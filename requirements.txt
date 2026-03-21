@@ -14,6 +14,7 @@ openai==1.0.0
 langchain==0.0.330
 numpy==1.26.0
 pandas==2.1.0
+pypdf==5.9.0
 
 # Media Processing
 edge-tts==6.1.9
