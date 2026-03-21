@@ -22,3 +22,7 @@ data/quick_outputs/
 data/videos/
 data/voices/
 output/
+
+.vscode/
+.idea/
+
