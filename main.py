@@ -12,6 +12,8 @@ from src.services import (
     KnowledgeImportRequest,
     QuickGenerationRequest,
 )
+from src.content_factory.presenter import PresenterRequest
+from src.content_factory.presenter_pipeline import PresenterPipeline
 from src.shared.config import settings
 from src.shared.logger import logger
 
@@ -46,6 +48,19 @@ def build_parser():
     quick_parser.add_argument("--emotion-type", type=str, help="Emotion type")
     quick_parser.add_argument("--positive-energy-type", type=str, help="Positive energy type")
     quick_parser.add_argument("--target-audience", type=str, help="Target audience")
+
+    presenter_parser = subparsers.add_parser("presenter", help="Generate an offline digital presenter video")
+    presenter_parser.add_argument("--keywords", type=str, default="", help="Keywords/topic for script generation")
+    presenter_parser.add_argument("--text", type=str, default="", help="Direct presenter script text")
+    presenter_parser.add_argument("--title", type=str, default="", help="On-screen title")
+    presenter_parser.add_argument("--character", type=str, default="na1", help="Character id or PNG path, e.g. na1/n3")
+    presenter_parser.add_argument("--background", type=str, default="", help="Background image/video path")
+    presenter_parser.add_argument("--audio", type=str, default="", help="Use an existing audio file and skip TTS")
+    presenter_parser.add_argument("--bgm", type=str, default="", help="Optional BGM path")
+    presenter_parser.add_argument("--output-dir", type=str, default="data/videos", help="Output directory for final mp4")
+    presenter_parser.add_argument("--tts-provider", type=str, default="gpt_sovits", choices=["gpt_sovits", "edge"], help="TTS provider")
+    presenter_parser.add_argument("--voice", type=str, default="", help="Voice ID or reference audio path")
+    presenter_parser.add_argument("--max-segments", type=int, default=8, help="Maximum number of presenter segments")
 
     import_parser = subparsers.add_parser("import-knowledge", help="Import books into the vector knowledge base")
     import_parser.add_argument("--books-dir", type=str, default=service.default_books_dir, help="Books directory to import")
@@ -171,6 +186,34 @@ def main():
         logger.info("Quick command completed.")
         for path in outputs:
             print(path)
+        return
+
+    if args.command == "presenter":
+        if not args.text and not args.keywords:
+            logger.error("presenter command requires --text or --keywords.")
+            sys.exit(1)
+
+        presenter = PresenterPipeline()
+        request = PresenterRequest(
+            keywords=args.keywords or "",
+            text=args.text or "",
+            title=args.title or args.keywords or "",
+            voice=args.voice or "",
+            tts_provider=args.tts_provider,
+            character=args.character,
+            background=args.background or "",
+            bgm=args.bgm or "",
+            output_dir=args.output_dir,
+            audio_path=args.audio or "",
+            max_segments=args.max_segments,
+        )
+        result = presenter.run(request)
+        if not result.success:
+            logger.error(f"数字人主讲视频生成失败: {result.message}")
+            sys.exit(1)
+        logger.info(f"数字人主讲视频生成成功: {result.video_path}")
+        logger.info(f"工作目录: {result.work_dir}")
+        print(result.video_path)
         return
 
     if args.command == "import-knowledge":
