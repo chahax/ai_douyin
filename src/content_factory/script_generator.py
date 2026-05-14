@@ -44,8 +44,26 @@ class ScriptGenerator:
             # This handles both the specific template and the default fallback template
             prompt = self.prompt_template.format(**format_data)
         except KeyError as e:
-            logger.warning(f"Prompt formatting key error: {e}. Falling back to simple JSON injection.")
-            prompt = f"请根据以下信息生成文案：{json.dumps(wisdom_data, ensure_ascii=False)}"
+            logger.warning(f"Prompt formatting key error: {e}. Using explicit fallback.")
+            # Build a clear prompt with explicit key names
+            prompt = f"""请根据以下信息生成短视频口播文案。
+
+输入信息：
+标题：{wisdom_data.get('title', '')}
+核心观点：{wisdom_data.get('core_message', '')}
+金句：{wisdom_data.get('quote', '')}
+阐述：{wisdom_data.get('elaboration', '')}
+行动建议：{wisdom_data.get('actionable', '')}
+场景：{wisdom_data.get('scene', '')}
+情绪：{wisdom_data.get('emotion', '')}
+
+要求：
+- 生成320~520字的口播逐字稿
+- 语言口语化，像真人说话
+- 不要在结尾添加关注、点赞等号召语
+
+请仅输出以下JSON格式（不要输出其他内容）：
+{{"script_content": "完整口播逐字稿", "visual_cues": [], "bgm_suggestion": ""}}"""
         
         hint_lines = []
         if generation_hints:
@@ -84,12 +102,31 @@ class ScriptGenerator:
             if "script_content" not in script_data and "core_message" in script_data:
                  # It's a mock wisdom response, let's fake a script for testing pipeline
                  script_data["script_content"] = f"（Mock Script）大家好！今天想和大家分享一个道理：{script_data.get('core_message')}。希望大家都能行动起来！"
+            # Handle the case where LLM returns "content" instead of "script_content"
+            if "script_content" not in script_data and "content" in script_data:
+                script_data["script_content"] = script_data["content"]
+            # Handle the case where LLM returns "script" as a list of segments
+            if "script_content" not in script_data and isinstance(script_data.get("script"), list):
+                # Extract text from each segment and join into one script
+                script_list = script_data["script"]
+                texts = []
+                for seg in script_list:
+                    if isinstance(seg, dict) and seg.get("text"):
+                        texts.append(seg["text"])
+                    elif isinstance(seg, str):
+                        texts.append(seg)
+                script_data["script_content"] = "".join(texts)
             if isinstance(script_data.get("script_content"), str):
                 cleaned_script = script_data["script_content"]
                 cleaned_script = re.sub(r"(关注|点赞|评论|转发|收藏|一键三连)[^。！？!?\n]*[。！？!?]?", "", cleaned_script)
                 cleaned_script = re.sub(r"\n{3,}", "\n\n", cleaned_script).strip()
                 script_data["script_content"] = cleaned_script
-            
+
+            # Validate that we have actual script content
+            if not script_data.get("script_content"):
+                logger.error(f"LLM returned script without script_content. Response: {response_text[:500]}")
+                return None
+
             logger.info("Script generated successfully.")
             return script_data
         except json.JSONDecodeError as e:

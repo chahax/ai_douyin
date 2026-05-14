@@ -1,255 +1,397 @@
 import argparse
 import sys
-import os
+
+from src.platform_adapter import DouyinAdapter
+from src.platform_adapter.browser_session import BrowserSession, build_default_browser_session_config
+from src.platform_adapter.models import PublishRequest
+from src.services import (
+    AutoPublishRequest,
+    AutoPublishService,
+    GenerationRequest,
+    GenerationService,
+    KnowledgeImportRequest,
+    QuickGenerationRequest,
+)
+from src.shared.config import settings
 from src.shared.logger import logger
-from src.shared.output_manager import finalize_output
-from src.content_factory.book_processor import BookProcessor
-from src.content_factory.wisdom_extractor import WisdomExtractor
-from src.content_factory.wisdom_extractor_rag import WisdomExtractorRAG
-from src.rag_engine.wisdom_retriever import WisdomRetriever
-from src.content_factory.script_generator import ScriptGenerator
-from src.content_factory.tts_engine import TTSEngine
-from src.content_factory.audio_mixer import AudioMixer
-
-DEFAULT_BGM_PATH = r"d:\IT\ai_douyin\data\ref_audio\Morning-Routine-Lofi-Study-Music(chosic.com).mp3"
-
-def generate_video_pipeline(args):
-    """
-    Executes the video generation pipeline.
-    """
-    logger.info("=== Starting Video Generation Pipeline ===")
-    
-    script_content = ""
-    
-    # 0. Direct Text Mode (Skips Wisdom/Script Gen)
-    if hasattr(args, 'text') and args.text:
-        logger.info("[Step 0] Direct Text Mode Activated")
-        script_content = args.text
-    else:
-        wisdom = None
-        
-        # 1. Wisdom Acquisition (RAG or Random)
-        if args.topic:
-            logger.info(f"[Step 1] RAG Mode: Searching wisdom for topic '{args.topic}'...")
-            retriever = WisdomRetriever()
-            chunks = retriever.search_wisdom(args.topic, top_k=3)
-            
-            if not chunks:
-                logger.warning("No relevant chunks found. Falling back to random extraction.")
-            else:
-                logger.info(f"[Step 2] RAG Mode: Extracting wisdom from {len(chunks)} chunks...")
-                rag_extractor = WisdomExtractorRAG()
-                wisdom = rag_extractor.extract_wisdom(args.topic, chunks)
-
-        # Fallback to Random Book Mode if no topic or RAG failed
-        if not wisdom:
-            logger.info("[Step 1] Random Mode: Reading Book...")
-            book_proc = BookProcessor()
-            chunk = book_proc.read_random_chunk(book_name=args.book)
-            
-            if not chunk:
-                logger.error("Failed to read book chunk.")
-                return None
-            
-            logger.info(f"Book: {chunk['book_name']}")
-            
-            logger.info("[Step 2] Random Mode: Extracting Wisdom...")
-            extractor = WisdomExtractor()
-            wisdom = extractor.extract_wisdom(chunk['content'])
-        
-        if not wisdom:
-            logger.error("Failed to extract wisdom.")
-            return None
-        
-        logger.info(f"Wisdom Title: {wisdom.get('title')}")
-
-        # 3. Script Generation
-        logger.info("[Step 3] Generating Script...")
-        script_gen = ScriptGenerator()
-        generation_hints = {
-            "keywords": getattr(args, "keywords", ""),
-            "emotion_type": getattr(args, "emotion_type", ""),
-            "positive_energy_type": getattr(args, "positive_energy_type", ""),
-            "target_audience": getattr(args, "target_audience", ""),
-        }
-        script_data = script_gen.generate_script(wisdom, generation_hints=generation_hints)
-        
-        if not script_data:
-            logger.error("Failed to generate script.")
-            return None
-            
-        script_content = script_data.get("script_content", "")
-        logger.info("Script generated.")
-
-    # 4. TTS Synthesis
-    logger.info("[Step 4] Synthesizing Audio...")
-    tts = TTSEngine(provider_type=args.tts_provider)
-    
-    extension = "wav" if args.tts_provider == "gpt_sovits" else "mp3"
-    audio_filename = f"output_{int(os.times().system)}.{extension}"
-    
-    # Pass no_merge option to TTS engine
-    tts_kwargs = {}
-    if hasattr(args, 'no_merge') and args.no_merge:
-        tts_kwargs['no_merge'] = True
-        
-    audio_path = tts.generate_audio(
-        text=script_content,
-        filename=audio_filename,
-        voice=args.voice,
-        **tts_kwargs
-    )
-    
-    if not audio_path:
-        logger.error("Pipeline failed at TTS stage.")
-        return None
-
-    # 5. Audio Mixing (BGM)
-    if hasattr(args, 'bgm') and args.bgm:
-        logger.info(f"[Step 5] Mixing BGM: {args.bgm}")
-        mixer = AudioMixer()
-        
-        # Handle list of files if no_merge is active
-        if isinstance(audio_path, list):
-            mixed_paths = []
-            for idx, path in enumerate(audio_path):
-                mixed_path = f"{os.path.splitext(path)[0]}_mixed.mp3"
-                final_path = mixer.mix_audio(path, args.bgm, mixed_path, bgm_volume=args.bgm_volume)
-                if final_path:
-                    mixed_paths.append(final_path)
-                else:
-                    logger.warning(f"BGM mixing failed for {path}, using original.")
-                    mixed_paths.append(path)
-            audio_path = mixed_paths
-        else:
-            mixed_path = f"{os.path.splitext(audio_path)[0]}_mixed.mp3"
-            final_path = mixer.mix_audio(audio_path, args.bgm, mixed_path, bgm_volume=args.bgm_volume)
-            if final_path:
-                audio_path = final_path
-            else:
-                logger.warning("BGM mixing failed, using original speech audio.")
-
-    logger.info(f"Pipeline Success! Audio saved to: {audio_path}")
-    return audio_path
 
 
-def run_quick_pipeline(args):
-    final_paths = []
-    # If using direct text, we usually run once unless count is specified
-    loop_count = args.count
-    
-    for i in range(loop_count):
-        logger.info(f"--- Quick Generating {i+1}/{loop_count} ---")
-        
-        # Determine prompt/text usage
-        # If --text is used, prompt is ignored for generation but used for filename if prompt exists
-        # If --prompt is used without --text, we generate script
-        
-        topic_value = getattr(args, "prompt", None) or getattr(args, "keywords", None)
-        bgm_value = getattr(args, 'bgm', None)
-        if not bgm_value and os.path.exists(DEFAULT_BGM_PATH):
-            bgm_value = DEFAULT_BGM_PATH
-        pipeline_args = {
-            "book": None,
-            "topic": topic_value,
-            "count": 1,
-            "tts_provider": args.tts_provider,
-            "voice": args.voice,
-            "text": getattr(args, 'text', None),
-            "bgm": bgm_value,
-            "bgm_volume": getattr(args, 'bgm_volume', 0.2),
-            "no_merge": getattr(args, 'no_merge', False),
-            "keywords": getattr(args, "keywords", ""),
-            "emotion_type": getattr(args, "emotion_type", ""),
-            "positive_energy_type": getattr(args, "positive_energy_type", ""),
-            "target_audience": getattr(args, "target_audience", ""),
-        }
-        
-        mapped_args = argparse.Namespace(**pipeline_args)
-        
-        source_audio_path = generate_video_pipeline(mapped_args)
-        if not source_audio_path:
-            logger.error("Quick pipeline failed to generate audio.")
-            continue
-            
-        # Use prompt or first 10 chars of text for filename topic
-        topic_for_filename = args.prompt if args.prompt else (args.keywords if getattr(args, "keywords", None) else (args.text[:10] if args.text else "unknown"))
-            
-        # Handle archiving for single file or list of files
-        if isinstance(source_audio_path, list):
-            for idx, path in enumerate(source_audio_path):
-                # Append index to topic for unique filenames
-                sub_topic = f"{topic_for_filename}_{idx+1}"
-                archived_path = finalize_output(
-                    source_path=path,
-                    output_dir=args.output_dir,
-                    topic=sub_topic,
-                    provider=args.tts_provider,
-                    keep_temp=args.keep_temp,
-                )
-                if archived_path:
-                    final_paths.append(archived_path)
-                    logger.info(f"Quick pipeline output {idx+1}: {archived_path}")
-        else:
-            archived_path = finalize_output(
-                source_path=source_audio_path,
-                output_dir=args.output_dir,
-                topic=topic_for_filename,
-                provider=args.tts_provider,
-                keep_temp=args.keep_temp,
-            )
-            if archived_path:
-                final_paths.append(archived_path)
-                logger.info(f"Quick pipeline output: {archived_path}")
-    return final_paths
+service = GenerationService()
+DEFAULT_BGM_PATH = service.default_bgm_path
 
-def main():
-    parser = argparse.ArgumentParser(description="WisdomAI - Life Inspiration Video Generator")
+
+def build_parser():
+    parser = argparse.ArgumentParser(description="WisdomAI - Life Inspiration Audio Generator")
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
-    # Generate Command
-    gen_parser = subparsers.add_parser("generate", help="Generate a video")
+    gen_parser = subparsers.add_parser("generate", help="Generate audio from topic or random book wisdom")
     gen_parser.add_argument("--book", type=str, help="Specific book filename (optional, random mode only)")
-    gen_parser.add_argument("--topic", type=str, help="Topic for RAG search (e.g. '人生迷茫')")
-    gen_parser.add_argument("--count", type=int, default=1, help="Number of videos to generate")
-    gen_parser.add_argument("--tts-provider", type=str, default="edge", choices=["edge", "gpt_sovits"], help="TTS Provider")
-    gen_parser.add_argument("--voice", type=str, help="Voice ID (optional)")
+    gen_parser.add_argument("--topic", type=str, help="Topic for RAG search")
+    gen_parser.add_argument("--count", type=int, default=1, help="Number of audios to generate")
+    gen_parser.add_argument("--tts-provider", type=str, default="gpt_sovits", choices=["gpt_sovits"], help="TTS provider")
+    gen_parser.add_argument("--voice", type=str, help="Voice ID or reference audio path")
 
     quick_parser = subparsers.add_parser("quick", help="Generate by prompt in one command")
-    quick_parser.add_argument("--prompt", type=str, help="Prompt/topic text (Optional if --text is provided)")
+    quick_parser.add_argument("--prompt", type=str, help="Prompt/topic text (optional if --text is provided)")
     quick_parser.add_argument("--text", type=str, help="Direct text input (skips script generation)")
     quick_parser.add_argument("--bgm", type=str, help=f"Background music file path (default: {DEFAULT_BGM_PATH})")
     quick_parser.add_argument("--bgm-volume", type=float, default=0.2, help="BGM volume (0.0-1.0)")
     quick_parser.add_argument("--output-dir", type=str, help="Archive output directory")
-    quick_parser.add_argument("--tts-provider", type=str, default="gpt_sovits", choices=["edge", "gpt_sovits"], help="TTS Provider")
+    quick_parser.add_argument("--tts-provider", type=str, default="gpt_sovits", choices=["gpt_sovits"], help="TTS provider")
     quick_parser.add_argument("--voice", type=str, help="Voice ID or reference audio path")
     quick_parser.add_argument("--count", type=int, default=1, help="Number of audios to generate")
     quick_parser.add_argument("--keep-temp", action="store_true", help="Keep temp file in original output dir")
     quick_parser.add_argument("--no-merge", action="store_true", help="Do not merge sentences into one file")
     quick_parser.add_argument("--keywords", type=str, help="Required keywords, comma separated")
-    quick_parser.add_argument("--emotion-type", type=str, help="Emotion type, e.g. 顿悟/低谷/鼓励")
+    quick_parser.add_argument("--emotion-type", type=str, help="Emotion type")
     quick_parser.add_argument("--positive-energy-type", type=str, help="Positive energy type")
     quick_parser.add_argument("--target-audience", type=str, help="Target audience")
 
+    import_parser = subparsers.add_parser("import-knowledge", help="Import books into the vector knowledge base")
+    import_parser.add_argument("--books-dir", type=str, default=service.default_books_dir, help="Books directory to import")
+
+    login_parser = subparsers.add_parser("douyin-login", help="Open Douyin in a visible browser and keep it paused")
+    login_parser.add_argument("--url", type=str, default=settings.DOUYIN_HOME_URL, help="Target URL to open")
+    login_parser.add_argument("--pause-seconds", type=int, default=600, help="How long to keep the browser open")
+    login_parser.add_argument("--wait-for-enter", action="store_true", help="Keep browser open until Enter is pressed")
+
+    upload_page_parser = subparsers.add_parser(
+        "douyin-upload-page",
+        help="Open Douyin creator upload page, click 上传视频, and keep browser paused",
+    )
+    upload_page_parser.add_argument("--url", type=str, default=settings.DOUYIN_UPLOAD_URL, help="Upload page URL")
+    upload_page_parser.add_argument("--pause-seconds", type=int, default=600, help="How long to keep the browser open")
+    upload_page_parser.add_argument("--wait-for-enter", action="store_true", help="Keep browser open until Enter is pressed")
+
+    publish_parser = subparsers.add_parser("douyin-publish", help="Publish a video to Douyin via browser automation")
+    publish_parser.add_argument("--video", type=str, required=True, help="Path to video file")
+    publish_parser.add_argument("--title", type=str, required=True, help="Video title")
+    publish_parser.add_argument("--desc", type=str, default="", help="Video description")
+    publish_parser.add_argument("--tags", type=str, default="", help="Hashtags, comma separated, e.g. '励志,成长,正能量'")
+    publish_parser.add_argument("--cover", type=str, default=None, help="Cover image path (optional)")
+    publish_parser.add_argument("--interactive", action="store_true", help="Step-by-step mode, wait for confirmation at each step")
+    publish_parser.add_argument("--wait-for-enter", action="store_true", help="Keep browser open after publish until Enter is pressed")
+
+    sync_parser = subparsers.add_parser("douyin-sync", help="Sync published videos from Douyin creator dashboard")
+    sync_parser.add_argument("--page-limit", type=int, default=5, help="Maximum number of pages to sync (default: 5)")
+    sync_parser.add_argument("--interactive", action="store_true", help="Step-by-step mode, wait for confirmation at each step")
+    sync_parser.add_argument("--wait-for-enter", action="store_true", help="Keep browser open after sync until Enter is pressed")
+    sync_parser.add_argument("--headless", action="store_true", help="Run browser in headless mode (no visible window)")
+
+    # 评论抓取命令
+    comments_parser = subparsers.add_parser("douyin-fetch-comments", help="Fetch comments for a specific video or all published videos")
+    comments_parser.add_argument("--video-id", type=str, default=None, help="Specific video ID to fetch comments for")
+    comments_parser.add_argument("--all", action="store_true", help="Fetch comments for all published videos in database")
+    comments_parser.add_argument("--headless", action="store_true", help="Run browser in headless mode (no visible window)")
+
+    # 评论回复命令
+    reply_parser = subparsers.add_parser("douyin-reply-comment", help="Reply to a specific comment")
+    reply_parser.add_argument("--video-id", type=str, required=True, help="Video ID")
+    reply_parser.add_argument("--comment-id", type=str, required=True, help="Comment ID to reply to")
+    reply_parser.add_argument("--content", type=str, required=True, help="Reply content text")
+    reply_parser.add_argument("--headless", action="store_true", help="Run browser in headless mode (no visible window)")
+
+    # 自动回复命令
+    auto_reply_parser = subparsers.add_parser("auto-reply", help="Auto-reply to comments on a video")
+    auto_reply_parser.add_argument("--video-id", type=str, default=None, help="Specific video ID to process")
+    auto_reply_parser.add_argument("--all", action="store_true", help="Process all published videos in database")
+    auto_reply_parser.add_argument("--headless", action="store_true", help="Run browser in headless mode (no visible window)")
+
+    auto_parser = subparsers.add_parser("auto-publish", help="Generate script + TTS + BGM + compose video + publish to Douyin in one command")
+    auto_parser.add_argument("--keywords", type=str, required=True, help="Keywords to generate script (RAG search)")
+    auto_parser.add_argument("--title", type=str, default="", help="Video title (auto-generated if empty)")
+    auto_parser.add_argument("--desc", type=str, default="", help="Video description")
+    auto_parser.add_argument("--tags", type=str, default="", help="Hashtags, comma separated, e.g. '励志,成长,正能量'")
+    auto_parser.add_argument("--template", type=str, default="", help="Template video path")
+    auto_parser.add_argument("--bgm", type=str, default="", help="BGM file path (use default if empty)")
+    auto_parser.add_argument("--bgm-volume", type=float, default=0.2, help="BGM volume (0.0-1.0)")
+    auto_parser.add_argument("--output-dir", type=str, default="data/videos", help="Output directory for generated videos")
+    auto_parser.add_argument("--interactive", action="store_true", help="Step-by-step mode, wait for confirmation at each step")
+    auto_parser.add_argument("--wait-for-enter", action="store_true", help="Keep browser open after publish until Enter is pressed")
+
+    return parser
+
+
+def _auto_generate_title(keywords: str) -> str:
+    """根据关键字自动生成标题"""
+    if not keywords:
+        return "智慧语录"
+    # 简单处理：取第一个关键字 + 固定后缀
+    first_keyword = keywords.split(",")[0].strip()
+    return f"【{first_keyword}】智慧语录"
+
+
+def main():
+    parser = build_parser()
     args = parser.parse_args()
 
     if args.command == "generate":
-        for i in range(args.count):
-            logger.info(f"--- Generating Video {i+1}/{args.count} ---")
-            generate_video_pipeline(args)
-    elif args.command == "quick":
-        if not args.text and not args.prompt and not args.keywords:
-            logger.error("quick 命令至少需要 --prompt 或 --keywords 或 --text 其中一个参数。")
+        request = GenerationRequest(
+            book=args.book,
+            topic=args.topic,
+            tts_provider=args.tts_provider,
+            voice=args.voice,
+        )
+        results = service.run_batch_generation(request, count=args.count)
+        if not results:
+            logger.error("Generate command failed with no outputs.")
             sys.exit(1)
-        outputs = run_quick_pipeline(args)
-        if outputs:
-            logger.info("Quick command completed.")
-            for path in outputs:
+
+        for result in results:
+            for path in result.audio_paths:
                 print(path)
-        else:
+        return
+
+    if args.command == "quick":
+        if not args.text and not args.prompt and not args.keywords:
+            logger.error("quick command requires at least one of --prompt, --keywords, or --text.")
+            sys.exit(1)
+
+        request = QuickGenerationRequest(
+            prompt=args.prompt,
+            text=args.text,
+            tts_provider=args.tts_provider,
+            voice=args.voice,
+            count=args.count,
+            bgm=args.bgm,
+            bgm_volume=args.bgm_volume,
+            output_dir=args.output_dir,
+            keep_temp=args.keep_temp,
+            no_merge=args.no_merge,
+            keywords=args.keywords or "",
+            emotion_type=args.emotion_type or "",
+            positive_energy_type=args.positive_energy_type or "",
+            target_audience=args.target_audience or "",
+        )
+        outputs = service.run_quick_request(request)
+        if not outputs:
             logger.error("Quick command failed with no outputs.")
-    else:
-        parser.print_help()
+            sys.exit(1)
+
+        logger.info("Quick command completed.")
+        for path in outputs:
+            print(path)
+        return
+
+    if args.command == "import-knowledge":
+        ok = service.import_knowledge_base(KnowledgeImportRequest(books_dir=args.books_dir))
+        if not ok:
+            sys.exit(1)
+        return
+
+    if args.command == "douyin-login":
+        adapter = DouyinAdapter()
+        try:
+            state = adapter.open_login_window(
+                url=args.url,
+                pause_seconds=args.pause_seconds,
+                wait_for_enter=args.wait_for_enter,
+            )
+        except Exception as exc:
+            logger.error(str(exc))
+            sys.exit(1)
+
+        logger.info("浏览器会话已结束。")
+        logger.info(f"登录态文件: {state.storage_state_path}")
+        logger.info(f"用户数据目录: {state.user_data_dir}")
+        print(state.storage_state_path)
+        return
+
+    if args.command == "douyin-upload-page":
+        adapter = DouyinAdapter()
+        try:
+            state = adapter.open_upload_page(
+                url=args.url,
+                pause_seconds=args.pause_seconds,
+                wait_for_enter=args.wait_for_enter,
+            )
+        except Exception as exc:
+            logger.error(str(exc))
+            sys.exit(1)
+
+        logger.info("上传页浏览器会话已结束。")
+        logger.info(f"登录态文件: {state.storage_state_path}")
+        logger.info(f"用户数据目录: {state.user_data_dir}")
+        print(state.storage_state_path)
+        return
+
+    if args.command == "douyin-publish":
+        adapter = DouyinAdapter()
+        hashtags = [t.strip() for t in args.tags.split(",") if t.strip()] if args.tags else []
+        request = PublishRequest(
+            video_path=args.video,
+            title=args.title,
+            description=args.desc,
+            hashtags=hashtags,
+            cover_path=args.cover,
+        )
+        result = adapter.publish_video(request, interactive=args.interactive)
+        if result.success:
+            logger.info(f"发布成功: {result.message}")
+            logger.info(f"视频ID: {result.post_id}")
+            logger.info(f"链接: {result.publish_url}")
+            print(result.publish_url or result.post_id)
+            if args.wait_for_enter:
+                logger.info("浏览器保持打开，按回车键关闭...")
+                try:
+                    input()
+                except (EOFError, OSError):
+                    pass
+        else:
+            logger.error(f"发布失败: {result.message}")
+            sys.exit(1)
+        return
+
+    if args.command == "douyin-sync":
+        if args.headless:
+            session_config = build_default_browser_session_config()
+            session_config.headless = True
+            adapter = DouyinAdapter(session=BrowserSession(session_config))
+        else:
+            adapter = DouyinAdapter()
+        result = adapter.sync_videos(page_limit=args.page_limit, interactive=args.interactive)
+        if result.videos:
+            logger.info(f"同步成功: {result.message}")
+            for v in result.videos:
+                logger.info(f"  [{v.status.value}] {v.title} (id: {v.video_id})")
+            # 输出JSON列表供其他程序使用
+            import json
+            print(json.dumps([
+                {"video_id": v.video_id, "title": v.title, "status": v.status.value, "publish_time": v.publish_time}
+                for v in result.videos
+            ], ensure_ascii=False, indent=2))
+        else:
+            logger.warning("未同步到任何视频，请确认是否已登录")
+        if args.wait_for_enter:
+            logger.info("浏览器保持打开，按回车键关闭...")
+            try:
+                input()
+            except (EOFError, OSError):
+                pass
+        return
+
+    if args.command == "douyin-fetch-comments":
+        from src.services.video_service import get_videos
+        from src.platform_adapter.models import CommentQuery
+
+        if args.headless:
+            session_config = build_default_browser_session_config()
+            session_config.headless = True
+            adapter = DouyinAdapter(session=BrowserSession(session_config))
+        else:
+            adapter = DouyinAdapter()
+
+        target_ids = []
+        if args.video_id:
+            target_ids = [args.video_id]
+        elif args.all:
+            videos = get_videos(status="published", limit=100)
+            target_ids = [v["video_id"] for v in videos if v.get("video_id")]
+        else:
+            logger.error("请指定 --video-id 或 --all")
+            sys.exit(1)
+
+        total = 0
+        for vid in target_ids:
+            logger.info(f"抓取评论: {vid}")
+            result = adapter.fetch_comments(CommentQuery(post_id=vid))
+            count = len(result.comments)
+            total += count
+            logger.info(f"  → {count} 条评论已保存")
+            if result.message:
+                logger.info(f"  {result.message}")
+
+        logger.info(f"全部完成，共抓取 {total} 条评论")
+        return
+
+    if args.command == "douyin-reply-comment":
+        if args.headless:
+            session_config = build_default_browser_session_config()
+            session_config.headless = True
+            adapter = DouyinAdapter(session=BrowserSession(session_config))
+        else:
+            adapter = DouyinAdapter()
+
+        success = adapter.reply_to_comment(args.video_id, args.comment_id, args.content)
+        if success:
+            logger.info(f"回复成功！comment_id={args.comment_id}")
+        else:
+            logger.error("回复失败")
+            sys.exit(1)
+        return
+
+    if args.command == "auto-reply":
+        from src.platform_adapter.auto_reply_service import AutoReplyService
+        from src.services.video_service import get_videos
+
+        if args.headless:
+            session_config = build_default_browser_session_config()
+            session_config.headless = True
+            session = BrowserSession(session_config)
+        else:
+            session = None
+
+        service = AutoReplyService(session=session)
+
+        target_ids = []
+        if args.video_id:
+            target_ids = [args.video_id]
+        elif args.all:
+            videos = get_videos(status="published", limit=100)
+            target_ids = [v["video_id"] for v in videos if v.get("video_id")]
+        else:
+            logger.error("请指定 --video-id 或 --all")
+            sys.exit(1)
+
+        total_replied = 0
+        total_skipped = 0
+        total_failed = 0
+        for vid in target_ids:
+            logger.info(f"处理视频评论: {vid}")
+            result = service.process_video(vid)
+            total_replied += result.replied
+            total_skipped += result.skipped
+            total_failed += result.failed
+            logger.info(f"  → 回复={result.replied}, 跳过={result.skipped}, 失败={result.failed}, 总评论={result.total_comments}")
+
+        logger.info(f"全部完成: 回复={total_replied}, 跳过={total_skipped}, 失败={total_failed}")
+        if total_failed > 0:
+            sys.exit(1)
+        return
+
+    if args.command == "auto-publish":
+        auto_service = AutoPublishService()
+        request = AutoPublishRequest(
+            keywords=args.keywords,
+            title=args.title or _auto_generate_title(args.keywords),
+            description=args.desc,
+            hashtags=args.tags,
+            template_video=args.template or "",
+            bgm=args.bgm or "",
+            bgm_volume=args.bgm_volume,
+            output_dir=args.output_dir,
+            interactive=args.interactive,
+        )
+        result = auto_service.publish(request)
+        if result.success:
+            logger.info(f"自动发布成功！")
+            logger.info(f"  视频路径: {result.video_path}")
+            logger.info(f"  抖音ID: {result.post_id}")
+            logger.info(f"  链接: {result.publish_url}")
+            print(result.publish_url or result.post_id or result.video_path)
+        else:
+            logger.error(f"自动发布失败: {result.message}")
+            sys.exit(1)
+        if args.wait_for_enter:
+            logger.info("浏览器保持打开，按回车键关闭...")
+            try:
+                input()
+            except (EOFError, OSError):
+                pass
+        return
+
+    parser.print_help()
+
 
 if __name__ == "__main__":
     main()

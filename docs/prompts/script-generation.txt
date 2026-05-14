@@ -82,14 +82,14 @@
 ## 输出格式（仅JSON）
 请**仅**输出以下JSON对象，不要输出Markdown代码块，不要额外解释文本：
 
-{
+{{
   "title": "生成的短视频标题（15~28字，具备传播感）",
   "script_content": "完整口播逐字稿……",
   "visual_cues": ["画面建议1", "画面建议2", "画面建议3"],
   "bgm_suggestion": "推荐背景音乐风格（如：温暖钢琴/低频氛围/渐进鼓点）",
-  "inferred_params": {
+  "inferred_params": {{
     "keywords": "关键词1,关键词2,关键词3",
     "target_audience": "推导出的目标人群",
     "positive_energy_type": "逆境成长|自我觉醒|关系修复|行动自律|长期主义"
-  }
-}
+  }}
+}}

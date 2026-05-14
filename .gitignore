@@ -6,6 +6,7 @@ __pycache__/
 .venv/
 venv/
 env/
+.local_py/
 
 .env
 .env.*
@@ -21,7 +22,23 @@ env/
 data/quick_outputs/
 data/videos/
 data/voices/
+data/logs/
+data/browser/
+data/chroma_db/
+data/diagnostics/
+data/framepack/
+data/motion_assets/
+data/png/
+data/ref_audio/
+data/asset_collections/
+data/*.png
+data/*.jpg
+data/*.jpeg
+data/*.mp4
+data/*.db
 output/
+GPT_SoVITS/
+gfpgan/
 
 .vscode/
 .idea/
