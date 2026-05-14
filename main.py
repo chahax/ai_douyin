@@ -55,6 +55,7 @@ def build_parser():
     presenter_parser.add_argument("--title", type=str, default="", help="On-screen title")
     presenter_parser.add_argument("--character", type=str, default="na1", help="Character id or PNG path, e.g. na1/n3")
     presenter_parser.add_argument("--background", type=str, default="", help="Background image/video path")
+    presenter_parser.add_argument("--background-style", type=str, default="anime", choices=["anime", "existing", "gradient"], help="Default background style when --background is omitted")
     presenter_parser.add_argument("--audio", type=str, default="", help="Use an existing audio file and skip TTS")
     presenter_parser.add_argument("--bgm", type=str, default="", help="Optional BGM path")
     presenter_parser.add_argument("--output-dir", type=str, default="data/videos", help="Output directory for final mp4")
@@ -202,6 +203,7 @@ def main():
             tts_provider=args.tts_provider,
             character=args.character,
             background=args.background or "",
+            background_style=args.background_style,
             bgm=args.bgm or "",
             output_dir=args.output_dir,
             audio_path=args.audio or "",

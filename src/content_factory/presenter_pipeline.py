@@ -42,7 +42,11 @@ class PresenterPipeline:
             if not segments:
                 return PresenterResult(False, "脚本分段失败", work_dir=str(work_dir))
 
-            background = self.resolver.resolve_background(request.background, work_dir)
+            background = self.resolver.resolve_background(
+                request.background,
+                work_dir,
+                style=request.background_style,
+            )
             character = self.resolver.resolve_character(request.character)
 
             self._write_text(work_dir / "script.txt", script)

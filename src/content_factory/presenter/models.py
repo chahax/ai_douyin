@@ -22,6 +22,7 @@ class PresenterRequest:
     tts_provider: str = "gpt_sovits"
     character: str = "na1"
     background: str = ""
+    background_style: str = "anime"
     bgm: str = ""
     output_dir: str = "data/videos"
     audio_path: str = ""
