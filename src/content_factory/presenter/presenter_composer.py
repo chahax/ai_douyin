@@ -22,6 +22,8 @@ class PresenterComposer:
         background_path: str,
         character: CharacterAsset,
         output_path: Path,
+        character_position: str = "right_bottom",
+        character_size: str = "medium",
     ) -> str:
         output_path.parent.mkdir(parents=True, exist_ok=True)
         duration = segment.duration or get_duration(segment.audio_path)
@@ -34,13 +36,14 @@ class PresenterComposer:
         cmd.extend(["-loop", "1", "-framerate", str(self.fps), "-i", segment.text_layer_path])
         cmd.extend(["-i", segment.audio_path])
 
-        role_width = 470
+        role_width = self._role_width(character_size)
+        role_x, role_y = self._role_position(character_position)
         filter_complex = (
             f"[0:v]scale={self.width}:{self.height}:force_original_aspect_ratio=increase,"
             f"crop={self.width}:{self.height},setsar=1[bg];"
             f"[1:v]scale={role_width}:-1,format=rgba[role];"
             f"[2:v]scale={self.width}:{self.height},format=rgba[text];"
-            f"[bg][role]overlay=x=W-w-36:y=H-h-82:format=auto[tmp];"
+            f"[bg][role]overlay=x={role_x}:y={role_y}:format=auto[tmp];"
             f"[tmp][text]overlay=0:0:format=auto[outv]"
         )
 
@@ -145,6 +148,22 @@ class PresenterComposer:
 
     def _is_image(self, path: str) -> bool:
         return Path(path).suffix.lower() in IMAGE_EXTENSIONS
+
+    def _role_width(self, size: str) -> int:
+        sizes = {
+            "small": 340,
+            "medium": 440,
+            "large": 540,
+        }
+        return sizes.get((size or "medium").strip().lower(), sizes["medium"])
+
+    def _role_position(self, position: str) -> tuple[str, str]:
+        positions = {
+            "right_bottom": ("W-w-42", "H-h-86"),
+            "left_bottom": ("42", "H-h-86"),
+            "center_bottom": ("(W-w)/2", "H-h-70"),
+        }
+        return positions.get((position or "right_bottom").strip().lower(), positions["right_bottom"])
 
     def _run(self, cmd: list[str], timeout: int = 600) -> None:
         result = subprocess.run(cmd, capture_output=True, encoding="utf-8", errors="replace", timeout=timeout)

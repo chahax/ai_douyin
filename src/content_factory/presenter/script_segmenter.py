@@ -91,7 +91,7 @@ class ScriptSegmenter:
         return "caption"
 
     def _extract_keywords(self, text: str, title: str = "") -> list[str]:
-        source = f"{title} {text}"
+        source = text
         tokens = re.findall(r"[\u4e00-\u9fff]{2,6}|[A-Za-z][A-Za-z0-9_-]{2,}", source)
         seen = set()
         keywords = []

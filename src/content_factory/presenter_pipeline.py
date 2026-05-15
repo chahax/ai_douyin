@@ -67,12 +67,16 @@ class PresenterPipeline:
                     segment=segment,
                     title=title,
                     output_path=text_dir / f"seg_{segment.index:03d}.png",
+                    character_position=request.character_position,
+                    character_size=request.character_size,
                 )
                 segment.clip_path = self.composer.compose_segment(
                     segment=segment,
                     background_path=background,
                     character=character,
                     output_path=clips_dir / f"seg_{segment.index:03d}.mp4",
+                    character_position=request.character_position,
+                    character_size=request.character_size,
                 )
 
             self._write_json(work_dir / "segments.json", [asdict(segment) for segment in segments])

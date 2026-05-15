@@ -21,6 +21,8 @@ class PresenterRequest:
     voice: str = ""
     tts_provider: str = "gpt_sovits"
     character: str = "na1"
+    character_position: str = "right_bottom"
+    character_size: str = "medium"
     background: str = ""
     background_style: str = "anime"
     bgm: str = ""

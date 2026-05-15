@@ -54,6 +54,8 @@ def build_parser():
     presenter_parser.add_argument("--text", type=str, default="", help="Direct presenter script text")
     presenter_parser.add_argument("--title", type=str, default="", help="On-screen title")
     presenter_parser.add_argument("--character", type=str, default="na1", help="Character id or PNG path, e.g. na1/n3")
+    presenter_parser.add_argument("--character-position", type=str, default="right_bottom", choices=["right_bottom", "left_bottom", "center_bottom"], help="Character placement on the canvas")
+    presenter_parser.add_argument("--character-size", type=str, default="medium", choices=["small", "medium", "large"], help="Character display size")
     presenter_parser.add_argument("--background", type=str, default="", help="Background image/video path")
     presenter_parser.add_argument("--background-style", type=str, default="anime", choices=["anime", "existing", "gradient"], help="Default background style when --background is omitted")
     presenter_parser.add_argument("--audio", type=str, default="", help="Use an existing audio file and skip TTS")
@@ -202,6 +204,8 @@ def main():
             voice=args.voice or "",
             tts_provider=args.tts_provider,
             character=args.character,
+            character_position=args.character_position,
+            character_size=args.character_size,
             background=args.background or "",
             background_style=args.background_style,
             bgm=args.bgm or "",
