@@ -8,6 +8,7 @@ from src.shared.config import settings
 class WisdomRetriever:
     def __init__(self, persist_dir="./data/chroma_db", embedding_model=None):
         self.persist_dir = persist_dir
+        self.embedding_model = embedding_model
 
         # 优先使用 Ollama 本地 embedding（需提前安装：ollama pull nomic-embed-text）
         # 其次用本地 HuggingFace 模型，最后才请求 HuggingFace Hub
@@ -20,10 +21,12 @@ class WisdomRetriever:
         if ollama_model:
             try:
                 from langchain_ollama import OllamaEmbeddings
-                embedding = OllamaEmbeddings(
+                candidate_embedding = OllamaEmbeddings(
                     model=ollama_model,
                     base_url=settings.OLLAMA_BASE_URL,
                 )
+                candidate_embedding.embed_query("测试")
+                embedding = candidate_embedding
                 logger.info(f"Using Ollama embedding model: {ollama_model}")
             except Exception as exc:
                 logger.warning(f"Ollama embedding 初始化失败: {exc}")
@@ -38,9 +41,7 @@ class WisdomRetriever:
 
         # 3. Fallback: HuggingFace Hub（需要网络）
         if embedding is None:
-            hf_model = embedding_model or "shibing624/text2vec-base-chinese"
-            embedding = HuggingFaceEmbeddings(model_name=hf_model)
-            logger.info(f"Using HuggingFace Hub embedding model: {hf_model}（无本地模型，将请求 HuggingFace）")
+            embedding = self._build_huggingface_embedding()
 
         logger.info("Initializing Wisdom Retriever...")
         try:
@@ -64,7 +65,31 @@ class WisdomRetriever:
             return results
         except Exception as e:
             logger.error(f"Search failed: {e}")
+            if self._retry_with_huggingface():
+                try:
+                    results = self.db.similarity_search(query, k=top_k)
+                    logger.info(f"Found {len(results)} relevant chunks after embedding fallback.")
+                    return results
+                except Exception as retry_exc:
+                    logger.error(f"Search retry failed: {retry_exc}")
             return []
+
+    def _build_huggingface_embedding(self):
+        hf_model = self.embedding_model or "shibing624/text2vec-base-chinese"
+        logger.info(f"Using HuggingFace Hub embedding model: {hf_model}（无本地模型，将请求 HuggingFace）")
+        return HuggingFaceEmbeddings(model_name=hf_model)
+
+    def _retry_with_huggingface(self) -> bool:
+        try:
+            self.embeddings = self._build_huggingface_embedding()
+            self.db = Chroma(
+                persist_directory=self.persist_dir,
+                embedding_function=self.embeddings,
+            )
+            return True
+        except Exception as exc:
+            logger.error(f"Embedding fallback failed: {exc}")
+            return False
 
 if __name__ == "__main__":
     # Test Retriever

@@ -1,3 +1,12 @@
+---
+doc_status: archived_do_not_use_as_current
+doc_category: archive
+last_reviewed: 2026-05-10
+model_usage: 历史归档文档，仅用于追溯问题和避免重复踩坑；不要作为当前实现方案。
+---
+
+> 文档状态：历史归档文档，仅用于追溯问题和避免重复踩坑；不要作为当前实现方案。
+
 # AI Douyin 项目详细说明（当前实现版）
 
 > 文档目的：为后续你/我快速理解项目而写，尽量基于当前代码现状，而不是理想设计。

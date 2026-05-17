@@ -20,6 +20,7 @@ env/
 *.ogg
 
 data/quick_outputs/
+data/books/
 data/presenter/
 data/videos/
 data/voices/
@@ -28,6 +29,7 @@ data/browser/
 data/chroma_db/
 data/diagnostics/
 data/framepack/
+data/ip_characters/
 data/motion_assets/
 data/png/
 data/ref_audio/
@@ -43,4 +45,5 @@ gfpgan/
 
 .vscode/
 .idea/
+.claude/
 

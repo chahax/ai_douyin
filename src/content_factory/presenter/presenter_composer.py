@@ -7,6 +7,7 @@ from src.content_factory.video_composer import get_duration
 
 
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".bmp"}
+VIDEO_EXTENSIONS = {".mp4", ".mov", ".mkv", ".webm", ".avi"}
 
 
 class PresenterComposer:
@@ -38,10 +39,18 @@ class PresenterComposer:
 
         role_width = self._role_width(character_size)
         role_x, role_y = self._role_position(character_position)
+        role_filter = f"[1:v]scale={role_width}:-1,format=rgba[role];"
+        if character.kind == "video_chroma":
+            role_filter = (
+                f"[1:v]scale={role_width}:-1,format=rgba,"
+                f"colorkey=0xf4f6ec:0.10:0.04[role];"
+            )
+
         filter_complex = (
             f"[0:v]scale={self.width}:{self.height}:force_original_aspect_ratio=increase,"
-            f"crop={self.width}:{self.height},setsar=1[bg];"
-            f"[1:v]scale={role_width}:-1,format=rgba[role];"
+            f"crop={self.width}:{self.height},setsar=1,"
+            f"drawbox=x=0:y=1340:w={self.width}:h={self.height - 1340}:color=0xE9F1F6@0.96:t=fill[bg];"
+            f"{role_filter}"
             f"[2:v]scale={self.width}:{self.height},format=rgba[text];"
             f"[bg][role]overlay=x={role_x}:y={role_y}:format=auto[tmp];"
             f"[tmp][text]overlay=0:0:format=auto[outv]"
@@ -143,6 +152,8 @@ class PresenterComposer:
     def _append_character_input(self, cmd: list[str], character: CharacterAsset) -> None:
         if character.kind == "sequence":
             cmd.extend(["-stream_loop", "-1", "-framerate", str(self.fps), "-i", character.path])
+        elif character.kind in {"video", "video_chroma"}:
+            cmd.extend(["-stream_loop", "-1", "-an", "-i", character.path])
         else:
             cmd.extend(["-loop", "1", "-framerate", str(self.fps), "-i", character.path])
 

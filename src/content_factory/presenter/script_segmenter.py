@@ -11,7 +11,7 @@ STOPWORDS = {
 
 
 class ScriptSegmenter:
-    def __init__(self, max_chars: int = 42, max_segments: int = 8):
+    def __init__(self, max_chars: int = 24, max_segments: int = 16):
         self.max_chars = max_chars
         self.max_segments = max_segments
 
@@ -47,7 +47,7 @@ class ScriptSegmenter:
         buffer = ""
 
         for sentence in sentences:
-            if len(sentence) > self.max_chars * 1.5:
+            if len(sentence) > self.max_chars * 1.2:
                 if buffer:
                     chunks.append(buffer)
                     buffer = ""
@@ -66,12 +66,18 @@ class ScriptSegmenter:
         return chunks
 
     def _split_long_sentence(self, sentence: str) -> list[str]:
-        parts = re.split(r"(?<=[，,、])", sentence)
+        parts = re.split(r"(?<=[，,、：:])", sentence)
         chunks = []
         buffer = ""
         for part in parts:
             part = part.strip()
             if not part:
+                continue
+            if len(part) > self.max_chars:
+                if buffer:
+                    chunks.append(buffer)
+                    buffer = ""
+                chunks.extend(self._split_by_chars(part))
                 continue
             candidate = f"{buffer}{part}" if buffer else part
             if len(candidate) <= self.max_chars or not buffer:
@@ -81,6 +87,14 @@ class ScriptSegmenter:
                 buffer = part
         if buffer:
             chunks.append(buffer)
+        return chunks
+
+    def _split_by_chars(self, text: str) -> list[str]:
+        chunks = []
+        for start in range(0, len(text), self.max_chars):
+            chunk = text[start:start + self.max_chars].strip()
+            if chunk:
+                chunks.append(chunk)
         return chunks
 
     def _style_for(self, index: int, text: str) -> str:

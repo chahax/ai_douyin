@@ -9,6 +9,12 @@ class PresenterSegment:
     keywords: list[str] = field(default_factory=list)
     audio_path: str = ""
     duration: float = 0.0
+    background_path: str = ""
+    background_group: int = 0
+    background_prompt: str = ""
+    background_action: str = ""
+    background_subject: str = ""
+    background_include_ip: bool = False
     text_layer_path: str = ""
     clip_path: str = ""
 
@@ -19,7 +25,7 @@ class PresenterRequest:
     text: str = ""
     title: str = ""
     voice: str = ""
-    tts_provider: str = "gpt_sovits"
+    tts_provider: str = "edge"
     character: str = "na1"
     character_position: str = "right_bottom"
     character_size: str = "medium"
@@ -28,13 +34,13 @@ class PresenterRequest:
     bgm: str = ""
     output_dir: str = "data/videos"
     audio_path: str = ""
-    max_segments: int = 8
+    max_segments: int = 16
 
 
 @dataclass
 class CharacterAsset:
     path: str
-    kind: str = "static"  # static / sequence
+    kind: str = "static"  # static / sequence / video / video_chroma
 
 
 @dataclass

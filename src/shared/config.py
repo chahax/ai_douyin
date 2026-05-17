@@ -56,7 +56,7 @@ class Settings(BaseSettings):
     REF_AUDIO_DIR: str = "./data/ref_audio"
     CHROMA_PERSIST_DIR: str = "./data/chroma_db"
     DEFAULT_BGM_PATH: str = "./data/ref_audio/Morning-Routine-Lofi-Study-Music(chosic.com).mp3"
-    TTS_PROVIDER: str = "gpt_sovits"
+    TTS_PROVIDER: str = "edge"
 
     # GPT-SoVITS
     GPT_SOVITS_API_URL: str = "http://127.0.0.1:9880"

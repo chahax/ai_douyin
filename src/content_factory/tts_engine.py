@@ -23,7 +23,7 @@ class TTSEngine:
             from src.content_factory.tts_providers.edge_tts_provider import EdgeTTSProvider
 
             self.provider = EdgeTTSProvider()
-            logger.warning("TTSEngine initialized with deprecated Edge-TTS Provider")
+            logger.info("TTSEngine initialized with Edge-TTS Provider")
         else:
             raise ValueError(f"Unsupported TTS provider: {self.provider_type}")
 

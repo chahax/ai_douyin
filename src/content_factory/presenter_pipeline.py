@@ -42,11 +42,6 @@ class PresenterPipeline:
             if not segments:
                 return PresenterResult(False, "脚本分段失败", work_dir=str(work_dir))
 
-            background = self.resolver.resolve_background(
-                request.background,
-                work_dir,
-                style=request.background_style,
-            )
             character = self.resolver.resolve_character(request.character)
 
             self._write_text(work_dir / "script.txt", script)
@@ -62,7 +57,21 @@ class PresenterPipeline:
             else:
                 self._synthesize_segments(request, segments, audio_dir)
 
-            for segment in segments:
+            backgrounds = self.resolver.resolve_segment_backgrounds(
+                request.background,
+                work_dir,
+                segments,
+                style=request.background_style,
+                switch_seconds=5.0,
+                character=request.character,
+            )
+
+            for idx, segment in enumerate(segments):
+                segment.background_path = backgrounds[idx]
+                if idx > 0 and segment.background_path == segments[idx - 1].background_path:
+                    segment.background_group = segments[idx - 1].background_group
+                else:
+                    segment.background_group = 0 if idx == 0 else segments[idx - 1].background_group + 1
                 segment.text_layer_path = self.overlay_renderer.render(
                     segment=segment,
                     title=title,
@@ -72,7 +81,7 @@ class PresenterPipeline:
                 )
                 segment.clip_path = self.composer.compose_segment(
                     segment=segment,
-                    background_path=background,
+                    background_path=segment.background_path,
                     character=character,
                     output_path=clips_dir / f"seg_{segment.index:03d}.mp4",
                     character_position=request.character_position,

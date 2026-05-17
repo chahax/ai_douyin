@@ -1,3 +1,12 @@
+---
+doc_status: current
+doc_category: mainline
+last_reviewed: 2026-05-10
+model_usage: 当前主线文档，可以作为当前项目状态或实施依据。
+---
+
+> 文档状态：当前主线文档，可以作为当前项目状态或实施依据。
+
 # GPT-SoVITS 使用与接入说明
 
 本文档说明：

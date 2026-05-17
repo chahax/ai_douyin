@@ -17,7 +17,7 @@ class GenerationRequest:
     book: Optional[str] = None
     topic: Optional[str] = None
     text: Optional[str] = None
-    tts_provider: str = "gpt_sovits"
+    tts_provider: str = "edge"
     voice: Optional[str] = None
     bgm: Optional[str] = None
     bgm_volume: float = 0.2
@@ -34,7 +34,7 @@ class GenerationRequest:
 class QuickGenerationRequest:
     prompt: Optional[str] = None
     text: Optional[str] = None
-    tts_provider: str = "gpt_sovits"
+    tts_provider: str = "edge"
     voice: Optional[str] = None
     count: int = 1
     bgm: Optional[str] = None
@@ -87,7 +87,7 @@ class GenerationService:
             book=getattr(args, "book", None),
             topic=getattr(args, "topic", None),
             text=getattr(args, "text", None),
-            tts_provider=getattr(args, "tts_provider", "gpt_sovits"),
+            tts_provider=getattr(args, "tts_provider", "edge"),
             voice=getattr(args, "voice", None),
             bgm=getattr(args, "bgm", None),
             bgm_volume=getattr(args, "bgm_volume", 0.2),
@@ -104,7 +104,7 @@ class GenerationService:
         return QuickGenerationRequest(
             prompt=getattr(args, "prompt", None),
             text=getattr(args, "text", None),
-            tts_provider=getattr(args, "tts_provider", "gpt_sovits"),
+            tts_provider=getattr(args, "tts_provider", "edge"),
             voice=getattr(args, "voice", None),
             count=getattr(args, "count", 1),
             bgm=getattr(args, "bgm", None),
