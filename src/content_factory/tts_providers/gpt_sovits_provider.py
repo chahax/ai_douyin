@@ -1,19 +1,24 @@
+import json
 import os
 import re
 import shutil
+import subprocess
 import sys
+import tempfile
 import requests
 from src.content_factory.tts_providers.base import TTSProvider
+from src.shared.config import settings
 from src.shared.logger import logger
 
 
 class GPTSoVITSProvider(TTSProvider):
-    def __init__(self, api_url="http://127.0.0.1:9880"):
-        self.api_url = api_url
-        self.sdk_root = os.path.abspath(os.environ.get("GPT_SOVITS_SDK_ROOT", r"D:\IT\GPT-SoVITS-main\GPT-SoVITS-main"))
+    def __init__(self, api_url=None):
+        self.api_url = api_url or settings.GPT_SOVITS_API_URL
+        self.ref_audio_dir = os.path.abspath(settings.REF_AUDIO_DIR)
+        self.sdk_root = os.path.abspath(os.environ.get("GPT_SOVITS_SDK_ROOT", settings.GPT_SOVITS_SDK_ROOT))
         self.default_ref_audio = os.path.join(self.sdk_root, "output", "ref_audio_denoised", "ttsmaker-file-2026-3-14-16-10-15.mp3")
         if not os.path.exists(self.default_ref_audio):
-            self.default_ref_audio = os.path.abspath("data/ref_audio/mature_male_ref.wav")
+            self.default_ref_audio = os.path.abspath(settings.GPT_SOVITS_DEFAULT_REF_AUDIO)
         self.default_ref_text = "是的，爱情的症状和霍乱一模一样，突如其来摧枯拉朽让人失去控制。"
         self.default_lang = "zh"
         self.default_gpt_weights = "GPT_weights_v2ProPlus/xxx-e10.ckpt"
@@ -62,7 +67,7 @@ class GPTSoVITSProvider(TTSProvider):
         if ref_audio_path and os.path.exists(ref_audio_path):
             return os.path.abspath(ref_audio_path)
         if voice:
-            potential_path = os.path.abspath(os.path.join("data/ref_audio", f"{voice}.wav"))
+            potential_path = os.path.abspath(os.path.join(self.ref_audio_dir, f"{voice}.wav"))
             if os.path.exists(potential_path):
                 return potential_path
             if os.path.exists(voice):
@@ -145,120 +150,154 @@ class GPTSoVITSProvider(TTSProvider):
             logger.warning(f"GPT-SoVITS SDK init failed: {e}")
             return None
 
+    def _build_sdk_script(self, text, output_file, ref_audio_path, prompt_text, kwargs):
+        """Build the Python script string to run under conda Python 3.9."""
+        return f"""
+import sys, os, json, shutil
+os.chdir(r'{self.sdk_root}')
+sys.path.insert(0, r'{self.sdk_root}')
+sys.path.insert(0, r'{self.sdk_root}/GPT_SoVITS')
+sys.path.insert(0, r'{self.sdk_root}/GPT_SoVITS/eres2net')
+sys.path.insert(0, r'{self.sdk_root}/GPT_SoVITS/BigVGAN')
+
+from sdk.tts_client import ClientConfig, TTSClient
+
+config = ClientConfig(
+    gpt_weights=r'{kwargs.get("gpt_weights", self.default_gpt_weights)}',
+    sovits_weights=r'{kwargs.get("sovits_weights", self.default_sovits_weights)}',
+    output_dir=r'{kwargs.get("sdk_output_dir", "output/sdk")}',
+    default_text_lang='{kwargs.get("text_lang", self.default_lang)}',
+    default_prompt_lang='{kwargs.get("prompt_lang", self.default_lang)}',
+    default_output_format='{kwargs.get("output_format", "wav")}',
+    default_request_version='{kwargs.get("request_version", "v2ProPlus")}',
+    default_ref_audio_path=r'{ref_audio_path}',
+)
+client = TTSClient(config=config)
+result = client.synthesize(
+    text=r'''{text}''',
+    ref_audio_path=r'{ref_audio_path}',
+    prompt_text=r'''{prompt_text}''',
+    text_lang='{kwargs.get("text_lang", self.default_lang)}',
+    prompt_lang='{kwargs.get("prompt_lang", self.default_lang)}',
+    output_format='{kwargs.get("output_format", "wav")}',
+    speed_factor={kwargs.get("speed_factor", self.default_speed_factor)},
+    speaker_preset='{kwargs.get("speaker_preset", "")}',
+    trace_id='{kwargs.get("trace_id", "")}',
+    request_version='{kwargs.get("request_version", "v2ProPlus")}',
+    top_k={kwargs.get("top_k", self.default_top_k)},
+    top_p={kwargs.get("top_p", self.default_top_p)},
+    temperature={kwargs.get("temperature", self.default_temperature)},
+    text_split_method='{kwargs.get("text_split_method", self.default_text_split_method)}',
+    sample_steps={kwargs.get("sample_steps", 32)},
+    repetition_penalty={kwargs.get("repetition_penalty", self.default_repetition_penalty)},
+    seed={kwargs.get("seed", -1)},
+    is_half={kwargs.get("is_half", False)},
+    device='{kwargs.get("device", "cpu")}',
+    tts_config=r'{kwargs.get("tts_config", self.default_tts_config)}',
+    gpt_weights=r'{kwargs.get("gpt_weights", self.default_gpt_weights)}',
+    sovits_weights=r'{kwargs.get("sovits_weights", self.default_sovits_weights)}',
+)
+print(json.dumps(result))
+"""
+
     def _generate_with_sdk(self, text, output_file, ref_audio_path, prompt_text, kwargs):
-        client = self._init_sdk_client(kwargs)
-        if client is None:
-            return False
-        
-        # Temporarily change CWD to SDK root to handle relative paths in config
-        original_cwd = os.getcwd()
-        
-        # Ensure output_file is absolute before changing CWD
         output_file = os.path.abspath(output_file) if not os.path.isabs(output_file) else output_file
         ref_audio_path = os.path.abspath(ref_audio_path) if not os.path.isabs(ref_audio_path) else ref_audio_path
 
+        conda_python = os.path.abspath(settings.GPT_SOVITS_CONDA_PYTHON)
+        if not os.path.exists(conda_python):
+            logger.error(f"GPT-SoVITS conda Python not found: {conda_python}")
+            return False
+
+        no_merge = kwargs.get("no_merge", False)
+
+        # Build and run the SDK script under conda Python 3.9
+        script = self._build_sdk_script(text, output_file, ref_audio_path, prompt_text, kwargs)
+
         try:
-            if os.path.exists(self.sdk_root):
-                os.chdir(self.sdk_root)
-            
-            # Use SDK to synthesize
-            # Check if we need to return list of files (no_merge)
-            no_merge = kwargs.get("no_merge", False)
-            
-            result = client.synthesize(
-                text=text,
-                ref_audio_path=ref_audio_path,
-                prompt_text=prompt_text,
-                text_lang=kwargs.get("text_lang", self.default_lang),
-                prompt_lang=kwargs.get("prompt_lang", self.default_lang),
-                output_format=kwargs.get("output_format", "wav"),
-                speed_factor=float(kwargs.get("speed_factor", self.default_speed_factor)),
-                speaker_preset=kwargs.get("speaker_preset", ""),
-                trace_id=kwargs.get("trace_id", ""),
-                request_version=kwargs.get("request_version", "v2ProPlus"),
-                top_k=kwargs.get("top_k", self.default_top_k),
-                top_p=kwargs.get("top_p", self.default_top_p),
-                temperature=kwargs.get("temperature", self.default_temperature),
-                text_split_method=kwargs.get("text_split_method", self.default_text_split_method),
-                sample_steps=kwargs.get("sample_steps", 32),
-                repetition_penalty=kwargs.get("repetition_penalty", self.default_repetition_penalty),
-                seed=kwargs.get("seed", -1),
-                is_half=kwargs.get("is_half", False),
-                device=kwargs.get("device", "cpu"),
-                tts_config=kwargs.get("tts_config", self.default_tts_config),
-                gpt_weights=kwargs.get("gpt_weights", self.default_gpt_weights),
-                sovits_weights=kwargs.get("sovits_weights", self.default_sovits_weights),
-                return_files=no_merge # Pass return_files=True to get list of paths if SDK supports it, or handle result
+            result = subprocess.run(
+                [conda_python, "-c", script],
+                capture_output=True,
+                text=True,
+                cwd=self.sdk_root,
+                timeout=300,
             )
-            
-            if not result.get("success"):
-                error_code = result.get("error_code")
-                error_msg = result.get("error_msg", "")
-                logger.error(f"GPT-SoVITS SDK error: {error_code} - {error_msg}")
-                if error_code == "E_TEXT_TOO_LONG" or "text length exceeds" in str(error_msg):
-                    chunks = self._split_text_by_limit(text, max_len=480)
-                    if len(chunks) > 1:
-                        logger.warning(f"Text too long, auto split into {len(chunks)} chunks.")
-                        base_name, ext = os.path.splitext(output_file)
-                        audio_paths = []
-                        for i, part in enumerate(chunks):
-                            seg_output = f"{base_name}_{i+1}{ext}"
-                            kwargs_copy = kwargs.copy()
-                            kwargs_copy["no_merge"] = False
-                            seg_ok = self._generate_with_sdk(part, seg_output, ref_audio_path, prompt_text, kwargs_copy)
-                            if isinstance(seg_ok, str):
-                                audio_paths.append(seg_ok)
-                            elif seg_ok is True and os.path.exists(seg_output):
-                                audio_paths.append(seg_output)
-                            elif isinstance(seg_ok, list):
-                                audio_paths.extend(seg_ok)
-                        if audio_paths:
-                            return audio_paths
-                return False if not no_merge else []
-            
-            if no_merge:
-                # If SDK result has 'audio_paths' (list), use that.
-                audio_paths = result.get("audio_paths", [])
-                
-                # If SDK doesn't support list return, we implement split logic here
-                if not audio_paths:
-                    # Simple sentence splitting
-                    sentences = re.split(r'([。！？.!?\n])', text)
-                    sentences = ["".join(i) for i in zip(sentences[0::2], sentences[1::2])]
-                    if len(sentences) * 2 < len(re.split(r'([。！？.!?\n])', text)):
-                         sentences.append(re.split(r'([。！？.!?\n])', text)[-1])
-                    sentences = [s.strip() for s in sentences if s.strip()]
-                    
-                    audio_paths = []
+        except subprocess.TimeoutExpired:
+            logger.error("GPT-SoVITS SDK subprocess timed out")
+            return False
+        except Exception as e:
+            logger.error(f"GPT-SoVITS SDK subprocess failed: {e}")
+            return False
+
+        if result.returncode != 0:
+            logger.error(f"GPT-SoVITS SDK stderr: {result.stderr}")
+            return False
+
+        try:
+            # SDK logs go to stdout, JSON result is the last non-empty line
+            lines = [l.strip() for l in result.stdout.strip().splitlines() if l.strip()]
+            sdk_result = json.loads(lines[-1]) if lines else {}
+        except (json.JSONDecodeError, IndexError):
+            logger.error(f"Failed to parse SDK output: {result.stdout[:500]}")
+            return False
+
+        if not sdk_result.get("success"):
+            error_code = sdk_result.get("error_code", "")
+            error_msg = sdk_result.get("error_msg", "")
+            logger.error(f"GPT-SoVITS SDK error: {error_code} - {error_msg}")
+            if error_code == "E_TEXT_TOO_LONG" or "text length exceeds" in str(error_msg):
+                chunks = self._split_text_by_limit(text, max_len=480)
+                if len(chunks) > 1:
+                    logger.warning(f"Text too long, auto split into {len(chunks)} chunks.")
                     base_name, ext = os.path.splitext(output_file)
-                    
-                    for i, sent in enumerate(sentences):
+                    audio_paths = []
+                    for i, part in enumerate(chunks):
                         seg_output = f"{base_name}_{i+1}{ext}"
-                        # Recursive call without no_merge to generate individual segment
                         kwargs_copy = kwargs.copy()
                         kwargs_copy["no_merge"] = False
-                        if self._generate_with_sdk(sent, seg_output, ref_audio_path, prompt_text, kwargs_copy):
+                        seg_ok = self._generate_with_sdk(part, seg_output, ref_audio_path, prompt_text, kwargs_copy)
+                        if isinstance(seg_ok, str):
+                            audio_paths.append(seg_ok)
+                        elif seg_ok is True and os.path.exists(seg_output):
                             audio_paths.append(seg_output)
-                    
-                    return audio_paths if audio_paths else []
-                
-                return audio_paths
-            
-            audio_path = result.get("audio_path", "")
-            if not audio_path or not os.path.exists(audio_path):
-                logger.error("GPT-SoVITS SDK returned empty audio_path")
-                return False if not no_merge else []
-            
-            if no_merge:
-                return [] # Should have returned above if successful
-                
-            shutil.copyfile(audio_path, output_file)
-            return os.path.exists(output_file) and os.path.getsize(output_file) > 0
-        except Exception as e:
-            logger.error(f"GPT-SoVITS SDK synthesize failed: {e}")
+                        elif isinstance(seg_ok, list):
+                            audio_paths.extend(seg_ok)
+                    if audio_paths:
+                        return audio_paths
             return False if not no_merge else []
-        finally:
-            os.chdir(original_cwd)
+
+        if no_merge:
+            audio_paths = sdk_result.get("audio_paths", [])
+            if not audio_paths:
+                sentences = re.split(r'([。！？.!?\n])', text)
+                sentences = ["".join(i) for i in zip(sentences[0::2], sentences[1::2])]
+                if len(sentences) * 2 < len(re.split(r'([。！？.!?\n])', text)):
+                    sentences.append(re.split(r'([。！？.!?\n])', text)[-1])
+                sentences = [s.strip() for s in sentences if s.strip()]
+                audio_paths = []
+                base_name, ext = os.path.splitext(output_file)
+                for i, sent in enumerate(sentences):
+                    seg_output = f"{base_name}_{i+1}{ext}"
+                    kwargs_copy = kwargs.copy()
+                    kwargs_copy["no_merge"] = False
+                    if self._generate_with_sdk(sent, seg_output, ref_audio_path, prompt_text, kwargs_copy):
+                        audio_paths.append(seg_output)
+                return audio_paths if audio_paths else []
+            return audio_paths
+
+        audio_path = sdk_result.get("audio_path", "")
+        if not audio_path:
+            logger.error("GPT-SoVITS SDK returned empty audio_path")
+            return False
+
+        # Resolve SDK output path relative to sdk_root (SDK always writes there)
+        sdk_audio_path = os.path.join(self.sdk_root, audio_path)
+        if not os.path.exists(sdk_audio_path):
+            logger.error(f"GPT-SoVITS SDK audio not found: {sdk_audio_path}")
+            return False
+
+        shutil.copyfile(sdk_audio_path, output_file)
+        return os.path.exists(output_file) and os.path.getsize(output_file) > 0
 
     def _generate_with_http(self, text, output_file, ref_audio_path, prompt_text, kwargs):
         payload = {
@@ -324,6 +363,8 @@ class GPTSoVITSProvider(TTSProvider):
         Generate audio from text.
         If 'no_merge' is True in kwargs, returns a list of generated file paths instead of a single boolean/file.
         """
+        use_sdk = kwargs.get("use_sdk", settings.GPT_SOVITS_USE_SDK)
+        enable_http_fallback = kwargs.get("enable_http_fallback", settings.GPT_SOVITS_ENABLE_HTTP_FALLBACK)
         ref_audio_path = self._resolve_ref_audio(voice, kwargs.get("ref_audio_path", ""))
         prompt_text = kwargs.get("prompt_text", kwargs.get("ref_text", self.default_ref_text))
         if not os.path.exists(ref_audio_path):
@@ -331,17 +372,23 @@ class GPTSoVITSProvider(TTSProvider):
             return False
             
         # Handle no_merge logic for SDK
-        if kwargs.get("no_merge", False) and kwargs.get("use_sdk", True):
+        if kwargs.get("no_merge", False) and use_sdk:
              return self._generate_with_sdk(text, output_file, ref_audio_path, prompt_text, kwargs)
 
-        if kwargs.get("use_sdk", True):
+        if use_sdk:
             sdk_result = self._generate_with_sdk(text, output_file, ref_audio_path, prompt_text, kwargs)
             if sdk_result:
                 return sdk_result
-        return self._generate_with_http(text, output_file, ref_audio_path, prompt_text, kwargs)
+            if not enable_http_fallback:
+                logger.error("GPT-SoVITS SDK generation failed and HTTP fallback is disabled.")
+                return False
+
+        if enable_http_fallback:
+            return self._generate_with_http(text, output_file, ref_audio_path, prompt_text, kwargs)
+        logger.error("GPT-SoVITS HTTP fallback is disabled.")
+        return False
 
     def list_voices(self):
-        ref_dir = "data/ref_audio"
-        if not os.path.exists(ref_dir):
+        if not os.path.exists(self.ref_audio_dir):
             return []
-        return [f.replace(".wav", "") for f in os.listdir(ref_dir) if f.endswith(".wav")]
+        return [f.replace(".wav", "") for f in os.listdir(self.ref_audio_dir) if f.endswith(".wav")]

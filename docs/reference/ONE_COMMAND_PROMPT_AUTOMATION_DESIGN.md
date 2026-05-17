@@ -1,3 +1,12 @@
+---
+doc_status: reference
+doc_category: reference
+last_reviewed: 2026-05-10
+model_usage: 参考文档，只能作为背景材料；不要覆盖当前主线方案。
+---
+
+> 文档状态：参考文档，只能作为背景材料；不要覆盖当前主线方案。
+
 # 一条命令提示词生成与自动归档设计文档
 
 ## 1. 目标
@@ -77,11 +86,11 @@ python main.py quick --prompt "<提示词>"
 
 ### 5.1 总流程
 
-1. 解析 `quick` 参数  
-2. 构造与 `generate` 一致的内部参数对象  
-3. 调用现有流水线生成音频  
-4. 捕获返回的输出路径  
-5. 执行归档策略（移动或复制）  
+1. 解析 `quick` 参数
+2. 构造与 `generate` 一致的内部参数对象
+3. 调用现有流水线生成音频
+4. 捕获返回的输出路径
+5. 执行归档策略（移动或复制）
 6. 输出最终文件路径与结果摘要
 
 ### 5.2 复用点
@@ -174,9 +183,9 @@ python main.py quick --prompt "<提示词>"
 - [main.py](file:///d:/IT/ai_douyin/main.py)
 
 具体操作：
-1. `generate_video_pipeline(args)` 由“仅日志”改为“返回值”模式  
-2. 失败时返回 `None`  
-3. 成功时返回 `audio_path`  
+1. `generate_video_pipeline(args)` 由“仅日志”改为“返回值”模式
+2. 失败时返回 `None`
+3. 成功时返回 `audio_path`
 4. 保留现有日志文本，避免影响已有排障习惯
 
 验收：
@@ -192,7 +201,7 @@ python main.py quick --prompt "<提示词>"
 - [main.py](file:///d:/IT/ai_douyin/main.py)
 
 具体操作：
-1. 新增 `quick` 子命令  
+1. 新增 `quick` 子命令
 2. 参数：
    - `--prompt`（必填）
    - `--output-dir`（可选）
@@ -200,8 +209,8 @@ python main.py quick --prompt "<提示词>"
    - `--voice`（可选）
    - `--count`（默认 `1`）
    - `--keep-temp`（可选）
-3. 增加 `run_quick_pipeline(args)` 包装函数：  
-   - `prompt -> topic`  
+3. 增加 `run_quick_pipeline(args)` 包装函数：
+   - `prompt -> topic`
    - 构造内部参数并调用 `generate_video_pipeline`
 4. 打印最终输出：
    - 生成成功：绝对路径
@@ -226,9 +235,9 @@ def finalize_output(source_path: str, output_dir: str | None, topic: str, provid
 ```
 
 职责：
-1. 规范化目标目录与文件名  
-2. 执行 move（默认）  
-3. move 失败自动 copy 回退  
+1. 规范化目标目录与文件名
+2. 执行 move（默认）
+3. move 失败自动 copy 回退
 4. 返回最终文件路径
 
 验收：
@@ -277,27 +286,27 @@ def finalize_output(source_path: str, output_dir: str | None, topic: str, provid
 
 #### 功能测试
 
-1. 最简命令  
+1. 最简命令
    - `python main.py quick --prompt "人生迷茫"`
-2. 指定输出目录  
+2. 指定输出目录
    - `python main.py quick --prompt "长期主义" --output-dir "D:\out"`
-3. 指定参考音频  
+3. 指定参考音频
    - `python main.py quick --prompt "焦虑" --voice "D:\ref.wav"`
-4. 多次生成  
+4. 多次生成
    - `python main.py quick --prompt "成长" --count 2`
 
 #### 回归测试
 
-1. 原命令不变  
+1. 原命令不变
    - `python main.py generate --topic "人生迷茫"`
-2. 随机模式不变  
+2. 随机模式不变
    - `python main.py generate`
 
 #### 异常测试
 
-1. `--output-dir` 无权限  
-2. `--voice` 路径不存在  
-3. TTS 服务不可用  
+1. `--output-dir` 无权限
+2. `--voice` 路径不存在
+3. TTS 服务不可用
 4. RAG 检索为空，是否正确回退随机模式
 
 ### 10.5 风险应对
@@ -308,11 +317,11 @@ def finalize_output(source_path: str, output_dir: str | None, topic: str, provid
 
 ### 10.6 实施清单（可直接执行）
 
-1. 修改 [main.py](file:///d:/IT/ai_douyin/main.py) 支持返回 `audio_path`  
-2. 修改 [main.py](file:///d:/IT/ai_douyin/main.py) 增加 `quick` 子命令  
-3. 新建 [output_manager.py](file:///d:/IT/ai_douyin/src/shared/output_manager.py)  
-4. 接入归档逻辑并打印最终绝对路径  
-5. 运行命令级回归测试  
+1. 修改 [main.py](file:///d:/IT/ai_douyin/main.py) 支持返回 `audio_path`
+2. 修改 [main.py](file:///d:/IT/ai_douyin/main.py) 增加 `quick` 子命令
+3. 新建 [output_manager.py](file:///d:/IT/ai_douyin/src/shared/output_manager.py)
+4. 接入归档逻辑并打印最终绝对路径
+5. 运行命令级回归测试
 6. 更新使用文档与快速命令文档
 
 ### 10.7 交付产物

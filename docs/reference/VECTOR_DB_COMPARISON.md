@@ -1,3 +1,12 @@
+---
+doc_status: reference
+doc_category: reference
+last_reviewed: 2026-05-10
+model_usage: 参考文档，只能作为背景材料；不要覆盖当前主线方案。
+---
+
+> 文档状态：参考文档，只能作为背景材料；不要覆盖当前主线方案。
+
 # 向量数据库选型指南
 
 在 RAG 架构中，向量数据库（Vector Database）是核心组件。除了 ChromaDB，还有许多优秀的替代方案，以下是针对本项目的详细对比。

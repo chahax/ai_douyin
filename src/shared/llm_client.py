@@ -1,20 +1,65 @@
-import json
-from openai import OpenAI
 from src.shared.config import settings
+from src.shared.llm_providers import MockProvider, OllamaProvider, OpenAICompatibleProvider
 from src.shared.logger import logger
+
 
 class LLMClient:
     def __init__(self):
-        self.api_key = settings.LLM_API_KEY
-        self.base_url = settings.LLM_BASE_URL
-        self.model = settings.LLM_MODEL
-        
-        if self.api_key:
-            self.client = OpenAI(api_key=self.api_key, base_url=self.base_url)
-            logger.info(f"LLM Client initialized with model: {self.model}")
-        else:
-            self.client = None
-            logger.warning("LLM API Key not provided. Running in Mock Mode.")
+        self.provider_name = self._resolve_provider_name()
+        self.provider = self._build_provider()
+        logger.info(f"LLM Client initialized with provider: {self.provider_name}")
+
+    def _resolve_provider_name(self) -> str:
+        provider = (settings.LLM_PROVIDER or "").strip().lower()
+        if provider:
+            if provider in {"openai", "deepseek"}:
+                return "openai_compatible"
+            return provider
+        if self._is_legacy_ollama_configuration():
+            logger.warning("Detected legacy Ollama configuration via LLM_BASE_URL/LLM_MODEL. Using ollama provider.")
+            return "ollama"
+        if settings.LLM_API_KEY:
+            return "openai_compatible"
+        return "mock"
+
+    def _build_provider(self):
+        if self.provider_name == "ollama":
+            return OllamaProvider(
+                base_url=self._resolve_ollama_base_url(),
+                model=self._resolve_ollama_model(),
+                timeout_seconds=settings.LLM_TIMEOUT_SECONDS,
+            )
+        if self.provider_name == "openai_compatible":
+            return OpenAICompatibleProvider(
+                api_key=settings.LLM_API_KEY,
+                base_url=settings.LLM_BASE_URL,
+                model=settings.LLM_MODEL,
+                timeout_seconds=settings.LLM_TIMEOUT_SECONDS,
+            )
+        logger.warning("LLM provider is mock. Real model calls are disabled.")
+        return MockProvider()
+
+    def _is_legacy_ollama_configuration(self) -> bool:
+        base_url = (settings.LLM_BASE_URL or "").strip().lower()
+        api_key = (settings.LLM_API_KEY or "").strip().lower()
+        return "11434" in base_url or api_key == "ollama"
+
+    def _resolve_ollama_base_url(self) -> str:
+        explicit_base = (settings.OLLAMA_BASE_URL or "").strip()
+        legacy_base = (settings.LLM_BASE_URL or "").strip()
+
+        if (settings.LLM_PROVIDER or "").strip():
+            return explicit_base.rstrip("/")
+        if self._is_legacy_ollama_configuration() and legacy_base:
+            return legacy_base.removesuffix("/v1").rstrip("/")
+        return explicit_base.rstrip("/")
+
+    def _resolve_ollama_model(self) -> str:
+        if (settings.LLM_PROVIDER or "").strip():
+            return (settings.OLLAMA_MODEL or "").strip()
+        if self._is_legacy_ollama_configuration() and (settings.LLM_MODEL or "").strip():
+            return settings.LLM_MODEL.strip()
+        return (settings.OLLAMA_MODEL or "").strip()
 
     def chat_completion(self, messages, temperature=0.7, json_mode=False):
         """
@@ -24,36 +69,7 @@ class LLMClient:
         :param json_mode: Whether to force JSON output (if supported)
         :return: Response content string
         """
-        if not self.client:
-            return self._mock_response(messages)
+        return self.provider.chat_completion(messages, temperature=temperature, json_mode=json_mode)
 
-        try:
-            response_format = {"type": "json_object"} if json_mode else None
-            
-            response = self.client.chat.completions.create(
-                model=self.model,
-                messages=messages,
-                temperature=temperature,
-                response_format=response_format
-            )
-            return response.choices[0].message.content
-        except Exception as e:
-            logger.error(f"LLM API Error: {e}")
-            return None
 
-    def _mock_response(self, messages):
-        """Returns a dummy response for testing without API cost."""
-        last_msg = messages[-1]['content']
-        logger.info(f"[Mock LLM] Processing: {last_msg[:50]}...")
-        
-        # Simple heuristic to return valid JSON if requested
-        if "JSON" in last_msg or "json" in last_msg:
-            return json.dumps({
-                "title": "Mock Wisdom",
-                "core_message": "This is a mock response because no API key is set.",
-                "actionable": "Set your API key in .env file."
-            })
-        return "This is a mock response from LLMClient."
-
-# Singleton instance
 llm_client = LLMClient()

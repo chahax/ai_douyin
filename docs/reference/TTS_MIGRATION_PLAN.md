@@ -1,3 +1,12 @@
+---
+doc_status: reference
+doc_category: reference
+last_reviewed: 2026-05-10
+model_usage: 参考文档，只能作为背景材料；不要覆盖当前主线方案。
+---
+
+> 文档状态：参考文档，只能作为背景材料；不要覆盖当前主线方案。
+
 # TTS 语音合成框架对比与迁移方案
 
 ## 1. 现状评估
