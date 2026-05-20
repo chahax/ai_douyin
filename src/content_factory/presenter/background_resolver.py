@@ -69,6 +69,7 @@ class BackgroundResolver:
         style: str = "anime",
         switch_seconds: float = 5.0,
         character: str = "",
+        use_comfy: bool = True,
     ) -> list[str]:
         if requested:
             background = self.resolve_background(requested, work_dir, style=style)
@@ -99,11 +100,13 @@ class BackgroundResolver:
             background_path = backgrounds_dir / f"bg_{current_group:03d}.png"
             prompt, plan = self.build_background_prompt_with_plan(group_text, cue=cue, character=character)
 
-            generated = self._create_comfy_background(
-                prompt,
-                background_path,
-                seed=260600 + current_group,
-            )
+            generated = False
+            if use_comfy:
+                generated = self._create_comfy_background(
+                    prompt,
+                    background_path,
+                    seed=260600 + current_group,
+                )
             if not generated:
                 self._create_anime_background(
                     background_path,
@@ -329,6 +332,14 @@ class BackgroundResolver:
                 "include_ip": True,
                 "actor_action": "arranging blank colored planning cards on a table",
                 "visual": "a clean planning desk with blank colored cards, simple calendar shapes without numbers, and a warm lamp",
+            },
+            {
+                "action": "legal_rules",
+                "subject": "rules evidence and boundaries",
+                "triggers": ("规则", "法律", "合同", "证据", "权益", "责任", "纠纷", "维权", "条款", "借钱", "口头承诺", "签字", "转账"),
+                "include_ip": False,
+                "actor_action": "",
+                "visual": "a clean document review desk with blank contract papers, a signing pen, organized folders, a receipt envelope, and a small balance scale silhouette, warm reliable office light, visual metaphor for rules, evidence, boundaries, and legal process",
             },
             {
                 "action": "conflict_relationship",

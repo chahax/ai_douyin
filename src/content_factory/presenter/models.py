@@ -1,6 +1,9 @@
 from dataclasses import dataclass, field
 
 
+DEFAULT_SONIC_FOX_CHARACTER = "data/ip_characters/_incoming/sonic_test/fox_planner_576_mouthboost_upscale1080_sharp.mp4"
+
+
 @dataclass
 class PresenterSegment:
     index: int
@@ -27,7 +30,7 @@ class PresenterRequest:
     title: str = ""
     voice: str = ""
     tts_provider: str = "edge"
-    character: str = "na1"
+    character: str = DEFAULT_SONIC_FOX_CHARACTER
     character_position: str = "right_bottom"
     character_size: str = "medium"
     background: str = ""
@@ -36,6 +39,7 @@ class PresenterRequest:
     output_dir: str = "data/videos"
     audio_path: str = ""
     max_segments: int = 16
+    use_comfy_background: bool = True
 
 
 @dataclass

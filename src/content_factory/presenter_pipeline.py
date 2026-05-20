@@ -64,6 +64,7 @@ class PresenterPipeline:
                 style=request.background_style,
                 switch_seconds=5.0,
                 character=request.character,
+                use_comfy=request.use_comfy_background,
             )
 
             for idx, segment in enumerate(segments):
@@ -112,6 +113,57 @@ class PresenterPipeline:
             logger.exception("Presenter pipeline failed")
             return PresenterResult(False, f"异常: {exc}", work_dir=str(work_dir))
 
+    def run_assets_preview(self, request: PresenterRequest) -> PresenterResult:
+        """只生成脚本文字、分段、背景图和构图元数据，不生成音频和视频。"""
+        stamp = time.strftime("%Y%m%d_%H%M%S")
+        work_dir = project_path("data/presenter_assets") / stamp
+        backgrounds_dir = work_dir / "backgrounds"
+        backgrounds_dir.mkdir(parents=True, exist_ok=True)
+
+        try:
+            script = self._resolve_script(request)
+            if not script:
+                return PresenterResult(False, "脚本为空", work_dir=str(work_dir))
+
+            title = request.title or request.keywords or "数字人主讲"
+            segmenter = ScriptSegmenter(max_segments=request.max_segments)
+            segments = segmenter.split(script, title=title)
+            if not segments:
+                return PresenterResult(False, "脚本分段失败", work_dir=str(work_dir))
+
+            for segment in segments:
+                segment.duration = 5.0
+
+            self._write_text(work_dir / "script.txt", script)
+            self._write_json(work_dir / "request.json", asdict(request))
+
+            backgrounds = self.resolver.resolve_segment_backgrounds(
+                request.background,
+                work_dir,
+                segments,
+                style=request.background_style,
+                switch_seconds=5.0,
+                character=request.character,
+                use_comfy=request.use_comfy_background,
+            )
+            for idx, segment in enumerate(segments):
+                segment.background_path = backgrounds[idx]
+                if idx > 0 and segment.background_path == segments[idx - 1].background_path:
+                    segment.background_group = segments[idx - 1].background_group
+                else:
+                    segment.background_group = 0 if idx == 0 else segments[idx - 1].background_group + 1
+
+            self._write_json(work_dir / "segments.json", [asdict(segment) for segment in segments])
+            return PresenterResult(
+                success=True,
+                message="数字人文字和背景图预览生成完成",
+                work_dir=str(work_dir),
+                segments=segments,
+            )
+        except Exception as exc:
+            logger.exception("Presenter assets preview failed")
+            return PresenterResult(False, f"异常: {exc}", work_dir=str(work_dir))
+
     def _resolve_script(self, request: PresenterRequest) -> str:
         if request.text:
             return request.text.strip()
@@ -126,8 +178,6 @@ class PresenterPipeline:
         return (script or "").strip()
 
     def _synthesize_segments(self, request: PresenterRequest, segments, audio_dir: Path) -> None:
-        from tenacity import retry, stop_after_attempt, wait_fixed, retry_if_result
-
         tts = TTSEngine(output_dir=str(audio_dir), provider_type=request.tts_provider)
         extension = "wav" if request.tts_provider == "gpt_sovits" else "mp3"
 
@@ -142,7 +192,6 @@ class PresenterPipeline:
                 if audio_path:
                     break
                 logger.warning(f"TTS segment {segment.index} attempt {attempt} failed, retrying...")
-                import time
                 time.sleep(2)
 
             if not audio_path:

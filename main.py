@@ -12,7 +12,7 @@ from src.services import (
     KnowledgeImportRequest,
     QuickGenerationRequest,
 )
-from src.content_factory.presenter import PresenterRequest
+from src.content_factory.presenter import DEFAULT_SONIC_FOX_CHARACTER, PresenterRequest
 from src.content_factory.presenter_pipeline import PresenterPipeline
 from src.shared.config import settings
 from src.shared.logger import logger
@@ -53,7 +53,7 @@ def build_parser():
     presenter_parser.add_argument("--keywords", type=str, default="", help="Keywords/topic for script generation")
     presenter_parser.add_argument("--text", type=str, default="", help="Direct presenter script text")
     presenter_parser.add_argument("--title", type=str, default="", help="On-screen title")
-    presenter_parser.add_argument("--character", type=str, default="na1", help="Character id or PNG path, e.g. na1/n3")
+    presenter_parser.add_argument("--character", type=str, default=DEFAULT_SONIC_FOX_CHARACTER, help="Character id or asset path. Default: Sonic fox video layer")
     presenter_parser.add_argument("--character-position", type=str, default="right_bottom", choices=["right_bottom", "left_bottom", "center_bottom"], help="Character placement on the canvas")
     presenter_parser.add_argument("--character-size", type=str, default="medium", choices=["small", "medium", "large"], help="Character display size")
     presenter_parser.add_argument("--background", type=str, default="", help="Background image/video path")
@@ -64,6 +64,19 @@ def build_parser():
     presenter_parser.add_argument("--tts-provider", type=str, default="edge", choices=["edge", "gpt_sovits"], help="TTS provider")
     presenter_parser.add_argument("--voice", type=str, default="", help="Voice ID or reference audio path")
     presenter_parser.add_argument("--max-segments", type=int, default=16, help="Maximum number of presenter segments")
+    presenter_parser.add_argument("--no-comfy-background", action="store_true", help="Use local fallback anime backgrounds without ComfyUI")
+
+    presenter_assets_parser = subparsers.add_parser("presenter-assets", help="Generate presenter script and background images only")
+    presenter_assets_parser.add_argument("--keywords", type=str, default="", help="Keywords/topic for script generation")
+    presenter_assets_parser.add_argument("--text", type=str, default="", help="Direct presenter script text")
+    presenter_assets_parser.add_argument("--title", type=str, default="", help="On-screen title")
+    presenter_assets_parser.add_argument("--character", type=str, default=DEFAULT_SONIC_FOX_CHARACTER, help="Character id or asset path. Default: Sonic fox video layer")
+    presenter_assets_parser.add_argument("--background", type=str, default="", help="Background image/video path")
+    presenter_assets_parser.add_argument("--background-style", type=str, default="anime", choices=["anime", "existing", "gradient"], help="Default background style when --background is omitted")
+    presenter_assets_parser.add_argument("--tts-provider", type=str, default="edge", choices=["edge", "gpt_sovits"], help="TTS provider hint for script generation")
+    presenter_assets_parser.add_argument("--voice", type=str, default="", help="Voice ID or reference audio path")
+    presenter_assets_parser.add_argument("--max-segments", type=int, default=8, help="Maximum number of presenter segments")
+    presenter_assets_parser.add_argument("--comfy-background", action="store_true", help="Use ComfyUI to generate preview backgrounds. Default uses fast local fallback images.")
 
     import_parser = subparsers.add_parser("import-knowledge", help="Import books into the vector knowledge base")
     import_parser.add_argument("--books-dir", type=str, default=service.default_books_dir, help="Books directory to import")
@@ -212,6 +225,7 @@ def main():
             output_dir=args.output_dir,
             audio_path=args.audio or "",
             max_segments=args.max_segments,
+            use_comfy_background=not args.no_comfy_background,
         )
         result = presenter.run(request)
         if not result.success:
@@ -220,6 +234,32 @@ def main():
         logger.info(f"数字人主讲视频生成成功: {result.video_path}")
         logger.info(f"工作目录: {result.work_dir}")
         print(result.video_path)
+        return
+
+    if args.command == "presenter-assets":
+        if not args.text and not args.keywords:
+            logger.error("presenter-assets command requires --text or --keywords.")
+            sys.exit(1)
+
+        presenter = PresenterPipeline()
+        request = PresenterRequest(
+            keywords=args.keywords or "",
+            text=args.text or "",
+            title=args.title or args.keywords or "",
+            voice=args.voice or "",
+            tts_provider=args.tts_provider,
+            character=args.character,
+            background=args.background or "",
+            background_style=args.background_style,
+            max_segments=args.max_segments,
+            use_comfy_background=args.comfy_background,
+        )
+        result = presenter.run_assets_preview(request)
+        if not result.success:
+            logger.error(f"数字人文字和背景图预览生成失败: {result.message}")
+            sys.exit(1)
+        logger.info(f"数字人文字和背景图预览生成成功: {result.work_dir}")
+        print(result.work_dir)
         return
 
     if args.command == "import-knowledge":
