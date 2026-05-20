@@ -1,17 +1,17 @@
 ---
-doc_status: current
-doc_category: mainline
-last_reviewed: 2026-05-10
-model_usage: 当前主线文档，可以作为当前项目状态或实施依据。
+doc_status: archived_do_not_use_as_current
+doc_category: archive
+last_reviewed: 2026-05-20
+model_usage: 早期 2D 分层微动作路线记录，仅用于历史参考；当前主线是动漫数字人主讲。
 ---
 
-> 文档状态：当前主线文档，可以作为当前项目状态或实施依据。
+> 文档状态：历史参考。本文记录 2026-05-10 的 2D 分层微动作路线，不再是当前主线；当前主线以 `CURRENT_CAPABILITIES.md` 的“动漫数字人主讲”为准。
 
 # 方案二增强版：2D 分层 + 可复用微动作库
 
 > 日期：2026-05-10
 > 目标：在保留当前全身人物画面的前提下，让人物有轻微生动感。
-> 当前判断：这是现阶段最稳、最简单、最符合当前画面的路线。
+> 当时判断：这是 2026-05-10 阶段最稳、最简单、最符合当时画面的路线。
 
 ## 结论
 

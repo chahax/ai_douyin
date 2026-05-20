@@ -1,8 +1,12 @@
+import json
 from pathlib import Path
 
 from PIL import Image, ImageDraw
 
 from src.content_factory.presenter.models import CharacterAsset, PresenterSegment
+from src.shared.llm_client import llm_client
+from src.shared.config import settings
+from src.shared.logger import logger
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
@@ -94,12 +98,19 @@ class BackgroundResolver:
             cue = self._build_group_cue(group_segments, group_text)
             background_path = backgrounds_dir / f"bg_{current_group:03d}.png"
             prompt, plan = self.build_background_prompt_with_plan(group_text, cue=cue, character=character)
-            self._create_anime_background(
+
+            generated = self._create_comfy_background(
+                prompt,
                 background_path,
-                seed_index=current_group,
-                cue=cue,
-                scene_text=group_text,
+                seed=260600 + current_group,
             )
+            if not generated:
+                self._create_anime_background(
+                    background_path,
+                    seed_index=current_group,
+                    cue=cue,
+                    scene_text=group_text,
+                )
 
             for segment in group_segments:
                 segment.background_group = current_group
@@ -107,6 +118,7 @@ class BackgroundResolver:
                 segment.background_action = plan["action"]
                 segment.background_subject = plan["subject"]
                 segment.background_include_ip = plan["include_ip"]
+                segment.background_plan = plan
                 paths.append(str(background_path))
             current_group += 1
         return paths
@@ -116,6 +128,18 @@ class BackgroundResolver:
         return prompt
 
     def build_background_prompt_with_plan(self, text: str, cue: str = "", character: str = "") -> tuple[str, dict]:
+        llm_plan = self._build_llm_background_plan(text)
+        if llm_plan:
+            prompt = self._plan_to_comfy_prompt(llm_plan)
+            return prompt, {
+                "action": llm_plan.get("scene_type") or llm_plan.get("content_type") or "llm_plan",
+                "subject": llm_plan.get("core_metaphor") or llm_plan.get("content_type") or "llm generated background",
+                "include_ip": False,
+                "source": "llm",
+                "llm_plan": llm_plan,
+                "cue": cue,
+            }
+
         plan = self._visual_plan(text)
         ip_subject = self._ip_subject(character)
         subject = ip_subject if plan["include_ip"] else plan["subject"]
@@ -142,9 +166,103 @@ class BackgroundResolver:
         plan = {
             **plan,
             "subject": subject,
+            "source": "rules",
+            "llm_plan": {},
             "cue": cue,
         }
         return prompt, plan
+
+    def _build_llm_background_plan(self, text: str) -> dict:
+        template_path = PROJECT_ROOT / "docs" / "prompts" / "background-plan-generation.txt"
+        try:
+            template = template_path.read_text(encoding="utf-8")
+        except FileNotFoundError:
+            logger.warning("Background plan prompt file not found. Falling back to rule-based background plan.")
+            return {}
+
+        prompt = template.replace("{text}", (text or "").strip()[:900])
+        messages = [
+            {"role": "system", "content": "你是专业短视频动漫背景分镜导演。必须只输出合法 JSON。"},
+            {"role": "user", "content": prompt},
+        ]
+        try:
+            response = llm_client.chat_completion(messages, temperature=0.35, json_mode=True)
+            if not response:
+                return {}
+            cleaned = response.replace("```json", "").replace("```", "").strip()
+            plan = json.loads(cleaned)
+        except Exception as exc:
+            logger.warning(f"LLM background plan failed, fallback to rules: {exc}")
+            return {}
+
+        if not self._is_valid_llm_plan(plan):
+            logger.warning("LLM background plan missing required fields, fallback to rules.")
+            return {}
+        return plan
+
+    def _is_valid_llm_plan(self, plan: dict) -> bool:
+        if not isinstance(plan, dict):
+            return False
+        required = ("content_type", "scene_type", "composition", "main_visual_prompt", "symbolic_objects")
+        if any(not plan.get(key) for key in required):
+            return False
+        composition = plan.get("composition")
+        if not isinstance(composition, dict):
+            return False
+        if not isinstance(plan.get("symbolic_objects"), list):
+            return False
+        english_fields = [
+            plan.get("content_type", ""),
+            plan.get("scene_type", ""),
+            plan.get("emotion", ""),
+            plan.get("main_visual_prompt", ""),
+            plan.get("color_palette", ""),
+            plan.get("lighting", ""),
+            composition.get("foreground", ""),
+            composition.get("midground", ""),
+            composition.get("background", ""),
+            composition.get("focal_point", ""),
+            composition.get("camera_angle", ""),
+            *[str(item) for item in plan.get("symbolic_objects", [])],
+        ]
+        if any(self._contains_cjk(value) for value in english_fields):
+            return False
+        forbidden_marks = ("《", "》", "“", "”", "book title", "readable title")
+        joined = " ".join(str(value).lower() for value in english_fields)
+        if any(mark.lower() in joined for mark in forbidden_marks):
+            return False
+        return True
+
+    def _contains_cjk(self, value: str) -> bool:
+        return any("\u4e00" <= char <= "\u9fff" for char in str(value or ""))
+
+    def _plan_to_comfy_prompt(self, plan: dict) -> str:
+        composition = plan.get("composition") or {}
+        symbolic_objects = ", ".join(str(item) for item in (plan.get("symbolic_objects") or [])[:6])
+        parts = [
+            "vertical 9:16 anime illustration",
+            "clean modern slice-of-life scene",
+            "high quality soft cel shading",
+            "professional storyboarding composition",
+            "gentle cinematic lighting",
+            str(plan.get("main_visual_prompt") or "").strip(),
+            f"foreground: {composition.get('foreground', '')}",
+            f"midground: {composition.get('midground', '')}",
+            f"background: {composition.get('background', '')}",
+            f"focal point: {composition.get('focal_point', '')}",
+            f"camera angle: {composition.get('camera_angle', 'medium wide shot')}",
+            f"symbolic objects: {symbolic_objects}",
+            f"color palette: {plan.get('color_palette', 'warm clean soft colors')}",
+            f"lighting: {plan.get('lighting', 'soft warm light with gentle shadows')}",
+            "open empty lower 35 percent reserved for subtitles and presenter overlay",
+            "lower right area clean and uncluttered",
+            "plain clean surfaces",
+            "no written text, no Chinese characters, no English letters, no numbers",
+            "no signs, no posters, no book titles, no labels, no logo",
+            "no watermark, no speech bubble, no interface",
+            "no close-up face, no large portrait, no realistic photo style",
+        ]
+        return ", ".join(part for part in parts if part and not part.endswith(": "))
 
     def _build_group_cue(self, segments: list[PresenterSegment], group_text: str) -> str:
         keywords: list[str] = []
@@ -211,6 +329,14 @@ class BackgroundResolver:
                 "include_ip": True,
                 "actor_action": "arranging blank colored planning cards on a table",
                 "visual": "a clean planning desk with blank colored cards, simple calendar shapes without numbers, and a warm lamp",
+            },
+            {
+                "action": "conflict_relationship",
+                "subject": "conflict and communication",
+                "triggers": ("矛盾", "冲突", "误会", "争执", "分歧", "意见不合", "沟通", "对立"),
+                "include_ip": False,
+                "actor_action": "",
+                "visual": "a calm conversation table with two cups placed apart, two empty chairs facing each other, separated warm and cool light on the tabletop, visual metaphor for conflict, distance, and the possibility of communication",
             },
             {
                 "action": "connect",
@@ -364,6 +490,174 @@ class BackgroundResolver:
         if any(word in text for word in ("学习", "实践", "复习", "知识")):
             return "study"
         return "default"
+
+    def _create_comfy_background(self, prompt: str, output_path: Path, seed: int = 260600) -> bool:
+        """调用 ComfyUI (127.0.0.1:8190) 生成动漫背景图。自动启动/关闭 ComfyUI。"""
+        import json
+        import socket
+        import subprocess
+        import time
+        import urllib.request
+        import urllib.parse
+
+        host = settings.COMFYUI_HOST or "127.0.0.1"
+        port = int(settings.COMFYUI_PORT or 8190)
+        comfy_path = settings.COMFYUI_MAIN_PATH or r"D:\IT\AI_vido\ComfyUI\main.py"
+        comfy_main = Path(comfy_path)
+        comfy_marker = str(comfy_main).replace("/", "\\").lower()
+
+        def is_port_open(host: str, port: int) -> bool:
+            try:
+                with socket.create_connection((host, port), timeout=3):
+                    return True
+            except (socket.timeout, OSError):
+                return False
+
+        def wait_for_comfy(max_wait: int = 60) -> bool:
+            for _ in range(max_wait):
+                if is_comfyui_ready():
+                    return True
+                time.sleep(2)
+            return False
+
+        def is_comfyui_ready() -> bool:
+            if not is_port_open(host, port):
+                return False
+            try:
+                with urllib.request.urlopen(f"http://{host}:{port}/system_stats", timeout=5) as resp:
+                    data = json.loads(resp.read().decode("utf-8"))
+                return isinstance(data, dict) and ("system" in data or "devices" in data)
+            except Exception:
+                return False
+
+        def stop_comfyui_process_by_port() -> None:
+            ps_command = (
+                f"$conns = Get-NetTCPConnection -LocalPort {port} -ErrorAction SilentlyContinue; "
+                "$conns | ForEach-Object { "
+                "$pid = $_.OwningProcess; "
+                "$proc = Get-CimInstance Win32_Process -Filter \"ProcessId = $pid\" -ErrorAction SilentlyContinue; "
+                f"if ($proc -and $proc.CommandLine -and $proc.CommandLine.Replace('/', '\\').ToLower().Contains('{comfy_marker}')) "
+                "{ Stop-Process -Id $pid -Force -ErrorAction SilentlyContinue } "
+                "}"
+            )
+            subprocess.run(
+                ["powershell", "-NoProfile", "-Command", ps_command],
+                timeout=15,
+                capture_output=True,
+            )
+
+        def stop_started_comfy(process: subprocess.Popen | None) -> None:
+            if not we_started:
+                return
+            print("[ComfyUI] 生成流程结束，正在关闭本次启动的 ComfyUI...")
+            if process and process.poll() is None:
+                try:
+                    process.terminate()
+                    process.wait(timeout=10)
+                except Exception:
+                    try:
+                        process.kill()
+                        process.wait(timeout=5)
+                    except Exception as exc:
+                        print(f"[ComfyUI] 按 PID 关闭失败: {exc}")
+
+            # 兜底：只清理命令行匹配 ComfyUI main.py 且仍监听当前端口的进程。
+            try:
+                stop_comfyui_process_by_port()
+            except Exception as exc:
+                print(f"[ComfyUI] 端口兜底关闭失败: {exc}")
+
+        # 检查 ComfyUI 是否已运行
+        we_started = False
+        comfy_process = None
+        if is_port_open(host, port) and not is_comfyui_ready():
+            print(f"[ComfyUI] {host}:{port} 已被非 ComfyUI 服务占用，跳过 ComfyUI 背景生成。")
+            return False
+
+        if not is_port_open(host, port):
+            print("[ComfyUI] 未运行，正在启动...")
+            try:
+                comfy_process = subprocess.Popen(
+                    ["python", comfy_path, "--enable-cors", "--listen", host, "--port", str(port)],
+                    cwd=str(comfy_main.parent),
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                )
+                we_started = True
+            except Exception as e:
+                print(f"[ComfyUI] 启动失败: {e}")
+                return False
+
+            print("[ComfyUI] 等待服务就绪...")
+            if not wait_for_comfy(60):
+                print("[ComfyUI] 启动超时")
+                stop_started_comfy(comfy_process)
+                return False
+            print("[ComfyUI] 已就绪")
+
+        workflow = {
+            "1": {"class_type": "CheckpointLoaderSimple", "inputs": {"ckpt_name": "flux1-schnell-fp8.safetensors"}},
+            "2": {"class_type": "CLIPTextEncode", "inputs": {"text": prompt, "clip": ["1", 1]}},
+            "3": {"class_type": "CLIPTextEncode", "inputs": {
+                "text": "text, letters, numbers, sign, poster, frame, logo, watermark, "
+                        "close-up portrait, large animal, extra head, malformed face",
+                "clip": ["1", 1]
+            }},
+            "4": {"class_type": "EmptyLatentImage", "inputs": {"width": 768, "height": 1344, "batch_size": 1}},
+            "5": {"class_type": "KSampler", "inputs": {
+                "seed": seed, "steps": 4, "cfg": 1.0,
+                "sampler_name": "euler", "scheduler": "simple", "denoise": 1.0,
+                "model": ["1", 0], "positive": ["2", 0], "negative": ["3", 0], "latent_image": ["4", 0]
+            }},
+            "6": {"class_type": "VAEDecode", "inputs": {"samples": ["5", 0], "vae": ["1", 2]}},
+            "7": {"class_type": "SaveImage", "inputs": {"filename_prefix": "ai_douyin_bg", "images": ["6", 0]}},
+        }
+
+        try:
+            import uuid
+            cid = str(uuid.uuid4())
+            data = json.dumps({"prompt": workflow, "client_id": cid}).encode("utf-8")
+            req = urllib.request.Request(
+                f"http://{host}:{port}/prompt",
+                data=data,
+                headers={"Content-Type": "application/json"},
+            )
+            resp = urllib.request.urlopen(req, timeout=20)
+            pid = json.loads(resp.read())["prompt_id"]
+
+            for _ in range(240):
+                time.sleep(1)
+                hist = json.loads(urllib.request.urlopen(f"http://{host}:{port}/history/{pid}", timeout=10).read())
+                if pid in hist:
+                    break
+            else:
+                return False
+
+            item = hist[pid]
+            if item.get("status", {}).get("status_str") != "success":
+                return False
+
+            images = []
+            for node in item.get("outputs", {}).values():
+                images.extend(node.get("images", []))
+            if not images:
+                return False
+
+            img = images[0]
+            qs = urllib.parse.urlencode({
+                "filename": img["filename"],
+                "subfolder": img.get("subfolder", ""),
+                "type": img.get("type", "output"),
+            })
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            output_path.write_bytes(
+                urllib.request.urlopen(f"http://{host}:{port}/view?{qs}", timeout=30).read()
+            )
+            return output_path.exists() and output_path.stat().st_size > 0
+        except Exception:
+            return False
+        finally:
+            stop_started_comfy(comfy_process)
 
     def _draw_scene_symbols(self, draw: ImageDraw.ImageDraw, scene: str, width: int, height: int) -> None:
         top = 350

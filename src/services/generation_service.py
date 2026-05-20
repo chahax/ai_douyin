@@ -392,6 +392,17 @@ class GenerationService:
         logger.info("Script generated.")
         return script_content, "rag" if request.topic else "random_book"
 
+    def resolve_script(self, topic: str = "", keywords: str = "", tts_provider: str = "edge", voice: Optional[str] = None) -> str:
+        """公开接口：通过 RAG + LLM 生成脚本文本。"""
+        request = GenerationRequest(
+            topic=topic,
+            keywords=keywords,
+            tts_provider=tts_provider,
+            voice=voice,
+        )
+        script, _source = self._resolve_script_content(request)
+        return (script or "").strip()
+
     def _build_generation_hints(self, request: GenerationRequest):
         return {
             "keywords": request.keywords,

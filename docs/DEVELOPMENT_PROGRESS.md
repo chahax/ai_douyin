@@ -1,7 +1,7 @@
 ---
 doc_status: current
 doc_category: mainline
-last_reviewed: 2026-05-17
+last_reviewed: 2026-05-20
 model_usage: 当前开发进度总览。能力判断优先参考 CURRENT_CAPABILITIES.md，本文件用于看阶段状态。
 ---
 
@@ -9,7 +9,7 @@ model_usage: 当前开发进度总览。能力判断优先参考 CURRENT_CAPABIL
 
 # AI Douyin 开发进度总览
 
-更新时间：2026-05-17
+更新时间：2026-05-20
 
 ## 当前状态
 
@@ -27,9 +27,9 @@ model_usage: 当前开发进度总览。能力判断优先参考 CURRENT_CAPABIL
   -> 自动回复
 ```
 
-双角色人物视频、微动作 PNG 序列、FramePack 动作帧已经有独立代码和样片验证，但还不是 `auto-publish` 的默认一键模式。
+当前主线已经切到动漫数字人主讲：`AutoPublishRequest.video_mode` 默认是 `presenter_anime`，管理后台“在线制作/发布”也默认选中“动漫数字人主讲”。单人口播模板视频保留为历史/兜底模式。
 
-2026-05-16 至 2026-05-17，动漫数字人主讲路线完成半自动验证：Edge-TTS 分段音频、Sonic 角色视频层、ComfyUI 分段背景、字幕避让和 FFmpeg 拼接均可跑出完整版。下一步是把临时 ComfyUI API 调用整理成正式 provider，并增加背景质检。
+2026-05-16 至 2026-05-17，动漫数字人主讲路线完成验证：Edge-TTS 分段音频、Sonic 角色视频层、ComfyUI 分段背景、字幕避让和 FFmpeg 拼接均可跑出完整版。ComfyUI 不随平台启动，只在生成背景时按需启动，背景/视频输出完成后代码会尝试关闭 ComfyUI。下一步是把这套逻辑整理成正式 provider，并增加背景质检。
 
 ## 阶段进度表
 
@@ -40,11 +40,11 @@ model_usage: 当前开发进度总览。能力判断优先参考 CURRENT_CAPABIL
 | 阶段 2 | Provider 抽象 + Ollama | 已完成 | LLM Provider 已拆出，Ollama 可用 |
 | 阶段 3 | 抖音平台功能 | 已完成 | 发布、同步、评论抓取、自动回复 |
 | 阶段 4 | Streamlit 管理后台 | 已完成 | 视频、评论、自动回复、规则、违禁词、用户等页面 |
-| 阶段 4.1 | 单人口播视频生成 | 已完成 | 当前 `auto-publish` 默认模式 |
+| 阶段 4.1 | 单人口播视频生成 | 已完成 | 历史/兜底模式，管理后台可选“单人口播模板（旧格式）” |
 | 阶段 4.2 | 双角色对话素材链 | 局部完成 | 对话生成、双声线 TTS、FFmpeg 合成函数已具备 |
 | 阶段 4.3 | 微动作 PNG 序列 | 局部完成 | 眨眼/呼吸序列生成与最终合成已验证 |
 | 阶段 4.4 | FramePack 动作帧 | 半自动可用 | FramePack 手动生成，本项目抽帧/抠图/合成 |
-| 阶段 4.5 | 动漫数字人主讲 | 半自动可用 | `main.py presenter` 可跑兜底版；ComfyUI 分段背景和 Sonic 视频层已验证，待 provider 化 |
+| 阶段 4.5 | 动漫数字人主讲 | 当前主线 | 管理后台和服务默认 `presenter_anime`；ComfyUI 按需启动并在生成后尝试关闭 |
 | 阶段 5 | API 服务层 | 未开始 | FastAPI 入口未实现 |
 | 阶段 6 | 异步任务执行 | 未开始 | 队列和 Worker 未实现 |
 | 阶段 7 | 定时调度 | 未开始 | `src/scheduler/` 尚未形成能力 |
@@ -79,15 +79,15 @@ python main.py auto-reply --all
 
 | 模式 | 状态 | 说明 |
 |---|---|---|
-| 单人口播模板视频 | 已完成 | `auto-publish` 默认路线，模板视频按音频时长循环 |
+| 单人口播模板视频 | 已完成 | 历史/兜底模式，模板视频按音频时长循环 |
 | 手动已有视频发布 | 已完成 | 用 `douyin-publish` 直接发布 mp4 |
 | 双角色对话脚本 + 双声线 TTS | 局部完成 | `GenerationService.run_dialogue_generation()` 可返回结构化结果和 A/B 音频 |
 | 双角色视频叠加 | 局部完成 | `compose_dual_character_video()` 支持角色视频/PNG + 背景合成 |
 | 双角色 PNG 序列合成 | 局部完成 | `compose_dual_character_sequence_video()` 可合成两组角色帧 |
 | 本地微动作 | 局部完成 | `micro_motion.py` 生成眨眼/呼吸角色帧 |
 | FramePack 接入 | 半自动可用 | 手动生成 MP4，本项目后处理并合成 |
-| 动漫数字人主讲 | 半自动可用 | Edge-TTS + Sonic 角色视频层 + ComfyUI 分段背景已生成完整版，待一键化 |
-| 双角色一键发布 | 未完成 | 尚未接入 `auto-publish` |
+| 动漫数字人主讲 | 当前主线 | Edge-TTS + Sonic 角色视频层 + ComfyUI 按需背景 + 字幕合成；当前 `video_mode=presenter_anime` |
+| 双角色一键发布 | 管理后台可选 | `video_mode=dual_framepack_active`，依赖已有 FramePack 角色帧和背景素材 |
 
 ## 代表性输出
 
@@ -96,7 +96,7 @@ python main.py auto-reply --all
 - `data/videos/dual_v14_healing_bg.mp4`
 - `data/videos/presenter_20260516_225643_comfy_full.mp4`
 
-这些样片说明 9:16 输出、PNG 序列叠加、FramePack 后处理路线已能跑出成片；它们不代表已经进入一键自动发布主流程。
+这些样片说明 9:16 输出、PNG 序列叠加、FramePack 后处理路线已能跑出成片。管理后台已经提供相关模式入口，但素材检查、失败回退和时间轴精度仍需要继续加固。
 `presenter_20260516_225643_comfy_full.mp4` 说明动漫数字人主讲路线的分段背景和合成层已验证，但 ComfyUI 生成仍需增加伪文字质检和重抽。
 
 ## 主要代码索引
@@ -116,9 +116,9 @@ python main.py auto-reply --all
 
 ## 近期建议
 
-1. 把动漫数字人主讲的 ComfyUI 背景生成封装成 `BackgroundProvider`，支持 `fallback|preset|comfyui|auto`。
+1. 把动漫数字人主讲的 ComfyUI 背景生成封装成 `BackgroundProvider`，支持 `fallback|preset|comfyui|auto`，并保留按需启动/生成后关闭的行为。
 2. 增加背景质检和失败回退：伪文字、海报、人物过大、安全区占用时重抽或回退。
 3. 把双角色/FramePack 路线封装成服务层请求模型。
 4. 增加资源检查和失败回退：模板视频、音频、背景、角色帧缺失时给出清晰错误。
-5. 在稳定后给 `auto-publish` 增加 `--mode single|dual|framepack|presenter`。
+5. 给 `auto-publish` 增加 `--mode single_template|dual_framepack_active|presenter_anime`，避免 CLI 默认模式和网页默认模式继续混淆。
 6. 再考虑定时任务、API 和 Worker。

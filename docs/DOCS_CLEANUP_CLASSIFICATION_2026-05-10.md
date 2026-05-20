@@ -1,11 +1,11 @@
 ---
-doc_status: current
-doc_category: mainline
-last_reviewed: 2026-05-10
-model_usage: 当前主线文档，可以作为当前项目状态或实施依据。
+doc_status: archived_do_not_use_as_current
+doc_category: archive
+last_reviewed: 2026-05-20
+model_usage: 2026-05-10 的旧文档归类记录，已被 DOCS_RETENTION_ANALYSIS_2026-05-20.md 替代；不要作为当前主线依据。
 ---
 
-> 文档状态：当前主线文档，可以作为当前项目状态或实施依据。
+> 文档状态：历史归档。本文仍把“2D 分层 + 微动作库”作为当时主线，已不符合 2026-05-20 的“动漫数字人主讲”当前主线。当前归类以 [docs 文档保留与遗弃分析](DOCS_RETENTION_ANALYSIS_2026-05-20.md) 为准。
 
 # docs 文档归类清单
 

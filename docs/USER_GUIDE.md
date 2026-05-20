@@ -1,7 +1,7 @@
 ---
 doc_status: current
 doc_category: mainline
-last_reviewed: 2026-05-17
+last_reviewed: 2026-05-20
 model_usage: 当前用户使用手册。命令以本文件和 main.py 为准。
 ---
 
@@ -9,7 +9,7 @@ model_usage: 当前用户使用手册。命令以本文件和 main.py 为准。
 
 # AI Douyin 使用指南
 
-更新时间：2026-05-17
+更新时间：2026-05-20
 
 ## 环境准备
 
@@ -78,13 +78,22 @@ python main.py quick --keywords "自律" --output-dir data/videos
 python main.py auto-publish --keywords "励志,成长" --title "越自律越自由" --tags "励志,成长,自律"
 ```
 
-当前 `auto-publish` 默认使用单人口播模板视频路线：
+当前 CLI `auto-publish` 没有 `--mode` 参数，会使用 `AutoPublishRequest` 里的默认 `video_mode`。截至 2026-05-20，代码默认值是 `presenter_anime`，也就是动漫数字人主讲路线。
+
+当前默认路线：
 
 ```text
-关键词 -> 脚本 -> GPT-SoVITS 配音 -> BGM -> 模板视频循环合成 -> 抖音上传
+关键词 -> 脚本 -> Edge-TTS 分段配音 -> Sonic 角色层 -> 动漫背景 -> 字幕合成 -> 抖音上传
 ```
 
-如果默认模板视频路径不存在，需要传入模板：
+ComfyUI 行为：
+
+- 启动管理后台时不会启动 ComfyUI。
+- 生成动漫背景时才会按需检查/启动 `127.0.0.1:8190` 的 ComfyUI。
+- 背景图片生成完成后，如果是本次流程启动的 ComfyUI，代码会尝试关闭它。
+- 如果 ComfyUI 不可用，会回退到本地兜底背景。
+
+单人口播模板视频现在是历史/兜底模式。如果需要使用，需要在管理后台选择“单人口播模板（旧格式）”；CLI 后续建议补 `--mode single_template`：
 
 ```bash
 python main.py auto-publish --keywords "成长" --template data/videos/template.mp4
@@ -100,7 +109,8 @@ python main.py presenter --keywords "人生哲学导向" --character data/ip_cha
 
 当前边界：
 
-- `main.py presenter` 会直接生成本地兜底背景版。
+- `main.py presenter` 会直接生成数字人主讲视频；ComfyUI 不可用时会使用本地兜底背景。
+- 管理后台“在线制作/发布”当前默认选择“动漫数字人主讲”，对应 `video_mode=presenter_anime`。
 - ComfyUI 分段背景已验证，但还没有封装成正式 CLI 参数；暂时属于半自动流程。
 - 已验证样片：`data/videos/presenter_20260516_225643_comfy_full.mp4`。
 

@@ -126,11 +126,25 @@ class PresenterPipeline:
         return (script or "").strip()
 
     def _synthesize_segments(self, request: PresenterRequest, segments, audio_dir: Path) -> None:
+        from tenacity import retry, stop_after_attempt, wait_fixed, retry_if_result
+
         tts = TTSEngine(output_dir=str(audio_dir), provider_type=request.tts_provider)
         extension = "wav" if request.tts_provider == "gpt_sovits" else "mp3"
+
+        def try_generate(seg, attempt):
+            filename = f"seg_{seg.index:03d}.{extension}"
+            return tts.generate_audio(seg.text, filename=filename, voice=request.voice or None)
+
         for segment in segments:
-            filename = f"seg_{segment.index:03d}.{extension}"
-            audio_path = tts.generate_audio(segment.text, filename=filename, voice=request.voice or None)
+            audio_path = None
+            for attempt in range(1, 4):
+                audio_path = try_generate(segment, attempt)
+                if audio_path:
+                    break
+                logger.warning(f"TTS segment {segment.index} attempt {attempt} failed, retrying...")
+                import time
+                time.sleep(2)
+
             if not audio_path:
                 raise RuntimeError(f"TTS 失败: segment {segment.index}")
             segment.audio_path = audio_path

@@ -1,7 +1,7 @@
 ---
 doc_status: current
 doc_category: mainline
-last_reviewed: 2026-05-13
+last_reviewed: 2026-05-20
 model_usage: 关联项目集成说明。用于理解 ai_douyin 与 FramePack、FramePack_oneclick、ComfyUI 背景资源之间的关系。
 ---
 
@@ -9,19 +9,21 @@ model_usage: 关联项目集成说明。用于理解 ai_douyin 与 FramePack、F
 
 # 关联项目与视频生成集成说明
 
-更新时间：2026-05-13
+更新时间：2026-05-20
 
 ## 结论先行
 
 当前 `ai_douyin` 自己负责脚本、配音、混音、FFmpeg 合成、抖音发布；`FramePack` / `FramePack_oneclick` 不替代主项目，而是给主项目提供“人物动作短片段”和“治愈绿色背景素材”。
 
-现在最稳的生产路线还是单人口播模板视频。双角色已经有对话、双声线、角色 PNG 序列和最终合成样片，但还没有接入 `auto-publish` 成为一键模式。
+当前生产主线是动漫数字人主讲。`AutoPublishRequest.video_mode` 默认是 `presenter_anime`，管理后台“在线制作/发布”默认选中“动漫数字人主讲”。单人口播模板视频保留为历史/兜底模式；双角色已有对话、双声线、角色 PNG 序列和最终合成样片，并可在管理后台选择 `dual_framepack_active`。
+
+ComfyUI 不随管理后台启动；只有 Presenter 生成动漫背景时才按需启动，背景/视频输出完成后代码会尝试关闭。
 
 ## 当前视频背景是什么
 
 ### 1. 单人口播 `auto-publish` 背景
 
-`python main.py auto-publish ...` 当前默认走单人口播模板视频模式。
+单人口播模板视频模式使用模板视频作为背景/底片。注意：截至 2026-05-20，`python main.py auto-publish ...` 没有显式 `--mode` 参数，会使用代码里的 `AutoPublishRequest.video_mode` 默认值 `presenter_anime`；如果要使用单人口播路线，需要通过管理后台选择“单人口播模板（旧格式）”，或后续给 CLI 补 `--mode single_template`。
 
 默认模板视频在代码里：
 
@@ -115,7 +117,7 @@ data/videos/dual_final_mixed.mp4
 
 2026-05-13 正式化结果：`compose_dual_character_sequence_video()` 已增加 `active_speaker_timeline` 参数。传入 `[("A", 0, 18.504), ("B", 18.504, 31.464)]` 这类时间轴后，会在最终 FFmpeg 合成阶段让当前说话角色轻微放大、上移并提亮。正式样片为 `data/videos/dual_v16_green_active_speaker_official.mp4`。
 
-2026-05-13 在线制作调整：管理后台“在线制作/发布”默认使用 `dual_framepack_active`，也就是正式版双角色主动说话格式；“单人口播模板（旧格式）”保留为下拉备选。自动发布上传阶段通过 `publish_headless=True` 运行，不再展示浏览器窗口。
+2026-05-20 复核：当前 `src/web/app.py` 的“在线制作/发布”下拉框默认选中“动漫数字人主讲”，对应 `video_mode=presenter_anime`；“双角色主动说话正式版”对应 `dual_framepack_active`；“单人口播模板（旧格式）”对应 `single_template`。页面提示文案已同步为动漫数字人主讲。
 
 ### 仍未完成的部分
 

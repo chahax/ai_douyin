@@ -292,7 +292,7 @@ def page_videos():
     # 发布新视频
     st.markdown("---")
     st.subheader("➕ 在线制作/发布")
-    st.info("默认使用正式版双角色主动说话格式：绿色动态背景 + 谁说话谁轻微放大/提亮。单人口播旧格式仍可在下方切换。上传浏览器默认后台运行，可打开调试模式显示窗口。")
+    st.info("默认使用动漫数字人主讲格式：Edge-TTS + Sonic 角色层 + 动漫背景 + 字幕合成。双角色正式版和单人口播旧格式可在下方切换。上传浏览器默认后台运行，可打开调试模式显示窗口。")
     with st.form("auto_publish_form"):
         col_p1, col_p2 = st.columns(2)
         with col_p1:
@@ -301,11 +301,12 @@ def page_videos():
             title = st.text_input("视频标题（空则自动生成）", placeholder="自动生成")
         video_mode_label = st.selectbox(
             "视频格式",
-            ["双角色主动说话正式版", "单人口播模板（旧格式）"],
+            ["动漫数字人主讲", "双角色主动说话正式版", "单人口播模板（旧格式）"],
             index=0,
-            help="双角色正式版会使用 FramePack 人物素材、绿色动态背景和主动说话高亮效果。",
+            help="动漫数字人主讲使用动画角色和 AI 生成背景。双角色正式版使用 FramePack 人物素材和主动说话高亮效果。",
         )
         video_mode = {
+            "动漫数字人主讲": "presenter_anime",
             "双角色主动说话正式版": "dual_framepack_active",
             "单人口播模板（旧格式）": "single_template",
         }[video_mode_label]

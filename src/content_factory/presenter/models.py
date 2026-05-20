@@ -15,6 +15,7 @@ class PresenterSegment:
     background_action: str = ""
     background_subject: str = ""
     background_include_ip: bool = False
+    background_plan: dict = field(default_factory=dict)
     text_layer_path: str = ""
     clip_path: str = ""
 

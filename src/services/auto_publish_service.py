@@ -22,6 +22,8 @@ from pathlib import Path
 from typing import List, Optional
 
 from src.content_factory.video_composer import compose_dual_character_sequence_video, compose_video, get_duration
+from src.content_factory.presenter_pipeline import PresenterPipeline
+from src.content_factory.presenter.models import PresenterRequest
 from src.platform_adapter.browser_session import BrowserSession, build_default_browser_session_config
 from src.platform_adapter.douyin_adapter import DouyinAdapter
 from src.platform_adapter.models import PublishRequest, VideoItem, VideoStatus
@@ -34,6 +36,7 @@ DEFAULT_TEMPLATE_VIDEO = "D:/IT/AI_vido/ComfyUI/vido/4月19日.mp4"
 DEFAULT_BGM_VOLUME = 0.2
 VIDEO_MODE_SINGLE_TEMPLATE = "single_template"
 VIDEO_MODE_DUAL_FRAMEPACK_ACTIVE = "dual_framepack_active"
+VIDEO_MODE_PRESENTER_ANIME = "presenter_anime"
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DUAL_BACKGROUND = "data/videos/bg_comfy_green_loop_motion.mp4"
@@ -53,7 +56,7 @@ class AutoPublishRequest:
     bgm_volume: float = DEFAULT_BGM_VOLUME
     tts_provider: str = "edge"     # edge / gpt_sovits，后台默认用 edge 作为稳定兜底
     voice: str = ""                # 声音ID/参考音频
-    video_mode: str = VIDEO_MODE_SINGLE_TEMPLATE  # single_template / dual_framepack_active
+    video_mode: str = VIDEO_MODE_PRESENTER_ANIME  # presenter_anime / dual_framepack_active / single_template
     publish_headless: bool = True   # 自动发布默认后台运行浏览器
     output_dir: str = "data/videos"  # 输出目录
     interactive: bool = False       # 交互模式（每步暂停）
@@ -193,6 +196,15 @@ class AutoPublishService:
         if request.video_mode == VIDEO_MODE_DUAL_FRAMEPACK_ACTIVE:
             return self._generate_dual_dialogue_content(request)
 
+        if request.video_mode == VIDEO_MODE_PRESENTER_ANIME:
+            script = self.gen_service.resolve_script(
+                topic=request.keywords,
+                keywords=request.keywords,
+                tts_provider=request.tts_provider or "edge",
+                voice=request.voice or None,
+            )
+            return {"mode": VIDEO_MODE_PRESENTER_ANIME, "script": script}
+
         # 解析 hashtags（支持字符串或列表）
         hashtags = request.hashtags
         if isinstance(hashtags, str):
@@ -274,6 +286,9 @@ class AutoPublishService:
         if request.video_mode == VIDEO_MODE_DUAL_FRAMEPACK_ACTIVE:
             return self._compose_dual_framepack_active_video(request, content)
 
+        if request.video_mode == VIDEO_MODE_PRESENTER_ANIME:
+            return self._compose_presenter_anime_video(request, content)
+
         audio_path = content.get("audio_path", "")
         if not audio_path:
             return ""
@@ -326,6 +341,34 @@ class AutoPublishService:
             active_speaker_timeline=content.get("active_speaker_timeline"),
         )
         return video_path
+
+    def _compose_presenter_anime_video(self, request: AutoPublishRequest, content: dict) -> str:
+        """合成动漫数字人主讲视频（PresenterPipeline）。"""
+        presenter = PresenterPipeline()
+        # 优先使用 Sonic 生成的狐狸口型视频（video_chroma 绿幕）
+        character_path = (
+            "data/ip_characters/_incoming/sonic_test/fox_planner_576_mouthboost_upscale1080_sharp.mp4"
+        )
+        presenter_req = PresenterRequest(
+            keywords=request.keywords or "",
+            text=content.get("script", ""),
+            title=request.title or request.keywords or "数字人主讲",
+            voice=request.voice or "",
+            tts_provider=request.tts_provider or "edge",
+            character=character_path,
+            character_position="right_bottom",
+            character_size="medium",
+            background="",
+            background_style="anime",
+            bgm=request.bgm or "",
+            output_dir=request.output_dir or "data/videos",
+            audio_path="",
+            max_segments=16,
+        )
+        result = presenter.run(presenter_req)
+        if not result.success:
+            raise RuntimeError(f"动漫数字人视频生成失败: {result.message}")
+        return result.video_path
 
     @staticmethod
     def _existing_audio_files(paths: List[str]) -> List[str]:

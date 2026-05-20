@@ -68,6 +68,11 @@ class Settings(BaseSettings):
     # 必须使用 conda Python 3.9 执行 SDK（系统 Python 3.14 无法加载 SDK 的 C 扩展）
     GPT_SOVITS_CONDA_PYTHON: str = "C:/Users/c/.conda/envs/GPTSoVits/python.exe"
 
+    # ComfyUI background generation
+    COMFYUI_HOST: str = "127.0.0.1"
+    COMFYUI_PORT: int = 8190
+    COMFYUI_MAIN_PATH: str = "D:/IT/AI_vido/ComfyUI/main.py"
+
     model_config = SettingsConfigDict(env_file=".env")
 
     @field_validator(
@@ -77,6 +82,8 @@ class Settings(BaseSettings):
         "LLM_MODEL",
         "OLLAMA_BASE_URL",
         "OLLAMA_MODEL",
+        "COMFYUI_HOST",
+        "COMFYUI_MAIN_PATH",
         mode="before",
     )
     @classmethod
