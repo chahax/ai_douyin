@@ -346,11 +346,16 @@ class GenerationService:
             logger.info(f"[Step 1] RAG Mode: Searching wisdom for topic '{request.topic}'...")
             from src.rag_engine.wisdom_retriever import WisdomRetriever
 
-            retriever = WisdomRetriever()
-            chunks = retriever.search_wisdom(request.topic, top_k=3)
+            try:
+                retriever = WisdomRetriever()
+                chunks = retriever.search_wisdom(request.topic, top_k=3)
+            except Exception as exc:
+                logger.warning(f"RAG retriever unavailable, falling back to random extraction with keyword hints: {exc}")
+                chunks = []
 
             if not chunks:
-                logger.warning("No relevant chunks found. Falling back to random extraction.")
+                logger.warning("No relevant chunks found. Falling back to keyword-only wisdom.")
+                wisdom = self._build_keyword_wisdom(request)
             else:
                 logger.info(f"[Step 2] RAG Mode: Extracting wisdom from {len(chunks)} chunks...")
                 from src.content_factory.wisdom_extractor_rag import WisdomExtractorRAG
@@ -409,6 +414,18 @@ class GenerationService:
             "emotion_type": request.emotion_type,
             "positive_energy_type": request.positive_energy_type,
             "target_audience": request.target_audience,
+        }
+
+    def _build_keyword_wisdom(self, request: GenerationRequest) -> dict:
+        keyword_text = request.keywords or request.topic or "人生智慧"
+        return {
+            "title": keyword_text,
+            "core_message": f"围绕{keyword_text}，用具体生活场景说明边界、选择和行动方法。",
+            "quote": "",
+            "elaboration": f"不要引用随机书籍内容，直接围绕用户关键词{keyword_text}展开，先给真实生活痛点，再说明原因和解决方法。",
+            "actionable": "给出今天就能执行的三个小动作，要求具体、可验证、低门槛。",
+            "scene": "日常生活和工作场景",
+            "emotion": request.emotion_type or "冷静、清醒、有安全感",
         }
 
     def _synthesize_audio(self, request: GenerationRequest, script_content: str) -> List[str]:

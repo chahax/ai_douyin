@@ -1,16 +1,24 @@
 import json
+import re
 import time
 from dataclasses import asdict
 from pathlib import Path
 
 from src.content_factory.presenter.background_resolver import BackgroundResolver, project_path
-from src.content_factory.presenter.models import PresenterRequest, PresenterResult
+from src.content_factory.presenter.models import (
+    INPUT_MODE_ARTICLE_DIRECT,
+    INPUT_MODE_ARTICLE_EXTRACT,
+    INPUT_MODE_KEYWORDS,
+    PresenterRequest,
+    PresenterResult,
+)
 from src.content_factory.presenter.presenter_composer import PresenterComposer
 from src.content_factory.presenter.script_segmenter import ScriptSegmenter
 from src.content_factory.presenter.text_overlay import TextOverlayRenderer
 from src.content_factory.tts_engine import TTSEngine
 from src.content_factory.video_composer import get_duration
 from src.services.generation_service import GenerationRequest, GenerationService
+from src.shared.llm_client import llm_client
 from src.shared.logger import logger
 
 
@@ -114,11 +122,13 @@ class PresenterPipeline:
             return PresenterResult(False, f"异常: {exc}", work_dir=str(work_dir))
 
     def run_assets_preview(self, request: PresenterRequest) -> PresenterResult:
-        """只生成脚本文字、分段、背景图和构图元数据，不生成音频和视频。"""
+        """生成脚本文字、分段音频、背景图和构图元数据，只跳过最终视频合成。"""
         stamp = time.strftime("%Y%m%d_%H%M%S")
         work_dir = project_path("data/presenter_assets") / stamp
+        audio_dir = work_dir / "audio"
         backgrounds_dir = work_dir / "backgrounds"
-        backgrounds_dir.mkdir(parents=True, exist_ok=True)
+        for directory in (audio_dir, backgrounds_dir):
+            directory.mkdir(parents=True, exist_ok=True)
 
         try:
             script = self._resolve_script(request)
@@ -131,11 +141,18 @@ class PresenterPipeline:
             if not segments:
                 return PresenterResult(False, "脚本分段失败", work_dir=str(work_dir))
 
-            for segment in segments:
-                segment.duration = 5.0
-
             self._write_text(work_dir / "script.txt", script)
             self._write_json(work_dir / "request.json", asdict(request))
+
+            if request.audio_path:
+                segments = segments[:1]
+                audio_path = str(project_path(request.audio_path))
+                if not Path(audio_path).exists():
+                    raise FileNotFoundError(f"指定音频不存在: {audio_path}")
+                segments[0].audio_path = audio_path
+                segments[0].duration = get_duration(audio_path)
+            else:
+                self._synthesize_segments(request, segments, audio_dir)
 
             backgrounds = self.resolver.resolve_segment_backgrounds(
                 request.background,
@@ -165,8 +182,17 @@ class PresenterPipeline:
             return PresenterResult(False, f"异常: {exc}", work_dir=str(work_dir))
 
     def _resolve_script(self, request: PresenterRequest) -> str:
-        if request.text:
-            return request.text.strip()
+        input_mode = request.input_mode or INPUT_MODE_KEYWORDS
+        input_text = self._load_input_text(request)
+
+        if input_mode == INPUT_MODE_ARTICLE_DIRECT:
+            return self._clean_direct_article(input_text)
+
+        if input_mode == INPUT_MODE_ARTICLE_EXTRACT:
+            return self._extract_article_script(input_text, request)
+
+        if input_text and not request.keywords:
+            return self._clean_direct_article(input_text)
 
         gen_request = GenerationRequest(
             topic=request.keywords,
@@ -176,6 +202,75 @@ class PresenterPipeline:
         )
         script, _source = self.generation_service._resolve_script_content(gen_request)
         return (script or "").strip()
+
+    def _load_input_text(self, request: PresenterRequest) -> str:
+        if request.text_file:
+            path = project_path(request.text_file)
+            if not path.exists():
+                raise FileNotFoundError(f"文章文件不存在: {path}")
+            return path.read_text(encoding="utf-8").strip()
+        return (request.text or "").strip()
+
+    def _clean_direct_article(self, text: str) -> str:
+        if not text:
+            return ""
+        cleaned = text.replace("\ufeff", "")
+        cleaned = re.sub(r"https?://\S+", "", cleaned)
+        cleaned = re.sub(r"^[ \t]*#{1,6}[ \t]*", "", cleaned, flags=re.MULTILINE)
+        cleaned = re.sub(r"[ \t]+", " ", cleaned)
+        cleaned = re.sub(r"\n{3,}", "\n\n", cleaned)
+        cleaned = re.sub(r"(关注|点赞|评论|转发|收藏|一键三连)[^。！？!?\n]*[。！？!?]?", "", cleaned)
+        return cleaned.strip()
+
+    def _extract_article_script(self, text: str, request: PresenterRequest) -> str:
+        article = self._clean_direct_article(text)
+        if not article:
+            return ""
+        max_chars = 8000
+        if len(article) > max_chars:
+            logger.warning(f"文章过长，仅使用前 {max_chars} 字进行提炼。")
+            article = article[:max_chars]
+
+        template_path = project_path("docs/prompts/article-to-presenter-script.txt")
+        if template_path.exists():
+            template = template_path.read_text(encoding="utf-8")
+        else:
+            template = """请把下面文章提炼成60-90秒中文短视频口播稿。
+要求：保留核心观点，开头从具体生活场景切入，不要逐段复述，不要关注点赞引导。
+输出JSON：{{"title":"","script_content":"","visual_cues":[],"bgm_suggestion":""}}
+
+标题：{title}
+关键词：{keywords}
+文章：
+{article}
+"""
+
+        prompt = (
+            template.replace("{title}", request.title or request.keywords or "")
+            .replace("{keywords}", request.keywords or request.title or "")
+            .replace("{article}", article)
+        )
+        messages = [
+            {"role": "system", "content": "你是短视频口播稿编辑。必须忠于原文核心观点，只输出JSON，不要输出Markdown。"},
+            {"role": "user", "content": prompt},
+        ]
+        response_text = llm_client.chat_completion(messages, temperature=0.45, json_mode=True)
+        if not response_text:
+            raise RuntimeError("文章提炼失败：LLM 无返回")
+
+        cleaned = response_text.replace("```json", "").replace("```", "").strip()
+        try:
+            data = json.loads(cleaned)
+        except json.JSONDecodeError as exc:
+            raise RuntimeError(f"文章提炼失败：JSON 解析失败: {exc}") from exc
+
+        script = data.get("script_content") or data.get("content") or data.get("script") or ""
+        if isinstance(script, list):
+            script = "".join(str(item.get("text", item)) if isinstance(item, dict) else str(item) for item in script)
+        script = self._clean_direct_article(str(script))
+        if not script:
+            raise RuntimeError("文章提炼失败：返回内容缺少 script_content")
+        return script
 
     def _synthesize_segments(self, request: PresenterRequest, segments, audio_dir: Path) -> None:
         tts = TTSEngine(output_dir=str(audio_dir), provider_type=request.tts_provider)

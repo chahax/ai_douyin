@@ -160,9 +160,13 @@ class BackgroundResolver:
             "high quality soft cel shading, gentle cinematic lighting, "
             f"{actor_clause}{plan['visual']}, "
             "clear narrative action, no camera close-up, no realistic photo style, "
-            "plain clean walls, no wall art, no framed pictures, no decorations containing glyphs, "
+            "no indoor wall, no wall art, no framed pictures, no wall decorations, no hanging plaque, no calligraphy, "
+            "no signboard, no plaque, no certificate, no menu board, no poster board, "
+            "avoid open document pages, avoid forms, avoid receipts, avoid sheets filled with details, "
+            "all paper, cards, notebooks, folders, screens, walls, and signs are completely blank and plain, "
+            "no glyph-like marks, no pseudo text, no fake writing, no scribbles, no decorative strokes that resemble letters, "
             "open empty lower 35 percent reserved for subtitles and presenter overlay, "
-            "no written text, no Chinese characters, no English letters, no numbers, "
+            "no written text, no Chinese characters, no English letters, no numbers, no readable or unreadable characters, "
             "no signs, no road signs, no posters, no book titles, no labels, no logo, "
             "no watermark, no speech bubble, no interface"
         )
@@ -257,10 +261,12 @@ class BackgroundResolver:
             f"symbolic objects: {symbolic_objects}",
             f"color palette: {plan.get('color_palette', 'warm clean soft colors')}",
             f"lighting: {plan.get('lighting', 'soft warm light with gentle shadows')}",
+            "all paper, cards, notebooks, folders, screens, walls, and signs are completely blank and plain",
+            "no glyph-like marks, no pseudo text, no fake writing, no scribbles, no decorative strokes that resemble letters",
             "open empty lower 35 percent reserved for subtitles and presenter overlay",
             "lower right area clean and uncluttered",
             "plain clean surfaces",
-            "no written text, no Chinese characters, no English letters, no numbers",
+            "no written text, no Chinese characters, no English letters, no numbers, no readable or unreadable characters",
             "no signs, no posters, no book titles, no labels, no logo",
             "no watermark, no speech bubble, no interface",
             "no close-up face, no large portrait, no realistic photo style",
@@ -339,7 +345,7 @@ class BackgroundResolver:
                 "triggers": ("规则", "法律", "合同", "证据", "权益", "责任", "纠纷", "维权", "条款", "借钱", "口头承诺", "签字", "转账"),
                 "include_ip": False,
                 "actor_action": "",
-                "visual": "a clean document review desk with blank contract papers, a signing pen, organized folders, a receipt envelope, and a small balance scale silhouette, warm reliable office light, visual metaphor for rules, evidence, boundaries, and legal process",
+                "visual": "a simple peaceful anime landscape with a quiet garden path, a low wooden fence marking a clear boundary, a small open gate, smooth stepping stones, calm grass, and soft morning light, visual metaphor for rules, boundaries, safe choices, and a clear process, no indoor room, no wall, no desk, no paper, no document, no book, no signboard, no plaque, no poster, no framed object, no human face",
             },
             {
                 "action": "conflict_relationship",
@@ -610,7 +616,11 @@ class BackgroundResolver:
             "1": {"class_type": "CheckpointLoaderSimple", "inputs": {"ckpt_name": "flux1-schnell-fp8.safetensors"}},
             "2": {"class_type": "CLIPTextEncode", "inputs": {"text": prompt, "clip": ["1", 1]}},
             "3": {"class_type": "CLIPTextEncode", "inputs": {
-                "text": "text, letters, numbers, sign, poster, frame, logo, watermark, "
+                "text": "text, readable text, unreadable text, pseudo text, fake writing, glyphs, symbols, "
+                        "Chinese characters, English letters, numbers, scribbles, decorative strokes, "
+                        "sign, poster, frame, logo, watermark, label, book title, document text, "
+                        "forms, receipts, paper full of details, filled document pages, wall plaque, hanging plaque, "
+                        "calligraphy, certificate, menu board, poster board, framed writing, "
                         "close-up portrait, large animal, extra head, malformed face",
                 "clip": ["1", 1]
             }},

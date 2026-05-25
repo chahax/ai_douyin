@@ -1,7 +1,7 @@
 ---
 doc_status: current
 doc_category: mainline
-last_reviewed: 2026-05-20
+last_reviewed: 2026-05-24
 model_usage: 当前开发进度总览。能力判断优先参考 CURRENT_CAPABILITIES.md，本文件用于看阶段状态。
 ---
 
@@ -9,7 +9,7 @@ model_usage: 当前开发进度总览。能力判断优先参考 CURRENT_CAPABIL
 
 # AI Douyin 开发进度总览
 
-更新时间：2026-05-20
+更新时间：2026-05-24
 
 ## 当前状态
 
@@ -31,6 +31,8 @@ model_usage: 当前开发进度总览。能力判断优先参考 CURRENT_CAPABIL
 
 2026-05-16 至 2026-05-17，动漫数字人主讲路线完成验证：Edge-TTS 分段音频、Sonic 角色视频层、ComfyUI 分段背景、字幕避让和 FFmpeg 拼接均可跑出完整版。ComfyUI 不随平台启动，只在生成背景时按需启动，背景/视频输出完成后代码会尝试关闭 ComfyUI。下一步是把这套逻辑整理成正式 provider，并增加背景质检。
 
+2026-05-24，Presenter CLI 增加三种输入通道：`keywords`、`article_direct`、`article_extract`。`presenter-assets` 现在可用于文章直制或文章提炼的生产预览链路，输出脚本、分段音频、背景图和 `segments.json`，只跳过最终视频合成。
+
 ## 阶段进度表
 
 | 阶段 | 名称 | 状态 | 说明 |
@@ -44,7 +46,7 @@ model_usage: 当前开发进度总览。能力判断优先参考 CURRENT_CAPABIL
 | 阶段 4.2 | 双角色对话素材链 | 局部完成 | 对话生成、双声线 TTS、FFmpeg 合成函数已具备 |
 | 阶段 4.3 | 微动作 PNG 序列 | 局部完成 | 眨眼/呼吸序列生成与最终合成已验证 |
 | 阶段 4.4 | FramePack 动作帧 | 半自动可用 | FramePack 手动生成，本项目抽帧/抠图/合成 |
-| 阶段 4.5 | 动漫数字人主讲 | 当前主线 | 管理后台和服务默认 `presenter_anime`；ComfyUI 按需启动并在生成后尝试关闭 |
+| 阶段 4.5 | 动漫数字人主讲 | 当前主线 | 支持关键词、文章直接、文章提炼三输入；ComfyUI 按需启动并在生成后尝试关闭 |
 | 阶段 5 | API 服务层 | 未开始 | FastAPI 入口未实现 |
 | 阶段 6 | 异步任务执行 | 未开始 | 队列和 Worker 未实现 |
 | 阶段 7 | 定时调度 | 未开始 | `src/scheduler/` 尚未形成能力 |
@@ -58,6 +60,9 @@ python main.py generate --topic "成长" --count 1
 python main.py quick --keywords "励志,成长"
 python main.py quick --text "直接要配音的文本"
 python main.py presenter --keywords "人生哲学导向"
+python main.py presenter-assets --keywords "法律，规则"
+python main.py presenter --input-mode article_direct --text-file data/articles/rule_law.txt
+python main.py presenter --input-mode article_extract --text-file data/articles/rule_law.txt
 python main.py import-knowledge --books-dir data/books
 
 # 抖音平台
@@ -86,7 +91,7 @@ python main.py auto-reply --all
 | 双角色 PNG 序列合成 | 局部完成 | `compose_dual_character_sequence_video()` 可合成两组角色帧 |
 | 本地微动作 | 局部完成 | `micro_motion.py` 生成眨眼/呼吸角色帧 |
 | FramePack 接入 | 半自动可用 | 手动生成 MP4，本项目后处理并合成 |
-| 动漫数字人主讲 | 当前主线 | Edge-TTS + Sonic 角色视频层 + ComfyUI 按需背景 + 字幕合成；当前 `video_mode=presenter_anime` |
+| 动漫数字人主讲 | 当前主线 | `keywords` / `article_direct` / `article_extract` 三输入 + Edge-TTS + Sonic 角色视频层 + ComfyUI 按需背景 + 字幕合成 |
 | 双角色一键发布 | 管理后台可选 | `video_mode=dual_framepack_active`，依赖已有 FramePack 角色帧和背景素材 |
 
 ## 代表性输出
@@ -109,6 +114,7 @@ python main.py auto-reply --all
 | `src/content_factory/video_composer.py` | 单视频/双角色/PNG 序列 FFmpeg 合成 |
 | `src/content_factory/framepack_pipeline.py` | FramePack 输出后处理 |
 | `src/content_factory/presenter_pipeline.py` | 动漫数字人主讲视频编排 |
+| `docs/prompts/article-to-presenter-script.txt` | 长文章提炼为 Presenter 口播稿的提示词 |
 | `src/content_factory/presenter/` | 分段、背景规则、字幕层和单段合成 |
 | `src/content_factory/micro_motion.py` | 本地角色微动作序列 |
 | `src/platform_adapter/douyin_adapter.py` | 抖音浏览器自动化适配 |

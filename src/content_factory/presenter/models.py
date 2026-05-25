@@ -2,6 +2,14 @@ from dataclasses import dataclass, field
 
 
 DEFAULT_SONIC_FOX_CHARACTER = "data/ip_characters/_incoming/sonic_test/fox_planner_576_mouthboost_upscale1080_sharp.mp4"
+INPUT_MODE_KEYWORDS = "keywords"
+INPUT_MODE_ARTICLE_DIRECT = "article_direct"
+INPUT_MODE_ARTICLE_EXTRACT = "article_extract"
+INPUT_MODES = (
+    INPUT_MODE_KEYWORDS,
+    INPUT_MODE_ARTICLE_DIRECT,
+    INPUT_MODE_ARTICLE_EXTRACT,
+)
 
 
 @dataclass
@@ -27,6 +35,8 @@ class PresenterSegment:
 class PresenterRequest:
     keywords: str = ""
     text: str = ""
+    text_file: str = ""
+    input_mode: str = INPUT_MODE_KEYWORDS
     title: str = ""
     voice: str = ""
     tts_provider: str = "edge"

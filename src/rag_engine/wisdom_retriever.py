@@ -39,9 +39,15 @@ class WisdomRetriever:
             except Exception as exc:
                 logger.warning(f"本地 embedding 模型加载失败: {exc}")
 
-        # 3. Fallback: HuggingFace Hub（需要网络）
+        # 3. Fallback: HuggingFace Hub（需要网络，默认关闭，避免生成流程卡在模型下载）
         if embedding is None:
-            embedding = self._build_huggingface_embedding()
+            if settings.ENABLE_HF_EMBEDDING_FALLBACK:
+                embedding = self._build_huggingface_embedding()
+            else:
+                raise RuntimeError(
+                    "No local embedding model available. Run `ollama pull nomic-embed-text` "
+                    "or set ENABLE_HF_EMBEDDING_FALLBACK=true."
+                )
 
         logger.info("Initializing Wisdom Retriever...")
         try:

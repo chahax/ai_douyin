@@ -12,7 +12,7 @@ from src.services import (
     KnowledgeImportRequest,
     QuickGenerationRequest,
 )
-from src.content_factory.presenter import DEFAULT_SONIC_FOX_CHARACTER, PresenterRequest
+from src.content_factory.presenter import DEFAULT_SONIC_FOX_CHARACTER, INPUT_MODES, PresenterRequest
 from src.content_factory.presenter_pipeline import PresenterPipeline
 from src.shared.config import settings
 from src.shared.logger import logger
@@ -52,6 +52,8 @@ def build_parser():
     presenter_parser = subparsers.add_parser("presenter", help="Generate an offline digital presenter video")
     presenter_parser.add_argument("--keywords", type=str, default="", help="Keywords/topic for script generation")
     presenter_parser.add_argument("--text", type=str, default="", help="Direct presenter script text")
+    presenter_parser.add_argument("--text-file", type=str, default="", help="Article/script text file path")
+    presenter_parser.add_argument("--input-mode", type=str, default="keywords", choices=INPUT_MODES, help="Input mode: keywords, article_direct, or article_extract")
     presenter_parser.add_argument("--title", type=str, default="", help="On-screen title")
     presenter_parser.add_argument("--character", type=str, default=DEFAULT_SONIC_FOX_CHARACTER, help="Character id or asset path. Default: Sonic fox video layer")
     presenter_parser.add_argument("--character-position", type=str, default="right_bottom", choices=["right_bottom", "left_bottom", "center_bottom"], help="Character placement on the canvas")
@@ -66,9 +68,11 @@ def build_parser():
     presenter_parser.add_argument("--max-segments", type=int, default=16, help="Maximum number of presenter segments")
     presenter_parser.add_argument("--no-comfy-background", action="store_true", help="Use local fallback anime backgrounds without ComfyUI")
 
-    presenter_assets_parser = subparsers.add_parser("presenter-assets", help="Generate presenter script and background images only")
+    presenter_assets_parser = subparsers.add_parser("presenter-assets", help="Generate presenter script, segment audio, and background images without composing video")
     presenter_assets_parser.add_argument("--keywords", type=str, default="", help="Keywords/topic for script generation")
     presenter_assets_parser.add_argument("--text", type=str, default="", help="Direct presenter script text")
+    presenter_assets_parser.add_argument("--text-file", type=str, default="", help="Article/script text file path")
+    presenter_assets_parser.add_argument("--input-mode", type=str, default="keywords", choices=INPUT_MODES, help="Input mode: keywords, article_direct, or article_extract")
     presenter_assets_parser.add_argument("--title", type=str, default="", help="On-screen title")
     presenter_assets_parser.add_argument("--character", type=str, default=DEFAULT_SONIC_FOX_CHARACTER, help="Character id or asset path. Default: Sonic fox video layer")
     presenter_assets_parser.add_argument("--background", type=str, default="", help="Background image/video path")
@@ -76,7 +80,8 @@ def build_parser():
     presenter_assets_parser.add_argument("--tts-provider", type=str, default="edge", choices=["edge", "gpt_sovits"], help="TTS provider hint for script generation")
     presenter_assets_parser.add_argument("--voice", type=str, default="", help="Voice ID or reference audio path")
     presenter_assets_parser.add_argument("--max-segments", type=int, default=8, help="Maximum number of presenter segments")
-    presenter_assets_parser.add_argument("--comfy-background", action="store_true", help="Use ComfyUI to generate preview backgrounds. Default uses fast local fallback images.")
+    presenter_assets_parser.add_argument("--audio", type=str, default="", help="Use an existing audio file and skip TTS")
+    presenter_assets_parser.add_argument("--no-comfy-background", action="store_true", help="Use fast local fallback images instead of production ComfyUI backgrounds")
 
     import_parser = subparsers.add_parser("import-knowledge", help="Import books into the vector knowledge base")
     import_parser.add_argument("--books-dir", type=str, default=service.default_books_dir, help="Books directory to import")
@@ -205,14 +210,20 @@ def main():
         return
 
     if args.command == "presenter":
-        if not args.text and not args.keywords:
-            logger.error("presenter command requires --text or --keywords.")
+        if not args.text and not args.text_file and not args.keywords:
+            logger.error("presenter command requires --keywords, --text, or --text-file.")
             sys.exit(1)
+
+        input_mode = args.input_mode
+        if (args.text or args.text_file) and not args.keywords and input_mode == "keywords":
+            input_mode = "article_direct"
 
         presenter = PresenterPipeline()
         request = PresenterRequest(
             keywords=args.keywords or "",
             text=args.text or "",
+            text_file=args.text_file or "",
+            input_mode=input_mode,
             title=args.title or args.keywords or "",
             voice=args.voice or "",
             tts_provider=args.tts_provider,
@@ -237,22 +248,29 @@ def main():
         return
 
     if args.command == "presenter-assets":
-        if not args.text and not args.keywords:
-            logger.error("presenter-assets command requires --text or --keywords.")
+        if not args.text and not args.text_file and not args.keywords:
+            logger.error("presenter-assets command requires --keywords, --text, or --text-file.")
             sys.exit(1)
+
+        input_mode = args.input_mode
+        if (args.text or args.text_file) and not args.keywords and input_mode == "keywords":
+            input_mode = "article_direct"
 
         presenter = PresenterPipeline()
         request = PresenterRequest(
             keywords=args.keywords or "",
             text=args.text or "",
+            text_file=args.text_file or "",
+            input_mode=input_mode,
             title=args.title or args.keywords or "",
             voice=args.voice or "",
             tts_provider=args.tts_provider,
             character=args.character,
             background=args.background or "",
             background_style=args.background_style,
+            audio_path=args.audio or "",
             max_segments=args.max_segments,
-            use_comfy_background=args.comfy_background,
+            use_comfy_background=not args.no_comfy_background,
         )
         result = presenter.run_assets_preview(request)
         if not result.success:
@@ -420,7 +438,7 @@ def main():
         else:
             session = None
 
-        service = AutoReplyService(session=session)
+        reply_service = AutoReplyService(session=session)
 
         target_ids = []
         if args.video_id:
@@ -437,7 +455,7 @@ def main():
         total_failed = 0
         for vid in target_ids:
             logger.info(f"处理视频评论: {vid}")
-            result = service.process_video(vid)
+            result = reply_service.process_video(vid)
             total_replied += result.replied
             total_skipped += result.skipped
             total_failed += result.failed
