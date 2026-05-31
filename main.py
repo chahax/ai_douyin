@@ -1,8 +1,11 @@
 import argparse
+import json
 import sys
+from dataclasses import asdict
 
 from src.platform_adapter import DouyinAdapter
 from src.platform_adapter.browser_session import BrowserSession, build_default_browser_session_config
+from src.platform_adapter.douyin_warmup import DouyinWarmupService
 from src.platform_adapter.models import PublishRequest
 from src.services import (
     AutoPublishRequest,
@@ -14,6 +17,7 @@ from src.services import (
 )
 from src.content_factory.presenter import DEFAULT_SONIC_FOX_CHARACTER, INPUT_MODES, PresenterRequest
 from src.content_factory.presenter_pipeline import PresenterPipeline
+from src.content_factory.presenter.scene_planner import ScenePlanner
 from src.shared.config import settings
 from src.shared.logger import logger
 
@@ -65,7 +69,7 @@ def build_parser():
     presenter_parser.add_argument("--output-dir", type=str, default="data/videos", help="Output directory for final mp4")
     presenter_parser.add_argument("--tts-provider", type=str, default="edge", choices=["edge", "gpt_sovits"], help="TTS provider")
     presenter_parser.add_argument("--voice", type=str, default="", help="Voice ID or reference audio path")
-    presenter_parser.add_argument("--max-segments", type=int, default=16, help="Maximum number of presenter segments")
+    presenter_parser.add_argument("--max-segments", type=int, default=0, help="Maximum number of presenter segments. 0 means no truncation")
     presenter_parser.add_argument("--no-comfy-background", action="store_true", help="Use local fallback anime backgrounds without ComfyUI")
 
     presenter_assets_parser = subparsers.add_parser("presenter-assets", help="Generate presenter script, segment audio, and background images without composing video")
@@ -79,9 +83,12 @@ def build_parser():
     presenter_assets_parser.add_argument("--background-style", type=str, default="anime", choices=["anime", "existing", "gradient"], help="Default background style when --background is omitted")
     presenter_assets_parser.add_argument("--tts-provider", type=str, default="edge", choices=["edge", "gpt_sovits"], help="TTS provider hint for script generation")
     presenter_assets_parser.add_argument("--voice", type=str, default="", help="Voice ID or reference audio path")
-    presenter_assets_parser.add_argument("--max-segments", type=int, default=8, help="Maximum number of presenter segments")
+    presenter_assets_parser.add_argument("--max-segments", type=int, default=0, help="Maximum number of presenter segments. 0 means no truncation")
     presenter_assets_parser.add_argument("--audio", type=str, default="", help="Use an existing audio file and skip TTS")
     presenter_assets_parser.add_argument("--no-comfy-background", action="store_true", help="Use fast local fallback images instead of production ComfyUI backgrounds")
+
+    debug_bg_parser = subparsers.add_parser("debug-background-plan", help="Analyze text and show matched background scene plan")
+    debug_bg_parser.add_argument("--text", type=str, required=True, help="Chinese segment text to analyze")
 
     import_parser = subparsers.add_parser("import-knowledge", help="Import books into the vector knowledge base")
     import_parser.add_argument("--books-dir", type=str, default=service.default_books_dir, help="Books directory to import")
@@ -90,6 +97,53 @@ def build_parser():
     login_parser.add_argument("--url", type=str, default=settings.DOUYIN_HOME_URL, help="Target URL to open")
     login_parser.add_argument("--pause-seconds", type=int, default=600, help="How long to keep the browser open")
     login_parser.add_argument("--wait-for-enter", action="store_true", help="Keep browser open until Enter is pressed")
+
+    warmup_login_parser = subparsers.add_parser("douyin-warmup-login", help="Open a per-account Douyin warmup browser for manual login")
+    warmup_login_parser.add_argument("--account-id", type=str, required=True, help="Local account id, e.g. douyin_novel_01")
+    warmup_login_parser.add_argument("--display-name", type=str, default="", help="Human readable account name")
+    warmup_login_parser.add_argument("--url", type=str, default=settings.DOUYIN_HOME_URL, help="Target login URL")
+    warmup_login_parser.add_argument("--pause-seconds", type=int, default=900, help="How long to keep the browser open")
+    warmup_login_parser.add_argument("--wait-for-enter", action="store_true", help="Keep browser open until Enter is pressed")
+
+    warmup_parser = subparsers.add_parser("douyin-warmup", help="Run low-frequency random Douyin browsing for one account")
+    warmup_parser.add_argument("--account-id", type=str, required=True, help="Local account id created by douyin-warmup-login")
+    warmup_parser.add_argument("--mode", type=str, default="daily", choices=["daily", "pre-publish", "post-publish"], help="Warmup mode")
+    warmup_parser.add_argument("--keyword", type=str, default="", help="Search keyword. Random default if omitted")
+    warmup_parser.add_argument("--url", type=str, default="", help="Start URL. Default: https://www.douyin.com/jingxuan")
+    warmup_parser.add_argument("--use-search", action="store_true", help="Use keyword search page instead of recommend page")
+    warmup_parser.add_argument("--min-watch", type=int, default=8, help="Minimum watch seconds per video")
+    warmup_parser.add_argument("--max-watch", type=int, default=45, help="Maximum watch seconds per video. 0 means no cap when duration is detected")
+    warmup_parser.add_argument("--no-comment-max-watch", type=int, default=10, help="Max watch seconds when no comment entry is detected")
+    warmup_parser.add_argument("--duration-ratio-min", type=float, default=0.1, help="Minimum watch ratio of video duration when duration is detected")
+    warmup_parser.add_argument("--duration-ratio-max", type=float, default=2.0, help="Maximum watch ratio of video duration when duration is detected")
+    warmup_parser.add_argument("--max-videos", type=int, default=12, help="Maximum videos in one session")
+    warmup_parser.add_argument("--duration-minutes", type=int, default=0, help="Optional total duration limit. 0 means use max-videos only")
+    warmup_parser.add_argument("--comment-probability", type=float, default=0.0, help="Probability to open comments for viewing only, 0-1")
+    warmup_parser.add_argument("--min-comment-opens", type=int, default=1, help="Minimum comment panels to open per session")
+    warmup_parser.add_argument("--comment-scrolls", type=int, default=3, help="Scroll count inside each opened comment panel")
+    warmup_parser.add_argument("--comment-like-probability", type=float, default=0.0, help="Probability to like visible comments, 0-1. Default 0 disables comment likes")
+    warmup_parser.add_argument("--max-comment-likes", type=int, default=0, help="Maximum comment likes in one warmup session. Default 0 disables comment likes")
+    warmup_parser.add_argument("--like-probability", type=float, default=0.0, help="Probability to like a video, 0-1. Default 0 disables likes")
+    warmup_parser.add_argument("--max-likes", type=int, default=0, help="Maximum likes in one warmup session. Default 0 disables likes")
+    warmup_parser.add_argument("--close-on-blocked", action="store_true", help="Close browser immediately when login/captcha/security check is detected")
+    warmup_parser.add_argument("--keep-open", action="store_true", help="Keep browser open after warmup until Enter is pressed")
+    warmup_parser.add_argument("--headless", action="store_true", help="Run browser in headless mode")
+
+    warmup_report_parser = subparsers.add_parser("douyin-warmup-report", help="Show recent Douyin warmup logs for one account")
+    warmup_report_parser.add_argument("--account-id", type=str, required=True, help="Local account id")
+    warmup_report_parser.add_argument("--days", type=int, default=7, help="Report days")
+
+    warmup_account_parser = subparsers.add_parser("douyin-warmup-account", help="Manage Douyin warmup account metadata")
+    warmup_account_parser.add_argument("action", choices=["list", "show", "set"], help="Account metadata action")
+    warmup_account_parser.add_argument("--account-id", type=str, default="", help="Local account id")
+    warmup_account_parser.add_argument("--display-name", type=str, default="", help="Human readable account name")
+    warmup_account_parser.add_argument("--douyin-uid", type=str, default="", help="Douyin uid or public id")
+    warmup_account_parser.add_argument("--login-name", type=str, default="", help="Masked login name, e.g. 138****1234")
+    warmup_account_parser.add_argument("--phone-hint", type=str, default="", help="Masked phone hint")
+    warmup_account_parser.add_argument("--purpose", type=str, default="", help="Account purpose, e.g. novel_promotion")
+    warmup_account_parser.add_argument("--status", type=str, default="", choices=["", "active", "paused", "disabled"], help="Account status")
+    warmup_account_parser.add_argument("--notes", type=str, default="", help="Account notes")
+    warmup_account_parser.add_argument("--keywords", type=str, default="", help="Warmup keywords, comma separated")
 
     upload_page_parser = subparsers.add_parser(
         "douyin-upload-page",
@@ -280,6 +334,12 @@ def main():
         print(result.work_dir)
         return
 
+    if args.command == "debug-background-plan":
+        planner = ScenePlanner()
+        prompt, plan = planner.plan(args.text)
+        print(json.dumps({"prompt": prompt, "plan": plan}, ensure_ascii=False, indent=2))
+        return
+
     if args.command == "import-knowledge":
         ok = service.import_knowledge_base(KnowledgeImportRequest(books_dir=args.books_dir))
         if not ok:
@@ -303,6 +363,111 @@ def main():
         logger.info(f"用户数据目录: {state.user_data_dir}")
         print(state.storage_state_path)
         return
+
+    if args.command == "douyin-warmup-login":
+        warmup_service = DouyinWarmupService()
+        try:
+            account = warmup_service.open_login_window(
+                account_id=args.account_id,
+                display_name=args.display_name or "",
+                url=args.url,
+                pause_seconds=args.pause_seconds,
+                wait_for_enter=args.wait_for_enter,
+            )
+        except Exception as exc:
+            logger.error(str(exc))
+            sys.exit(1)
+
+        logger.info(f"养号账号登录窗口已结束: {account.account_id}")
+        logger.info(f"登录状态: {account.login_status}")
+        logger.info(f"浏览器用户目录: {account.browser_profile_dir}")
+        print(json.dumps(asdict(account), ensure_ascii=False, indent=2))
+        return
+
+    if args.command == "douyin-warmup":
+        warmup_service = DouyinWarmupService()
+        try:
+            result = warmup_service.run_warmup(
+                account_id=args.account_id,
+                mode=args.mode,
+                keyword=args.keyword or "",
+                min_watch=args.min_watch,
+                max_watch=args.max_watch,
+                max_videos=args.max_videos,
+                duration_minutes=args.duration_minutes,
+                comment_probability=args.comment_probability,
+                headless=args.headless,
+                keep_open_on_blocked=not args.close_on_blocked,
+                start_url=args.url or "",
+                use_search=args.use_search,
+                keep_open_after_run=args.keep_open,
+                no_comment_max_watch=args.no_comment_max_watch,
+                duration_ratio_min=args.duration_ratio_min,
+                duration_ratio_max=args.duration_ratio_max,
+                like_probability=args.like_probability,
+                max_likes=args.max_likes,
+                min_comment_opens=args.min_comment_opens,
+                comment_scrolls=args.comment_scrolls,
+                comment_like_probability=args.comment_like_probability,
+                max_comment_likes=args.max_comment_likes,
+            )
+        except Exception as exc:
+            logger.error(f"养号任务失败: {exc}")
+            sys.exit(1)
+
+        logger.info(f"养号任务完成: {result.status}, videos_seen={result.videos_seen}")
+        logger.info(f"日志: {result.log_path}")
+        print(json.dumps(asdict(result), ensure_ascii=False, indent=2))
+        if result.status not in {"completed"}:
+            sys.exit(1)
+        return
+
+    if args.command == "douyin-warmup-report":
+        warmup_service = DouyinWarmupService()
+        try:
+            rows = warmup_service.report(account_id=args.account_id, days=args.days)
+        except Exception as exc:
+            logger.error(str(exc))
+            sys.exit(1)
+        print(json.dumps(rows, ensure_ascii=False, indent=2))
+        return
+
+    if args.command == "douyin-warmup-account":
+        warmup_service = DouyinWarmupService()
+        try:
+            if args.action == "list":
+                accounts = warmup_service.list_accounts()
+                print(json.dumps([asdict(item) for item in accounts], ensure_ascii=False, indent=2))
+                return
+
+            if not args.account_id:
+                logger.error("show/set 需要指定 --account-id")
+                sys.exit(1)
+
+            if args.action == "show":
+                account = warmup_service.get_account(args.account_id)
+                print(json.dumps(asdict(account), ensure_ascii=False, indent=2))
+                return
+
+            keywords = None
+            if args.keywords:
+                keywords = [item.strip() for item in args.keywords.split(",") if item.strip()]
+            account = warmup_service.update_account(
+                account_id=args.account_id,
+                display_name=args.display_name or "",
+                douyin_uid=args.douyin_uid or "",
+                login_name=args.login_name or "",
+                phone_hint=args.phone_hint or "",
+                purpose=args.purpose or "",
+                status=args.status or "",
+                notes=args.notes or "",
+                keywords=keywords,
+            )
+            print(json.dumps(asdict(account), ensure_ascii=False, indent=2))
+            return
+        except Exception as exc:
+            logger.error(str(exc))
+            sys.exit(1)
 
     if args.command == "douyin-upload-page":
         adapter = DouyinAdapter()
@@ -362,7 +527,6 @@ def main():
             for v in result.videos:
                 logger.info(f"  [{v.status.value}] {v.title} (id: {v.video_id})")
             # 输出JSON列表供其他程序使用
-            import json
             print(json.dumps([
                 {"video_id": v.video_id, "title": v.title, "status": v.status.value, "publish_time": v.publish_time}
                 for v in result.videos

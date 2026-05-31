@@ -2,6 +2,7 @@
 
 任务：
 根据一段中文口播文字，为 9:16 竖屏动漫数字人主讲视频设计一张背景图构图方案。
+你必须先理解这段话里“谁/什么主体在做什么动作、涉及什么物品或场景”，再把它转换成英文画面提示词。
 
 输入口播文字：
 {text}
@@ -13,24 +14,29 @@
 - 背景图只负责营造语义氛围，不要直接把文字内容写进画面。
 
 构图原则：
-1. 先判断这段文字的内容类型、情绪和核心隐喻。
-2. 画面必须是生活化场景 + 象征性道具，不要抽象空泛。
+1. 先判断这段文字的内容类型、情绪、主体、动作和核心隐喻。
+2. 画面必须是生活化场景 + 明确动作 + 象征性道具，不要抽象空泛。
 3. 使用清晰的前景、中景、背景关系。
 4. 视觉重心放在画面中上部或左中部，避免右下角。
 5. 下方 35% 必须干净留白，不能有复杂物体、文字、人物脸部。
 6. 禁止生成可读文字、中文、英文、数字、标语、海报、书名、路牌、Logo。
-7. 禁止大脸、半身人像、写实照片风。
-8. 人物如果必须出现，只能是远处小剪影或抽象背影，不能抢数字人主讲角色。
-9. 风格统一为温暖、干净、现代、动漫插画、柔和光影。
+7. 禁止室内墙面作为主体，禁止墙上挂画、字画、牌匾、证书框、相框、海报、书法卷轴。
+8. 禁止大脸、半身人像、近景背影、写实照片风。
+9. 人物如果必须出现，只能是远处小剪影或很小的动作轮廓，不能抢数字人主讲角色。
+10. 风格统一为温暖、干净、现代、动漫插画、柔和光影。
+11. 禁止孤立手臂、漂浮的手、截断肢体、手臂和身体断开、只有身体部件没有完整人物。需要人物时必须是完整小全身人物，双臂连接在躯干上。
 
 内容类型提示：
-- 如果内容涉及规则、法律、合同、证据、权利、责任、纠纷，优先用简单风景插画表达：quiet garden path、low wooden fence、small open gate、smooth stepping stones、calm river bank、soft morning light。不要画室内墙面、牌匾、挂画、证书、打开的合同纸、文件正文、票据、表格、便签、书页、卡片堆，因为这些区域容易生成伪文字。
+- 如果内容涉及法院、法律、劳动、社保、工伤、合同、证据、权利、责任、纠纷，不要画法庭、法官、律师、法院门头、办公室墙面、更衣柜走廊、牌匾、挂画、证书、公告栏、打开的合同纸、文件正文、票据、表格、便签、书页、卡片堆，因为这些区域容易生成伪文字和错误肢体。
+- 社会/法律/劳动类优先选择无文字承载物的动作场景：worker checking a safety helmet beside a workshop entrance, delivery rider parking a scooter beside a plain building entrance, two people standing on opposite sides of a clean floor boundary line, closed blank folder beside a helmet and toolbox, phone with blank message bubbles facing down beside keys, calm outdoor service counter without signs, courthouse-like stone steps without signs or plaques, plain city sidewalk outside an office building with no signage。
+- 必须根据这段话的动作选择不同场景，不要机械套用同一个围栏或桌面。
 - 如果内容涉及矛盾、冲突、误会、沟通、关系拉扯，优先用两只杯子、两把椅子、桌面距离、分开的光影、未发送的空白纸条、半开的门、对坐剪影等表达，不要画争吵大脸。
 - 如果内容涉及成长、自律、选择、低谷、目标，请自由选择贴合含义的生活化隐喻场景，不要机械套关键词。
+- 每一段都要尽量生成不同场景。除非文字明确重复，否则不要连续使用相同构图，例如不要连续使用同一张桌子、同一个围栏、同一个室内墙面。
 
 输出语言要求：
 - 除 `core_metaphor` 和 `reason` 可以使用中文外，其他所有构图字段必须使用英文。
-- `composition.foreground`、`composition.midground`、`composition.background`、`composition.focal_point`、`main_visual_prompt`、`symbolic_objects`、`color_palette`、`lighting` 必须使用英文。
+- `detected_subject`、`detected_action`、`composition.foreground`、`composition.midground`、`composition.background`、`composition.focal_point`、`main_visual_prompt`、`symbolic_objects`、`color_palette`、`lighting` 必须使用英文。
 - 不要把书名、人名、文章名、口播里的具体文字写进画面，例如不要出现 book title、quoted title、Chinese book cover、readable notes。
 - 如果需要表达书籍或资料，只能写 blank book、blank paper、plain notebook，不能出现可读标题。
 
@@ -40,6 +46,8 @@
   "content_type": "内容类型，例如 legal_life_advice / conflict_relationship / self_growth / relationship / career / emotional_healing / decision_making / general_philosophy",
   "core_metaphor": "核心隐喻，用中文简短说明",
   "emotion": "画面情绪，例如 calm_secure / warm_hopeful / reflective / serious_but_gentle / tense_but_soft",
+  "detected_subject": "英文，画面主体，例如 worker / contract folder / phone evidence / family member / office doorway",
+  "detected_action": "英文，主体动作，例如 checking safety gear / reviewing a blank folder / setting a boundary / saving evidence",
   "scene_type": "具体场景类型，例如 desk_document_review / quiet_study / planning_desk / open_doorway / two_cups_conversation",
   "composition": {
     "foreground": "英文描述前景，低信息密度，不遮挡下方字幕区",
@@ -49,10 +57,10 @@
     "camera_angle": "wide shot / medium wide shot / slightly top-down desk view",
     "safe_area": "lower 35 percent clean and empty, especially lower right"
   },
-  "main_visual_prompt": "英文画面描述，40-80词，专业、具体、无文字元素",
+  "main_visual_prompt": "英文画面描述，40-80词，必须包含主体、动作、道具、场景，专业、具体、无文字元素",
   "symbolic_objects": ["3-6个英文道具名"],
   "color_palette": "英文色彩描述",
   "lighting": "英文光影描述",
-  "negative_prompt": ["readable text", "Chinese characters", "English letters", "numbers", "logo", "poster", "road sign", "book title", "close-up face", "realistic photo"],
+  "negative_prompt": ["readable text", "Chinese characters", "English letters", "numbers", "logo", "poster", "road sign", "book title", "close-up face", "large human figure", "near back-view person", "indoor wall", "wall art", "framed picture", "calligraphy", "plaque", "certificate", "realistic photo"],
   "reason": "中文说明，解释为什么这样构图"
 }

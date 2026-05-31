@@ -20,12 +20,14 @@ env/
 *.ogg
 
 data/quick_outputs/
+data/articles/
 data/books/
 data/presenter/
 data/presenter_assets/
 data/videos/
 data/voices/
 data/logs/
+data/douyin_warmup/
 data/browser/
 data/chroma_db/
 data/diagnostics/

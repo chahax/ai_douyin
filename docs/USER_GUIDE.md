@@ -1,7 +1,7 @@
 ---
 doc_status: current
 doc_category: mainline
-last_reviewed: 2026-05-20
+last_reviewed: 2026-05-30
 model_usage: 当前用户使用手册。命令以本文件和 main.py 为准。
 ---
 
@@ -9,7 +9,7 @@ model_usage: 当前用户使用手册。命令以本文件和 main.py 为准。
 
 # AI Douyin 使用指南
 
-更新时间：2026-05-20
+更新时间：2026-05-30
 
 ## 环境准备
 
@@ -125,6 +125,8 @@ python main.py presenter --input-mode article_direct --text-file data/articles/r
 python main.py presenter --input-mode article_extract --text-file data/articles/rule_law.txt --title "法律，规则"
 ```
 
+长文章默认不截断分段。如果只想生成前几段用于快速测试，可以加 `--max-segments 16`。
+
 三种输入模式：
 
 | 模式 | 说明 |
@@ -134,6 +136,14 @@ python main.py presenter --input-mode article_extract --text-file data/articles/
 | `article_extract` | 读取 `--text` 或 `--text-file`，先提炼为短视频口播稿 |
  
 `--no-comfy-background` 可用于快速本地兜底背景测试；正式质量测试建议不加该参数，走 ComfyUI 生产背景。
+
+查看单段文本会匹配到什么背景场景：
+
+```bash
+python main.py debug-background-plan --text "这曾是无数外卖骑手、网约车司机、网络主播心中的困惑。"
+```
+
+背景场景规划器当前默认关闭，主流程已退回 `BackgroundResolver` 内置规则。`debug-background-plan` 仅用于调试场景库，不影响默认生成。
 
 当前边界：
 
@@ -154,6 +164,54 @@ python main.py douyin-publish --video data/videos/demo.mp4 --title "标题" --de
 python main.py douyin-login
 python main.py douyin-upload-page
 ```
+
+### 抖音账号养号
+
+首次为账号创建独立浏览器 profile，并由用户手动登录：
+
+```bash
+python main.py douyin-warmup-login --account-id "douyin_novel_01" --wait-for-enter
+```
+
+查看或更新账号基本信息：
+
+```bash
+python main.py douyin-warmup-account list
+python main.py douyin-warmup-account show --account-id "douyin_novel_01"
+python main.py douyin-warmup-account set --account-id "douyin_novel_01" --display-name "小说推广号A" --login-name "138****1234" --keywords "小说推荐,短剧反转,番茄小说"
+```
+
+基础养号，默认进入抖音精选页并点击“推荐”：
+
+```bash
+python main.py douyin-warmup --account-id "douyin_novel_01" --mode daily --url "https://www.douyin.com/jingxuan" --max-videos 5
+```
+
+按视频时长倍率停留，`--max-watch 0` 表示读到视频时长后不封顶：
+
+```bash
+python main.py douyin-warmup --account-id "douyin_novel_01" --mode daily --url "https://www.douyin.com/jingxuan" --min-watch 8 --max-watch 0 --duration-ratio-min 0.1 --duration-ratio-max 2.0 --max-videos 5
+```
+
+强制打开评论区、下滑 3 次并最多点赞 2 条评论：
+
+```bash
+python main.py douyin-warmup --account-id "douyin_novel_01" --mode daily --url "https://www.douyin.com/jingxuan" --max-videos 1 --min-comment-opens 1 --comment-scrolls 3 --comment-like-probability 1 --max-comment-likes 2 --keep-open
+```
+
+10 个视频内最多 5 个视频赞、最多 5 个评论赞：
+
+```bash
+python main.py douyin-warmup --account-id "douyin_novel_01" --mode daily --url "https://www.douyin.com/jingxuan" --max-videos 10 --like-probability 0.5 --max-likes 5 --min-comment-opens 1 --comment-scrolls 3 --comment-like-probability 0.5 --max-comment-likes 5
+```
+
+查看养号日志：
+
+```bash
+python main.py douyin-warmup-report --account-id "douyin_novel_01" --days 7
+```
+
+说明：养号不会自动发评论、关注、收藏。遇到登录/验证码/安全验证时默认保持浏览器打开，用户处理后回终端按回车保存会话。
 
 ### 同步视频和评论
 

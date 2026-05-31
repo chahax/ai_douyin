@@ -73,8 +73,15 @@ class Settings(BaseSettings):
     COMFYUI_HOST: str = "127.0.0.1"
     COMFYUI_PORT: int = 8190
     COMFYUI_MAIN_PATH: str = "D:/IT/AI_vido/ComfyUI/main.py"
+    COMFYUI_CHECKPOINT: str = "flux1-schnell-fp8.safetensors"
+    COMFYUI_STEPS: int = 8
+    COMFYUI_CFG: float = 1.0
+    ENABLE_BACKGROUND_SCENE_PLANNER: bool = False
+    BACKGROUND_SCENE_LIBRARY_DIR: str = "data/background_scene_library"
+    BACKGROUND_SCENE_PLANNER_USE_LLM: bool = False
+    BACKGROUND_SCENE_ANALYSIS_MODEL: str = ""
 
-    model_config = SettingsConfigDict(env_file=".env")
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     @field_validator(
         "LLM_PROVIDER",
@@ -85,6 +92,9 @@ class Settings(BaseSettings):
         "OLLAMA_MODEL",
         "COMFYUI_HOST",
         "COMFYUI_MAIN_PATH",
+        "COMFYUI_CHECKPOINT",
+        "BACKGROUND_SCENE_LIBRARY_DIR",
+        "BACKGROUND_SCENE_ANALYSIS_MODEL",
         mode="before",
     )
     @classmethod

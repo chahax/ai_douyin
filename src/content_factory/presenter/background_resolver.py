@@ -4,6 +4,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 
 from src.content_factory.presenter.models import CharacterAsset, PresenterSegment
+from src.content_factory.presenter.scene_planner import ScenePlanner
 from src.shared.llm_client import llm_client
 from src.shared.config import settings
 from src.shared.logger import logger
@@ -39,6 +40,11 @@ class BackgroundResolver:
             ("data/png/n3_nobg.png", "static"),
         ),
     }
+
+    def __init__(self):
+        self._comfy_process = None
+        self._comfy_started_by_resolver = False
+        self.scene_planner = ScenePlanner()
 
     def resolve_background(self, requested: str, work_dir: Path, style: str = "anime") -> str:
         if requested:
@@ -86,51 +92,74 @@ class BackgroundResolver:
         paths: list[str] = []
         segment_index = 0
         current_group = 0
-        while segment_index < len(segments):
-            group_segments: list[PresenterSegment] = []
-            group_elapsed = 0.0
-            while segment_index < len(segments) and (not group_segments or group_elapsed < switch_seconds):
-                segment = segments[segment_index]
-                group_segments.append(segment)
-                group_elapsed += max(segment.duration or switch_seconds, 0.1)
-                segment_index += 1
+        try:
+            while segment_index < len(segments):
+                group_segments: list[PresenterSegment] = []
+                group_elapsed = 0.0
+                while segment_index < len(segments) and (not group_segments or group_elapsed < switch_seconds):
+                    segment = segments[segment_index]
+                    group_segments.append(segment)
+                    group_elapsed += max(segment.duration or switch_seconds, 0.1)
+                    segment_index += 1
 
-            group_text = " ".join(segment.text for segment in group_segments)
-            cue = self._build_group_cue(group_segments, group_text)
-            background_path = backgrounds_dir / f"bg_{current_group:03d}.png"
-            prompt, plan = self.build_background_prompt_with_plan(group_text, cue=cue, character=character)
-
-            generated = False
-            if use_comfy:
-                generated = self._create_comfy_background(
-                    prompt,
-                    background_path,
-                    seed=260600 + current_group,
-                )
-            if not generated:
-                self._create_anime_background(
-                    background_path,
-                    seed_index=current_group,
+                group_text = " ".join(segment.text for segment in group_segments)
+                cue = self._build_group_cue(group_segments, group_text)
+                background_path = backgrounds_dir / f"bg_{current_group:03d}.png"
+                prompt, plan = self.build_background_prompt_with_plan(
+                    group_text,
                     cue=cue,
-                    scene_text=group_text,
+                    character=character,
+                    variant_index=current_group,
                 )
 
-            for segment in group_segments:
-                segment.background_group = current_group
-                segment.background_prompt = prompt
-                segment.background_action = plan["action"]
-                segment.background_subject = plan["subject"]
-                segment.background_include_ip = plan["include_ip"]
-                segment.background_plan = plan
-                paths.append(str(background_path))
-            current_group += 1
+                generated = False
+                if use_comfy:
+                    generated = self._create_comfy_background(
+                        prompt,
+                        background_path,
+                        seed=260600 + current_group,
+                        close_after=False,
+                    )
+                if not generated:
+                    self._create_anime_background(
+                        background_path,
+                        seed_index=current_group,
+                        cue=cue,
+                        scene_text=group_text,
+                    )
+
+                for segment in group_segments:
+                    segment.background_group = current_group
+                    segment.background_prompt = prompt
+                    segment.background_action = plan["action"]
+                    segment.background_subject = plan["subject"]
+                    segment.background_include_ip = plan["include_ip"]
+                    segment.background_plan = plan
+                    paths.append(str(background_path))
+                current_group += 1
+        finally:
+            if use_comfy:
+                self._stop_active_comfy()
         return paths
 
     def build_background_prompt(self, text: str, cue: str = "", character: str = "") -> str:
         prompt, _plan = self.build_background_prompt_with_plan(text, cue=cue, character=character)
         return prompt
 
-    def build_background_prompt_with_plan(self, text: str, cue: str = "", character: str = "") -> tuple[str, dict]:
+    def build_background_prompt_with_plan(self, text: str, cue: str = "", character: str = "", variant_index: int = 0) -> tuple[str, dict]:
+        if settings.ENABLE_BACKGROUND_SCENE_PLANNER:
+            try:
+                prompt, plan = self.scene_planner.plan(text, cue=cue, character=character)
+                if prompt and plan:
+                    return prompt, {
+                        "action": plan.get("category") or plan.get("matched_template_id") or "scene_planner",
+                        "subject": plan.get("subject") or plan.get("matched_template_id") or "scene planner background",
+                        "include_ip": bool(plan.get("include_ip", False)),
+                        **plan,
+                    }
+            except Exception as exc:
+                logger.warning(f"Scene planner failed, falling back to background resolver rules: {exc}")
+
         llm_plan = self._build_llm_background_plan(text)
         if llm_plan:
             prompt = self._plan_to_comfy_prompt(llm_plan)
@@ -143,7 +172,18 @@ class BackgroundResolver:
                 "cue": cue,
             }
 
-        plan = self._visual_plan(text)
+        if self._is_social_legal_text(text):
+            plan = self._visual_plan(text, variant_index=variant_index)
+            prompt = self._rule_plan_to_prompt(plan, character=character)
+            plan = self._finalize_rule_plan(plan, cue=cue, character=character)
+            return prompt, plan
+
+        plan = self._visual_plan(text, variant_index=variant_index)
+        prompt = self._rule_plan_to_prompt(plan, character=character)
+        plan = self._finalize_rule_plan(plan, cue=cue, character=character)
+        return prompt, plan
+
+    def _rule_plan_to_prompt(self, plan: dict, character: str = "") -> str:
         ip_subject = self._ip_subject(character)
         subject = ip_subject if plan["include_ip"] else plan["subject"]
         actor_clause = ""
@@ -168,16 +208,27 @@ class BackgroundResolver:
             "open empty lower 35 percent reserved for subtitles and presenter overlay, "
             "no written text, no Chinese characters, no English letters, no numbers, no readable or unreadable characters, "
             "no signs, no road signs, no posters, no book titles, no labels, no logo, "
-            "no watermark, no speech bubble, no interface"
+            "no watermark, no speech bubble, no interface, "
+            "no detailed human figure, no visible hands, no visible fingers, no holding paper, no writing pose, "
+            "no back-view person with hair details, tiny simplified silhouettes only if needed, no facial details, no hair details, "
+            "no malformed anatomy, no dislocated limbs, no misplaced hands, no hands crossing through body, "
+            "no arm behind head illusion, no twisted arms, no extra arms, no extra hands, no broken fingers, "
+            "no detached head, no head-body mismatch, no backwards body pose, "
+            "no floating hand, no isolated hand, no severed arm, no cropped arm, no body parts without a full person, "
+            "complete full-body figure only, both arms connected to the torso"
         )
-        plan = {
+        return prompt
+
+    def _finalize_rule_plan(self, plan: dict, cue: str = "", character: str = "") -> dict:
+        ip_subject = self._ip_subject(character)
+        subject = ip_subject if plan["include_ip"] else plan["subject"]
+        return {
             **plan,
             "subject": subject,
             "source": "rules",
             "llm_plan": {},
             "cue": cue,
         }
-        return prompt, plan
 
     def _build_llm_background_plan(self, text: str) -> dict:
         template_path = PROJECT_ROOT / "docs" / "prompts" / "background-plan-generation.txt"
@@ -202,26 +253,64 @@ class BackgroundResolver:
             logger.warning(f"LLM background plan failed, fallback to rules: {exc}")
             return {}
 
+        plan = self._normalize_llm_plan(plan)
         if not self._is_valid_llm_plan(plan):
             logger.warning("LLM background plan missing required fields, fallback to rules.")
             return {}
         return plan
 
+    def _is_social_legal_text(self, text: str) -> bool:
+        keywords = (
+            "法院", "法律", "劳动", "工伤", "社保", "合同", "证据", "权益", "责任", "纠纷",
+            "维权", "仲裁", "赔偿", "公司", "单位", "老板", "员工", "工资", "加班", "签字", "转账",
+            "外卖", "骑手", "网约车", "司机", "主播", "平台", "新业态", "用工", "灵活就业", "合作协议",
+        )
+        return any(keyword in (text or "") for keyword in keywords)
+
+    def _normalize_llm_plan(self, plan: dict) -> dict:
+        if not isinstance(plan, dict):
+            return {}
+        composition = plan.get("composition") if isinstance(plan.get("composition"), dict) else {}
+        main_visual = str(plan.get("main_visual_prompt") or "").strip()
+        scene_type = str(plan.get("scene_type") or plan.get("content_type") or "slice_of_life_scene").strip()
+        if not main_visual:
+            subject = str(plan.get("detected_subject") or plan.get("core_metaphor") or "symbolic everyday object").strip()
+            action = str(plan.get("detected_action") or "showing a clear everyday action").strip()
+            main_visual = f"a clean anime scene of {subject}, {action}, with simple symbolic objects and no written text"
+        plan["content_type"] = plan.get("content_type") or "general_life_advice"
+        plan["scene_type"] = scene_type
+        plan["emotion"] = plan.get("emotion") or "calm_reflective"
+        plan["main_visual_prompt"] = main_visual
+        plan["symbolic_objects"] = plan.get("symbolic_objects") if isinstance(plan.get("symbolic_objects"), list) else []
+        plan["color_palette"] = plan.get("color_palette") or "warm clean muted colors"
+        plan["lighting"] = plan.get("lighting") or "soft cinematic light with gentle shadows"
+        plan["composition"] = {
+            "foreground": composition.get("foreground") or "clean empty lower foreground reserved for subtitles",
+            "midground": composition.get("midground") or "main subject and action placed in the left or upper-middle area",
+            "background": composition.get("background") or "simple spacious background with no text or signs",
+            "focal_point": composition.get("focal_point") or "upper-left main action area",
+            "camera_angle": composition.get("camera_angle") or "medium wide shot",
+            "safe_area": composition.get("safe_area") or "lower 35 percent clean and empty, especially lower right",
+        }
+        return plan
+
     def _is_valid_llm_plan(self, plan: dict) -> bool:
         if not isinstance(plan, dict):
             return False
-        required = ("content_type", "scene_type", "composition", "main_visual_prompt", "symbolic_objects")
+        required = ("content_type", "scene_type", "composition", "main_visual_prompt")
         if any(not plan.get(key) for key in required):
             return False
         composition = plan.get("composition")
         if not isinstance(composition, dict):
             return False
         if not isinstance(plan.get("symbolic_objects"), list):
-            return False
+            plan["symbolic_objects"] = []
         english_fields = [
             plan.get("content_type", ""),
             plan.get("scene_type", ""),
             plan.get("emotion", ""),
+            plan.get("detected_subject", ""),
+            plan.get("detected_action", ""),
             plan.get("main_visual_prompt", ""),
             plan.get("color_palette", ""),
             plan.get("lighting", ""),
@@ -234,7 +323,11 @@ class BackgroundResolver:
         ]
         if any(self._contains_cjk(value) for value in english_fields):
             return False
-        forbidden_marks = ("《", "》", "“", "”", "book title", "readable title")
+        forbidden_marks = (
+            "《", "》", "“", "”", "book title", "readable title",
+            "wall art", "framed picture", "calligraphy", "plaque", "certificate",
+            "poster", "hanging frame", "wall-mounted", "large human", "close-up person",
+        )
         joined = " ".join(str(value).lower() for value in english_fields)
         if any(mark.lower() in joined for mark in forbidden_marks):
             return False
@@ -261,6 +354,9 @@ class BackgroundResolver:
             f"symbolic objects: {symbolic_objects}",
             f"color palette: {plan.get('color_palette', 'warm clean soft colors')}",
             f"lighting: {plan.get('lighting', 'soft warm light with gentle shadows')}",
+            "avoid courtrooms, judges, lawyers, gavels, scales, office wall backgrounds, and any official-looking signboard",
+            "no indoor wall as the main subject, no wall art, no framed pictures, no hanging plaque, no calligraphy, no certificate, no poster",
+            "no detailed human figure, no close-up person, no near back-view person, no visible hands, no visible fingers, no holding paper, no writing pose, tiny simplified silhouettes only if needed, no facial details",
             "all paper, cards, notebooks, folders, screens, walls, and signs are completely blank and plain",
             "no glyph-like marks, no pseudo text, no fake writing, no scribbles, no decorative strokes that resemble letters",
             "open empty lower 35 percent reserved for subtitles and presenter overlay",
@@ -269,7 +365,12 @@ class BackgroundResolver:
             "no written text, no Chinese characters, no English letters, no numbers, no readable or unreadable characters",
             "no signs, no posters, no book titles, no labels, no logo",
             "no watermark, no speech bubble, no interface",
-            "no close-up face, no large portrait, no realistic photo style",
+            "no close-up face, no large portrait, no large human body, no realistic photo style",
+            "no malformed anatomy, no dislocated limbs, no misplaced hands, no hands crossing through body",
+            "no arm behind head illusion, no twisted arms, no extra arms, no extra hands, no broken fingers",
+            "no detached head, no head-body mismatch, no backwards body pose",
+            "no floating hand, no isolated hand, no severed arm, no cropped arm, no body parts without a full person",
+            "no detailed fingers, no paper held by a person, no person writing, no indoor two-person scene with wall art",
         ]
         return ", ".join(part for part in parts if part and not part.endswith(": "))
 
@@ -280,8 +381,10 @@ class BackgroundResolver:
         compact = "、".join(dict.fromkeys(word for word in keywords if word))
         return compact or group_text[:24]
 
-    def _visual_plan(self, text: str) -> dict:
+    def _visual_plan(self, text: str, variant_index: int = 0) -> dict:
         normalized = text or ""
+        if self._is_social_legal_text(normalized):
+            return self._social_legal_plan(normalized, variant_index=variant_index)
         rules = (
             {
                 "action": "choose",
@@ -345,7 +448,7 @@ class BackgroundResolver:
                 "triggers": ("规则", "法律", "合同", "证据", "权益", "责任", "纠纷", "维权", "条款", "借钱", "口头承诺", "签字", "转账"),
                 "include_ip": False,
                 "actor_action": "",
-                "visual": "a simple peaceful anime landscape with a quiet garden path, a low wooden fence marking a clear boundary, a small open gate, smooth stepping stones, calm grass, and soft morning light, visual metaphor for rules, boundaries, safe choices, and a clear process, no indoor room, no wall, no desk, no paper, no document, no book, no signboard, no plaque, no poster, no framed object, no human face",
+                "visual": "a plain city sidewalk outside a modern office building with no signage, a clean floor boundary line, a closed blank folder beside keys and a work helmet, soft morning light, visual metaphor for rules, responsibility, evidence, and safe boundaries, no indoor room, no wall, no desk, no open paper, no document text, no book, no signboard, no plaque, no poster, no framed object, no human face",
             },
             {
                 "action": "conflict_relationship",
@@ -390,6 +493,113 @@ class BackgroundResolver:
             "include_ip": False,
             "actor_action": "",
             "visual": "a warm philosophical presentation background with symbolic blank objects, soft room depth, clean empty space",
+        }
+
+    def _pick_variant(self, variants: list[str], variant_index: int) -> str:
+        if not variants:
+            return ""
+        return variants[variant_index % len(variants)]
+
+    def _social_legal_plan(self, text: str, variant_index: int = 0) -> dict:
+        if any(word in text for word in ("外卖", "骑手", "网约车", "司机", "主播", "平台", "新业态", "灵活就业", "用工")):
+            visual = self._pick_variant([
+                (
+                    "a clean city sidewalk scene in soft morning light, "
+                    "large foreground delivery helmet and insulated delivery bag on a simple bench, car keys, phone facing down, and a closed blank folder, "
+                    "one tiny simplified platform worker silhouette in the far upper-left distance, no visible hands or facial details, "
+                    "distant plain apartment buildings with no signage, "
+                    "clear narrative action about platform workers facing unclear labor responsibility, "
+                    "the tiny silhouette is decorative only and placed far from the lower right presenter area, "
+                    "no office wall, no court building, no signs, no posters, no open documents, no readable screen, "
+                    "no close-up face, no portrait, no large person, no near back-view person, no visible hands, no hair details"
+                ),
+                (
+                    "a quiet residential pickup area with no signage, a partial electric scooter wheel and large delivery bag near the left side, "
+                    "closed blank folder and phone facing down on a low curb, one tiny simplified rider silhouette far in the background, no visible hands, "
+                    "soft morning light, plain apartment blocks in the distance, visual metaphor for platform work and unclear responsibility, "
+                    "no license plate text, no store signs, no posters, no office wall, no open documents, no large people, no close-up face, no detailed person, lower area clean"
+                ),
+                (
+                    "a calm roadside rest spot with a parked car detail cropped without license plate, car keys, phone facing down, "
+                    "a large delivery helmet and closed blank folder on a simple seat, one tiny simplified driver silhouette far in the background, "
+                    "plain city background with no signage, visual metaphor for flexible work and labor rights uncertainty, "
+                    "no readable screens, no signs, no numbers, no close-up person, no large human figure, no visible hands"
+                ),
+                (
+                    "a minimal creator work corner with a turned-off ring light, phone facing down, plain microphone stand without logo, "
+                    "closed blank folder and a cup on a clean table, one tiny simplified creator silhouette near a window, no visible hands, "
+                    "soft neutral light, no screen content, no posters, no wall certificates, no readable text, lower right area empty"
+                ),
+            ], variant_index)
+            return {
+                "action": "platform_worker_rights",
+                "subject": "platform workers and flexible employment rights",
+                "include_ip": False,
+                "actor_action": "",
+                "visual": visual,
+            }
+        if any(word in text for word in ("工伤", "劳动", "员工", "公司", "单位", "老板", "工资", "加班")):
+            visual = self._pick_variant([
+                (
+                    "an outdoor clean workshop entrance with no signage and no indoor wall, a large safety helmet, a toolbox, and a closed blank folder placed on a bench, "
+                    "one tiny simplified worker silhouette far in the background, no visible hands or facial details, soft morning light, visual metaphor for labor rights and responsibility, "
+                    "no isolated hand, no floating limb, no signs, no wall text, no office wall, no framed pictures, no open documents, no court room"
+                ),
+                (
+                    "a plain outdoor worksite rest area without labels, a closed first-aid kit, safety gloves, capped pen, and sealed blank envelope on a simple bench, "
+                    "large safety helmet as the main object, one tiny simplified worker silhouette far in the background, no visible hands, soft light, visual metaphor for injury responsibility and evidence, "
+                    "no lockers, no posters, no notices, no certificates, no readable text, no floating hand, no isolated arm, no large people, no close-up face"
+                ),
+            ], variant_index)
+            return {
+                "action": "labor_rights",
+                "subject": "labor rights and responsibility",
+                "include_ip": False,
+                "actor_action": "",
+                "visual": visual,
+            }
+        if any(word in text for word in ("法院", "仲裁", "维权", "赔偿", "纠纷", "法律")):
+            visual = self._pick_variant([
+                (
+                    "plain stone steps in a civic-looking outdoor space with no signs or plaques, a closed blank folder, keys, "
+                    "and a phone facing down on a simple bench, calm city morning light, visual metaphor for legal process and evidence, "
+                    "no courtroom, no judge, no gavel, no scales, no wall art, no text"
+                ),
+                (
+                    "a quiet city walkway near a plain public building facade with no signage, sealed envelope and phone facing down on a clean stone ledge, "
+                    "one tiny simplified person silhouette walking toward light in the far middle distance, no visible hands or facial details, visual metaphor for orderly dispute resolution, "
+                    "no plaques, no official signs, no posters, no document text, no large people, no close-up face"
+                ),
+            ], variant_index)
+            return {
+                "action": "legal_process",
+                "subject": "legal process and evidence",
+                "include_ip": False,
+                "actor_action": "",
+                "visual": visual,
+            }
+        visual = self._pick_variant([
+            (
+                "two tiny simplified silhouettes standing on opposite sides of a clean floor boundary line, no visible hands or facial details, "
+                "outside a plain entrance with no signage, closed blank folder and phone facing down on a nearby bench, "
+                "soft neutral light, visual metaphor for clear rules, boundaries, and responsibility, no signs, no text, no wall art"
+            ),
+            (
+                "a clean corridor floor with a bright boundary line, work items separated on two sides, capped pen, closed blank folder, and keys, "
+                "one tiny simplified silhouette standing in the upper-left far distance, no visible hands or facial details, visual metaphor for responsibility boundaries, "
+                "no office wall decorations, no rule board, no announcement board, no readable text, lower area empty"
+            ),
+            (
+                "a simple open gate threshold with no sign, two paths divided by a clean line, closed folder and phone facing down on a stone bench, "
+                "soft morning light, tiny simplified silhouettes only if needed, no visible hands, no facial details, visual metaphor for rules and responsibility boundaries, no plaques, no posters, no text"
+            ),
+        ], variant_index)
+        return {
+            "action": "social_rules",
+            "subject": "social rules and boundaries",
+            "include_ip": False,
+            "actor_action": "",
+            "visual": visual,
         }
 
     def _ip_subject(self, character: str) -> str:
@@ -508,8 +718,8 @@ class BackgroundResolver:
             return "study"
         return "default"
 
-    def _create_comfy_background(self, prompt: str, output_path: Path, seed: int = 260600) -> bool:
-        """调用 ComfyUI (127.0.0.1:8190) 生成动漫背景图。自动启动/关闭 ComfyUI。"""
+    def _create_comfy_background(self, prompt: str, output_path: Path, seed: int = 260600, close_after: bool = True) -> bool:
+        """调用 ComfyUI 生成动漫背景图。可在一次 Presenter 流程内复用服务。"""
         import json
         import socket
         import subprocess
@@ -587,7 +797,11 @@ class BackgroundResolver:
         # 检查 ComfyUI 是否已运行
         we_started = False
         comfy_process = None
-        if is_port_open(host, port) and not is_comfyui_ready():
+        active_started_process = self._comfy_process and self._comfy_process.poll() is None
+        if active_started_process:
+            comfy_process = self._comfy_process
+
+        if is_port_open(host, port) and not active_started_process and not is_comfyui_ready():
             print(f"[ComfyUI] {host}:{port} 已被非 ComfyUI 服务占用，跳过 ComfyUI 背景生成。")
             return False
 
@@ -601,6 +815,8 @@ class BackgroundResolver:
                     stderr=subprocess.DEVNULL,
                 )
                 we_started = True
+                self._comfy_process = comfy_process
+                self._comfy_started_by_resolver = True
             except Exception as e:
                 print(f"[ComfyUI] 启动失败: {e}")
                 return False
@@ -613,20 +829,25 @@ class BackgroundResolver:
             print("[ComfyUI] 已就绪")
 
         workflow = {
-            "1": {"class_type": "CheckpointLoaderSimple", "inputs": {"ckpt_name": "flux1-schnell-fp8.safetensors"}},
+            "1": {"class_type": "CheckpointLoaderSimple", "inputs": {"ckpt_name": settings.COMFYUI_CHECKPOINT}},
             "2": {"class_type": "CLIPTextEncode", "inputs": {"text": prompt, "clip": ["1", 1]}},
             "3": {"class_type": "CLIPTextEncode", "inputs": {
                 "text": "text, readable text, unreadable text, pseudo text, fake writing, glyphs, symbols, "
                         "Chinese characters, English letters, numbers, scribbles, decorative strokes, "
-                        "sign, poster, frame, logo, watermark, label, book title, document text, "
+                        "sign, poster, frame, wall art, framed picture, logo, watermark, label, book title, document text, "
                         "forms, receipts, paper full of details, filled document pages, wall plaque, hanging plaque, "
-                        "calligraphy, certificate, menu board, poster board, framed writing, "
-                        "close-up portrait, large animal, extra head, malformed face",
+                        "calligraphy, certificate, menu board, poster board, framed writing, indoor wall as main subject, "
+                        "close-up portrait, close-up person, large human figure, near back-view person, large animal, extra head, malformed face, "
+                        "detailed human figure, visible hands, visible fingers, holding paper, writing pose, back-view person with hair details, "
+                        "malformed anatomy, dislocated limbs, misplaced hands, hands crossing through body, "
+                        "arm behind head illusion, twisted arms, extra arms, extra hands, broken fingers, "
+                        "detached head, head-body mismatch, backwards body pose, floating hand, isolated hand, "
+                        "severed arm, cropped arm, body parts without a full person, disconnected limb",
                 "clip": ["1", 1]
             }},
             "4": {"class_type": "EmptyLatentImage", "inputs": {"width": 768, "height": 1344, "batch_size": 1}},
             "5": {"class_type": "KSampler", "inputs": {
-                "seed": seed, "steps": 4, "cfg": 1.0,
+                "seed": seed, "steps": int(settings.COMFYUI_STEPS), "cfg": float(settings.COMFYUI_CFG),
                 "sampler_name": "euler", "scheduler": "simple", "denoise": 1.0,
                 "model": ["1", 0], "positive": ["2", 0], "negative": ["3", 0], "latent_image": ["4", 0]
             }},
@@ -678,7 +899,26 @@ class BackgroundResolver:
         except Exception:
             return False
         finally:
-            stop_started_comfy(comfy_process)
+            if close_after:
+                stop_started_comfy(comfy_process)
+
+    def _stop_active_comfy(self) -> None:
+        if not self._comfy_started_by_resolver:
+            return
+        print("[ComfyUI] 本次背景生成完成，正在关闭本次启动的 ComfyUI...")
+        process = self._comfy_process
+        if process and process.poll() is None:
+            try:
+                process.terminate()
+                process.wait(timeout=10)
+            except Exception:
+                try:
+                    process.kill()
+                    process.wait(timeout=5)
+                except Exception as exc:
+                    print(f"[ComfyUI] 按 PID 关闭失败: {exc}")
+        self._comfy_process = None
+        self._comfy_started_by_resolver = False
 
     def _draw_scene_symbols(self, draw: ImageDraw.ImageDraw, scene: str, width: int, height: int) -> None:
         top = 350

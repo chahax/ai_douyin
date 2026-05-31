@@ -1,0 +1,110 @@
+[
+  {
+    "id": "social_security_umbrella_bench",
+    "domain": ["labor_law", "social_law"],
+    "category": ["social_security_coverage"],
+    "applies_to": ["社会保障", "社保", "保障", "覆盖不足", "保险", "养老", "医疗"],
+    "visual_prompt": "clean city bench with a closed umbrella, safety helmet, sealed blank envelope, and a small first-aid pouch, soft morning light, distant plain buildings with no signage",
+    "safe_action": "social protection and coverage represented by everyday protective objects",
+    "negative_rules": ["no hospital sign", "no insurance document", "no certificate", "no readable text", "no numbers", "no open paper", "no office wall"],
+    "safe_area": "lower 35 percent clean and empty, especially lower right",
+    "style": "vertical 9:16 anime illustration, calm social protection metaphor, soft cel shading",
+    "notes": "Use for social security coverage, insurance gaps, and protection issues."
+  },
+  {
+    "id": "platform_worker_sidewalk_helmet",
+    "domain": ["labor_law", "social_law", "platform_economy"],
+    "category": ["platform_worker_rights", "flexible_employment", "general_transition"],
+    "applies_to": ["外卖", "骑手", "网约车", "司机", "主播", "平台", "新业态", "灵活就业", "用工"],
+    "visual_prompt": "clean city sidewalk, delivery helmet, insulated delivery bag, car keys, phone facing down, closed blank folder, distant plain buildings with no signage",
+    "safe_action": "platform workers facing unclear labor responsibility",
+    "negative_rules": ["no signboard", "no readable text", "no pseudo text", "no court building", "no office wall", "no certificate", "no poster", "no open documents", "no large people"],
+    "safe_area": "lower 35 percent clean and empty, especially lower right",
+    "style": "vertical 9:16 anime illustration, clean modern slice-of-life scene, soft cel shading",
+    "notes": "Use for platform worker rights and flexible employment relationship."
+  },
+  {
+    "id": "labor_safety_workshop",
+    "domain": ["labor_law", "social_law"],
+    "category": ["labor_injury", "responsibility_boundary"],
+    "applies_to": ["工伤", "劳动", "员工", "公司", "单位", "老板", "加班", "受伤", "事故"],
+    "visual_prompt": "plain workshop entrance, safety helmet, toolbox, closed first-aid kit, sealed blank archive envelope, tiny distant worker silhouette checking safety gear",
+    "safe_action": "worker checking safety responsibility before work",
+    "negative_rules": ["no factory slogan", "no safety sign", "no wall notice", "no certificate", "no open paper", "no readable screen"],
+    "safe_area": "lower 35 percent clean and empty, especially lower right",
+    "style": "vertical 9:16 anime illustration, calm workplace scene, soft cel shading",
+    "notes": "Use for work injury and employer responsibility."
+  },
+  {
+    "id": "contract_risk_closed_folder",
+    "domain": ["labor_law", "legal", "social_law"],
+    "category": ["contract_risk", "responsibility_boundary"],
+    "applies_to": ["合作协议", "劳动合同", "签字", "条款", "外包", "承包", "协议", "合同"],
+    "visual_prompt": "clean neutral table, closed blank folder, capped pen, two water cups placed apart, soft side light, no open paper",
+    "safe_action": "careful review before signing without showing document text",
+    "negative_rules": ["no open contract", "no document text", "no signature", "no stamp", "no form", "no wall art", "no certificate"],
+    "safe_area": "lower 35 percent clean and empty, especially lower right",
+    "style": "vertical 9:16 anime illustration, clean neutral table scene, soft cel shading",
+    "notes": "Use for contract and agreement risk without showing readable documents."
+  },
+  {
+    "id": "evidence_phone_envelope",
+    "domain": ["legal", "labor_law", "social_law"],
+    "category": ["evidence_preservation"],
+    "applies_to": ["聊天记录", "转账", "录音", "截图", "订单", "打卡", "证据", "保存"],
+    "visual_prompt": "phone facing down, keys, sealed envelope, closed blank folder, small desk lamp, clean table surface",
+    "safe_action": "preserving evidence without displaying private content",
+    "negative_rules": ["no phone screen content", "no chat bubbles", "no bill", "no QR code", "no numbers", "no readable text"],
+    "safe_area": "lower 35 percent clean and empty, especially lower right",
+    "style": "vertical 9:16 anime illustration, quiet evidence preservation scene, soft cel shading",
+    "notes": "Use for evidence and record preservation."
+  },
+  {
+    "id": "legal_process_plain_steps",
+    "domain": ["legal", "social_law"],
+    "category": ["legal_process"],
+    "applies_to": ["法院", "仲裁", "起诉", "调解", "判决", "维权", "赔偿", "纠纷"],
+    "visual_prompt": "plain stone steps in a civic-looking outdoor space with no signs, closed blank folder, phone facing down, calm city morning light",
+    "safe_action": "orderly legal process represented without official signs",
+    "negative_rules": ["no courthouse sign", "no judge", "no lawyer", "no gavel", "no scales", "no plaque", "no notice board", "no readable text"],
+    "safe_area": "lower 35 percent clean and empty, especially lower right",
+    "style": "vertical 9:16 anime illustration, calm civic outdoor scene, soft cel shading",
+    "notes": "Use for legal process while avoiding court signage and institutional text."
+  },
+  {
+    "id": "responsibility_boundary_line",
+    "domain": ["labor_law", "legal", "social_law"],
+    "category": ["responsibility_boundary"],
+    "applies_to": ["责任", "边界", "指派", "管理", "考勤", "派单", "规章制度", "实际控制"],
+    "visual_prompt": "clean floor boundary line, work items separated on both sides, tiny distant silhouettes, plain corridor with no wall decorations",
+    "safe_action": "clear boundary between responsibility and control",
+    "negative_rules": ["no office wall", "no rule board", "no announcement board", "no certificate", "no large person", "no readable text"],
+    "safe_area": "lower 35 percent clean and empty, especially lower right",
+    "style": "vertical 9:16 anime illustration, minimal boundary metaphor, soft cel shading",
+    "notes": "Use for responsibility boundaries and actual management control."
+  },
+  {
+    "id": "income_wage_closed_wallet",
+    "domain": ["labor_law", "social_law"],
+    "category": ["income_wage"],
+    "applies_to": ["工资", "报酬", "提成", "结算", "拖欠", "加班费", "收入"],
+    "visual_prompt": "closed wallet, blank calculator with no numbers, capped pen, water cup, closed notebook on a clean table",
+    "safe_action": "checking income and payment boundaries without showing numbers",
+    "negative_rules": ["no bill", "no numbers", "no payslip", "no bank card number", "no readable text", "no open notebook"],
+    "safe_area": "lower 35 percent clean and empty, especially lower right",
+    "style": "vertical 9:16 anime illustration, clean financial planning table scene, soft cel shading",
+    "notes": "Use for wages, payment, and income settlement."
+  },
+  {
+    "id": "general_transition_city_morning",
+    "domain": ["social_law", "general"],
+    "category": ["general_transition", "general_life_advice"],
+    "applies_to": ["近年来", "随着", "这种模式", "背后", "问题", "变化", "模式"],
+    "visual_prompt": "quiet city morning sidewalk, several work-related objects on a bench, delivery helmet, closed folder, keys, distant plain buildings with no signage",
+    "safe_action": "social change represented through everyday work objects",
+    "negative_rules": ["no road sign", "no advertisement", "no building sign", "no logo", "no text", "no large people"],
+    "safe_area": "lower 35 percent clean and empty, especially lower right",
+    "style": "vertical 9:16 anime illustration, calm city morning scene, soft cel shading",
+    "notes": "Use for transition sentences about social change."
+  }
+]

@@ -4,6 +4,7 @@ from src.content_factory.presenter.models import PresenterSegment
 
 
 SENTENCE_RE = re.compile(r"[^。！？!?；;\n]+[。！？!?；;]?", re.MULTILINE)
+SPEAKABLE_RE = re.compile(r"[\u4e00-\u9fffA-Za-z0-9]")
 STOPWORDS = {
     "一个", "一种", "这个", "那个", "我们", "你会", "就是", "其实", "如果", "因为",
     "所以", "但是", "然后", "可以", "不要", "时候", "自己", "什么",
@@ -40,7 +41,7 @@ class ScriptSegmenter:
         if not cleaned:
             return []
         sentences = [m.group(0).strip() for m in SENTENCE_RE.finditer(cleaned)]
-        return [s for s in sentences if s]
+        return [s for s in sentences if self._has_speakable_text(s)]
 
     def _pack_sentences(self, sentences: list[str]) -> list[str]:
         chunks = []
@@ -58,10 +59,11 @@ class ScriptSegmenter:
             if len(candidate) <= self.max_chars or not buffer:
                 buffer = candidate
             else:
-                chunks.append(buffer)
+                if self._has_speakable_text(buffer):
+                    chunks.append(buffer)
                 buffer = sentence
 
-        if buffer:
+        if self._has_speakable_text(buffer):
             chunks.append(buffer)
         return chunks
 
@@ -71,11 +73,12 @@ class ScriptSegmenter:
         buffer = ""
         for part in parts:
             part = part.strip()
-            if not part:
+            if not self._has_speakable_text(part):
                 continue
             if len(part) > self.max_chars:
                 if buffer:
-                    chunks.append(buffer)
+                    if self._has_speakable_text(buffer):
+                        chunks.append(buffer)
                     buffer = ""
                 chunks.extend(self._split_by_chars(part))
                 continue
@@ -83,9 +86,10 @@ class ScriptSegmenter:
             if len(candidate) <= self.max_chars or not buffer:
                 buffer = candidate
             else:
-                chunks.append(buffer)
+                if self._has_speakable_text(buffer):
+                    chunks.append(buffer)
                 buffer = part
-        if buffer:
+        if self._has_speakable_text(buffer):
             chunks.append(buffer)
         return chunks
 
@@ -93,9 +97,12 @@ class ScriptSegmenter:
         chunks = []
         for start in range(0, len(text), self.max_chars):
             chunk = text[start:start + self.max_chars].strip()
-            if chunk:
+            if self._has_speakable_text(chunk):
                 chunks.append(chunk)
         return chunks
+
+    def _has_speakable_text(self, text: str) -> bool:
+        return bool(SPEAKABLE_RE.search(text or ""))
 
     def _style_for(self, index: int, text: str) -> str:
         if index == 0:
