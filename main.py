@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import argparse
 import json
 import sys
@@ -6,6 +7,7 @@ from dataclasses import asdict
 from src.platform_adapter import DouyinAdapter
 from src.platform_adapter.browser_session import BrowserSession, build_default_browser_session_config
 from src.platform_adapter.douyin_warmup import DouyinWarmupService
+from src.platform_adapter.fanqie_promotion import FanqiePromotionService
 from src.platform_adapter.models import PublishRequest
 from src.services import (
     AutoPublishRequest,
@@ -19,7 +21,44 @@ from src.content_factory.presenter import DEFAULT_SONIC_FOX_CHARACTER, INPUT_MOD
 from src.content_factory.presenter_pipeline import PresenterPipeline
 from src.content_factory.presenter.scene_planner import ScenePlanner
 from src.shared.config import settings
+from src.shared.database import init_db, SessionLocal
 from src.shared.logger import logger
+from src.shared.migration import ensure_migrated
+
+# 启动时检查 DB 是否已通过 Alembic 迁移到位。
+# 全新环境：先 `alembic upgrade head`；老环境：先 `alembic stamp head`。
+# 失败时 strict=True 直接 sys.exit(1)；设 INIT_DB_FALLBACK=1 跳过。
+if not ensure_migrated(strict=True):
+    sys.exit(1)
+
+# 必须先导入所有模型，否则 Base.metadata 里没有对应表
+from src.memory.models import UserProfile, ConversationSession, ConversationMessage  # noqa: F401
+from src.memory.problem_memory import ConversationMemory, UserMemory, ProblemMemory  # noqa: F401
+from src.scheduler.models import ScheduledTask, TaskExecution, TaskType, TaskStatus, TriggerType  # noqa: F401
+
+# init_db 现在是 noop（迁移走 Alembic），保留调用以维持向后兼容
+init_db()
+
+# 首次启动时播种内置定时任务（每日未解决问题调查）
+try:
+    with SessionLocal() as _sess:
+        if not _sess.query(ScheduledTask).filter_by(name="investigate_problems_daily").first():
+            _sess.add(ScheduledTask(
+                name="investigate_problems_daily",
+                description="每日扫描未解决问题，调用 LLM 生成调查摘要",
+                task_type=TaskType.SCHEDULED.value,
+                skill_name="investigate_problems",
+                skill_params={"limit": 20},
+                trigger_type=TriggerType.CRON.value,
+                trigger_config={"expression": "37 9 * * *"},
+                status=TaskStatus.PENDING.value,
+                enabled=True,
+                max_retries=1,
+                retry_delay_seconds=300,
+            ))
+            _sess.commit()
+except Exception:
+    pass
 
 
 service = GenerationService()
@@ -89,6 +128,34 @@ def build_parser():
 
     debug_bg_parser = subparsers.add_parser("debug-background-plan", help="Analyze text and show matched background scene plan")
     debug_bg_parser.add_argument("--text", type=str, required=True, help="Chinese segment text to analyze")
+
+    fanqie_login_parser = subparsers.add_parser("fanqie-login", help="Open Fanqie KOL center and save browser login state")
+    fanqie_login_parser.add_argument("--url", type=str, default="", help="Target URL to open")
+    fanqie_login_parser.add_argument("--pause-seconds", type=int, default=900, help="How long to keep the browser open")
+    fanqie_login_parser.add_argument("--wait-for-enter", action="store_true", help="Keep browser open until Enter is pressed")
+
+    fanqie_apply_parser = subparsers.add_parser("fanqie-promo-apply", help="Apply for one Fanqie promotion task with saved browser login state")
+    fanqie_apply_parser.add_argument("--type", type=str, default="novel", choices=["novel", "audio"], help="Promotion content type")
+    fanqie_apply_parser.add_argument("--book-name", type=str, default="", help="Optional target novel name. Default uses first available item")
+    fanqie_apply_parser.add_argument("--alias", type=str, default="", help="Promotion alias to fill. Default is generated from book name")
+    fanqie_apply_parser.add_argument("--no-wait-login", action="store_true", help="Do not pause for manual login before applying")
+    fanqie_apply_parser.add_argument("--headless", action="store_true", help="Run browser in headless mode")
+    fanqie_apply_parser.add_argument("--keep-open", action="store_true", help="Keep browser open after submitting for manual check")
+
+    fanqie_fetch_parser = subparsers.add_parser("fanqie-book-fetch", help="Search Fanqie novel and fetch first chapters")
+    fanqie_fetch_parser.add_argument("--book-name", type=str, required=True, help="Novel name")
+    fanqie_fetch_parser.add_argument("--chapters", type=int, default=10, help="Chapter count to fetch")
+    fanqie_fetch_parser.add_argument("--headless", action="store_true", help="Run browser in headless mode")
+
+    fanqie_video_parser = subparsers.add_parser("fanqie-promo-video", help="Generate a Fanqie novel promotion presenter video")
+    fanqie_video_parser.add_argument("--task-file", type=str, default="", help="Task JSON from fanqie-promo-apply")
+    fanqie_video_parser.add_argument("--book-name", type=str, default="", help="Novel name if no task file is provided")
+    fanqie_video_parser.add_argument("--alias", type=str, default="", help="Promotion alias if no task file is provided")
+    fanqie_video_parser.add_argument("--chapters", type=int, default=10, help="Chapter count to fetch when material is missing")
+    fanqie_video_parser.add_argument("--output-dir", type=str, default="data/videos", help="Output directory for final video")
+    fanqie_video_parser.add_argument("--max-segments", type=int, default=0, help="Maximum presenter segments. 0 means no truncation")
+    fanqie_video_parser.add_argument("--no-comfy-background", action="store_true", help="Use local fallback backgrounds instead of ComfyUI")
+    fanqie_video_parser.add_argument("--assets-only", action="store_true", help="Generate script/audio/background assets only, skip final video")
 
     import_parser = subparsers.add_parser("import-knowledge", help="Import books into the vector knowledge base")
     import_parser.add_argument("--books-dir", type=str, default=service.default_books_dir, help="Books directory to import")
@@ -338,6 +405,70 @@ def main():
         planner = ScenePlanner()
         prompt, plan = planner.plan(args.text)
         print(json.dumps({"prompt": prompt, "plan": plan}, ensure_ascii=False, indent=2))
+        return
+
+    if args.command == "fanqie-login":
+        fanqie = FanqiePromotionService()
+        try:
+            state = fanqie.open_login_window(
+                url=args.url or "",
+                pause_seconds=args.pause_seconds,
+                wait_for_enter=args.wait_for_enter,
+            )
+        except Exception as exc:
+            logger.error(f"番茄登录窗口失败: {exc}")
+            sys.exit(1)
+        print(json.dumps(state, ensure_ascii=False, indent=2))
+        return
+
+    if args.command == "fanqie-promo-apply":
+        fanqie = FanqiePromotionService()
+        try:
+            task = fanqie.apply_promotion(
+                content_type=args.type,
+                book_name=args.book_name or "",
+                alias=args.alias or "",
+                wait_for_login=not args.no_wait_login,
+                headless=args.headless,
+                keep_open=args.keep_open,
+            )
+        except Exception as exc:
+            logger.error(f"番茄推广申请失败: {exc}")
+            sys.exit(1)
+        print(json.dumps(asdict(task), ensure_ascii=False, indent=2))
+        return
+
+    if args.command == "fanqie-book-fetch":
+        fanqie = FanqiePromotionService()
+        try:
+            result = fanqie.fetch_book(
+                book_name=args.book_name,
+                chapters=args.chapters,
+                headless=args.headless,
+            )
+        except Exception as exc:
+            logger.error(f"番茄小说内容获取失败: {exc}")
+            sys.exit(1)
+        print(json.dumps(asdict(result), ensure_ascii=False, indent=2))
+        return
+
+    if args.command == "fanqie-promo-video":
+        fanqie = FanqiePromotionService()
+        try:
+            task = fanqie.generate_promo_video(
+                task_file=args.task_file or "",
+                book_name=args.book_name or "",
+                chapters=args.chapters,
+                alias=args.alias or "",
+                output_dir=args.output_dir,
+                max_segments=args.max_segments,
+                no_comfy_background=args.no_comfy_background,
+                assets_only=args.assets_only,
+            )
+        except Exception as exc:
+            logger.error(f"番茄推广视频生成失败: {exc}")
+            sys.exit(1)
+        print(json.dumps(asdict(task), ensure_ascii=False, indent=2))
         return
 
     if args.command == "import-knowledge":

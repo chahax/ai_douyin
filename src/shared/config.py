@@ -59,6 +59,11 @@ class Settings(BaseSettings):
     DEFAULT_BGM_PATH: str = "./data/ref_audio/Morning-Routine-Lofi-Study-Music(chosic.com).mp3"
     TTS_PROVIDER: str = "edge"
 
+    # Session cookie (跨刷新保持登录)
+    SESSION_SECRET: str = ""  # HMAC 签名密钥；为空时由程序启动时生成并写入 data/.session_secret
+    SESSION_COOKIE_NAME: str = "ai_douyin_session"
+    SESSION_COOKIE_DAYS: int = 30  # 30 天内刷新免登录
+
     # GPT-SoVITS
     GPT_SOVITS_API_URL: str = "http://127.0.0.1:9880"
     GPT_SOVITS_SDK_ROOT: str = "./GPT_SoVITS"
@@ -67,12 +72,12 @@ class Settings(BaseSettings):
     GPT_SOVITS_DEFAULT_REF_AUDIO: str = "./data/ref_audio/mature_male_ref.wav"
     GPT_SOVITS_DEFAULT_REF_TEXT: str = "是的，爱和混乱有时候会同时到来，但人最终要学会让自己重新稳定下来。"
     # 必须使用 conda Python 3.9 执行 SDK（系统 Python 3.14 无法加载 SDK 的 C 扩展）
-    GPT_SOVITS_CONDA_PYTHON: str = "C:/Users/c/.conda/envs/GPTSoVits/python.exe"
+    GPT_SOVITS_CONDA_PYTHON: str = ""  # 由用户在 .env 里填绝对路径，例如 Windows: "C:/Users/<you>/.conda/envs/GPTSoVits/python.exe"
 
     # ComfyUI background generation
     COMFYUI_HOST: str = "127.0.0.1"
     COMFYUI_PORT: int = 8190
-    COMFYUI_MAIN_PATH: str = "D:/IT/AI_vido/ComfyUI/main.py"
+    COMFYUI_MAIN_PATH: str = ""  # ComfyUI 的 main.py 绝对路径，由用户在 .env 里填；留空则 BackgroundResolver 跳过按需启动
     COMFYUI_CHECKPOINT: str = "flux1-schnell-fp8.safetensors"
     COMFYUI_STEPS: int = 8
     COMFYUI_CFG: float = 1.0

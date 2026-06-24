@@ -58,5 +58,21 @@ class Video(Base):
 engine = create_engine(settings.DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+
 def init_db():
-    Base.metadata.create_all(bind=engine)
+    """
+    已弃用：建表/迁移改用 Alembic。
+
+    - 全新环境：先 `alembic upgrade head`，再启动 app。
+    - 已有 DB：先 `alembic stamp head` 标记基线，再 `alembic upgrade head`。
+    - 仅在 `INIT_DB_FALLBACK=1` 时仍会跑 `Base.metadata.create_all`（仅用于开发环境的快速 hack）。
+    """
+    import os
+    if os.environ.get("INIT_DB_FALLBACK") == "1":
+        Base.metadata.create_all(bind=engine)
+        return
+    from src.shared.logger import logger
+    logger.info(
+        "init_db() noop — schema is managed by Alembic. "
+        "Run `alembic upgrade head` if you haven't."
+    )

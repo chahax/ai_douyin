@@ -1,5 +1,6 @@
 # Web Framework
 streamlit>=1.40.0
+streamlit-cookies-manager>=0.2.0  # 跨刷新保持登录（session_state 本身不能持久化）
 fastapi>=0.115.0
 uvicorn>=0.35.0
 httpx>=0.28.0
