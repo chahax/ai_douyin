@@ -103,4 +103,4 @@ TypeError: exceptions must derive from BaseException
 | `data/videos/dual_final_mixed.mp4` | 混合方案测试输出 |
 | `data/png/role_b.png` | 角色B原图（人脸检测失败） |
 | `data/png/role_b_grabcut.png` | 角色B GrabCut 抠图版本 |
-| `D:/IT/SadTalker_v2/SadTalker-main/` | SadTalker 根目录 |
+| `<your_sadtalker_install_path>` | SadTalker 根目录 |
