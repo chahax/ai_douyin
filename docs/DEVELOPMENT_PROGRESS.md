@@ -1,7 +1,7 @@
 ---
 doc_status: current
 doc_category: mainline
-last_reviewed: 2026-05-30
+last_reviewed: 2026-06-15
 model_usage: 当前开发进度总览。能力判断优先参考 CURRENT_CAPABILITIES.md，本文件用于看阶段状态。
 ---
 
@@ -9,7 +9,7 @@ model_usage: 当前开发进度总览。能力判断优先参考 CURRENT_CAPABIL
 
 # AI Douyin 开发进度总览
 
-更新时间：2026-05-30
+更新时间：2026-06-15
 
 ## 当前状态
 
@@ -27,7 +27,7 @@ model_usage: 当前开发进度总览。能力判断优先参考 CURRENT_CAPABIL
   -> 自动回复
 ```
 
-当前主线已经切到动漫数字人主讲：`AutoPublishRequest.video_mode` 默认是 `presenter_anime`，管理后台“在线制作/发布”也默认选中“动漫数字人主讲”。单人口播模板视频保留为历史/兜底模式。
+当前主线已经切到动漫数字人主讲：`AutoPublishRequest.video_mode` 默认是 `presenter_anime`，管理后台"在线制作/发布"也默认选中"动漫数字人主讲"。单人口播模板视频保留为历史/兜底模式。
 
 2026-05-16 至 2026-05-17，动漫数字人主讲路线完成验证：Edge-TTS 分段音频、Sonic 角色视频层、ComfyUI 分段背景、字幕避让和 FFmpeg 拼接均可跑出完整版。ComfyUI 不随平台启动，只在生成背景时按需启动，背景/视频输出完成后代码会尝试关闭 ComfyUI。下一步是把这套逻辑整理成正式 provider，并增加背景质检。
 
@@ -39,6 +39,12 @@ model_usage: 当前开发进度总览。能力判断优先参考 CURRENT_CAPABIL
 
 2026-05-30，抖音账号养号/活跃维护 CLI 测试版完成：支持多账号独立浏览器 profile、账号信息保存、手动登录、精选页推荐入口、按视频时长倍率随机停留、自动下滑、评论区打开和下滑、可控视频点赞和评论点赞，并记录本地日志。默认不自动发评论、关注、收藏，遇到验证码/安全验证会停留等待用户处理。
 
+2026-06-15，Agent + 分层记忆 + 任务调度三件套落地：
+
+- `src/agent/`：对话式入口，自动调 LLM + Skill Registry，写操作走"先计划、再确认"流程。
+- `src/memory/`：用户画像 / 会话消息 / 分层记忆（preference / problem / discarded / normal）+ ProblemMemory 自动跟踪未解决问题。
+- `src/scheduler/`：APScheduler 包装 + SQLite 任务队列 + 后台 Worker；Streamlit "任务调度"页内置每日 `investigate_problems` 自动播种。
+
 ## 阶段进度表
 
 | 阶段 | 名称 | 状态 | 说明 |
@@ -48,7 +54,7 @@ model_usage: 当前开发进度总览。能力判断优先参考 CURRENT_CAPABIL
 | 阶段 2 | Provider 抽象 + Ollama | 已完成 | LLM Provider 已拆出，Ollama 可用 |
 | 阶段 3 | 抖音平台功能 | 已完成 | 发布、同步、评论抓取、自动回复 |
 | 阶段 4 | Streamlit 管理后台 | 已完成 | 视频、评论、自动回复、规则、违禁词、用户等页面 |
-| 阶段 4.1 | 单人口播视频生成 | 已完成 | 历史/兜底模式，管理后台可选“单人口播模板（旧格式）” |
+| 阶段 4.1 | 单人口播视频生成 | 已完成 | 历史/兜底模式，管理后台可选"单人口播模板（旧格式）" |
 | 阶段 4.2 | 双角色对话素材链 | 局部完成 | 对话生成、双声线 TTS、FFmpeg 合成函数已具备 |
 | 阶段 4.3 | 微动作 PNG 序列 | 局部完成 | 眨眼/呼吸序列生成与最终合成已验证 |
 | 阶段 4.4 | FramePack 动作帧 | 半自动可用 | FramePack 手动生成，本项目抽帧/抠图/合成 |
@@ -56,9 +62,11 @@ model_usage: 当前开发进度总览。能力判断优先参考 CURRENT_CAPABIL
 | 阶段 4.6 | 背景图图片质检 | 已暂缓 | 设计文档保留，当前不接入图片理解质检主链路 |
 | 阶段 4.7 | 背景场景规划器 | 默认关闭 | 试用后暂缓进入主链路，保留调试命令和设计材料 |
 | 阶段 4.8 | 抖音账号养号/活跃维护 | 测试版完成 | 多账号 profile、手动登录、随机看视频、评论区浏览、可控点赞和日志已完成 CLI 验证 |
-| 阶段 5 | API 服务层 | 未开始 | FastAPI 入口未实现 |
-| 阶段 6 | 异步任务执行 | 未开始 | 队列和 Worker 未实现 |
-| 阶段 7 | 定时调度 | 未开始 | `src/scheduler/` 尚未形成能力 |
+| 阶段 4.9 | 对话式 Agent + Skill Registry | 已完成 | 18+ Skill 自动注册，写操作需用户确认；失败兜底写 ProblemMemory |
+| 阶段 4.10 | 分层记忆 + 问题跟踪 | 已完成 | preference/problem/discarded/normal 自动分类，每日 cron 调查未解决问题 |
+| 阶段 5 | 任务调度（APScheduler + 队列） | 已完成 | cron/interval 触发、SQLite 队列、Worker 重试、Streamlit 管理页 |
+| 阶段 6 | API 服务层 | 未开始 | FastAPI 入口未实现；Agent 尚未拆为独立服务 |
+| 阶段 7 | 跨进程 Worker / 多实例 | 未开始 | 当前 SQLite 锁仅适合单进程 |
 | 阶段 8 | 打包与部署 | 未开始 | 暂无 Docker/compose |
 
 ## 当前 CLI 命令
@@ -90,6 +98,12 @@ python main.py douyin-warmup-login --account-id "douyin_novel_01" --wait-for-ent
 python main.py douyin-warmup-account show --account-id "douyin_novel_01"
 python main.py douyin-warmup --account-id "douyin_novel_01" --mode daily --url "https://www.douyin.com/jingxuan" --max-videos 5
 python main.py douyin-warmup-report --account-id "douyin_novel_01" --days 7
+
+# 番茄推广
+python main.py fanqie-login --wait-for-enter
+python main.py fanqie-promo-apply --type novel --alias "小说推广号A" --keep-open
+python main.py fanqie-book-fetch --book-name "小说名" --chapters 10 --headless
+python main.py fanqie-promo-video --task-file data/fanqie_promotion/tasks/<task_id>/task.json
 ```
 
 注意：当前 `main.py` 没有 `compose`、`publish`、`sync`、`fetch-comments` 这些短命令；请使用上面的真实命令名。
@@ -108,6 +122,15 @@ python main.py douyin-warmup-report --account-id "douyin_novel_01" --days 7
 | 动漫数字人主讲 | 当前主线 | `keywords` / `article_direct` / `article_extract` 三输入 + Edge-TTS + Sonic 角色视频层 + ComfyUI 按需背景 + 字幕合成 |
 | 抖音账号养号/活跃维护 | 测试版完成 | `douyin-warmup-login` / `douyin-warmup` / `douyin-warmup-account` / `douyin-warmup-report` 可用 |
 | 双角色一键发布 | 管理后台可选 | `video_mode=dual_framepack_active`，依赖已有 FramePack 角色帧和背景素材 |
+
+## Agent / Skill 状态
+
+- Agent：`src/agent/agent.py`，LLM 决策 + Skill 调度 + 用户确认拦截 + 异常兜底。
+- Skill Registry：`src/agent/registry.py`，已注册 18+ Skill，涵盖内容/平台/养号/番茄/知识库/记忆管理/系统工具。
+- 记忆：`src/memory/`，用户画像、会话、分层记忆、问题跟进。
+- 调度：`src/scheduler/`，APScheduler cron/interval + SQLite 任务队列 + 后台 Worker。
+- 内置任务：`investigate_problems_daily` 每日 09:37 自动调查未解决问题。
+- UI 入口：Streamlit 管理后台"对话"页面（Agent.chat）和"任务调度"页面。
 
 ## 代表性输出
 
@@ -137,6 +160,14 @@ python main.py douyin-warmup-report --account-id "douyin_novel_01" --days 7
 | `src/content_factory/micro_motion.py` | 本地角色微动作序列 |
 | `src/platform_adapter/douyin_adapter.py` | 抖音浏览器自动化适配 |
 | `src/platform_adapter/douyin_warmup.py` | 抖音账号养号/活跃维护，多账号 profile、随机浏览、评论区浏览和可控点赞 |
+| `src/platform_adapter/fanqie_promotion.py` | 番茄小说推广 MVP |
+| `src/agent/agent.py` | Agent 核心（对话 + 计划 + 确认拦截） |
+| `src/agent/registry.py` | Skill 注册表 + 18+ Skill 实现 |
+| `src/memory/manager.py` | 用户画像 / 会话 / 消息 |
+| `src/memory/problem_memory.py` | 分层记忆 + ProblemMemory |
+| `src/scheduler/cron.py` | APScheduler 定时调度 |
+| `src/scheduler/queue.py` | 任务队列 + Worker |
+| `src/scheduler/ui.py` | Streamlit 调度管理页 |
 | `src/web/app.py` | Streamlit 管理后台 |
 
 ## 近期建议
@@ -144,6 +175,6 @@ python main.py douyin-warmup-report --account-id "douyin_novel_01" --days 7
 1. 把动漫数字人主讲的 ComfyUI 背景生成封装成 `BackgroundProvider`，支持 `fallback|preset|comfyui|auto`，并保留按需启动/生成后关闭的行为。
 2. 增加背景质检和失败回退：伪文字、海报、人物过大、安全区占用时重抽或回退。
 3. 把双角色/FramePack 路线封装成服务层请求模型。
-4. 增加资源检查和失败回退：模板视频、音频、背景、角色帧缺失时给出清晰错误。
-5. 给 `auto-publish` 增加 `--mode single_template|dual_framepack_active|presenter_anime`，避免 CLI 默认模式和网页默认模式继续混淆。
-6. 再考虑定时任务、API 和 Worker。
+4. 给 `auto-publish` 增加 `--mode single_template|dual_framepack_active|presenter_anime`，避免 CLI 默认模式和网页默认模式继续混淆。
+5. 把 Agent 拆成独立服务（FastAPI / WebSocket），调度和对话解耦。
+6. 把后台 Worker 切换到支持跨进程的队列（PostgreSQL / Redis / 专用 broker），再考虑多实例。

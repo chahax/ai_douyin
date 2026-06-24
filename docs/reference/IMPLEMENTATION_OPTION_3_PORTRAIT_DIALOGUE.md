@@ -283,7 +283,7 @@ loop_clip_to_duration(
 ```python
 import os, subprocess
 
-FFMPEG = "C:/Users/c/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-8.0.1-full_build/bin/ffmpeg.exe"
+FFMPEG = "C:/Users/<your-user>/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-8.0.1-full_build/bin/ffmpeg.exe"
 
 def generate_sadtalker_portrait(portrait_img, audio_path, output_mp4):
     """

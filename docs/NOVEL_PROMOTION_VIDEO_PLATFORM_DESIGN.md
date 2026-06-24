@@ -1,15 +1,48 @@
 ---
 doc_status: current
 doc_category: implementation_plan
-last_reviewed: 2026-05-28
-model_usage: 小说推广视频平台支线设计文档。用于规划番茄推广平台任务申请、小说内容获取、推广视频生成和平台绑定流程；当前为设计阶段，不代表已落地能力。
+last_reviewed: 2026-06-15
+model_usage: 小说推广视频平台支线设计文档。用于规划和记录番茄推广平台任务申请、小说内容获取、推广视频生成和平台绑定流程；当前 MVP CLI 已开始落地，但仍不是稳定生产能力。
 ---
 
-> 文档状态：当前支线设计文档。当前已落地能力仍以 `CURRENT_CAPABILITIES.md` 为准；本文用于指导“小说推广视频自动化”支线开发。
+> 文档状态：当前支线设计/实现记录。当前已落地能力仍以 `CURRENT_CAPABILITIES.md` 为准；本文用于指导“小说推广视频自动化”支线开发和记录 MVP 边界。
 
 # 小说推广视频平台支线设计
 
-更新时间：2026-05-28
+更新时间：2026-06-15
+
+## 当前实现状态
+
+番茄推广支线已进入 MVP CLI 测试版，代码暂放在 `src/platform_adapter/fanqie_promotion.py`，不是最终模块拆分形态。
+
+已落地入口：
+
+| 命令 | 状态 | 说明 |
+|---|---|---|
+| `python main.py fanqie-login --wait-for-enter` | 测试版 | 打开番茄达人中心并保存浏览器会话，使用 `data/browser/fanqie/` |
+| `python main.py fanqie-promo-apply --type novel --alias "小说推广号A"` | 测试版 | 尝试从推广内容页读取小说名，点击申请推广，填写推广别名并保存 task JSON |
+| `python main.py fanqie-book-fetch --book-name "小说名" --chapters 10` | 测试版 | 通过番茄小说网页搜索/页面接口获取小说页面和前 N 章内容 |
+| `python main.py fanqie-promo-video --task-file ...` | 测试版 | 从任务和章节素材生成推广脚本，并复用 Presenter 生成推广视频 |
+
+当前数据目录：
+
+```text
+data/browser/fanqie/user_data
+data/browser/fanqie/storage_state.json
+data/fanqie_promotion/tasks/<task_id>/task.json
+data/fanqie_promotion/books/<book_name>/chapters/001.txt
+data/fanqie_promotion/books/<book_name>/material.txt
+```
+
+当前仍未完成：
+
+- 番茄页面 DOM 和申请弹窗的稳定适配。
+- 推广申请后的状态确认和失败分类。
+- 番茄平台绑定抖音视频 ID。
+- 后台页面接入。
+- 从 `src/platform_adapter/fanqie_promotion.py` 拆分为正式 `src/novel_promotion/` 包。
+
+当前合规边界：遇到登录、验证码、短信验证或安全验证时必须由用户手动完成；系统不绕过平台风控，不保存明文账号、密码或验证码。
 
 ## 一句话定位
 

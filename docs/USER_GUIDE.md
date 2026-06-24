@@ -1,7 +1,7 @@
 ---
 doc_status: current
 doc_category: mainline
-last_reviewed: 2026-05-30
+last_reviewed: 2026-06-15
 model_usage: 当前用户使用手册。命令以本文件和 main.py 为准。
 ---
 
@@ -9,7 +9,7 @@ model_usage: 当前用户使用手册。命令以本文件和 main.py 为准。
 
 # AI Douyin 使用指南
 
-更新时间：2026-05-30
+更新时间：2026-06-15
 
 ## 环境准备
 
@@ -32,7 +32,7 @@ OLLAMA_EMBEDDING_MODEL=nomic-embed-text
 
 TTS_PROVIDER=edge
 GPT_SOVITS_SDK_ROOT=./GPT_SoVITS
-GPT_SOVITS_CONDA_PYTHON=C:/Users/c/.conda/envs/GPTSoVits/python.exe
+GPT_SOVITS_CONDA_PYTHON=C:/Users/<your-user>/.conda/envs/GPTSoVits/python.exe
 
 DOUYIN_STORAGE_STATE_PATH=./data/browser/douyin/storage_state.json
 DOUYIN_USER_DATA_DIR=./data/browser/douyin/user_data
@@ -213,6 +213,66 @@ python main.py douyin-warmup-report --account-id "douyin_novel_01" --days 7
 
 说明：养号不会自动发评论、关注、收藏。遇到登录/验证码/安全验证时默认保持浏览器打开，用户处理后回终端按回车保存会话。
 
+### 番茄小说推广 MVP
+
+当前番茄推广支线是 CLI 测试版，目标是先跑通：番茄达人中心申请可推广小说 -> 获取小说名和推广别名 -> 搜索小说章节 -> 生成推广脚本和 Presenter 视频。
+
+首次登录番茄达人中心并保存浏览器会话：
+
+```bash
+python main.py fanqie-login --wait-for-enter
+```
+
+浏览器打开后手动登录番茄达人中心，登录完成后回终端按回车。番茄会话目录与抖音登录方案类似，使用：
+
+```text
+data/browser/fanqie/user_data
+data/browser/fanqie/storage_state.json
+```
+
+申请一本可推广小说，并填写推广别名：
+
+```bash
+python main.py fanqie-promo-apply --type novel --alias "小说推广号A" --keep-open
+```
+
+输出会保存任务文件：
+
+```text
+data/fanqie_promotion/tasks/<task_id>/task.json
+```
+
+根据小说名获取前 10 章：
+
+```bash
+python main.py fanqie-book-fetch --book-name "小说名" --chapters 10 --headless
+```
+
+用任务文件生成推广视频：
+
+```bash
+python main.py fanqie-promo-video --task-file "data/fanqie_promotion/tasks/<task_id>/task.json" --chapters 10 --max-segments 8
+```
+
+只生成脚本、音频和背景资产，不合成最终视频：
+
+```bash
+python main.py fanqie-promo-video --task-file "data/fanqie_promotion/tasks/<task_id>/task.json" --chapters 10 --max-segments 6 --assets-only
+```
+
+快速流程测试可跳过 ComfyUI 背景：
+
+```bash
+python main.py fanqie-promo-video --task-file "data/fanqie_promotion/tasks/<task_id>/task.json" --chapters 3 --max-segments 4 --assets-only --no-comfy-background
+```
+
+当前边界：
+
+- 番茄推广页面自动化依赖页面 DOM 和按钮文案，仍需按实际页面继续修正。
+- 遇到登录、验证码、短信验证或安全验证时，由用户手动完成，不绕过平台风控。
+- 当前只做到申请推广、获取章节和生成视频；番茄平台绑定抖音视频 ID 尚未实现。
+- 项目不保存明文账号、密码或验证码；浏览器登录态保存在本地 `data/browser/fanqie/`。
+
 ### 同步视频和评论
 
 ```bash
@@ -268,7 +328,38 @@ http://localhost:8501
 | 规则 | 管理关键词回复规则 |
 | 违禁词 | 管理回复过滤词 |
 | 用户 | 管理角色与限流 |
+| 对话 | 直接用自然语言调起任意 Skill（Agent + Skill Registry） |
+| 任务调度 | 仪表板 / 定时任务 / 任务队列 / 执行记录 |
 | 设置 | 查看当前配置 |
+
+### 对话式 Agent
+
+Streamlit"对话"页面背后是 `src/agent/agent.py`：
+
+- 用户发消息 → 自动入库分层记忆 → Agent 调 LLM + Skill Registry。
+- 涉及写操作的 Skill（生成视频、发布、自动回复、养号、番茄推广等）会先生成 `​```plan ... ```​` 计划块。
+- 用户回复"确认"才执行，"取消"则丢弃，其他输入视作修改请求。
+- 任何异常都被兜底成"抱歉，我现在处理这条消息时遇到了点问题"，并写入 ProblemMemory。
+
+可以直接说：
+
+- "帮我生成一个关于'自律'的动漫数字人视频"
+- "把所有视频的评论自动回一遍"
+- "把昨天那个视频再同步一次评论"
+- "把默认 TTS 换成 GPT-SoVITS"
+
+### 任务调度
+
+"任务调度"页面提供：
+
+- **仪表板**：活跃任务 / 排队中 / 运行中 / 已完成 / 失败 + 启动/停止调度器按钮。
+- **定时任务**：新建 cron / interval 任务，可选 Skill 列表 + 重试次数 + JSON 参数。
+- **任务队列**：查看 pending / running 任务。
+- **执行记录**：按状态筛选历史执行，可展开查看错误详情或返回 JSON。
+- **预置任务**：首次启动会自动播种 `investigate_problems_daily`（每日 09:37 调查未解决问题）。
+- **快捷按钮**：UI 上提供"📊 CodeGraph 周更"按钮，自动注册每周日凌晨 3:00 重跑 `codegraph init -i`。
+
+后台 Worker 由 `src/scheduler/runner.py` 在 Streamlit 启动时静默拉起，SQLite `SELECT ... FOR UPDATE SKIP LOCKED` 保证多 Worker 不会重复抢同一任务（适合单进程）。
 
 ## 视频生成方式
 
