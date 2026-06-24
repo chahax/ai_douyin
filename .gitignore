@@ -28,6 +28,7 @@ data/videos/
 data/voices/
 data/logs/
 data/douyin_warmup/
+data/fanqie_promotion/
 data/browser/
 data/chroma_db/
 data/diagnostics/
@@ -49,4 +50,23 @@ gfpgan/
 .vscode/
 .idea/
 .claude/
+
+# CodeGraph 生成物（含绝对路径）
+data/codegraph.html
+data/codegraph.db
+.codegraph/
+
+# 个人早期方案草稿（不入库；用通配符避免 .gitignore 中文编码问题）
+*AI项目方案*.md
+*人生激励*.md
+
+# 隐私检查脚本的输出（可选）
+.pre_push_report.txt
+
+# Claude Code 本地配置 + Docker 化计划产物
+.mcp.json
+.dockerignore
+Dockerfile
+docker-compose.yml
+docker/
 
