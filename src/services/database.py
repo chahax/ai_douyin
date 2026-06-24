@@ -86,6 +86,7 @@ CREATE TABLE IF NOT EXISTS user_reply_configs (
     last_reply_date TEXT,                     -- 上次重置日期（YYYY-MM-DD）
     is_whitelist   INTEGER DEFAULT 0,         -- 白名单 0/1
     password_hash   TEXT,                      -- 管理后台登录密码哈希
+    registered_ip  TEXT,                      -- 注册时的 IP 地址
     created_at     TEXT,
     updated_at     TEXT
 );
@@ -240,6 +241,8 @@ def _migrate_user_configs(cursor: sqlite3.Cursor) -> None:
         cursor.execute("ALTER TABLE user_reply_configs ADD COLUMN role TEXT DEFAULT 'viewer'")
     if "password_hash" not in columns:
         cursor.execute("ALTER TABLE user_reply_configs ADD COLUMN password_hash TEXT")
+    if "registered_ip" not in columns:
+        cursor.execute("ALTER TABLE user_reply_configs ADD COLUMN registered_ip TEXT")
 
 
 def _init_blocked_words(cursor: sqlite3.Cursor) -> None:

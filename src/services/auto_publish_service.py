@@ -32,7 +32,7 @@ from src.services.video_service import save_video, update_video_rag_context
 from src.shared.logger import logger
 
 
-DEFAULT_TEMPLATE_VIDEO = "D:/IT/AI_vido/ComfyUI/vido/4月19日.mp4"
+DEFAULT_TEMPLATE_VIDEO = "data/videos/template.mp4"  # 用户自备并放到 data/videos/ 下；不存在时模板视频模式会在合成阶段失败
 DEFAULT_BGM_VOLUME = 0.2
 VIDEO_MODE_SINGLE_TEMPLATE = "single_template"
 VIDEO_MODE_DUAL_FRAMEPACK_ACTIVE = "dual_framepack_active"

@@ -12,6 +12,47 @@ from src.services.database import get_db
 
 DEFAULT_DAILY_LIMIT = 5
 DEFAULT_TOTAL_LIMIT = 50
+MAX_ACCOUNTS_PER_IP = 3  # 同 IP 最多注册账号数
+
+
+def get_client_ip() -> str:
+    """获取客户端 IP，优先从 Streamlit 请求头读取"""
+    try:
+        import streamlit as st
+        # Streamlit 部署时通过 X-Forwarded-For 等头获取真实 IP
+        for header in ["X-Forwarded-For", "X-Real-IP", "X-Client-IP"]:
+            ip = st.context.headers.get(header, "")
+            if ip:
+                # X-Forwarded-For 可能为 "ip1, ip2"，取第一个
+                return ip.split(",")[0].strip()
+    except Exception:
+        pass
+    return "127.0.0.1"
+
+
+def count_ip_accounts(ip: str) -> int:
+    """查询指定 IP 已注册的账号数量"""
+    if not ip:
+        return 0
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT COUNT(*) FROM user_reply_configs WHERE registered_ip = ? AND password_hash IS NOT NULL AND password_hash != ''",
+            (ip,)
+        )
+        row = cursor.fetchone()
+        return row[0] if row else 0
+
+
+def count_users_with_password() -> int:
+    """查询已设置密码的用户总数（任何 IP）。用于判断是否是首位注册者。"""
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT COUNT(*) FROM user_reply_configs WHERE password_hash IS NOT NULL AND password_hash != ''"
+        )
+        row = cursor.fetchone()
+        return row[0] if row else 0
 
 # ─── 密码管理 ────────────────────────────────────────────
 
@@ -36,8 +77,8 @@ def verify_password(user_nickname: str, password: str) -> bool:
         return stored_hash == hash_password(password)
 
 
-def set_user_password(user_nickname: str, password: str) -> bool:
-    """设置用户密码"""
+def set_user_password(user_nickname: str, password: str, registered_ip: str = "") -> bool:
+    """设置用户密码，同时记录注册 IP"""
     pw_hash = hash_password(password)
     now = _now()
     with get_db() as conn:
@@ -47,29 +88,46 @@ def set_user_password(user_nickname: str, password: str) -> bool:
             (user_nickname,)
         )
         if cursor.fetchone():
-            cursor.execute(
-                "UPDATE user_reply_configs SET password_hash = ?, updated_at = ? WHERE user_nickname = ?",
-                (pw_hash, now, user_nickname)
-            )
+            # 已存在用户，只更新密码
+            if registered_ip:
+                cursor.execute(
+                    "UPDATE user_reply_configs SET password_hash = ?, updated_at = ?, registered_ip = COALESCE(NULLIF(registered_ip, ''), ?) WHERE user_nickname = ?",
+                    (pw_hash, now, registered_ip, user_nickname)
+                )
+            else:
+                cursor.execute(
+                    "UPDATE user_reply_configs SET password_hash = ?, updated_at = ? WHERE user_nickname = ?",
+                    (pw_hash, now, user_nickname)
+                )
         else:
+            # 新用户，检查 IP 限制
+            if registered_ip and count_ip_accounts(registered_ip) >= MAX_ACCOUNTS_PER_IP:
+                raise PermissionError(
+                    f"该 IP ({registered_ip}) 已达到账号上限（{MAX_ACCOUNTS_PER_IP}个），请联系管理员"
+                )
             cursor.execute("""
                 INSERT INTO user_reply_configs
                     (user_nickname, role, daily_limit, total_limit, daily_count, total_count,
-                     last_reply_date, is_whitelist, password_hash, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     last_reply_date, is_whitelist, password_hash, registered_ip, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (user_nickname, "viewer", DEFAULT_DAILY_LIMIT, DEFAULT_TOTAL_LIMIT,
-                  0, 0, "", 0, pw_hash, now, now))
+                  0, 0, "", 0, pw_hash, registered_ip, now, now))
         conn.commit()
         return True
 
 
-def create_user(user_nickname: str, password: str, role: str = "viewer") -> bool:
-    """创建新用户（含密码）"""
+def create_user(user_nickname: str, password: str, role: str = "viewer", registered_ip: str = "") -> bool:
+    """创建新用户（含密码），检查 IP 限制"""
     valid_roles = ("viewer", "editor", "admin", "superadmin")
     if role not in valid_roles:
         return False
     pw_hash = hash_password(password)
     now = _now()
+    # 检查 IP 上限
+    if registered_ip and count_ip_accounts(registered_ip) >= MAX_ACCOUNTS_PER_IP:
+        raise PermissionError(
+            f"该 IP ({registered_ip}) 已达到账号上限（{MAX_ACCOUNTS_PER_IP}个），请联系管理员"
+        )
     with get_db() as conn:
         cursor = conn.cursor()
         cursor.execute(
@@ -81,10 +139,10 @@ def create_user(user_nickname: str, password: str, role: str = "viewer") -> bool
         cursor.execute("""
             INSERT INTO user_reply_configs
                 (user_nickname, role, daily_limit, total_limit, daily_count, total_count,
-                 last_reply_date, is_whitelist, password_hash, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                 last_reply_date, is_whitelist, password_hash, registered_ip, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (user_nickname, role, DEFAULT_DAILY_LIMIT, DEFAULT_TOTAL_LIMIT,
-              0, 0, "", 0, pw_hash, now, now))
+              0, 0, "", 0, pw_hash, registered_ip, now, now))
         conn.commit()
         return True
 

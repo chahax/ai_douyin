@@ -41,6 +41,7 @@ def main():
     slow_mo = init.get("slow_mo", 0)
     timeout_ms = init.get("timeout_ms", 30000)
     channel = init.get("channel", "")
+    chromium_sandbox = init.get("chromium_sandbox", False)
 
     from playwright.sync_api import sync_playwright
 
@@ -52,6 +53,8 @@ def main():
     }
     if channel:
         kwargs["channel"] = channel
+    if chromium_sandbox:
+        kwargs["chromium_sandbox"] = True
 
     context = pw.chromium.launch_persistent_context(**kwargs)
     context.set_default_timeout(timeout_ms)
@@ -463,6 +466,7 @@ class BrowserSession:
             "slow_mo": self.config.slow_mo_ms,
             "timeout_ms": self.config.timeout_ms,
             "channel": self.config.browser_channel or self._detect_browser_channel(),
+            "chromium_sandbox": self.config.chromium_sandbox,
         }
         self._proc.stdin.write(json.dumps(init).encode())
         self._proc.stdin.write(b"\n")

@@ -13,6 +13,7 @@ class BrowserSessionConfig:
     headless: bool = False
     slow_mo_ms: int = 0
     timeout_ms: int = 30000
+    chromium_sandbox: bool = False
 
 
 @dataclass

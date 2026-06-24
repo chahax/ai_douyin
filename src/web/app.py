@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 app.py — Streamlit 管理后台入口
 
@@ -11,9 +12,51 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 import streamlit as st
 from src.web.components.auth import render_login_page, is_logged_in, get_current_user, get_current_role, logout_user, has_permission
+from src.shared.logger import logger
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 STREAMLIT_LOG_PATH = PROJECT_ROOT / "data" / "logs" / "streamlit_combined.log"
+
+# 启动时确保所有数据库表已创建（包含记忆系统新表）
+# 必须先导入所有模型，否则 Base.metadata 里没有对应表
+from src.memory.models import UserProfile, ConversationSession, ConversationMessage  # noqa: F401
+from src.memory.problem_memory import ConversationMemory, UserMemory, ProblemMemory  # noqa: F401
+from src.scheduler.models import ScheduledTask, TaskExecution  # noqa: F401
+from src.shared.database import init_db
+init_db()
+
+# 自动启动调度器 + Worker（静默启动，失败不影响主程序）
+try:
+    from src.scheduler.runner import start_scheduler
+    start_scheduler()
+except Exception:
+    pass
+
+# 首次启动时播种内置定时任务（如有问题调查 cron）
+try:
+    from src.shared.database import SessionLocal
+    from src.scheduler.models import ScheduledTask, TaskType, TaskStatus, TriggerType
+    with SessionLocal() as _sess:
+        if not _sess.query(ScheduledTask).filter_by(name="investigate_problems_daily").first():
+            _sess.add(ScheduledTask(
+                name="investigate_problems_daily",
+                description="每日扫描未解决问题，调用 LLM 生成调查摘要",
+                task_type=TaskType.SCHEDULED.value,
+                skill_name="investigate_problems",
+                skill_params={"limit": 20},
+                trigger_type=TriggerType.CRON.value,
+                trigger_config={"expression": "37 9 * * *"},
+                status=TaskStatus.PENDING.value,
+                enabled=True,
+                max_retries=1,
+                retry_delay_seconds=300,
+            ))
+            _sess.commit()
+except Exception:
+    pass
+
+# 调度管理页面
+from src.scheduler.ui import page_scheduler
 
 LOCAL_SAMPLE_VIDEOS = [
     {
@@ -84,9 +127,22 @@ def _format_file_size(size_bytes: int) -> str:
 def render_local_sample_videos() -> None:
     """展示本地生成的样片，方便在管理后台直接复盘视频版本。"""
     available = []
+    seen_paths = set()
+    videos_dir = PROJECT_ROOT / "data" / "videos"
+    if videos_dir.exists():
+        for path in sorted(videos_dir.glob("*.mp4"), key=lambda item: item.stat().st_mtime, reverse=True):
+            rel_path = path.relative_to(PROJECT_ROOT).as_posix()
+            seen_paths.add(path.resolve())
+            available.append(({
+                "title": path.stem,
+                "path": rel_path,
+                "description": "自动扫描 data/videos 下的最新本地视频。",
+                "tag": "最新" if not available else "本地",
+            }, path))
+
     for item in LOCAL_SAMPLE_VIDEOS:
         path = PROJECT_ROOT / item["path"]
-        if path.exists():
+        if path.exists() and path.resolve() not in seen_paths:
             available.append((item, path))
 
     st.markdown("---")
@@ -99,6 +155,7 @@ def render_local_sample_videos() -> None:
         "选择样片",
         range(len(available)),
         format_func=lambda idx: f"{available[idx][0]['tag']} · {available[idx][0]['title']}",
+        index=0,
     )
     sample, video_path = available[selected_idx]
     stat = video_path.stat()
@@ -715,6 +772,7 @@ def page_books():
 def page_users():
     import pandas as pd
     from src.services.user_profile_service import list_users, set_user_role, set_whitelist, set_user_limits, set_user_password, create_user
+    from src.web.components.auth import get_client_ip
 
     st.title("👥 用户管理")
     users = list_users()
@@ -727,6 +785,7 @@ def page_users():
                 "日限/已用": f"{u.get('daily_count', 0)}/{u.get('daily_limit', 5)}",
                 "总限/已用": f"{u.get('total_count', 0)}/{u.get('total_limit', 50)}",
                 "白名单": "✅" if u.get("is_whitelist") else "❌",
+                "注册IP": u.get("registered_ip", "—") or "—",
             })
         st.dataframe(pd.DataFrame(rows), width='stretch', hide_index=True)
     else:
@@ -755,7 +814,7 @@ def page_users():
     with col_pw3:
         if st.button("设置密码", width='stretch'):
             if pw_nickname and new_password:
-                set_user_password(pw_nickname, new_password)
+                set_user_password(pw_nickname, new_password, registered_ip=get_client_ip())
                 st.success(f"密码已设置")
                 st.rerun()
             else:
@@ -773,7 +832,7 @@ def page_users():
     with col_new4:
         if st.button("创建", width='stretch'):
             if new_nickname and new_pass:
-                if create_user(new_nickname, new_pass, new_role):
+                if create_user(new_nickname, new_pass, new_role, registered_ip=get_client_ip()):
                     st.success(f"用户 {new_nickname} 创建成功")
                     st.rerun()
                 else:
@@ -829,10 +888,185 @@ def page_settings():
     st.caption("系统配置通过 .env 文件管理，如需修改请编辑 .env 后重启应用")
 
 
+# ── 我的记忆（Phase 2 新增） ────────────────────────────────────
+def page_memory():
+    from src.memory import MemoryManager, MemoryLayerManager
+    from src.memory.humane_recorder import (
+        get_recent_sentiment,
+        get_followup_reminders,
+        get_session_sentiment_summary,
+    )
+    from src.shared.database import SessionLocal
+
+    st.title("🧠 我的记忆")
+    st.caption("Agent 记得的关于你的偏好、问题、情感与待跟进事项。")
+
+    user_id = get_current_user() or "default"
+
+    # 1) 偏好列表
+    st.subheader("📌 你的偏好")
+    with SessionLocal() as sess:
+        mlm = MemoryLayerManager(sess)
+        prefs = mlm.get_user_memories(user_id)
+    if prefs:
+        for p in prefs:
+            st.markdown(
+                f"- **{p['memory_type']}** · `{p['key']}` = {p['value'][:120]}"
+            )
+    else:
+        st.info("还没有记录到偏好。试试在对话里说「我习惯用 Edge TTS」之类的。")
+
+    st.divider()
+
+    # 2) 未解决问题
+    st.subheader("❓ 未解决的问题")
+    with SessionLocal() as sess:
+        mlm = MemoryLayerManager(sess)
+        problems = mlm.get_unresolved_problems(limit=10)
+    if problems:
+        for p in problems:
+            col1, col2 = st.columns([3, 1])
+            with col1:
+                st.markdown(f"**#{p['id']}** {p['problem_text'][:120]}")
+                if p.get("last_investigation_note"):
+                    st.caption(f"🤖 LLM 调查方向：{p['last_investigation_note'][:200]}")
+            with col2:
+                st.caption(f"状态: {p['status']}")
+                st.caption(f"调查次数: {p.get('investigation_count', 0)}")
+            st.divider()
+    else:
+        st.info("无未解决问题。")
+
+    st.divider()
+
+    # 3) 待跟进事项
+    st.subheader("📞 待跟进：之前提过的事，后来怎么样了？")
+    reminders = get_followup_reminders(user_id=user_id, limit=5)
+    if reminders:
+        for r in reminders:
+            st.markdown(
+                f"- _{r['created_at'][:16] if r.get('created_at') else ''}_  "
+                f"**{r['humane_summary']}**"
+            )
+            if r.get("sentiment"):
+                st.caption(f"情感: {r['sentiment']}")
+    else:
+        st.info("无待跟进事项。LLM 异步分类会标记 needs_followup=True 的对话。")
+
+    st.divider()
+
+    # 4) Sentiment 分布
+    st.subheader("🎭 情感分布")
+    with SessionLocal() as sess:
+        mm = MemoryManager(sess)
+        sess_obj = mm.get_or_create_active_session(user_id)
+        summary = get_session_sentiment_summary(sess_obj.id)
+    if summary:
+        st.bar_chart(summary)
+    else:
+        st.info("还没有情感数据。让 LLM 分类跑一会儿再来看看。")
+
+
+# ── AI 助手聊天页面 ─────────────────────────────────────────
+def page_chat():
+    st.title("🤖 AI 助手")
+
+    # 初始化 session state
+    if "chat_history" not in st.session_state:
+        st.session_state.chat_history = []  # list of {"role": "user"|"assistant", "content": str}
+    if "pending_plan" not in st.session_state:
+        st.session_state.pending_plan = None
+
+    # 侧边栏：历史会话
+    with st.sidebar:
+        st.subheader("📂 历史会话")
+        from src.memory import MemoryManager
+        with MemoryManager() as mm:
+            history = mm.get_session_history(limit=10, status="archived")
+            for sess in history:
+                label = sess.title or f"会话 {sess.id}"
+                if st.button(label, use_container_width=True, key=f"hist_{sess.id}"):
+                    msgs = mm.get_recent_messages(sess.id, limit=100, include_system=True)
+                    st.session_state.chat_history = [
+                        {"role": m.role, "content": m.content}
+                        for m in msgs if m.role in ("user", "assistant")
+                    ]
+                    st.rerun()
+
+        st.divider()
+        if st.button("🗑️ 清除当前对话", use_container_width=True):
+            st.session_state.chat_history = []
+            st.rerun()
+
+    # 展示聊天历史
+    for msg in st.session_state.chat_history:
+        with st.chat_message(msg["role"]):
+            st.markdown(msg["content"])
+
+    # 用户输入
+    user_input = st.chat_input("输入你的需求...")
+
+    if user_input:
+        # 追加用户消息
+        st.session_state.chat_history.append({"role": "user", "content": user_input})
+        with st.chat_message("user"):
+            st.markdown(user_input)
+
+        # 调用 Agent（带 UI 兜底：即便 agent 内部异常也展示友好提示）
+        with st.spinner("思考中..."):
+            from src.agent import Agent
+            from src.memory import MemoryManager
+
+            current_user = get_current_user() or "default"
+            agent = Agent(user_id=current_user)
+            with MemoryManager() as mm:
+                sess = mm.get_or_create_active_session(current_user)
+            try:
+                response = agent.chat(user_input, session_id=sess.id)
+            except Exception as exc:
+                # 极端兜底（Agent 自己的 _handle_chat_failure 也会再接一层）
+                logger.exception("UI 层 Agent.chat 失败")
+                from src.agent.agent import FALLBACK_REPLY
+                response = type("R", (), {})()
+                response.text = FALLBACK_REPLY.format(reason=f"{type(exc).__name__}")
+                response.needs_confirmation = False
+                response.pending_plan = None
+
+            # 追加 AI 回复
+            st.session_state.chat_history.append({"role": "assistant", "content": response.text})
+            with st.chat_message("assistant"):
+                st.markdown(response.text)
+
+            # 如果有待确认计划，显示确认按钮
+            if response.needs_confirmation and response.pending_plan:
+                st.session_state.pending_plan = response.pending_plan
+                plan = response.pending_plan
+                cols = st.columns([1, 1])
+                with cols[0]:
+                    if st.button("✅ 确认执行", type="primary", use_container_width=True):
+                        confirmed_response = agent.chat("确认", session_id=sess.id)
+                        # 替换最后一条 AI 回复
+                        st.session_state.chat_history[-1] = {"role": "assistant", "content": confirmed_response.text}
+                        st.session_state.pending_plan = None
+                        st.rerun()
+                with cols[1]:
+                    if st.button("❌ 取消", use_container_width=True):
+                        cancel_response = agent.chat("取消", session_id=sess.id)
+                        st.session_state.chat_history[-1] = {"role": "assistant", "content": cancel_response.text}
+                        st.session_state.pending_plan = None
+                        st.rerun()
+
+
 # ── 权限过滤：根据角色决定可见页面 ──────────────────────────
 role = get_current_role()
 
 pages = []
+if has_permission(role, "viewer"):
+    pages.append(st.Page(page_chat, title="AI 助手", icon="🤖"))
+if has_permission(role, "viewer"):
+    pages.append(st.Page(page_memory, title="我的记忆", icon="🧠"))
+if has_permission(role, "editor"):
+    pages.append(st.Page(page_scheduler, title="任务调度", icon="📋"))
 if has_permission(role, "viewer"):
     pages.append(st.Page(page_dashboard, title="看板", icon="📊"))
 if has_permission(role, "viewer"):
