@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from openai import OpenAI
 
 from src.shared.llm_providers.base import BaseLLMProvider
@@ -15,7 +16,8 @@ class OpenAICompatibleProvider(BaseLLMProvider):
 
     def chat_completion(self, messages, temperature=0.7, json_mode=False):
         try:
-            response_format = {"type": "json_object"} if json_mode else None
+            # MiniMax 等部分 OpenAI 兼容服务要求 response_format 字段始终存在
+            response_format = {"type": "json_object"} if json_mode else {"type": "text"}
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=messages,
