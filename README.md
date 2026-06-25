@@ -1,6 +1,6 @@
-# AI Douyin
+# AI ShortVideo
 
-> 本地运行的 AI 短视频内容生成与抖音运营自动化平台。从自然语言一句话调度全链路：脚本生成 → TTS 配音 → 视频合成 → 抖音发布 → 评论回复 → 定时任务。
+> 本地运行的 AI 短视频内容生成与多平台运营自动化工具。从自然语言一句话调度全链路：脚本生成 → TTS 配音 → 视频合成 → 视频平台发布 → 评论回复 → 定时任务。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
@@ -27,12 +27,12 @@
 
 ## 这是什么
 
-把抖音运营里的重复步骤交给 AI：
+把短视频运营里的重复步骤交给 AI：
 
 - **写脚本** — 关键词 / 文章 / 古典典籍 → LLM 生成 60-90 秒逐字稿
 - **配音** — Edge-TTS（默认）或 GPT-SoVITS（声线克隆）
 - **合成视频** — Edge-TTS + Sonic 角色视频层 + ComfyUI 动漫背景 + FFmpeg
-- **发抖音** — Selenium 浏览器自动化登录、上传、填标题标签、发布
+- **发平台** — Selenium 浏览器自动化登录、上传、填标题标签、发布
 - **运营** — 同步视频、抓评论、规则 + LLM 自动回复
 - **调度** — cron + SQLite 任务队列 + 后台 Worker
 - **对话** — Streamlit 聊天页一句话调度任意能力（带"先确认再执行"安全拦截）
@@ -140,15 +140,15 @@ graph TB
     end
 
     subgraph PA["🌐 Platform Adapter"]
-        DA[DouyinAdapter]
-        FA[FanqieAdapter]
-        DW[DouyinWarmup]
+        DA[VideoAdapter]
+        FA[NovelAdapter]
+        DW[AccountWarmup]
         SEL[Selenium / Playwright]
     end
 
     subgraph STORE["💾 Storage"]
         S1[(wisdom_ai.db)]
-        S2[(douyin.db)]
+        S2[(platform.db)]
         S3[(chroma_db)]
         V[data/videos/]
     end
@@ -266,7 +266,7 @@ python main.py import-knowledge --books-dir data/books
 python main.py quick --keywords "人生哲学导向"
 python main.py presenter --keywords "人生哲学导向" --tts-provider edge --max-segments 16
 
-# 3. 首次发布到抖音前，先登录
+# 3. 首次发布到视频平台前，先登录
 python main.py douyin-login
 
 # 4. 启动管理后台
@@ -310,7 +310,7 @@ ai_douyin/
 │   ├── memory/                  # 分层记忆（用户画像 / 会话 / 偏好 / 问题跟踪）
 │   ├── scheduler/               # APScheduler + SQLite 任务队列 + 后台 Worker
 │   ├── web/                     # Streamlit 管理后台（对话 / 调度 / 视频 / 评论 / 记忆）
-│   ├── platform_adapter/        # 抖音 + 番茄 + 浏览器会话
+│   ├── platform_adapter/        # 视频平台 + 网络文学平台 + 浏览器会话
 │   ├── content_factory/         # 脚本 / TTS / 视频合成 / Presenter 管线
 │   ├── rag_engine/              # Chroma 向量库 + Embedding
 │   ├── services/                # 业务服务编排
@@ -332,10 +332,10 @@ ai_douyin/
 | 动漫数字人主讲视频 | 当前主线 | Edge-TTS + Sonic + ComfyUI 按需背景 + FFmpeg |
 | 单人口播模板视频 | 历史/兜底 | 模板视频循环 + 音轨替换 |
 | RAG 知识检索 | 可用 | Chroma + Ollama embedding |
-| 抖音发布 / 同步 / 评论 | 可用 | Selenium 浏览器自动化 |
+| 视频平台发布 / 同步 / 评论 | 可用 | Selenium 浏览器自动化 |
 | 评论自动回复 | 可用 | 规则 + LLM + 安全过滤 |
 | 多账号养号 | 测试版 | 多 profile、随机观看、可控点赞 |
-| 番茄小说推广 MVP | MVP | 番茄达人中心 + Presenter 视频 |
+| 网络文学平台推广 MVP | MVP | 网文达人中心 + Presenter 视频 |
 | 对话式 Agent | 可用 | 18+ Skill，"先确认再执行" |
 | 分层记忆 + 问题跟踪 | 可用 | preference / problem / 普通自动分类 |
 | 任务调度 + 队列 | 可用 | cron + SQLite SKIP LOCKED |
@@ -358,8 +358,8 @@ ai_douyin/
 
 **本项目仅供技术研究与个人学习使用。**
 
-- **抖音 / 番茄小说平台的自动化行为可能违反其用户服务协议和社区自律公约**。请在合规和合理使用的范围内运行本项目。
-- **大量注册账号、群控、刷量、发广告**等行为违反抖音平台规则，本项目**不鼓励也不支持**任何此类用途。
+- **视频平台 / 网络文学平台的自动化行为可能违反其用户服务协议和社区自律公约**。请在合规和合理使用的范围内运行本项目。
+- **大量注册账号、群控、刷量、发广告**等行为违反主流平台规则，本项目**不鼓励也不支持**任何此类用途。
 - 用户对自己使用本项目产生的任何后果（包括但不限于账号封禁、法律纠纷）**负全部责任**。
 - 项目作者不为任何因使用本项目而导致的直接或间接损失负责。
 
