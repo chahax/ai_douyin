@@ -8,9 +8,8 @@ src/agent/registry.py — Skill 注册表
 Agent 通过 skill_name 查找并调用。
 """
 
-import inspect
-from dataclasses import asdict, dataclass
-from typing import Any, Callable
+from dataclasses import asdict
+from typing import Any
 
 from src.agent.skill_decorator import (
     ParamType,
@@ -283,7 +282,7 @@ def _update_user_preferences(
     **kwargs,
 ) -> dict:
     """更新用户偏好"""
-    from src.memory import MemoryManager, UserPreferences
+    from src.memory import MemoryManager
 
     updates = {k: v for k, v in {
         "default_video_mode": default_video_mode,
@@ -536,7 +535,7 @@ def _investigate_problems(limit: int = 20, **kwargs) -> dict:
     并把访问时间 / 次数更新到 ProblemMemory。
     适合由 cron 任务每天调用。
     """
-    from src.memory.problem_memory import MemoryLayerManager, ProblemStatus
+    from src.memory.problem_memory import MemoryLayerManager
     from src.shared.llm_client import llm_client
 
     with MemoryLayerManager() as mlm:

@@ -10,10 +10,9 @@ comment_workflow.py — 抖音评论抓取工作流
 
 import time
 import re
-from dataclasses import dataclass
 from typing import Optional
 
-from playwright.sync_api import Page, TimeoutError as PlaywrightTimeout
+from playwright.sync_api import Page
 
 from src.platform_adapter.browser_session import BrowserSession
 from src.platform_adapter.models import CommentQuery, CommentRecord, CommentSyncResult

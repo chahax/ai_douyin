@@ -8,11 +8,10 @@ sync_workflow.py — 抖音视频同步工作流
 """
 
 import urllib.parse
-import time
 from datetime import datetime
 from typing import List, Optional, Tuple
 
-from playwright.sync_api import Page, TimeoutError as PlaywrightTimeout
+from playwright.sync_api import Page
 
 from src.platform_adapter.browser_session import BrowserSession
 from src.platform_adapter.models import VideoItem, VideoStats, VideoStatus

@@ -3,7 +3,7 @@ reply_history_service.py — 回复历史 CRUD
 """
 
 from datetime import datetime, timedelta
-from typing import List, Optional
+from typing import List
 
 from src.services.database import get_db
 

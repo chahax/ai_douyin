@@ -219,7 +219,6 @@ class MemoryLayerManager:
 
             # 如果 LLM 重新判定为 problem 而快路径是 normal，补建 ProblemMemory
             if data["memory_type"] == "problem":
-                from src.memory.models import UserProfile
                 # 简单 dedup：LIKE 检查
                 existing = self._find_similar_problem(
                     row.session.user_id if hasattr(row.session, "user_id") else "default",

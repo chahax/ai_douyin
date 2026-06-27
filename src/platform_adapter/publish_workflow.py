@@ -13,11 +13,9 @@ publish_workflow.py — 抖音视频发布工作流
 
 import re
 import time
-from datetime import datetime
 from pathlib import Path
-from typing import Optional
 
-from playwright.sync_api import Page, TimeoutError as PlaywrightTimeout
+from playwright.sync_api import Page
 
 from src.platform_adapter.browser_session import BrowserSession
 from src.platform_adapter.models import PublishRequest, PublishResult
