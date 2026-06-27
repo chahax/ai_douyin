@@ -776,7 +776,7 @@ class BackgroundResolver:
         def stop_started_comfy(process: subprocess.Popen | None) -> None:
             if not we_started:
                 return
-            print("[ComfyUI] 生成流程结束，正在关闭本次启动的 ComfyUI...")
+            logger.info("[ComfyUI] 生成流程结束，正在关闭本次启动的 ComfyUI...")
             if process and process.poll() is None:
                 try:
                     process.terminate()
@@ -786,13 +786,13 @@ class BackgroundResolver:
                         process.kill()
                         process.wait(timeout=5)
                     except Exception as exc:
-                        print(f"[ComfyUI] 按 PID 关闭失败: {exc}")
+                        logger.error(f"[ComfyUI] 按 PID 关闭失败: {exc}")
 
             # 兜底：只清理命令行匹配 ComfyUI main.py 且仍监听当前端口的进程。
             try:
                 stop_comfyui_process_by_port()
             except Exception as exc:
-                print(f"[ComfyUI] 端口兜底关闭失败: {exc}")
+                logger.error(f"[ComfyUI] 端口兜底关闭失败: {exc}")
 
         # 检查 ComfyUI 是否已运行
         we_started = False
@@ -802,11 +802,11 @@ class BackgroundResolver:
             comfy_process = self._comfy_process
 
         if is_port_open(host, port) and not active_started_process and not is_comfyui_ready():
-            print(f"[ComfyUI] {host}:{port} 已被非 ComfyUI 服务占用，跳过 ComfyUI 背景生成。")
+            logger.warning(f"[ComfyUI] {host}:{port} 已被非 ComfyUI 服务占用，跳过 ComfyUI 背景生成。")
             return False
 
         if not is_port_open(host, port):
-            print("[ComfyUI] 未运行，正在启动...")
+            logger.info("[ComfyUI] 未运行，正在启动...")
             try:
                 comfy_process = subprocess.Popen(
                     ["python", comfy_path, "--enable-cors", "--listen", host, "--port", str(port)],
@@ -818,15 +818,15 @@ class BackgroundResolver:
                 self._comfy_process = comfy_process
                 self._comfy_started_by_resolver = True
             except Exception as e:
-                print(f"[ComfyUI] 启动失败: {e}")
+                logger.error(f"[ComfyUI] 启动失败: {e}")
                 return False
 
-            print("[ComfyUI] 等待服务就绪...")
+            logger.info("[ComfyUI] 等待服务就绪...")
             if not wait_for_comfy(60):
-                print("[ComfyUI] 启动超时")
+                logger.error("[ComfyUI] 启动超时")
                 stop_started_comfy(comfy_process)
                 return False
-            print("[ComfyUI] 已就绪")
+            logger.info("[ComfyUI] 已就绪")
 
         workflow = {
             "1": {"class_type": "CheckpointLoaderSimple", "inputs": {"ckpt_name": settings.COMFYUI_CHECKPOINT}},
@@ -905,7 +905,7 @@ class BackgroundResolver:
     def _stop_active_comfy(self) -> None:
         if not self._comfy_started_by_resolver:
             return
-        print("[ComfyUI] 本次背景生成完成，正在关闭本次启动的 ComfyUI...")
+        logger.info("[ComfyUI] 本次背景生成完成，正在关闭本次启动的 ComfyUI...")
         process = self._comfy_process
         if process and process.poll() is None:
             try:
@@ -916,7 +916,7 @@ class BackgroundResolver:
                     process.kill()
                     process.wait(timeout=5)
                 except Exception as exc:
-                    print(f"[ComfyUI] 按 PID 关闭失败: {exc}")
+                    logger.error(f"[ComfyUI] 按 PID 关闭失败: {exc}")
         self._comfy_process = None
         self._comfy_started_by_resolver = False
 
