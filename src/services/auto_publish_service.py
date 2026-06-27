@@ -13,7 +13,6 @@ auto_publish_service.py — 一键自动发布服务
 
 import os
 import subprocess
-import sys
 import time
 import uuid
 from dataclasses import dataclass
@@ -504,6 +503,6 @@ class AutoPublishService:
         if self.adapter:
             try:
                 self.adapter.close()
-            except Exception:
-                pass
+            except Exception as exc:
+                logger.debug(f"关闭 adapter 失败: {exc}")
             self.adapter = None
