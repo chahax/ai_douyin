@@ -11,8 +11,7 @@ src/agent/agent.py — Agent 核心类
 
 import json
 import re
-import traceback
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
 from typing import Optional
 
@@ -206,8 +205,8 @@ class Agent:
                 # 清理可能残留的 pending_plan，避免下一次正常消息被误拦截
                 try:
                     mm.save_pending_plan(session_id, None)
-                except Exception:
-                    pass
+                except Exception as exc:
+                    logger.debug(f"清理 pending_plan 失败（session={session_id}）: {exc}")
         except Exception:
             logger.exception("写入失败回退消息失败")
 
@@ -378,7 +377,6 @@ class Agent:
         异步调 MessageClassifier.classify_async，回写精细 metadata
         到最近的 ConversationMemory 行。fire-and-forget，不阻塞对话。
         """
-        import asyncio
         from src.shared.async_runner import fire_and_forget
 
         async def _do_enrich():
@@ -388,7 +386,6 @@ class Agent:
                 mlm = MemoryLayerManager(sess)
                 # 找最近一条相同 (session_id, content) 的 ConversationMemory 行
                 from src.memory.problem_memory import ConversationMemory
-                from datetime import datetime
                 row = (
                     sess.query(ConversationMemory)
                     .filter_by(session_id=session_id, content=user_message)

@@ -43,8 +43,8 @@ class AudioMixer:
                         try:
                             from moviepy.audio.fx.AudioLoop import AudioLoop
                             bgm_clip = bgm_clip.with_effects([AudioLoop(n_loops=n_loops)])
-                        except Exception:
-                            pass
+                        except Exception as exc:
+                            logger.debug(f"BGM 音频循环失败，回退到底层 AudioLoop 仍失败: {exc}")
             
             # Trim BGM to match speech duration
             bgm_clip = bgm_clip.subclipped(0, speech_clip.duration)

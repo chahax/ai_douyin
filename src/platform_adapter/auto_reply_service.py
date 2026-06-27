@@ -11,11 +11,11 @@ from src.platform_adapter.browser_session import BrowserSession, build_default_b
 from src.platform_adapter.comment_workflow import CommentWorkflow
 from src.platform_adapter.models import CommentRecord
 from src.platform_adapter.reply_bot_workflow import ReplyBotWorkflow
-from src.services.comment_filter import should_reply, FilterResult
+from src.services.comment_filter import should_reply
 from src.services.reply_context_service import (
     get_context, add_user_comment, add_bot_reply, build_context_prompt,
 )
-from src.services.reply_rules_service import match_rule, get_rules, DEFAULT_REPLY
+from src.services.reply_rules_service import match_rule, DEFAULT_REPLY
 from src.services.user_profile_service import can_reply, record_reply
 from src.services.video_service import get_video_by_id
 from src.shared.logger import logger

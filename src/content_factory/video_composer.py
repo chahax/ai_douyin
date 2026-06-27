@@ -11,6 +11,8 @@ import os
 import subprocess
 import time
 
+from src.shared.logger import logger
+
 
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".bmp"}
 
@@ -26,14 +28,14 @@ def _run_ffmpeg(cmd: list, timeout: int = 600) -> bool:
             timeout=timeout,
         )
         if result.returncode != 0:
-            print(f"[FFmpeg Error]\n{result.stderr[-1000:]}")
+            logger.error(f"[FFmpeg Error]\n{result.stderr[-1000:]}")
             return False
         return True
     except subprocess.TimeoutExpired:
-        print("[FFmpeg Error] 命令执行超时")
+        logger.error("[FFmpeg Error] 命令执行超时")
         return False
     except FileNotFoundError:
-        print("[FFmpeg Error] ffmpeg 未找到，请确认已安装并加入 PATH")
+        logger.error("[FFmpeg Error] ffmpeg 未找到，请确认已安装并加入 PATH")
         return False
 
 
@@ -151,12 +153,12 @@ def compose_video(
 
     audio_duration = get_duration(audio_path)
     if audio_duration <= 0:
-        print("[VideoComposer] 无法读取音频时长")
+        logger.error(f"[VideoComposer] 无法读取音频时长: {audio_path}")
         return ""
 
     clip_duration = get_duration(video_clip_path)
     if clip_duration <= 0:
-        print("[VideoComposer] 无法读取视频片段时长")
+        logger.error(f"[VideoComposer] 无法读取视频片段时长: {video_clip_path}")
         return ""
 
     repeat_count = max(1, int(audio_duration / clip_duration) + 1)
@@ -195,7 +197,7 @@ def compose_video(
         print(f"[VideoComposer] 完成: {final_path}  (时长 {actual:.2f}s)")
         return final_path
 
-    print("[VideoComposer] 合成失败")
+    logger.error(f"[VideoComposer] 合成失败: {final_path}")
     return ""
 
 
@@ -259,13 +261,16 @@ def compose_dual_character_video(
 
     for path, label in [(background_path, "背景视频"), (clip_a_path, "角色A视频"), (clip_b_path, "角色B视频")]:
         if not os.path.exists(path):
-            print(f"[VideoComposer] {label}不存在: {path}")
+            logger.error(f"[VideoComposer] {label}不存在: {path}")
             return ""
 
     audio_a_dur = get_duration(audio_a_path)
     audio_b_dur = get_duration(audio_b_path)
     if audio_a_dur <= 0 or audio_b_dur <= 0:
-        print("[VideoComposer] 无法读取角色音频时长")
+        logger.error(
+            f"[VideoComposer] 无法读取角色音频时长: audio_a={audio_a_path} ({audio_a_dur}s), "
+            f"audio_b={audio_b_path} ({audio_b_dur}s)"
+        )
         return ""
 
     # 音频滤镜使用 concat 顺序拼接 A/B，两段时长需要相加。
@@ -280,7 +285,7 @@ def compose_dual_character_video(
 
     bg_dur = get_duration(background_path)
     if bg_dur <= 0:
-        print("[VideoComposer] 无法读取背景视频时长")
+        logger.error(f"[VideoComposer] 无法读取背景视频时长: {background_path}")
         return ""
     repeat_count = max(1, int(total_dur / bg_dur) + 2)
 
@@ -402,7 +407,7 @@ def compose_dual_character_video(
         print(f"[VideoComposer] 完成: {final_path}  (时长 {actual:.2f}s)")
         return final_path
 
-    print("[VideoComposer] 合成失败")
+    logger.error(f"[VideoComposer] 合成失败: {final_path}")
     return ""
 
 
@@ -455,7 +460,10 @@ def compose_dual_character_sequence_video(
     audio_a_dur = get_duration(audio_a_path)
     audio_b_dur = get_duration(audio_b_path)
     if audio_a_dur <= 0 or audio_b_dur <= 0:
-        print("[VideoComposer] 无法读取角色音频时长")
+        logger.error(
+            f"[VideoComposer] 无法读取角色音频时长: audio_a={audio_a_path} ({audio_a_dur}s), "
+            f"audio_b={audio_b_path} ({audio_b_dur}s)"
+        )
         return ""
 
     total_dur = audio_a_dur + audio_b_dur
@@ -469,7 +477,7 @@ def compose_dual_character_sequence_video(
 
     bg_dur = get_duration(background_path)
     if bg_dur <= 0:
-        print("[VideoComposer] 无法读取背景视频时长")
+        logger.error(f"[VideoComposer] 无法读取背景视频时长: {background_path}")
         return ""
     repeat_count = max(1, int(total_dur / bg_dur) + 2)
 
@@ -575,7 +583,7 @@ def compose_dual_character_sequence_video(
         print(f"[VideoComposer] 完成: {final_path}  (时长 {actual:.2f}s)")
         return final_path
 
-    print("[VideoComposer] 合成失败")
+    logger.error(f"[VideoComposer] 合成失败: {final_path}")
     return ""
 
 

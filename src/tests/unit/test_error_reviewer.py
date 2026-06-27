@@ -12,10 +12,8 @@ Covers:
 """
 
 import json
-from datetime import datetime
 from unittest.mock import patch
 
-import pytest
 
 from src.agent.error_reviewer import (
     ErrorReviewer,
@@ -226,7 +224,6 @@ class TestBuildReview:
 class TestReviewAndStoreAsync:
     def setup_method(self):
         from src.shared.database import Base, engine
-        from src.memory.error_review_model import ErrorReview
         # 确保表已建
         Base.metadata.create_all(bind=engine)
         # 清空

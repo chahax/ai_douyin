@@ -177,9 +177,7 @@ def login_user(username: str, password: str) -> tuple[bool, str]:
         set_user_password,
         set_user_role,
         set_whitelist,
-        count_ip_accounts,
         count_users_with_password,
-        MAX_ACCOUNTS_PER_IP,
     )
 
     ip = get_client_ip()

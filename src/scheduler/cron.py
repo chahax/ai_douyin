@@ -7,14 +7,14 @@ src/scheduler/cron.py — 定时调度器
 """
 
 import logging
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Optional
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 
-from src.scheduler.models import ScheduledTask, TaskStatus, TriggerType
+from src.scheduler.models import ScheduledTask, TriggerType
 from src.scheduler.queue import TaskQueue
 from src.shared.database import SessionLocal
 

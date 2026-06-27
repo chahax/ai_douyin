@@ -22,7 +22,6 @@ from src.agent.skill_decorator import (
     skill,
 )
 from src.agent.registry import (
-    SKILLS,
     SkillRegistry,
     validate_params,
 )

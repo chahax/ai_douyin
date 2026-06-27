@@ -8,7 +8,6 @@ dialogue_generator.py — 双角色对话脚本生成
 
 import json
 import os
-from typing import List, Dict, Optional
 
 from src.shared.llm_client import llm_client
 from src.shared.logger import logger

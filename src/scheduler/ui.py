@@ -11,14 +11,11 @@ import uuid
 from datetime import datetime
 
 from src.scheduler import (
-    CronScheduler,
-    EnqueueResult,
     ScheduledTask,
     TaskExecution,
     TaskQueue,
     TaskStatus,
     TaskType,
-    TriggerType,
 )
 from src.shared.database import SessionLocal
 
@@ -497,7 +494,6 @@ def _create_codegraph_weekly_task():
     Open-source 注意：npx/codegraph 的实际路径由用户在环境里决定，
     所以这里探测常见位置；找不到就跳过创建，让用户在 UI 里手动配置。
     """
-    import os
     from pathlib import Path
     # 检查是否已存在同名任务
     with SessionLocal() as sess:

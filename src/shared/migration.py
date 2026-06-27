@@ -11,11 +11,9 @@ Usage in app startup:
 """
 
 import os
-import sys
 
 from sqlalchemy import inspect, text
 
-from src.shared.config import settings
 from src.shared.database import engine
 from src.shared.logger import logger
 

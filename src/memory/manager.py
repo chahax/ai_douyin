@@ -8,7 +8,6 @@ src/memory/manager.py — 记忆系统核心管理器
   - RAG 友好格式导出（供 Agent 上下文注入）
 """
 
-import json
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Optional

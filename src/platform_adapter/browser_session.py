@@ -719,7 +719,6 @@ class APIResponse:
         return self._data.get("text", "")
 
     def body(self) -> bytes:
-        import json as _json
         body_str = self._data.get("body", "")
         if isinstance(body_str, str):
             return body_str.encode("utf-8")

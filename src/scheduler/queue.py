@@ -12,7 +12,6 @@ src/scheduler/queue.py — 任务队列核心
 
 import json
 import logging
-import threading
 import time
 import uuid
 from dataclasses import dataclass
@@ -21,7 +20,6 @@ from typing import Optional
 
 from sqlalchemy.orm import Session
 
-from src.agent import Agent
 from src.memory import MemoryManager
 from src.scheduler.models import ScheduledTask, TaskExecution, TaskStatus, TaskType
 from src.shared.database import SessionLocal

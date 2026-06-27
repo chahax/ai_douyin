@@ -247,7 +247,7 @@ class GenerationService:
             if chunks:
                 rag_extractor = WisdomExtractorRAG()
                 wisdom_data = rag_extractor.extract_wisdom(request.topic, chunks)
-                context = "\n".join([c.get("content", "") for c in chunks])
+                context = "\n".join([c.page_content for c in chunks])
 
         if not wisdom_data:
             logger.warning("No RAG results, using topic as search")

@@ -13,7 +13,6 @@ src/agent/skill_decorator.py — Skill 装饰器 + 显式参数 schema
 """
 
 import inspect
-import logging
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Callable

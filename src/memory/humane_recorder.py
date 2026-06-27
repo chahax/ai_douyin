@@ -13,7 +13,6 @@ src/memory/humane_recorder.py — 人性化记忆查询
 """
 
 from datetime import datetime, timedelta
-from typing import Optional
 
 from sqlalchemy import desc, func
 

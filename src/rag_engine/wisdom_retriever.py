@@ -1,8 +1,28 @@
 import os
+import glob
 from langchain_community.vectorstores import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
 from src.shared.logger import logger
 from src.shared.config import settings
+
+
+def _resolve_local_embedding_path() -> str | None:
+    """
+    按优先级查找本地 embedding 模型路径：
+      1. ./data/models/text2vec-base-chinese   (项目内置约定路径)
+      2. ~/.cache/huggingface/hub/models--shibing624--text2vec-base-chinese/snapshots/*/   (HF 缓存)
+    返回第一个含 config.json 的路径；都找不到返回 None。
+    """
+    candidates = [
+        os.path.abspath("./data/models/text2vec-base-chinese"),
+        *glob.glob(os.path.expanduser(
+            "~/.cache/huggingface/hub/models--shibing624--text2vec-base-chinese/snapshots/*/"
+        )),
+    ]
+    for path in candidates:
+        if os.path.isdir(path) and os.path.exists(os.path.join(path, "config.json")):
+            return path
+    return None
 
 
 class WisdomRetriever:
@@ -10,42 +30,27 @@ class WisdomRetriever:
         self.persist_dir = persist_dir
         self.embedding_model = embedding_model
 
-        # 优先使用 Ollama 本地 embedding（需提前安装：ollama pull nomic-embed-text）
-        # 其次用本地 HuggingFace 模型，最后才请求 HuggingFace Hub
-        ollama_model = getattr(settings, "OLLAMA_EMBEDDING_MODEL", "")
-        local_model_path = os.path.abspath("./data/models/text2vec-base-chinese")
+        # 优先本地 embedding（项目内置路径或 HF 缓存），最后才请求 HF Hub
+        local_model_path = _resolve_local_embedding_path()
 
         embedding = None
 
-        # 1. 尝试 Ollama embedding
-        if ollama_model:
-            try:
-                from langchain_ollama import OllamaEmbeddings
-                candidate_embedding = OllamaEmbeddings(
-                    model=ollama_model,
-                    base_url=settings.OLLAMA_BASE_URL,
-                )
-                candidate_embedding.embed_query("测试")
-                embedding = candidate_embedding
-                logger.info(f"Using Ollama embedding model: {ollama_model}")
-            except Exception as exc:
-                logger.warning(f"Ollama embedding 初始化失败: {exc}")
-
-        # 2. 尝试本地 HuggingFace 模型
-        if embedding is None and os.path.exists(local_model_path):
+        # 1. 尝试本地 HuggingFace 模型（项目路径或 HF 缓存）
+        if local_model_path:
             try:
                 embedding = HuggingFaceEmbeddings(model_name=local_model_path)
                 logger.info(f"Using local HuggingFace embedding model: {local_model_path}")
             except Exception as exc:
                 logger.warning(f"本地 embedding 模型加载失败: {exc}")
 
-        # 3. Fallback: HuggingFace Hub（需要网络，默认关闭，避免生成流程卡在模型下载）
+        # 2. Fallback: HuggingFace Hub（需要网络，默认关闭，避免生成流程卡在模型下载）
         if embedding is None:
             if settings.ENABLE_HF_EMBEDDING_FALLBACK:
                 embedding = self._build_huggingface_embedding()
             else:
                 raise RuntimeError(
-                    "No local embedding model available. Run `ollama pull nomic-embed-text` "
+                    "No local embedding model available. "
+                    "Either put the model at ./data/models/text2vec-base-chinese "
                     "or set ENABLE_HF_EMBEDDING_FALLBACK=true."
                 )
 

@@ -7,7 +7,6 @@ from src.platform_adapter.models import (
     PublishResult,
     SessionState,
     SyncResult,
-    VideoItem,
 )
 from src.platform_adapter.publish_workflow import PublishWorkflow
 from src.platform_adapter.sync_workflow import SyncWorkflow
