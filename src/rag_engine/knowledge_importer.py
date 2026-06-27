@@ -12,13 +12,33 @@ from src.shared.logger import logger
 from src.shared.config import settings
 
 
+def _resolve_local_embedding_path() -> str | None:
+    """
+    按优先级查找本地 embedding 模型路径：
+      1. ./data/models/text2vec-base-chinese   (项目内置约定路径)
+      2. ~/.cache/huggingface/hub/models--shibing624--text2vec-base-chinese/snapshots/*/   (HF 缓存)
+    返回第一个含 config.json 的路径；都找不到返回 None。
+    """
+    import glob
+    candidates = [
+        os.path.abspath("./data/models/text2vec-base-chinese"),
+        *glob.glob(os.path.expanduser(
+            "~/.cache/huggingface/hub/models--shibing624--text2vec-base-chinese/snapshots/*/"
+        )),
+    ]
+    for path in candidates:
+        if os.path.isdir(path) and os.path.exists(os.path.join(path, "config.json")):
+            return path
+    return None
+
+
 class KnowledgeImporter:
     def __init__(self, persist_dir="./data/chroma_db", embedding_model=None):
         self.persist_dir = persist_dir
 
-        # Determine model path
-        local_model_path = os.path.abspath("./data/models/text2vec-base-chinese")
-        if os.path.exists(local_model_path) and os.path.exists(os.path.join(local_model_path, "config.json")):
+        # Determine model path: prefer local (项目路径 or HF cache), else HF Hub
+        local_model_path = _resolve_local_embedding_path()
+        if local_model_path:
             self.embedding_model_name = local_model_path
             logger.info(f"Using local embedding model: {self.embedding_model_name}")
         else:
