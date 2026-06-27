@@ -10,10 +10,8 @@ Covers:
 """
 
 import json
-import sys
 from unittest.mock import patch
 
-import pytest
 
 from src.memory.message_classifier import (
     MessageClassifier,
@@ -167,7 +165,6 @@ class TestClassifierAsync:
         assert data["classification_source"] == "default"
 
     def test_classify_fast_does_not_call_llm(self):
-        import asyncio
         with patch(
             "src.memory.message_classifier.llm_client.chat_completion"
         ) as mock_llm:

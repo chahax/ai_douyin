@@ -11,7 +11,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 import streamlit as st
-from src.web.components.auth import render_login_page, is_logged_in, get_current_user, get_current_role, logout_user, has_permission
+from src.web.components.auth import render_login_page, get_current_user, get_current_role, logout_user, has_permission
 from src.shared.logger import logger
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -455,8 +455,6 @@ def page_comments():
     import pandas as pd
     from src.services.comment_service import get_comments, count_comments, count_replied_comments
     from src.services.video_service import get_videos
-    from src.platform_adapter.douyin_adapter import DouyinAdapter
-    from src.services.comment_service import mark_comment_replied
 
     st.title("💬 评论管理")
     col1, col2, col3 = st.columns(3)
@@ -666,7 +664,7 @@ def page_blocked_words():
 def page_books():
     from src.shared.config import settings
     from src.rag_engine.knowledge_importer import KnowledgeImporter
-    import os, shutil
+    import shutil
     from pathlib import Path
 
     st.title("📚 知识库管理")
@@ -892,7 +890,6 @@ def page_settings():
 def page_memory():
     from src.memory import MemoryManager, MemoryLayerManager
     from src.memory.humane_recorder import (
-        get_recent_sentiment,
         get_followup_reminders,
         get_session_sentiment_summary,
     )
