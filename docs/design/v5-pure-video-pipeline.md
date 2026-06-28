@@ -236,55 +236,132 @@ def align_audio_to_clip(
 | `presenter_pipeline.py` | 不动（V4 仍可用）|
 | `video_composer.py` | 不动（仍服务 V4）|
 
-## 五、ComfyUI Workflow 设计（wan22_i2v_4step.json）
+## 五、ComfyUI Workflow 设计
+
+### 5.0 D0 已装节点
+
+| 节点 | 来源 | 文件路径 | 状态 |
+|---|---|---|---|
+| **WanVideoWrapper** | [kijai/ComfyUI-WanVideoWrapper](https://github.com/kijai/ComfyUI-WanVideoWrapper) | `D:/IT/AI_vido/ComfyUI/custom_nodes/ComfyUI-WanVideoWrapper/` | ✅ 已装 |
+| **PuLID_ComfyUI** | [cubiq/PuLID_ComfyUI](https://github.com/cubiq/PuLID_ComfyUI) | `D:/IT/AI_vido/ComfyUI/custom_nodes/PuLID_ComfyUI/` | ✅ 已装 |
+
+WanVideoWrapper 提供的关键节点类名（`comfy_extras/nodes_wan.py` 不可用，**必须用 WanVideoWrapper 的节点**）：
+- `WanVideoModelLoader` — 加载 diffusion model
+- `WanVideoVAELoader` — 加载 VAE
+- `WanVideoTextEncoderLoader` — 加载 UMT5（**注意是 text_encoders/ 不是 clip/**）
+- `WanVideoLoraSelect` / `WanVideoAddLightXToApply` — 4 步 LoRA
+- `WanVideoImageToVideoEncode` — **首尾帧编码**（替换原计划的 WanImageToVideo）
+- `WanVideoSampler` — 4 步采样
+- `WanVideoDecode` — 视频输出
+- `VHSVideoCombine` — 视频保存（VHS 节点，内置）
+
+PuLID 节点类名（来自 `pulid.py:498`）：
+- `ApplyPulid` — 标准节点（fidelity method）
+- `ApplyPulidAdvanced` — 高级节点（fidelity slider + projection 选项）
+
+### 5.1 Wan 2.2 i2v workflow（`assets/workflows/wan22_i2v_4step.json`）
 
 ```json
 {
-  "1": {"class_type": "CheckpointLoaderSimple",
-        "inputs": {"ckpt_name": "wan2.2_ti2v_5B_fp16.safetensors"}},
-  "2": {"class_type": "LoadLora",  // 4 步加速 LoRA
-        "inputs": {"model": ["1", 0],
-                   "lora_name": "wan2.2_t2v_lightx2v_4steps_lora_v1.1_low_noise.safetensors",
-                   "strength_model": 1.0}},
-  "3": {"class_type": "VAELoader",
+  "1": {"class_type": "WanVideoModelLoader",
+        "inputs": {"model": "wan2.2_ti2v_5B_fp16.safetensors"}},
+  "2": {"class_type": "WanVideoVAELoader",
         "inputs": {"vae_name": "wan2.2_vae.safetensors"}},
-  "4": {"class_type": "CLIPLoader",  // umt5 text encoder
-        "inputs": {"clip_name": "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
-                   "type": "wan"}},
+  "3": {"class_type": "WanVideoTextEncoderLoader",
+        "inputs": {"text_encoder": "umt5_xxl_fp8_e4m3fn_scaled.safetensors"}},
+  "4": {"class_type": "WanVideoLoraSelect",
+        "inputs": {"lora": "wan2.2_t2v_lightx2v_4steps_lora_v1.1_low_noise.safetensors",
+                   "strength": 1.0}},
   "5": {"class_type": "LoadImage",  // 首帧
         "inputs": {"image": "first_frame.png"}},
   "6": {"class_type": "LoadImage",  // 末帧
         "inputs": {"image": "last_frame.png"}},
-  "7": {"class_type": "WanImageToVideo",  // 关键节点
-        "inputs": {"positive": ["CLIPTextEncode", 0],  // prompt
-                   "negative": ["CLIPTextEncode", 1],
-                   "vae": ["3", 0],
-                   "start_image": ["5", 0],  // 首帧
-                   "end_image": ["6", 0],    // 末帧
-                   "width": 540,
-                   "height": 960,
+  "7": {"class_type": "WanVideoTextEncode",
+        "inputs": {"text_encoder": ["3", 0],
+                   "positive": "scene motion prompt"}},
+  "8": {"class_type": "WanVideoTextEncode",
+        "inputs": {"text_encoder": ["3", 0],
+                   "negative": "blur, low quality, distortion"}},
+  "9": {"class_type": "WanVideoImageToVideoEncode",
+        "inputs": {"vae": ["2", 0],
+                   "start_image": ["5", 0],
+                   "end_image": ["6", 0],
+                   "width": 540, "height": 960,
                    "length": 81,            // 5s @ 16fps
-                   "batch_size": 1,
-                   "seed": 42}},
-  "8": {"class_type": "KSampler",
-        "inputs": {"model": ["2", 0],     // 用 LoRA 后的 model
-                   "positive": ["7", 0],
-                   "negative": ["7", 1],
-                   "latent_image": ["7", 4],
-                   "steps": 4,             // LoRA 加速：4 步即可
-                   "cfg": 1.0,
-                   "sampler_name": "euler",
-                   "scheduler": "simple",
-                   "denoise": 1.0}},
-  "9": {"class_type": "VAEDecode",
-        "inputs": {"samples": ["8", 0],
-                   "vae": ["3", 0]}},
-  "10": {"class_type": "VHSVideoCombine",  // 视频输出
-         "inputs": {"images": ["9", 0],
+                   "batch_size": 1}},
+  "10": {"class_type": "WanVideoSampler",
+         "inputs": {"model": ["1", 0],
+                    "text_encoder": ["3", 0],
+                    "lora": ["4", 0],
+                    "positive": ["7", 0],
+                    "negative": ["8", 0],
+                    "latent": ["9", 0],
+                    "steps": 4,             // 4 步加速（LoRA）
+                    "cfg": 1.0,
+                    "sampler": "euler",
+                    "scheduler": "simple"}},
+  "11": {"class_type": "WanVideoDecode",
+         "inputs": {"vae": ["2", 0],
+                    "samples": ["10", 0]}},
+  "12": {"class_type": "VHSVideoCombine",
+         "inputs": {"images": ["11", 0],
                     "frame_rate": 16,
                     "loop_count": 1,
                     "filename_prefix": "v5_clip",
                     "format": "video/h264-mp4"}}
+}
+```
+
+### 5.2 首末帧生成 workflow（`assets/workflows/keyframe_gen_xl.json`）
+
+**依赖权重**（D0.6 需下载，PuLID 模型 + AntelopeV2）：
+
+| 文件 | 来源 | 目标路径 | 大小 |
+|---|---|---|---|
+| `ip-adapter_pulid_sdxl_fp16.safetensors` | [huchenlei/ipadapter_pulid](https://huggingface.co/huchenlei/ipadapter_pulid/resolve/main/ip-adapter_pulid_sdxl_fp16.safetensors) | `ComfyUI/models/pulid/` | ~1.5GB |
+| AntelopeV2（多文件）| [MonsterMMORPG/tools](https://huggingface.co/MonsterMMORPG/tools/tree/main) | `ComfyUI/models/insightface/models/antelopev2/` | ~300MB |
+| EVA02-CLIP-L-14-336 | 自动下载到 HF cache | — | ~2GB |
+
+> **D0.6 任务**：上述 PuLID 权重 + AntelopeV2 下载（~1.8GB，约 10-30 分钟）。下载到对应目录后 PuLID 节点可立即工作。
+
+**workflow 节点**（独立 keyframe workflow，与 D2 Wan workflow 分离）：
+
+```json
+{
+  "1": {"class_type": "CheckpointLoaderSimple",
+        "inputs": {"ckpt_name": "DreamShaper XL_v7.safetensors"}},  // 或 AnythingXL
+  "2": {"class_type": "LoadImage",  // 角色参考图
+        "inputs": {"image": "data/characters/<name>/reference.png"}},
+  "3": {"class_type": "ApplyPulidAdvanced",
+        "inputs": {"model": ["1", 0],
+                   "pulid": ["2", 0],
+                   "method": "fidelity",
+                   "weight": 0.85,         // fidelity
+                   "start_at": 0.0, "end_at": 0.8}},
+  "4": {"class_type": "CLIPTextEncode",
+        "inputs": {"text": "first_frame_prompt 或 last_frame_prompt"}},
+  "5": {"class_type": "CLIPTextEncode",
+        "inputs": {"text": "blurry, low quality, distorted, deformed"}},
+  "6": {"class_type": "KSampler",
+        "inputs": {"model": ["3", 0],    // 经 PuLID 处理后的 model
+                   "positive": ["4", 0], "negative": ["5", 0],
+                   "latent_image": ["EmptyLatentImage", 0],   // 540x960
+                   "steps": 25, "cfg": 7,
+                   "sampler_name": "euler", "scheduler": "sgm_uniform"}},
+  "7": {"class_type": "VAEDecode",
+        "inputs": {"samples": ["6", 0], "vae": ["1", 2]}},  // VAE 在 CheckpointLoader 输出
+  "8": {"class_type": "SaveImage",
+        "inputs": {"images": ["7", 0]}}
+}
+```
+
+**风格枚举 → checkpoint 映射**：
+
+```python
+STYLE_TO_CHECKPOINT = {
+    "dream_shaper_xl": "DreamShaper XL_v7.safetensors",
+    "anything_xl":     "AnythingXL_xl.safetensors",
+    "realvis_xl":      "RealVisXL_v4.safetensors",  # 慎用
 }
 ```
 
@@ -331,36 +408,66 @@ class TestV5Pipeline:
     def test_end_to_end_sample_novel(self): ...  # 跑一个 200 字短篇
 ```
 
-## 八、时间表（8 天）
+## 八、时间表（8 天 + D0 setup 0.5 天）
 
-| 天 | 内容 |
-|---|---|
-| D1-2 | L1: novel_splitter + Pydantic schema（scene_plan, dialogue, novel_split）|
-| D3 | Wan 2.2 ComfyUI workflow JSON 调通 + 试跑单段 + **D3 验证产物（见 §8.1）**|
-| D4-5 | wan_pipeline.py：HTTP API 调用 + 重试 + 降级到静态图 |
-| D6-7 | v5_pipeline.py + video_concat.py（拼音频 + BGM + 字幕 + 段间连贯性校验 + 音视频对齐）|
-| D8 | 端到端跑 sample novel + 写单测 + 端到端 CLI |
+### 8.0 依赖图（关键：PuLID 只 D3 需要）
 
-### 8.1 D3 验证产物（实测数据采集）
+```
+D0.1 装 WanVideoWrapper ✅ done
+D0.2 装 PuLID_ComfyUI  ✅ done
+D0.3 验证 Wan 模型路径  ✅ done
+D0.4 修 workflow JSON（已修）✅ done
+D0.5 重排序依赖       ✅ done
+    ↓
+D0.6 下 PuLID 权重 + AntelopeV2（~1.8GB，10-30 分钟，用户可后台跑）
+    ↓
+D1   novel_splitter + Pydantic schema（不依赖 D0.6）
+D2   Wan 2.2 i2v workflow（依赖 D0.1）—— 调通 + 试跑单段
+D3   keyframe_gen_xl workflow（依赖 D0.2 + D0.6）—— 调通 + 试跑单段
+D4-5 wan_pipeline.py：HTTP API + 重试 + 降级（依赖 D2 + 复用 I-2）
+D6-7 v5_pipeline.py + video_concat.py（拼 + BGM + 字幕 + 段间 LPIPS + 音视频对齐）
+D8   端到端跑 sample novel + 写单测 + 端到端 CLI
+```
 
-D3 末尾必须留出实测数据，让预估变成事实：
+### 8.1 时间表
+
+| 天 | 内容 | 依赖 |
+|---|---|---|
+| D0.6 | 下 PuLID 权重 + AntelopeV2（~1.8GB，可后台）| — |
+| D1 | L1: novel_splitter + Pydantic schema | 不依赖 PuLID 权重 |
+| D2 | Wan 2.2 ComfyUI workflow 调通 + 试跑单段 | D0.1 |
+| D3 | keyframe_gen_xl workflow 调通 + 试跑单段 | D0.2 + D0.6 |
+| D4-5 | wan_pipeline.py：HTTP API + 重试 + 降级 | D2 + I-2 容错 |
+| D6-7 | v5_pipeline.py + video_concat.py（拼 + 段间 LPIPS + 音视频对齐）| D4-5 |
+| D8 | 端到端跑 sample novel + 单测 + CLI | D7 |
+
+### 8.2 D2 / D3 验证产物（实测数据采集）
+
+D2 和 D3 末尾必须留出实测数据，让预估变成事实：
 
 ```markdown
-## D3 实测记录（实际填入）
+## D2 实测记录（Wan 2.2 workflow）
 
 | 项 | 预估 | 实测 | 差异 |
 |---|---|---|---|
-| 首末帧静态图（DreamShaper XL） | ~5s/张 | ___s | ___ |
 | Wan 2.2 i2v 单段（4 步 LoRA） | 30-60s | ___s | ___ |
 | Wan 2.2 i2v 单段（25 步无 LoRA） | 5-10min | ___min | ___ |
 | 单段显存峰值 | ~12GB | ___GB | ___ |
-| keyframe_gen_xl PuLID 显存 | ~8GB | ___GB | ___ |
+| 首尾帧锚定有效性（LPIPS）| < 0.3 | ___ | ___ |
+
+## D3 实测记录（PuLID keyframe workflow）
+
+| 项 | 预估 | 实测 | 差异 |
+|---|---|---|---|
+| DreamShaper XL 单张 540x960 | ~5s | ___s | ___ |
+| PuLID fidelity 0.85 显存 | ~8GB | ___GB | ___ |
+| 角色一致度（同 prompt 复现脸）| ≥ 0.55 face_sim | ___ | ___ |
 | 端到端 8 段小说耗时 | ~10min | ___min | ___ |
 ```
 
 **产物文件**：
-- `data/test/wan22_test_clip_001.mp4`（单段成功）
-- `data/test/wan22_test_keyframe_001.png`（首帧示例）
+- `data/test/wan22_test_clip_001.mp4`（D2 成功）
+- `data/test/keyframe_test_001.png`（D3 成功）
 
 **实测数据让预估变成事实**，D4-D8 的容量规划基于实际数据调整。
 
