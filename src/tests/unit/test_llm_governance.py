@@ -305,3 +305,70 @@ class TestAsyncChatCompletion:
             assert logs[1].completion_tokens == 0
             assert logs[1].cost_usd == 0.0
             assert logs[1].latency_ms == 0
+
+
+# ---------------------------------------------------------------------------
+# normalize_json_content — reasoning model <think> 块剥离
+# ---------------------------------------------------------------------------
+
+
+class TestNormalizeJsonContent:
+    """修复 DeepSeek-R1 / MiniMax-M2 / QwQ 等 reasoning model 的 <think>...</think> 块。"""
+
+    def _provider(self):
+        from src.shared.llm_providers.base import BaseLLMProvider
+
+        class _P(BaseLLMProvider):
+            def chat_completion(self, messages, temperature=0.7, json_mode=False):
+                return None
+
+        return _P()
+
+    def test_basic_json_passes(self):
+        r = self._provider().normalize_json_content('{"a": 1}')
+        assert r == '{"a": 1}'
+
+    def test_markdown_json_stripped(self):
+        r = self._provider().normalize_json_content("```json\n{\"a\": 1}\n```")
+        assert r == '{"a": 1}'
+
+    def test_think_block_stripped(self):
+        """核心修复: DeepSeek-R1 / MiniMax-M2 输出 <think>...</think> 思考块。"""
+        r = self._provider().normalize_json_content('<think>thinking</think>\n\n{"a": 1}')
+        assert r == '{"a": 1}', f"got {r!r}"
+
+    def test_think_block_multiline(self):
+        r = self._provider().normalize_json_content(
+            "<think>\nmultiple\nlines\nof thinking\n</think>\n\n[1, 2, 3]"
+        )
+        assert r == "[1, 2, 3]"
+
+    def test_deepseek_style_think_marker(self):
+        """<|begin▁of▁think|>...<|end▁of▁think|> (DeepSeek-R1 风格)"""
+        r = self._provider().normalize_json_content(
+            '<|begin▁of▁think|>t<|end▁of▁think|>{"a": 1}'
+        )
+        assert r == '{"a": 1}'
+
+    def test_think_then_markdown(self):
+        r = self._provider().normalize_json_content(
+            '<think>t</think>\n```json\n{"a": 1}\n```'
+        )
+        assert r == '{"a": 1}'
+
+    def test_no_json_returns_none(self):
+        assert self._provider().normalize_json_content("just text") is None
+
+    def test_empty_returns_none(self):
+        assert self._provider().normalize_json_content("") is None
+
+    def test_invalid_json_returns_none(self):
+        """无效 JSON（剥了 think 之后仍非 JSON）应返回 None。"""
+        assert self._provider().normalize_json_content("<think>t</think>not json") is None
+
+    def test_partial_extraction_fallback(self):
+        """多段文字中嵌入 JSON 时,提取第一个 {} 块。"""
+        r = self._provider().normalize_json_content(
+            '<think>t</think>some text before {"a": 1} some text after'
+        )
+        assert r == '{"a": 1}'
