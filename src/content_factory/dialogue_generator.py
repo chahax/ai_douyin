@@ -124,7 +124,9 @@ class DialogueGenerator:
         ]
 
         logger.info(f"Generating dialogue for topic: {wisdom_data.get('title', 'unknown')}")
-        response_text = llm_client.chat_completion(messages, temperature=0.8, json_mode=True)
+        response_text = llm_client.chat_completion_tracked(
+            messages, caller="dialogue_gen", temperature=0.8, json_mode=True,
+        )
 
         if not response_text:
             logger.error("LLM returned empty response for dialogue generation")

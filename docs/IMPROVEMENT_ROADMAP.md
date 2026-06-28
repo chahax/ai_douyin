@@ -307,6 +307,7 @@ ruff check --select F401 --fix src/
 | 2026-06-28 | **Phase 0 完成 (H-1/H-2/H-3)** | `git rm -r src/platform-adapter/`（10s）+ ruff 清 60 处 F401（1 分钟）+ 3 处关键 `pass` → `logger.debug`（10 分钟）|
 | 2026-06-28 | **I-2 ComfyUI 容错完成** | 4 异常类（OOM/Workflow/Timeout/UNAVAILABLE）+ 3 次重试阶梯 + OOM 关键字检测 + GPU 显存探测 + alembic 0006 + comfy_task_failures 表 + Streamlit 失败 tab + 28 单测 + 端到端 V4 OOM 模拟成功降级（46.9s 出片，失败记录入库）|
 | 2026-06-28 | **I-4 LLM 成本与限流完成** | token 计量（tiktoken）+ 成本估算（PRICE_TABLE）+ aiolimiter 10 QPS + diskcache 24h TTL + alembic 0007 + llm_usage_logs 表 + Streamlit "LLM 用量" 页 + 27 单测 + 端到端 50 QPS 突发验证（4.0s 完成，40 个等令牌）+ cache 命中实测（210x 加速）|
+| 2026-06-28 | **I-4 真正生效** | 11 个 LLM 调用点（agent / error_reviewer / registry / dialogue_gen / scene_plan / script_gen / wisdom_extractor × 2 / background_plan / fanqie_promo / presenter_pipeline）全部从 `chat_completion()` 切到 `chat_completion_tracked()`（同步包装，内部走 async 限流/缓存/计量/记录路径）。新增 caller tag：`agent_chat` / `script_gen` / `scene_plan` / `dialogue_gen` / `wisdom_extractor` / `wisdom_extractor_rag` / `background_plan` / `fanqie_promo` / `error_reviewer` / `skill_registry`。实测：script_generator 一次调用 → 1 条 llm_usage_logs 入库（caller=script_gen, 2626+772 tokens, $0.0034, 36.9s）。test_error_reviewer mock 同步迁移到 chat_completion_tracked。|
 
 ---
 

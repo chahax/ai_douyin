@@ -450,7 +450,9 @@ class FanqiePromotionService:
             {"role": "system", "content": "你是小说推文短视频编导，只输出JSON。"},
             {"role": "user", "content": prompt},
         ]
-        response = llm_client.chat_completion(messages, temperature=0.55, json_mode=True)
+        response = llm_client.chat_completion_tracked(
+            messages, caller="fanqie_promo", temperature=0.55, json_mode=True,
+        )
         if response:
             cleaned = response.replace("```json", "").replace("```", "").strip()
             try:

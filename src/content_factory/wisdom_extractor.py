@@ -41,7 +41,9 @@ class WisdomExtractor:
         ]
         
         logger.info("Sending chunk to LLM for extraction...")
-        response_text = llm_client.chat_completion(messages, temperature=0.7, json_mode=True)
+        response_text = llm_client.chat_completion_tracked(
+            messages, caller="wisdom_extractor", temperature=0.7, json_mode=True,
+        )
         
         if not response_text:
             return None

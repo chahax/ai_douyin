@@ -555,7 +555,7 @@ def _investigate_problems(limit: int = 20, **kwargs) -> dict:
         )
 
         try:
-            response = llm_client.chat_completion(
+            response = llm_client.chat_completion_tracked(
                 [
                     {"role": "system", "content": "你是 AI 助手，擅长排查技术问题。"},
                     {"role": "user", "content": prompt},

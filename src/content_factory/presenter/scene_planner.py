@@ -61,7 +61,9 @@ class ScenePlanner:
             {"role": "user", "content": prompt},
         ]
         try:
-            response = llm_client.chat_completion(messages, temperature=0.2, json_mode=True)
+            response = llm_client.chat_completion_tracked(
+                messages, caller="scene_plan", temperature=0.2, json_mode=True,
+            )
             if not response:
                 return fallback
             cleaned = response.replace("```json", "").replace("```", "").strip()
