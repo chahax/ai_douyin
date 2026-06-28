@@ -964,6 +964,94 @@ def page_memory():
         st.info("还没有情感数据。让 LLM 分类跑一会儿再来看看。")
 
 
+# ── LLM 用量页面 (I-4) ─────────────────────────────────────────
+def page_llm_usage():
+    """I-4 LLM 成本与限流治理：用量 / 成本 / 缓存命中率 / QPS。"""
+    from src.shared.database import SessionLocal
+    from src.shared.llm_usage_log_model import LlmUsageLog
+    from sqlalchemy import func, desc
+
+    st.title("📊 LLM 用量")
+    st.caption("I-4 LLM 成本与限流治理：每次 LLM 调用 1 条记录。")
+
+    with SessionLocal() as sess:
+        # 顶部 KPI
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            total_calls = sess.query(func.count(LlmUsageLog.id)).scalar() or 0
+            st.metric("总调用次数", f"{total_calls:,}")
+        with col2:
+            total_tokens = sess.query(
+                func.coalesce(func.sum(LlmUsageLog.prompt_tokens), 0)
+                + func.coalesce(func.sum(LlmUsageLog.completion_tokens), 0)
+            ).scalar() or 0
+            st.metric("总 token", f"{total_tokens:,}")
+        with col3:
+            total_cost = sess.query(func.coalesce(func.sum(LlmUsageLog.cost_usd), 0.0)).scalar() or 0.0
+            st.metric("总成本 (USD)", f"${total_cost:.4f}")
+        with col4:
+            cache_hits = sess.query(func.count(LlmUsageLog.id)).filter(
+                LlmUsageLog.cache_hit == True  # noqa: E712
+            ).scalar() or 0
+            hit_rate = (cache_hits / total_calls * 100) if total_calls else 0.0
+            st.metric("缓存命中率", f"{hit_rate:.1f}%")
+
+        st.divider()
+
+        # 按 caller 聚合
+        st.subheader("按调用方统计")
+        rows = sess.query(
+            LlmUsageLog.caller,
+            func.count(LlmUsageLog.id).label("calls"),
+            func.coalesce(func.sum(LlmUsageLog.prompt_tokens), 0).label("in_tok"),
+            func.coalesce(func.sum(LlmUsageLog.completion_tokens), 0).label("out_tok"),
+            func.coalesce(func.sum(LlmUsageLog.cost_usd), 0.0).label("cost"),
+            func.coalesce(func.sum(LlmUsageLog.latency_ms), 0).label("latency_total"),
+            func.coalesce(func.sum(func.cast(LlmUsageLog.cache_hit, Integer)), 0).label("hits"),
+        ).group_by(LlmUsageLog.caller).order_by(desc("calls")).all()
+
+        if rows:
+            st.dataframe(
+                {
+                    "调用方": [r.caller or "(unknown)" for r in rows],
+                    "调用次数": [r.calls for r in rows],
+                    "输入 token": [int(r.in_tok) for r in rows],
+                    "输出 token": [int(r.out_tok) for r in rows],
+                    "成本 (USD)": [f"${float(r.cost):.4f}" for r in rows],
+                    "平均延迟 (ms)": [
+                        int(r.latency_total // r.calls) if r.calls else 0
+                        for r in rows
+                    ],
+                    "缓存命中": [int(r.hits) for r in rows],
+                },
+                use_container_width=True,
+            )
+        else:
+            st.info("暂无 LLM 用量记录")
+
+        st.divider()
+
+        # 最近 N 条
+        st.subheader("最近 20 条调用")
+        recent = sess.query(LlmUsageLog).order_by(LlmUsageLog.id.desc()).limit(20).all()
+        if recent:
+            st.dataframe(
+                {
+                    "id": [r.id for r in recent],
+                    "时间": [r.created_at.strftime("%m-%d %H:%M:%S") if r.created_at else "-" for r in recent],
+                    "模型": [r.model for r in recent],
+                    "调用方": [r.caller for r in recent],
+                    "输入": [r.prompt_tokens or 0 for r in recent],
+                    "输出": [r.completion_tokens or 0 for r in recent],
+                    "成本": [f"${r.cost_usd:.4f}" if r.cost_usd else "-" for r in recent],
+                    "延迟": [f"{r.latency_ms}ms" if r.latency_ms else "-" for r in recent],
+                    "缓存": ["✓" if r.cache_hit else "" for r in recent],
+                    "限流": ["✓" if r.rate_limited else "" for r in recent],
+                },
+                use_container_width=True,
+            )
+
+
 # ── AI 助手聊天页面 ─────────────────────────────────────────
 def page_chat():
     st.title("🤖 AI 助手")
@@ -1062,6 +1150,8 @@ if has_permission(role, "viewer"):
     pages.append(st.Page(page_chat, title="AI 助手", icon="🤖"))
 if has_permission(role, "viewer"):
     pages.append(st.Page(page_memory, title="我的记忆", icon="🧠"))
+if has_permission(role, "viewer"):
+    pages.append(st.Page(page_llm_usage, title="LLM 用量", icon="📊"))
 if has_permission(role, "editor"):
     pages.append(st.Page(page_scheduler, title="任务调度", icon="📋"))
 if has_permission(role, "viewer"):

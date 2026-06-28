@@ -1,3 +1,6 @@
+import time
+from typing import List, Optional
+
 from src.shared.config import settings
 from src.shared.llm_providers import MockProvider, OllamaProvider, OpenAICompatibleProvider
 from src.shared.logger import logger
@@ -61,15 +64,104 @@ class LLMClient:
             return settings.LLM_MODEL.strip()
         return (settings.OLLAMA_MODEL or "").strip()
 
+    @property
+    def model_name(self) -> str:
+        """供 I-4 用的当前 model 名。"""
+        if hasattr(self.provider, "model"):
+            return self.provider.model
+        if self.provider_name == "ollama":
+            return self._resolve_ollama_model()
+        return settings.LLM_MODEL or ""
+
     def chat_completion(self, messages, temperature=0.7, json_mode=False):
         """
-        Executes a chat completion request.
-        :param messages: List of message dicts [{"role": "user", "content": "..."}]
-        :param temperature: Creativity parameter
-        :param json_mode: Whether to force JSON output (if supported)
-        :return: Response content string
+        同步入口（向后兼容）。Agent 高频调用走这里，不限流 + 不缓存。
+        I-4 新增的治理（限流 / 缓存 / 计量 / 记录）走 async chat_completion_async。
         """
         return self.provider.chat_completion(messages, temperature=temperature, json_mode=json_mode)
 
+    async def chat_completion_async(
+        self,
+        messages: List[dict],
+        caller: str = "unknown",
+        temperature: float = 0.7,
+        json_mode: bool = False,
+        use_cache: bool = True,
+    ) -> Optional[str]:
+        """
+        I-4 异步入口：限流 + 缓存 + 计量 + 记录一站式。
+
+        Args:
+            messages: OpenAI 风格 [{"role": ..., "content": ...}]
+            caller: 调用方标识（用于计量统计 + 限流豁免判断）
+            temperature / json_mode: 透传给 provider
+            use_cache: 是否读 / 写缓存（CLI 调试时可关闭）
+
+        Returns:
+            LLM 响应字符串，或 None（失败 / 缓存命中也会返回）
+        """
+        # 懒导入避免循环依赖
+        from src.shared.token_counter import count_tokens, estimate_cost
+        from src.shared.llm_usage_log_model import record_usage
+        from src.shared.rate_limiter import acquire as rate_acquire, is_exempt
+        from src.shared.llm_cache import make_key, get_cached, set_cached, is_enabled as cache_enabled
+
+        model = self.model_name
+
+        # 1. 缓存查询
+        if use_cache and cache_enabled():
+            key = make_key(model, messages, temperature, json_mode)
+            cached = get_cached(key)
+            if cached is not None:
+                # 缓存命中：只记 1 条 usage（cost=0, latency=0, cache_hit=True）
+                record_usage(
+                    model=model,
+                    prompt_tokens=0,
+                    completion_tokens=0,
+                    cost_usd=0.0,
+                    latency_ms=0,
+                    caller=caller,
+                    cache_hit=True,
+                )
+                logger.debug(f"[LLM cache hit] caller={caller} key={key[:12]}...")
+                return cached
+
+        # 2. 限流（exempt 跳过）
+        await rate_acquire(caller)
+
+        # 3. 实际调用 + 计时
+        t0 = time.time()
+        result = self.provider.chat_completion(messages, temperature=temperature, json_mode=json_mode)
+        latency_ms = int((time.time() - t0) * 1000)
+
+        # 4. 计量 + 记录
+        if result is not None and isinstance(result, str):
+            prompt_text = "".join(
+                str(m.get("content", "")) for m in messages if isinstance(m, dict)
+            )
+            prompt_tokens = count_tokens(model, prompt_text)
+            completion_tokens = count_tokens(model, result)
+            cost = estimate_cost(model, prompt_tokens, completion_tokens)
+        else:
+            prompt_tokens = completion_tokens = 0
+            cost = 0.0
+
+        record_usage(
+            model=model,
+            prompt_tokens=prompt_tokens,
+            completion_tokens=completion_tokens,
+            cost_usd=cost,
+            latency_ms=latency_ms,
+            caller=caller,
+        )
+
+        # 5. 缓存结果
+        if use_cache and cache_enabled() and result is not None and isinstance(result, str):
+            key = make_key(model, messages, temperature, json_mode)
+            set_cached(key, result)
+
+        return result
+
 
 llm_client = LLMClient()
+
