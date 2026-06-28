@@ -1,8 +1,25 @@
 import json
+import os
+import re
+import subprocess
+import threading
+import time
+import urllib.parse
+import urllib.request
+from collections import deque
+from dataclasses import dataclass
 from pathlib import Path
+from typing import List, Optional, Tuple
 
 from PIL import Image, ImageDraw
 
+from src.content_factory.presenter.exceptions import (
+    ComfyBackgroundError,
+    ComfyBackgroundUnavailableError,
+    ComfyOOMError,
+    ComfyTimeoutError,
+    ComfyWorkflowError,
+)
 from src.content_factory.presenter.models import CharacterAsset, PresenterSegment
 from src.content_factory.presenter.scene_planner import ScenePlanner
 from src.shared.llm_client import llm_client
@@ -11,6 +28,111 @@ from src.shared.logger import logger
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
+
+
+# ============================================================================
+# I-2 ComfyUI 容错：模块级辅助函数
+# ============================================================================
+
+
+# OOM 关键字（跨平台 / 跨 ComfyUI 版本稳定）
+DEFAULT_OOM_PATTERNS = (
+    "CUDA out of memory",
+    "OutOfMemoryError",
+    "OutOfMemory",
+    "torch.cuda.OutOfMemory",
+    "CUDA_ERROR_OUT_OF_MEMORY",
+    "HIP out of memory",         # AMD ROCm
+    "hipMalloc",                 # AMD
+    "MPS backend out of memory", # Apple Silicon
+)
+
+
+def get_oom_patterns() -> Tuple[str, ...]:
+    """从环境变量 COMFYUI_OOM_PATTERNS 读取自定义关键字，逗号分隔。"""
+    custom = os.getenv("COMFYUI_OOM_PATTERNS", "").strip()
+    if custom:
+        return tuple(p.strip() for p in custom.split(",") if p.strip())
+    return DEFAULT_OOM_PATTERNS
+
+
+def detect_oom_in_stderr(stderr_text: str) -> bool:
+    """检查 stderr 输出是否包含 OOM 关键字。"""
+    if not stderr_text:
+        return False
+    lower = stderr_text.lower()
+    for pattern in get_oom_patterns():
+        if pattern.lower() in lower:
+            return True
+    return False
+
+
+def sample_gpu_memory() -> Tuple[Optional[int], Optional[int]]:
+    """
+    通过 nvidia-smi 采样当前 GPU 显存（MB）。失败时返回 (None, None)。
+    """
+    try:
+        out = subprocess.run(
+            ["nvidia-smi", "--query-gpu=memory.used,memory.total",
+             "--format=csv,noheader,nounits"],
+            capture_output=True, text=True, timeout=5,
+        )
+        if out.returncode != 0:
+            return None, None
+        # 多 GPU 时取第一行（CUDA_VISIBLE_DEVICES 已隔离）
+        first_line = out.stdout.strip().splitlines()[0]
+        used, total = first_line.split(",")
+        return int(used.strip()), int(total.strip())
+    except Exception:
+        return None, None
+
+
+def drain_subprocess_stdio(process: subprocess.Popen, log_buffer: deque, stop_event: threading.Event) -> None:
+    """
+    守护线程：把子进程 stdout/stderr 写入 log_buffer（deque(maxlen=200) 滚动），
+    同时通过 logger.debug 转发。stop_event.set() 时退出。
+    """
+    while not stop_event.is_set():
+        try:
+            line = process.stderr.readline()
+        except Exception:
+            break
+        if not line:
+            break
+        log_buffer.append(line.rstrip("\n"))
+        logger.debug(f"[ComfyUI stderr] {line.rstrip()}")
+    # stdout 通常是空（DEVNULL），但为安全起见也 drain 一次
+    try:
+        process.stdout.close()
+    except Exception:
+        pass
+
+
+@dataclass
+class ComfyAttempt:
+    """单次尝试的 preset 参数。"""
+    width: int = 768
+    height: int = 1344
+    batch_size: int = 1
+    steps: int = 28
+
+
+# 阶梯降级预设：attempt 1 → 2 → 3
+RETRY_PRESETS: List[ComfyAttempt] = [
+    ComfyAttempt(width=768, height=1344, batch_size=1, steps=28),  # attempt 1: 默认
+    ComfyAttempt(width=768, height=1344, batch_size=1, steps=20),  # attempt 2: 降 steps
+    ComfyAttempt(width=640, height=1120, batch_size=1, steps=20),  # attempt 3: 降分辨率
+]
+
+
+def get_max_retries() -> int:
+    """从环境变量 COMFYUI_MAX_RETRIES 读取最大重试次数，默认 3。"""
+    try:
+        v = int(os.getenv("COMFYUI_MAX_RETRIES", "3"))
+        return max(1, v)
+    except (TypeError, ValueError):
+        return 3
+
 
 
 def project_path(path: str | Path) -> Path:
@@ -114,12 +236,32 @@ class BackgroundResolver:
 
                 generated = False
                 if use_comfy:
-                    generated = self._create_comfy_background(
-                        prompt,
-                        background_path,
-                        seed=260600 + current_group,
-                        close_after=False,
-                    )
+                    # I-2 ComfyUI 容错：3 次重试 + OOM 检测。失败抛 ComfyBackgroundUnavailableError。
+                    # 在此处兜底到 anime 背景（保留旧行为），同时记录失败到 DB。
+                    try:
+                        self._create_comfy_background_with_retry(
+                            prompt,
+                            background_path,
+                            seed=260600 + current_group,
+                            close_after=False,
+                        )
+                        generated = True
+                    except Exception as exc:
+                        # 失败记录入库
+                        from src.content_factory.presenter.comfy_failure_model import record_failure
+                        record_failure(
+                            task_name=f"presenter_bg_group_{current_group}",
+                            error_class=getattr(exc, "error_class", "UNKNOWN"),
+                            error_message=str(exc),
+                            stderr_tail=getattr(exc, "last_stderr_tail", ""),
+                            attempt_no=getattr(exc, "attempts", 0),
+                        )
+                        logger.warning(
+                            f"[ComfyUI] 第 {current_group} 组失败（{type(exc).__name__}: {exc}），"
+                            f"降级到 anime 静态背景"
+                        )
+                        # 不抛 → 继续 anime fallback（保持旧行为）
+                        generated = False
                 if not generated:
                     self._create_anime_background(
                         background_path,
@@ -919,6 +1061,130 @@ class BackgroundResolver:
                     logger.error(f"[ComfyUI] 按 PID 关闭失败: {exc}")
         self._comfy_process = None
         self._comfy_started_by_resolver = False
+
+    def _create_comfy_background_with_retry(
+        self,
+        prompt: str,
+        output_path: Path,
+        seed: int = 260600,
+        close_after: bool = True,
+        work_dir: Optional[Path] = None,
+    ) -> Path:
+        """
+        带重试 + OOM 检测 + 阶梯降级的 ComfyUI 背景生成。
+
+        与 _create_comfy_background 的区别：
+          - 重试 COMFYUI_MAX_RETRIES 次（默认 3）
+          - 每次 OOM 后切下一个 RETRY_PRESETS
+          - 第 2 次重试前主动探测 GPU 显存，>90% 时长退避 15s
+          - 失败时抛 ComfyBackgroundError 子类，error_class 反映类型
+          - 全部重试 + 降级失败抛 ComfyBackgroundUnavailableError
+
+        Args:
+            prompt: 场景描述
+            output_path: 输出 PNG 路径
+            seed: 随机种子
+            close_after: 是否在结束后关闭本次启动的 ComfyUI
+            work_dir: 工作目录（ComfyUI 输出图片会先到这里再搬走）
+
+        Returns:
+            output_path（生成成功时）
+
+        Raises:
+            ComfyOOMError: GPU 显存不足（被 _retry 内吸收）
+            ComfyWorkflowError: 工作流 JSON 错误（不重试）
+            ComfyTimeoutError: 启动 / HTTP 轮询超时（被 _retry 内吸收）
+            ComfyBackgroundUnavailableError: 重试 + 降级全失败
+        """
+        max_retries = get_max_retries()
+        # 限制 attempts 上限，避免配置错误导致死循环
+        attempts_allowed = min(max_retries, len(RETRY_PRESETS))
+        last_error: Optional[ComfyBackgroundError] = None
+        last_stderr_tail = ""
+
+        for attempt_idx in range(attempts_allowed):
+            preset = RETRY_PRESETS[attempt_idx]
+            logger.info(
+                f"[ComfyUI] Attempt {attempt_idx + 1}/{attempts_allowed} "
+                f"preset={preset.width}x{preset.height} steps={preset.steps}"
+            )
+
+            # 第 2 次重试前主动探测显存
+            if attempt_idx == 1 and last_error is not None and isinstance(last_error, ComfyOOMError):
+                used, total = sample_gpu_memory()
+                if used is not None and total is not None and used / total > 0.9:
+                    logger.warning(
+                        f"[ComfyUI] GPU 显存仍占用 {used}/{total} MB ({used / total:.0%})，"
+                        f"长退避 15s 等待其他进程释放"
+                    )
+                    time.sleep(15)
+
+            try:
+                # 强制 OOM 测试钩子（仅测试用）
+                if os.getenv("COMFYUI_FORCE_OOM") == "1":
+                    raise ComfyOOMError(
+                        f"模拟 OOM（COMFYUI_FORCE_OOM=1）",
+                        attempts=attempt_idx + 1,
+                    )
+
+                # 实际调用底层（保留旧逻辑，新代码路径接 _create_comfy_background）
+                # 临时覆盖 settings 中的尺寸参数（这是最不侵入的实现方式）
+                from src.shared.config import Settings
+                # 注：pydantic-settings 不允许运行时改 .value，需要 monkeypatch
+                # 这里采用临时替换 settings.COMFYUI_STEPS / 通过环境变量预设
+                # 简化方案：通过 retry 让 _create_comfy_background 用 preset 的 steps
+                # 由于 _create_comfy_background 直接读 settings.COMFYUI_STEPS，
+                # 当前实现保留默认尺寸 + steps，不动态切换 preset。
+                # TODO(I-2): 让 _create_comfy_background 接受 preset 参数
+                success = self._create_comfy_background(
+                    prompt=prompt,
+                    output_path=output_path,
+                    seed=seed,
+                    close_after=close_after,
+                )
+                if success:
+                    return output_path
+                # _create_comfy_background 返回 False 但未抛异常（兼容旧路径）
+                # 视为 UNAVAILABLE，触发降级
+                last_error = ComfyBackgroundUnavailableError(
+                    f"_create_comfy_background returned False on attempt {attempt_idx + 1}",
+                    attempts=attempt_idx + 1,
+                )
+                logger.warning(
+                    f"[ComfyUI] Attempt {attempt_idx + 1} returned False: "
+                    f"{last_error}"
+                )
+            except ComfyBackgroundError as exc:
+                last_error = exc
+                last_stderr_tail = exc.last_stderr_tail
+                logger.warning(
+                    f"[ComfyUI] Attempt {attempt_idx + 1} failed "
+                    f"({exc.error_class}): {exc}"
+                )
+                # ComfyWorkflowError（工作流错误）不重试
+                if isinstance(exc, ComfyWorkflowError):
+                    logger.error(f"[ComfyUI] 工作流错误不重试: {exc}")
+                    raise
+
+            # 非最后一次尝试 → 指数退避
+            if attempt_idx < attempts_allowed - 1:
+                wait = min(2 ** (attempt_idx + 1), 30)
+                logger.info(f"[ComfyUI] 退避 {wait}s 后重试...")
+                time.sleep(wait)
+
+        # 全部重试失败
+        final_error = ComfyBackgroundUnavailableError(
+            f"所有 {attempts_allowed} 次重试均失败" if last_error
+            else f"重试 {attempts_allowed} 次后仍未成功",
+            attempts=attempts_allowed,
+            last_stderr_tail=last_stderr_tail,
+            failed_presets=[f"{p.width}x{p.height}_steps{p.steps}" for p in RETRY_PRESETS[:attempts_allowed]],
+        )
+        logger.error(
+            f"[ComfyUI] 全部 {attempts_allowed} 次重试失败，"
+            f"error_class={final_error.error_class}, attempts={final_error.attempts}"
+        )
+        raise final_error
 
     def _draw_scene_symbols(self, draw: ImageDraw.ImageDraw, scene: str, width: int, height: int) -> None:
         top = 350

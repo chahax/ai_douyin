@@ -50,6 +50,8 @@ class PresenterRequest:
     audio_path: str = ""
     max_segments: int = 16
     use_comfy_background: bool = True
+    # I-2 ComfyUI 容错：True 时 ComfyUI 不可用直接中止 pipeline；False 时用 None 背景继续（默认）
+    strict_background: bool = False
 
 
 @dataclass
@@ -65,3 +67,5 @@ class PresenterResult:
     video_path: str = ""
     work_dir: str = ""
     segments: list[PresenterSegment] = field(default_factory=list)
+    # I-2 ComfyUI 容错：error_class 反映 pipeline 状态（"" / "OOM" / "WORKFLOW" / "TIMEOUT" / "UNAVAILABLE"）
+    error_class: str = ""
