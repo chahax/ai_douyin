@@ -23,7 +23,7 @@ from src.shared.database import SessionLocal
 def page_scheduler():
     st.title("📋 任务调度")
 
-    tab_names = ["仪表板", "定时任务", "任务队列", "执行记录", "错误诊断"]
+    tab_names = ["仪表板", "定时任务", "任务队列", "执行记录", "错误诊断", "ComfyUI 失败"]
     tabs = st.tabs(tab_names)
 
     with tabs[0]:
@@ -36,6 +36,8 @@ def page_scheduler():
         _render_execution_history()
     with tabs[4]:
         _render_error_dashboard()
+    with tabs[5]:
+        _render_compyui_failures()
 
 
 # ── Phase 3: 错误诊断仪表板 ───────────────────────────────────
@@ -404,6 +406,62 @@ def _render_execution_history():
                 with cols[4]:
                     with st.expander("结果"):
                         st.json(e.result or {})
+
+
+def _render_compyui_failures():
+    """I-2 ComfyUI 容错：失败记录 tab。
+
+    显示 comfy_task_failures 表中最近 N 条失败，支持按 error_class 筛选。
+    如果有 UNAVAILABLE 类型会显示警示 banner。
+    """
+    st.subheader("ComfyUI 失败记录")
+    try:
+        from src.content_factory.presenter.comfy_failure_model import ComfyTaskFailure
+    except ImportError:
+        st.info("ComfyTaskFailure 模型未注册（请先跑 alembic upgrade head）")
+        return
+
+    col_filter, col_limit, _ = st.columns([2, 1, 3])
+    with col_filter:
+        class_filter = st.selectbox(
+            "错误类型",
+            ["全部", "OOM", "WORKFLOW", "TIMEOUT", "UNAVAILABLE", "UNKNOWN"],
+        )
+    with col_limit:
+        limit = st.selectbox("条数", [20, 50, 100], index=0)
+
+    with SessionLocal() as sess:
+        query = sess.query(ComfyTaskFailure)
+        if class_filter != "全部":
+            query = query.filter(ComfyTaskFailure.error_class == class_filter)
+        records = query.order_by(ComfyTaskFailure.created_at.desc()).limit(limit).all()
+
+        if not records:
+            st.info("暂无 ComfyUI 失败记录")
+            return
+
+        # UNAVAILABLE banner（多次失败时显示）
+        unavailable_count = sum(1 for r in records if r.error_class == "UNAVAILABLE")
+        if unavailable_count > 0:
+            st.error(
+                f"⚠️ 最近 {len(records)} 次中 {unavailable_count} 次 ComfyUI 不可用（UNAVAILABLE），"
+                f"建议检查 COMFYUI_HOST / 模型路径 / GPU 显存"
+            )
+
+        for r in records:
+            with st.expander(
+                f"[{r.created_at.strftime('%m-%d %H:%M') if r.created_at else '?'}] "
+                f"{r.error_class} · attempt {r.attempt_no} · {r.task_name or '?'}"
+            ):
+                st.write(f"**error_class**: {r.error_class}")
+                st.write(f"**attempts**: {r.attempt_no}")
+                st.write(f"**GPU 显存**: {r.gpu_mem_used_mb}/{r.gpu_mem_total_mb} MB")
+                st.write(f"**ComfyUI 参数**: {r.width}x{r.height} steps={r.steps} batch={r.batch_size}")
+                if r.error_message:
+                    st.code(r.error_message, language="text")
+                if r.stderr_tail:
+                    with st.expander("stderr 摘要"):
+                        st.code(r.stderr_tail[:2000], language="text")
 
 
 # ── 辅助函数 ────────────────────────────────────────────────

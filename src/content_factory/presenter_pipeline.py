@@ -12,6 +12,7 @@ from src.content_factory.presenter.models import (
     PresenterRequest,
     PresenterResult,
 )
+from src.content_factory.presenter.exceptions import ComfyBackgroundUnavailableError
 from src.content_factory.presenter.presenter_composer import PresenterComposer
 from src.content_factory.presenter.script_segmenter import ScriptSegmenter
 from src.content_factory.presenter.text_overlay import TextOverlayRenderer
@@ -65,15 +66,37 @@ class PresenterPipeline:
             else:
                 self._synthesize_segments(request, segments, audio_dir)
 
-            backgrounds = self.resolver.resolve_segment_backgrounds(
-                request.background,
-                work_dir,
-                segments,
-                style=request.background_style,
-                switch_seconds=5.0,
-                character=request.character,
-                use_comfy=request.use_comfy_background,
-            )
+            # I-2 ComfyUI 容错：异常捕获。strict_background=True 中止，False 走 None 背景继续
+            try:
+                backgrounds = self.resolver.resolve_segment_backgrounds(
+                    request.background,
+                    work_dir,
+                    segments,
+                    style=request.background_style,
+                    switch_seconds=5.0,
+                    character=request.character,
+                    use_comfy=request.use_comfy_background,
+                )
+            except ComfyBackgroundUnavailableError as exc:
+                # 失败记录入库（供 Streamlit 调度页查）
+                from src.content_factory.presenter.comfy_failure_model import record_failure
+                record_failure(
+                    task_name=f"presenter_bg_{stamp}",
+                    error_class=exc.error_class,
+                    error_message=str(exc),
+                    stderr_tail=exc.last_stderr_tail,
+                    attempt_no=exc.attempts,
+                )
+                if request.strict_background:
+                    return PresenterResult(
+                        False, f"ComfyUI 不可用且 strict_background=True（{exc.error_class}）",
+                        work_dir=str(work_dir), error_class=exc.error_class,
+                    )
+                logger.warning(
+                    f"ComfyUI 不可用（{exc.error_class}, {exc.attempts} 次尝试失败），"
+                    f"strict_background=False → 用 None 背景继续 pipeline"
+                )
+                backgrounds = [None] * len(segments)
 
             for idx, segment in enumerate(segments):
                 segment.background_path = backgrounds[idx]
@@ -154,15 +177,37 @@ class PresenterPipeline:
             else:
                 self._synthesize_segments(request, segments, audio_dir)
 
-            backgrounds = self.resolver.resolve_segment_backgrounds(
-                request.background,
-                work_dir,
-                segments,
-                style=request.background_style,
-                switch_seconds=5.0,
-                character=request.character,
-                use_comfy=request.use_comfy_background,
-            )
+            # I-2 ComfyUI 容错：异常捕获。strict_background=True 中止，False 走 None 背景继续
+            try:
+                backgrounds = self.resolver.resolve_segment_backgrounds(
+                    request.background,
+                    work_dir,
+                    segments,
+                    style=request.background_style,
+                    switch_seconds=5.0,
+                    character=request.character,
+                    use_comfy=request.use_comfy_background,
+                )
+            except ComfyBackgroundUnavailableError as exc:
+                # 失败记录入库（供 Streamlit 调度页查）
+                from src.content_factory.presenter.comfy_failure_model import record_failure
+                record_failure(
+                    task_name=f"presenter_bg_{stamp}",
+                    error_class=exc.error_class,
+                    error_message=str(exc),
+                    stderr_tail=exc.last_stderr_tail,
+                    attempt_no=exc.attempts,
+                )
+                if request.strict_background:
+                    return PresenterResult(
+                        False, f"ComfyUI 不可用且 strict_background=True（{exc.error_class}）",
+                        work_dir=str(work_dir), error_class=exc.error_class,
+                    )
+                logger.warning(
+                    f"ComfyUI 不可用（{exc.error_class}, {exc.attempts} 次尝试失败），"
+                    f"strict_background=False → 用 None 背景继续 pipeline"
+                )
+                backgrounds = [None] * len(segments)
             for idx, segment in enumerate(segments):
                 segment.background_path = backgrounds[idx]
                 if idx > 0 and segment.background_path == segments[idx - 1].background_path:
