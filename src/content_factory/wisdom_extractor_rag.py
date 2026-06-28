@@ -71,7 +71,9 @@ class WisdomExtractorRAG:
         ]
         
         logger.info(f"Sending RAG context ({len(chunks)} chunks) to LLM...")
-        response_text = llm_client.chat_completion(messages, temperature=0.7, json_mode=True)
+        response_text = llm_client.chat_completion_tracked(
+            messages, caller="wisdom_extractor_rag", temperature=0.7, json_mode=True,
+        )
         
         if not response_text:
             return None

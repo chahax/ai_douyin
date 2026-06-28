@@ -105,7 +105,7 @@ class ErrorReviewer:
                 traceback_snippet=traceback_snippet,
                 context_extra=json.dumps(ctx, ensure_ascii=False)[:500],
             )
-            resp = llm_client.chat_completion(
+            resp = llm_client.chat_completion_tracked(
                 [
                     {"role": "system", "content": "严格输出 JSON。"},
                     {"role": "user", "content": prompt},

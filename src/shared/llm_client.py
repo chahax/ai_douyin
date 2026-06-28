@@ -1,3 +1,4 @@
+import asyncio
 import time
 from typing import List, Optional
 
@@ -75,10 +76,58 @@ class LLMClient:
 
     def chat_completion(self, messages, temperature=0.7, json_mode=False):
         """
-        同步入口（向后兼容）。Agent 高频调用走这里，不限流 + 不缓存。
-        I-4 新增的治理（限流 / 缓存 / 计量 / 记录）走 async chat_completion_async。
+        [已废弃] 同步入口 — 不走 I-4 治理（无 token 计量 / 无缓存 / 无限流）。
+        新代码请用 chat_completion_tracked() 或 chat_completion_async()。
         """
         return self.provider.chat_completion(messages, temperature=temperature, json_mode=json_mode)
+
+    def chat_completion_tracked(
+        self,
+        messages,
+        caller: str = "unknown",
+        temperature: float = 0.7,
+        json_mode: bool = False,
+        use_cache: bool = True,
+    ) -> Optional[str]:
+        """
+        I-4 同步入口：从 sync 上下文调用，走 async 治理路径（限流 + 缓存 + 计量 + 记录）。
+
+        实现：用 asyncio.run() 启动临时 event loop 调用 chat_completion_async。
+        若已在 async 上下文中调用（已有 event loop），降级到直接 provider 调用并 logger.warning。
+
+        Args:
+            messages: OpenAI 风格 messages
+            caller: 调用方标识（用于限流豁免判断 + 计量统计）
+                推荐值: "agent_chat", "script_gen", "scene_plan", "tag",
+                        "wisdom_extractor", "dialogue_gen", "background_plan",
+                        "background_prompt", "error_reviewer", "skill_registry",
+                        "memory_classifier", "fanqie_promo", "auto_reply"
+            temperature / json_mode / use_cache: 透传给 async 路径
+        """
+        try:
+            asyncio.run(
+                self.chat_completion_async(
+                    messages,
+                    caller=caller,
+                    temperature=temperature,
+                    json_mode=json_mode,
+                    use_cache=use_cache,
+                )
+            )
+        except RuntimeError as exc:
+            # 已在 event loop 中（async 上下文嵌套）— 降级路径
+            if "asyncio.run()" in str(exc) or "loop" in str(exc).lower():
+                logger.warning(
+                    f"[LLM tracked fallback] caller={caller} 在已有 event loop 中调用，"
+                    f"降级为直接 provider 调用（不走限流/缓存/记录）"
+                )
+                return self.provider.chat_completion(
+                    messages, temperature=temperature, json_mode=json_mode
+                )
+            raise
+        except Exception as exc:
+            logger.error(f"[LLM tracked] caller={caller} 调用异常: {exc}")
+            return None
 
     async def chat_completion_async(
         self,

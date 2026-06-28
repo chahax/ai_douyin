@@ -90,7 +90,9 @@ class ScriptGenerator:
         ]
         
         logger.info(f"Generating script for wisdom: {wisdom_data.get('title')}")
-        response_text = llm_client.chat_completion(messages, temperature=0.65, json_mode=True)
+        response_text = llm_client.chat_completion_tracked(
+            messages, caller="script_gen", temperature=0.65, json_mode=True,
+        )
         
         if not response_text:
             return None

@@ -150,7 +150,7 @@ class TestBuildReview:
             }
         )
         with patch(
-            "src.agent.error_reviewer.llm_client.chat_completion",
+            "src.agent.error_reviewer.llm_client.chat_completion_tracked",
             return_value=good,
         ):
             data = self.r.build_review(
@@ -163,7 +163,7 @@ class TestBuildReview:
 
     def test_llm_returns_none_falls_back(self):
         with patch(
-            "src.agent.error_reviewer.llm_client.chat_completion",
+            "src.agent.error_reviewer.llm_client.chat_completion_tracked",
             return_value=None,
         ):
             data = self.r.build_review(
@@ -176,7 +176,7 @@ class TestBuildReview:
 
     def test_llm_raises_falls_back(self):
         with patch(
-            "src.agent.error_reviewer.llm_client.chat_completion",
+            "src.agent.error_reviewer.llm_client.chat_completion_tracked",
             side_effect=RuntimeError("provider down"),
         ):
             data = self.r.build_review(
@@ -199,7 +199,7 @@ class TestBuildReview:
             }
         )
         with patch(
-            "src.agent.error_reviewer.llm_client.chat_completion",
+            "src.agent.error_reviewer.llm_client.chat_completion_tracked",
             return_value=good,
         ):
             data1 = self.r.build_review(
@@ -207,7 +207,7 @@ class TestBuildReview:
             )
         # 第二次不调 LLM
         with patch(
-            "src.agent.error_reviewer.llm_client.chat_completion"
+            "src.agent.error_reviewer.llm_client.chat_completion_tracked"
         ) as mock_llm:
             data2 = self.r.build_review(
                 source="agent_chat", location="session:1", exc=ValueError("net")
@@ -246,7 +246,7 @@ class TestReviewAndStoreAsync:
             }
         )
         with patch(
-            "src.agent.error_reviewer.llm_client.chat_completion",
+            "src.agent.error_reviewer.llm_client.chat_completion_tracked",
             return_value=good,
         ):
             import asyncio
@@ -279,7 +279,7 @@ class TestReviewAndStoreAsync:
             }
         )
         with patch(
-            "src.agent.error_reviewer.llm_client.chat_completion",
+            "src.agent.error_reviewer.llm_client.chat_completion_tracked",
             return_value=good,
         ):
             import asyncio
@@ -317,7 +317,7 @@ class TestReviewAndStoreAsync:
             }
         )
         with patch(
-            "src.agent.error_reviewer.llm_client.chat_completion",
+            "src.agent.error_reviewer.llm_client.chat_completion_tracked",
             return_value=good,
         ):
             import asyncio

@@ -145,7 +145,7 @@ class Agent:
                     {"role": "user", "content": user_message},
                 ]
 
-                response_text = llm_client.chat_completion(
+                response_text = llm_client.chat_completion_tracked(
                     messages,
                     temperature=0.3,
                     json_mode=False,

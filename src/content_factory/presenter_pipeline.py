@@ -299,7 +299,9 @@ class PresenterPipeline:
             {"role": "system", "content": "你是短视频口播稿编辑。必须忠于原文核心观点，只输出JSON，不要输出Markdown。"},
             {"role": "user", "content": prompt},
         ]
-        response_text = llm_client.chat_completion(messages, temperature=0.45, json_mode=True)
+        response_text = llm_client.chat_completion_tracked(
+            messages, caller="script_gen", temperature=0.45, json_mode=True,
+        )
         if not response_text:
             raise RuntimeError("文章提炼失败：LLM 无返回")
 
