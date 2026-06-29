@@ -767,6 +767,172 @@ def page_books():
     st.caption("💡 修改源书籍目录后需编辑 .env 文件中的 SYNC_BOOKS_SOURCE_DIR，重启后生效")
 
 
+# ── 番茄批量抓取清单（Harness Engineering L5）────────────────
+def page_fanqie_batch_queue():
+    """展示 fanqie_batch_books 清单 + 状态 filter + 一键 Run。
+
+    DB 表（fanqie_batch_books）字段见 src/platform_adapter/fanqie_batch.py。
+    批量抓取不接受任意 book_names —— 必须先加书到 DB，再跑 Run。
+    """
+    st.title("📋 番茄批量抓取清单")
+    st.caption("Harness Engineering L5: 批量抓取必须先加书到清单（受控）")
+
+    # ── 顶部 metric ───────────────────────────────────────
+    from src.platform_adapter.fanqie_batch import list_books
+    from src.scheduler.models import FanqieBatchStatus
+
+    all_books = list_books(limit=500)
+    counts = {s.value: 0 for s in FanqieBatchStatus}
+    for b in all_books:
+        counts[b["status"]] = counts.get(b["status"], 0) + 1
+
+    col1, col2, col3, col4, col5 = st.columns(5)
+    col1.metric("总清单", len(all_books))
+    col2.metric("待抓 pending", counts.get("pending", 0))
+    col3.metric("抓取中 running", counts.get("running", 0))
+    col4.metric("完成 done", counts.get("done", 0))
+    col5.metric("失败 failed", counts.get("failed", 0))
+
+    st.divider()
+
+    # ── filter + 表格 ─────────────────────────────────────
+    status_filter = st.selectbox(
+        "状态过滤",
+        options=["all", "pending", "running", "done", "failed", "skipped"],
+        index=0,
+        help="默认 all；按状态过滤",
+    )
+    s = None if status_filter == "all" else status_filter
+    books = list_books(status=s, limit=500)
+
+    if not books:
+        st.info(f"清单为空（filter={status_filter}）")
+    else:
+        # 表格（转中文）
+        rows = []
+        for b in books:
+            status_icon = {
+                "pending": "🟡 待抓",
+                "running": "🔵 抓取中",
+                "done": "✅ 完成",
+                "failed": "❌ 失败",
+                "skipped": "⏭ 跳过",
+            }.get(b["status"], b["status"])
+            rows.append({
+                "ID": b["id"],
+                "状态": status_icon,
+                "书名": b["book_name"],
+                "book_id": b["book_id"] or "-",
+                "章数": f"{b['chapters_fetched']}/{b['chapters']}",
+                "耗时": f"{b['duration_ms']/1000:.1f}s" if b.get("duration_ms") else "-",
+                "重试": b.get("attempt_count", 0),
+                "付费墙": "是" if b.get("paywall_hit") else "-",
+                "加入时间": b["added_at"][:19] if b.get("added_at") else "-",
+                "最后抓": b["last_fetched_at"][:19] if b.get("last_fetched_at") else "-",
+                "备注": (b.get("note") or "")[:30],
+            })
+        st.dataframe(rows, use_container_width=True, hide_index=True)
+        st.caption(f"共 {len(books)} 条")
+
+    st.divider()
+
+    # ── 加书表单 ─────────────────────────────────────────
+    st.subheader("➕ 加书到清单")
+    with st.form("add_books_form", clear_on_submit=True):
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            book_names_raw = st.text_area(
+                "书名（每行一本，支持 # 注释）",
+                placeholder="我的6个超级奶爸\n被攻略的竟是我自己？\n# 全家恋爱脑（待评估）",
+                height=120,
+            )
+        with col2:
+            chapters = st.number_input("章数", min_value=1, max_value=50, value=5)
+            interval_s = st.number_input("间隔(s)", min_value=5, max_value=600, value=30)
+        note = st.text_input("备注", placeholder="可选")
+        submit = st.form_submit_button("加入清单")
+
+    if submit:
+        if not book_names_raw.strip():
+            st.error("请输入至少一个书名")
+        else:
+            from src.platform_adapter.fanqie_batch import add_books
+            # 解析：每行一本，跳过空行和 # 注释
+            names = []
+            for line in book_names_raw.splitlines():
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                names.append(line)
+            if not names:
+                st.error("没有有效书名（全部是空行或注释）")
+            else:
+                result = add_books(names, chapters=chapters, interval_s=interval_s, note=note)
+                st.success(
+                    f"✅ 加书完成: added={result['added']}, "
+                    f"skipped={result['skipped']}（已存在）"
+                )
+                st.rerun()
+
+    st.divider()
+
+    # ── 一键 Run ─────────────────────────────────────────
+    st.subheader("▶️ 跑批量抓取")
+    col1, col2 = st.columns(2)
+    with col1:
+        max_count = st.number_input("最多抓几本", min_value=1, max_value=100, value=5)
+    with col2:
+        run_interval = st.number_input("间隔(s)", min_value=5, max_value=600, value=30)
+
+    col1, col2 = st.columns(2)
+    with col1:
+        run_sync = st.button(
+            f"🚀 同步跑 {max_count} 本（阻塞）",
+            type="primary",
+            use_container_width=True,
+            help="从 DB pending 状态的书开始跑，失败不中断",
+        )
+    with col2:
+        run_enqueue = st.button(
+            "📤 入队到 TaskQueue（Worker 异步跑）",
+            use_container_width=True,
+            help="把 DB pending 状态的书入队，Worker 异步拉取",
+        )
+
+    if run_sync:
+        with st.spinner(f"正在跑最多 {max_count} 本（间隔 {run_interval}s）..."):
+            from src.platform_adapter.fanqie_batch import batch_fetch_sync, _summarize_report
+            report = batch_fetch_sync(interval_s=run_interval, max_count=max_count)
+            summary = _summarize_report(report)
+            st.success(
+                f"✅ 完成: {report.succeeded}/{report.total} 成功, "
+                f"{report.failed} 失败, 耗时 {report.total_duration_ms/1000:.1f}s"
+            )
+            # 详细表
+            rows = []
+            for r in summary["results"]:
+                rows.append({
+                    "书名": r["book_name"],
+                    "状态": "✅" if r["success"] else "❌",
+                    "book_id": r["book_id"] or "-",
+                    "章数": r["chapters_fetched"],
+                    "耗时": f"{r['duration_ms']/1000:.1f}s",
+                    "错误": r["error_message"][:50] if r["error_message"] else "-",
+                })
+            st.dataframe(rows, use_container_width=True, hide_index=True)
+            st.rerun()
+
+    if run_enqueue:
+        with st.spinner("入队中..."):
+            from src.platform_adapter.fanqie_batch import batch_enqueue_pending
+            result = batch_enqueue_pending()
+            st.success(
+                f"✅ 入队完成: queued={result['queued']}/{result['total']}"
+            )
+            st.rerun()
+
+
+
 def page_users():
     import pandas as pd
     from src.services.user_profile_service import list_users, set_user_role, set_whitelist, set_user_limits, set_user_password, create_user
@@ -1298,6 +1464,8 @@ if has_permission(role, "viewer"):
     pages.append(st.Page(page_llm_usage, title="LLM 用量", icon="📊"))
 if has_permission(role, "editor"):
     pages.append(st.Page(page_skill_monitor, title="Skill 监控", icon="🛠️"))
+if has_permission(role, "editor"):
+    pages.append(st.Page(page_fanqie_batch_queue, title="批量抓取", icon="📋"))
 if has_permission(role, "editor"):
     pages.append(st.Page(page_scheduler, title="任务调度", icon="📋"))
 if has_permission(role, "viewer"):
