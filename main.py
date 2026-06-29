@@ -177,6 +177,11 @@ def build_parser():
     fanqie_batch_enqueue = subparsers.add_parser("fanqie-batch-enqueue", help="Enqueue all DB pending to TaskQueue")
     fanqie_batch_seed = subparsers.add_parser("fanqie-batch-seed", help="Seed DB from config/fanqie_batch_books.yaml")
 
+    fanqie_batch_from_kol = subparsers.add_parser("fanqie-batch-from-kol", help="Scan KOL center list + add all to DB queue (default: 4 rankings ~40 books)")
+    fanqie_batch_from_kol.add_argument("--chapters", type=int, default=5)
+    fanqie_batch_from_kol.add_argument("--interval-s", type=int, default=30)
+    fanqie_batch_from_kol.add_argument("--target", type=int, default=40, help="Stop when unique books count >= target")
+
     fanqie_video_parser = subparsers.add_parser("fanqie-promo-video", help="Generate a Fanqie novel promotion presenter video")
     fanqie_video_parser.add_argument("--task-file", type=str, default="", help="Task JSON from fanqie-promo-apply")
     fanqie_video_parser.add_argument("--book-name", type=str, default="", help="Novel name if no task file is provided")
@@ -557,6 +562,16 @@ def main():
     if args.command == "fanqie-batch-seed":
         from src.platform_adapter.fanqie_batch import seed_from_yaml
         result = seed_from_yaml()
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return
+
+    if args.command == "fanqie-batch-from-kol":
+        from src.platform_adapter.fanqie_batch import add_books_from_kol_list
+        result = add_books_from_kol_list(
+            chapters=args.chapters,
+            interval_s=args.interval_s,
+            target_count=args.target,
+        )
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return
 

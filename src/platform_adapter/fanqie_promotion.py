@@ -19,8 +19,8 @@ from src.shared.logger import logger
 FANQIE_ROOT = Path("data/fanqie_promotion")
 FANQIE_NOVEL_CONTENT_URL = "https://kol.fanqieopen.com/page/content?tab_type=2&top_tab_genre=-1"
 FANQIE_AUDIO_CONTENT_URL = "https://kol.fanqieopen.com/page/content?tab_type=3&top_tab_genre=-1"
-FANQIE_NOVEL_LIST_URL = "https://kol.fanqieopen.com/page/promotion-list?tab_type=2&top_tab_genre=-1"
-FANQIE_AUDIO_LIST_URL = "https://kol.fanqieopen.com/page/promotion-list?tab_type=3&top_tab_genre=-1"
+FANQIE_NOVEL_LIST_URL = "https://kol.fanqieopen.com/page/content?tab_type=2&top_tab_genre=-1"
+FANQIE_AUDIO_LIST_URL = "https://kol.fanqieopen.com/page/content?tab_type=3&top_tab_genre=-1"
 FANQIE_NOVEL_HOME = "https://fanqienovel.com"
 
 # list 页别名状态文案 → 内部状态

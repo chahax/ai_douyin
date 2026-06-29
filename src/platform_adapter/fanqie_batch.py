@@ -17,6 +17,7 @@ Harness Engineering Layer 5: 批量抓取**不允许**用户传任意 book_names
 
 from __future__ import annotations
 
+import json
 import logging
 import time
 from dataclasses import asdict, dataclass, field
@@ -471,3 +472,120 @@ def seed_from_yaml(yaml_path: str = "config/fanqie_batch_books.yaml") -> dict:
         "skipped": add_result["skipped"],
         "added_ids": add_result["added_ids"],
     }
+
+
+# ── 达人中心 list 扫描（Harness L5: 自动入库的辅助）─────────────
+
+def add_books_from_kol_list(
+    *,
+    chapters: int = 5,
+    interval_s: int = 30,
+    note_prefix: str = "KOL 推荐池",
+    target_count: int = 40,
+) -> dict:
+    """扫番茄达人中心 /page/content?tab_type=2 拿 ~40 本 unique。
+
+    策略（**纯浏览器自动化**，不用 search API）：
+      1. 打开 tab_type=2 默认页面（task-menu-second 默认"爆款榜"，filter 默认"全部"）
+      2. click task-menu-second 切 4 个榜单（爆款/阅读/潜力/全部内容）
+      3. 每个榜单 click 后等 2.5s + 收 10 本 unique
+      4. 去重入库（4 × 10 ≈ 40 本）
+
+    进阶（默认关）：click arco-tabs-header-title 切"最高收入/最新上架"
+    —— 但实测 4 个榜单就够 40 本，先不做。
+
+    Returns:
+        {
+            "scanned": M,            # 总书数（含重复）
+            "unique": N,             # 去重后
+            "added": K,               # 新增到 DB
+            "skipped": L,             # 已存在
+            "added_books": [{"id", "book_name"}, ...],
+            "rankings_visited": [...],
+        }
+    """
+    from src.platform_adapter.fanqie_promotion import FanqiePromotionService
+    from src.shared.logger import logger
+
+    service = FanqiePromotionService()
+    session = service._open_browser_cache_session(headless=True)
+    all_titles: list[str] = []
+    rankings_visited: list[str] = []
+    try:
+        # 默认 URL（task-menu 默认"网文+爆款榜"）
+        page = session.open_page(
+            "https://kol.fanqieopen.com/page/content?tab_type=2&top_tab_genre=-1"
+        )
+        try:
+            page.wait_for_selector(".book-hQ7GYr", timeout=10_000)
+        except Exception:
+            logger.warning("[batch-from-kol] 等 .book-hQ7GYr 超时")
+        page.wait_for_timeout(2000)
+
+        # 取 task-menu-second 4 个榜单（爆款/阅读/潜力/全部内容）
+        scan_js = r"""
+        () => {
+          const cards = Array.from(document.querySelectorAll('.book-hQ7GYr'));
+          return cards.map(c => {
+            const t = c.querySelector('.book-title-txt-_CIhYa');
+            return t ? t.innerText.trim() : '';
+          }).filter(Boolean);
+        }
+        """
+        # 先收默认榜单（爆款榜）
+        first_titles = page.locator("").evaluate(scan_js) or []
+        all_titles.extend(first_titles)
+        rankings_visited.append("爆款榜")
+
+        # 切剩下的 3 个榜单
+        for idx in range(2, 5):  # 索引 1, 2, 3 对应 阅读榜 / 潜力榜 / 全部内容
+            click_js = f"""
+            () => {{
+              const items = document.querySelectorAll('.task-menu-second .task-menu-second-item');
+              if (items[{idx-1}]) items[{idx-1}].click();
+            }}
+            """
+            page.locator("").evaluate(click_js)
+            page.wait_for_timeout(2500)
+            tab_titles = page.locator("").evaluate(scan_js) or []
+            # 取榜单名（first item + idx）
+            rank_name_js = f"""
+            () => {{
+              const items = document.querySelectorAll('.task-menu-second .task-menu-second-item');
+              return items[{idx-1}] ? items[{idx-1}].innerText.trim() : 'unknown';
+            }}
+            """
+            rank_name = page.locator("").evaluate(rank_name_js) or f"榜单{idx}"
+            rankings_visited.append(rank_name)
+            logger.info(f"[batch-from-kol] {rank_name}: {len(tab_titles)} books")
+            all_titles.extend(tab_titles)
+            # 达到 target_count 提前停
+            if len(set(all_titles)) >= target_count:
+                logger.info(
+                    f"[batch-from-kol] reached target_count={target_count}, stop"
+                )
+                break
+    finally:
+        session.stop()
+
+    unique_titles = list(dict.fromkeys(all_titles))
+    logger.info(
+        f"[batch-from-kol] total scanned: {len(all_titles)}, unique: {len(unique_titles)}"
+    )
+
+    if not unique_titles:
+        return {
+            "scanned": 0, "unique": 0, "added": 0, "skipped": 0,
+            "added_books": [], "rankings_visited": rankings_visited,
+        }
+
+    result = add_books(
+        unique_titles,
+        chapters=chapters,
+        interval_s=interval_s,
+        note=note_prefix,
+    )
+    result["scanned"] = len(all_titles)
+    result["unique"] = len(unique_titles)
+    result["rankings_visited"] = rankings_visited
+    return result
