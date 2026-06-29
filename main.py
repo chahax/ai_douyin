@@ -157,6 +157,18 @@ def build_parser():
 
     fanqie_books_parser = subparsers.add_parser("fanqie-list-books", help="List all books already fetched (scan data/fanqie_promotion/books/)")
 
+    fanqie_batch_parser = subparsers.add_parser("fanqie-batch-fetch", help="Batch fetch multiple fanqie books (sync)")
+    fanqie_batch_parser.add_argument("--book-names", type=str, nargs="+", required=True, help="Book names to fetch")
+    fanqie_batch_parser.add_argument("--chapters", type=int, default=5, help="Chapters per book")
+    fanqie_batch_parser.add_argument("--interval-s", type=float, default=30.0, help="Sleep seconds between books (anti-crawl)")
+    fanqie_batch_parser.add_argument("--headless", action="store_true", help="Browser headless mode")
+
+    fanqie_batch_async_parser = subparsers.add_parser("fanqie-batch-fetch-async", help="Batch fetch via TaskQueue (Worker picks up)")
+    fanqie_batch_async_parser.add_argument("--book-names", type=str, nargs="+", required=True, help="Book names to fetch")
+    fanqie_batch_async_parser.add_argument("--chapters", type=int, default=5, help="Chapters per book")
+    fanqie_batch_async_parser.add_argument("--interval-s", type=float, default=30.0, help="Sleep seconds between books")
+    fanqie_batch_async_parser.add_argument("--name-prefix", type=str, default="fanqie-batch", help="ScheduledTask name prefix")
+
     fanqie_video_parser = subparsers.add_parser("fanqie-promo-video", help="Generate a Fanqie novel promotion presenter video")
     fanqie_video_parser.add_argument("--task-file", type=str, default="", help="Task JSON from fanqie-promo-apply")
     fanqie_video_parser.add_argument("--book-name", type=str, default="", help="Novel name if no task file is provided")
@@ -502,6 +514,28 @@ def main():
         fanqie = FanqiePromotionService()
         books = fanqie.list_books()
         print(json.dumps(books, ensure_ascii=False, indent=2))
+        return
+
+    if args.command == "fanqie-batch-fetch":
+        from src.platform_adapter.fanqie_batch import batch_fetch_sync, _summarize_report
+        report = batch_fetch_sync(
+            book_names=args.book_names,
+            chapters=args.chapters,
+            interval_s=args.interval_s,
+            headless=args.headless,
+        )
+        print(json.dumps(_summarize_report(report), ensure_ascii=False, indent=2))
+        return
+
+    if args.command == "fanqie-batch-fetch-async":
+        from src.platform_adapter.fanqie_batch import batch_fetch_async
+        result = batch_fetch_async(
+            book_names=args.book_names,
+            chapters=args.chapters,
+            interval_s=args.interval_s,
+            name_prefix=args.name_prefix,
+        )
+        print(json.dumps(result, ensure_ascii=False, indent=2))
         return
 
     if args.command == "import-knowledge":

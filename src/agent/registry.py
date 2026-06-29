@@ -471,6 +471,89 @@ def _fanqie_list_books(**kwargs) -> dict:
     return {"success": True, "count": len(books), "books": books}
 
 
+def _fanqie_batch_fetch(
+    book_names: list[str] | None = None,
+    chapters: int = 5,
+    interval_s: float = 30.0,
+    headless: bool = True,
+    **kwargs,
+) -> dict:
+    """批量抓取番茄小说（同步阻塞模式）。"""
+    from src.agent.skill_result import SkillResult
+    from src.platform_adapter.fanqie_batch import batch_fetch_sync, _summarize_report
+
+    if not book_names:
+        return SkillResult.err(
+            "validation_error", "缺少 book_names (list[str])",
+            error={"retryable": False},
+        ).to_dict()
+    if not isinstance(book_names, list):
+        return SkillResult.err(
+            "validation_error", f"book_names 必须是 list[str], 实际 {type(book_names).__name__}",
+            error={"retryable": False},
+        ).to_dict()
+
+    try:
+        report = batch_fetch_sync(
+            book_names=book_names,
+            chapters=chapters,
+            interval_s=interval_s,
+            headless=headless,
+        )
+        summary = _summarize_report(report)
+        return SkillResult.ok(
+            data=summary,
+            message=f"批量完成: {report.succeeded}/{report.total} 成功, {report.failed} 失败, 耗时 {report.total_duration_ms}ms",
+        ).to_dict()
+    except Exception as exc:
+        return SkillResult.err(
+            "skill_error",
+            f"{type(exc).__name__}: {exc}"[:300],
+            error={"type": type(exc).__name__, "message": str(exc), "retryable": False},
+        ).to_dict()
+
+
+def _fanqie_batch_fetch_async(
+    book_names: list[str] | None = None,
+    chapters: int = 5,
+    interval_s: float = 30.0,
+    name_prefix: str = "番茄批量抓取",
+    **kwargs,
+) -> dict:
+    """批量抓取番茄小说（后台入队模式）。每本入队 TaskQueue,Worker 异步跑。"""
+    from src.agent.skill_result import SkillResult
+    from src.platform_adapter.fanqie_batch import batch_fetch_async
+
+    if not book_names:
+        return SkillResult.err(
+            "validation_error", "缺少 book_names (list[str])",
+            error={"retryable": False},
+        ).to_dict()
+    if not isinstance(book_names, list):
+        return SkillResult.err(
+            "validation_error", f"book_names 必须是 list[str], 实际 {type(book_names).__name__}",
+            error={"retryable": False},
+        ).to_dict()
+
+    try:
+        result = batch_fetch_async(
+            book_names=book_names,
+            chapters=chapters,
+            interval_s=interval_s,
+            name_prefix=name_prefix,
+        )
+        return SkillResult.ok(
+            data=result,
+            message=f"已入队 {result['queued']}/{result['total']}, 跳过 {result['skipped']} (已存在)",
+        ).to_dict()
+    except Exception as exc:
+        return SkillResult.err(
+            "skill_error",
+            f"{type(exc).__name__}: {exc}"[:300],
+            error={"type": type(exc).__name__, "message": str(exc), "retryable": False},
+        ).to_dict()
+
+
 def _douyin_warmup(
     account_id: str = "",
     mode: str = "daily",
@@ -777,6 +860,21 @@ SKILLS: list[Skill] = [
         description="列出已抓的所有番茄小说（扫 data/fanqie_promotion/books/ 下的 meta.json）",
         func=_fanqie_list_books,
         requires_confirmation=False,
+    ),
+    Skill(
+        name="fanqie_batch_fetch",
+        description="批量抓取多本番茄小说。参数: book_names(list[str] 必填), chapters(int 默认5), interval_s(float 默认30秒防反爬), headless(bool)。同步阻塞模式,适合 < 10 本;失败不中断,继续下一本。返回: {total, succeeded, failed, skipped, results: [{book_name, success, ...}]}",
+        func=_fanqie_batch_fetch,
+        requires_confirmation=True,  # 批量写操作
+        timeout_s=3600.0,          # 1 小时（10 本 × 30s + 抓取时间）
+        retries=0,
+    ),
+    Skill(
+        name="fanqie_batch_fetch_async",
+        description="批量抓取番茄小说（后台入队模式）。参数: book_names(list[str] 必填), chapters(int 默认5), interval_s(float 默认30秒防反爬)。每本入队 TaskQueue,Worker 异步拉取;适合 10+ 本大规模抓取。返回: {total, queued, skipped, execution_uuids, task_ids}",
+        func=_fanqie_batch_fetch_async,
+        requires_confirmation=True,
+        timeout_s=60.0,           # 入队操作本身快速
     ),
     # ── 抖音养号 ─────────────────────────────────────────────────
     Skill(
