@@ -964,6 +964,150 @@ def page_memory():
         st.info("还没有情感数据。让 LLM 分类跑一会儿再来看看。")
 
 
+# ── Skill 监控页面 (Harness Engineering Layer 4 + 6) ──────────────
+def page_skill_monitor():
+    """Skill 调用监控：失败率 / 耗时 / 错误码分布 / 热门失败 / ProblemMemory 摘要。
+
+    数据源：
+      - ErrorReview 表（error_reviewer 落库的诊断）
+      - ConversationMessage.tool_success / tool_error（agent 层记录的工具调用）
+    """
+    st.header("Skill 监控")
+    st.caption("Harness Engineering Layer 4 + 6：Skill 调用反馈 + 持续改进")
+
+    # 1) Skill 总览
+    st.subheader("Skill 列表")
+    try:
+        from src.agent.registry import SkillRegistry
+        reg = SkillRegistry()
+        skills = reg.list_all()
+
+        # 表格
+        rows = []
+        for s in skills:
+            row = {
+                "Skill": s.name,
+                "分类": s.category,
+                "需确认": "是" if s.requires_confirmation else "否",
+                "超时(s)": s.timeout_s,
+                "重试": s.retries,
+                "幂等": "是" if s.idempotent else "否",
+                "参数": len(s.params),
+            }
+            rows.append(row)
+        st.dataframe(rows, use_container_width=True)
+    except Exception as exc:
+        st.error(f"加载 Skill 列表失败: {exc}")
+
+    st.divider()
+
+    # 2) 错误诊断（ErrorReview 表）
+    st.subheader("错误诊断（ErrorReview）")
+    try:
+        from src.memory.error_review_model import ErrorReview
+        from src.shared.database import SessionLocal
+        from datetime import datetime, timedelta
+
+        with SessionLocal() as sess:
+            # 最近 7 天
+            cutoff = datetime.utcnow() - timedelta(days=7)
+            reviews = (
+                sess.query(ErrorReview)
+                .filter(ErrorReview.last_seen_at >= cutoff)
+                .order_by(ErrorReview.occurrence_count.desc())
+                .limit(50)
+                .all()
+            )
+
+            if not reviews:
+                st.info("最近 7 天无 Skill 失败记录")
+            else:
+                # 聚合：按 cluster_key 统计
+                from collections import Counter
+                cluster_counts = Counter()
+                for r in reviews:
+                    cluster_counts[r.cluster_key] += r.occurrence_count
+
+                # 热门失败 Top 10
+                st.write("**热门失败模式（按 cluster_key）**")
+                cluster_rows = []
+                for cluster, count in cluster_counts.most_common(10):
+                    cluster_rows.append({"cluster_key": cluster, "发生次数": count})
+                st.dataframe(cluster_rows, use_container_width=True)
+
+                # 详细列表
+                with st.expander("详细诊断（最近 50 条）"):
+                    detail_rows = []
+                    for r in reviews:
+                        detail_rows.append({
+                            "Skill": r.location.replace("skill:", ""),
+                            "code": r.error_type,
+                            "severity": r.severity,
+                            "category": r.category,
+                            "次数": r.occurrence_count,
+                            "首次": r.first_seen_at.strftime("%Y-%m-%d %H:%M") if r.first_seen_at else "",
+                            "最后": r.last_seen_at.strftime("%Y-%m-%d %H:%M") if r.last_seen_at else "",
+                            "summary": (r.summary or "")[:80],
+                            "建议修复": (r.suggested_fix or "")[:80],
+                        })
+                    st.dataframe(detail_rows, use_container_width=True)
+    except Exception as exc:
+        st.error(f"加载 ErrorReview 失败: {exc}")
+
+    st.divider()
+
+    # 3) 工具调用摘要（来自 ConversationMessage）
+    st.subheader("近期工具调用")
+    try:
+        from src.memory import MemoryManager
+        mm = MemoryManager()
+        from datetime import datetime, timedelta
+
+        with mm.session as sess:
+            from src.memory.models import ConversationMessage
+            cutoff = datetime.utcnow() - timedelta(days=7)
+            calls = (
+                sess.query(ConversationMessage)
+                .filter(
+                    ConversationMessage.skill_name.isnot(None),
+                    ConversationMessage.created_at >= cutoff,
+                )
+                .order_by(ConversationMessage.created_at.desc())
+                .limit(50)
+                .all()
+            )
+
+            if not calls:
+                st.info("最近 7 天无工具调用记录")
+            else:
+                from collections import Counter
+                success_count = sum(1 for c in calls if c.tool_success)
+                failure_count = sum(1 for c in calls if not c.tool_success)
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    st.metric("总调用", len(calls))
+                with col2:
+                    st.metric("成功", success_count)
+                with col3:
+                    st.metric("失败", failure_count,
+                             delta=f"-{failure_count}" if failure_count else None,
+                             delta_color="inverse")
+
+                # 失败详情
+                with st.expander("最近 50 次工具调用详情"):
+                    call_rows = []
+                    for c in calls:
+                        call_rows.append({
+                            "Skill": c.skill_name or "",
+                            "状态": "✅" if c.tool_success else "❌",
+                            "错误": (c.tool_error or "")[:80],
+                            "时间": c.created_at.strftime("%Y-%m-%d %H:%M") if c.created_at else "",
+                        })
+                    st.dataframe(call_rows, use_container_width=True)
+    except Exception as exc:
+        st.error(f"加载工具调用记录失败: {exc}")
+
+
 # ── LLM 用量页面 (I-4) ─────────────────────────────────────────
 def page_llm_usage():
     """I-4 LLM 成本与限流治理：用量 / 成本 / 缓存命中率 / QPS。"""
@@ -1152,6 +1296,8 @@ if has_permission(role, "viewer"):
     pages.append(st.Page(page_memory, title="我的记忆", icon="🧠"))
 if has_permission(role, "viewer"):
     pages.append(st.Page(page_llm_usage, title="LLM 用量", icon="📊"))
+if has_permission(role, "editor"):
+    pages.append(st.Page(page_skill_monitor, title="Skill 监控", icon="🛠️"))
 if has_permission(role, "editor"):
     pages.append(st.Page(page_scheduler, title="任务调度", icon="📋"))
 if has_permission(role, "viewer"):
