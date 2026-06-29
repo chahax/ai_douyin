@@ -181,6 +181,20 @@ def main():
                     val = page.evaluate(cmd["js"])
                 sys.stdout.write(json.dumps({"status": "ok", "value": val}) + "\n")
 
+            elif action == "screenshot":
+                # 截图：selector="" 截整页；否则截指定元素
+                out_path = cmd.get("path")
+                if not out_path:
+                    sys.stdout.write(json.dumps({"status": "error", "msg": "screenshot 需要 path 参数"}) + "\n")
+                    continue
+                full_page = bool(cmd.get("full_page", False))
+                sel = cmd.get("selector", "")
+                if sel:
+                    page.locator(sel).first.screenshot(path=out_path)
+                else:
+                    page.screenshot(path=out_path, full_page=full_page)
+                sys.stdout.write(json.dumps({"status": "ok", "path": out_path}) + "\n")
+
             elif action == "inner_text":
                 txt = page.locator(cmd["selector"]).first.inner_text().strip()
                 sys.stdout.write(json.dumps({"status": "ok", "text": txt}) + "\n")
@@ -424,9 +438,37 @@ class BrowserSession:
         finally:
             self.stop()
 
+    # Harness Engineering Layer 5: 约束与安全 — 浏览器域名白名单
+    # 只允许访问 KOL 运营相关的域，防止 LLM 误调用到其他域
+    _ALLOWED_DOMAINS = (
+        "kol.fanqieopen.com",       # 番茄达人中心
+        "fanqienovel.com",          # 番茄小说主站（search API）
+        "creator.douyin.com",       # 抖音创作者中心
+        "www.douyin.com",           # 抖音主站
+        "127.0.0.1",                # 本地（开发用）
+        "localhost",
+    )
+
+    def _check_domain_allowed(self, url: str) -> None:
+        """域名白名单检查。失败抛 PermissionError（被 SkillRegistry 捕获为 skill_error）。"""
+        from urllib.parse import urlparse
+        host = (urlparse(url).hostname or "").lower()
+        if not host:
+            raise PermissionError(f"浏览器沙箱：URL 无效域名 ({url})")
+        for allowed in self._ALLOWED_DOMAINS:
+            if host == allowed or host.endswith("." + allowed):
+                return
+        raise PermissionError(
+            f"浏览器沙箱：禁止访问 {host}（白名单：{', '.join(self._ALLOWED_DOMAINS)}）"
+        )
+
     def open_page(self, url: str) -> "Page":
-        """打开指定 URL，返回兼容 Page 对象（命令转发器）"""
+        """打开指定 URL，返回兼容 Page 对象（命令转发器）
+
+        Harness Engineering Layer 5: 域名白名单检查。
+        """
         self._start()
+        self._check_domain_allowed(url)
         result = self._send({"action": "goto", "url": url})
         page = Page(self)
         page.url = result.get("url", url)
