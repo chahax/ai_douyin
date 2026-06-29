@@ -137,15 +137,25 @@ def build_parser():
     fanqie_apply_parser = subparsers.add_parser("fanqie-promo-apply", help="Apply for one Fanqie promotion task with saved browser login state")
     fanqie_apply_parser.add_argument("--type", type=str, default="novel", choices=["novel", "audio"], help="Promotion content type")
     fanqie_apply_parser.add_argument("--book-name", type=str, default="", help="Optional target novel name. Default uses first available item")
-    fanqie_apply_parser.add_argument("--alias", type=str, default="", help="Promotion alias to fill. Default is generated from book name")
+    fanqie_apply_parser.add_argument("--alias", type=str, default="", help="Promotion alias to fill. Empty = use first recommended alias")
     fanqie_apply_parser.add_argument("--no-wait-login", action="store_true", help="Do not pause for manual login before applying")
     fanqie_apply_parser.add_argument("--headless", action="store_true", help="Run browser in headless mode")
     fanqie_apply_parser.add_argument("--keep-open", action="store_true", help="Keep browser open after submitting for manual check")
+    fanqie_apply_parser.add_argument("--no-auto-submit", action="store_true", help="Fill modal only, do not click submit (let user confirm in browser)")
+    fanqie_apply_parser.add_argument("--publish-type", type=str, default="AI数字人", help="发文类型（preferred list first match wins），默认 AI数字人")
+    fanqie_apply_parser.add_argument("--max-alias-attempts", type=int, default=5, help="撞名时最多尝试的推荐别名个数")
 
     fanqie_fetch_parser = subparsers.add_parser("fanqie-book-fetch", help="Search Fanqie novel and fetch first chapters")
     fanqie_fetch_parser.add_argument("--book-name", type=str, required=True, help="Novel name")
     fanqie_fetch_parser.add_argument("--chapters", type=int, default=10, help="Chapter count to fetch")
     fanqie_fetch_parser.add_argument("--headless", action="store_true", help="Run browser in headless mode")
+
+    fanqie_list_parser = subparsers.add_parser("fanqie-promo-list", help="Scan Fanqie promotion-list page and sync alias status to task.json")
+    fanqie_list_parser.add_argument("--type", type=str, default="novel", choices=["novel", "audio"], help="Promotion content type")
+    fanqie_list_parser.add_argument("--headless", action="store_true", help="Run browser in headless mode")
+    fanqie_list_parser.add_argument("--no-sync", action="store_true", help="List only, do not write back to task.json")
+
+    fanqie_books_parser = subparsers.add_parser("fanqie-list-books", help="List all books already fetched (scan data/fanqie_promotion/books/)")
 
     fanqie_video_parser = subparsers.add_parser("fanqie-promo-video", help="Generate a Fanqie novel promotion presenter video")
     fanqie_video_parser.add_argument("--task-file", type=str, default="", help="Task JSON from fanqie-promo-apply")
@@ -430,7 +440,10 @@ def main():
                 alias=args.alias or "",
                 wait_for_login=not args.no_wait_login,
                 headless=args.headless,
+                auto_submit=not args.no_auto_submit,
+                publish_type=args.publish_type,
                 keep_open=args.keep_open,
+                max_alias_attempts=args.max_alias_attempts,
             )
         except Exception as exc:
             logger.error(f"番茄推广申请失败: {exc}")
@@ -469,6 +482,26 @@ def main():
             logger.error(f"番茄推广视频生成失败: {exc}")
             sys.exit(1)
         print(json.dumps(asdict(task), ensure_ascii=False, indent=2))
+        return
+
+    if args.command == "fanqie-promo-list":
+        fanqie = FanqiePromotionService()
+        try:
+            result = fanqie.list_promotions(
+                content_type=args.type,
+                headless=args.headless,
+                sync_to_tasks=not args.no_sync,
+            )
+        except Exception as exc:
+            logger.error(f"番茄推广列表扫描失败: {exc}")
+            sys.exit(1)
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return
+
+    if args.command == "fanqie-list-books":
+        fanqie = FanqiePromotionService()
+        books = fanqie.list_books()
+        print(json.dumps(books, ensure_ascii=False, indent=2))
         return
 
     if args.command == "import-knowledge":

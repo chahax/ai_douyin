@@ -60,7 +60,10 @@ class SkillParam:
 
 @dataclass
 class Skill:
-    """Skill 注册信息。"""
+    """Skill 注册信息。
+
+    Harness Engineering Layer 3: 编排字段（timeout/retry/idempotent）。
+    """
 
     name: str
     description: str
@@ -69,6 +72,13 @@ class Skill:
     requires_confirmation: bool = True
     category: str = "general"                            # UI 分组：创作/发布/养号/系统/记忆
     examples: list[str] = field(default_factory=list)     # LLM 参考用法
+
+    # ── Harness Engineering: 编排规范（Harness Layer 3）──
+    timeout_s: float = 300.0         # 0 = 不超时；默认 5 分钟
+    retries: int = 0                 # 0 = 不重试；N = 失败后重试 N 次
+    retry_on: tuple[str, ...] = ("timeout", "rate_limited")
+    retry_backoff: str = "exponential"   # "exponential" | "fixed"
+    idempotent: bool = False         # True 时 registry 自动检查重复
 
 
 # 装饰器注册的 Skills（追加在 SKILLS 列表之后）
@@ -135,6 +145,12 @@ def skill(
     category: str = "general",
     examples: list[str] | None = None,
     params: list[SkillParam] | None = None,
+    # Harness Engineering Layer 3: 编排
+    timeout_s: float = 300.0,
+    retries: int = 0,
+    retry_on: tuple[str, ...] | None = None,
+    retry_backoff: str = "exponential",
+    idempotent: bool = False,
 ):
     """
     装饰器：注册一个 Skill。
@@ -146,6 +162,9 @@ def skill(
             "从知识库检索相关段落",
             requires_confirmation=False,
             category="记忆",
+            timeout_s=60.0,                  # 1 分钟超时
+            retries=2,                       # 失败重试 2 次
+            retry_on=("timeout",),          # 仅超时重试
             examples=['{"query": "人生哲学", "top_k": 3}'],
             params=[
                 SkillParam("query", ParamType.STRING, required=True, description="查询文本"),
@@ -156,6 +175,7 @@ def skill(
             ...
     """
     resolved_examples = examples or []
+    resolved_retry_on = retry_on if retry_on is not None else ("timeout", "rate_limited")
 
     def wrap(fn: Callable) -> Callable:
         resolved_params = params if params is not None else _derive_from_signature(fn)
@@ -168,6 +188,11 @@ def skill(
                 requires_confirmation=requires_confirmation,
                 category=category,
                 examples=resolved_examples,
+                timeout_s=timeout_s,
+                retries=retries,
+                retry_on=resolved_retry_on,
+                retry_backoff=retry_backoff,
+                idempotent=idempotent,
             )
         )
         return fn

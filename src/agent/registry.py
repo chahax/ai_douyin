@@ -8,6 +8,8 @@ src/agent/registry.py — Skill 注册表
 Agent 通过 skill_name 查找并调用。
 """
 
+import asyncio
+import json
 from dataclasses import asdict
 from typing import Any
 
@@ -324,9 +326,22 @@ def _fanqie_apply_promotion(
     wait_for_login: bool = True,
     headless: bool = False,
     keep_open: bool = False,
+    auto_submit: bool = True,
+    publish_type: str = "AI数字人",
     **kwargs,
 ) -> dict:
-    """申请番茄小说推广"""
+    """申请番茄小说推广
+
+    Args:
+        content_type: 推广内容类型 novel/audio
+        book_name: 目标小说名（空 = 取第一张书卡）
+        alias: 推广别名（空 = 用番茄推荐别名）
+        wait_for_login: 是否暂停等待用户登录
+        headless: 无头模式
+        keep_open: 提交后保持浏览器打开供人工确认
+        auto_submit: 是否自动点击提交（False = 只填表让用户确认）
+        publish_type: 发文类型偏好（"AI数字人" 等）
+    """
     from src.platform_adapter.fanqie_promotion import FanqiePromotionService
     fanqie = FanqiePromotionService()
     try:
@@ -337,6 +352,8 @@ def _fanqie_apply_promotion(
             wait_for_login=wait_for_login,
             headless=headless,
             keep_open=keep_open,
+            auto_submit=auto_submit,
+            publish_type=publish_type,
         )
         return {"success": True, "task": asdict(task)}
     except Exception as exc:
@@ -380,6 +397,78 @@ def _fanqie_generate_video(
         return {"success": True, "task": asdict(task)}
     except Exception as exc:
         return {"success": False, "error": str(exc)}
+
+
+def _fanqie_list_promotions(
+    content_type: str = "novel",
+    sync_to_tasks: bool = True,
+    headless: bool = False,
+    **kwargs,
+) -> dict:
+    """扫描番茄推广列表页，列出所有别名状态；可选择同步到 task.json。
+
+    Args:
+        content_type: 推广内容类型 novel/audio
+        sync_to_tasks: 是否把状态写回 tasks/<id>/task.json
+        headless: 无头模式
+    """
+    from src.platform_adapter.fanqie_promotion import FanqiePromotionService
+    fanqie = FanqiePromotionService()
+    try:
+        result = fanqie.list_promotions(
+            content_type=content_type,
+            headless=headless,
+            sync_to_tasks=sync_to_tasks,
+        )
+        return {"success": True, "result": result}
+    except Exception as exc:
+        return {"success": False, "error": str(exc)}
+
+
+def _fanqie_fetch_book(
+    book_name: str = "",
+    chapters: int = 10,
+    headless: bool = True,
+    **kwargs,
+) -> dict:
+    """抓取番茄小说内容。
+
+    流程：达人中心搜索书名 → 跳转详情页 → 抓元数据 + 章节正文 → 保存 meta.json + chapters/ + material.txt。
+    存储位置：data/fanqie_promotion/books/<book_id>_<书名>/。
+
+    Args:
+        book_name: 书名（必填）
+        chapters: 抓取章节数（默认 10，含付费墙检测自动停止）
+        headless: 无头模式
+    """
+    from src.platform_adapter.fanqie_promotion import FanqiePromotionService
+    if not book_name.strip():
+        return {"success": False, "error": "缺少 book_name"}
+    fanqie = FanqiePromotionService()
+    try:
+        result = fanqie.fetch_book(
+            book_name=book_name,
+            chapters=chapters,
+            headless=headless,
+        )
+        return {
+            "success": True,
+            "book_name": result.book_name,
+            "book_id": result.book_id,
+            "chapters_count": len(result.chapters),
+            "material_path": result.material_path,
+            "chapters_dir": result.chapters_dir,
+        }
+    except Exception as exc:
+        return {"success": False, "error": str(exc)}
+
+
+def _fanqie_list_books(**kwargs) -> dict:
+    """列出已抓的所有番茄小说（扫 data/fanqie_promotion/books/）。"""
+    from src.platform_adapter.fanqie_promotion import FanqiePromotionService
+    fanqie = FanqiePromotionService()
+    books = fanqie.list_books()
+    return {"success": True, "count": len(books), "books": books}
 
 
 def _douyin_warmup(
@@ -655,7 +744,7 @@ SKILLS: list[Skill] = [
     ),
     Skill(
         name="fanqie_apply_promotion",
-        description="申请番茄小说推广，参数: content_type(novel/audio), book_name, alias, headless",
+        description="申请番茄小说推广，参数: content_type(novel/audio), book_name, alias, headless, auto_submit(bool 默认True), publish_type(默认AI数字人)",
         func=_fanqie_apply_promotion,
         requires_confirmation=True,
     ),
@@ -670,6 +759,24 @@ SKILLS: list[Skill] = [
         description="生成番茄小说推广视频，参数: book_name, alias, chapters, max_segments, no_comfy_background, assets_only",
         func=_fanqie_generate_video,
         requires_confirmation=True,
+    ),
+    Skill(
+        name="fanqie_list_promotions",
+        description="扫描番茄推广列表页，列出所有别名状态并同步到 task.json，参数: content_type(novel/audio), sync_to_tasks(bool 默认True), headless",
+        func=_fanqie_list_promotions,
+        requires_confirmation=False,
+    ),
+    Skill(
+        name="fanqie_fetch_book",
+        description="抓取番茄小说内容（搜索书名 + 抓元数据 + 抓章节正文）。参数: book_name(必填, 书名), chapters(int 默认10), headless(bool)。返回: book_id / chapters_count / material_path",
+        func=_fanqie_fetch_book,
+        requires_confirmation=False,
+    ),
+    Skill(
+        name="fanqie_list_books",
+        description="列出已抓的所有番茄小说（扫 data/fanqie_promotion/books/ 下的 meta.json）",
+        func=_fanqie_list_books,
+        requires_confirmation=False,
     ),
     # ── 抖音养号 ─────────────────────────────────────────────────
     Skill(
@@ -811,21 +918,217 @@ class SkillRegistry:
         return "\n".join(parts)
 
     def call(self, name: str, kwargs: dict) -> dict:
-        """调用指定 Skill，返回结果字典。失败时返回 {'success': False, ...}。"""
+        """调用指定 Skill，返回 SkillResult.to_dict()。
+
+        Harness Engineering Layer 3: 编排 + Layer 4: 反馈 + Layer 6: 持续改进。
+          - 参数 schema 校验（Layer 5: 关 1）
+          - 幂等性检查（Layer 5: 关 2）
+          - 重试循环（exponential backoff，retry_on 决定哪些 code 触发）
+          - 超时熔断（threading.Thread.join(timeout=)）
+          - 失败自动落盘 ProblemMemory（Layer 4: 反馈）
+          - 触发 fire-and-forget LLM 错误诊断（Layer 6: 持续改进）
+
+        老 Skill 返回裸 dict 会被 coerce_to_skill_result 归一化。
+        """
+        import time
+        from src.agent.skill_result import SkillResult, coerce_to_skill_result, SKILL_ERROR_CODES
+
         skill = self.get(name)
         if not skill:
-            return {"success": False, "error": f"未知 Skill: {name}"}
-        # 1) schema 校验
+            return SkillResult.err(
+                "not_found", f"未知 Skill: {name}",
+                error={"retryable": False, "type": "UnknownSkill"},
+            ).to_dict()
+
+        # 关 1: 参数 schema 校验
         is_valid, err, code = validate_params(skill, kwargs)
         if not is_valid:
             logger.warning("Skill %s 参数校验失败: %s", name, err)
-            return {"success": False, "error": err, "code": code}
-        # 2) 真正执行
-        try:
+            return SkillResult.err(
+                "validation_error", err,
+                error={"code": code, "retryable": False},
+                skill=name,
+            ).to_dict()
+
+        # 关 2: 幂等性检查（仅对声明 idempotent=True 的 Skill）
+        if skill.idempotent:
+            dup = self._check_idempotent(name, kwargs)
+            if dup:
+                return SkillResult.ok(
+                    data={"deduplicated": True, "previous_result": dup},
+                    message=f"检测到重复执行（之前结果：{dup}）",
+                    skill=name,
+                ).to_dict()
+
+        # 重试循环 + 超时熔断
+        attempts = max(1, skill.retries + 1)
+        last_result: SkillResult | None = None
+        for attempt in range(attempts):
+            start = time.time()
+            try:
+                raw = self._invoke_with_timeout(skill, kwargs)
+            except TimeoutError as exc:
+                last_result = SkillResult.err(
+                    "timeout",
+                    f"Skill {name} 超时 (>{skill.timeout_s}s)",
+                    error={"type": "TimeoutError", "message": str(exc), "retryable": True},
+                    skill=name,
+                )
+            except Exception as exc:
+                last_result = SkillResult.err(
+                    "skill_error",
+                    f"{type(exc).__name__}: {exc}"[:300],
+                    error={
+                        "type": type(exc).__name__,
+                        "message": str(exc),
+                        "retryable": False,
+                    },
+                    skill=name,
+                )
+            else:
+                # 成功
+                duration = int((time.time() - start) * 1000)
+                result = coerce_to_skill_result(name, raw)
+                result.skill = name
+                result.duration_ms = duration
+                result.attempts = attempt + 1
+                # 幂等缓存：成功后写入，下次同样 kwargs 命中
+                if skill.idempotent:
+                    self._save_idempotent(name, kwargs, result.to_dict())
+                return result.to_dict()
+
+            # 失败：决定是否重试
+            if (
+                attempt < attempts - 1
+                and last_result is not None
+                and last_result.code in skill.retry_on
+            ):
+                backoff = self._backoff_seconds(attempt, skill.retry_backoff)
+                logger.info(
+                    "Skill %s 失败 (%s)，%ss 后重试 (%d/%d)",
+                    name, last_result.code, backoff, attempt + 1, attempts,
+                )
+                time.sleep(backoff)
+                continue
+            break
+
+        # 失败终态
+        if last_result is not None:
+            # 标记是否耗尽重试
+            if skill.retries > 0 and last_result.code in skill.retry_on:
+                last_result.code = "max_retries_exceeded"
+            last_result.attempts = attempts
+            last_result.duration_ms = int((time.time() - start) * 1000) if 'start' in dir() else 0
+            # 自动落盘 ProblemMemory + 触发错误诊断
+            self._save_to_problem_memory(name, kwargs, last_result)
+            return last_result.to_dict()
+
+        return SkillResult.err("skill_error", "未知失败", skill=name).to_dict()
+
+    def _invoke_with_timeout(self, skill, kwargs: dict):
+        """在子线程跑 Skill，超时抛 TimeoutError。
+
+        daemon=True：进程退出时强制终止。
+        """
+        if skill.timeout_s <= 0:
             return skill.func(**kwargs)
+
+        import threading
+        result_box: dict = {}
+        exc_box: dict = {}
+
+        def run():
+            try:
+                result_box["v"] = skill.func(**kwargs)
+            except BaseException as e:  # noqa: BLE001
+                exc_box["e"] = e
+
+        t = threading.Thread(target=run, daemon=True, name=f"Skill[{skill.name}]")
+        t.start()
+        t.join(timeout=skill.timeout_s)
+        if t.is_alive():
+            # 超时（线程继续在后台跑；daemon 进程结束会强制终止）
+            raise TimeoutError(f"Skill timed out after {skill.timeout_s}s")
+        if "e" in exc_box:
+            raise exc_box["e"]
+        return result_box.get("v")
+
+    def _backoff_seconds(self, attempt: int, mode: str) -> float:
+        """指数退避：1s, 2s, 4s, 8s...；固定：2s。"""
+        if mode == "fixed":
+            return 2.0
+        # exponential
+        return float(2 ** attempt)
+
+    def _check_idempotent(self, name: str, kwargs: dict) -> dict | None:
+        """幂等性检查：返回之前的执行结果（如果有），否则 None。
+
+        默认实现：根据 (name, json.dumps(kwargs, sort_keys=True)) 在短期缓存里查。
+        子类可以重写。
+        """
+        if not hasattr(self, "_idempotent_cache"):
+            self._idempotent_cache: dict[str, dict] = {}
+        import hashlib
+        import time
+        key = self._idempotent_key(name, kwargs)
+        cached = self._idempotent_cache.get(key)
+        if cached and time.time() - cached.get("ts", 0) < 300:
+            return cached.get("result")
+        return None
+
+    def _save_idempotent(self, name: str, kwargs: dict, result: dict) -> None:
+        """存幂等结果。"""
+        if not hasattr(self, "_idempotent_cache"):
+            self._idempotent_cache: dict[str, dict] = {}
+        import time
+        key = self._idempotent_key(name, kwargs)
+        self._idempotent_cache[key] = {"ts": time.time(), "result": result}
+
+    def _idempotent_key(self, name: str, kwargs: dict) -> str:
+        import hashlib
+        payload = f"{name}:{json.dumps(kwargs, sort_keys=True, ensure_ascii=False)}"
+        return name + ":" + hashlib.md5(payload.encode("utf-8")).hexdigest()[:12]
+
+    def _save_to_problem_memory(
+        self, skill_name: str, kwargs: dict, result: SkillResult
+    ) -> None:
+        """Skill 失败时触发 fire-and-forget 错误诊断。
+
+        Harness Engineering Layer 6: 持续改进。
+        注：写 ProblemMemory 表留给 agent.py 层（它有 session_id 上下文），
+        registry 层只触发 error_reviewer + 写日志。
+
+        任何异常都不会抛给调用方。
+        """
+        # 1) 写日志（必有，便于排查）
+        logger.warning(
+            "Skill %s 失败: code=%s message=%s attempts=%d kwargs=%s",
+            skill_name, result.code, result.message[:200],
+            result.attempts, json.dumps(kwargs, ensure_ascii=False)[:200],
+        )
+
+        # 2) fire-and-forget LLM 错误诊断（Layer 6: 持续改进）
+        #    异步跑 asyncio loop；不阻塞主流程
+        try:
+            from src.agent.error_reviewer import error_reviewer
+            import threading
+
+            def _run_review():
+                try:
+                    asyncio.run(
+                        error_reviewer.review_skill_failure_async(
+                            skill_name=skill_name,
+                            skill_kwargs=kwargs,
+                            result=result,
+                        )
+                    )
+                except Exception:
+                    logger.exception("error_reviewer 失败")
+
+            t = threading.Thread(target=_run_review, daemon=True, name=f"error-review[{skill_name}]")
+            t.start()
         except Exception as exc:
-            logger.exception(f"Skill {name} 执行失败")
-            return {"success": False, "error": str(exc)}
+            logger.debug(f"启动 error_reviewer 失败: {exc}")
 
 
 # ---------------------------------------------------------------------------

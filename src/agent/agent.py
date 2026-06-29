@@ -308,54 +308,52 @@ class Agent:
 
         if any(w in normalized for w in confirm_words):
             # 确认 → 执行 Skill
-            try:
-                result = self.registry.call(target_skill, skill_kwargs)
-            except Exception as exc:
-                logger.exception("Skill 执行失败: %s", target_skill)
-                err = f"{type(exc).__name__}: {exc}"[:200]
-                mm.save_pending_plan(session_id, None)
-                mm.append_message(session_id, role="assistant", content=f"[执行失败] {err}")
+            # 注：registry.call 内部已完成参数校验/重试/超时/auto-save 错误诊断，
+            # 永远返回 SkillResult dict（不抛异常）。
+            result = self.registry.call(target_skill, skill_kwargs)
+            mm.save_pending_plan(session_id, None)
 
-                # Phase 3: 写 ProblemMemory（修潜在 bug：之前没写）
+            if not result.get("success"):
+                # 失败：registry 已自动触发 error_reviewer + 写日志
+                # 这里只负责清 pending + 写助手消息 + 返回错误
+                err_msg = result.get("message") or "Skill 执行失败"
+                code = result.get("code", "skill_error")
+                # 写 ProblemMemory（这里有 session_id 上下文，registry 层没有）
                 try:
                     with MemoryLayerManager() as mlm:
                         mlm._add_problem(
                             session_id=session_id,
                             user_id=self.user_id,
-                            content=f"[skill_failure] {target_skill}: {err}",
+                            content=f"[skill_failure] {target_skill}: {code}: {err_msg}",
                             memory_type="problem",
-                            tags=["skill_failure", target_skill, type(exc).__name__],
+                            tags=["skill_failure", target_skill, code],
                         )
                 except Exception:
                     logger.exception("skill_failure 写 ProblemMemory 失败")
 
-                # Phase 3: fire-and-forget 错误诊断
-                try:
-                    from src.agent.error_reviewer import error_reviewer
-                    from src.shared.async_runner import fire_and_forget
-                    fire_and_forget(
-                        error_reviewer.review_and_store_async(
-                            source="skill_exec",
-                            location=f"skill:{target_skill}",
-                            exc=exc,
-                            context_extra={
-                                "skill_name": target_skill,
-                                "skill_kwargs": skill_kwargs,
-                            },
-                        ),
-                        name="skill-error-review",
-                    )
-                except Exception:
-                    logger.exception("fire error_reviewer 启动失败")
-
-                return AgentResponse(
-                    text=f"执行失败：{err}\n请稍后再试或换个方案。",
-                    error=err,
+                text = f"执行失败：[{code}] {err_msg}\n请稍后再试或换个方案。"
+                mm.append_message(
+                    session_id, role="assistant",
+                    content=text,
+                    skill_name=target_skill,
+                    tool_success=False,
+                    tool_error=f"{code}: {err_msg}",
                 )
-            mm.save_pending_plan(session_id, None)
-            summary = (result or {}).get("summary") or (result or {}).get("message") or json.dumps(result, ensure_ascii=False)[:300]
+                return AgentResponse(text=text, error=f"{code}: {err_msg}")
+
+            # 成功
+            summary = (
+                result.get("summary")
+                or result.get("message")
+                or json.dumps(result.get("data", {}), ensure_ascii=False)[:300]
+            )
             text = f"✅ 执行完成：{summary}"
-            mm.append_message(session_id, role="assistant", content=text)
+            mm.append_message(
+                session_id, role="assistant",
+                content=text,
+                skill_name=target_skill,
+                tool_success=True,
+            )
             return AgentResponse(text=text, skill_result=result)
 
         if any(w in normalized for w in cancel_words):
