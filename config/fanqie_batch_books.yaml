@@ -1,0 +1,32 @@
+# 番茄批量抓取种子清单
+# 首次启动时通过 `python main.py fanqie-batch-seed` 导入到 DB。
+# 之后通过 `python main.py fanqie-batch-add --book-names "..."` 动态加书。
+#
+# Harness Engineering L5: 批量抓取**不允许**任意指定书名 —— 必须先加书到清单。
+# 这份 YAML 是 git track 的"初始种子"，方便版本管理 + 团队共享。
+
+books:
+  - name: "我的6个超级奶爸"
+    chapters: 5
+    interval_s: 30
+    note: "番茄达人中心 KOL 推荐 Top 1 — 4 胞胎/年代文/萌宝团宠"
+
+  - name: "被攻略的竟是我自己？"
+    chapters: 5
+    interval_s: 30
+    note: "KOL 推荐 Top 2 — 都市日常/穿越反套路"
+
+  - name: "百年成的大帝"
+    chapters: 3
+    interval_s: 30
+    note: "KOL 推荐 Top 4 — 解说混剪/玄幻（解说混剪发文类型，需评估）"
+
+  - name: "全家恋爱脑？郡主抽醒一个又一个"
+    chapters: 5
+    interval_s: 30
+    note: "KOL 推荐 Top 4 — 宫斗宅斗/女强"
+
+  - name: "分手后，被一群精神小妹收留了"
+    chapters: 5
+    interval_s: 30
+    note: "KOL 推荐 Top 3 — 都市脑洞/年代反差"

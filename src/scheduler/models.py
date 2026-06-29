@@ -134,3 +134,43 @@ class TaskExecution(Base):
     next_retry_at = Column(DateTime, nullable=True)  # Phase 3: retry_delay_seconds 实现
 
     created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class FanqieBatchStatus(str, Enum):
+    """番茄批量抓取清单状态。"""
+    PENDING = "pending"        # 待抓
+    RUNNING = "running"        # 抓取中
+    DONE = "done"              # 抓取完成
+    FAILED = "failed"          # 抓取失败（保留在清单）
+    SKIPPED = "skipped"        # 跳过（已存在）
+
+
+class FanqieBatchBook(Base):
+    """
+    番茄批量抓取清单（Harness Engineering L5：受控清单）。
+
+    批量抓取**不允许**用户传任意 book_names —— 必须先加书到这张表，
+    再调 fanqie_batch_run 跑 pending 状态的书。
+    """
+    __tablename__ = "fanqie_batch_books"
+
+    id = Column(Integer, primary_key=True, index=True)
+    book_name = Column(String(255), nullable=False, index=True)
+    status = Column(String(32), default=FanqieBatchStatus.PENDING.value, index=True)
+    chapters = Column(Integer, default=5)             # 默认 5 章
+    interval_s = Column(Integer, default=30)           # 默认 30 秒
+
+    # 抓取结果
+    book_id = Column(String(64), default="")
+    chapters_fetched = Column(Integer, default=0)
+    total_chapters_seen = Column(Integer, default=0)
+    paywall_hit = Column(Boolean, default=False)
+    material_path = Column(String(512), default="")
+    error_message = Column(Text, default="")
+    duration_ms = Column(Integer, default=0)
+
+    # 调度
+    added_at = Column(DateTime, default=datetime.utcnow)
+    last_fetched_at = Column(DateTime, nullable=True)
+    attempt_count = Column(Integer, default=0)
+    note = Column(Text, default="")  # Agent / 用户备注

@@ -471,21 +471,24 @@ def _fanqie_list_books(**kwargs) -> dict:
     return {"success": True, "count": len(books), "books": books}
 
 
-def _fanqie_batch_fetch(
+def _fanqie_batch_add(
     book_names: list[str] | None = None,
     chapters: int = 5,
-    interval_s: float = 30.0,
-    headless: bool = True,
+    interval_s: int = 30,
+    note: str = "",
     **kwargs,
 ) -> dict:
-    """批量抓取番茄小说（同步阻塞模式）。"""
+    """加书到批量抓取清单（DB）。
+
+    Harness Engineering L5: 批量抓取必须先加书到清单，不能任意指定。
+    """
     from src.agent.skill_result import SkillResult
-    from src.platform_adapter.fanqie_batch import batch_fetch_sync, _summarize_report
+    from src.platform_adapter.fanqie_batch import add_books
 
     if not book_names:
         return SkillResult.err(
             "validation_error", "缺少 book_names (list[str])",
-            error={"retryable": False},
+            error={"retryable": False, "hint": "传 list[str]，例如 ['我的6个超级奶爸', '被攻略的竟是我自己？']"},
         ).to_dict()
     if not isinstance(book_names, list):
         return SkillResult.err(
@@ -494,12 +497,75 @@ def _fanqie_batch_fetch(
         ).to_dict()
 
     try:
-        report = batch_fetch_sync(
+        result = add_books(
             book_names=book_names,
             chapters=chapters,
             interval_s=interval_s,
-            headless=headless,
+            note=note,
         )
+        return SkillResult.ok(
+            data=result,
+            message=f"加书完成: added={result['added']}, skipped={result['skipped']}",
+        ).to_dict()
+    except Exception as exc:
+        return SkillResult.err(
+            "skill_error",
+            f"{type(exc).__name__}: {exc}"[:300],
+            error={"type": type(exc).__name__, "message": str(exc), "retryable": False},
+        ).to_dict()
+
+
+def _fanqie_batch_list(
+    status: str = "all",
+    limit: int = 200,
+    **kwargs,
+) -> dict:
+    """列批量抓取清单（DB）。
+
+    Args:
+        status: 过滤（pending/running/done/failed/skipped/all）
+        limit: 最多返回条数
+    """
+    from src.agent.skill_result import SkillResult
+    from src.platform_adapter.fanqie_batch import list_books
+
+    try:
+        s = None if status == "all" else status
+        books = list_books(status=s, limit=limit)
+        return SkillResult.ok(
+            data={"count": len(books), "books": books, "status_filter": status},
+            message=f"清单 {len(books)} 本（status={status}）",
+        ).to_dict()
+    except Exception as exc:
+        return SkillResult.err(
+            "skill_error",
+            f"{type(exc).__name__}: {exc}"[:300],
+            error={"type": type(exc).__name__, "message": str(exc), "retryable": False},
+        ).to_dict()
+
+
+def _fanqie_batch_run(
+    interval_s: float = 30.0,
+    max_count: int = 10,
+    **kwargs,
+) -> dict:
+    """跑批量抓取（**不接受 book_names**）：从 DB 读 pending 状态的书。
+
+    Harness Engineering L5: 批量跑必须用 DB 清单，不能任意传书。
+    """
+    from src.agent.skill_result import SkillResult
+    from src.platform_adapter.fanqie_batch import batch_fetch_sync, _summarize_report
+
+    # 显式拒绝 book_names
+    if "book_names" in kwargs and kwargs["book_names"]:
+        return SkillResult.err(
+            "validation_error",
+            "批量跑不接受 book_names 参数（受控清单）。先调 fanqie_batch_add 加书到 DB",
+            error={"retryable": False, "expected_skill": "fanqie_batch_add"},
+        ).to_dict()
+
+    try:
+        report = batch_fetch_sync(interval_s=interval_s, max_count=max_count)
         summary = _summarize_report(report)
         return SkillResult.ok(
             data=summary,
@@ -513,38 +579,37 @@ def _fanqie_batch_fetch(
         ).to_dict()
 
 
-def _fanqie_batch_fetch_async(
-    book_names: list[str] | None = None,
-    chapters: int = 5,
-    interval_s: float = 30.0,
-    name_prefix: str = "番茄批量抓取",
+def _fanqie_batch_enqueue(
     **kwargs,
 ) -> dict:
-    """批量抓取番茄小说（后台入队模式）。每本入队 TaskQueue,Worker 异步跑。"""
+    """把 DB pending 状态的书入队 TaskQueue，Worker 异步跑。"""
     from src.agent.skill_result import SkillResult
-    from src.platform_adapter.fanqie_batch import batch_fetch_async
-
-    if not book_names:
-        return SkillResult.err(
-            "validation_error", "缺少 book_names (list[str])",
-            error={"retryable": False},
-        ).to_dict()
-    if not isinstance(book_names, list):
-        return SkillResult.err(
-            "validation_error", f"book_names 必须是 list[str], 实际 {type(book_names).__name__}",
-            error={"retryable": False},
-        ).to_dict()
+    from src.platform_adapter.fanqie_batch import batch_enqueue_pending
 
     try:
-        result = batch_fetch_async(
-            book_names=book_names,
-            chapters=chapters,
-            interval_s=interval_s,
-            name_prefix=name_prefix,
-        )
+        result = batch_enqueue_pending()
         return SkillResult.ok(
             data=result,
-            message=f"已入队 {result['queued']}/{result['total']}, 跳过 {result['skipped']} (已存在)",
+            message=f"入队完成: queued={result['queued']}/{result['total']}",
+        ).to_dict()
+    except Exception as exc:
+        return SkillResult.err(
+            "skill_error",
+            f"{type(exc).__name__}: {exc}"[:300],
+            error={"type": type(exc).__name__, "message": str(exc), "retryable": False},
+        ).to_dict()
+
+
+def _fanqie_batch_seed(**kwargs) -> dict:
+    """从 YAML 种子清单导入 DB（首次启动用）。"""
+    from src.agent.skill_result import SkillResult
+    from src.platform_adapter.fanqie_batch import seed_from_yaml
+
+    try:
+        result = seed_from_yaml()
+        return SkillResult.ok(
+            data=result,
+            message=f"seed 完成: imported={result.get('imported', 0)}, skipped={result.get('skipped', 0)}",
         ).to_dict()
     except Exception as exc:
         return SkillResult.err(
@@ -862,19 +927,37 @@ SKILLS: list[Skill] = [
         requires_confirmation=False,
     ),
     Skill(
-        name="fanqie_batch_fetch",
-        description="批量抓取多本番茄小说。参数: book_names(list[str] 必填), chapters(int 默认5), interval_s(float 默认30秒防反爬), headless(bool)。同步阻塞模式,适合 < 10 本;失败不中断,继续下一本。返回: {total, succeeded, failed, skipped, results: [{book_name, success, ...}]}",
-        func=_fanqie_batch_fetch,
+        name="fanqie_batch_add",
+        description="加书到批量抓取清单（DB）。参数: book_names(list[str] 必填), chapters(int 默认5), interval_s(int 默认30秒), note(str)。Harness L5: 批量抓取必须先加书,不能任意指定。返回: {total, added, skipped, added_ids}",
+        func=_fanqie_batch_add,
+        requires_confirmation=True,  # 写操作
+    ),
+    Skill(
+        name="fanqie_batch_list",
+        description="列批量抓取清单（DB）。参数: status(pending/running/done/failed/skipped/all, 默认all), limit(int 默认200)。返回: {count, books, status_filter}",
+        func=_fanqie_batch_list,
+        requires_confirmation=False,
+    ),
+    Skill(
+        name="fanqie_batch_run",
+        description="跑批量抓取：从 DB 读 pending 状态的书（不接受 book_names 参数）。参数: interval_s(float 默认30秒), max_count(int 默认10)。失败不中断,逐本 mark_done。返回: BatchFetchReport",
+        func=_fanqie_batch_run,
         requires_confirmation=True,  # 批量写操作
-        timeout_s=3600.0,          # 1 小时（10 本 × 30s + 抓取时间）
+        timeout_s=3600.0,          # 1 小时
         retries=0,
     ),
     Skill(
-        name="fanqie_batch_fetch_async",
-        description="批量抓取番茄小说（后台入队模式）。参数: book_names(list[str] 必填), chapters(int 默认5), interval_s(float 默认30秒防反爬)。每本入队 TaskQueue,Worker 异步拉取;适合 10+ 本大规模抓取。返回: {total, queued, skipped, execution_uuids, task_ids}",
-        func=_fanqie_batch_fetch_async,
+        name="fanqie_batch_enqueue",
+        description="把 DB pending 状态的书入队 TaskQueue,Worker 异步跑。返回: {total, queued, skipped, execution_uuids, task_ids}",
+        func=_fanqie_batch_enqueue,
         requires_confirmation=True,
-        timeout_s=60.0,           # 入队操作本身快速
+        timeout_s=60.0,
+    ),
+    Skill(
+        name="fanqie_batch_seed",
+        description="从 data/fanqie_promotion/batch_books.yaml 种子清单导入 DB（首次启动用）",
+        func=_fanqie_batch_seed,
+        requires_confirmation=False,
     ),
     # ── 抖音养号 ─────────────────────────────────────────────────
     Skill(
