@@ -1,0 +1,125 @@
+{
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "hospital_shot03_face_closeup_keyframe.png"
+    }
+  },
+  "2": {
+    "class_type": "VHS_LoadVideo",
+    "inputs": {
+      "video": "hospital_shot03_blink_driver_pingpong.mp4",
+      "force_rate": 25,
+      "custom_width": 0,
+      "custom_height": 0,
+      "frame_load_cap": 71,
+      "skip_first_frames": 0,
+      "select_every_nth": 1,
+      "force_size": "Disabled"
+    }
+  },
+  "3": {
+    "class_type": "DownloadAndLoadLivePortraitModels",
+    "inputs": {
+      "precision": "fp16",
+      "mode": "human"
+    }
+  },
+  "4": {
+    "class_type": "LivePortraitLoadMediaPipeCropper",
+    "inputs": {
+      "landmarkrunner_onnx_device": "CPU",
+      "keep_model_loaded": true
+    }
+  },
+  "5": {
+    "class_type": "LivePortraitCropper",
+    "inputs": {
+      "pipeline": [
+        "3",
+        0
+      ],
+      "cropper": [
+        "4",
+        0
+      ],
+      "source_image": [
+        "1",
+        0
+      ],
+      "dsize": 512,
+      "scale": 2.3,
+      "vx_ratio": 0.0,
+      "vy_ratio": -0.125,
+      "face_index": 0,
+      "face_index_order": "large-small",
+      "rotate": true
+    }
+  },
+  "6": {
+    "class_type": "LivePortraitProcess",
+    "inputs": {
+      "pipeline": [
+        "3",
+        0
+      ],
+      "crop_info": [
+        "5",
+        1
+      ],
+      "source_image": [
+        "1",
+        0
+      ],
+      "driving_images": [
+        "2",
+        0
+      ],
+      "lip_zero": true,
+      "lip_zero_threshold": 0.03,
+      "stitching": true,
+      "delta_multiplier": 0.45,
+      "mismatch_method": "constant",
+      "relative_motion_mode": "relative",
+      "driving_smooth_observation_variance": 0.00001,
+      "expression_friendly": false,
+      "expression_friendly_multiplier": 1.0
+    }
+  },
+  "7": {
+    "class_type": "LivePortraitComposite",
+    "inputs": {
+      "source_image": [
+        "1",
+        0
+      ],
+      "cropped_image": [
+        "6",
+        0
+      ],
+      "liveportrait_out": [
+        "6",
+        1
+      ]
+    }
+  },
+  "8": {
+    "class_type": "VHS_VideoCombine",
+    "inputs": {
+      "images": [
+        "7",
+        0
+      ],
+      "frame_rate": 25.0,
+      "loop_count": 0,
+      "filename_prefix": "hospital_video/shot03_liveportrait",
+      "format": "video/h264-mp4",
+      "pingpong": false,
+      "save_output": true,
+      "pix_fmt": "yuv420p",
+      "crf": 19,
+      "save_metadata": true,
+      "trim_to_audio": false
+    }
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "id": "chibi_plush_3d",
+  "display_name": "3D软萌布偶 / Q版玩偶",
+  "version": 1,
+  "reference_image": "assets/style_references/chibi_plush_3d_reference.jpg",
+  "character_anchor": "data/qa/hospital_character_reference/chibi_plush_3d/linmo_xiaoman_anchor_v1.png",
+  "style_fingerprint": {
+    "medium": "premium cinematic 3D toy animation",
+    "proportions": "2.5-head-tall chibi, oversized head, short rounded limbs",
+    "surface": "soft flocked plush and felt fibers with clean seams",
+    "face": "soft molded doll face, large glossy eyes, subtle blush, tiny nose and mouth",
+    "lighting": "soft cinematic key light, delicate rim light, shallow depth of field",
+    "mood": "cute, restrained, emotionally readable, not comedic"
+  },
+  "identity_lock": {
+    "primary_method": "reuse the approved character anchor as every shot's image-conditioning source and use I2V rather than unconstrained T2V",
+    "installed_optional_method": {
+      "node_pack": "PuLID_ComfyUI",
+      "model": "pulid/ip-adapter_pulid_sdxl_fp16.safetensors",
+      "clip_vision": "clip_vision/clip_vision_h.safetensors",
+      "recommended_weight": 0.45,
+      "note": "Keep weight moderate because strong human-face identity conditioning can pull the doll face back toward realism."
+    },
+    "strongest_method": "train one character LoRA per recurring character from 15-30 approved multi-view doll-style images",
+    "locked_attributes": [
+      "father: short black side-parted hair silhouette",
+      "father: dark charcoal blazer, light gray crew-neck shirt, black trousers and shoes",
+      "daughter: black bob with blunt bangs and two tiny red hair ties",
+      "daughter: teal puffer jacket, mustard backpack, gray leggings and white sneakers",
+      "father-daughter height ratio and age difference",
+      "stable eye color, eye highlight pattern and head-to-body ratio"
+    ]
+  },
+  "local_generation_profiles": {
+    "fast_style_master": {
+      "checkpoint": "flux1-schnell-fp8.safetensors",
+      "resolution": "768x1024",
+      "steps": 4,
+      "cfg": 1.0,
+      "use": "Create and approve the initial doll-style character master images."
+    },
+    "identity_weighted_sdxl": {
+      "checkpoint": "animagine-xl-3.1.safetensors",
+      "resolution": "768x1024",
+      "steps": 24,
+      "cfg": 5.5,
+      "sampler": "dpmpp_2m_sde",
+      "scheduler": "karras",
+      "pulid_weight": 0.45,
+      "use": "Generate alternate views when stronger facial reference conditioning is more important than exact 3D material rendering."
+    },
+    "video": {
+      "preferred_model": "LTX-2.3 I2V",
+      "resolution": "704x1248",
+      "fps": 25,
+      "length_frames": 65,
+      "motion_amplitude": "small to medium",
+      "rule": "Begin every shot from an approved keyframe derived from the character anchor; do not use free T2V for recurring characters."
+    }
+  },
+  "prompt_prefix": "premium cinematic 3D chibi plush-doll animation, 2.5-head-tall proportions, oversized rounded head, short soft limbs, fine flocked felt fibers, clean fabric seams, soft molded doll face, large glossy eyes with stable highlights, subtle cheek blush, tiny nose and mouth, shallow depth of field, soft cinematic lighting, cute but emotionally restrained",
+  "negative_prompt": "photorealistic human skin, 2D illustration, flat anime drawing, plastic shine, different hairstyle, different clothing colors, adult-sized child, changed eye color, changed eye highlights, extra characters, duplicate character, missing backpack, long realistic limbs, deformed hands, face drift, text, subtitles, watermark, social media interface, logo",
+  "consistency_rules": [
+    "Approve front and three-quarter character anchors before generating shots.",
+    "Keep identity conditioning and style conditioning on separate branches.",
+    "Do not change seed as an identity strategy; the anchor image or LoRA is authoritative.",
+    "Regenerate a shot keyframe when pose or camera angle changes materially.",
+    "Use the same approved keyframe for retries of the same shot.",
+    "Route precise full-body actions through pose control after a compatible ControlNet model is installed."
+  ],
+  "known_local_limitations": [
+    "PuLID and its SDXL model are installed.",
+    "No compatible ControlNet model file is currently installed, although comfyui_controlnet_aux is present.",
+    "No Flux Redux or Flux IP-Adapter model is currently installed.",
+    "Without a trained character LoRA, cross-shot identity is strong but not mathematically identical."
+  ]
+}

@@ -1,0 +1,212 @@
+{
+  "last_node_id": 12,
+  "last_link_id": 17,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "WanVideoLoraSelect",
+      "pos": [50, 50],
+      "size": [300, 100],
+      "properties": {
+        "lora": "wan2.2_t2v_lightx2v_4steps_lora_v1.1_low_noise.safetensors",
+        "strength": 1.0
+      },
+      "widgets_values": [
+        "wan2.2_t2v_lightx2v_4steps_lora_v1.1_low_noise.safetensors",
+        1.0
+      ]
+    },
+    {
+      "id": 2,
+      "type": "WanVideoModelLoader",
+      "pos": [400, 50],
+      "size": [300, 100],
+      "properties": {
+        "model": "wan2.2_ti2v_5B_fp16.safetensors",
+        "base_precision": "bf16",
+        "quantization": "disabled",
+        "load_device": "offload_device"
+      },
+      "widgets_values": [
+        "wan2.2_ti2v_5B_fp16.safetensors",
+        "bf16",
+        "disabled",
+        "offload_device"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "WanVideoVAELoader",
+      "pos": [400, 200],
+      "size": [300, 60],
+      "properties": {
+        "model_name": "wan2.2_vae.safetensors"
+      },
+      "widgets_values": [
+        "wan2.2_vae.safetensors"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "WanVideoTextEncoderLoader",
+      "pos": [400, 300],
+      "size": [300, 80],
+      "properties": {
+        "model_name": "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+        "precision": "fp16"
+      },
+      "widgets_values": [
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+        "fp16"
+      ]
+    },
+    {
+      "id": 5,
+      "type": "LoadImage",
+      "pos": [50, 220],
+      "size": [300, 80],
+      "properties": {
+        "image": "first_frame.png"
+      },
+      "widgets_values": [
+        "first_frame.png",
+        "image"
+      ]
+    },
+    {
+      "id": 6,
+      "type": "LoadImage",
+      "pos": [50, 340],
+      "size": [300, 80],
+      "properties": {
+        "image": "last_frame.png"
+      },
+      "widgets_values": [
+        "last_frame.png",
+        "image"
+      ]
+    },
+    {
+      "id": 7,
+      "type": "WanVideoTextEncode",
+      "pos": [750, 200],
+      "size": [400, 200],
+      "properties": {
+        "positive_prompt": "smooth cinematic camera motion, vibrant colors, anime style, character walking through scene",
+        "negative_prompt": "blurry, low quality, distorted, deformed, jpeg artifacts, watermark"
+      },
+      "widgets_values": [
+        "smooth cinematic camera motion, vibrant colors, anime style, character walking through scene",
+        "blurry, low quality, distorted, deformed, jpeg artifacts, watermark"
+      ]
+    },
+    {
+      "id": 8,
+      "type": "WanVideoImageToVideoEncode",
+      "pos": [1200, 200],
+      "size": [350, 220],
+      "properties": {
+        "width": 540,
+        "height": 960,
+        "num_frames": 81,
+        "noise_aug_strength": 0.0,
+        "start_latent_strength": 1.0,
+        "end_latent_strength": 1.0,
+        "force_offload": true,
+        "fun_or_fl2v_model": true
+      },
+      "widgets_values": [
+        540,
+        960,
+        81,
+        0.0,
+        1.0,
+        1.0,
+        true,
+        null,
+        null,
+        null,
+        true
+      ]
+    },
+    {
+      "id": 9,
+      "type": "WanVideoSampler",
+      "pos": [1600, 200],
+      "size": [350, 280],
+      "properties": {
+        "steps": 4,
+        "cfg": 1.0,
+        "shift": 5.0,
+        "seed": 42,
+        "force_offload": true,
+        "scheduler": "unipc",
+        "riflex_freq_index": 0
+      },
+      "widgets_values": [
+        4,
+        1.0,
+        5.0,
+        42,
+        true,
+        "unipc",
+        0
+      ]
+    },
+    {
+      "id": 10,
+      "type": "WanVideoDecode",
+      "pos": [2000, 250],
+      "size": [200, 80],
+      "properties": {
+        "enable_vae_tiling": false
+      },
+      "widgets_values": [
+        false
+      ]
+    },
+    {
+      "id": 11,
+      "type": "VHS_VideoCombine",
+      "pos": [2250, 250],
+      "size": [300, 120],
+      "properties": {
+        "frame_rate": 16,
+        "loop_count": 0,
+        "filename_prefix": "wan22_test",
+        "format": "video/h264-mp4",
+        "pingpong": false,
+        "save_output": true
+      },
+      "widgets_values": [
+        16,
+        0,
+        "wan22_test",
+        "video/h264-mp4",
+        false,
+        true
+      ]
+    }
+  ],
+  "links": [
+    [1, 1, 0, 2, 4, "WANVIDLORA"],
+    [2, 2, 0, 9, 0, "WANVIDEOMODEL"],
+    [3, 3, 0, 8, 0, "VAE"],
+    [4, 4, 0, 7, 0, "WANTEXTENCODER"],
+    [5, 5, 0, 8, 1, "IMAGE"],
+    [6, 6, 0, 8, 2, "IMAGE"],
+    [7, 7, 0, 9, 1, "WANVIDEOTEXTEMBEDS"],
+    [8, 8, 0, 9, 2, "WANVIDIMAGE_EMBEDS"],
+    [9, 9, 0, 10, 0, "LATENT"],
+    [10, 10, 0, 11, 0, "IMAGE"]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.0,
+      "offset": [0, 0]
+    }
+  },
+  "version": 0.4
+}

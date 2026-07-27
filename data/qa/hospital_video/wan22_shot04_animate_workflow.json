@@ -1,0 +1,201 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "Wan2_2-Animate-14B_fp8_e4m3fn_scaled_KJ.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "3": {
+    "class_type": "ModelSamplingSD3",
+    "inputs": {
+      "model": ["1", 0],
+      "shift": 8.0
+    }
+  },
+  "4": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+      "type": "wan",
+      "device": "default"
+    }
+  },
+  "5": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": ["4", 0],
+      "text": "photorealistic restrained cinematic hospital drama, preserve the exact same slim thirty-one-year-old Chinese father and the exact same very small five-year-old Chinese daughter from the reference image, preserve their faces, hair, clothing, proportions, chairs, backpack, untied right shoelace and cool fluorescent hospital corridor. Hero motion, medium amplitude and slow deliberate speed: the father starts seated on the front edge of the left blue chair with torso leaning forward and hands clasped, slowly separates his hands, turns toward his daughter, shifts his weight forward, lowers his body in one continuous controlled path, places his right knee onto the tiled floor and keeps his left foot planted, ending in a stable one-knee kneeling posture facing the girl's untied right sneaker, torso inclined forward and both hands lowered near the loose shoelace without tying it yet. The daughter remains seated, still and looking down. fixed eye-level camera, stable exposure, cold soft fluorescent light, reserved grief, no speech"
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": ["4", 0],
+      "text": "identity change, different face, glasses, hairstyle change, clothing change, child growing, child moving, child standing, child disappearing, backpack disappearing, shoelace tied, father jumping, father stepping onto chair, raised foot on chair, father walking away, falling, fast abrupt motion, extra person, extra limbs, fused bodies, malformed knees, malformed hands, mouth opening, talking, smiling, crying, camera movement, camera shake, zoom, pan, corridor bending, moving walls, lighting pulse, flicker, warm orange color, cut, scene change, text, watermark"
+    }
+  },
+  "7": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "wan_2.1_vae.safetensors"
+    }
+  },
+  "8": {
+    "class_type": "CLIPVisionLoader",
+    "inputs": {
+      "clip_name": "clip_vision_h.safetensors"
+    }
+  },
+  "9": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "hospital_shot01_waiting_keyframe.png"
+    }
+  },
+  "10": {
+    "class_type": "CLIPVisionEncode",
+    "inputs": {
+      "clip_vision": ["8", 0],
+      "image": ["9", 0],
+      "crop": "none"
+    }
+  },
+  "11": {
+    "class_type": "LoadVideo",
+    "inputs": {
+      "file": "hospital_shot04_pose_driver_416x736_16fps.mp4"
+    }
+  },
+  "12": {
+    "class_type": "GetVideoComponents",
+    "inputs": {
+      "video": ["11", 0]
+    }
+  },
+  "13": {
+    "class_type": "ImageScale",
+    "inputs": {
+      "image": ["12", 0],
+      "upscale_method": "lanczos",
+      "width": 416,
+      "height": 736,
+      "crop": "disabled"
+    }
+  },
+  "16": {
+    "class_type": "WanAnimateToVideo",
+    "inputs": {
+      "positive": ["5", 0],
+      "negative": ["6", 0],
+      "vae": ["7", 0],
+      "reference_image": ["9", 0],
+      "clip_vision_output": ["10", 0],
+      "pose_video": ["13", 0],
+      "width": 416,
+      "height": 736,
+      "length": 49,
+      "batch_size": 1,
+      "video_frame_offset": 0,
+      "continue_motion_max_frames": 5
+    }
+  },
+  "17": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": ["3", 0],
+      "positive": ["16", 0],
+      "negative": ["16", 1],
+      "latent_image": ["16", 2],
+      "seed": 260726404,
+      "steps": 12,
+      "cfg": 1.0,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "denoise": 1.0
+    }
+  },
+  "18": {
+    "class_type": "TrimVideoLatent",
+    "inputs": {
+      "samples": ["17", 0],
+      "trim_amount": ["16", 3]
+    }
+  },
+  "19": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": ["18", 0],
+      "vae": ["7", 0]
+    }
+  },
+  "20": {
+    "class_type": "ImageFromBatch",
+    "inputs": {
+      "image": ["19", 0],
+      "batch_index": ["16", 4],
+      "length": 4096
+    }
+  },
+  "21": {
+    "class_type": "CreateVideo",
+    "inputs": {
+      "images": ["20", 0],
+      "fps": 16.0
+    }
+  },
+  "22": {
+    "class_type": "SaveVideo",
+    "inputs": {
+      "video": ["21", 0],
+      "filename_prefix": "hospital_video/shot04_wan22_animate",
+      "format": "mp4",
+      "codec": "h264"
+    }
+  },
+  "23": {
+    "class_type": "ImageFromBatch",
+    "inputs": {
+      "image": ["20", 0],
+      "batch_index": 0,
+      "length": 1
+    }
+  },
+  "24": {
+    "class_type": "ImageFromBatch",
+    "inputs": {
+      "image": ["20", 0],
+      "batch_index": 24,
+      "length": 1
+    }
+  },
+  "25": {
+    "class_type": "ImageFromBatch",
+    "inputs": {
+      "image": ["20", 0],
+      "batch_index": 48,
+      "length": 1
+    }
+  },
+  "26": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["23", 0],
+      "filename_prefix": "hospital_video/shot04_wan_f000"
+    }
+  },
+  "27": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["24", 0],
+      "filename_prefix": "hospital_video/shot04_wan_f024"
+    }
+  },
+  "28": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["25", 0],
+      "filename_prefix": "hospital_video/shot04_wan_f048"
+    }
+  }
+}

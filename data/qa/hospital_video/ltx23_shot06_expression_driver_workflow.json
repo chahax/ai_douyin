@@ -1,0 +1,118 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "LTX2\\ltx-2.3-22b-distilled-1.1_transformer_only_fp8_scaled.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "2": {
+    "class_type": "ModelSamplingLTXV",
+    "inputs": {
+      "model": ["1", 0],
+      "max_shift": 2.05,
+      "base_shift": 0.95,
+      "latent": ["9", 2]
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "LTX-Kijai\\LTX23_video_vae_bf16.safetensors"
+    }
+  },
+  "4": {
+    "class_type": "LTXAVTextEncoderLoader",
+    "inputs": {
+      "text_encoder": "gemma_3_12B_it.safetensors",
+      "ckpt_name": "ltx-2.3-text-proj-only.safetensors",
+      "device": "default"
+    }
+  },
+  "5": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": ["4", 0],
+      "text": "Photorealistic restrained cinematic realism. The exact same adult Chinese father begins with his chin slightly lowered, gaze directed down, both eyes open and lips gently closed. With extremely small amplitude and slow speed, he completes one quiet inhale as his upper chest rises only slightly, closes both eyes naturally and keeps them closed for about one second, then reopens both eyes together. He slowly raises his chin by only a few degrees, directs his gaze slightly upward toward his daughter, and forms an extremely faint reassuring closed-lip smile visible only as a tiny softening at the corners of his mouth. He ends holding the gentle expression and remains still. No tear is visible and no hand enters the frame. His exact face, hair, clothing, skin texture, the blurred dusty-blue child shoulder in the lower-right foreground and the cool hospital background remain unchanged. Locked camera, no speech."
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": ["4", 0],
+      "text": "identity change, different face, face morphing, age change, glasses, hairstyle change, clothing change, broad smile, teeth, laughing, crying, visible tear, multiple tears, open mouth, talking, lip movement, exaggerated emotion, repeated blinking, wink, one eye closing alone, head turn, large head movement, hand entering frame, child moving, child face appearing, foreground shoulder moving, camera movement, camera shake, refocus, background change, changing lights, warm orange lighting, flicker, exposure pumping, scene cut, text, watermark"
+    }
+  },
+  "7": {
+    "class_type": "LTXVConditioning",
+    "inputs": {
+      "positive": ["5", 0],
+      "negative": ["6", 0],
+      "frame_rate": 25.0
+    }
+  },
+  "8": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "hospital_shot06_face_base_keyframe.png"
+    }
+  },
+  "9": {
+    "class_type": "LTXVImgToVideo",
+    "inputs": {
+      "positive": ["7", 0],
+      "negative": ["7", 1],
+      "vae": ["3", 0],
+      "image": ["8", 0],
+      "width": 704,
+      "height": 1248,
+      "length": 81,
+      "batch_size": 1,
+      "strength": 0.9
+    }
+  },
+  "10": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": ["2", 0],
+      "positive": ["9", 0],
+      "negative": ["9", 1],
+      "latent_image": ["9", 2],
+      "seed": 260726606,
+      "steps": 8,
+      "cfg": 1.0,
+      "sampler_name": "euler_ancestral_cfg_pp",
+      "scheduler": "simple",
+      "denoise": 1.0
+    }
+  },
+  "11": {
+    "class_type": "LTXVTiledVAEDecode",
+    "inputs": {
+      "vae": ["3", 0],
+      "latents": ["10", 0],
+      "horizontal_tiles": 1,
+      "vertical_tiles": 2,
+      "overlap": 2,
+      "last_frame_fix": false,
+      "working_device": "auto",
+      "working_dtype": "auto"
+    }
+  },
+  "12": {
+    "class_type": "CreateVideo",
+    "inputs": {
+      "images": ["11", 0],
+      "fps": 25.0
+    }
+  },
+  "13": {
+    "class_type": "SaveVideo",
+    "inputs": {
+      "video": ["12", 0],
+      "filename_prefix": "hospital_video/shot06_ltx23_expression_driver",
+      "format": "mp4",
+      "codec": "h264"
+    }
+  }
+}

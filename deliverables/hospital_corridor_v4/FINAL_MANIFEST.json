@@ -1,0 +1,44 @@
+{
+  "project": "hospital_corridor",
+  "version": "v4_natural_lace",
+  "status": "ready_for_review",
+  "video": {
+    "file": "hospital_corridor_roughcut_v4_natural_lace.mp4",
+    "width": 704,
+    "height": 1248,
+    "fps": 25,
+    "frames": 381,
+    "duration_seconds": 15.24,
+    "codec": "h264",
+    "sha256": "8BE209C4A1089DE70DB40DCF09EE8DAFCAF9700694559B54388C7109657A4178"
+  },
+  "kneeling_shot": {
+    "file": "shot04_kneel_natural_lace.mp4",
+    "frames": 101,
+    "duration_seconds": 4.04,
+    "sha256": "5A3079B3C921B03C6776CD6287CDEEF814FE5D131FC5E43C98444D193B49AA22"
+  },
+  "shoelace_correction": {
+    "shoe": "girl's right sneaker, viewer's left",
+    "other_shoe": "remains tied",
+    "short_end": "curves downward along the shoe side",
+    "long_end": "hangs below the toe in a relaxed asymmetric curve",
+    "tips": "point downward and remain above the floor",
+    "wide_shot_regenerated": true
+  },
+  "quality_checks": {
+    "full_video_decode": "passed",
+    "kneeling_dense_frame_review": "passed",
+    "shoelace_six_point_close_review": "passed",
+    "shoelace_persists_through_all_sampled_frames": true,
+    "shoelace_floating_or_rigid": false,
+    "shoelace_duplication": false,
+    "right_shoe_accidentally_tied": false,
+    "gross_anatomy": "passed"
+  },
+  "reproducibility": {
+    "workflow": "shot04_ltx23_natural_lace_workflow.json",
+    "endpoint_keyframe": "shot04_kneel_endpoint_natural_lace.png",
+    "model": "LTX-2.3 22B distilled FP8"
+  }
+}

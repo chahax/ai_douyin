@@ -1,0 +1,11 @@
+{
+  "1": {"class_type": "CLIPLoader", "inputs": {"clip_name": "umt5_xxl_fp8_e4m3fn_scaled.safetensors", "type": "wan"}},
+  "2": {"class_type": "CLIPTextEncode", "inputs": {"text": "PROMPT_PLACEHOLDER", "clip": ["1", 0]}},
+  "3": {"class_type": "CLIPTextEncode", "inputs": {"text": "blurry, low quality, distorted, deformed, jpeg artifacts, watermark, morphing, 3D, realistic, photorealistic, fast motion, camera shake, disfigured", "clip": ["1", 0]}},
+  "4": {"class_type": "VAELoader", "inputs": {"vae_name": "wan2.2_vae.safetensors"}},
+  "5": {"class_type": "LoadImage", "inputs": {"image": "start_frame.png"}},
+  "6": {"class_type": "LoadImage", "inputs": {"image": "end_frame.png"}},
+  "7": {"class_type": "WanFirstLastFrameToVideo", "inputs": {"positive": ["2", 0], "negative": ["3", 0], "vae": ["4", 0], "width": 540, "height": 960, "length": 81, "batch_size": 1, "start_image": ["5", 0], "end_image": ["6", 0]}},
+  "8": {"class_type": "VAEDecode", "inputs": {"samples": ["7", 2], "vae": ["4", 0]}},
+  "9": {"class_type": "VHS_VideoCombine", "inputs": {"images": ["8", 0], "frame_rate": 16, "loop_count": 0, "filename_prefix": "wan_i2v", "format": "video/h264-mp4", "pingpong": false, "save_output": true}}
+}
