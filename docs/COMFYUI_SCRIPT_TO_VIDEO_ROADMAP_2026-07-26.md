@@ -210,22 +210,23 @@ models\insightface\models\antelopev2\
 | `ComfyUI-LivePortraitKJ` | 面部微动 | 不可删 |
 | `PuLID_ComfyUI` | SDXL 人物身份路线 | 保留 |
 | `ComfyUI_Sonic` | 音频驱动备用路线 | 按需保留；若未来完全不做口型/数字人，可连同 SVD 依赖一起评估 |
-| `x-flux-comfyui` | 未安装 | 无需清理 |
+| `x-flux-comfyui` | 已重启加载并通过 8 镜头关键帧实测 | 新增强工作流依赖；保留 |
 
 #### 2.6.6 ControlNet 与 Flux IP-Adapter 当前真实状态
 
 截至 2026-07-27 本次更新：
 
-- `D:\IT\AI_vido\ComfyUI\models\controlnet` 中没有有效 ControlNet 权重，只有占位文件。
-- `InstantX/FLUX.1-dev-Controlnet-Union` 主权重已由用户完整下载到 `C:\Users\c\Downloads\diffusion_pytorch_model (1).safetensors`，约 6.15GiB；已通过 safetensors 头检查，但**尚未放入 ComfyUI 模型目录**。
-- SDXL OpenPose 主权重已下载到 `C:\Users\c\Downloads\diffusion_pytorch_model.safetensors`，约 2.33GiB；已通过 safetensors 头检查，但尚未安装。
-- `x-flux-comfyui` 未安装。
-- `models\xlabs\ipadapters` 未创建。
-- `x-flux-comfyui-main.zip` 已下载到 Downloads，ZIP 完整性检查通过，但尚未解压安装。
-- `XLabs-AI/flux-ip-adapter-v2` 的 `ip_adapter.safetensors` 已下载到 Downloads，约 0.99GiB，尚未安装。
-- XLabs 指定的 OpenAI CLIP ViT-L/14 `model.safetensors` 已下载到 Downloads，约 1.59GiB，尚未安装；本地 ComfyUI 现有的 `clip_vision_h.safetensors` 是另一模型，不能互相替代。
+- 已将 `InstantX/FLUX.1-dev-Controlnet-Union` 主权重安装到 `models\controlnet\InstantX_FLUX1_dev_Controlnet_Union\diffusion_pytorch_model.safetensors`。
+- 已将 xinsir SDXL OpenPose 主权重安装到 `models\controlnet\xinsir_sdxl_openpose\diffusion_pytorch_model.safetensors`。
+- 已将 `x-flux-comfyui` 解压到 `custom_nodes\x-flux-comfyui`；它要求的 GitPython、einops、transformers、diffusers、sentencepiece、OpenCV 在当前 ComfyUI Python 环境中均已存在。
+- 已将 `XLabs-AI/flux-ip-adapter-v2` 安装到 `models\xlabs\ipadapters\ip_adapter.safetensors`。
+- 已将配套 OpenAI CLIP ViT-L/14 安装到 `models\clip_vision\openai_clip_vit_l14\model.safetensors`；本地已有的 `clip_vision_h.safetensors` 是另一模型，不能互相替代。
+- Downloads 中的原始下载文件仍保留，未删除，可作为离线备份。
+- `LoadFluxIPAdapter`、`ApplyFluxIPAdapter`、`ApplyAdvancedFluxIPAdapter` 已在 ComfyUI 重启后成功加载；`ip_adapter.safetensors` 与 OpenAI CLIP ViT-L/14 已完成 8 镜头关键帧实测。
+- 本机 `Flux.1 Schnell FP8 + x-flux-comfyui` 必须使用 `XlabsSampler`。核心 `KSampler` 实测报 `DoubleStreamBlock.forward() got unexpected keyword argument 'attn_mask'`，不能作为这套增强模板的采样器。
+- InstantX Flux Union 已作为备选权重安装，但本项目没有把它纳入成片主线，仍需以后针对具体姿态镜头单独验证。
 
-“已下载”和“已安装”必须分开理解：只有移动到对应 ComfyUI 目录、安装节点、重启 ComfyUI 并成功加载工作流后，状态才能改为“已安装/可使用”。本次 Git 快照保存的是接入这些新组件之前的稳定基线。
+“已下载”“文件已安装”“重启后已验证”是三个不同状态。本次 Git 快照保存的是接入这些新组件之前的稳定基线；新组件不会覆盖该基线。
 
 远程备选信息：
 
@@ -252,14 +253,14 @@ InstantX Union 和 XLabs Flux IP-Adapter 都面向 FLUX.1-dev，并受 FLUX.1-de
 
 ### 当前主要缺口
 
-1. **人物一致性还没有产品化**  
-   现在主要依靠参考图和提示词。跨大量场景、侧脸、远近景和复杂动作时仍会漂移。
+1. **人物一致性已有可用增强模板，但还没有完全产品化**
+   已验证 XLabs Flux IP-Adapter + 人物母版图可以改善跨镜头脸型连续性；跨大量场景、侧脸、全身和复杂动作时仍会漂移，长期角色仍建议训练角色 LoRA。
 
-2. **姿态预处理器有了，但 ControlNet 权重缺失**  
-   这会限制 Animagine/SDXL 首帧的精确姿态控制。
+2. **姿态预处理器与两套 ControlNet 权重已经具备，但尚未形成统一姿态模板**
+   本机已有 DWPose/OpenPose 预处理、xinsir SDXL OpenPose 和 InstantX Flux Union；下一步是针对下蹲、行走、手部动作分别做兼容性和参数验收。
 
-3. **没有 ComfyUI IPAdapter Plus 节点及对应权重**  
-   PuLID 可做身份，但 IP-Adapter 更适合把“人物内容参考”和“画风参考”拆开控制。它是可选项，不是当前阻塞项。
+3. **已有 Flux IP-Adapter，但 SDXL IPAdapter Plus 仍未安装**
+   当前 XLabs 方案服务 Flux 关键帧；若要在 Animagine/SDXL 中把人物内容参考与画风参考拆开控制，仍可按需安装 ComfyUI IPAdapter Plus。它不是当前阻塞项。
 
 4. **没有 FLUX Redux**  
    Redux 能增强图像变化和参考图重绘，但 FLUX.1 Redux dev 受 FLUX dev 非商业许可约束，下载前需要先确认使用场景。
@@ -530,11 +531,11 @@ LTX-2.3 官方建议宽高可被 32 整除，帧数满足 `8n + 1`。例如 65�
 
 1. **冻结现有医院走廊工作流**：保存所有成功镜头的 API JSON、seed、模型、参考图和提示词。
 2. **建立项目 JSON 规范**：先让同一套流程能换剧情，不做模型升级。
-3. **安装 SDXL OpenPose ControlNet**：补齐姿态控制链，重点重试“下蹲/系鞋带”。
+3. **固化 SDXL OpenPose 与 Flux Union 姿态模板**：权重已经就位，下一步重点验收“下蹲/系鞋带”。
 4. **制作 Q版毛绒 3D 的完整人物母版**：正面、45°、侧面、全身和表情表。
 5. **用 PuLID 测试 10 张跨镜头静态首帧**：确认身份一致性上限。
 6. **若仍漂移，再训练 SDXL 角色 LoRA**。
-7. **最后再评估 IPAdapter Plus、FLUX Redux 或 Wan I2V A14B**，不要同时引入多个变量。
+7. **最后再评估 SDXL IPAdapter Plus、FLUX Redux 或 Wan I2V A14B**，不要同时引入多个变量；Flux IP-Adapter 增强模板已经完成实测。
 
 近期里程碑建议定义为：
 

@@ -1,0 +1,139 @@
+{
+  "template": "story_video/v1",
+  "title": "冒充公检法诈骗警示短片（旧工作流基线版）",
+  "quality_profile": "publish",
+  "responsibilities": {},
+  "require_scene_control": false,
+  "allow_user_overrides": false,
+  "cast": {
+    "narrator": {
+      "name": "旁白",
+      "voice": "zh-CN-XiaoxiaoNeural",
+      "tts_provider": "edge"
+    },
+    "scammer": {
+      "name": "诈骗者",
+      "voice": "zh-CN-YunyangNeural",
+      "tts_provider": "edge"
+    },
+    "officer": {
+      "name": "陈警官",
+      "voice": "zh-CN-YunjianNeural",
+      "tts_provider": "edge"
+    }
+  },
+  "scenes": [
+    {
+      "id": "01_unknown_call",
+      "video_path": "data\\qa\\anti_fraud_police_chibi_v1\\old\\video\\clips\\01_unknown_call.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "narrator",
+          "text": "晚上加班时，李婷接到一个陌生境外来电。",
+          "audio_path": null,
+          "pause_after_seconds": 0.15
+        }
+      ]
+    },
+    {
+      "id": "02_accusation",
+      "video_path": "data\\qa\\anti_fraud_police_chibi_v1\\old\\video\\clips\\02_accusation.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "scammer",
+          "text": "你涉嫌洗钱，必须立即配合资金核查。",
+          "audio_path": null,
+          "pause_after_seconds": 0.15
+        }
+      ]
+    },
+    {
+      "id": "03_foreign_number",
+      "video_path": "data\\qa\\anti_fraud_police_chibi_v1\\old\\video\\clips\\03_foreign_number.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "narrator",
+          "text": "她明知号码异常，却被对方的强硬语气吓住。",
+          "audio_path": null,
+          "pause_after_seconds": 0.15
+        }
+      ]
+    },
+    {
+      "id": "04_pacing",
+      "video_path": "data\\qa\\anti_fraud_police_chibi_v1\\old\\video\\clips\\04_pacing.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "scammer",
+          "text": "不许挂断，不许告诉任何人，否则马上逮捕你。",
+          "audio_path": null,
+          "pause_after_seconds": 0.15
+        }
+      ]
+    },
+    {
+      "id": "05_transfer",
+      "video_path": "data\\qa\\anti_fraud_police_chibi_v1\\old\\video\\cleaned\\05_transfer_clean_v2.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "narrator",
+          "text": "李婷打开银行应用，手指停在确认转账上。",
+          "audio_path": null,
+          "pause_after_seconds": 0.15
+        }
+      ]
+    },
+    {
+      "id": "06_police_call",
+      "video_path": "data\\qa\\anti_fraud_police_chibi_v1\\old\\video\\clips\\06_police_call.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "narrator",
+          "text": "就在这时，真正的反诈民警打来电话。",
+          "audio_path": null,
+          "pause_after_seconds": 0.15
+        }
+      ]
+    },
+    {
+      "id": "07_real_officer",
+      "video_path": "data\\qa\\anti_fraud_police_chibi_v1\\old\\video\\clips\\07_real_officer.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "officer",
+          "text": "我是派出所民警。你正在遭遇诈骗，立刻挂断，绝对不要转账！",
+          "audio_path": null,
+          "pause_after_seconds": 0.15
+        }
+      ]
+    },
+    {
+      "id": "08_relief_warning",
+      "video_path": "data\\qa\\anti_fraud_police_chibi_v1\\old\\video\\clips\\08_relief_warning.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "narrator",
+          "text": "李婷及时醒悟。记住：真警察不会通过电话办案，更不会让你转账。",
+          "audio_path": null,
+          "pause_after_seconds": 0.0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+[
+  {
+    "id": "liting_anchor_v2",
+    "status": "skipped",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\old\\keyframes\\liting_anchor_v2.png"
+  },
+  {
+    "id": "01_unknown_call",
+    "status": "generated",
+    "prompt_id": "64035c8c-f504-4d83-89dd-b79dcf8bbdc9",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\old\\01_unknown_call_00001_.png",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\old\\keyframes\\01_unknown_call.png",
+    "seed": 527101
+  },
+  {
+    "id": "02_accusation",
+    "status": "generated",
+    "prompt_id": "66c342d0-ce8e-4cf7-a56b-30c22f6da37c",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\old\\02_accusation_00001_.png",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\old\\keyframes\\02_accusation.png",
+    "seed": 527102
+  },
+  {
+    "id": "03_foreign_number",
+    "status": "generated",
+    "prompt_id": "013fecaa-c624-442a-ab11-0f78e9113872",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\old\\03_foreign_number_00001_.png",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\old\\keyframes\\03_foreign_number.png",
+    "seed": 527103
+  },
+  {
+    "id": "04_pacing",
+    "status": "generated",
+    "prompt_id": "ab4fedc9-c896-4226-b6bf-8b4a6bc621e1",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\old\\04_pacing_00001_.png",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\old\\keyframes\\04_pacing.png",
+    "seed": 527104
+  },
+  {
+    "id": "05_transfer",
+    "status": "generated",
+    "prompt_id": "c381812c-9beb-41f4-86d8-e9c5a6dd0d6d",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\old\\05_transfer_00001_.png",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\old\\keyframes\\05_transfer.png",
+    "seed": 527105
+  },
+  {
+    "id": "06_police_call",
+    "status": "generated",
+    "prompt_id": "09dbc182-1473-4a9c-a72d-a391441e74ca",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\old\\06_police_call_00001_.png",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\old\\keyframes\\06_police_call.png",
+    "seed": 527106
+  },
+  {
+    "id": "07_real_officer",
+    "status": "generated",
+    "prompt_id": "8f51ab95-2847-4863-b74c-11e8baf62779",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\old\\07_real_officer_00001_.png",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\old\\keyframes\\07_real_officer.png",
+    "seed": 527107
+  },
+  {
+    "id": "08_relief_warning",
+    "status": "generated",
+    "prompt_id": "cc7246a5-4493-4638-9e9c-c7cb69555a9c",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\old\\08_relief_warning_00001_.png",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\old\\keyframes\\08_relief_warning.png",
+    "seed": 527108
+  }
+]

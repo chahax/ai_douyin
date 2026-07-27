@@ -1,0 +1,172 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "LTX2\\ltx-2.3-22b-distilled-1.1_transformer_only_fp8_scaled.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "2": {
+    "class_type": "ModelSamplingLTXV",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "max_shift": 2.05,
+      "base_shift": 0.95,
+      "latent": [
+        "9",
+        2
+      ]
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "LTX-Kijai\\LTX23_video_vae_bf16.safetensors"
+    }
+  },
+  "4": {
+    "class_type": "LTXAVTextEncoderLoader",
+    "inputs": {
+      "text_encoder": "gemma_3_12B_it.safetensors",
+      "ckpt_name": "ltx-2.3-text-proj-only.safetensors",
+      "device": "default"
+    }
+  },
+  "5": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "4",
+        0
+      ],
+      "text": "Vertical macro close-up of an adult woman's soft plush right hand holding a modern smartphone, the screen kept simple and dark with empty clean interface space reserved for later graphics. The thumb hovers indecisively near the lower part of the screen without touching. Sleeve is the same light blue shirt under a dark charcoal blazer cuff; a hint of the wooden desk behind. Premium handcrafted 3D plush stop-motion style, fine textile fibers, physically plausible four fingers and one thumb, natural grip, cinematic cold light, 85mm macro lens, no generated letters, no numbers, no watermark, no extra fingers. Animate only the following controlled action. Start: the thumb rests away from the bottom of the phone screen. Action: the thumb moves slowly toward the lower screen, pauses several millimeters above it, trembles once, then pulls back without touching. End: the natural five-finger grip remains unchanged. Motion is slow, precise, and minimal. Preserve the exact first-frame composition, character identity, outfit, props, and room. The camera stays locked and stable. No dialogue or lip movement."
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "4",
+        0
+      ],
+      "text": "identity change, different face, hairstyle change, clothing change, missing silver necklace, extra person, duplicate person, cloned face, extra limb, missing limb, extra fingers, fused fingers, broken hand, warped phone, melting object, body deformation, child proportions, dancing, running, kneeling, large motion, fast motion, camera shake, pan, tilt, zoom, scene cut, flicker, exposure pumping, generated text, letters, numbers, logo, watermark"
+    }
+  },
+  "7": {
+    "class_type": "LTXVConditioning",
+    "inputs": {
+      "positive": [
+        "5",
+        0
+      ],
+      "negative": [
+        "6",
+        0
+      ],
+      "frame_rate": 25.0
+    }
+  },
+  "8": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "anti_fraud_police_chibi_v1/old/03_foreign_number.png"
+    }
+  },
+  "9": {
+    "class_type": "LTXVImgToVideo",
+    "inputs": {
+      "positive": [
+        "7",
+        0
+      ],
+      "negative": [
+        "7",
+        1
+      ],
+      "vae": [
+        "3",
+        0
+      ],
+      "image": [
+        "8",
+        0
+      ],
+      "width": 704,
+      "height": 1248,
+      "length": 65,
+      "batch_size": 1,
+      "strength": 0.94
+    }
+  },
+  "10": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "2",
+        0
+      ],
+      "positive": [
+        "9",
+        0
+      ],
+      "negative": [
+        "9",
+        1
+      ],
+      "latent_image": [
+        "9",
+        2
+      ],
+      "seed": 528103,
+      "steps": 8,
+      "cfg": 1.0,
+      "sampler_name": "euler_ancestral_cfg_pp",
+      "scheduler": "simple",
+      "denoise": 1.0
+    }
+  },
+  "11": {
+    "class_type": "LTXVTiledVAEDecode",
+    "inputs": {
+      "vae": [
+        "3",
+        0
+      ],
+      "latents": [
+        "10",
+        0
+      ],
+      "horizontal_tiles": 1,
+      "vertical_tiles": 2,
+      "overlap": 2,
+      "last_frame_fix": false,
+      "working_device": "auto",
+      "working_dtype": "auto"
+    }
+  },
+  "12": {
+    "class_type": "CreateVideo",
+    "inputs": {
+      "images": [
+        "11",
+        0
+      ],
+      "fps": 25.0
+    }
+  },
+  "13": {
+    "class_type": "SaveVideo",
+    "inputs": {
+      "video": [
+        "12",
+        0
+      ],
+      "filename_prefix": "anti_fraud_police_chibi/old_video/03_foreign_number",
+      "format": "mp4",
+      "codec": "h264"
+    }
+  }
+}

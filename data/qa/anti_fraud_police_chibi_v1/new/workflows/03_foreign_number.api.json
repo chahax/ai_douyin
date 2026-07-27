@@ -1,0 +1,118 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "flux1-schnell-fp8.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "anti_fraud_police_chibi_v1/new/liting_anchor_v2.png"
+    }
+  },
+  "3": {
+    "class_type": "LoadFluxIPAdapter",
+    "inputs": {
+      "ipadatper": "ip_adapter.safetensors",
+      "clip_vision": "openai_clip_vit_l14\\model.safetensors",
+      "provider": "CPU"
+    }
+  },
+  "4": {
+    "class_type": "ApplyFluxIPAdapter",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "ip_adapter_flux": [
+        "3",
+        0
+      ],
+      "image": [
+        "2",
+        0
+      ],
+      "ip_scale": 0.25
+    }
+  },
+  "5": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "Vertical macro close-up of an adult woman's soft plush right hand holding a modern smartphone, the screen kept simple and dark with empty clean interface space reserved for later graphics. The thumb hovers indecisively near the lower part of the screen without touching. Sleeve is the same light blue shirt under a dark charcoal blazer cuff; a hint of the wooden desk behind. Premium handcrafted 3D plush stop-motion style, fine textile fibers, physically plausible four fingers and one thumb, natural grip, cinematic cold light, 85mm macro lens, no generated letters, no numbers, no watermark, no extra fingers. The woman's identity must exactly match the supplied character master reference: same oval face, same dark-brown eyes, same low ponytail, same light-blue shirt, same charcoal blazer, and the same visible thin silver necklace. Preserve an unmistakably adult professional appearance. Show exactly two natural adult hands and one phone. The phone screen is solid dark navy and blank.",
+      "clip": [
+        "1",
+        1
+      ]
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "",
+      "clip": [
+        "1",
+        1
+      ]
+    }
+  },
+  "7": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 704,
+      "height": 1248,
+      "batch_size": 1
+    }
+  },
+  "8": {
+    "class_type": "XlabsSampler",
+    "inputs": {
+      "model": [
+        "4",
+        0
+      ],
+      "conditioning": [
+        "5",
+        0
+      ],
+      "neg_conditioning": [
+        "6",
+        0
+      ],
+      "noise_seed": 529103,
+      "steps": 4,
+      "timestep_to_start_cfg": 4,
+      "true_gs": 1.0,
+      "image_to_image_strength": 0.0,
+      "denoise_strength": 1.0,
+      "latent_image": [
+        "7",
+        0
+      ]
+    }
+  },
+  "9": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "8",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    }
+  },
+  "10": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "9",
+        0
+      ],
+      "filename_prefix": "anti_fraud_police_chibi/new/03_foreign_number"
+    }
+  }
+}

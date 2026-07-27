@@ -1,0 +1,118 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "flux1-schnell-fp8.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "anti_fraud_police_chibi_v1/new/liting_anchor_v2.png"
+    }
+  },
+  "3": {
+    "class_type": "LoadFluxIPAdapter",
+    "inputs": {
+      "ipadatper": "ip_adapter.safetensors",
+      "clip_vision": "openai_clip_vit_l14\\model.safetensors",
+      "provider": "CPU"
+    }
+  },
+  "4": {
+    "class_type": "ApplyFluxIPAdapter",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "ip_adapter_flux": [
+        "3",
+        0
+      ],
+      "image": [
+        "2",
+        0
+      ],
+      "ip_scale": 0.6
+    }
+  },
+  "5": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "Vertical medium-wide shot in the same modern Chinese apartment study. The same adult Chinese woman age 28, same oval face, low ponytail, light blue shirt, dark charcoal blazer and silver necklace, stands between the desk and window. She holds a smartphone at her left ear while her right hand presses her temple, one foot placed forward as if pacing. Premium handcrafted 3D plush doll and miniature room, soft flocked fabric and fine fibers, rounded chibi adult proportions, restrained anxious body language, cold white evening light, subtle long shadows, ample walking space, cinematic 35mm lens, no text, no watermark, correct limbs. The woman's identity must exactly match the supplied character master reference: same oval face, same dark-brown eyes, same low ponytail, same light-blue shirt, same charcoal blazer, and the same visible thin silver necklace. Preserve an unmistakably adult professional appearance. Both feet are planted naturally, parallel and shoulder-width apart; she wears closed dark office shoes.",
+      "clip": [
+        "1",
+        1
+      ]
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "",
+      "clip": [
+        "1",
+        1
+      ]
+    }
+  },
+  "7": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 704,
+      "height": 1248,
+      "batch_size": 1
+    }
+  },
+  "8": {
+    "class_type": "XlabsSampler",
+    "inputs": {
+      "model": [
+        "4",
+        0
+      ],
+      "conditioning": [
+        "5",
+        0
+      ],
+      "neg_conditioning": [
+        "6",
+        0
+      ],
+      "noise_seed": 529104,
+      "steps": 4,
+      "timestep_to_start_cfg": 4,
+      "true_gs": 1.0,
+      "image_to_image_strength": 0.0,
+      "denoise_strength": 1.0,
+      "latent_image": [
+        "7",
+        0
+      ]
+    }
+  },
+  "9": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "8",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    }
+  },
+  "10": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "9",
+        0
+      ],
+      "filename_prefix": "anti_fraud_police_chibi/new/04_pacing"
+    }
+  }
+}

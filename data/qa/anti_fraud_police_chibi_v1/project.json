@@ -1,0 +1,112 @@
+{
+  "project_id": "anti_fraud_police_chibi_v1",
+  "title": "冒充公检法诈骗",
+  "visual_style": "3D软萌布偶 / Q版玩偶，现实主义反诈叙事",
+  "canvas": {"width": 704, "height": 1248, "fps": 25},
+  "character_bible": {
+    "liting": {
+      "name": "李婷",
+      "age": 28,
+      "identity_prompt": "adult Chinese woman age 28, oval face, dark brown almond eyes, subtle natural makeup, straight black hair tied in a neat low ponytail, light blue button-up shirt, dark charcoal gray fitted blazer, thin silver necklace",
+      "style_prompt": "premium handcrafted 3D plush doll, soft flocked fabric skin, fine textile fibers, subtle stitched seams, rounded chibi proportions, large head and compact adult body, cinematic stop-motion toy film quality",
+      "invariants": "same adult woman, same oval face, same low ponytail, same light blue shirt, same dark gray blazer, same thin silver necklace in every shot"
+    },
+    "officer_chen": {
+      "name": "陈警官",
+      "age": 35,
+      "identity_prompt": "adult Chinese male police officer age 35, square face, short neat black hair, steady dark eyes, dark navy Chinese police duty uniform without readable badge numbers",
+      "style_prompt": "premium handcrafted 3D plush doll, soft flocked fabric, rounded chibi proportions, cinematic stop-motion toy film quality"
+    }
+  },
+  "keyframe_generation": {
+    "checkpoint": "flux1-schnell-fp8.safetensors",
+    "steps": 4,
+    "cfg": 1.0,
+    "sampler": "euler",
+    "scheduler": "simple",
+    "width": 704,
+    "height": 1248
+  },
+  "anchor": {
+    "id": "liting_anchor_v2",
+    "seed": 527002,
+    "width": 768,
+    "height": 1024,
+    "prompt": "Character master reference, the same adult Chinese professional woman age 28, oval face, dark brown almond eyes, subtle natural makeup, straight black hair tied in a neat low ponytail, light blue button-up shirt, dark charcoal gray fitted blazer. A thin silver chain with a tiny simple silver pendant is clearly visible at the base of her neck above the shirt collar and must not disappear. Premium handcrafted 3D plush doll, noticeably soft flocked fabric skin, visible fine textile fibers on face and clothing, subtle stitched seams, rounded chibi proportions, large head and compact adult body, unmistakably adult professional woman. Neutral calm expression, front-facing three-quarter upper-body portrait, centered, plain cool gray studio background, soft even key light, 50mm lens, clean silhouette, high identity clarity, no text, no logo, no watermark, no extra person."
+  },
+  "shots": [
+    {
+      "id": "01_unknown_call",
+      "duration": 4,
+      "seed": 527101,
+      "hero_motion": "低头看电脑 → 手机震动后伸右手拿起 → 看见陌生号码后微皱眉并接听",
+      "prompt": "Vertical cinematic medium shot inside a modern Chinese apartment study at evening. Adult Chinese woman age 28 with oval face, dark brown almond eyes, straight black hair in a neat low ponytail, light blue button-up shirt, dark charcoal gray blazer and thin silver necklace sits at a wooden desk beside an open laptop. A smartphone lies on the desk and appears to vibrate. Her right hand is reaching toward it, eyebrows slightly drawn together. Premium handcrafted 3D plush doll characters and environment, soft flocked fabric, fine textile fibers, subtle seams, rounded chibi adult proportions, serious stop-motion toy film, cold white practical lighting with a small warm desk lamp, clean 9:16 composition, no readable screen text, no watermark."
+    },
+    {
+      "id": "02_accusation",
+      "duration": 4,
+      "seed": 527102,
+      "hero_motion": "疑惑接听 → 眼神收紧并咬住下唇 → 手指抓紧手机贴近耳侧",
+      "prompt": "Vertical close portrait of the same adult Chinese woman age 28, same oval face, same low ponytail, same light blue shirt, same dark charcoal blazer and thin silver necklace. She holds a smartphone tightly against her right ear; confusion is turning into restrained fear, lower lip gently pressed, eyes tense but not exaggerated. Premium handcrafted 3D plush doll, soft flocked fabric skin, fine fibers and subtle stitched seams, rounded chibi adult face, shallow depth of field, slow-push-in composition, cold white apartment light, cinematic tension, no text, no watermark, anatomically correct two hands."
+    },
+    {
+      "id": "03_foreign_number",
+      "duration": 3,
+      "seed": 527103,
+      "hero_motion": "拇指靠近挂断区域 → 在屏幕上方停住犹豫 → 手指缩回并继续通话",
+      "prompt": "Vertical macro close-up of an adult woman's soft plush right hand holding a modern smartphone, the screen kept simple and dark with empty clean interface space reserved for later graphics. The thumb hovers indecisively near the lower part of the screen without touching. Sleeve is the same light blue shirt under a dark charcoal blazer cuff; a hint of the wooden desk behind. Premium handcrafted 3D plush stop-motion style, fine textile fibers, physically plausible four fingers and one thumb, natural grip, cinematic cold light, 85mm macro lens, no generated letters, no numbers, no watermark, no extra fingers."
+    },
+    {
+      "id": "04_pacing",
+      "duration": 5,
+      "seed": 527104,
+      "hero_motion": "站在书桌旁左手持手机 → 沿房间短距离来回踱步并用右手揉太阳穴 → 停在窗边急促呼吸",
+      "prompt": "Vertical medium-wide shot in the same modern Chinese apartment study. The same adult Chinese woman age 28, same oval face, low ponytail, light blue shirt, dark charcoal blazer and silver necklace, stands between the desk and window. She holds a smartphone at her left ear while her right hand presses her temple, one foot placed forward as if pacing. Premium handcrafted 3D plush doll and miniature room, soft flocked fabric and fine fibers, rounded chibi adult proportions, restrained anxious body language, cold white evening light, subtle long shadows, ample walking space, cinematic 35mm lens, no text, no watermark, correct limbs."
+    },
+    {
+      "id": "05_transfer",
+      "duration": 5,
+      "seed": 527105,
+      "hero_motion": "打开银行页面 → 右手食指悬停在确认区域上方 → 手指颤动但没有落下",
+      "prompt": "Vertical over-shoulder close shot of the same adult Chinese woman seated at the wooden desk. Her smartphone displays a clean generic banking interface with blank areas reserved for later graphics; her right index finger hovers several millimeters above a large confirmation area, not touching. Her worried plush face is visible in three-quarter profile with a tiny bead of sweat, same low ponytail, light blue shirt, dark gray blazer and silver necklace. Premium 3D plush stop-motion film, soft textile fibers, cold tense lighting, shallow depth of field, physically correct hand, no generated words, no logo, no watermark, no extra fingers."
+    },
+    {
+      "id": "06_police_call",
+      "duration": 4,
+      "seed": 527106,
+      "hero_motion": "盯着转账页面 → 看见新来电后整个人愣住 → 手指离开确认区域并转向接听",
+      "prompt": "Vertical medium close shot of the same adult Chinese woman at the desk, frozen in surprise while looking at a smartphone showing a second incoming-call card with blank clean space reserved for later 110 graphics. Her right index finger has pulled away from the transfer area and her shoulders stop moving. Same oval face, low ponytail, light blue shirt, dark charcoal blazer and thin silver necklace. Premium handcrafted 3D plush doll, fine textile fibers, cinematic split-light transition from cold blue on one side to faint warm light on the other, suspenseful but readable composition, no generated text, no logo, no watermark."
+    },
+    {
+      "id": "07_real_officer",
+      "duration": 5,
+      "seed": 527107,
+      "hero_motion": "陈警官正视镜头抬手示意停止 → 坚定说明立即挂断 → 李婷肩膀放松并缓慢放下手机",
+      "prompt": "Vertical cinematic two-person composition presented as a clean video-call split frame. On the left, the same adult Chinese woman age 28 in her apartment, same oval face, low ponytail, light blue shirt, charcoal blazer and silver necklace, frightened but attentive, slowly lowering her phone. On the right, an adult Chinese male police officer age 35 with square face and short neat black hair wears a dark navy duty uniform without readable badge numbers and raises one open palm in a firm stop gesture. Both are premium handcrafted 3D plush dolls with soft flocked fabric and subtle seams, rounded chibi adult proportions. The woman's side shifts from cold to warmer light; the officer side is neutral professional light. No text, no badge numbers, no watermark, correct hands."
+    },
+    {
+      "id": "08_relief_warning",
+      "duration": 5,
+      "seed": 527108,
+      "hero_motion": "把已挂断手机放到桌面 → 双手短暂捂脸并长舒气 → 抬头平静看向镜头",
+      "prompt": "Vertical medium shot in the same apartment study. The same adult Chinese woman age 28 sits safely at the wooden desk, smartphone placed face-up and inactive. Her hands are lowering from her face after a deep relieved breath and she looks directly toward camera with calm gratitude and renewed clarity. Same oval face, dark brown eyes, low ponytail, light blue shirt, dark charcoal blazer and thin silver necklace. Premium handcrafted 3D plush stop-motion film, soft flocked fabric and fine fibers, rounded chibi adult proportions, lighting now gently warm and reassuring, clean negative space in upper third for a later anti-fraud slogan, cinematic 50mm lens, no generated text, no watermark."
+    }
+  ],
+  "audio": {
+    "cast": {
+      "narrator": {"name": "旁白", "voice": "zh-CN-XiaoxiaoNeural", "tts_provider": "edge"},
+      "scammer": {"name": "诈骗者", "voice": "zh-CN-YunyangNeural", "tts_provider": "edge"},
+      "officer": {"name": "陈警官", "voice": "zh-CN-YunjianNeural", "tts_provider": "edge"}
+    },
+    "lines": {
+      "01_unknown_call": [{"speaker": "narrator", "text": "晚上加班时，李婷接到一个陌生境外来电。"}],
+      "02_accusation": [{"speaker": "scammer", "text": "你涉嫌洗钱，必须立即配合资金核查。"}],
+      "03_foreign_number": [{"speaker": "narrator", "text": "她明知号码异常，却被对方的强硬语气吓住。"}],
+      "04_pacing": [{"speaker": "scammer", "text": "不许挂断，不许告诉任何人，否则马上逮捕你。"}],
+      "05_transfer": [{"speaker": "narrator", "text": "李婷打开银行应用，手指停在确认转账上。"}],
+      "06_police_call": [{"speaker": "narrator", "text": "就在这时，真正的反诈民警打来电话。"}],
+      "07_real_officer": [{"speaker": "officer", "text": "我是派出所民警。你正在遭遇诈骗，立刻挂断，绝对不要转账！"}],
+      "08_relief_warning": [{"speaker": "narrator", "text": "李婷及时醒悟。记住：真警察不会通过电话办案，更不会让你转账。"}]
+    }
+  }
+}

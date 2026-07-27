@@ -1,0 +1,39 @@
+{
+  "project_id": "anti_fraud_police_chibi_v1",
+  "completed_at": "2026-07-27",
+  "old_final": "data/qa/anti_fraud_police_chibi_v1/old/final/anti_fraud_police_old_captioned.mp4",
+  "new_final": "data/qa/anti_fraud_police_chibi_v1/new/final/anti_fraud_police_new_captioned.mp4",
+  "side_by_side": "data/qa/anti_fraud_police_chibi_v1/comparison/anti_fraud_police_old_vs_new.mp4",
+  "delivery": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "duration_seconds": 39.808,
+    "video_codec": "h264",
+    "pixel_format": "yuv420p",
+    "color_space": "bt709"
+  },
+  "audio": {
+    "same_source_files": true,
+    "old_extracted_stream_md5": "a65d3317aac6ea8845c57160f5f67fbd",
+    "new_extracted_stream_md5": "a65d3317aac6ea8845c57160f5f67fbd",
+    "bitstream_identical": true
+  },
+  "quality_gate": {
+    "old_passed": true,
+    "new_passed": true
+  },
+  "enhanced_workflow": {
+    "identity_reference": "data/qa/anti_fraud_police_chibi_v1/old/keyframes/liting_anchor_v2.png",
+    "image_model": "flux1-schnell-fp8.safetensors",
+    "identity_adapter": "XLabs Flux IP-Adapter V2",
+    "sampler": "XlabsSampler",
+    "video_model": "LTX-2.3 22B distilled FP8 scaled",
+    "accepted_retry": "06_police_call",
+    "known_limitations": [
+      "shot 03 prioritizes a stable one-hand phone composition instead of a precise thumb hesitation",
+      "shot 04 lower garment drifts from trousers to shorts or a short skirt",
+      "shot 08 generated text is covered by a deterministic opaque slogan overlay"
+    ]
+  }
+}

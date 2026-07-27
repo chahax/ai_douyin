@@ -1,0 +1,27 @@
+﻿[Script Info]
+ScriptType: v4.00+
+PlayResX: 704
+PlayResY: 1248
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name,Fontname,Fontsize,PrimaryColour,SecondaryColour,OutlineColour,BackColour,Bold,Italic,Underline,StrikeOut,ScaleX,ScaleY,Spacing,Angle,BorderStyle,Outline,Shadow,Alignment,MarginL,MarginR,MarginV,Encoding
+Style: Subtitle,Microsoft YaHei,42,&H00FFFFFF,&H000000FF,&H00121212,&H76000000,-1,0,0,0,100,100,0,0,1,3,1,2,44,44,86,1
+Style: Callout,Microsoft YaHei,43,&H0000E7FF,&H000000FF,&H00101010,&H88000000,-1,0,0,0,100,100,1,0,1,3,1,8,38,38,92,1
+Style: Slogan,Microsoft YaHei,45,&H0029F3FF,&H000000FF,&H00101010,&H90000000,-1,0,0,0,100,100,1,0,1,4,1,8,36,36,95,1
+
+[Events]
+Format: Layer,Start,End,Style,Name,MarginL,MarginR,MarginV,Effect,Text
+Dialogue: 0,0:00:00.00,0:00:04.27,Subtitle,,0,0,0,,晚上加班时，李婷接到一个陌生境外来电。
+Dialogue: 0,0:00:04.42,0:00:08.07,Subtitle,,0,0,0,,你涉嫌洗钱，必须立即配合资金核查。
+Dialogue: 0,0:00:08.22,0:00:12.66,Subtitle,,0,0,0,,她明知号码异常，却被对方的强硬语气吓住。
+Dialogue: 0,0:00:12.81,0:00:16.99,Subtitle,,0,0,0,,不许挂断，不许告诉任何人，否则马上逮捕你。
+Dialogue: 0,0:00:17.14,0:00:21.67,Subtitle,,0,0,0,,李婷打开银行应用，手指停在确认转账上。
+Dialogue: 0,0:00:21.82,0:00:25.71,Subtitle,,0,0,0,,就在这时，真正的反诈民警打来电话。
+Dialogue: 0,0:00:25.86,0:00:32.46,Subtitle,,0,0,0,,我是派出所民警。你正在遭遇诈骗，立刻挂断，绝对不要转账！
+Dialogue: 0,0:00:32.61,0:00:39.64,Subtitle,,0,0,0,,李婷及时醒悟。记住：真警察不会通过电话办案，更不会让你转账。
+Dialogue: 1,0:00:08.22,0:00:12.66,Callout,,0,0,0,,境外来电  00 开头号码
+Dialogue: 1,0:00:17.14,0:00:21.67,Callout,,0,0,0,,资金核查  ·  确认转账
+Dialogue: 1,0:00:21.82,0:00:25.71,Callout,,0,0,0,,110 来电
+Dialogue: 1,0:00:32.61,0:00:39.64,Slogan,,0,0,0,,真警察不会通过电话办案\N更不会让你转账！

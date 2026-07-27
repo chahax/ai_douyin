@@ -1,0 +1,65 @@
+{
+  "path": "data\\qa\\anti_fraud_police_chibi_v1\\new\\final\\anti_fraud_police_new_raw.mp4",
+  "profile": "publish",
+  "passed": true,
+  "metadata": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30.0,
+    "duration": 39.8,
+    "bit_rate": 2988690,
+    "codec": "h264",
+    "pixel_format": "yuv420p",
+    "color_space": "bt709",
+    "color_primaries": "bt709",
+    "color_transfer": "bt709"
+  },
+  "frame_metrics": [
+    {
+      "timestamp": 3.588763761250012,
+      "mean_luma": 86.37,
+      "luma_stddev": 65.544,
+      "mean_chroma": 55.658,
+      "sharpness": 1462.505,
+      "row_luma_stddev": 35.046,
+      "column_luma_stddev": 20.846
+    },
+    {
+      "timestamp": 9.395505504500003,
+      "mean_luma": 65.962,
+      "luma_stddev": 58.0,
+      "mean_chroma": 45.341,
+      "sharpness": 799.475,
+      "row_luma_stddev": 20.627,
+      "column_luma_stddev": 29.139
+    },
+    {
+      "timestamp": 18.791011009000005,
+      "mean_luma": 111.555,
+      "luma_stddev": 70.209,
+      "mean_chroma": 43.21,
+      "sharpness": 1525.046,
+      "row_luma_stddev": 36.664,
+      "column_luma_stddev": 27.011
+    },
+    {
+      "timestamp": 24.59775275225,
+      "mean_luma": 87.32,
+      "luma_stddev": 64.281,
+      "mean_chroma": 56.011,
+      "sharpness": 1463.014,
+      "row_luma_stddev": 40.726,
+      "column_luma_stddev": 13.627
+    },
+    {
+      "timestamp": 33.993258256749996,
+      "mean_luma": 92.978,
+      "luma_stddev": 61.941,
+      "mean_chroma": 47.117,
+      "sharpness": 1426.668,
+      "row_luma_stddev": 21.172,
+      "column_luma_stddev": 24.651
+    }
+  ],
+  "issues": []
+}
