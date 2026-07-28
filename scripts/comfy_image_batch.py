@@ -67,6 +67,10 @@ def main() -> None:
     parser.add_argument("--comfy-output", default=r"D:\IT\AI_vido\ComfyUI\output")
     parser.add_argument("--anchor-only", action="store_true")
     parser.add_argument("--skip-existing", action="store_true")
+    parser.add_argument("--only", action="append", help="Generate only a selected item id; repeat as needed.")
+    parser.add_argument("--overrides", help="Optional JSON mapping item ids to prompt overrides.")
+    parser.add_argument("--seed-offset", type=int, default=0)
+    parser.add_argument("--filename-prefix", default="anti_fraud_police_chibi/old")
     parser.add_argument("--timeout-seconds", type=int, default=3600)
     args = parser.parse_args()
 
@@ -79,9 +83,16 @@ def main() -> None:
     workflow_dir.mkdir(parents=True, exist_ok=True)
     image_dir.mkdir(parents=True, exist_ok=True)
 
+    overrides = (
+        json.loads(Path(args.overrides).read_text(encoding="utf-8"))
+        if args.overrides else {}
+    )
     items = [project["anchor"]]
     if not args.anchor_only:
         items.extend(project["shots"])
+    if args.only:
+        selected = set(args.only)
+        items = [item for item in items if item["id"] in selected]
 
     report = []
     client_id = str(uuid.uuid4())
@@ -91,10 +102,12 @@ def main() -> None:
             report.append({"id": item["id"], "status": "skipped", "output": str(output_path)})
             continue
         workflow = _workflow(
-            checkpoint=settings["checkpoint"], prompt=item["prompt"], seed=item["seed"],
+            checkpoint=settings["checkpoint"],
+            prompt=overrides.get(item["id"], {}).get("prompt", item["prompt"]),
+            seed=item["seed"] + args.seed_offset,
             width=item.get("width", settings["width"]), height=item.get("height", settings["height"]),
             steps=settings["steps"], cfg=settings["cfg"], sampler=settings["sampler"],
-            scheduler=settings["scheduler"], filename_prefix=f"anti_fraud_police_chibi/old/{item['id']}",
+            scheduler=settings["scheduler"], filename_prefix=f"{args.filename_prefix}/{item['id']}",
         )
         (workflow_dir / f"{item['id']}.api.json").write_text(
             json.dumps(workflow, ensure_ascii=False, indent=2), encoding="utf-8"
@@ -108,7 +121,7 @@ def main() -> None:
         shutil.copy2(source, output_path)
         report.append({
             "id": item["id"], "status": "generated", "prompt_id": prompt_id,
-            "source": str(source), "output": str(output_path), "seed": item["seed"],
+            "source": str(source), "output": str(output_path), "seed": item["seed"] + args.seed_offset,
         })
         (output_dir / "run_report.json").write_text(
             json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8"

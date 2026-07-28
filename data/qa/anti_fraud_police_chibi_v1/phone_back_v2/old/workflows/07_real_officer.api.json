@@ -1,0 +1,86 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "flux1-schnell-fp8.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "Vertical clean two-person composition with exactly two adult plush characters. On the left, the same adult Chinese woman age 28 sits in her apartment and holds one smartphone at chest height with only its matte rear shell and camera module facing the camera; its display faces her and remains completely hidden. On the right, one bareheaded adult Chinese male police officer age 35 with square face and clearly visible short black hair wears a plain solid dark navy duty shirt with an empty chest and no insignia, and raises one open palm in a calm firm stop gesture. He has no hat and no cap. Same light blue shirt, charcoal blazer, low ponytail and thin silver necklace on the woman. Premium handcrafted 3D plush stop-motion film, cool light turning slightly warm, simple clean background. Exactly two people and one phone, phone rear side only, no visible screen, no interface, no badge, no emblem, no generated words.",
+      "clip": [
+        "1",
+        1
+      ]
+    }
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "",
+      "clip": [
+        "1",
+        1
+      ]
+    }
+  },
+  "4": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 704,
+      "height": 1248,
+      "batch_size": 1
+    }
+  },
+  "5": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "seed": 531108,
+      "steps": 4,
+      "cfg": 1.0,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "positive": [
+        "2",
+        0
+      ],
+      "negative": [
+        "3",
+        0
+      ],
+      "latent_image": [
+        "4",
+        0
+      ],
+      "denoise": 1.0
+    }
+  },
+  "6": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "5",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    }
+  },
+  "7": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "6",
+        0
+      ],
+      "filename_prefix": "anti_fraud_police_chibi/phone_back_v2/old_retry/07_real_officer"
+    }
+  }
+}

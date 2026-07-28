@@ -1,0 +1,56 @@
+[
+  {
+    "id": "01_unknown_call",
+    "status": "generated",
+    "prompt_id": "e44ac6b1-6e2e-47d4-af6d-4e33d6133574",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\phone_back_v2\\old_video\\01_unknown_call_00001_.mp4",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\phone_back_v2\\old\\video\\clips\\01_unknown_call.mp4",
+    "seed": 534101,
+    "frames": 97
+  },
+  {
+    "id": "03_foreign_number",
+    "status": "generated",
+    "prompt_id": "57f44a04-c7df-4726-a445-99bc54e07953",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\phone_back_v2\\old_video\\03_foreign_number_00001_.mp4",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\phone_back_v2\\old\\video\\clips\\03_foreign_number.mp4",
+    "seed": 534103,
+    "frames": 65
+  },
+  {
+    "id": "05_transfer",
+    "status": "generated",
+    "prompt_id": "d7128632-51e2-4dbd-ac9d-a63708271326",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\phone_back_v2\\old_video\\05_transfer_00001_.mp4",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\phone_back_v2\\old\\video\\clips\\05_transfer.mp4",
+    "seed": 534105,
+    "frames": 97
+  },
+  {
+    "id": "06_police_call",
+    "status": "generated",
+    "prompt_id": "71b0f2ed-2aa3-4b64-bd2e-931000da212e",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\phone_back_v2\\old_video\\06_police_call_00001_.mp4",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\phone_back_v2\\old\\video\\clips\\06_police_call.mp4",
+    "seed": 534106,
+    "frames": 97
+  },
+  {
+    "id": "07_real_officer",
+    "status": "generated",
+    "prompt_id": "6308e500-8e18-4b11-b1b5-c1bdff70a957",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\phone_back_v2\\old_video\\07_real_officer_00001_.mp4",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\phone_back_v2\\old\\video\\clips\\07_real_officer.mp4",
+    "seed": 534107,
+    "frames": 97
+  },
+  {
+    "id": "08_relief_warning",
+    "status": "generated",
+    "prompt_id": "b723236d-788f-4a0c-86e8-d2c22febd5cd",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\phone_back_v2\\old_video\\08_relief_warning_00001_.mp4",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\phone_back_v2\\old\\video\\clips\\08_relief_warning.mp4",
+    "seed": 534108,
+    "frames": 97
+  }
+]

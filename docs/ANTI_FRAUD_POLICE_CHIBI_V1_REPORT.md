@@ -180,3 +180,33 @@ Downloads 中原始文件暂不删除，作为离线备份。
 `XlabsSampler` 后成功生成。后续复制增强版工作流时必须保留这一采样器，不要自动替换成核心 KSampler。
 
 由于 XLabs IP-Adapter 主要面向 Flux.1-dev，而本机底模为 Schnell，本次属于已跑通的实验组合。它对近景面部和双人镜头有改善，但不能代替角色 LoRA、姿态约束或逐镜审核。
+
+## 12. 手机背面版 V2
+
+2026-07-28 根据成片审核结果，新增“手机永不露屏幕”的安全构图预设：
+
+- 镜头 01：手机背面朝上放在桌面，按侧边拿起，移动到耳边时不翻面。
+- 镜头 03：越过手机背壳拍人物表情，以画外音和顶部提示表达境外号码。
+- 镜头 05：取消悬停点击动作，改为人物阅读隐藏屏幕、空闲手在桌面收紧。
+- 镜头 06：手机固定在胸前，只用眼神和下巴表现看到新来电；`110 来电`由后期叠加。
+- 镜头 07：手机背面朝镜头，警官抬掌，李婷只下移手机几厘米。
+- 镜头 08：手机平放于桌面且背面朝上，整个镜头保持静止。
+
+手机背面规则配置：`data/qa/anti_fraud_police_chibi_v1/phone_back_overrides.json`。
+
+最终交付：
+
+| 交付物 | 路径 |
+|---|---|
+| 手机背面版·旧工作流 | `data/qa/anti_fraud_police_chibi_v1/phone_back_v2/old/final/anti_fraud_phone_back_old_captioned.mp4` |
+| 手机背面版·IP-Adapter增强 | `data/qa/anti_fraud_police_chibi_v1/phone_back_v2/new/final/anti_fraud_phone_back_new_captioned.mp4` |
+| 两版同屏对比 | `data/qa/anti_fraud_police_chibi_v1/phone_back_v2/comparison/phone_back_old_vs_new.mp4` |
+| 最终抽帧对比 | `data/qa/anti_fraud_police_chibi_v1/phone_back_v2/final_contact_comparison.png` |
+
+验收结果：
+
+- 两版均为 1080×1920、30fps、39.808 秒、H.264、yuv420p、BT.709。
+- 两版发布质量门均通过，自动报告的 `issues` 为空。
+- 两版音频流 MD5 均为 `a65d3317aac6ea8845c57160f5f67fbd`，与此前版本完全一致。
+- 对 6 个重生手机镜头各抽取 4 帧检查，未发现空白手机屏幕、AI界面乱码、手机离场重入或中途翻成正面。
+- 旧工作流镜头 07 的警帽仍带有非真实的装饰徽记；增强版已采用无帽警官，适合优先发布。

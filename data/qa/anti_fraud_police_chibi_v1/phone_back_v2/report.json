@@ -1,0 +1,41 @@
+{
+  "project_id": "anti_fraud_police_chibi_v1_phone_back_v2",
+  "completed_at": "2026-07-28",
+  "policy": "The phone display must never face the camera. Screen information is communicated by narration, sound and deterministic overlays.",
+  "regenerated_shots": [
+    "01_unknown_call",
+    "03_foreign_number",
+    "05_transfer",
+    "06_police_call",
+    "07_real_officer",
+    "08_relief_warning"
+  ],
+  "reused_shots": [
+    "02_accusation",
+    "04_pacing"
+  ],
+  "old_final": "data/qa/anti_fraud_police_chibi_v1/phone_back_v2/old/final/anti_fraud_phone_back_old_captioned.mp4",
+  "new_final": "data/qa/anti_fraud_police_chibi_v1/phone_back_v2/new/final/anti_fraud_phone_back_new_captioned.mp4",
+  "comparison": "data/qa/anti_fraud_police_chibi_v1/phone_back_v2/comparison/phone_back_old_vs_new.mp4",
+  "delivery": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "duration_seconds": 39.808,
+    "video_codec": "h264",
+    "pixel_format": "yuv420p",
+    "color_space": "bt709"
+  },
+  "audio": {
+    "old_md5": "a65d3317aac6ea8845c57160f5f67fbd",
+    "new_md5": "a65d3317aac6ea8845c57160f5f67fbd",
+    "bitstream_identical": true
+  },
+  "quality_gate": {
+    "old_passed": true,
+    "new_passed": true,
+    "phone_screen_visible": false,
+    "generated_phone_ui": false
+  },
+  "recommendation": "Prefer the IP-Adapter enhanced version for publishing. The old version is retained as a workflow baseline."
+}

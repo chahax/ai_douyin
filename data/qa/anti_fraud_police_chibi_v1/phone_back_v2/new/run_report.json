@@ -1,0 +1,92 @@
+[
+  {
+    "id": "01_unknown_call",
+    "status": "generated",
+    "prompt_id": "dbbe4138-cbba-452f-8dd0-f21360718ae4",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\phone_back_v2\\new\\01_unknown_call_00001_.png",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\phone_back_v2\\new\\keyframes\\01_unknown_call.png",
+    "seed": 532101,
+    "ip_scale": 0.55
+  },
+  {
+    "id": "03_foreign_number",
+    "status": "generated",
+    "prompt_id": "215d384c-2f8c-4adf-af59-d3bd4bcbb173",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\phone_back_v2\\new\\03_foreign_number_00001_.png",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\phone_back_v2\\new\\keyframes\\03_foreign_number.png",
+    "seed": 532103,
+    "ip_scale": 0.25
+  },
+  {
+    "id": "05_transfer",
+    "status": "generated",
+    "prompt_id": "7752704c-b58b-4d4a-a13a-7e5d87382017",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\phone_back_v2\\new\\05_transfer_00001_.png",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\phone_back_v2\\new\\keyframes\\05_transfer.png",
+    "seed": 532105,
+    "ip_scale": 0.55
+  },
+  {
+    "id": "06_police_call",
+    "status": "generated",
+    "prompt_id": "75d3b814-5436-47f7-80a6-d0cee720a3ba",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\phone_back_v2\\new\\06_police_call_00001_.png",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\phone_back_v2\\new\\keyframes\\06_police_call.png",
+    "seed": 532106,
+    "ip_scale": 0.68
+  },
+  {
+    "id": "07_real_officer",
+    "status": "generated",
+    "prompt_id": "d9a289a9-9c00-46ef-a0f3-e60f20c2085b",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\phone_back_v2\\new\\07_real_officer_00001_.png",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\phone_back_v2\\new\\keyframes\\07_real_officer.png",
+    "seed": 532107,
+    "ip_scale": 0.42
+  },
+  {
+    "id": "08_relief_warning",
+    "status": "generated",
+    "prompt_id": "bdc035e9-8e7e-41fa-bbc5-e6bbe98a47ec",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\phone_back_v2\\new\\08_relief_warning_00001_.png",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\phone_back_v2\\new\\keyframes\\08_relief_warning.png",
+    "seed": 532108,
+    "ip_scale": 0.7
+  },
+  {
+    "id": "03_foreign_number",
+    "status": "generated",
+    "prompt_id": "75bc17a0-61c6-438b-b519-f097d5ab6980",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\phone_back_v2\\new_retry\\03_foreign_number_00001_.png",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\phone_back_v2\\new\\keyframes\\03_foreign_number.png",
+    "seed": 532104,
+    "ip_scale": 0.58
+  },
+  {
+    "id": "07_real_officer",
+    "status": "generated",
+    "prompt_id": "7c0504b0-630a-4b2f-8058-10d80c4d573b",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\phone_back_v2\\new_retry\\07_real_officer_00001_.png",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\phone_back_v2\\new\\keyframes\\07_real_officer.png",
+    "seed": 532108,
+    "ip_scale": 0.42
+  },
+  {
+    "id": "08_relief_warning",
+    "status": "generated",
+    "prompt_id": "0b330c46-bd9a-43cb-a813-4740b7f7a180",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\phone_back_v2\\new_retry\\08_relief_warning_00001_.png",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\phone_back_v2\\new\\keyframes\\08_relief_warning.png",
+    "seed": 532109,
+    "ip_scale": 0.78
+  },
+  {
+    "id": "08_relief_warning",
+    "status": "generated",
+    "prompt_id": "1b1b4122-c249-42a0-901c-7654be727801",
+    "source": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_police_chibi\\phone_back_v2\\new_retry2\\08_relief_warning_00001_.png",
+    "output": "D:\\IT\\ai_douyin\\data\\qa\\anti_fraud_police_chibi_v1\\phone_back_v2\\new\\keyframes\\08_relief_warning.png",
+    "seed": 532110,
+    "ip_scale": 1.0
+  }
+]

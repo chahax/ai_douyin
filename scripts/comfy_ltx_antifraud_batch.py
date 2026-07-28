@@ -135,6 +135,8 @@ def main() -> None:
     parser.add_argument("--variant", default="old", choices=("old", "new"))
     parser.add_argument("--seed-offset", type=int, default=1000)
     parser.add_argument("--only", action="append", help="Generate only a selected shot id; repeat as needed.")
+    parser.add_argument("--overrides", help="Optional JSON mapping shot ids to prompt and motion overrides.")
+    parser.add_argument("--filename-prefix", help="ComfyUI SaveVideo filename prefix.")
     parser.add_argument("--first-prompt-id", help="Resume an already queued first shot instead of submitting it again.")
     parser.add_argument("--skip-existing", action="store_true")
     parser.add_argument("--timeout-seconds", type=int, default=7200)
@@ -149,6 +151,10 @@ def main() -> None:
     clip_dir.mkdir(parents=True, exist_ok=True)
     report_path = output_dir / "run_report.json"
     report = json.loads(report_path.read_text(encoding="utf-8")) if report_path.is_file() else []
+    overrides = (
+        json.loads(Path(args.overrides).read_text(encoding="utf-8"))
+        if args.overrides else {}
+    )
     done_ids = {item["id"] for item in report if item.get("status") in {"generated", "skipped"}}
     client_id = str(uuid.uuid4())
 
@@ -162,9 +168,13 @@ def main() -> None:
             continue
 
         workflow = json.loads(json.dumps(template))
-        motion = NEW_SAFE_MOTIONS.get(shot_id, MOTIONS[shot_id]) if args.variant == "new" else MOTIONS[shot_id]
+        override = overrides.get(shot_id, {})
+        motion = override.get("motion")
+        if not motion:
+            motion = NEW_SAFE_MOTIONS.get(shot_id, MOTIONS[shot_id]) if args.variant == "new" else MOTIONS[shot_id]
+        shot_prompt = override.get("prompt", shot["prompt"])
         workflow["5"]["inputs"]["text"] = (
-            shot["prompt"] + " Animate only the following controlled action. " + motion +
+            shot_prompt + " Animate only the following controlled action. " + motion +
             " Preserve the exact first-frame composition, character identity, outfit, props, and room. "
             "The camera stays locked and stable. No dialogue or lip movement."
         )
@@ -175,7 +185,8 @@ def main() -> None:
         workflow["9"]["inputs"]["length"] = 97 if shot["duration"] >= 4 else 65
         workflow["9"]["inputs"]["strength"] = 0.94
         workflow["10"]["inputs"]["seed"] = shot["seed"] + args.seed_offset
-        workflow["13"]["inputs"]["filename_prefix"] = f"anti_fraud_police_chibi/{args.variant}_video/{shot_id}"
+        save_prefix = args.filename_prefix or f"anti_fraud_police_chibi/{args.variant}_video"
+        workflow["13"]["inputs"]["filename_prefix"] = f"{save_prefix}/{shot_id}"
 
         workflow_path = workflow_dir / f"{shot_id}.api.json"
         workflow_path.write_text(json.dumps(workflow, ensure_ascii=False, indent=2), encoding="utf-8")

@@ -1,0 +1,118 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "flux1-schnell-fp8.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "anti_fraud_police_chibi_v1/new/liting_anchor_v2.png"
+    }
+  },
+  "3": {
+    "class_type": "LoadFluxIPAdapter",
+    "inputs": {
+      "ipadatper": "ip_adapter.safetensors",
+      "clip_vision": "openai_clip_vit_l14\\model.safetensors",
+      "provider": "CPU"
+    }
+  },
+  "4": {
+    "class_type": "ApplyFluxIPAdapter",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "ip_adapter_flux": [
+        "3",
+        0
+      ],
+      "image": [
+        "2",
+        0
+      ],
+      "ip_scale": 1.0
+    }
+  },
+  "5": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "Vertical medium shot in the same apartment study. The exact same adult Chinese woman from the identity reference sits safely at the wooden desk. One smartphone lies completely flat and horizontal on the wooden tabletop, face-down and inactive, fully supported by the desk; only its matte rear shell and camera module are visible. Her hands are lowering from her face after a relieved breath and she looks toward camera with calm gratitude. Her straight black hair is swept tightly behind both ears and tied at the nape into one clearly visible neat low ponytail; never a bob, never loose shoulder-length hair. Same oval face, light blue shirt, charcoal blazer and thin silver necklace. Premium handcrafted 3D plush stop-motion film, soft textile fibers, gently warm reassuring light, clean upper-third negative space. Exactly one flat face-down phone, no upright phone, no visible screen, no interface, no generated text. The woman's identity must exactly match the supplied character master reference: same oval face, same dark-brown eyes, same low ponytail, same light-blue shirt, same charcoal blazer, and the same visible thin silver necklace. Preserve an unmistakably adult professional appearance. ",
+      "clip": [
+        "1",
+        1
+      ]
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "",
+      "clip": [
+        "1",
+        1
+      ]
+    }
+  },
+  "7": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 704,
+      "height": 1248,
+      "batch_size": 1
+    }
+  },
+  "8": {
+    "class_type": "XlabsSampler",
+    "inputs": {
+      "model": [
+        "4",
+        0
+      ],
+      "conditioning": [
+        "5",
+        0
+      ],
+      "neg_conditioning": [
+        "6",
+        0
+      ],
+      "noise_seed": 532110,
+      "steps": 4,
+      "timestep_to_start_cfg": 4,
+      "true_gs": 1.0,
+      "image_to_image_strength": 0.0,
+      "denoise_strength": 1.0,
+      "latent_image": [
+        "7",
+        0
+      ]
+    }
+  },
+  "9": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "8",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    }
+  },
+  "10": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "9",
+        0
+      ],
+      "filename_prefix": "anti_fraud_police_chibi/phone_back_v2/new_retry2/08_relief_warning"
+    }
+  }
+}

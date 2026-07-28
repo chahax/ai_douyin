@@ -182,6 +182,9 @@ def main() -> None:
     parser.add_argument("--clip-vision", default=r"openai_clip_vit_l14\model.safetensors")
     parser.add_argument("--skip-existing", action="store_true")
     parser.add_argument("--only", action="append", help="Generate only a selected shot id; repeat as needed.")
+    parser.add_argument("--overrides", help="Optional JSON mapping shot ids to prompt overrides.")
+    parser.add_argument("--seed-offset", type=int, default=2000)
+    parser.add_argument("--filename-prefix", default="anti_fraud_police_chibi/new")
     parser.add_argument("--timeout-seconds", type=int, default=3600)
     args = parser.parse_args()
 
@@ -194,6 +197,10 @@ def main() -> None:
     workflow_dir.mkdir(parents=True, exist_ok=True)
     report_path = output_dir / "run_report.json"
     report = json.loads(report_path.read_text(encoding="utf-8")) if report_path.is_file() else []
+    overrides = (
+        json.loads(Path(args.overrides).read_text(encoding="utf-8"))
+        if args.overrides else {}
+    )
     client_id = str(uuid.uuid4())
 
     for shot in project["shots"]:
@@ -203,17 +210,19 @@ def main() -> None:
         if args.skip_existing and destination.is_file():
             print(f"skipped {shot['id']}", flush=True)
             continue
+        override_prompt = overrides.get(shot["id"], {}).get("prompt")
+        base_prompt = override_prompt or PROMPT_OVERRIDES.get(shot["id"], shot["prompt"])
+        suffix = "" if override_prompt else SHOT_SUFFIXES[shot["id"]]
         prompt = (
-            PROMPT_OVERRIDES.get(shot["id"], shot["prompt"]) +
-            " The woman's identity must exactly match the supplied character master reference: "
+            base_prompt + " The woman's identity must exactly match the supplied character master reference: "
             "same oval face, same dark-brown eyes, same low ponytail, same light-blue shirt, "
             "same charcoal blazer, and the same visible thin silver necklace. "
-            "Preserve an unmistakably adult professional appearance. " + SHOT_SUFFIXES[shot["id"]]
+            "Preserve an unmistakably adult professional appearance. " + suffix
         )
         graph = workflow(
             checkpoint=settings["checkpoint"],
             prompt=prompt,
-            seed=shot["seed"] + 2000,
+            seed=shot["seed"] + args.seed_offset,
             width=settings["width"],
             height=settings["height"],
             steps=settings["steps"],
@@ -223,8 +232,8 @@ def main() -> None:
             reference_image=args.reference_image,
             ip_adapter=args.ip_adapter,
             clip_vision=args.clip_vision,
-            ip_scale=IP_SCALES[shot["id"]],
-            filename_prefix=f"anti_fraud_police_chibi/new/{shot['id']}",
+            ip_scale=overrides.get(shot["id"], {}).get("ip_scale", IP_SCALES[shot["id"]]),
+            filename_prefix=f"{args.filename_prefix}/{shot['id']}",
         )
         workflow_path = workflow_dir / f"{shot['id']}.api.json"
         workflow_path.write_text(json.dumps(graph, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -240,8 +249,8 @@ def main() -> None:
             "prompt_id": prompt_id,
             "source": str(source),
             "output": str(destination),
-            "seed": shot["seed"] + 2000,
-            "ip_scale": IP_SCALES[shot["id"]],
+            "seed": shot["seed"] + args.seed_offset,
+            "ip_scale": overrides.get(shot["id"], {}).get("ip_scale", IP_SCALES[shot["id"]]),
         })
         report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
         print(f"generated {shot['id']}: {destination}", flush=True)
