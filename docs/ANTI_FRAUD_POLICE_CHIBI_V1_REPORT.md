@@ -198,10 +198,11 @@ Downloads 中原始文件暂不删除，作为离线备份。
 
 | 交付物 | 路径 |
 |---|---|
-| 手机背面版·旧工作流 | `data/qa/anti_fraud_police_chibi_v1/phone_back_v2/old/final/anti_fraud_phone_back_old_captioned.mp4` |
-| 手机背面版·IP-Adapter增强 | `data/qa/anti_fraud_police_chibi_v1/phone_back_v2/new/final/anti_fraud_phone_back_new_captioned.mp4` |
-| 两版同屏对比 | `data/qa/anti_fraud_police_chibi_v1/phone_back_v2/comparison/phone_back_old_vs_new.mp4` |
+| 手机背面版·旧工作流（修复版） | `data/qa/anti_fraud_police_chibi_v1/phone_back_v2/old/final/anti_fraud_phone_back_old_fixed.mp4` |
+| 手机背面版·IP-Adapter增强（修复版，推荐） | `data/qa/anti_fraud_police_chibi_v1/phone_back_v2/new/final/anti_fraud_phone_back_new_fixed.mp4` |
+| 两版修复后同屏对比 | `data/qa/anti_fraud_police_chibi_v1/phone_back_v2/comparison/phone_back_fixed_old_vs_new.mp4` |
 | 最终抽帧对比 | `data/qa/anti_fraud_police_chibi_v1/phone_back_v2/final_contact_comparison.png` |
+| 接缝连续性检查 | `data/qa/anti_fraud_police_chibi_v1/phone_back_v2/new/final/seam_check.png` |
 
 验收结果：
 
@@ -210,3 +211,17 @@ Downloads 中原始文件暂不删除，作为离线备份。
 - 两版音频流 MD5 均为 `a65d3317aac6ea8845c57160f5f67fbd`，与此前版本完全一致。
 - 对 6 个重生手机镜头各抽取 4 帧检查，未发现空白手机屏幕、AI界面乱码、手机离场重入或中途翻成正面。
 - 旧工作流镜头 07 的警帽仍带有非真实的装饰徽记；增强版已采用无帽警官，适合优先发布。
+
+### 12.1 分段重复修复
+
+原合成器使用 `-stream_loop -1` 补足短于旁白的镜头，导致约 3.88 秒长的视频素材在同一场景内重新从首帧播放，形成“3 秒后回到 0 秒画面”的断裂感。
+
+本次新增 `video_fit_mode: hold_last`：
+
+- 视频素材只播放一次，不再循环。
+- 素材早于旁白结束时，以最后一帧自然停留到该场景结束。
+- 新旧工作流的 `story_video.json` 均已启用该模式。
+- 已检查原循环点 3.880、10.820、16.690、21.016、25.702、29.740、36.490 秒；修复版没有回到首帧。
+- 两版修复成片的发布质量门均通过，音频流 MD5 仍为 `a65d3317aac6ea8845c57160f5f67fbd`。
+
+旧的 `*_captioned.mp4` 文件仅作为历史对照保留；后续交付和发布应使用 `*_fixed.mp4`。

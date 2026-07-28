@@ -14,9 +14,20 @@
     "02_accusation",
     "04_pacing"
   ],
-  "old_final": "data/qa/anti_fraud_police_chibi_v1/phone_back_v2/old/final/anti_fraud_phone_back_old_captioned.mp4",
-  "new_final": "data/qa/anti_fraud_police_chibi_v1/phone_back_v2/new/final/anti_fraud_phone_back_new_captioned.mp4",
-  "comparison": "data/qa/anti_fraud_police_chibi_v1/phone_back_v2/comparison/phone_back_old_vs_new.mp4",
+  "old_final": "data/qa/anti_fraud_police_chibi_v1/phone_back_v2/old/final/anti_fraud_phone_back_old_fixed.mp4",
+  "new_final": "data/qa/anti_fraud_police_chibi_v1/phone_back_v2/new/final/anti_fraud_phone_back_new_fixed.mp4",
+  "comparison": "data/qa/anti_fraud_police_chibi_v1/phone_back_v2/comparison/phone_back_fixed_old_vs_new.mp4",
+  "video_fit_mode": "hold_last",
+  "loop_reset_fixed": true,
+  "verified_seam_times_seconds": [
+    3.88,
+    10.82,
+    16.69,
+    21.016,
+    25.702,
+    29.74,
+    36.49
+  ],
   "delivery": {
     "width": 1080,
     "height": 1920,

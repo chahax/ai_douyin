@@ -2,6 +2,7 @@
   "template": "story_video/v1",
   "title": "冒充公检法诈骗警示短片（手机背面版·IP-Adapter增强）",
   "quality_profile": "publish",
+  "video_fit_mode": "hold_last",
   "cast": {
     "narrator": {"name": "旁白", "voice": "zh-CN-XiaoxiaoNeural", "tts_provider": "edge"},
     "scammer": {"name": "诈骗者", "voice": "zh-CN-YunyangNeural", "tts_provider": "edge"},
