@@ -1,0 +1,38 @@
+{
+  "project_id": "perfect_lover_pig_butchering_v1",
+  "variant": "v2_identity_locked_lipsync",
+  "status": "accepted_by_automated_quality_gate",
+  "outputs": {
+    "final": "data/qa/perfect_lover_pig_butchering_v1/final/perfect_lover_v2_lipsync_captioned.mp4",
+    "raw": "data/qa/perfect_lover_pig_butchering_v1/final/perfect_lover_v2_lipsync_raw.mp4",
+    "subtitles": "data/qa/perfect_lover_pig_butchering_v1/final/perfect_lover_v2_lipsync_captioned.ass",
+    "timeline": "data/qa/perfect_lover_pig_butchering_v1/final/perfect_lover_v2_lipsync_raw.timeline.json",
+    "quality_report": "data/qa/perfect_lover_pig_butchering_v1/final/perfect_lover_v2_lipsync_raw.quality.json",
+    "all_scenes_contact": "data/qa/perfect_lover_pig_butchering_v1/final/perfect_lover_v2_all_scenes_contact.png",
+    "problem_scenes_contact": "data/qa/perfect_lover_pig_butchering_v1/final/perfect_lover_v2_problem_scenes_contact.png"
+  },
+  "identity_control": {
+    "linxiaoyu_anchor": "references/linxiaoyu/keyframes/linxiaoyu_anchor.png",
+    "chenmo_anchor": "references/chenmo/keyframes/chenmo_anchor.png",
+    "method": "one fixed anchor per character, SadTalker crop mode, scene-specific blurred background"
+  },
+  "speech_control": {
+    "tts": "Edge-TTS",
+    "prosody_fields": ["rate", "volume", "pitch"],
+    "lip_sync": "SadTalker audio-driven portrait",
+    "non_speaking_policy": "No diffusion-generated random mouth motion is used."
+  },
+  "verified_fixes": {
+    "02_coffee_message": "No clear hands or cup in the talking portrait; the former extra-hand region is background-only and heavily blurred.",
+    "10_fake_profit": "Fixed-anchor foreground prevents exposure pumping; sampled luma passed the publish quality gate.",
+    "11_harvest_pressure": "Full 9.32-second generated clip with 233 source frames; no 1.5-second freeze detected."
+  },
+  "final_spec": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "duration_seconds": 175.507,
+    "video_codec": "h264",
+    "audio_codec": "aac"
+  }
+}

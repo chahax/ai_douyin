@@ -9,15 +9,23 @@ class EdgeTTSProvider(TTSProvider):
         self.default_voice = "zh-CN-YunyangNeural"
         self.default_rate = "+0%"
         self.default_volume = "+0%"
+        self.default_pitch = "+0Hz"
 
-    async def _generate_async(self, text, output_file, voice, rate, volume):
-        communicate = edge_tts.Communicate(text, voice, rate=rate, volume=volume)
+    async def _generate_async(self, text, output_file, voice, rate, volume, pitch):
+        communicate = edge_tts.Communicate(
+            text,
+            voice,
+            rate=rate,
+            volume=volume,
+            pitch=pitch,
+        )
         await communicate.save(output_file)
 
     def generate_audio(self, text, output_file, voice=None, **kwargs) -> bool:
         voice = voice or self.default_voice
         rate = kwargs.get("rate", self.default_rate)
         volume = kwargs.get("volume", self.default_volume)
+        pitch = kwargs.get("pitch", self.default_pitch)
 
         try:
             # Handle nested loops if necessary (though better to call this in a clean sync context)
@@ -26,9 +34,13 @@ class EdgeTTSProvider(TTSProvider):
                 if loop.is_running():
                     import nest_asyncio
                     nest_asyncio.apply()
-                loop.run_until_complete(self._generate_async(text, output_file, voice, rate, volume))
+                loop.run_until_complete(
+                    self._generate_async(text, output_file, voice, rate, volume, pitch)
+                )
             except RuntimeError:
-                asyncio.run(self._generate_async(text, output_file, voice, rate, volume))
+                asyncio.run(
+                    self._generate_async(text, output_file, voice, rate, volume, pitch)
+                )
             
             return os.path.exists(output_file) and os.path.getsize(output_file) > 0
         except Exception as e:

@@ -1,0 +1,21 @@
+{
+  "01_after_call": {"rate": "-2%", "volume": "-2%", "pitch": "+2Hz"},
+  "02_coffee_message": {"rate": "-4%", "volume": "+0%", "pitch": "-1Hz"},
+  "03_flirty_reply": {"rate": "+5%", "volume": "+1%", "pitch": "+3Hz"},
+  "04_sweet_promise": {"rate": "-5%", "volume": "+0%", "pitch": "-2Hz"},
+  "05_browsing_photos": {"rate": "+3%", "volume": "+0%", "pitch": "+2Hz"},
+  "06_future_plan": {"rate": "-4%", "volume": "+0%", "pitch": "-2Hz"},
+  "07_week_later_worry": {"rate": "-8%", "volume": "-2%", "pitch": "-2Hz"},
+  "08_small_invest_pitch": {"rate": "-3%", "volume": "+1%", "pitch": "-2Hz"},
+  "09_first_transfer": {"rate": "-10%", "volume": "-2%", "pitch": "-2Hz"},
+  "10_fake_profit": {"rate": "+8%", "volume": "+3%", "pitch": "+2Hz"},
+  "11_harvest_pressure": {"rate": "+10%", "volume": "+4%", "pitch": "-1Hz"},
+  "12_all_savings": {"rate": "-10%", "volume": "-3%", "pitch": "-3Hz"},
+  "13_dali_promise": {"rate": "-4%", "volume": "+1%", "pitch": "-2Hz"},
+  "14_almost_confirm": {"rate": "-12%", "volume": "-3%", "pitch": "-2Hz"},
+  "15_photo_discovery": {"rate": "-8%", "volume": "-2%", "pitch": "-2Hz"},
+  "16_test_account": {"rate": "-4%", "volume": "+0%", "pitch": "-1Hz"},
+  "17_cold_gaslight": {"rate": "+12%", "volume": "+5%", "pitch": "-3Hz"},
+  "18_report_and_block": {"rate": "-2%", "volume": "+2%", "pitch": "-1Hz"},
+  "19_friend_thanks": {"rate": "-10%", "volume": "-3%", "pitch": "-3Hz"}
+}

@@ -60,6 +60,9 @@ class StoryLine:
     text: str = ""
     audio_path: str | None = None
     pause_after_seconds: float = 0.0
+    rate: str = "+0%"
+    volume: str = "+0%"
+    pitch: str = "+0Hz"
 
     @classmethod
     def from_dict(cls, value: object, *, scene_id: str, line_index: int) -> "StoryLine":
@@ -69,12 +72,21 @@ class StoryLine:
         text = value.get("text", "")
         audio_path = value.get("audio_path")
         pause = value.get("pause_after_seconds", 0.0)
+        rate = value.get("rate", "+0%")
+        volume = value.get("volume", "+0%")
+        pitch = value.get("pitch", "+0Hz")
         if not isinstance(speaker, str) or not speaker.strip():
             raise ValueError(f"scenes.{scene_id}.lines[{line_index}].speaker is required")
         if not isinstance(text, str):
             raise ValueError(f"scenes.{scene_id}.lines[{line_index}].text must be a string")
         if audio_path is not None and not isinstance(audio_path, str):
             raise ValueError(f"scenes.{scene_id}.lines[{line_index}].audio_path must be a string or null")
+        if not isinstance(rate, str) or not re.fullmatch(r"[+-]\d+%", rate):
+            raise ValueError(f"scenes.{scene_id}.lines[{line_index}].rate must look like +5% or -8%")
+        if not isinstance(volume, str) or not re.fullmatch(r"[+-]\d+%", volume):
+            raise ValueError(f"scenes.{scene_id}.lines[{line_index}].volume must look like +5% or -8%")
+        if not isinstance(pitch, str) or not re.fullmatch(r"[+-]\d+Hz", pitch):
+            raise ValueError(f"scenes.{scene_id}.lines[{line_index}].pitch must look like +2Hz or -3Hz")
         try:
             pause_seconds = float(pause)
         except (TypeError, ValueError) as exc:
@@ -88,6 +100,9 @@ class StoryLine:
             text=text.strip(),
             audio_path=audio_path.strip() if isinstance(audio_path, str) and audio_path.strip() else None,
             pause_after_seconds=pause_seconds,
+            rate=rate,
+            volume=volume,
+            pitch=pitch,
         )
 
 
@@ -240,6 +255,9 @@ class StoryVideoManifest:
                             text=line.text,
                             audio_path=resolve(line.audio_path),
                             pause_after_seconds=line.pause_after_seconds,
+                            rate=line.rate,
+                            volume=line.volume,
+                            pitch=line.pitch,
                         )
                         for line in scene.lines
                     ),
@@ -282,6 +300,9 @@ class StoryVideoManifest:
                             "text": line.text,
                             "audio_path": line.audio_path,
                             "pause_after_seconds": line.pause_after_seconds,
+                            "rate": line.rate,
+                            "volume": line.volume,
+                            "pitch": line.pitch,
                         }
                         for line in scene.lines
                     ],
@@ -526,13 +547,29 @@ def _synthesize_line(
         TTSEngine(output_dir=str(audio_dir), provider_type=cast_member.tts_provider),
     )
     extension = "wav" if cast_member.tts_provider == "gpt_sovits" else "mp3"
-    synthesis_key = "\0".join((cast_member.tts_provider, cast_member.voice, line.text))
+    synthesis_key = "\0".join(
+        (
+            cast_member.tts_provider,
+            cast_member.voice,
+            line.text,
+            line.rate,
+            line.volume,
+            line.pitch,
+        )
+    )
     content_hash = hashlib.sha256(synthesis_key.encode("utf-8")).hexdigest()[:12]
     output_name = f"scene_{scene_index:03d}_line_{line_index:03d}_{line.speaker}_{content_hash}.{extension}"
     cached_path = audio_dir / output_name
     if cached_path.is_file() and _duration(cached_path) > 0:
         return cached_path
-    generated = engine.generate_audio(line.text, filename=output_name, voice=cast_member.voice or None)
+    generated = engine.generate_audio(
+        line.text,
+        filename=output_name,
+        voice=cast_member.voice or None,
+        rate=line.rate,
+        volume=line.volume,
+        pitch=line.pitch,
+    )
     if isinstance(generated, list):
         raise RuntimeError(f"TTS returned multiple files for scene {scene_index} line {line_index}")
     if not generated:
