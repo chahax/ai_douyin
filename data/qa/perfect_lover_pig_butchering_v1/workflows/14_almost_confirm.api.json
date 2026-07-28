@@ -1,0 +1,118 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "flux1-schnell-fp8.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "perfect_lover_v1/references/linxiaoyu_anchor.png"
+    }
+  },
+  "3": {
+    "class_type": "LoadFluxIPAdapter",
+    "inputs": {
+      "ipadatper": "ip_adapter.safetensors",
+      "clip_vision": "openai_clip_vit_l14\\model.safetensors",
+      "provider": "CPU"
+    }
+  },
+  "4": {
+    "class_type": "ApplyFluxIPAdapter",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "ip_adapter_flux": [
+        "3",
+        0
+      ],
+      "image": [
+        "2",
+        0
+      ],
+      "ip_scale": 0.85
+    }
+  },
+  "5": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "Vertical tight three-quarter side shot in the same bedroom. The same adult Chinese woman age 25 holds exactly one plain dark-blue smartphone in her left hand at chest height. The camera sees only the matte phone back and side edge; the screen faces only her and is fully invisible. Her right index finger is suspended one centimeter beyond the phone's far edge, about to tap the hidden front, then freezes. Her eyes suddenly widen at an off-screen notification. Cream knitted top, dusty-rose cardigan, tiny moon necklace, same shoulder-length dark-brown hair and side bangs. Premium handcrafted 3D plush doll, physically natural five-finger hands, cool tense light, no letters, no captions, no symbols, no logo, no watermark. The character identity must exactly match the supplied character master reference: same gentle oval face, same warm dark-brown almond eyes, same shoulder-length dark-brown hair with airy side bangs and low half-up tie, same cream knitted top, same dusty-rose cardigan, same tiny moon-shaped silver necklace. Preserve the same adult identity in every frame.",
+      "clip": [
+        "1",
+        1
+      ]
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "",
+      "clip": [
+        "1",
+        1
+      ]
+    }
+  },
+  "7": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 704,
+      "height": 1248,
+      "batch_size": 1
+    }
+  },
+  "8": {
+    "class_type": "XlabsSampler",
+    "inputs": {
+      "model": [
+        "4",
+        0
+      ],
+      "conditioning": [
+        "5",
+        0
+      ],
+      "neg_conditioning": [
+        "6",
+        0
+      ],
+      "noise_seed": 630114,
+      "steps": 4,
+      "timestep_to_start_cfg": 4,
+      "true_gs": 1.0,
+      "image_to_image_strength": 0.0,
+      "denoise_strength": 1.0,
+      "latent_image": [
+        "7",
+        0
+      ]
+    }
+  },
+  "9": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "8",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    }
+  },
+  "10": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "9",
+        0
+      ],
+      "filename_prefix": "perfect_lover_v1/keyframes_retry/14_almost_confirm"
+    }
+  }
+}

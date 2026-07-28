@@ -169,21 +169,42 @@ def main() -> None:
 
         workflow = json.loads(json.dumps(template))
         override = overrides.get(shot_id, {})
-        motion = override.get("motion")
+        motion = override.get("motion") or shot.get("motion") or shot.get("hero_motion")
         if not motion:
-            motion = NEW_SAFE_MOTIONS.get(shot_id, MOTIONS[shot_id]) if args.variant == "new" else MOTIONS[shot_id]
+            if args.variant == "new":
+                motion = NEW_SAFE_MOTIONS.get(shot_id) or MOTIONS.get(shot_id)
+            else:
+                motion = MOTIONS.get(shot_id)
+        if not motion:
+            raise ValueError(f"shot {shot_id} requires motion or hero_motion")
         shot_prompt = override.get("prompt", shot["prompt"])
+        speech_direction = override.get(
+            "speech_direction",
+            shot.get("speech_direction", "No dialogue or lip movement."),
+        )
+        negative_prompt = override.get(
+            "negative_prompt",
+            project.get("video_generation", {}).get("negative_prompt", NEGATIVE),
+        )
         workflow["5"]["inputs"]["text"] = (
             shot_prompt + " Animate only the following controlled action. " + motion +
             " Preserve the exact first-frame composition, character identity, outfit, props, and room. "
-            "The camera stays locked and stable. No dialogue or lip movement."
+            "The camera stays locked and stable. " + speech_direction
         )
-        workflow["6"]["inputs"]["text"] = NEGATIVE
+        workflow["6"]["inputs"]["text"] = negative_prompt
         workflow["8"]["inputs"]["image"] = f"{args.input_prefix}/{shot_id}.png"
         workflow["9"]["inputs"]["width"] = project["canvas"]["width"]
         workflow["9"]["inputs"]["height"] = project["canvas"]["height"]
-        workflow["9"]["inputs"]["length"] = 97 if shot["duration"] >= 4 else 65
-        workflow["9"]["inputs"]["strength"] = 0.94
+        default_frames = project.get("video_generation", {}).get(
+            "frames",
+            97 if shot["duration"] >= 4 else 65,
+        )
+        workflow["9"]["inputs"]["length"] = int(
+            override.get("frames", shot.get("frames", default_frames))
+        )
+        workflow["9"]["inputs"]["strength"] = float(
+            override.get("strength", shot.get("i2v_strength", project.get("video_generation", {}).get("i2v_strength", 0.94)))
+        )
         workflow["10"]["inputs"]["seed"] = shot["seed"] + args.seed_offset
         save_prefix = args.filename_prefix or f"anti_fraud_police_chibi/{args.variant}_video"
         workflow["13"]["inputs"]["filename_prefix"] = f"{save_prefix}/{shot_id}"

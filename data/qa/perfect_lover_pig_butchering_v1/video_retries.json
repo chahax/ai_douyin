@@ -1,0 +1,38 @@
+{
+  "02_coffee_message": {
+    "frames": 65,
+    "strength": 0.97,
+    "motion": "Start: Chen Mo faces camera with exactly two hands already wrapped around one ceramic coffee cup at chest height. Action: the cup and both hands remain completely fixed; he makes one tiny head tilt, blinks once, and gives a restrained smile. End: exactly the same two hands still hold the same cup in the same position. No hand enters or leaves the frame. Motion is extremely small.",
+    "speech_direction": "Only subtle lip and eye movement. Both arms, both hands, the cup, and the camera remain fixed."
+  },
+  "09_first_transfer": {
+    "frames": 65,
+    "strength": 0.97,
+    "motion": "Start: Lin Xiaoyu holds exactly one phone vertically at chest height with its matte back facing camera and both hands already touching it. Action: the phone and both hands remain fixed in the same position; only her eyes lower toward the hidden screen and her right index fingertip bends by two millimeters. End: the phone remains fully visible at chest height with the matte back facing camera. Motion is extremely small.",
+    "speech_direction": "Only subtle lip and eye movement. The phone must never leave, rotate, flip, or expose its screen."
+  },
+  "14_almost_confirm": {
+    "frames": 65,
+    "strength": 0.97,
+    "motion": "Start: Lin Xiaoyu holds exactly one phone at chest height with its matte back facing camera; both hands are already fixed around it. Action: the phone, fingers, wrists and arms remain completely still; only her eyes shift toward the left and her eyebrows lift in surprise. End: the same phone remains fully visible in the same position, back still facing camera. No tapping motion. Motion is extremely small.",
+    "speech_direction": "Only subtle lip, eye and eyebrow movement. The phone must never drop, rotate, flip, or leave the frame."
+  },
+  "15_photo_discovery": {
+    "frames": 65,
+    "strength": 0.97,
+    "motion": "Start: the frame contains exactly one phone with its matte back facing camera and one laptop whose display faces only Lin Xiaoyu. Action: both devices and both hands remain completely fixed; only her eyes move once from the phone toward the laptop and her lips part slightly in realization. End: the frame still contains exactly the same one phone and one laptop. No object is raised or created. Motion is extremely small.",
+    "speech_direction": "Only subtle lip and eye movement. Never create a second phone, never reveal a screen, and never display any picture or interface."
+  },
+  "18_report_and_block": {
+    "frames": 65,
+    "strength": 0.97,
+    "motion": "Start: exactly one phone lies flat and face-down on the wooden desk, with its matte back and camera lenses facing upward. Action: the phone remains completely motionless and face-down; Lin Xiaoyu draws both hands back by one centimeter and exhales. End: the same phone remains face-down in exactly the same position while both hands rest beside it. Motion is extremely small.",
+    "speech_direction": "Only subtle lip, eye and shoulder movement. The phone must never rotate, flip, move, or expose its screen."
+  },
+  "12_all_savings": {
+    "frames": 65,
+    "strength": 0.98,
+    "motion": "Start: Lin Xiaoyu sits behind exactly one closed blue card wallet resting on two closed paper notebooks. There is no phone anywhere in the frame. Action: the wallet, notebooks and both hands remain fixed; only her eyes lower toward the wallet, her brows tighten, and she takes one small anxious breath. End: the frame still contains only the same wallet and two notebooks, with no electronic device. Motion is extremely small.",
+    "speech_direction": "Only subtle lip, eye and eyebrow movement. Never create a phone, tablet, screen, interface, card, or additional object."
+  }
+}

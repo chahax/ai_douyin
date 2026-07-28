@@ -1,0 +1,65 @@
+{
+  "path": "data\\qa\\perfect_lover_pig_butchering_v1\\final\\perfect_lover_captioned.mp4",
+  "profile": "publish",
+  "passed": true,
+  "metadata": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30.0,
+    "duration": 170.9,
+    "bit_rate": 2041134,
+    "codec": "h264",
+    "pixel_format": "yuv420p",
+    "color_space": "bt709",
+    "color_primaries": "bt709",
+    "color_transfer": "bt709"
+  },
+  "frame_metrics": [
+    {
+      "timestamp": 15.410043386875055,
+      "mean_luma": 112.682,
+      "luma_stddev": 48.761,
+      "mean_chroma": 51.751,
+      "sharpness": 2007.835,
+      "row_luma_stddev": 15.01,
+      "column_luma_stddev": 14.41
+    },
+    {
+      "timestamp": 40.344017354750015,
+      "mean_luma": 115.226,
+      "luma_stddev": 59.41,
+      "mean_chroma": 65.217,
+      "sharpness": 2492.283,
+      "row_luma_stddev": 28.82,
+      "column_luma_stddev": 20.875
+    },
+    {
+      "timestamp": 80.68803470950003,
+      "mean_luma": 111.841,
+      "luma_stddev": 63.233,
+      "mean_chroma": 60.703,
+      "sharpness": 2730.432,
+      "row_luma_stddev": 36.258,
+      "column_luma_stddev": 24.902
+    },
+    {
+      "timestamp": 105.622008677375,
+      "mean_luma": 133.277,
+      "luma_stddev": 57.513,
+      "mean_chroma": 71.977,
+      "sharpness": 2692.176,
+      "row_luma_stddev": 18.066,
+      "column_luma_stddev": 30.688
+    },
+    {
+      "timestamp": 145.966026032125,
+      "mean_luma": 129.657,
+      "luma_stddev": 55.759,
+      "mean_chroma": 51.784,
+      "sharpness": 2734.778,
+      "row_luma_stddev": 25.197,
+      "column_luma_stddev": 18.597
+    }
+  ],
+  "issues": []
+}

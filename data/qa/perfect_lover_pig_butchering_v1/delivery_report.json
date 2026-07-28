@@ -1,0 +1,55 @@
+{
+  "project_id": "perfect_lover_pig_butchering_v1",
+  "title": "杀猪盘反诈短剧《完美恋人》",
+  "completed_at": "2026-07-29",
+  "narrative": {
+    "scene_count": 19,
+    "dialogue_characters": 707,
+    "narrator": false,
+    "voice_over_exposition": false
+  },
+  "delivery": {
+    "final": "data/qa/perfect_lover_pig_butchering_v1/final/perfect_lover_captioned.mp4",
+    "raw": "data/qa/perfect_lover_pig_butchering_v1/final/perfect_lover_raw.mp4",
+    "subtitles": "data/qa/perfect_lover_pig_butchering_v1/final/perfect_lover_captioned.ass",
+    "quality_report": "data/qa/perfect_lover_pig_butchering_v1/final/perfect_lover_captioned.quality.json",
+    "contact_sheet": "data/qa/perfect_lover_pig_butchering_v1/final/final_caption_wrap_contact.png",
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "duration_seconds": 170.9,
+    "video_codec": "h264",
+    "pixel_format": "yuv420p",
+    "color_space": "bt709",
+    "audio_codec": "aac",
+    "size_bytes": 47025854,
+    "sha256": "335330DF585E2957513E24B5F6F2F1F22A9D250AF533823897C69AB65BD6771C"
+  },
+  "generation": {
+    "keyframe_model": "Flux.1 Schnell FP8 + XLabs Flux IP-Adapter V2",
+    "video_model": "LTX-2.3 22B distilled FP8 scaled I2V",
+    "keyframe_resolution": "704x1248",
+    "video_frames_default": 65,
+    "video_fit_mode": "hold_last",
+    "tts": {
+      "linxiaoyu": "zh-CN-XiaoyiNeural",
+      "chenmo": "zh-CN-YunxiNeural"
+    }
+  },
+  "quality_gate": {
+    "passed": true,
+    "issues": [],
+    "phone_screen_visible": false,
+    "generated_phone_ui_used": false,
+    "subtitle_overflow": false,
+    "loop_reset": false
+  },
+  "replaced_shots": [
+    "02_coffee_message",
+    "09_first_transfer",
+    "12_all_savings",
+    "14_almost_confirm",
+    "15_photo_discovery",
+    "18_report_and_block"
+  ]
+}

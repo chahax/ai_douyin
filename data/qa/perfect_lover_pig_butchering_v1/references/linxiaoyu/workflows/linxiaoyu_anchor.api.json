@@ -1,0 +1,86 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "flux1-schnell-fp8.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "Character master reference, adult Chinese woman age 25, gentle oval face, warm dark-brown almond eyes, small straight nose, soft natural lips, subtle makeup, shoulder-length dark-brown straight hair with airy side bangs and a neat low half-up tie. She wears a cream knitted lounge top under a dusty-rose soft cardigan and a tiny moon-shaped silver necklace. Premium handcrafted 3D plush doll, soft flocked fabric skin, visible fine textile fibers, subtle stitched seams, rounded adult chibi proportions, unmistakably adult urban professional. Calm neutral expression, front-facing three-quarter upper-body portrait, centered, plain cool-gray studio background, soft even key light, 50mm lens, clean silhouette, high identity clarity, no phone, no text, no logo, no watermark, no extra person.",
+      "clip": [
+        "1",
+        1
+      ]
+    }
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "",
+      "clip": [
+        "1",
+        1
+      ]
+    }
+  },
+  "4": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 768,
+      "height": 1024,
+      "batch_size": 1
+    }
+  },
+  "5": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "seed": 628001,
+      "steps": 4,
+      "cfg": 1.0,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "positive": [
+        "2",
+        0
+      ],
+      "negative": [
+        "3",
+        0
+      ],
+      "latent_image": [
+        "4",
+        0
+      ],
+      "denoise": 1.0
+    }
+  },
+  "6": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "5",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    }
+  },
+  "7": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "6",
+        0
+      ],
+      "filename_prefix": "perfect_lover_v1/references/linxiaoyu/linxiaoyu_anchor"
+    }
+  }
+}

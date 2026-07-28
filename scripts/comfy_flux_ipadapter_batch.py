@@ -210,14 +210,26 @@ def main() -> None:
         if args.skip_existing and destination.is_file():
             print(f"skipped {shot['id']}", flush=True)
             continue
-        override_prompt = overrides.get(shot["id"], {}).get("prompt")
+        shot_options = overrides.get(shot["id"], {})
+        override_prompt = shot_options.get("prompt")
         base_prompt = override_prompt or PROMPT_OVERRIDES.get(shot["id"], shot["prompt"])
-        suffix = "" if override_prompt else SHOT_SUFFIXES[shot["id"]]
-        prompt = (
-            base_prompt + " The woman's identity must exactly match the supplied character master reference: "
-            "same oval face, same dark-brown eyes, same low ponytail, same light-blue shirt, "
-            "same charcoal blazer, and the same visible thin silver necklace. "
-            "Preserve an unmistakably adult professional appearance. " + suffix
+        suffix = shot_options.get("suffix", SHOT_SUFFIXES.get(shot["id"], ""))
+        identity_lock = shot_options.get("identity_lock", shot.get("identity_lock"))
+        if not identity_lock:
+            character_id = shot.get("character_id")
+            character = project.get("character_bible", {}).get(character_id, {})
+            identity_lock = character.get("invariants") or character.get("identity_prompt", "")
+        prompt = base_prompt
+        if identity_lock:
+            prompt += (
+                " The character identity must exactly match the supplied character master reference: "
+                + identity_lock + ". Preserve the same adult identity in every frame."
+            )
+        if suffix:
+            prompt += " " + suffix
+        ip_scale = shot_options.get(
+            "ip_scale",
+            shot.get("ip_scale", IP_SCALES.get(shot["id"], 0.65)),
         )
         graph = workflow(
             checkpoint=settings["checkpoint"],
@@ -232,7 +244,7 @@ def main() -> None:
             reference_image=args.reference_image,
             ip_adapter=args.ip_adapter,
             clip_vision=args.clip_vision,
-            ip_scale=overrides.get(shot["id"], {}).get("ip_scale", IP_SCALES[shot["id"]]),
+            ip_scale=ip_scale,
             filename_prefix=f"{args.filename_prefix}/{shot['id']}",
         )
         workflow_path = workflow_dir / f"{shot['id']}.api.json"
@@ -250,7 +262,7 @@ def main() -> None:
             "source": str(source),
             "output": str(destination),
             "seed": shot["seed"] + args.seed_offset,
-            "ip_scale": overrides.get(shot["id"], {}).get("ip_scale", IP_SCALES[shot["id"]]),
+            "ip_scale": ip_scale,
         })
         report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
         print(f"generated {shot['id']}: {destination}", flush=True)

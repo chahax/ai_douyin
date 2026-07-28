@@ -1,0 +1,230 @@
+{
+  "project_id": "perfect_lover_pig_butchering_v1",
+  "title": "完美恋人",
+  "visual_style": "高级3D软萌布偶 / Q版玩偶电影，细腻现实主义网恋反诈短剧",
+  "canvas": {
+    "width": 704,
+    "height": 1248,
+    "fps": 25
+  },
+  "character_bible": {
+    "linxiaoyu": {
+      "name": "林小雨",
+      "age": 25,
+      "identity_prompt": "adult Chinese woman age 25, gentle oval face, warm dark-brown almond eyes, small straight nose, soft natural lips, subtle makeup, shoulder-length dark-brown straight hair with airy side bangs and a neat low half-up tie, cream knitted lounge top, dusty-rose cardigan, tiny moon-shaped silver necklace",
+      "invariants": "same gentle oval face, same warm dark-brown almond eyes, same shoulder-length dark-brown hair with airy side bangs and low half-up tie, same cream knitted top, same dusty-rose cardigan, same tiny moon-shaped silver necklace"
+    },
+    "chenmo": {
+      "name": "陈默",
+      "age": 28,
+      "identity_prompt": "handsome adult Chinese man age 28, clean angular oval face, warm dark-brown eyes behind thin black rectangular glasses, straight eyebrows, neat short black hair with a natural side part, clean shaven, camel-beige crewneck sweater over a crisp white shirt, simple dark wristwatch",
+      "invariants": "same angular oval face, same warm dark-brown eyes, same thin black rectangular glasses, same neat side-parted short black hair, same camel-beige sweater over white shirt, same dark wristwatch"
+    }
+  },
+  "keyframe_generation": {
+    "checkpoint": "flux1-schnell-fp8.safetensors",
+    "steps": 4,
+    "cfg": 1.0,
+    "sampler": "euler",
+    "scheduler": "simple",
+    "width": 704,
+    "height": 1248
+  },
+  "video_generation": {
+    "frames": 65,
+    "i2v_strength": 0.95,
+    "negative_prompt": "identity change, different face, hairstyle change, clothing change, child, childlike body, duplicate person, extra person, extra limb, missing limb, extra fingers, fused fingers, broken hand, warped phone, melting object, body deformation, dancing, running, large motion, fast motion, camera shake, pan, tilt, zoom, scene cut, flicker, exposure pumping, visible phone screen, generated text, letters, numbers, logo, watermark"
+  },
+  "shots": [
+    {
+      "id": "01_after_call",
+      "character_id": "linxiaoyu",
+      "duration": 4,
+      "seed": 628101,
+      "ip_scale": 0.72,
+      "speech_direction": "She makes subtle natural speaking mouth movements for one short sentence, then closes her lips and smiles softly.",
+      "motion": "Start: Lin Xiaoyu reclines against the headboard with the back of one phone near her shoulder. Action: she says goodnight softly, lowers the phone by ten centimeters, and lets a shy smile appear. End: she looks at the hidden screen with relaxed shoulders. Motion is slow and small.",
+      "prompt": "Vertical cinematic medium close shot in a cozy modern Chinese bedroom at night. Lin Xiaoyu reclines against a cream upholstered headboard, holding one smartphone with only its matte back visible near her shoulder. Blue night light from the window mixes with a warm bedside lamp. Her expression is tender after ending a video call. Premium handcrafted 3D plush doll film, soft flocked fabric, fine textile fibers, subtle seams, shallow depth of field, 50mm lens, clean 9:16 composition, no readable screen, no text."
+    },
+    {
+      "id": "02_coffee_message",
+      "character_id": "chenmo",
+      "duration": 4,
+      "seed": 628102,
+      "ip_scale": 0.72,
+      "speech_direction": "He speaks naturally with restrained lip movement and a warm persuasive smile.",
+      "motion": "Start: Chen Mo faces the camera holding a ceramic pour-over coffee cup at chest height. Action: he raises the cup slightly toward camera, speaks warmly, and tilts his head by a few degrees. End: he holds the cup steady with a polished reassuring smile. Motion is slow and controlled.",
+      "prompt": "Vertical video-message style medium close shot of Chen Mo in a tasteful modern apartment kitchen at night. He presents a handmade ceramic cup of pour-over coffee toward the camera. Warm amber practical lights, a blurred coffee dripper behind him, carefully curated successful lifestyle. Premium handcrafted 3D plush doll, soft flocked fabric, fine fibers, adult chibi proportions, cinematic 50mm lens, phone-camera intimacy, no text, no logo."
+    },
+    {
+      "id": "03_flirty_reply",
+      "character_id": "linxiaoyu",
+      "duration": 4,
+      "seed": 628103,
+      "ip_scale": 0.75,
+      "speech_direction": "She speaks one playful sentence with subtle lip movement and then presses her lips into a shy smile.",
+      "motion": "Start: she holds the phone back toward camera at chest height. Action: she speaks playfully, draws the phone toward her chest, and lowers her chin with a shy smile. End: both arms gently hug the phone against her cardigan. Motion is slow and minimal.",
+      "prompt": "Vertical medium shot in the same cozy bedroom. Lin Xiaoyu sits upright on the bed with a soft beige pillow beside her. She looks at a phone whose back faces the camera, cheeks slightly warm and eyes bright. Warm bedside light softens the cool blue window light. Premium handcrafted 3D plush doll, visible textile fibers, adult romantic expression, cinematic shallow depth of field, no visible screen, no generated text."
+    },
+    {
+      "id": "04_sweet_promise",
+      "character_id": "chenmo",
+      "duration": 4,
+      "seed": 628104,
+      "ip_scale": 0.74,
+      "speech_direction": "He speaks smoothly with restrained lip movement, pausing briefly before the final promise.",
+      "motion": "Start: Chen Mo sits relaxed beside a warm table lamp, one forearm resting on the table. Action: he leans forward slightly, speaks, and opens one palm in an inviting promise. End: he holds direct eye contact with a gentle confident smile. Motion is small and deliberate.",
+      "prompt": "Vertical intimate video-call portrait of Chen Mo in a polished apartment living room. Warm table lamp, a blurred shelf with books and a small plant, aspirational but believable surroundings. He leans slightly toward camera with convincing affection. Premium handcrafted 3D plush film, adult chibi proportions, soft flocked fabric, 65mm lens, no text, no logo, no extra person."
+    },
+    {
+      "id": "05_browsing_photos",
+      "character_id": "linxiaoyu",
+      "duration": 4,
+      "seed": 628105,
+      "ip_scale": 0.70,
+      "speech_direction": "She speaks softly to the phone with curious, amused lip movement.",
+      "motion": "Start: she sits cross-legged with a phone held upright toward herself. Action: her eyes scan downward, she performs one small pinch-to-zoom gesture on the hidden screen, then lifts her eyebrows and speaks. End: she studies the phone with a fond smile. Motion is slow and precise.",
+      "prompt": "Vertical over-lap medium close shot of Lin Xiaoyu on the bed browsing a social profile. Only the matte back and side edge of the phone are visible; the screen faces her and stays fully hidden from camera. A travel postcard and closed laptop rest nearby as neutral props. Premium handcrafted 3D plush doll, romantic warm night lighting, physically natural hands, no visible interface, no text."
+    },
+    {
+      "id": "06_future_plan",
+      "character_id": "chenmo",
+      "duration": 4,
+      "seed": 628106,
+      "ip_scale": 0.73,
+      "speech_direction": "He speaks with gentle lip movement and a believable affectionate pause.",
+      "motion": "Start: he looks into camera with hands loosely folded. Action: he speaks, glances briefly toward a framed landscape photo, then returns his gaze and gives a small hopeful nod. End: he keeps steady sincere eye contact. Motion is subtle.",
+      "prompt": "Vertical medium close video-call shot of Chen Mo at a clean desk in his tasteful apartment. A blurred framed lake landscape suggests future travel without readable details. Warm refined lighting, calm trustworthy persona. Premium handcrafted 3D plush doll, fine textile fibers, adult chibi proportions, cinematic 50mm lens, no text, no logo."
+    },
+    {
+      "id": "07_week_later_worry",
+      "character_id": "linxiaoyu",
+      "duration": 4,
+      "seed": 628107,
+      "ip_scale": 0.76,
+      "speech_direction": "She asks a worried question with subtle natural lip movement.",
+      "motion": "Start: she sits cross-legged hugging a beige pillow, phone back visible near her mouth. Action: her smile fades, brows draw together, and she tilts her head while asking whether he is all right. End: she waits anxiously, hugging the pillow tighter. Motion is slow and small.",
+      "prompt": "Vertical medium shot in the same bedroom one week later. Lin Xiaoyu hugs a soft beige pillow, the back of her phone visible near her face, concern replacing her earlier happiness. Cooler night light and a dimmer bedside lamp create a slight emotional chill. Premium handcrafted 3D plush doll film, soft fabric, fine fibers, adult restrained acting, no visible phone screen, no text."
+    },
+    {
+      "id": "08_small_invest_pitch",
+      "character_id": "chenmo",
+      "duration": 4,
+      "seed": 628108,
+      "ip_scale": 0.76,
+      "speech_direction": "He speaks continuously with calm persuasive lip movement, never becoming theatrical.",
+      "motion": "Start: Chen Mo appears slightly tired, looking down with one hand near his temple. Action: he exhales, looks back into camera, softens into a reassuring smile, and raises one index finger to indicate a small trial amount. End: he holds the reassuring gesture. Motion is controlled and persuasive.",
+      "prompt": "Vertical video-call medium close shot of Chen Mo at his desk late at night. His polished room is slightly darker; laptop glow lights one side of his face. He performs vulnerability while carefully steering the conversation toward a small investment. Premium handcrafted 3D plush doll, cinematic cool-warm split light, adult proportions, no readable laptop content, no text, no logo."
+    },
+    {
+      "id": "09_first_transfer",
+      "character_id": "linxiaoyu",
+      "duration": 4,
+      "seed": 628109,
+      "ip_scale": 0.72,
+      "speech_direction": "She speaks hesitantly with small lip movement, then closes her mouth before moving her finger.",
+      "motion": "Start: she sits at the edge of the bed holding one phone toward herself, screen hidden. Action: she speaks hesitantly, lowers her gaze, and taps once with her right index finger on the unseen front surface. End: she withdraws the finger and watches with tense shoulders. Motion is very small and precise.",
+      "prompt": "Vertical side-angle medium close shot of Lin Xiaoyu making a cautious first transfer. The phone screen faces only her and is completely hidden; camera sees the matte back and her natural five-finger grip. Her expression mixes doubt and trust. Premium handcrafted 3D plush doll, cool tense bedroom light, realistic hands, shallow depth of field, no visible UI, no text."
+    },
+    {
+      "id": "10_fake_profit",
+      "character_id": "chenmo",
+      "duration": 4,
+      "seed": 628110,
+      "ip_scale": 0.73,
+      "speech_direction": "He speaks with excited but controlled lip movement, using enthusiasm as persuasion.",
+      "motion": "Start: he looks down at his unseen device. Action: his eyes brighten, he looks into camera, lifts one open hand in a small celebratory gesture, and nods twice. End: he smiles as if sharing good news. Motion is moderate but controlled.",
+      "prompt": "Vertical energetic video-message portrait of Chen Mo in the same polished apartment. He reacts as though a small investment has just profited, framing the result as shared luck. Warm light becomes slightly brighter and inviting. Premium handcrafted 3D plush doll, adult chibi proportions, clean composition, no visible screens, no generated numbers, no text."
+    },
+    {
+      "id": "11_harvest_pressure",
+      "character_id": "chenmo",
+      "duration": 4,
+      "seed": 628111,
+      "ip_scale": 0.78,
+      "speech_direction": "He speaks steadily with subtle lip movement; the warmth becomes more urgent near the end.",
+      "motion": "Start: Chen Mo sits upright, hands composed and expression serious. Action: he leans closer, speaks with increasing urgency, presses one palm lightly to his chest, then extends that hand toward camera. End: he waits with fixed persuasive eye contact. Motion is medium and deliberate.",
+      "prompt": "Vertical close video-call shot two weeks later. Chen Mo's same handsome persona is lit by colder laptop light with a warm lamp behind, creating an attractive but subtly pressuring contrast. He claims to risk all his savings and invokes a shared future. Premium handcrafted 3D plush doll film, 65mm lens, restrained psychological tension, no text, no logo."
+    },
+    {
+      "id": "12_all_savings",
+      "character_id": "linxiaoyu",
+      "duration": 4,
+      "seed": 628112,
+      "ip_scale": 0.78,
+      "speech_direction": "She speaks slowly with fearful lip movement and a small break before asking to meet.",
+      "motion": "Start: she sits at a small bedroom desk, phone back visible in one hand and the other hand resting near a closed bank card wallet. Action: her eyes move between the wallet and phone, her fingers tighten around the phone, and she asks to meet first. End: she holds still with worried wet eyes. Motion is slow and restrained.",
+      "prompt": "Vertical medium close shot of Lin Xiaoyu confronting the risk of her entire savings. She sits at a small bedroom desk with a plain card wallet and notebook, no readable financial screen. Cool blue light dominates; the warm bedside lamp is weak. Premium handcrafted 3D plush doll, fine fabric fibers, adult emotional realism, no visible phone screen, no text."
+    },
+    {
+      "id": "13_dali_promise",
+      "character_id": "chenmo",
+      "duration": 4,
+      "seed": 628113,
+      "ip_scale": 0.78,
+      "speech_direction": "He speaks continuously with intimate persuasive lip movement, ending on a firm instruction.",
+      "motion": "Start: he looks gently concerned into camera. Action: he places one hand over his heart, speaks about meeting and traveling together, then gives one slow confident nod. End: his smile fades into expectant eye contact. Motion is small but emotionally manipulative.",
+      "prompt": "Vertical intimate close portrait of Chen Mo during the decisive call. Warm background bokeh suggests romance while cold screen light sharpens his eyes. Same polished sweater and trustworthy appearance, but the pressure underneath is now visible. Premium handcrafted 3D plush doll, cinematic 85mm lens, fine textile detail, no text, no logo."
+    },
+    {
+      "id": "14_almost_confirm",
+      "character_id": "linxiaoyu",
+      "duration": 4,
+      "seed": 628114,
+      "ip_scale": 0.76,
+      "speech_direction": "She whispers a short phrase with slight lip movement, then falls completely silent in shock.",
+      "motion": "Start: her right index finger hovers above the unseen phone screen facing her. Action: the fingertip descends but stops before contact when a notification sound occurs; her eyes snap sideways and her hand freezes. End: she slowly pulls the finger back, stunned. Motion is extremely small and precise.",
+      "prompt": "Vertical tight side-angle shot of Lin Xiaoyu nearly confirming a large transfer. The phone front faces away from camera and remains invisible; only its side and matte back are shown. Her finger stops before contact as new information arrives. Cool blue bedroom light, tense shallow depth of field, premium handcrafted 3D plush doll, anatomically natural hand, no visible UI, no text."
+    },
+    {
+      "id": "15_photo_discovery",
+      "character_id": "linxiaoyu",
+      "duration": 4,
+      "seed": 628115,
+      "ip_scale": 0.80,
+      "speech_direction": "She speaks in short broken phrases with restrained lip movement as the realization forms.",
+      "motion": "Start: she sits before an open laptop while holding the phone back toward camera. Action: her eyes compare laptop and phone, she pinches to enlarge the hidden image once, then her mouth parts and her hand begins to tremble. End: she stares at the mismatch with tears forming. Motion is slow and controlled.",
+      "prompt": "Vertical over-desk medium close shot of Lin Xiaoyu comparing a travel photograph source on a laptop with a phone. Both displays are angled away or softly blurred, containing no readable generated text. Her expression shifts from confusion to betrayal. Premium handcrafted 3D plush doll, cold investigative light, warm lamp nearly gone, physically natural hands, no visible UI, no text."
+    },
+    {
+      "id": "16_test_account",
+      "character_id": "linxiaoyu",
+      "duration": 4,
+      "seed": 628116,
+      "ip_scale": 0.80,
+      "speech_direction": "She speaks calmly with deliberate lip movement, hiding her fear while testing him.",
+      "motion": "Start: she steadies the phone at chest height, back facing camera, and takes one controlled breath. Action: she wipes one tear with her free thumb, straightens her back, and asks him to change the account. End: she watches the phone with newly focused eyes. Motion is slow and restrained.",
+      "prompt": "Vertical medium close shot in the same bedroom. Lin Xiaoyu has regained composure and tests the supposed lover with a false bank warning. One tear remains on her plush cheek, but her posture is straighter and analytical. The phone screen stays fully hidden. Premium handcrafted 3D plush film, cool controlled light, adult emotional realism, no text, no visible UI."
+    },
+    {
+      "id": "17_cold_gaslight",
+      "character_id": "chenmo",
+      "duration": 4,
+      "seed": 628117,
+      "ip_scale": 0.82,
+      "speech_direction": "He speaks with restrained but faster lip movement; the affectionate mask drops into irritation.",
+      "motion": "Start: Chen Mo waits with a fixed smile. Action: the smile disappears, his brows lower, he leans toward camera and points once with a tense index finger, then opens his hand in accusation. End: he holds a cold demanding stare. Motion is medium and controlled.",
+      "prompt": "Vertical close video-call shot of Chen Mo after being challenged. Same face and clothing, but his warmth has vanished; cold laptop light dominates and the polished background falls into darkness. He uses guilt and urgency instead of affection. Premium handcrafted 3D plush doll, cinematic 85mm lens, psychological realism, no text, no logo, no extra person."
+    },
+    {
+      "id": "18_report_and_block",
+      "character_id": "linxiaoyu",
+      "duration": 4,
+      "seed": 628118,
+      "ip_scale": 0.82,
+      "speech_direction": "She speaks one firm final statement with controlled lip movement, then closes her mouth and acts silently.",
+      "motion": "Start: she faces the hidden phone screen with tears on both cheeks. Action: she speaks firmly, taps several slow deliberate times to save evidence and report, then turns the phone face down on the desk. End: both hands leave the phone and she exhales. Motion is slow and decisive.",
+      "prompt": "Vertical medium shot at the bedroom desk. Lin Xiaoyu ends the scam, preserving evidence and blocking the contact while the phone display remains completely hidden. Tears show grief rather than helplessness; her posture is determined. Lighting begins transitioning from cold blue toward warm amber. Premium handcrafted 3D plush doll, natural hands, no visible screen, no generated text."
+    },
+    {
+      "id": "19_friend_thanks",
+      "character_id": "linxiaoyu",
+      "duration": 4,
+      "seed": 628119,
+      "ip_scale": 0.82,
+      "speech_direction": "She speaks softly with a trembling but relieved voice, then closes her lips and breathes out.",
+      "motion": "Start: she sits curled beside the window, holding the phone back toward camera near her chest. Action: she thanks her friend, lowers the phone into her lap, wipes the last tear, and takes one long breath. End: she looks toward the warm streetlight with quiet relief. Motion is slow and gentle.",
+      "prompt": "Vertical cinematic closing medium shot of Lin Xiaoyu seated beside the bedroom window. Warm streetlight enters and softens the remaining cool night light. She has survived the emotional betrayal, still sad but clear-eyed. The phone rests safely with its back visible. Premium handcrafted 3D plush doll film, fine fibers, gentle 50mm lens, clean upper negative space for a final slogan, no text, no watermark."
+    }
+  ]
+}

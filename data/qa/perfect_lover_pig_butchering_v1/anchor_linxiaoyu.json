@@ -1,0 +1,20 @@
+{
+  "project_id": "perfect_lover_linxiaoyu_anchor_v1",
+  "keyframe_generation": {
+    "checkpoint": "flux1-schnell-fp8.safetensors",
+    "steps": 4,
+    "cfg": 1.0,
+    "sampler": "euler",
+    "scheduler": "simple",
+    "width": 768,
+    "height": 1024
+  },
+  "anchor": {
+    "id": "linxiaoyu_anchor",
+    "seed": 628001,
+    "width": 768,
+    "height": 1024,
+    "prompt": "Character master reference, adult Chinese woman age 25, gentle oval face, warm dark-brown almond eyes, small straight nose, soft natural lips, subtle makeup, shoulder-length dark-brown straight hair with airy side bangs and a neat low half-up tie. She wears a cream knitted lounge top under a dusty-rose soft cardigan and a tiny moon-shaped silver necklace. Premium handcrafted 3D plush doll, soft flocked fabric skin, visible fine textile fibers, subtle stitched seams, rounded adult chibi proportions, unmistakably adult urban professional. Calm neutral expression, front-facing three-quarter upper-body portrait, centered, plain cool-gray studio background, soft even key light, 50mm lens, clean silhouette, high identity clarity, no phone, no text, no logo, no watermark, no extra person."
+  },
+  "shots": []
+}

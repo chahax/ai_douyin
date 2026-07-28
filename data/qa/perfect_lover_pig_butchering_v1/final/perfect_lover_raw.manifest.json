@@ -1,0 +1,289 @@
+{
+  "template": "story_video/v1",
+  "title": "杀猪盘反诈短剧《完美恋人》",
+  "quality_profile": "publish",
+  "video_fit_mode": "hold_last",
+  "responsibilities": {},
+  "require_scene_control": false,
+  "allow_user_overrides": false,
+  "cast": {
+    "linxiaoyu": {
+      "name": "林小雨",
+      "voice": "zh-CN-XiaoyiNeural",
+      "tts_provider": "edge"
+    },
+    "chenmo": {
+      "name": "陈默",
+      "voice": "zh-CN-YunxiNeural",
+      "tts_provider": "edge"
+    }
+  },
+  "scenes": [
+    {
+      "id": "01_after_call",
+      "video_path": "data\\qa\\perfect_lover_pig_butchering_v1\\video\\clips\\01_after_call.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "linxiaoyu",
+          "text": "晚安，陈默。你也早点休息……今天和你聊天，我很开心。",
+          "audio_path": null,
+          "pause_after_seconds": 0.45
+        }
+      ]
+    },
+    {
+      "id": "02_coffee_message",
+      "video_path": "data\\qa\\perfect_lover_pig_butchering_v1\\video\\clips\\02_coffee_message.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "chenmo",
+          "text": "刚做好的手冲咖啡，第一杯想给你尝。生活需要一点甜，尤其是遇见你之后。",
+          "audio_path": null,
+          "pause_after_seconds": 0.35
+        }
+      ]
+    },
+    {
+      "id": "03_flirty_reply",
+      "video_path": "data\\qa\\perfect_lover_pig_butchering_v1\\video\\clips\\03_flirty_reply.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "linxiaoyu",
+          "text": "隔着屏幕都闻到香了。你每天都这么有仪式感吗？",
+          "audio_path": null,
+          "pause_after_seconds": 0.35
+        }
+      ]
+    },
+    {
+      "id": "04_sweet_promise",
+      "video_path": "data\\qa\\perfect_lover_pig_butchering_v1\\video\\clips\\04_sweet_promise.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "chenmo",
+          "text": "以前没有。等这个项目结束，我飞去见你。我们去大理看洱海，好不好？",
+          "audio_path": null,
+          "pause_after_seconds": 0.45
+        }
+      ]
+    },
+    {
+      "id": "05_browsing_photos",
+      "video_path": "data\\qa\\perfect_lover_pig_butchering_v1\\video\\clips\\05_browsing_photos.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "linxiaoyu",
+          "text": "你怎么一会儿纽约，一会儿巴黎？这张铁塔下的照片，还挺帅的。",
+          "audio_path": null,
+          "pause_after_seconds": 0.4
+        }
+      ]
+    },
+    {
+      "id": "06_future_plan",
+      "video_path": "data\\qa\\perfect_lover_pig_butchering_v1\\video\\clips\\06_future_plan.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "chenmo",
+          "text": "工作到处跑，照片都是随手拍的。以后不拍风景了，留着和你一起看。",
+          "audio_path": null,
+          "pause_after_seconds": 0.45
+        }
+      ]
+    },
+    {
+      "id": "07_week_later_worry",
+      "video_path": "data\\qa\\perfect_lover_pig_butchering_v1\\video\\clips\\07_week_later_worry.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "linxiaoyu",
+          "text": "你今天声音不太对。是不是项目又出问题了？要不……我去陪你？",
+          "audio_path": null,
+          "pause_after_seconds": 0.5
+        }
+      ]
+    },
+    {
+      "id": "08_small_invest_pitch",
+      "video_path": "data\\qa\\perfect_lover_pig_butchering_v1\\video\\clips\\08_small_invest_pitch.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "chenmo",
+          "text": "傻瓜，我怎么舍得你奔波。对了，我教你的理财应用试了吗？先投一千，亏了算我的。不是为了赚钱，是让我们的计划快一点。",
+          "audio_path": null,
+          "pause_after_seconds": 0.5
+        }
+      ]
+    },
+    {
+      "id": "09_first_transfer",
+      "video_path": "data\\qa\\perfect_lover_pig_butchering_v1\\video\\clips\\09_first_transfer.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "linxiaoyu",
+          "text": "这个平台我没听说过……不过，就一千。那我试一次，你别笑我胆小。",
+          "audio_path": null,
+          "pause_after_seconds": 0.45
+        }
+      ]
+    },
+    {
+      "id": "10_fake_profit",
+      "video_path": "data\\qa\\perfect_lover_pig_butchering_v1\\video\\clips\\10_fake_profit.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "chenmo",
+          "text": "宝宝你看，五分钟涨了百分之八。我就说你运气好。等月底漏洞修复，机会就没了。",
+          "audio_path": null,
+          "pause_after_seconds": 0.55
+        }
+      ]
+    },
+    {
+      "id": "11_harvest_pressure",
+      "video_path": "data\\qa\\perfect_lover_pig_butchering_v1\\video\\clips\\11_harvest_pressure.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "chenmo",
+          "text": "这次我把全部积蓄都投进去了。你不是想开工作室吗？把五万放进去，这一单做完，首付就有了。",
+          "audio_path": null,
+          "pause_after_seconds": 0.55
+        }
+      ]
+    },
+    {
+      "id": "12_all_savings",
+      "video_path": "data\\qa\\perfect_lover_pig_butchering_v1\\video\\clips\\12_all_savings.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "linxiaoyu",
+          "text": "五万三……这是我全部的存款。陈默，我有点怕。我们能不能先见面，再谈投资？",
+          "audio_path": null,
+          "pause_after_seconds": 0.55
+        }
+      ]
+    },
+    {
+      "id": "13_dali_promise",
+      "video_path": "data\\qa\\perfect_lover_pig_butchering_v1\\video\\clips\\13_dali_promise.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "chenmo",
+          "text": "小雨，你相信我。我什么时候让你失望过？做完这单我就飞过去，我们一起去大理。别让犹豫毁掉我们的未来。",
+          "audio_path": null,
+          "pause_after_seconds": 0.6
+        }
+      ]
+    },
+    {
+      "id": "14_almost_confirm",
+      "video_path": "data\\qa\\perfect_lover_pig_butchering_v1\\video\\clips\\14_almost_confirm.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "linxiaoyu",
+          "text": "嗯……我信你。五万……确认。等等，苏苏说，这张巴黎照片是网图？",
+          "audio_path": null,
+          "pause_after_seconds": 0.65
+        }
+      ]
+    },
+    {
+      "id": "15_photo_discovery",
+      "video_path": "data\\qa\\perfect_lover_pig_butchering_v1\\video\\clips\\15_photo_discovery.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "linxiaoyu",
+          "text": "原博主二零二三年就发过。你说是今年春天拍的……健身房镜子里的手机是苹果十三，可你明明说一直用华为。",
+          "audio_path": null,
+          "pause_after_seconds": 0.65
+        }
+      ]
+    },
+    {
+      "id": "16_test_account",
+      "video_path": "data\\qa\\perfect_lover_pig_butchering_v1\\video\\clips\\16_test_account.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "linxiaoyu",
+          "text": "陈默，银行提示收款账户异常，还标记了高风险。你换一个账号，我马上转。",
+          "audio_path": null,
+          "pause_after_seconds": 0.55
+        }
+      ]
+    },
+    {
+      "id": "17_cold_gaslight",
+      "video_path": "data\\qa\\perfect_lover_pig_butchering_v1\\video\\clips\\17_cold_gaslight.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "chenmo",
+          "text": "怎么可能？就这个账号，我确认过很多次。你是不是不信我？我把所有钱都投进去了，你不转，我们两个都要亏。",
+          "audio_path": null,
+          "pause_after_seconds": 0.65
+        }
+      ]
+    },
+    {
+      "id": "18_report_and_block",
+      "video_path": "data\\qa\\perfect_lover_pig_butchering_v1\\video\\clips\\18_report_and_block.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "linxiaoyu",
+          "text": "漏洞、月底、最后机会……你每句话都在催我。你盯上的不是我，是我的余额。别再联系我了。我已经保存证据，也已经举报。",
+          "audio_path": null,
+          "pause_after_seconds": 0.9
+        }
+      ]
+    },
+    {
+      "id": "19_friend_thanks",
+      "video_path": "data\\qa\\perfect_lover_pig_butchering_v1\\video\\clips\\19_friend_thanks.mp4",
+      "control_manifest": null,
+      "control_review": null,
+      "lines": [
+        {
+          "speaker": "linxiaoyu",
+          "text": "苏苏，谢谢你。差一点，我就把五万块和我对他的信任，一起交出去了。",
+          "audio_path": null,
+          "pause_after_seconds": 2.8
+        }
+      ]
+    }
+  ]
+}

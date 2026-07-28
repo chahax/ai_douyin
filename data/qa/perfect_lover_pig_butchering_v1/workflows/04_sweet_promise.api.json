@@ -1,0 +1,118 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "flux1-schnell-fp8.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "perfect_lover_v1/references/chenmo_glasses_anchor.png"
+    }
+  },
+  "3": {
+    "class_type": "LoadFluxIPAdapter",
+    "inputs": {
+      "ipadatper": "ip_adapter.safetensors",
+      "clip_vision": "openai_clip_vit_l14\\model.safetensors",
+      "provider": "CPU"
+    }
+  },
+  "4": {
+    "class_type": "ApplyFluxIPAdapter",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "ip_adapter_flux": [
+        "3",
+        0
+      ],
+      "image": [
+        "2",
+        0
+      ],
+      "ip_scale": 0.95
+    }
+  },
+  "5": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "Vertical intimate video-call portrait of Chen Mo in a polished apartment living room. Warm table lamp, a blurred shelf with books and a small plant, aspirational but believable surroundings. He leans slightly toward camera with convincing affection. Premium handcrafted 3D plush film, adult chibi proportions, soft flocked fabric, 65mm lens, no text, no logo, no extra person. The character identity must exactly match the supplied character master reference: same angular oval face, same warm dark-brown eyes, same thin black rectangular glasses, same neat side-parted short black hair, same camel-beige sweater over white shirt, same dark wristwatch. Preserve the same adult identity in every frame. Match the supplied glasses scene master exactly: same thin black rectangular glasses, same angular oval face, same side-parted short black hair, same adult age and camel-beige sweater.",
+      "clip": [
+        "1",
+        1
+      ]
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "",
+      "clip": [
+        "1",
+        1
+      ]
+    }
+  },
+  "7": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 704,
+      "height": 1248,
+      "batch_size": 1
+    }
+  },
+  "8": {
+    "class_type": "XlabsSampler",
+    "inputs": {
+      "model": [
+        "4",
+        0
+      ],
+      "conditioning": [
+        "5",
+        0
+      ],
+      "neg_conditioning": [
+        "6",
+        0
+      ],
+      "noise_seed": 630104,
+      "steps": 4,
+      "timestep_to_start_cfg": 4,
+      "true_gs": 1.0,
+      "image_to_image_strength": 0.0,
+      "denoise_strength": 1.0,
+      "latent_image": [
+        "7",
+        0
+      ]
+    }
+  },
+  "9": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "8",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    }
+  },
+  "10": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "9",
+        0
+      ],
+      "filename_prefix": "perfect_lover_v1/keyframes_final/04_sweet_promise"
+    }
+  }
+}
