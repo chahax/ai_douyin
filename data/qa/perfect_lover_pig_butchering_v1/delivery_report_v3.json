@@ -1,0 +1,30 @@
+{
+  "version": "v3_hybrid",
+  "status": "delivered",
+  "output": "final/perfect_lover_v3_hybrid_captioned.mp4",
+  "duration_seconds": 175.507,
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "codec": "h264",
+    "pixel_format": "yuv420p",
+    "color_space": "bt709"
+  },
+  "control_policy": {
+    "identity": "one fixed anchor per character",
+    "dialogue": "audio-driven SadTalker lip sync",
+    "hands": "verified short source prefixes; no more than two visible hands",
+    "phone": "back or side only; no generated screen content",
+    "scene_02": "action prefix ends at 0.9 seconds, before the rejected third-hand frame",
+    "scene_10": "lipsync-only to prevent exposure drift",
+    "scene_11": "lipsync-only; no freeze longer than 1.5 seconds detected"
+  },
+  "quality_gate": {
+    "profile": "publish",
+    "passed": true,
+    "issues": []
+  },
+  "review_contact_sheet": "final/perfect_lover_v3_actions_contact.png",
+  "sha256": "A12717E8AADC67D264440A0F93A827220B8D9DD77226C96D663BF93908806E29"
+}

@@ -1,0 +1,29 @@
+{
+  "policy": {
+    "clear_phone_surface": "back_or_side_only",
+    "hand_count": "two_hands_maximum",
+    "dialogue_motion": "audio_driven",
+    "action_insert": "verified_source_prefix"
+  },
+  "scenes": {
+    "01_after_call": {"lead_seconds": 1.6, "crop_y": 648},
+    "02_coffee_message": {"lead_seconds": 0.9, "crop_y": 648},
+    "03_flirty_reply": {"lead_seconds": 1.6, "crop_y": 648},
+    "04_sweet_promise": {"lead_seconds": 0.0},
+    "05_browsing_photos": {"lead_seconds": 1.6, "crop_y": 648},
+    "06_future_plan": {"lead_seconds": 0.0},
+    "07_week_later_worry": {"lead_seconds": 1.6, "crop_y": 648},
+    "08_small_invest_pitch": {"lead_seconds": 1.4, "crop_y": 648},
+    "09_first_transfer": {"lead_seconds": 1.4, "crop_y": 648},
+    "10_fake_profit": {"lead_seconds": 0.0},
+    "11_harvest_pressure": {"lead_seconds": 0.0},
+    "12_all_savings": {"lead_seconds": 1.6, "crop_y": 648},
+    "13_dali_promise": {"lead_seconds": 0.0},
+    "14_almost_confirm": {"lead_seconds": 1.4, "crop_y": 648},
+    "15_photo_discovery": {"lead_seconds": 1.6, "crop_y": 648},
+    "16_test_account": {"lead_seconds": 1.6, "crop_y": 648},
+    "17_cold_gaslight": {"lead_seconds": 0.0},
+    "18_report_and_block": {"lead_seconds": 1.6, "crop_y": 648},
+    "19_friend_thanks": {"lead_seconds": 1.6, "crop_y": 648}
+  }
+}
