@@ -30,12 +30,36 @@ else {
     git -C $RepoDir submodule update --init --recursive
 }
 
-$python = "C:\Users\c\.conda\envs\$EnvName\python.exe"
+$envInfo = conda env list --json | ConvertFrom-Json
+$envPath = $envInfo.envs |
+    Where-Object { (Split-Path -Leaf $_) -eq $EnvName } |
+    Select-Object -First 1
+if (-not $envPath) {
+    throw "Conda environment was not found: $EnvName"
+}
+$python = Join-Path $envPath "python.exe"
 if (-not (Test-Path -LiteralPath $python)) {
     throw "Conda Python not found: $python"
 }
 
-& $python -m pip install -r (Join-Path $RepoDir "requirements.txt") `
+$sourceRequirements = Join-Path $RepoDir "requirements.txt"
+$filteredRequirements = Join-Path ([System.IO.Path]::GetTempPath()) "cosyvoice-windows-blackwell-requirements.txt"
+Get-Content -LiteralPath $sourceRequirements |
+    Where-Object {
+        $_ -notmatch "^\s*torch==" -and
+        $_ -notmatch "^\s*torchaudio==" -and
+        $_ -notmatch "download\.pytorch\.org/whl/cu121"
+    } |
+    Set-Content -LiteralPath $filteredRequirements -Encoding UTF8
+
+# RTX 50 series needs a CUDA 12.8-capable PyTorch build. The upstream
+# requirements currently pin torch 2.3.1/cu121, which cannot use this GPU.
+& $python -m pip install `
+    torch==2.8.0 `
+    torchaudio==2.8.0 `
+    --index-url "https://download.pytorch.org/whl/cu128"
+
+& $python -m pip install -r $filteredRequirements `
     -i "https://mirrors.aliyun.com/pypi/simple/" `
     --trusted-host "mirrors.aliyun.com"
 

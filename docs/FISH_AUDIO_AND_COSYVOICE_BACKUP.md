@@ -49,7 +49,8 @@
 
 本机准备状态：
 
-- 独立环境：`C:\Users\c\.conda\envs\cosyvoice`
+- 独立环境：通过`conda env list`动态解析；当前为
+  `C:\ProgramData\miniconda3\envs\cosyvoice`
 - Python：3.10.20
 - Pynini：2.1.6
 - GPU：RTX 5070 Ti 16GB
@@ -72,6 +73,8 @@ powershell -ExecutionPolicy Bypass -File D:\IT\ai_douyin\scripts\setup_cosyvoice
 
 - CosyVoice与ComfyUI、GPT-SoVITS使用不同Conda环境。
 - 不安装vLLM；单卡16GB先使用官方普通PyTorch推理。
+- RTX 5070 Ti使用PyTorch 2.8.0/CUDA 12.8；安装脚本会过滤官方
+  `torch 2.3.1/cu121`固定项，避免Blackwell显卡无法运行。
 - 首次只下载`Fun-CosyVoice3-0.5B-2512`，不同时下载全部旧模型。
 - 先生成五段情绪试听，确认后才接入整片对白。
 - 克隆真人音色必须取得声音所有者授权。
