@@ -1,0 +1,44 @@
+{
+  "status": "soft_lock_limit_confirmed",
+  "base_model": "flux1-schnell-fp8.safetensors",
+  "identity_tool": "XLabs Flux IP-Adapter",
+  "ip_scale": 1.0,
+  "tests": {
+    "linxiaoyu": {
+      "shot": "15_photo_discovery",
+      "result": "partial",
+      "passed": false,
+      "observations": [
+        "face, eye color, cardigan and cream knit top are closer to the master",
+        "hairstyle still changes from deep side part and side ponytail to straight fringe",
+        "generic IP-Adapter is not a hard identity lock for this stylized character"
+      ],
+      "output": "linxiaoyu_negative/keyframes/15_photo_discovery.png"
+    },
+    "chenmo": {
+      "shot": "17_cold_gaslight",
+      "result": "usable_probe",
+      "passed": true,
+      "observations": [
+        "negative conditioning removed the unwanted glasses",
+        "face, eyebrows, quiff and camel sweater are close to the master"
+      ],
+      "output": "chenmo_negative/keyframes/17_cold_gaslight.png"
+    }
+  },
+  "decision": {
+    "rerender_all_with_current_ipadapter": false,
+    "reason": "The female lead still fails the hard hairstyle and identity requirement at maximum supported IP-Adapter strength.",
+    "recommended": [
+      "prepare 12-20 approved images per character",
+      "train a dedicated Flux or SDXL character LoRA for each lead",
+      "regenerate and approve all 19 keyframes before video generation",
+      "reuse the accepted motion, audio, caption and RIFE assembly stages"
+    ]
+  },
+  "installed_alternatives": {
+    "pulid_sdxl": "installed but paired with Animagine XL locally; likely to change the current 3D soft-doll style",
+    "character_lora_training": "not installed"
+  },
+  "contact_sheet": "identity_probe_contact.png"
+}

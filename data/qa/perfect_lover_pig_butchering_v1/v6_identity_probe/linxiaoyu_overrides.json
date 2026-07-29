@@ -1,0 +1,8 @@
+{
+  "15_photo_discovery": {
+    "ip_scale": 1.0,
+    "prompt": "Vertical over-desk medium close shot in a modern bedroom at night. The exact same adult Chinese woman from the supplied master reference compares evidence using one laptop and exactly one dark-blue phone. The phone's matte back faces camera and the display faces only her. Her eyes move between the devices as shock forms. Preserve the master reference literally: identical gentle narrow oval face, identical very large warm brown almond eyes, identical small straight nose and coral lips, identical dark-brown hair with a deep side part gathered into one low side ponytail falling over her left shoulder, identical cream high-neck ribbed knit top, identical dusty-rose cardigan, identical oval silver pendant. Premium handcrafted 3D soft doll film, clean natural hands, cold investigative light, no visible screen, no text, no logo, no watermark.",
+    "suffix": "Preserve the hairstyle, face proportions, eye shape, eye color, clothing, necklace, age, and doll material from the supplied master reference.",
+    "negative_prompt": "blunt bangs, straight bangs, full fringe, center part, bob haircut, short hair, bun hairstyle, loose shoulder-length hair, different face, different clothes, different necklace"
+  }
+}

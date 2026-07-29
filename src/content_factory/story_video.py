@@ -156,6 +156,7 @@ class StoryVideoManifest:
     cast: dict[str, StoryCastMember]
     scenes: tuple[StoryScene, ...]
     quality_profile: str = "publish"
+    output_fps: int | None = None
     video_fit_mode: str = "loop"
     template: str = "story_video/v1"
     responsibilities: dict[str, str] = field(default_factory=dict)
@@ -181,6 +182,7 @@ class StoryVideoManifest:
         cast_value = value.get("cast")
         scenes_value = value.get("scenes")
         quality_profile = value.get("quality_profile", "publish")
+        output_fps = value.get("output_fps")
         video_fit_mode = value.get("video_fit_mode", "loop")
         responsibilities = value.get("responsibilities", {})
         require_scene_control = value.get("require_scene_control", False)
@@ -193,6 +195,10 @@ class StoryVideoManifest:
             raise ValueError("scenes must be a non-empty list")
         if not isinstance(quality_profile, str):
             raise ValueError("quality_profile must be a string")
+        if output_fps is not None and (
+            not isinstance(output_fps, int) or isinstance(output_fps, bool) or not 1 <= output_fps <= 120
+        ):
+            raise ValueError("output_fps must be an integer between 1 and 120 or null")
         if video_fit_mode not in {"loop", "hold_last"}:
             raise ValueError("video_fit_mode must be loop or hold_last")
         if not isinstance(responsibilities, dict) or not all(
@@ -227,6 +233,7 @@ class StoryVideoManifest:
             cast=cast,
             scenes=scenes,
             quality_profile=quality_profile,
+            output_fps=output_fps,
             video_fit_mode=video_fit_mode,
             responsibilities={key: item.strip() for key, item in responsibilities.items()},
             require_scene_control=require_scene_control,
@@ -265,6 +272,7 @@ class StoryVideoManifest:
                 for scene in self.scenes
             ),
             quality_profile=self.quality_profile,
+            output_fps=self.output_fps,
             video_fit_mode=self.video_fit_mode,
             responsibilities=self.responsibilities,
             require_scene_control=self.require_scene_control,
@@ -276,6 +284,7 @@ class StoryVideoManifest:
             "template": self.template,
             "title": self.title,
             "quality_profile": self.quality_profile,
+            "output_fps": self.output_fps,
             "video_fit_mode": self.video_fit_mode,
             "responsibilities": self.responsibilities,
             "require_scene_control": self.require_scene_control,
@@ -316,6 +325,8 @@ def compose_story_video(manifest_path: str | Path, output_path: str | Path) -> s
     """Synthesize missing line audio, compose scene videos, then accept one story video."""
     manifest = StoryVideoManifest.load(manifest_path)
     profile = resolve_quality_profile(manifest.quality_profile)
+    if manifest.output_fps is not None:
+        profile = profile.with_overrides(fps=manifest.output_fps)
     output = Path(output_path)
     output.parent.mkdir(parents=True, exist_ok=True)
     _validate_scene_assets(manifest)

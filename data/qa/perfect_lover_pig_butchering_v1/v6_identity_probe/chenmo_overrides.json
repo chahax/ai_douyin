@@ -1,0 +1,8 @@
+{
+  "17_cold_gaslight": {
+    "ip_scale": 1.0,
+    "prompt": "Vertical close video-call shot of the exact same adult Chinese man from the supplied master reference. His affectionate mask drops: brows lower, lips tense, and one index finger points toward camera in accusation. Preserve the master reference literally: identical long rounded oval face, identical warm brown eyes, identical thick straight black eyebrows, identical prominent ears, identical sculpted swept-back black quiff with short sides, identical clean-shaven face and fully visible eye area, identical camel ribbed high crew-neck sweater and black wrist band. Cold laptop light dominates while the apartment background falls dark. Premium handcrafted 3D soft doll film, rounded adult proportions, clean face, no text, no logo, no watermark.",
+    "suffix": "Preserve the face, eyes, eyebrows, hairstyle, ears, clothing, age, and doll material from the supplied master reference.",
+    "negative_prompt": "glasses, eyeglasses, spectacles, eyewear, sunglasses, goggles, monocle, different face, different hairstyle, different clothes"
+  }
+}

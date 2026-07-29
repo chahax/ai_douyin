@@ -40,10 +40,22 @@ def main() -> None:
     parser.add_argument("output_manifest")
     parser.add_argument("--ffmpeg", default="ffmpeg")
     parser.add_argument("--ffprobe", default="ffprobe")
+    parser.add_argument("--fps", type=int, default=25)
+    parser.add_argument(
+        "--interpolation",
+        choices=("minterpolate", "fps"),
+        default="minterpolate",
+        help=(
+            "Frame synthesis used after time stretching. Use fps for inputs that "
+            "were already densely interpolated by RIFE."
+        ),
+    )
     parser.add_argument("--only", action="append")
     parser.add_argument("--exclude", action="append")
     parser.add_argument("--attach-audio", action="store_true")
     args = parser.parse_args()
+    if args.fps <= 0:
+        raise ValueError("--fps must be positive")
 
     manifest_path = Path(args.manifest).resolve()
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -73,10 +85,15 @@ def main() -> None:
         source_duration = probe_duration(source, args.ffprobe)
         speed_factor = target_duration / source_duration
         output = output_dir / f"{scene_id}.mp4"
+        interpolation_filter = (
+            f"minterpolate=fps={args.fps}:mi_mode=mci:mc_mode=aobmc:"
+            "me_mode=bidir:vsbmc=1"
+            if args.interpolation == "minterpolate"
+            else f"fps={args.fps}"
+        )
         video_filter = (
             f"setpts={speed_factor:.9f}*PTS,"
-            "minterpolate=fps=25:mi_mode=mci:mc_mode=aobmc:"
-            "me_mode=bidir:vsbmc=1,"
+            f"{interpolation_filter},"
             f"trim=duration={target_duration:.6f},"
             "setpts=PTS-STARTPTS,setsar=1,format=yuv420p"
         )
@@ -90,7 +107,7 @@ def main() -> None:
                 "-vf",
                 video_filter,
                 "-r",
-                "25",
+                str(args.fps),
                 "-c:v",
                 "libx264",
                 "-preset",
@@ -119,6 +136,8 @@ def main() -> None:
                 "speed_factor": speed_factor,
                 "output": str(output),
                 "composition": "full_frame_original",
+                "fps": args.fps,
+                "interpolation": args.interpolation,
             }
         )
         print(f"built {scene_id}", flush=True)

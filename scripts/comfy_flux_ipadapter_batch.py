@@ -119,6 +119,7 @@ def workflow(
     *,
     checkpoint: str,
     prompt: str,
+    negative_prompt: str,
     seed: int,
     width: int,
     height: int,
@@ -149,7 +150,7 @@ def workflow(
             },
         },
         "5": {"class_type": "CLIPTextEncode", "inputs": {"text": prompt, "clip": ["1", 1]}},
-        "6": {"class_type": "CLIPTextEncode", "inputs": {"text": "", "clip": ["1", 1]}},
+        "6": {"class_type": "CLIPTextEncode", "inputs": {"text": negative_prompt, "clip": ["1", 1]}},
         "7": {"class_type": "EmptyLatentImage", "inputs": {"width": width, "height": height, "batch_size": 1}},
         "8": {
             "class_type": "XlabsSampler",
@@ -234,6 +235,7 @@ def main() -> None:
         graph = workflow(
             checkpoint=settings["checkpoint"],
             prompt=prompt,
+            negative_prompt=shot_options.get("negative_prompt", ""),
             seed=shot["seed"] + args.seed_offset,
             width=settings["width"],
             height=settings["height"],

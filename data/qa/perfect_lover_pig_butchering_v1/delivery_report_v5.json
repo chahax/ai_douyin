@@ -1,0 +1,44 @@
+{
+  "version": "v5_rife50",
+  "status": "delivered_with_identity_limitation",
+  "output": "final/perfect_lover_v5_rife50_captioned.mp4",
+  "duration_seconds": 175.509,
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 50,
+    "frames": 8773,
+    "codec": "h264",
+    "pixel_format": "yuv420p",
+    "color_space": "bt709"
+  },
+  "interpolation": {
+    "model": "RIFE 4.26",
+    "source_fps": 25,
+    "neural_multiplier": 4,
+    "intermediate_fps": 100,
+    "delivery_fps": 50,
+    "scope": "all 19 accepted source clips before dialogue-duration stretching"
+  },
+  "audio": {
+    "policy": "reuse accepted emotional voice tracks",
+    "changed": false
+  },
+  "quality_gate": {
+    "profile": "publish with 50fps override",
+    "passed": true,
+    "issues": []
+  },
+  "freeze_review": {
+    "threshold_db": -60,
+    "minimum_duration_seconds": 1.0,
+    "detected_segments": 0
+  },
+  "identity_review": {
+    "fixed_in_v5": false,
+    "reason": "RIFE preserves frames but cannot repair identity drift already present in generated keyframes.",
+    "recommended_next_route": "train one character LoRA per lead, regenerate all keyframes, then rerun I2V and RIFE"
+  },
+  "review_contact_sheet": "final/perfect_lover_v5_rife50_contact.png",
+  "sha256": "B12EFCB1050D2E085DC966D2767D55A357F6C88F89E1DEC0932BE33AD2CD362C"
+}

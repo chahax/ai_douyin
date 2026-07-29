@@ -243,6 +243,45 @@ def test_story_video_manifest_accepts_hold_last_fit_mode():
     assert manifest.to_dict()["video_fit_mode"] == "hold_last"
 
 
+def test_story_video_manifest_accepts_output_fps_override():
+    manifest = StoryVideoManifest.from_dict(
+        {
+            "template": "story_video/v1",
+            "output_fps": 50,
+            "cast": {"narrator": {"name": "narrator"}},
+            "scenes": [
+                {
+                    "id": "opening",
+                    "video_path": "opening.mp4",
+                    "lines": [{"speaker": "narrator", "text": "hello"}],
+                }
+            ],
+        }
+    )
+
+    assert manifest.output_fps == 50
+    assert manifest.to_dict()["output_fps"] == 50
+
+
+@pytest.mark.parametrize("output_fps", [0, 121, 30.0, True])
+def test_story_video_manifest_rejects_invalid_output_fps(output_fps):
+    with pytest.raises(ValueError, match="output_fps"):
+        StoryVideoManifest.from_dict(
+            {
+                "template": "story_video/v1",
+                "output_fps": output_fps,
+                "cast": {"narrator": {"name": "narrator"}},
+                "scenes": [
+                    {
+                        "id": "opening",
+                        "video_path": "opening.mp4",
+                        "lines": [{"speaker": "narrator", "text": "hello"}],
+                    }
+                ],
+            }
+        )
+
+
 def test_story_video_hold_last_fit_does_not_loop(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
     commands: list[list[str]] = []
     monkeypatch.setattr(

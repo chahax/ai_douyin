@@ -11,14 +11,14 @@
     "linxiaoyu": {
       "name": "林小雨",
       "age": 25,
-      "identity_prompt": "adult Chinese woman age 25, gentle oval face, warm dark-brown almond eyes, small straight nose, soft natural lips, subtle makeup, shoulder-length dark-brown straight hair with airy side bangs and a neat low half-up tie, cream knitted lounge top, dusty-rose cardigan, tiny moon-shaped silver necklace",
-      "invariants": "same gentle oval face, same warm dark-brown almond eyes, same shoulder-length dark-brown hair with airy side bangs and low half-up tie, same cream knitted top, same dusty-rose cardigan, same tiny moon-shaped silver necklace"
+      "identity_prompt": "adult Chinese woman age 25, gentle narrow oval face, very large warm-brown almond eyes, small straight nose, soft coral lips, subtle makeup, dark-brown hair with a deep side part gathered into one low side ponytail falling over her left shoulder, cream high-neck ribbed knitted top, dusty-rose cardigan, oval silver pendant",
+      "invariants": "same gentle narrow oval face, same very large warm-brown almond eyes, same small straight nose and coral lips, same dark-brown deep side part and low side ponytail over her left shoulder, same cream high-neck ribbed knit top, same dusty-rose cardigan, same oval silver pendant"
     },
     "chenmo": {
       "name": "陈默",
       "age": 28,
-      "identity_prompt": "handsome adult Chinese man age 28, clean angular oval face, warm dark-brown eyes behind thin black rectangular glasses, straight eyebrows, neat short black hair with a natural side part, clean shaven, camel-beige crewneck sweater over a crisp white shirt, simple dark wristwatch",
-      "invariants": "same angular oval face, same warm dark-brown eyes, same thin black rectangular glasses, same neat side-parted short black hair, same camel-beige sweater over white shirt, same dark wristwatch"
+      "identity_prompt": "handsome adult Chinese man age 28, long rounded oval face, warm brown eyes, thick straight black eyebrows, prominent ears, sculpted swept-back black quiff with short sides, clean shaven, fully visible unobstructed eye area, camel ribbed high crew-neck sweater, simple black wrist band",
+      "invariants": "same long rounded oval face, same warm brown eyes, same thick straight black eyebrows, same prominent ears, same sculpted swept-back black quiff with short sides, same clean-shaven face and fully visible eye area, same camel ribbed high crew-neck sweater, same black wrist band"
     }
   },
   "keyframe_generation": {
