@@ -1,0 +1,44 @@
+{
+  "version": "v4_fullframe",
+  "status": "delivered",
+  "output": "final/perfect_lover_v4_fullframe_captioned.mp4",
+  "duration_seconds": 175.5,
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "codec": "h264",
+    "pixel_format": "yuv420p",
+    "color_space": "bt709"
+  },
+  "composition_policy": {
+    "base": "first-edition full-frame scene composition",
+    "forbidden": [
+      "portrait inset",
+      "blurred replacement background",
+      "cropped hand window",
+      "loop back to first frame"
+    ],
+    "timing": "each accepted clip is played once and smoothly extended to dialogue duration"
+  },
+  "repairs": {
+    "02_coffee_message": "Removed the generated extra-hand prefix; retained a verified full-frame suffix with exactly two hands and one cup.",
+    "10_fake_profit": "Removed the exposure-pumping tail; retained the stable 0.0-2.8 second full-frame interval.",
+    "11_harvest_pressure": "Used a new full-frame continuous-motion candidate; sampled luma stayed between 113.7 and 116.9."
+  },
+  "freeze_review": {
+    "threshold_db": -60,
+    "longest_detected_seconds": 0.9,
+    "freeze_over_one_second": false
+  },
+  "quality_gate": {
+    "profile": "publish",
+    "passed": true,
+    "issues": []
+  },
+  "review_contact_sheets": [
+    "final/perfect_lover_v4_critical_contact.png",
+    "final/perfect_lover_v4_all_scenes_contact.png"
+  ],
+  "sha256": "BACFF30F9151881ABF19A61BE6B0C8859A83359E6D81457DBC6B44D8992AE6A4"
+}

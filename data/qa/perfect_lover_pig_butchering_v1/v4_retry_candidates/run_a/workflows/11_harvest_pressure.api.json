@@ -1,0 +1,172 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "LTX2\\ltx-2.3-22b-distilled-1.1_transformer_only_fp8_scaled.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "2": {
+    "class_type": "ModelSamplingLTXV",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "max_shift": 2.05,
+      "base_shift": 0.95,
+      "latent": [
+        "9",
+        2
+      ]
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "LTX-Kijai\\LTX23_video_vae_bf16.safetensors"
+    }
+  },
+  "4": {
+    "class_type": "LTXAVTextEncoderLoader",
+    "inputs": {
+      "text_encoder": "gemma_3_12B_it.safetensors",
+      "ckpt_name": "ltx-2.3-text-proj-only.safetensors",
+      "device": "default"
+    }
+  },
+  "5": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "4",
+        0
+      ],
+      "text": "Vertical close video-call shot two weeks later. Chen Mo's same handsome persona is lit by colder laptop light with a warm lamp behind, creating an attractive but subtly pressuring contrast. He claims to risk all his savings and invokes a shared future. Premium handcrafted 3D plush doll film, 65mm lens, restrained psychological tension, no text, no logo. Animate only the following controlled action. Start: Chen Mo holds steady persuasive eye contact in the original full vertical composition. Action: he speaks continuously with small natural lip movement, blinks once near the first third, inhales subtly at mid-shot, and tightens his eyebrows slightly near the end; his head remains centered and his body, background, camera, and lighting remain fixed. End: he maintains eye contact with a restrained serious expression. Motion is continuous, extremely small, and evenly distributed across the entire clip; there is no frozen interval. Preserve the exact first-frame composition, character identity, outfit, props, and room. The camera stays locked and stable. Distribute subtle lip, eyelid, pupil, eyebrow, and breathing motion continuously from first frame through final frame. Preserve the full original frame."
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "4",
+        0
+      ],
+      "text": "frozen face, frozen interval, still image, stopped motion, exposure pumping, brightness change, overexposure, flicker, identity change, different face, missing glasses, altered glasses, hairstyle change, clothing change, extra limb, extra hand, camera movement, zoom, crop, inset, portrait box, blurred background replacement, scene cut, text, logo, watermark"
+    }
+  },
+  "7": {
+    "class_type": "LTXVConditioning",
+    "inputs": {
+      "positive": [
+        "5",
+        0
+      ],
+      "negative": [
+        "6",
+        0
+      ],
+      "frame_rate": 25.0
+    }
+  },
+  "8": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "perfect_lover_v1/keyframes/11_harvest_pressure.png"
+    }
+  },
+  "9": {
+    "class_type": "LTXVImgToVideo",
+    "inputs": {
+      "positive": [
+        "7",
+        0
+      ],
+      "negative": [
+        "7",
+        1
+      ],
+      "vae": [
+        "3",
+        0
+      ],
+      "image": [
+        "8",
+        0
+      ],
+      "width": 704,
+      "height": 1248,
+      "length": 97,
+      "batch_size": 1,
+      "strength": 0.985
+    }
+  },
+  "10": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "2",
+        0
+      ],
+      "positive": [
+        "9",
+        0
+      ],
+      "negative": [
+        "9",
+        1
+      ],
+      "latent_image": [
+        "9",
+        2
+      ],
+      "seed": 632111,
+      "steps": 8,
+      "cfg": 1.0,
+      "sampler_name": "euler_ancestral_cfg_pp",
+      "scheduler": "simple",
+      "denoise": 1.0
+    }
+  },
+  "11": {
+    "class_type": "LTXVTiledVAEDecode",
+    "inputs": {
+      "vae": [
+        "3",
+        0
+      ],
+      "latents": [
+        "10",
+        0
+      ],
+      "horizontal_tiles": 1,
+      "vertical_tiles": 2,
+      "overlap": 2,
+      "last_frame_fix": false,
+      "working_device": "auto",
+      "working_dtype": "auto"
+    }
+  },
+  "12": {
+    "class_type": "CreateVideo",
+    "inputs": {
+      "images": [
+        "11",
+        0
+      ],
+      "fps": 25.0
+    }
+  },
+  "13": {
+    "class_type": "SaveVideo",
+    "inputs": {
+      "video": [
+        "12",
+        0
+      ],
+      "filename_prefix": "perfect_lover_v1/v4_fullframe_run_a/11_harvest_pressure",
+      "format": "mp4",
+      "codec": "h264"
+    }
+  }
+}

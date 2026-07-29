@@ -1,0 +1,23 @@
+{
+  "02_coffee_message": {
+    "frames": 97,
+    "strength": 0.985,
+    "motion": "Start: Chen Mo faces camera while exactly two visible hands already hold one ceramic coffee cup at chest height. Action: both hands, every finger, both wrists, the cup, both forearms, and the camera remain completely fixed; only his eyelids blink once, his eyes soften, and his lips make restrained speaking movements. End: the same two hands still hold the same single cup in exactly the same pose. No hand, finger, arm, object, or body part enters from any edge. Motion amplitude is extremely small and slow.",
+    "speech_direction": "Only the lips, eyelids, and pupils may move. Keep the full original vertical composition. Never generate a new hand, finger, arm, cup, or object.",
+    "negative_prompt": "third hand, extra hand, detached hand, hand entering from frame edge, extra arm, extra fingers, duplicated fingers, fused fingers, missing fingers, moving hands, moving cup, rotating cup, warped cup, identity change, different face, missing glasses, altered glasses, hairstyle change, clothing change, duplicate person, camera movement, crop, inset, portrait box, blurred background replacement, flicker, exposure pumping, scene cut, text, logo, watermark"
+  },
+  "10_fake_profit": {
+    "frames": 97,
+    "strength": 0.985,
+    "motion": "Start: Chen Mo sits centered in the original medium portrait with both shoulders relaxed. Action: he makes one tiny controlled nod, blinks once, and speaks with restrained lips; his torso, clothing, hands outside the lower frame, background, camera, and all lighting remain fixed. End: he holds the same centered pose with a subtle persuasive smile. Motion amplitude is extremely small and slow. Brightness and color temperature remain mathematically constant from first frame to last frame.",
+    "speech_direction": "Only lips, eyelids, pupils, and a two-degree head nod may move. Preserve the complete original frame and constant exposure.",
+    "negative_prompt": "exposure pumping, brightness change, overexposure, white flash, lighting change, color shift, flicker, identity change, different face, missing glasses, altered glasses, hairstyle change, clothing change, extra limb, extra hand, camera movement, zoom, crop, inset, portrait box, blurred background replacement, scene cut, text, logo, watermark"
+  },
+  "11_harvest_pressure": {
+    "frames": 97,
+    "strength": 0.985,
+    "motion": "Start: Chen Mo holds steady persuasive eye contact in the original full vertical composition. Action: he speaks continuously with small natural lip movement, blinks once near the first third, inhales subtly at mid-shot, and tightens his eyebrows slightly near the end; his head remains centered and his body, background, camera, and lighting remain fixed. End: he maintains eye contact with a restrained serious expression. Motion is continuous, extremely small, and evenly distributed across the entire clip; there is no frozen interval.",
+    "speech_direction": "Distribute subtle lip, eyelid, pupil, eyebrow, and breathing motion continuously from first frame through final frame. Preserve the full original frame.",
+    "negative_prompt": "frozen face, frozen interval, still image, stopped motion, exposure pumping, brightness change, overexposure, flicker, identity change, different face, missing glasses, altered glasses, hairstyle change, clothing change, extra limb, extra hand, camera movement, zoom, crop, inset, portrait box, blurred background replacement, scene cut, text, logo, watermark"
+  }
+}
