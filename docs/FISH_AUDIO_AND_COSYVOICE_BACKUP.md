@@ -96,3 +96,34 @@ Windows 下必须把 Numba 缓存指向可写目录，否则 `librosa` 首次导
 - 首次只下载`Fun-CosyVoice3-0.5B-2512`，不同时下载全部旧模型。
 - 先生成五段情绪试听，确认后才接入整片对白。
 - 克隆真人音色必须取得声音所有者授权。
+
+## 3. Kokoro 免费角色基础音色
+
+用途：先从开放模型音色中选出虚构角色的固定声音，再将选中的干净
+WAV作为CosyVoice参考音频，增加情绪和语速控制。
+
+本机状态（2026-07-30）：
+
+- 环境：`C:\Users\c\.conda\envs\kokoro`
+- Kokoro / Misaki：0.9.4
+- PyTorch：2.8.0 CPU
+- 模型：`hexgrad/Kokoro-82M-v1.1-zh`，Apache 2.0
+- 本地路径：
+  `D:\IT\ai_douyin\data\models\kokoro\Kokoro-82M-v1.1-zh`
+- 模型与音色文件约376MB
+- 中文音色：100个，其中女声55个、男声45个
+- 输出：24kHz、16-bit PCM WAV
+
+批量试听：
+
+```powershell
+& C:\Users\c\.conda\envs\kokoro\python.exe `
+  D:\IT\ai_douyin\scripts\kokoro_voice_audition.py `
+  --text "这笔钱是我全部的积蓄，我需要再考虑一下。" `
+  --voices zf_001 zf_023 zf_048 zf_094 `
+  --speed 1.08 `
+  --output-dir D:\IT\ai_douyin\data\audio\kokoro\auditions
+```
+
+当前项目不使用慢速试听；基础速度采用`1.05-1.10`。Kokoro音色选定后，
+每个角色只保留一个固定参考音频，防止不同镜头间角色音色漂移。
