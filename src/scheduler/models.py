@@ -169,6 +169,9 @@ class FanqieBatchBook(Base):
     error_message = Column(Text, default="")
     duration_ms = Column(Integer, default=0)
 
+    # 关闭闭环外键（可空，P0 回填）
+    fanqie_book_pk = Column(Integer, ForeignKey("fanqie_books.id"), nullable=True, index=True)
+
     # 调度
     added_at = Column(DateTime, default=datetime.utcnow)
     last_fetched_at = Column(DateTime, nullable=True)

@@ -1,0 +1,54 @@
+[
+  {
+    "alias": "synthetic_alias_alpha",
+    "book_name": "synthetic_novel_one",
+    "book_id": "1000000000000000001",
+    "content_type": "小说",
+    "publish_type": "AI数字人",
+    "alias_status": "已失效",
+    "book_status": "正常",
+    "fill_status": "未填写",
+    "has_fill_link": false,
+    "created_at": "2026-01-15",
+    "valid_range": "2026-01-15 ~ 2026-07-15"
+  },
+  {
+    "alias": "synthetic_alias_beta",
+    "book_name": "synthetic_novel_two",
+    "book_id": "2000000000000000002",
+    "content_type": "小说",
+    "publish_type": "AIGC",
+    "alias_status": "已失效",
+    "book_status": "正常",
+    "fill_status": "未填写",
+    "has_fill_link": false,
+    "created_at": "2026-02-01",
+    "valid_range": "2026-02-01 ~ 2026-08-01"
+  },
+  {
+    "alias": "synthetic_alias_gamma",
+    "book_name": "synthetic_novel_three",
+    "book_id": "3000000000000000003",
+    "content_type": "小说",
+    "publish_type": "真人出镜",
+    "alias_status": "已失效",
+    "book_status": "正常",
+    "fill_status": "未填写",
+    "has_fill_link": false,
+    "created_at": "2026-03-10",
+    "valid_range": "2026-03-10 ~ 2026-09-10"
+  },
+  {
+    "alias": "synthetic_alias_delta",
+    "book_name": "synthetic_novel_four",
+    "book_id": "4000000000000000004",
+    "content_type": "小说",
+    "publish_type": "解说混剪",
+    "alias_status": "审核不通过",
+    "book_status": "正常",
+    "fill_status": "未填写",
+    "has_fill_link": false,
+    "created_at": "2026-04-20",
+    "valid_range": ""
+  }
+]

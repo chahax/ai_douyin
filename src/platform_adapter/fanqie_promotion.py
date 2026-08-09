@@ -19,7 +19,7 @@ from src.shared.logger import logger
 FANQIE_ROOT = Path("data/fanqie_promotion")
 FANQIE_NOVEL_CONTENT_URL = "https://kol.fanqieopen.com/page/content?tab_type=2&top_tab_genre=-1"
 FANQIE_AUDIO_CONTENT_URL = "https://kol.fanqieopen.com/page/content?tab_type=3&top_tab_genre=-1"
-FANQIE_NOVEL_LIST_URL = "https://kol.fanqieopen.com/page/content?tab_type=2&top_tab_genre=-1"
+FANQIE_NOVEL_LIST_URL = "https://kol.fanqieopen.com/page/promotion-list?tab_type=2&top_tab_genre=-1"
 FANQIE_AUDIO_LIST_URL = "https://kol.fanqieopen.com/page/content?tab_type=3&top_tab_genre=-1"
 FANQIE_NOVEL_HOME = "https://fanqienovel.com"
 
@@ -338,54 +338,250 @@ async () => {
 """
 
 
-# 扫推广列表页：每行 { alias, book_name, book_id, content_type, publish_type, alias_status, book_status, fill_status, created_at, valid_range }
+# 扫推广列表页 — header-driven parsing with current 11 Chinese column names.
+# Tolerates reordered columns, parses combined 书本信息, and detects
+# a clickable fill/backfill link only inside 发文详情 (not any link).
+# Returns structured parse_error or missing_headers when required headers
+# are absent, so list_promotions fails clearly.
 LIST_PROMOTIONS_JS = r"""
 () => {
-  const sleep = ms => new Promise(r => setTimeout(r, ms));
-  const textOf = el => (el.innerText || el.textContent || '').trim();
-  const rows = Array.from(document.querySelectorAll('.arco-table-tr'));
+  const textOf = el => (el.innerText || el.textContent || '').trim().replace(/\s+/g, ' ').trim();
+  const headerRow = document.querySelector('thead .arco-table-tr, thead tr');
+  if (!headerRow) {
+    return { count: 0, items: [], parse_error: 'no_theader_row' };
+  }
 
-  // 过滤：跳过 thead
-  const dataRows = rows.filter(r => r.closest('thead') === null);
-  const out = dataRows.map(row => {
-    const cells = Array.from(row.querySelectorAll('.arco-table-td'));
-    // 用 first-child textContent 提取列（部分 cell 内含嵌套 div）
-    const cellText = i => cells[i] ? textOf(cells[i]).replace(/\s+/g, ' ').trim() : '';
+  // Read header text from each <th> / .arco-table-th / .arco-table-th-title
+  const headerCells = Array.from(headerRow.querySelectorAll('th, .arco-table-th'));
+  const headers = headerCells.map(th => {
+    const titleEl = th.querySelector('.arco-table-th-title');
+    return textOf(titleEl || th);
+  });
 
-    // 别名状态：.alias-status-ButiOZ 文本（去除 svg 等）
+  // Chinese header → English key mapping
+  const HEADER_MAP = {
+    '关键词': 'alias',
+    '书本信息': 'combined_book_info',
+    '体裁': 'content_type',
+    '发文类型': 'publish_type',
+    '别名状态': 'alias_status',
+    '书籍状态': 'book_status',
+    '发文详情': 'fill_detail',
+    '创建时间': 'created_at',
+    '有效期': 'valid_range',
+    '结算截止日': 'settlement_deadline',
+    '操作': 'actions',
+  };
+
+  const columnMap = {};         // colIndex → englishKey
+  const missing = [];
+  const REQUIRED = ['别名', '书本信息', '别名状态'];
+  // canonical name for alias is 关键词
+  const requiredHeadChecks = [
+    { check: h => h === '关键词' || headers.includes('关键词'), label: '关键词' },
+    { check: h => h === '书本信息' || headers.includes('书本信息'), label: '书本信息' },
+    { check: h => h === '别名状态' || headers.includes('别名状态'), label: '别名状态' },
+  ];
+  for (const {check, label} of requiredHeadChecks) {
+    if (!headers.some(h => check(h))) { missing.push(label); }
+  }
+  if (missing.length) {
+    return {
+      count: 0, items: [], missing_headers: missing,
+      parse_error: 'missing_required_headers',
+      all_headers: headers,
+    };
+  }
+
+  for (let i = 0; i < headers.length; i++) {
+    const key = HEADER_MAP[headers[i]] || null;
+    if (key) columnMap[i] = key;
+    else columnMap[i] = '_unknown_' + i;
+  }
+
+  // Data rows
+  const rows = Array.from(document.querySelectorAll('.arco-table-tr, tbody tr'));
+  const dataRows = rows.filter(r => {
+    const isHeader = r.closest('thead') !== null;
+    return !isHeader;
+  });
+
+  const RE_BOOK_INFO = /^(.+?)\s*[\(（]\s*ID\s*[:：]\s*(\d{10,24})\s*[\)）]\s*$/;
+  const RE_TRAILING_ID = /^(.+?)\s+(\d{10,24})\s*$/;
+
+  const items = dataRows.map((row, rowIdx) => {
+    const cells = Array.from(row.querySelectorAll('.arco-table-td, td'));
+
+    // alias_status from dedicated class when present
     const statusEl = row.querySelector('.alias-status-ButiOZ');
     const aliasStatusText = statusEl ? textOf(statusEl) : '';
 
-    // 书本信息：.book-name-iHil3A + .extra-info-hpGb2J
-    const bookNameEl = row.querySelector('.book-name-iHil3A');
-    const extraEl = row.querySelector('.extra-info-hpGb2J');
-    const bookName = bookNameEl ? textOf(bookNameEl) : '';
-    const extraText = extraEl ? textOf(extraEl) : '';
-    const bookIdMatch = extraText.match(/id:\s*(\d+)/);
-    const bookId = bookIdMatch ? bookIdMatch[1] : '';
+    const cellText = i => cells[i] ? textOf(cells[i]) : '';
 
-    // 回填状态：第 7 列（"未填写" 或带"回填发文" link）
-    const fillText = cellText(6);
-    const hasFillLink = !!row.querySelector('.arco-table-cell .link');
+    const entry = {};
+    let bookName = '', bookId = '';
 
-    return {
-      alias: cellText(0),
-      book_name: bookName,
-      book_id: bookId,
-      content_type: cellText(2),
-      publish_type: cellText(3),
-      alias_status: aliasStatusText,
-      book_status: cellText(5),
-      fill_status: fillText,
-      has_fill_link: hasFillLink,
-      created_at: cellText(7),
-      valid_range: cellText(8),
-    };
+    for (let ci = 0; ci < cells.length; ci++) {
+      const key = columnMap[ci] || '_unknown_' + ci;
+      const raw = cellText(ci);
+
+      switch (key) {
+        case 'alias':
+          entry.alias = raw;
+          break;
+        case 'combined_book_info': {
+          const m = raw.match(RE_BOOK_INFO);
+          if (m) { bookName = m[1].trim(); bookId = m[2]; }
+          else {
+            const m2 = raw.match(RE_TRAILING_ID);
+            if (m2) { bookName = m2[1].trim(); bookId = m2[2]; }
+            else { bookName = raw; }
+          }
+          break;
+        }
+        case 'content_type': entry.content_type = raw; break;
+        case 'publish_type': entry.publish_type = raw; break;
+        case 'alias_status': entry.alias_status = aliasStatusText || raw; break;
+        case 'book_status': entry.book_status = raw; break;
+        case 'fill_detail': {
+          entry.fill_status = raw || '未填写';
+          // Detect clickable fill/backfill link ONLY inside this cell
+          if (cells[ci]) {
+            const link = cells[ci].querySelector('a[href], .link, [class*="fill"]');
+            const btn = cells[ci].querySelector('button');
+            entry.has_fill_link = !!(link || btn);
+          } else {
+            entry.has_fill_link = false;
+          }
+          break;
+        }
+        case 'created_at': entry.created_at = raw; break;
+        case 'valid_range': entry.valid_range = raw; break;
+        case 'settlement_deadline': break;  // ignored
+        case 'actions': break;  // ignored
+        default: break;
+      }
+    }
+
+    entry.book_name = bookName;
+    entry.book_id = bookId;
+    if (!entry.alias_status && aliasStatusText) entry.alias_status = aliasStatusText;
+    if (!entry.has_fill_link && entry.has_fill_link === undefined) entry.has_fill_link = false;
+
+    return entry;
   }).filter(r => r.alias);
 
-  return { count: out.length, items: out };
+  return { count: items.length, items, all_headers: headers };
 }
 """
+
+
+# ── Pure Python table helpers (testable without a browser) ────────────────
+
+# Updated 11-column Chinese header contract
+FANQIE_PROMOTION_HEADERS = [
+    "关键词",     # alias
+    "书本信息",   # combined book_name + book_id
+    "体裁",       # content_type / genre
+    "发文类型",   # publish_type
+    "别名状态",   # alias_status
+    "书籍状态",   # book_status
+    "发文详情",   # fill_detail (may be "未填写", URL, or dict with has_fill_link)
+    "创建时间",   # created_at
+    "有效期",     # valid_range
+    "结算截止日", # settlement_deadline (ignored)
+    "操作",       # action buttons (ignored)
+]
+
+FANQIE_CN_HEADER_MAP = {
+    "关键词": "alias",
+    "书本信息": "combined_book_info",
+    "体裁": "content_type",
+    "发文类型": "publish_type",
+    "别名状态": "alias_status",
+    "书籍状态": "book_status",
+    "发文详情": "fill_detail",
+    "创建时间": "created_at",
+    "有效期": "valid_range",
+    "结算截止日": "settlement_deadline",
+    "操作": "actions",
+}
+
+REQUIRED_PROMOTION_HEADERS = {"关键词", "书本信息", "别名状态"}
+
+RE_COMBINED_BOOK_INFO = re.compile(
+    r'^(.+?)\s*[\(（]\s*ID\s*[:：]\s*(\d{10,24})\s*[\)）]\s*$'
+)
+RE_TRAILING_BOOK_ID = re.compile(r'^(.+?)\s+(\d{10,24})\s*$')
+
+
+def parse_promotion_table(headers: list[str], rows: list[list[str]]) -> dict:
+    """Parse a promotion list table from headers + row cell arrays.
+
+    Maps cells by Chinese header names, tolerates reordering, rejects
+    missing required headers. Returns {count, items, ...} or
+    {parse_error, missing_headers, ...}.
+
+    This mirrors the JS ``LIST_PROMOTIONS_JS`` behavior in pure Python
+    for source-contract tests.
+    """
+    # Build header → index map
+    col_map: dict[int, str] = {}
+    missing = sorted(REQUIRED_PROMOTION_HEADERS - set(headers))
+    if missing:
+        return {
+            "count": 0,
+            "items": [],
+            "parse_error": "missing_required_headers",
+            "missing_headers": missing,
+            "all_headers": headers,
+        }
+
+    for i, h in enumerate(headers):
+        col_map[i] = FANQIE_CN_HEADER_MAP.get(h, f"_unknown_{i}")
+
+    items = []
+    for row in rows:
+        entry = {}
+        book_name, book_id = "", ""
+        for ci, cell_text in enumerate(row):
+            key = col_map.get(ci, f"_unknown_{ci}")
+            if key == "alias":
+                entry["alias"] = cell_text
+            elif key == "combined_book_info":
+                m = RE_COMBINED_BOOK_INFO.match(cell_text)
+                if m:
+                    book_name, book_id = m.group(1).strip(), m.group(2)
+                else:
+                    m2 = RE_TRAILING_BOOK_ID.match(cell_text)
+                    if m2:
+                        book_name, book_id = m2.group(1).strip(), m2.group(2)
+                    else:
+                        book_name = cell_text
+            elif key == "content_type":
+                entry["content_type"] = cell_text
+            elif key == "publish_type":
+                entry["publish_type"] = cell_text
+            elif key == "alias_status":
+                entry["alias_status"] = cell_text
+            elif key == "book_status":
+                entry["book_status"] = cell_text
+            elif key == "fill_detail":
+                entry["fill_status"] = cell_text if cell_text else "未填写"
+                entry["has_fill_link"] = False  # no DOM metadata in pure Python
+            elif key == "created_at":
+                entry["created_at"] = cell_text
+            elif key == "valid_range":
+                entry["valid_range"] = cell_text
+            elif key in ("settlement_deadline", "actions"):
+                continue
+
+        entry["book_name"] = book_name
+        entry["book_id"] = book_id
+        if "alias" in entry:
+            items.append(entry)
+
+    return {"count": len(items), "items": items, "all_headers": headers}
 
 
 class FanqiePromotionService:

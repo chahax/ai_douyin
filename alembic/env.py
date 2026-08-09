@@ -27,6 +27,7 @@ from src.shared import database as _db_module  # noqa: E402, F401
 from src.memory import models as _memory_models  # noqa: E402, F401
 from src.memory import problem_memory as _problem_memory  # noqa: E402, F401
 from src.scheduler import models as _scheduler_models  # noqa: E402, F401
+from src.novel_promotion import models as _fanqie_models  # noqa: E402, F401
 
 config = context.config
 

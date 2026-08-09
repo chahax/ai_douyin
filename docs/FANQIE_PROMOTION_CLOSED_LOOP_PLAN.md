@@ -7,6 +7,25 @@ topic: 番茄推书任务数据库闭环与可审计交付推进计划
 
 # 番茄推书任务闭环推进计划
 
+## 当前实现状态（2026-08-09）
+
+P0-B 实现代码存在于分支 `codex/fanqie-closed-loop-p0`，尚未提交。独立聚焦验证结果如下：
+
+| 项目 | 状态 |
+|---|---|
+| 分支 | `codex/fanqie-closed-loop-p0`（未提交） |
+| Alembic 头 | `0008_fanqie_closed_loop_p0` |
+| 迁移验证 | 从 `5cb67ecb2df3` 重建隔离库成功升级；`fanqie_bindings` 及 partial unique indexes 已创建；现有 20 行 `fanqie_batch_books` 保留；新建闭环表干净 |
+| 已实现组件 | models、repositories、state machine、import、reconcile、query/event 支持、Douyin 旧库 account-aware 迁移/repository/sync 校验、旧 CLI write-through（兼容路径，同步写 DB） |
+| 推广列表解析 | 现网使用 `/page/promotion-list?tab_type=2&top_tab_genre=-1`，按观察到的 11 列中文表头驱动解析 |
+| 测试 | **151 通过**，仅 3 条 deprecation warning；CLI `--help`、task list、旧迁移 false/head true 探针、diff 检查均通过 |
+| P0-A 结论 | **`partially_verified`**：观察页面 4 行（3 强制失效、1 不通过），均未填写，无可点击回填入口；无授权 active 任务 + 真实抖音 URL 完成的回填提交 |
+| P0-B 代码 | **review-ready / accepted as a candidate**；但 P0 整体验收 **未达成** |
+| P3 绑定自动化 | **阻塞**于外部 P0-A 门禁 |
+| 未完成 | 未执行 P1 视频生成冒烟测试，未执行 P3 真实发布/回填 |
+
+旧命令（`fanqie-book-fetch`、`fanqie-promo-apply`、`fanqie-promo-list`）是兼容路径：执行时通过 DB write-through 同步数据库和事件，并打印弃用提示指向 `fanqie-task-*` 目标命令。P0-A 探针（`fanqie-task-p0a-probe`）是只读探针，不写入任何数据，结论固定为 `partially_verified`。
+
 ## 1. 文档目标
 
 本计划把一条番茄小说推广任务推进为可查询、可恢复、可审核的完整业务闭环：

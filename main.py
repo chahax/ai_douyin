@@ -24,6 +24,7 @@ from src.shared.config import settings
 from src.shared.database import init_db, SessionLocal
 from src.shared.logger import logger
 from src.shared.migration import ensure_migrated
+from src.novel_promotion import models as _fanqie_closed_loop_models  # noqa: F401
 
 # 启动时检查 DB 是否已通过 Alembic 迁移到位。
 # 全新环境：先 `alembic upgrade head`；老环境：先 `alembic stamp head`。
@@ -301,6 +302,10 @@ def build_parser():
     auto_parser.add_argument("--interactive", action="store_true", help="Step-by-step mode, wait for confirmation at each step")
     auto_parser.add_argument("--wait-for-enter", action="store_true", help="Keep browser open after publish until Enter is pressed")
 
+    # ── 番茄闭环 P0 新命令 ──
+    from src.novel_promotion.cli import add_fanqie_closed_loop_parsers
+    add_fanqie_closed_loop_parsers(subparsers)
+
     return parser
 
 
@@ -474,6 +479,13 @@ def main():
             logger.error(f"番茄推广申请失败: {exc}")
             sys.exit(1)
         print(json.dumps(asdict(task), ensure_ascii=False, indent=2))
+        # Write-through: sync application result to DB
+        from src.novel_promotion.write_through import sync_promotion_apply_result
+        wt_result = sync_promotion_apply_result(asdict(task))
+        if not wt_result["success"]:
+            logger.error(f"DB 同步失败 (partial_failure): {wt_result.get('reason')}")
+            print(f"[partial_failure] {wt_result.get('reason')}", flush=True)
+            sys.exit(2)
         return
 
     if args.command == "fanqie-book-fetch":
@@ -488,6 +500,13 @@ def main():
             logger.error(f"番茄小说内容获取失败: {exc}")
             sys.exit(1)
         print(json.dumps(asdict(result), ensure_ascii=False, indent=2))
+        # Write-through: sync fetch result to DB
+        from src.novel_promotion.write_through import sync_book_fetch_result
+        wt_result = sync_book_fetch_result(args.book_name, asdict(result))
+        if not wt_result["success"]:
+            logger.error(f"DB 同步失败 (partial_failure): {wt_result.get('reason')}")
+            print(f"[partial_failure] {wt_result.get('reason')}", flush=True)
+            sys.exit(2)
         return
 
     if args.command == "fanqie-promo-video":
@@ -521,6 +540,15 @@ def main():
             logger.error(f"番茄推广列表扫描失败: {exc}")
             sys.exit(1)
         print(json.dumps(result, ensure_ascii=False, indent=2))
+        # Write-through: sync promotion list to DB
+        from src.novel_promotion.write_through import sync_promotion_list_result
+        items = result.get("items", []) if isinstance(result, dict) else []
+        if items:
+            wt_result = sync_promotion_list_result(items)
+            if not wt_result["success"]:
+                logger.error(f"DB 同步失败 (partial_failure): {wt_result.get('reason')}")
+                print(f"[partial_failure] {wt_result.get('reason')}", flush=True)
+                sys.exit(2)
         return
 
     if args.command == "fanqie-list-books":
@@ -894,6 +922,12 @@ def main():
                 input()
             except (EOFError, OSError):
                 pass
+        return
+
+    # Dispatch fanqie-closed-loop commands
+    if args.command and (args.command.startswith("fanqie-task") or args.command.startswith("fanqie-douyin")):
+        from src.novel_promotion.cli import dispatch_fanqie_closed_loop_commands
+        dispatch_fanqie_closed_loop_commands(args)
         return
 
     parser.print_help()

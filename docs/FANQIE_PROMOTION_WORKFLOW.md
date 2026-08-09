@@ -7,8 +7,23 @@ topic: 番茄小说推广端到端工作流（V5 阶段）
 
 # 番茄小说推广 — 端到端工作流
 
-> 完整链路：**抓书 → 申请别名 → 出视频 → 上传抖音 → 回填视频 URL**。所有数据存本地文件系统，Agent 可自然语言调起。
->
+## 当前实现状态（2026-08-09）
+
+P0-B 实现代码存在于分支 `codex/fanqie-closed-loop-p0`，尚未提交。以下为独立聚焦验证结果摘要：
+
+| 项目 | 状态 |
+|---|---|
+| 分支 | `codex/fanqie-closed-loop-p0`（未提交） |
+| Alembic 头 | `0008_fanqie_closed_loop_p0`（从 `5cb67ecb2df3` 可成功升级） |
+| 测试 | **151 通过**，3 条 deprecation warning |
+| CLI `--help` | 包含全量子命令（`fanqie-task-p0a-probe` 等），正常输出 |
+| P0-A | **`partially_verified`**：无可点击回填入口，无真实回填提交证据 |
+| P0-B 代码 | review-ready / accepted as a candidate；P0 整体验收 **未达成** |
+| P3 绑定自动化 | 阻塞于外部 P0-A 门禁 |
+| 未完成 | P1 视频冒烟、P3 真实发布/回填 |
+
+旧命令（`fanqie-book-fetch`、`fanqie-promo-apply`、`fanqie-promo-list`）已接入兼容 write-through 层：执行时同步数据库和事件，并打印指向 `fanqie-task-*` 的弃用提示。推广列表现网使用 `/page/promotion-list?tab_type=2&top_tab_genre=-1`，按 11 列中文表头驱动解析。
+
 > 数据库闭环、状态机、审计产物和阶段验收的目标方案见 [番茄推书任务闭环推进计划](FANQIE_PROMOTION_CLOSED_LOOP_PLAN.md)。本文记录当前文件式 MVP 和已验证命令，不能替代目标数据库设计。
 
 ## 1. 完整链路

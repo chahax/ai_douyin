@@ -24,34 +24,35 @@ def _alembic_version_table_exists() -> bool:
 
 
 def _is_migration_up_to_date() -> bool:
-    """Check the alembic_version row matches the latest revision file.
+    """Check the alembic_version row matches the head revision.
 
-    Returns True if the database is at the same revision as the head
-    migration (i.e. nothing pending).
+    Uses the Alembic ScriptDirectory revision graph (get_heads), not regex
+    parsing of version files. The regex approach could not parse typed
+    annotations such as ``down_revision: Union[str, None] = '...'``,
+    causing false-negatives.
     """
     with engine.connect() as conn:
         row = conn.execute(text("SELECT version_num FROM alembic_version")).first()
     if row is None:
         return False
     current = row[0]
-    # Read the head revision from migration files' `revision` variable.
-    # This matches what's actually stored in alembic_version.
     try:
-        import re
+        from alembic.config import Config
+        from alembic.script import ScriptDirectory
         from pathlib import Path
-        versions_dir = Path(__file__).resolve().parent.parent.parent / "alembic" / "versions"
-        revs = []
-        rev_re = re.compile(r'^\s*revision:\s*str\s*=\s*["\']([^"\']+)["\']', re.MULTILINE)
-        for p in versions_dir.glob("*.py"):
-            if p.name.startswith("_"):
-                continue
-            m = rev_re.search(p.read_text(encoding="utf-8"))
-            if m:
-                revs.append(m.group(1))
-        if not revs:
-            return True  # no migrations — nothing pending
-        head = max(revs)
-        return current == head
+
+        alembic_dir = Path(__file__).resolve().parent.parent.parent / "alembic"
+        cfg = Config()
+        cfg.config_file_name = None  # skip fileConfig — we only need script_location
+        cfg.set_main_option("script_location", str(alembic_dir))
+        script = ScriptDirectory.from_config(cfg)
+
+        heads = script.get_heads()
+        if not heads:
+            # No migration files at all — nothing pending
+            return True
+        # If multiple heads (branches), current must match one of them
+        return current in heads
     except Exception:
         # Conservative: if we can't tell, assume pending
         return False
