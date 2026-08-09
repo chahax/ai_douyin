@@ -1,13 +1,15 @@
 ---
 doc_status: current
 doc_category: mainline
-last_reviewed: 2026-06-29
+last_reviewed: 2026-08-09
 topic: 番茄小说推广端到端工作流（V5 阶段）
 ---
 
 # 番茄小说推广 — 端到端工作流
 
 > 完整链路：**抓书 → 申请别名 → 出视频 → 上传抖音 → 回填视频 URL**。所有数据存本地文件系统，Agent 可自然语言调起。
+>
+> 数据库闭环、状态机、审计产物和阶段验收的目标方案见 [番茄推书任务闭环推进计划](FANQIE_PROMOTION_CLOSED_LOOP_PLAN.md)。本文记录当前文件式 MVP 和已验证命令，不能替代目标数据库设计。
 
 ## 1. 完整链路
 
@@ -105,6 +107,8 @@ data/fanqie_promotion/
 | `has_fill_link` | list 同步时回填，标记能否在番茄页面"回填发文" |
 | `fill_status` | "未填写" / 已回填 URL |
 
+> 闭环数据库启用后，旧 `apply_status` 通过固定映射进入新状态机：`started → applying`，`pending_review/submitted → under_review`，`active/rejected/expired` 保持语义，`needs_manual_check/manual_or_skipped/未知值 → manual_intervention`。完整映射以闭环计划 Section 4.3 为准。
+
 ## 3. CLI 命令清单
 
 ```bash
@@ -132,6 +136,8 @@ python main.py douyin-publish --video data/videos/<file>.mp4 --title "..."
 # python main.py fanqie-bind-douyin-video --task-file <task.json> --video-url <url>
 ```
 
+> 命令迁移：以上 `fanqie-*` 是当前MVP入口；目标公开入口是 `fanqie-task-*`。旧命令在P0接入同一Service并提示弃用，P1起文档和Agent改用新命令。回填不再实现旧 `fanqie-bind-douyin-video`，直接实现 `fanqie-task-bind`。
+
 ## 4. Agent Skill 清单
 
 ```python
@@ -152,7 +158,7 @@ fanqie_promo_list           # 同步状态
 |---|---|
 | B 环节（apply）只能对达人中心 list 推荐池里的书生效 | 番茄 KOL 推荐池控制可推广范围 |
 | 申请别名要 1 天审核（实际秒过） | 推 promotion-list 立即看到 active |
-| 别名有效期约 6 个月（2026-06-29 ~ 2026-12-26） | 长期不推就过期 |
+| 已观察样例的别名有效期约6个月（例如2026-06-29～2026-12-26） | 这不是全局硬截止日；每条任务必须解析自身 `valid_range`，长期不推会过期 |
 | 已生效别名必须回填抖音视频 URL 才计算收益 | G 环节必须做 |
 | 番茄对未回填的别名显示"未填写" + "回填发文" link | 可批量回填 |
 
@@ -237,7 +243,10 @@ python main.py douyin-publish --video data/videos/<file>.mp4 --title "..."
 
 ## 9. 下一步
 
-1. **G 环节** `fanqie_bind_douyin_video`：在推广列表点"回填发文" link，弹窗填抖音视频 URL
-2. **D 端到端**：用 apply 成功的 task + meta.json 跑 `fanqie-promo-video` 出片
-3. **fetch_book 容错**：搜索未匹配时 fallback 到 fanqienovel 搜索 API（用 book_id 直接拼 kol 详情页 URL）
-4. **fetch_book 增量更新**：已经抓过的书只抓新增章节
+1. **P0-A 可行性门禁**：先由人工使用一条明确授权的任务和作品 URL 验证“回填发文”入口、字段和限制，保存脱敏证据；正式自动化仍在 P3 实现。
+2. **数据不断流**：闭环数据库上线时，同步改造现有写命令，禁止只做一次性旧文件导入。
+3. **G 环节** `fanqie_bind_douyin_video`：在推广列表点“回填发文”，校验后填写抖音作品 URL。
+4. **D 端到端**：用 apply 成功的 task + meta.json 跑 `fanqie-promo-video` 出片。
+5. **统一抓取入口**：批量和单本抓取统一进入同一 `fanqie_books` 主记录和素材服务。
+6. **人工任务入口**：尽早提供 `fanqie-task-list --attention` 或等价看板。
+7. **fetch_book 容错/增量**：搜索未匹配时 fallback；已抓书只抓新增章节。
