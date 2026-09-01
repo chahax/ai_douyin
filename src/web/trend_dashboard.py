@@ -27,6 +27,7 @@ from src.trend_intelligence.providers import (
     estimate_douyin_planned_pages,
 )
 from src.trend_intelligence.repository import TrendRepository
+from src.trend_intelligence.opportunity import ContentOpportunityService
 from src.trend_intelligence.service import TrendOperationsService
 from src.trend_intelligence.temporal import TemporalTrendService
 from src.trend_intelligence.source_policy import (
@@ -90,7 +91,7 @@ def page_trend_operations() -> None:
     with collect_tab:
         _render_collection(repository, service, account_repository)
     with briefs_tab:
-        _render_briefs(repository, service)
+        _render_briefs(repository, service, account_repository)
     with feedback_tab:
         _render_feedback(repository)
 
@@ -784,7 +785,122 @@ def _render_content_analysis(
 def _render_briefs(
     repository: TrendRepository,
     service: TrendOperationsService,
+    account_repository: AccountProfileRepository,
 ) -> None:
+    section_header(
+        "账号机会排行",
+        "综合流量、时间动量、内容证据、账号相关度、饱和度和制作可行性。",
+    )
+    profiles = account_repository.list_active()
+    if profiles:
+        opportunity_account_key = st.selectbox(
+            "机会账号",
+            [item.account_key for item in profiles],
+            format_func=lambda value: _account_profile_label(profiles, value),
+            key="trend_opportunity_account",
+        )
+        opportunity_profile = next(
+            item for item in profiles if item.account_key == opportunity_account_key
+        )
+        opportunity_service = ContentOpportunityService(repository)
+        if st.button(
+            "刷新账号机会排行",
+            type="primary",
+            key="trend_build_opportunities",
+        ):
+            service.analyze(account_profile=opportunity_profile, limit=100_000)
+            opportunities = opportunity_service.build_opportunities(
+                opportunity_profile
+            )
+            st.success(f"已生成 {len(opportunities)} 个账号机会。")
+        opportunities = repository.list_opportunities(
+            account_uuid=opportunity_profile.account_uuid,
+            limit=200,
+        )
+        if opportunities:
+            st.dataframe(
+                [
+                    {
+                        "机会": item.title,
+                        "状态": item.status,
+                        "机会分": item.opportunity_score,
+                        "时间动量": item.score_breakdown.get("temporal_momentum"),
+                        "账号相关度": item.score_breakdown.get("account_relevance"),
+                        "内容证据": item.score_breakdown.get("content_confidence"),
+                        "展示方式": item.recommended_presentation,
+                        "钩子": item.recommended_hook_type,
+                        "有效至": item.valid_until,
+                    }
+                    for item in opportunities
+                ],
+                width="stretch",
+                hide_index=True,
+            )
+            opportunity_id = st.selectbox(
+                "选择机会",
+                [item.opportunity_id for item in opportunities],
+                format_func=lambda value: next(
+                    f"{item.title} · {item.opportunity_score:.1f}"
+                    for item in opportunities
+                    if item.opportunity_id == value
+                ),
+                key="trend_selected_opportunity",
+            )
+            opportunity = next(
+                item for item in opportunities if item.opportunity_id == opportunity_id
+            )
+            st.info("｜".join(opportunity.evidence[:3]))
+            approve_col, reject_col, script_col = st.columns(3)
+            with approve_col:
+                if st.button("批准机会", key="trend_approve_opportunity"):
+                    opportunity_service.approve_opportunity(opportunity_id)
+                    st.rerun()
+            with reject_col:
+                if st.button("拒绝机会", key="trend_reject_opportunity"):
+                    opportunity_service.reject_opportunity(opportunity_id)
+                    st.rerun()
+            with script_col:
+                if st.button("生成 A/B 15秒脚本", key="trend_generate_ab_scripts"):
+                    scripts = opportunity_service.generate_scripts(
+                        opportunity_profile,
+                        opportunity_id,
+                    )
+                    st.success(f"已生成 {len(scripts)} 个脚本版本。")
+            scripts = repository.list_opportunity_scripts(
+                opportunity_id=opportunity_id
+            )
+            for script in scripts:
+                with st.expander(
+                    f"脚本 {script.variant_id} · {script.title} · {script.status}",
+                    expanded=script.status == "draft",
+                ):
+                    st.dataframe(
+                        [
+                            {
+                                "时间": f"{beat.start_seconds:g}—{beat.end_seconds:g}秒",
+                                "段落作用": beat.role,
+                                "画面": beat.visual,
+                                "口播/对白": beat.voiceover,
+                                "字幕": beat.on_screen_text,
+                            }
+                            for beat in script.beats
+                        ],
+                        width="stretch",
+                        hide_index=True,
+                    )
+                    st.caption(f"CTA：{script.cta}")
+                    if st.button(
+                        f"批准脚本 {script.variant_id}",
+                        key=f"trend_approve_script_{script.script_id}",
+                    ):
+                        opportunity_service.approve_script(script.script_id)
+                        st.rerun()
+        else:
+            st.info("暂无机会卡。先完成采集和内容分析，再刷新账号机会排行。")
+    else:
+        st.warning("请先配置运营账号。")
+
+    st.markdown("---")
     section_header("选题审批", "只有批准后的选题卡可以带入视频制作。")
     status_filter = st.selectbox(
         "状态",

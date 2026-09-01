@@ -139,6 +139,8 @@ def test_repository_persists_analysis_approval_and_snapshots(tmp_path) -> None:
         "snapshots": 0,
         "plans": 0,
         "content_analyses": 0,
+        "opportunities": 0,
+        "opportunity_scripts": 0,
     }
     assert repository.update_brief_status(briefs[0].brief_id, "approved") is True
     assert repository.get_brief(briefs[0].brief_id).status == "approved"

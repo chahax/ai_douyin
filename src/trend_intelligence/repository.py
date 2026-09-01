@@ -17,8 +17,11 @@ from .models import (
     AccountContentRelevance,
     ContentAnalysisBatchResult,
     ContentEvidence,
+    ContentOpportunity,
     ContentSegment,
     PublishedContentContext,
+    OpportunityScript,
+    ScriptBeat,
     TrendBrief,
     TrendCluster,
     TrendObservation,
@@ -33,7 +36,7 @@ from .collection.planner import AccountCollectionPlan
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DB_PATH = PROJECT_ROOT / "data" / "trend_intelligence.db"
-TREND_SCHEMA_VERSION = 4
+TREND_SCHEMA_VERSION = 5
 
 
 SCHEMA_SQL = """
@@ -97,6 +100,35 @@ CREATE TABLE IF NOT EXISTS trend_content_analysis_batches (
     cached_count INTEGER NOT NULL,
     payload_json TEXT NOT NULL,
     created_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS trend_content_opportunities (
+    opportunity_id TEXT PRIMARY KEY,
+    account_uuid TEXT NOT NULL,
+    profile_version INTEGER NOT NULL,
+    domain_strategy_id TEXT NOT NULL,
+    strategy_version TEXT NOT NULL,
+    cluster_id TEXT NOT NULL,
+    status TEXT NOT NULL,
+    score REAL NOT NULL,
+    valid_until TEXT NOT NULL,
+    payload_json TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS trend_opportunity_scripts (
+    script_id TEXT PRIMARY KEY,
+    opportunity_id TEXT NOT NULL,
+    account_uuid TEXT NOT NULL,
+    domain_strategy_id TEXT NOT NULL,
+    strategy_version TEXT NOT NULL,
+    variant_id TEXT NOT NULL,
+    status TEXT NOT NULL,
+    payload_json TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (opportunity_id) REFERENCES trend_content_opportunities(opportunity_id)
 );
 
 CREATE TABLE IF NOT EXISTS trend_items (
@@ -273,6 +305,12 @@ CREATE INDEX IF NOT EXISTS idx_content_analysis_account
     ON trend_content_analyses(account_uuid, profile_version, created_at);
 CREATE INDEX IF NOT EXISTS idx_content_analysis_item
     ON trend_content_analyses(item_id, account_uuid, created_at);
+CREATE INDEX IF NOT EXISTS idx_opportunity_account_score
+    ON trend_content_opportunities(account_uuid, status, score DESC);
+CREATE INDEX IF NOT EXISTS idx_opportunity_validity
+    ON trend_content_opportunities(valid_until, status);
+CREATE INDEX IF NOT EXISTS idx_opportunity_scripts
+    ON trend_opportunity_scripts(opportunity_id, status);
 """
 
 
@@ -967,6 +1005,200 @@ class TrendRepository:
                 ),
             )
 
+    def save_opportunity(self, opportunity: ContentOpportunity) -> None:
+        now = utc_now_iso()
+        with self.connection() as conn:
+            conn.execute(
+                """
+                INSERT INTO trend_content_opportunities (
+                    opportunity_id, account_uuid, profile_version,
+                    domain_strategy_id, strategy_version, cluster_id,
+                    status, score, valid_until, payload_json, created_at, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(opportunity_id) DO UPDATE SET
+                    status = excluded.status,
+                    score = excluded.score,
+                    valid_until = excluded.valid_until,
+                    payload_json = excluded.payload_json,
+                    updated_at = excluded.updated_at
+                """,
+                (
+                    opportunity.opportunity_id,
+                    opportunity.account_uuid,
+                    opportunity.profile_version,
+                    opportunity.domain_strategy_id,
+                    opportunity.strategy_version,
+                    opportunity.cluster_id,
+                    opportunity.status,
+                    opportunity.opportunity_score,
+                    opportunity.valid_until,
+                    json.dumps(asdict(opportunity), ensure_ascii=False),
+                    opportunity.created_at,
+                    now,
+                ),
+            )
+
+    def get_opportunity(self, opportunity_id: str) -> ContentOpportunity | None:
+        with self.connection() as conn:
+            row = conn.execute(
+                """
+                SELECT payload_json, status
+                FROM trend_content_opportunities
+                WHERE opportunity_id = ?
+                """,
+                (opportunity_id,),
+            ).fetchone()
+        if row is None:
+            return None
+        payload = json.loads(row["payload_json"])
+        payload["status"] = row["status"]
+        return ContentOpportunity(**payload)
+
+    def list_opportunities(
+        self,
+        *,
+        account_uuid: str = "",
+        status: str | None = None,
+        limit: int = 500,
+    ) -> list[ContentOpportunity]:
+        query = "SELECT payload_json, status FROM trend_content_opportunities"
+        clauses: list[str] = []
+        params: list[object] = []
+        if account_uuid:
+            clauses.append("account_uuid = ?")
+            params.append(account_uuid)
+        if status:
+            clauses.append("status = ?")
+            params.append(status)
+        if clauses:
+            query += " WHERE " + " AND ".join(clauses)
+        query += " ORDER BY score DESC LIMIT ?"
+        params.append(max(1, min(int(limit), 5000)))
+        with self.connection() as conn:
+            rows = conn.execute(query, params).fetchall()
+        output: list[ContentOpportunity] = []
+        for row in rows:
+            payload = json.loads(row["payload_json"])
+            payload["status"] = row["status"]
+            output.append(ContentOpportunity(**payload))
+        return output
+
+    def update_opportunity_status(self, opportunity_id: str, status: str) -> bool:
+        if status not in {"candidate", "approved", "rejected", "used", "expired"}:
+            raise ValueError("invalid opportunity status")
+        return self._update_payload_status(
+            table="trend_content_opportunities",
+            id_column="opportunity_id",
+            identity=opportunity_id,
+            status=status,
+        )
+
+    def save_opportunity_script(self, script: OpportunityScript) -> None:
+        now = utc_now_iso()
+        with self.connection() as conn:
+            conn.execute(
+                """
+                INSERT INTO trend_opportunity_scripts (
+                    script_id, opportunity_id, account_uuid,
+                    domain_strategy_id, strategy_version, variant_id,
+                    status, payload_json, created_at, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(script_id) DO UPDATE SET
+                    status = excluded.status,
+                    payload_json = excluded.payload_json,
+                    updated_at = excluded.updated_at
+                """,
+                (
+                    script.script_id,
+                    script.opportunity_id,
+                    script.account_uuid,
+                    script.domain_strategy_id,
+                    script.strategy_version,
+                    script.variant_id,
+                    script.status,
+                    json.dumps(asdict(script), ensure_ascii=False),
+                    script.created_at,
+                    now,
+                ),
+            )
+
+    def list_opportunity_scripts(
+        self,
+        *,
+        opportunity_id: str = "",
+        status: str | None = None,
+        limit: int = 500,
+    ) -> list[OpportunityScript]:
+        query = "SELECT payload_json, status FROM trend_opportunity_scripts"
+        clauses: list[str] = []
+        params: list[object] = []
+        if opportunity_id:
+            clauses.append("opportunity_id = ?")
+            params.append(opportunity_id)
+        if status:
+            clauses.append("status = ?")
+            params.append(status)
+        if clauses:
+            query += " WHERE " + " AND ".join(clauses)
+        query += " ORDER BY created_at DESC, variant_id LIMIT ?"
+        params.append(max(1, min(int(limit), 5000)))
+        with self.connection() as conn:
+            rows = conn.execute(query, params).fetchall()
+        output: list[OpportunityScript] = []
+        for row in rows:
+            payload = json.loads(row["payload_json"])
+            payload["status"] = row["status"]
+            payload["beats"] = [
+                ScriptBeat(**item) for item in payload.get("beats", [])
+            ]
+            output.append(OpportunityScript(**payload))
+        return output
+
+    def update_opportunity_script_status(self, script_id: str, status: str) -> bool:
+        if status not in {"draft", "approved", "rejected", "used"}:
+            raise ValueError("invalid opportunity script status")
+        return self._update_payload_status(
+            table="trend_opportunity_scripts",
+            id_column="script_id",
+            identity=script_id,
+            status=status,
+        )
+
+    def _update_payload_status(
+        self,
+        *,
+        table: str,
+        id_column: str,
+        identity: str,
+        status: str,
+    ) -> bool:
+        allowed = {
+            ("trend_content_opportunities", "opportunity_id"),
+            ("trend_opportunity_scripts", "script_id"),
+        }
+        if (table, id_column) not in allowed:
+            raise ValueError("unsupported status table")
+        with self.connection() as conn:
+            row = conn.execute(
+                f"SELECT payload_json FROM {table} WHERE {id_column} = ?",
+                (identity,),
+            ).fetchone()
+            if row is None:
+                return False
+            payload = json.loads(row["payload_json"])
+            payload["status"] = status
+            cursor = conn.execute(
+                f"UPDATE {table} SET status = ?, payload_json = ?, updated_at = ? "
+                f"WHERE {id_column} = ?",
+                (
+                    status,
+                    json.dumps(payload, ensure_ascii=False),
+                    utc_now_iso(),
+                    identity,
+                ),
+            )
+        return cursor.rowcount > 0
+
     def save_analysis(
         self,
         clusters: list[TrendCluster],
@@ -1221,6 +1453,12 @@ class TrendRepository:
                 ).fetchone()[0],
                 "content_analyses": conn.execute(
                     "SELECT COUNT(*) FROM trend_content_analyses"
+                ).fetchone()[0],
+                "opportunities": conn.execute(
+                    "SELECT COUNT(*) FROM trend_content_opportunities"
+                ).fetchone()[0],
+                "opportunity_scripts": conn.execute(
+                    "SELECT COUNT(*) FROM trend_opportunity_scripts"
                 ).fetchone()[0],
             }
 

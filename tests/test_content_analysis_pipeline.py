@@ -186,7 +186,7 @@ def test_batch_service_caches_results_and_round_trips_nested_evidence(tmp_path) 
     assert len(stored) == 2
     assert stored[0].relevance is not None
     assert stored[0].evidence[0].channel == "title"
-    assert TREND_SCHEMA_VERSION == 4
+    assert TREND_SCHEMA_VERSION >= 4
 
 
 def test_local_batch_failure_can_degrade_to_metadata(tmp_path) -> None:

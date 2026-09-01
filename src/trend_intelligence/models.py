@@ -285,3 +285,63 @@ class ContentAnalysisBatchResult:
     analyses: list[VideoContentAnalysis] = field(default_factory=list)
     errors: list[str] = field(default_factory=list)
     created_at: str = field(default_factory=utc_now_iso)
+
+
+@dataclass(slots=True)
+class ContentOpportunity:
+    opportunity_id: str
+    account_uuid: str
+    account_key: str
+    profile_version: int
+    domain_strategy_id: str
+    strategy_version: str
+    cluster_id: str
+    brief_id: str
+    title: str
+    status: str
+    opportunity_score: float
+    score_breakdown: dict[str, float]
+    selected_item_ids: list[str]
+    recommended_presentation: str
+    recommended_hook_type: str
+    recommended_pacing: str
+    recommended_duration_seconds: float
+    recommended_publish_window: str
+    recommended_workflow_profile: str
+    topic_labels: list[str] = field(default_factory=list)
+    user_intents: list[str] = field(default_factory=list)
+    evidence: list[str] = field(default_factory=list)
+    risks: list[str] = field(default_factory=list)
+    valid_from: str = field(default_factory=utc_now_iso)
+    valid_until: str = ""
+    created_at: str = field(default_factory=utc_now_iso)
+
+
+@dataclass(slots=True)
+class ScriptBeat:
+    start_seconds: float
+    end_seconds: float
+    role: str
+    visual: str
+    voiceover: str
+    on_screen_text: str
+
+
+@dataclass(slots=True)
+class OpportunityScript:
+    script_id: str
+    opportunity_id: str
+    account_uuid: str
+    domain_strategy_id: str
+    strategy_version: str
+    variant_id: str
+    title: str
+    status: str
+    target_duration_seconds: float
+    beats: list[ScriptBeat]
+    cta: str
+    source_requirements: list[str]
+    fact_check_requirements: list[str]
+    originality_requirements: list[str]
+    workflow_snapshot: dict[str, str]
+    created_at: str = field(default_factory=utc_now_iso)
