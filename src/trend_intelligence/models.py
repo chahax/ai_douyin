@@ -25,7 +25,10 @@ class TrendObservation:
     run_id: str = ""
     metric_text: str = ""
     metric_value: int | None = None
+    metric_kind: str = "displayed_unknown"
     collected_at: str = field(default_factory=utc_now_iso)
+    published_at: str = ""
+    published_at_text: str = ""
     raw_text: str = ""
     query_kind: str = "keyword"
     query_value: str = ""
@@ -163,3 +166,46 @@ class StrategyRecommendation:
     adjacent_topics: list[str]
     experiment_share: float
     summary: str
+
+
+@dataclass(slots=True)
+class VideoTrendSignal:
+    item_id: str
+    video_id: str
+    title: str
+    author: str
+    point_count: int
+    observation_hours: float
+    metric_kind: str
+    metric_start: int | None
+    metric_end: int | None
+    metric_velocity_per_hour: float | None
+    rank_start: int
+    rank_end: int
+    rank_improvement_per_hour: float
+    run_coverage: float
+    age_hours: float | None
+    momentum_score: float
+    confidence: float
+    direction: str
+    latest_collected_at: str
+
+
+@dataclass(slots=True)
+class TagFamilyTrendSignal:
+    root_keyword: str
+    tag: str
+    sort_key: str
+    point_count: int
+    observation_hours: float
+    sample_score_start: float
+    sample_score_end: float
+    sample_score_velocity_per_hour: float
+    best_rank_start: int
+    best_rank_end: int
+    visible_metric_start: int | None
+    visible_metric_end: int | None
+    momentum_score: float
+    confidence: float
+    direction: str
+    latest_collected_at: str

@@ -186,6 +186,7 @@ def _policy() -> SourcePolicy:
                 "sort",
                 "rank",
                 "displayed_metrics",
+                "published_at",
                 "hashtags",
                 "tag_relationships",
                 "tag_traffic_snapshots",

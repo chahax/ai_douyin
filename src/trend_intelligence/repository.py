@@ -23,11 +23,12 @@ from .models import (
     VideoMetricSnapshot,
     utc_now_iso,
 )
+from .collection.planner import AccountCollectionPlan
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DB_PATH = PROJECT_ROOT / "data" / "trend_intelligence.db"
-TREND_SCHEMA_VERSION = 2
+TREND_SCHEMA_VERSION = 3
 
 
 SCHEMA_SQL = """
@@ -39,7 +40,28 @@ CREATE TABLE IF NOT EXISTS trend_collection_runs (
     item_count INTEGER NOT NULL DEFAULT 0,
     warnings_json TEXT NOT NULL DEFAULT '[]',
     started_at TEXT NOT NULL,
-    finished_at TEXT
+    finished_at TEXT,
+    account_uuid TEXT NOT NULL DEFAULT '',
+    profile_version INTEGER NOT NULL DEFAULT 0,
+    domain_strategy_id TEXT NOT NULL DEFAULT '',
+    strategy_version TEXT NOT NULL DEFAULT '',
+    plan_id TEXT NOT NULL DEFAULT '',
+    batch_id TEXT NOT NULL DEFAULT '',
+    wave_kind TEXT NOT NULL DEFAULT ''
+);
+
+CREATE TABLE IF NOT EXISTS trend_collection_plans (
+    plan_id TEXT PRIMARY KEY,
+    account_uuid TEXT NOT NULL,
+    account_key TEXT NOT NULL,
+    profile_version INTEGER NOT NULL,
+    domain_strategy_id TEXT NOT NULL,
+    strategy_version TEXT NOT NULL,
+    wave_kind TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'planned',
+    payload_json TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS trend_items (
@@ -50,7 +72,9 @@ CREATE TABLE IF NOT EXISTS trend_items (
     title TEXT NOT NULL,
     author TEXT NOT NULL DEFAULT '',
     first_seen_at TEXT NOT NULL,
-    last_seen_at TEXT NOT NULL
+    last_seen_at TEXT NOT NULL,
+    published_at TEXT NOT NULL DEFAULT '',
+    published_at_text TEXT NOT NULL DEFAULT ''
 );
 
 CREATE TABLE IF NOT EXISTS trend_observations (
@@ -63,7 +87,10 @@ CREATE TABLE IF NOT EXISTS trend_observations (
     rank INTEGER NOT NULL,
     metric_text TEXT NOT NULL DEFAULT '',
     metric_value INTEGER,
+    metric_kind TEXT NOT NULL DEFAULT 'displayed_unknown',
     collected_at TEXT NOT NULL,
+    published_at TEXT NOT NULL DEFAULT '',
+    published_at_text TEXT NOT NULL DEFAULT '',
     raw_text TEXT NOT NULL DEFAULT '',
     query_kind TEXT NOT NULL DEFAULT 'keyword',
     query_value TEXT NOT NULL DEFAULT '',
@@ -205,6 +232,8 @@ CREATE INDEX IF NOT EXISTS idx_tag_relations_target
     ON trend_tag_relations(target_tag, collected_at);
 CREATE INDEX IF NOT EXISTS idx_tag_traffic_timeline
     ON trend_tag_traffic_snapshots(tag, sort_key, collected_at);
+CREATE INDEX IF NOT EXISTS idx_collection_plans_account
+    ON trend_collection_plans(account_uuid, created_at);
 """
 
 
@@ -236,9 +265,19 @@ class TrendRepository:
         with self.connection() as conn:
             conn.executescript(SCHEMA_SQL)
             self._ensure_observation_columns(conn)
+            self._ensure_item_columns(conn)
+            self._ensure_collection_run_columns(conn)
             conn.execute(
                 "CREATE INDEX IF NOT EXISTS idx_trend_observations_query "
                 "ON trend_observations(query_kind, query_value, collected_at)"
+            )
+            conn.execute(
+                "CREATE INDEX IF NOT EXISTS idx_collection_runs_account "
+                "ON trend_collection_runs(account_uuid, finished_at)"
+            )
+            conn.execute(
+                "CREATE INDEX IF NOT EXISTS idx_collection_runs_plan "
+                "ON trend_collection_runs(plan_id, batch_id)"
             )
             conn.execute(f"PRAGMA user_version = {TREND_SCHEMA_VERSION}")
 
@@ -254,12 +293,130 @@ class TrendRepository:
             "query_depth": "INTEGER NOT NULL DEFAULT 0",
             "root_keywords_json": "TEXT NOT NULL DEFAULT '[]'",
             "hashtags_json": "TEXT NOT NULL DEFAULT '[]'",
+            "metric_kind": "TEXT NOT NULL DEFAULT 'displayed_unknown'",
+            "published_at": "TEXT NOT NULL DEFAULT ''",
+            "published_at_text": "TEXT NOT NULL DEFAULT ''",
         }
         for name, definition in additions.items():
             if name not in existing:
                 conn.execute(
                     f"ALTER TABLE trend_observations ADD COLUMN {name} {definition}"
                 )
+
+    @staticmethod
+    def _ensure_item_columns(conn: sqlite3.Connection) -> None:
+        existing = {
+            row["name"] for row in conn.execute("PRAGMA table_info(trend_items)")
+        }
+        for name, definition in {
+            "published_at": "TEXT NOT NULL DEFAULT ''",
+            "published_at_text": "TEXT NOT NULL DEFAULT ''",
+        }.items():
+            if name not in existing:
+                conn.execute(f"ALTER TABLE trend_items ADD COLUMN {name} {definition}")
+
+    @staticmethod
+    def _ensure_collection_run_columns(conn: sqlite3.Connection) -> None:
+        existing = {
+            row["name"]
+            for row in conn.execute("PRAGMA table_info(trend_collection_runs)")
+        }
+        additions = {
+            "account_uuid": "TEXT NOT NULL DEFAULT ''",
+            "profile_version": "INTEGER NOT NULL DEFAULT 0",
+            "domain_strategy_id": "TEXT NOT NULL DEFAULT ''",
+            "strategy_version": "TEXT NOT NULL DEFAULT ''",
+            "plan_id": "TEXT NOT NULL DEFAULT ''",
+            "batch_id": "TEXT NOT NULL DEFAULT ''",
+            "wave_kind": "TEXT NOT NULL DEFAULT ''",
+        }
+        for name, definition in additions.items():
+            if name not in existing:
+                conn.execute(
+                    f"ALTER TABLE trend_collection_runs ADD COLUMN {name} {definition}"
+                )
+
+    def save_collection_plan(self, plan: AccountCollectionPlan) -> None:
+        payload = json.dumps(plan.to_dict(), ensure_ascii=False)
+        with self.connection() as conn:
+            conn.execute(
+                """
+                INSERT INTO trend_collection_plans (
+                    plan_id, account_uuid, account_key, profile_version,
+                    domain_strategy_id, strategy_version, wave_kind, status,
+                    payload_json, created_at, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, 'planned', ?, ?, ?)
+                ON CONFLICT(plan_id) DO UPDATE SET
+                    payload_json = excluded.payload_json,
+                    updated_at = excluded.updated_at
+                """,
+                (
+                    plan.plan_id,
+                    plan.account_uuid,
+                    plan.account_key,
+                    plan.profile_version,
+                    plan.domain_strategy_id,
+                    plan.strategy_version,
+                    plan.wave_kind,
+                    payload,
+                    plan.created_at,
+                    utc_now_iso(),
+                ),
+            )
+
+    def update_collection_plan_status(self, plan_id: str, status: str) -> bool:
+        if status not in {"planned", "running", "partial", "completed", "failed"}:
+            raise ValueError("invalid collection plan status")
+        with self.connection() as conn:
+            cursor = conn.execute(
+                """
+                UPDATE trend_collection_plans
+                SET status = ?, updated_at = ?
+                WHERE plan_id = ?
+                """,
+                (status, utc_now_iso(), plan_id),
+            )
+        return cursor.rowcount > 0
+
+    def list_collection_plans(
+        self, *, account_uuid: str = "", limit: int = 100
+    ) -> list[dict[str, object]]:
+        query = "SELECT payload_json, status, updated_at FROM trend_collection_plans"
+        params: list[object] = []
+        if account_uuid:
+            query += " WHERE account_uuid = ?"
+            params.append(account_uuid)
+        query += " ORDER BY created_at DESC LIMIT ?"
+        params.append(max(1, min(int(limit), 1000)))
+        with self.connection() as conn:
+            rows = conn.execute(query, params).fetchall()
+        output: list[dict[str, object]] = []
+        for row in rows:
+            payload = json.loads(row["payload_json"])
+            payload["status"] = row["status"]
+            payload["updated_at"] = row["updated_at"]
+            output.append(payload)
+        return output
+
+    def list_collection_runs(
+        self, *, plan_id: str = "", account_uuid: str = "", limit: int = 1000
+    ) -> list[dict[str, object]]:
+        query = "SELECT * FROM trend_collection_runs"
+        clauses: list[str] = []
+        params: list[object] = []
+        if plan_id:
+            clauses.append("plan_id = ?")
+            params.append(plan_id)
+        if account_uuid:
+            clauses.append("account_uuid = ?")
+            params.append(account_uuid)
+        if clauses:
+            query += " WHERE " + " AND ".join(clauses)
+        query += " ORDER BY finished_at DESC, started_at DESC LIMIT ?"
+        params.append(max(1, min(int(limit), 10_000)))
+        with self.connection() as conn:
+            rows = conn.execute(query, params).fetchall()
+        return [dict(row) for row in rows]
 
     def save_collection(
         self,
@@ -270,6 +427,13 @@ class TrendRepository:
         warnings: list[str] | None = None,
         tag_relations: list[TrendTagRelation] | None = None,
         tag_traffic_snapshots: list[TrendTagTrafficSnapshot] | None = None,
+        account_uuid: str = "",
+        profile_version: int = 0,
+        domain_strategy_id: str = "",
+        strategy_version: str = "",
+        plan_id: str = "",
+        batch_id: str = "",
+        wave_kind: str = "",
     ) -> str:
         run_id = uuid.uuid4().hex
         started_at = min(
@@ -282,8 +446,10 @@ class TrendRepository:
                 """
                 INSERT INTO trend_collection_runs (
                     run_id, provider, keywords_json, status, item_count,
-                    warnings_json, started_at, finished_at
-                ) VALUES (?, ?, ?, 'completed', ?, ?, ?, ?)
+                    warnings_json, started_at, finished_at, account_uuid,
+                    profile_version, domain_strategy_id, strategy_version,
+                    plan_id, batch_id, wave_kind
+                ) VALUES (?, ?, ?, 'completed', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     run_id,
@@ -293,6 +459,13 @@ class TrendRepository:
                     json.dumps(warnings or [], ensure_ascii=False),
                     started_at,
                     finished_at,
+                    account_uuid,
+                    max(0, int(profile_version)),
+                    domain_strategy_id,
+                    strategy_version,
+                    plan_id,
+                    batch_id,
+                    wave_kind,
                 ),
             )
             for item in observations:
@@ -301,14 +474,23 @@ class TrendRepository:
                     """
                     INSERT INTO trend_items (
                         item_id, platform, video_id, url, title, author,
-                        first_seen_at, last_seen_at
-                    ) VALUES (?, 'douyin', ?, ?, ?, ?, ?, ?)
+                        first_seen_at, last_seen_at, published_at,
+                        published_at_text
+                    ) VALUES (?, 'douyin', ?, ?, ?, ?, ?, ?, ?, ?)
                     ON CONFLICT(item_id) DO UPDATE SET
                         video_id = COALESCE(excluded.video_id, trend_items.video_id),
                         url = excluded.url,
                         title = excluded.title,
                         author = excluded.author,
-                        last_seen_at = excluded.last_seen_at
+                        last_seen_at = excluded.last_seen_at,
+                        published_at = CASE
+                            WHEN excluded.published_at != '' THEN excluded.published_at
+                            ELSE trend_items.published_at
+                        END,
+                        published_at_text = CASE
+                            WHEN excluded.published_at_text != '' THEN excluded.published_at_text
+                            ELSE trend_items.published_at_text
+                        END
                     """,
                     (
                         item.item_id,
@@ -318,6 +500,8 @@ class TrendRepository:
                         item.author,
                         item.collected_at,
                         item.collected_at,
+                        item.published_at,
+                        item.published_at_text,
                     ),
                 )
                 conn.execute(
@@ -325,9 +509,10 @@ class TrendRepository:
                     INSERT INTO trend_observations (
                         run_id, item_id, keyword, sort_key, sort_label, rank,
                         metric_text, metric_value, collected_at, raw_text,
+                        metric_kind, published_at, published_at_text,
                         query_kind, query_value, query_depth,
                         root_keywords_json, hashtags_json
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     ON CONFLICT(run_id, item_id, keyword, sort_key) DO UPDATE SET
                         sort_label = excluded.sort_label,
                         rank = excluded.rank,
@@ -335,6 +520,9 @@ class TrendRepository:
                         metric_value = excluded.metric_value,
                         collected_at = excluded.collected_at,
                         raw_text = excluded.raw_text,
+                        metric_kind = excluded.metric_kind,
+                        published_at = excluded.published_at,
+                        published_at_text = excluded.published_at_text,
                         query_kind = excluded.query_kind,
                         query_value = excluded.query_value,
                         query_depth = excluded.query_depth,
@@ -352,6 +540,9 @@ class TrendRepository:
                         item.metric_value,
                         item.collected_at,
                         item.raw_text,
+                        item.metric_kind,
+                        item.published_at,
+                        item.published_at_text,
                         item.query_kind,
                         item.query_value or item.keyword,
                         max(0, item.query_depth),
@@ -500,7 +691,7 @@ class TrendRepository:
         )
 
     def list_observations(self, limit: int = 2000) -> list[TrendObservation]:
-        safe_limit = max(1, min(int(limit), 10_000))
+        safe_limit = max(1, min(int(limit), 100_000))
         with self.connection() as conn:
             rows = conn.execute(
                 """
@@ -508,6 +699,7 @@ class TrendRepository:
                        o.run_id,
                        o.keyword, o.sort_key, o.sort_label, o.rank,
                        o.metric_text, o.metric_value, o.collected_at, o.raw_text,
+                       o.metric_kind, o.published_at, o.published_at_text,
                        o.query_kind, o.query_value, o.query_depth,
                        o.root_keywords_json, o.hashtags_json
                 FROM trend_observations o
@@ -531,7 +723,10 @@ class TrendRepository:
                 run_id=row["run_id"],
                 metric_text=row["metric_text"],
                 metric_value=row["metric_value"],
+                metric_kind=row["metric_kind"],
                 collected_at=row["collected_at"],
+                published_at=row["published_at"],
+                published_at_text=row["published_at_text"],
                 raw_text=row["raw_text"],
                 query_kind=row["query_kind"],
                 query_value=row["query_value"] or row["keyword"],
@@ -566,7 +761,7 @@ class TrendRepository:
             query += " WHERE run_id = ?"
             params.append(run_id)
         query += " ORDER BY relationship_score DESC, collected_at DESC LIMIT ?"
-        params.append(max(1, min(int(limit), 10_000)))
+        params.append(max(1, min(int(limit), 100_000)))
         with self.connection() as conn:
             rows = conn.execute(query, params).fetchall()
         return [
@@ -605,7 +800,7 @@ class TrendRepository:
             query += " WHERE run_id = ?"
             params.append(run_id)
         query += " ORDER BY sample_score DESC, collected_at DESC LIMIT ?"
-        params.append(max(1, min(int(limit), 10_000)))
+        params.append(max(1, min(int(limit), 100_000)))
         with self.connection() as conn:
             rows = conn.execute(query, params).fetchall()
         return [
@@ -877,6 +1072,9 @@ class TrendRepository:
                 ).fetchone()[0],
                 "snapshots": conn.execute(
                     "SELECT COUNT(*) FROM video_metric_snapshots"
+                ).fetchone()[0],
+                "plans": conn.execute(
+                    "SELECT COUNT(*) FROM trend_collection_plans"
                 ).fetchone()[0],
             }
 

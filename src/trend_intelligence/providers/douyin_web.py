@@ -6,7 +6,7 @@ import json
 import re
 import time
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Callable
 from urllib.parse import quote
 
@@ -68,6 +68,9 @@ EXTRACT_SCRIPT = r"""(() => {
     const metricText = lines.find(
       (value) => /^(?:\d+(?:\.\d+)?)(?:万|亿)?$/.test(value)
     ) || '';
+    const publishedAtText = lines.find(
+      (value) => /^(?:刚刚|昨天|前天|\d+(?:分钟|小时|天)前|\d{1,2}-\d{1,2}|\d{4}-\d{1,2}-\d{1,2})$/.test(value)
+    ) || '';
     const hashtags = Array.from(
       raw.matchAll(/[#＃]([0-9A-Za-z_\u3400-\u9fff]{1,40})/gu),
       (match) => match[1]
@@ -77,6 +80,7 @@ EXTRACT_SCRIPT = r"""(() => {
       title,
       author,
       metricText,
+      publishedAtText,
       hashtags,
       rawText: raw.slice(0, 1000),
     };
@@ -224,6 +228,7 @@ class DouyinWebTrendProvider:
                     "sort",
                     "rank",
                     "displayed_metrics",
+                    "published_at",
                     "hashtags",
                     "tag_relationships",
                     "tag_traffic_snapshots",
@@ -413,6 +418,7 @@ class DouyinWebTrendProvider:
             start=1,
         ):
             metric_text = str(row.get("metricText") or "")
+            published_at_text = str(row.get("publishedAtText") or "").strip()
             raw_text = str(row.get("rawText") or "")[:1000]
             hashtags = _row_hashtags(row, raw_text=raw_text)
             output.append(
@@ -428,7 +434,12 @@ class DouyinWebTrendProvider:
                     rank=rank,
                     metric_text=metric_text,
                     metric_value=metric_to_number(metric_text),
+                    metric_kind="displayed_unknown",
                     collected_at=collected_at,
+                    published_at=parse_visible_publish_time(
+                        published_at_text, collected_at=collected_at
+                    ),
+                    published_at_text=published_at_text,
                     raw_text=raw_text if retain_raw else "",
                     query_kind=query_kind,
                     query_value=query,
@@ -535,3 +546,53 @@ def _row_hashtags(row: dict, *, raw_text: str) -> list[str]:
             seen.add(tag)
             output.append(tag)
     return output
+
+
+def parse_visible_publish_time(value: str, *, collected_at: str) -> str:
+    """Normalize a visible relative/date label without pretending second precision."""
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    try:
+        captured = datetime.fromisoformat(collected_at.replace("Z", "+00:00"))
+    except (TypeError, ValueError):
+        return ""
+    if captured.tzinfo is None:
+        captured = captured.replace(tzinfo=timezone.utc)
+    captured = captured.astimezone(timezone.utc)
+    if text == "刚刚":
+        published = captured
+    elif text == "昨天":
+        published = captured - timedelta(days=1)
+    elif text == "前天":
+        published = captured - timedelta(days=2)
+    else:
+        relative = re.fullmatch(r"(\d+)(分钟|小时|天)前", text)
+        if relative:
+            amount = int(relative.group(1))
+            delta = {
+                "分钟": timedelta(minutes=amount),
+                "小时": timedelta(hours=amount),
+                "天": timedelta(days=amount),
+            }[relative.group(2)]
+            published = captured - delta
+        else:
+            china_tz = timezone(timedelta(hours=8))
+            local_captured = captured.astimezone(china_tz)
+            try:
+                if re.fullmatch(r"\d{4}-\d{1,2}-\d{1,2}", text):
+                    local_date = datetime.strptime(text, "%Y-%m-%d").date()
+                elif re.fullmatch(r"\d{1,2}-\d{1,2}", text):
+                    local_date = datetime.strptime(
+                        f"{local_captured.year}-{text}", "%Y-%m-%d"
+                    ).date()
+                    if local_date > local_captured.date() + timedelta(days=1):
+                        local_date = local_date.replace(year=local_date.year - 1)
+                else:
+                    return ""
+            except ValueError:
+                return ""
+            published = datetime.combine(
+                local_date, datetime.min.time(), tzinfo=china_tz
+            ).astimezone(timezone.utc)
+    return published.isoformat()

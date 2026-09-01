@@ -24,6 +24,7 @@ from src.trend_intelligence.providers import (
 )
 from src.trend_intelligence.repository import TrendRepository
 from src.trend_intelligence.service import TrendOperationsService
+from src.trend_intelligence.temporal import TemporalTrendService
 from src.trend_intelligence.source_policy import (
     PolicyStatus,
     SourcePolicy,
@@ -42,6 +43,7 @@ COLLECTED_FIELDS = frozenset(
         "sort",
         "rank",
         "displayed_metrics",
+        "published_at",
         "hashtags",
         "tag_relationships",
         "tag_traffic_snapshots",
@@ -118,6 +120,61 @@ def _render_collection(
     else:
         st.warning("尚未配置运营账号。请先在“账号策略”页创建账号策略版本。")
         default_keywords = "法律,小说"
+
+    if account_profile is not None:
+        with st.expander("账号领域分批采集计划", expanded=False):
+            wave_label = st.selectbox(
+                "采集波次",
+                ["baseline", "discovery", "momentum"],
+                format_func=lambda value: {
+                    "baseline": "基线：根关键词 + 标签族（每天）",
+                    "discovery": "发现：领域扩展词（每天）",
+                    "momentum": "追踪：高潜词复采（每 6 小时）",
+                }[value],
+                key="trend_plan_wave",
+            )
+            hot_text = st.text_input(
+                "高潜追踪词",
+                value=",".join(account_profile.seed_keywords),
+                disabled=wave_label != "momentum",
+                key="trend_plan_hot_keywords",
+            )
+            if st.button("生成并保存分批计划", key="trend_create_collection_plan"):
+                try:
+                    plan = service.create_collection_plan(
+                        account_profile,
+                        wave_kind=wave_label,
+                        hot_keywords=(
+                            _split_keywords(hot_text)
+                            if wave_label == "momentum"
+                            else None
+                        ),
+                    )
+                except ValueError as exc:
+                    st.error(f"计划生成失败：{exc}")
+                else:
+                    st.session_state["trend_collection_plan"] = plan
+                    st.success(
+                        f"已生成 {len(plan.batches)} 批、预计 {plan.estimated_pages} 页；"
+                        f"建议每 {plan.repeat_interval_hours} 小时执行一轮。"
+                    )
+            plan = st.session_state.get("trend_collection_plan")
+            if plan is not None and plan.account_uuid == account_profile.account_uuid:
+                st.dataframe(
+                    [
+                        {
+                            "批次": item.sequence,
+                            "波次": item.wave_kind,
+                            "关键词": "、".join(item.keywords),
+                            "排序": "、".join(item.sorts),
+                            "标签族扩展": "是" if item.expand_related_tags else "否",
+                            "预计页面": item.estimated_pages,
+                        }
+                        for item in plan.batches
+                    ],
+                    width="stretch",
+                    hide_index=True,
+                )
 
     keywords_text = st.text_input(
         "关键词",
@@ -236,6 +293,7 @@ def _render_collection(
                 DouyinWebTrendProvider(),
                 request,
                 policy=policy,
+                account_profile=account_profile,
             )
             if run_id:
                 clusters, briefs = service.analyze(
@@ -280,6 +338,7 @@ def _render_collection(
             st.info("当前没有可分析样本，请先完成采集。")
 
     _render_tag_relationships(repository)
+    _render_temporal_signals(repository)
 
 
 def _render_account_profiles(repository: AccountProfileRepository) -> None:
@@ -518,6 +577,59 @@ def _render_tag_relationships(repository: TrendRepository) -> None:
                 width="stretch",
                 hide_index=True,
             )
+
+
+def _render_temporal_signals(repository: TrendRepository) -> None:
+    st.markdown("---")
+    section_header(
+        "多时间点趋势",
+        "默认观察最近 14 天；至少两个批次才判断上涨或回落。",
+    )
+    temporal = TemporalTrendService(repository)
+    videos = temporal.video_signals(window_days=14)[:50]
+    tags = temporal.tag_family_signals(window_days=14)[:50]
+    if videos:
+        st.write("视频动量")
+        st.dataframe(
+            [
+                {
+                    "视频": item.title,
+                    "方向": item.direction,
+                    "动量分": item.momentum_score,
+                    "置信度": item.confidence,
+                    "时间点": item.point_count,
+                    "观察小时": item.observation_hours,
+                    "展示指标/小时": item.metric_velocity_per_hour,
+                    "排名改善/小时": item.rank_improvement_per_hour,
+                    "发布距今小时": item.age_hours,
+                }
+                for item in videos
+            ],
+            width="stretch",
+            hide_index=True,
+        )
+    else:
+        st.info("暂无视频时间趋势；重复执行同一批关键词后会形成动量信号。")
+    if tags:
+        st.write("标签族动量")
+        st.dataframe(
+            [
+                {
+                    "根关键词": item.root_keyword,
+                    "标签": f"#{item.tag}",
+                    "排序": item.sort_key,
+                    "方向": item.direction,
+                    "动量分": item.momentum_score,
+                    "置信度": item.confidence,
+                    "时间点": item.point_count,
+                    "样本分变化/小时": item.sample_score_velocity_per_hour,
+                    "排名": f"{item.best_rank_start} → {item.best_rank_end}",
+                }
+                for item in tags
+            ],
+            width="stretch",
+            hide_index=True,
+        )
 
 
 def _render_briefs(
