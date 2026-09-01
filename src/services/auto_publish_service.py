@@ -53,9 +53,10 @@ class AutoPublishRequest:
     template_video: str = ""        # 模板视频路径
     bgm: str = ""                  # BGM 路径（空则用默认）
     bgm_volume: float = DEFAULT_BGM_VOLUME
-    tts_provider: str = "edge"     # edge / gpt_sovits，后台默认用 edge 作为稳定兜底
+    tts_provider: str = "workflow_default"  # 空/current/workflow_default = 跟随当前工作流
     voice: str = ""                # 声音ID/参考音频
-    video_mode: str = VIDEO_MODE_PRESENTER_ANIME  # presenter_anime / dual_framepack_active / single_template
+    video_mode: str = "workflow_default"  # presenter_anime / dual_framepack_active / single_template
+    background_provider: str = "workflow_default"  # comfyui_flux / local_fallback
     publish_headless: bool = True   # 自动发布默认后台运行浏览器
     output_dir: str = "data/videos"  # 输出目录
     interactive: bool = False       # 交互模式（每步暂停）
@@ -103,6 +104,8 @@ class AutoPublishService:
         完整流水线：生成 → 合成 → 发布 → 落库
         """
         try:
+            self._apply_workflow_selections(request)
+
             # Step 1: 生成内容
             logger.info("=" * 50)
             logger.info("[Step 1/6] 开始生成内容...")
@@ -179,7 +182,7 @@ class AutoPublishService:
             logger.info("发布流程完成！")
             logger.info(f"  视频文件: {video_path}")
             logger.info(f"  本地ID: {db_video_id}")
-            logger.info(f"  抖音ID: （sync 后补上）")
+            logger.info("  抖音ID: （sync 后补上）")
 
             return AutoPublishResult(
                 success=True,
@@ -197,6 +200,25 @@ class AutoPublishService:
             self._close_adapter()
 
     # ─── 分步实现 ────────────────────────────────────────
+
+    @staticmethod
+    def _apply_workflow_selections(request: AutoPublishRequest) -> None:
+        """Resolve explicit overrides or the active web-managed profile."""
+        from src.workflow.runtime import resolve_node_implementation
+
+        request.tts_provider = resolve_node_implementation("tts", request.tts_provider)
+        request.video_mode = resolve_node_implementation(
+            "video_pipeline", request.video_mode
+        )
+        request.background_provider = resolve_node_implementation(
+            "background", request.background_provider
+        )
+        logger.info(
+            "工作流实现: video_pipeline={}, tts={}, background={}",
+            request.video_mode,
+            request.tts_provider,
+            request.background_provider,
+        )
 
     @staticmethod
     def _chunk_to_text(chunk) -> str:
@@ -380,6 +402,7 @@ class AutoPublishService:
             output_dir=request.output_dir or "data/videos",
             audio_path="",
             max_segments=16,
+            use_comfy_background=request.background_provider == "comfyui_flux",
         )
         result = presenter.run(presenter_req)
         if not result.success:

@@ -208,6 +208,10 @@ def read_recent_publish_log(max_lines: int = 80) -> str:
 if not render_login_page():
     st.stop()
 
+from src.web.components.ui import inject_app_theme
+
+inject_app_theme()
+
 # ── 当前用户信息 ──────────────────────────────────────────
 role_names = {"superadmin": "超级管理员", "admin": "运营管理员", "editor": "运营编辑", "viewer": "查看者"}
 user = get_current_user()
@@ -349,29 +353,67 @@ def page_videos():
     # 发布新视频
     st.markdown("---")
     st.subheader("➕ 在线制作/发布")
-    st.info("默认使用动漫数字人主讲格式：Edge-TTS + Sonic 角色层 + 动漫背景 + 字幕合成。双角色正式版和单人口播旧格式可在下方切换。上传浏览器默认后台运行，可打开调试模式显示窗口。")
+    st.info("默认值跟随“工作流节点”当前配置；本次任务仍可在下方临时覆盖视频格式和配音。上传浏览器默认后台运行，可打开调试模式显示窗口。")
+    try:
+        from src.workflow.runtime import active_selections
+
+        workflow_defaults = active_selections()
+    except Exception as exc:
+        logger.warning(f"读取工作流节点配置失败，在线制作使用兼容默认值: {exc}")
+        workflow_defaults = {
+            "video_pipeline": "presenter_anime",
+            "tts": "edge",
+        }
     with st.form("auto_publish_form"):
+        trend_prefill = st.session_state.get("trend_publish_prefill", {})
         col_p1, col_p2 = st.columns(2)
         with col_p1:
-            keywords = st.text_input("关键词（生成脚本）", placeholder="励志,成长")
+            keywords = st.text_input(
+                "关键词（生成脚本）",
+                value=trend_prefill.get("keywords", ""),
+                placeholder="励志,成长",
+            )
         with col_p2:
-            title = st.text_input("视频标题（空则自动生成）", placeholder="自动生成")
-        video_mode_label = st.selectbox(
-            "视频格式",
-            ["动漫数字人主讲", "双角色主动说话正式版", "单人口播模板（旧格式）"],
-            index=0,
-            help="动漫数字人主讲使用动画角色和 AI 生成背景。双角色正式版使用 FramePack 人物素材和主动说话高亮效果。",
-        )
-        video_mode = {
+            title = st.text_input(
+                "视频标题（空则自动生成）",
+                value=trend_prefill.get("title", ""),
+                placeholder="自动生成",
+            )
+        video_mode_labels = ["动漫数字人主讲", "双角色主动说话正式版", "单人口播模板（旧格式）"]
+        video_mode_by_label = {
             "动漫数字人主讲": "presenter_anime",
             "双角色主动说话正式版": "dual_framepack_active",
             "单人口播模板（旧格式）": "single_template",
-        }[video_mode_label]
+        }
+        default_video_mode = workflow_defaults.get("video_pipeline", "presenter_anime")
+        default_video_label = next(
+            (
+                label
+                for label, implementation_id in video_mode_by_label.items()
+                if implementation_id == default_video_mode
+            ),
+            "动漫数字人主讲",
+        )
+        video_mode_label = st.selectbox(
+            "视频格式",
+            video_mode_labels,
+            index=video_mode_labels.index(default_video_label),
+            help="动漫数字人主讲使用动画角色和 AI 生成背景。双角色正式版使用 FramePack 人物素材和主动说话高亮效果。",
+        )
+        video_mode = video_mode_by_label[video_mode_label]
         col_p3, col_p4 = st.columns(2)
         with col_p3:
-            desc = st.text_input("视频描述", placeholder="描述（可选）")
+            desc = st.text_input(
+                "视频描述",
+                value=trend_prefill.get("description", ""),
+                placeholder="描述（可选）",
+            )
         with col_p4:
-            tags = st.text_input("话题标签", placeholder="励志,正能量（逗号分隔）")
+            tags = st.text_input(
+                "话题标签",
+                value=trend_prefill.get("tags", ""),
+                placeholder="励志,正能量（逗号分隔）",
+            )
         st.markdown(
             """
             <style>
@@ -398,9 +440,12 @@ def page_videos():
             )
             visibility = {"私密": "private", "仅粉丝": "friends"}.get(visibility_label, "private")
         with col_tts:
+            tts_choices = ["edge", "gpt_sovits"]
+            default_tts = workflow_defaults.get("tts", "edge")
             tts_provider = st.selectbox(
                 "配音方式",
-                ["edge", "gpt_sovits"],
+                tts_choices,
+                index=tts_choices.index(default_tts) if default_tts in tts_choices else 0,
                 format_func=lambda x: {"edge": "Edge-TTS（兜底）", "gpt_sovits": "GPT-SoVITS"}[x],
                 help="Edge-TTS 需要联网；GPT-SoVITS 可离线，但当前环境缺 torch，需修复后再用。",
             )
@@ -425,10 +470,29 @@ def page_videos():
                     tts_provider=tts_provider,
                     video_mode=video_mode,
                     publish_headless=not debug_mode,
+                    trend_brief_id=trend_prefill.get("brief_id", ""),
+                    trend_cluster_id=trend_prefill.get("cluster_id", ""),
+                    hook_type=trend_prefill.get("hook_type", ""),
+                    account_uuid=trend_prefill.get("account_uuid", ""),
+                    account_profile_version=int(
+                        trend_prefill.get("account_profile_version", 0) or 0
+                    ),
+                    domain_strategy_id=trend_prefill.get("domain_strategy_id", ""),
+                    strategy_version=trend_prefill.get("strategy_version", ""),
+                    opportunity_id=trend_prefill.get("opportunity_id", ""),
+                    opportunity_script_id=trend_prefill.get(
+                        "opportunity_script_id", ""
+                    ),
+                    script_variant=trend_prefill.get("script_variant", ""),
+                    presentation_type=trend_prefill.get("presentation_type", ""),
+                    pacing=trend_prefill.get("pacing", ""),
+                    publish_window=trend_prefill.get("publish_window", ""),
+                    workflow_profile=trend_prefill.get("workflow_profile", ""),
                 )
                 service = AutoPublishService()
                 result = service.publish(request)
             if result.success:
+                st.session_state.pop("trend_publish_prefill", None)
                 if result.post_id:
                     st.success(f"发布成功！视频ID: {result.post_id}")
                 else:
@@ -1453,6 +1517,9 @@ def page_chat():
 
 
 # ── 权限过滤：根据角色决定可见页面 ──────────────────────────
+from src.web.trend_dashboard import page_trend_operations
+from src.web.workflow_dashboard import page_workflow_nodes
+
 role = get_current_role()
 
 pages = []
@@ -1470,6 +1537,8 @@ if has_permission(role, "editor"):
     pages.append(st.Page(page_scheduler, title="任务调度", icon="📋"))
 if has_permission(role, "viewer"):
     pages.append(st.Page(page_dashboard, title="看板", icon="📊"))
+if has_permission(role, "editor"):
+    pages.append(st.Page(page_trend_operations, title="热门选题", icon="📈"))
 if has_permission(role, "viewer"):
     pages.append(st.Page(page_videos, title="视频", icon="📹"))
 if has_permission(role, "viewer"):
@@ -1484,6 +1553,8 @@ if has_permission(role, "admin"):
     pages.append(st.Page(page_books, title="知识库", icon="📚"))
 if has_permission(role, "superadmin"):
     pages.append(st.Page(page_users, title="用户管理", icon="👥"))
+if has_permission(role, "admin"):
+    pages.append(st.Page(page_workflow_nodes, title="工作流节点", icon="🔀"))
 if has_permission(role, "superadmin"):
     pages.append(st.Page(page_settings, title="系统设置", icon="⚙️"))
 

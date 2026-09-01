@@ -1,0 +1,22 @@
+{
+  "schema_version": "workflow_node_selection/v1",
+  "revision": 1,
+  "active_profile": "production",
+  "updated_at": "2026-08-28T00:00:00+00:00",
+  "profiles": {
+    "production": {
+      "description": "默认生产工作流；网页保存后立即更新当前选择",
+      "selections": {
+        "llm": "openai_compatible",
+        "tts": "edge",
+        "background": "comfyui_flux",
+        "video_pipeline": "presenter_anime",
+        "portrait_animation": "sonic",
+        "video_generation": "ltx_i2v",
+        "frame_interpolation": "rife",
+        "composition": "ffmpeg",
+        "publishing": "douyin_playwright"
+      }
+    }
+  }
+}

@@ -15,7 +15,12 @@ class TTSEngine:
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir, exist_ok=True)
 
-        self.provider_type = provider_type or settings.TTS_PROVIDER
+        # Empty/current values follow the active workflow profile.  Explicit
+        # provider IDs remain per-run overrides for backward compatibility.
+        from src.workflow.runtime import resolve_node_implementation
+
+        requested_provider = provider_type or "workflow_default"
+        self.provider_type = resolve_node_implementation("tts", requested_provider)
         if self.provider_type == "gpt_sovits":
             self.provider = GPTSoVITSProvider()
             logger.info("TTSEngine initialized with GPT-SoVITS Provider")
