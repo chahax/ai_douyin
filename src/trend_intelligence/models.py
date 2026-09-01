@@ -143,6 +143,16 @@ class PublishedContentContext:
     content_format: str = ""
     duration_seconds: float | None = None
     published_at: str = ""
+    account_uuid: str = ""
+    account_profile_version: int = 0
+    domain_strategy_id: str = ""
+    strategy_version: str = ""
+    opportunity_id: str = ""
+    script_id: str = ""
+    script_variant: str = ""
+    presentation_type: str = ""
+    pacing: str = ""
+    publish_window: str = ""
 
 
 @dataclass(slots=True)
@@ -156,6 +166,15 @@ class PerformanceResult:
     relative_performance: float
     observation_hours: float
     views_gained: int
+    account_uuid: str = ""
+    opportunity_id: str = ""
+    script_id: str = ""
+    script_variant: str = ""
+    hook_type: str = ""
+    presentation_type: str = ""
+    workflow_profile: str = ""
+    publish_window: str = ""
+    latest_window: str = ""
 
 
 @dataclass(slots=True)
@@ -166,6 +185,46 @@ class StrategyRecommendation:
     adjacent_topics: list[str]
     experiment_share: float
     summary: str
+    winning_dimensions: list[str] = field(default_factory=list)
+    losing_dimensions: list[str] = field(default_factory=list)
+    allocation: dict[str, float] = field(default_factory=dict)
+
+
+@dataclass(slots=True)
+class DimensionPerformance:
+    dimension: str
+    value: str
+    sample_size: int
+    average_relative_performance: float
+    average_view_velocity: float
+    average_engagement_per_1k: float
+    win_rate: float
+    confidence: float
+
+
+@dataclass(slots=True)
+class FeedbackLearningReport:
+    report_id: str
+    account_uuid: str
+    profile_version: int
+    sample_size: int
+    status: str
+    dimensions: list[DimensionPerformance]
+    score_adjustments: dict[str, float]
+    proven_topics: list[str]
+    next_cycle_allocation: dict[str, float]
+    summary: str
+    created_at: str = field(default_factory=utc_now_iso)
+
+
+@dataclass(slots=True)
+class SnapshotWindowDue:
+    local_id: str
+    video_id: str
+    account_uuid: str
+    window: str
+    target_at: str
+    overdue_hours: float
 
 
 @dataclass(slots=True)

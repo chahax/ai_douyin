@@ -61,6 +61,21 @@ class AutoPublishRequest:
     interactive: bool = False       # 交互模式（每步暂停）
     auto_hashtags: bool = True     # 自动生成话题标签
     visibility: str = "public"     # 可见性：public / private / friends
+    trend_brief_id: str = ""       # 来源选题卡，用于发布后效果归因
+    trend_cluster_id: str = ""     # 来源话题簇
+    hook_type: str = ""            # 开头类型，例如 question / contrast
+    script_version: str = "v1"     # 脚本版本
+    workflow_profile: str = ""     # 生成时使用的工作流方案
+    account_uuid: str = ""         # 运营账号稳定 UUID
+    account_profile_version: int = 0
+    domain_strategy_id: str = ""
+    strategy_version: str = ""
+    opportunity_id: str = ""
+    opportunity_script_id: str = ""
+    script_variant: str = ""
+    presentation_type: str = ""
+    pacing: str = ""
+    publish_window: str = ""
 
 
 @dataclass
@@ -139,6 +154,8 @@ class AutoPublishService:
                 from src.services.video_service import update_video_status_by_local
                 update_video_status_by_local(db_video_id, "failed")
                 raise
+
+            self._mark_trend_brief_used(request, db_video_id, post_id)
 
             # Step 6: RAG 检索 + 写入 rag_context
             logger.info("=" * 50)
@@ -496,7 +513,73 @@ class AutoPublishService:
 
         save_video(video)
         logger.info(f"[OK] 已保存到数据库: local_id={local_id}, status=PENDING")
+        if (
+            request.trend_brief_id
+            or request.trend_cluster_id
+            or request.opportunity_id
+            or request.opportunity_script_id
+        ):
+            try:
+                from src.trend_intelligence.models import PublishedContentContext
+                from src.trend_intelligence.repository import TrendRepository
+
+                TrendRepository().link_published_content(
+                    PublishedContentContext(
+                        local_id=local_id,
+                        brief_id=request.trend_brief_id,
+                        cluster_id=request.trend_cluster_id,
+                        script_version=request.script_version or "v1",
+                        workflow_profile=request.workflow_profile or request.video_mode,
+                        hook_type=request.hook_type,
+                        content_format=request.video_mode,
+                        duration_seconds=get_duration(video_path),
+                        published_at=datetime.now().isoformat(),
+                        account_uuid=request.account_uuid,
+                        account_profile_version=request.account_profile_version,
+                        domain_strategy_id=request.domain_strategy_id,
+                        strategy_version=request.strategy_version,
+                        opportunity_id=request.opportunity_id,
+                        script_id=request.opportunity_script_id,
+                        script_variant=request.script_variant,
+                        presentation_type=(
+                            request.presentation_type or request.video_mode
+                        ),
+                        pacing=request.pacing,
+                        publish_window=request.publish_window,
+                    )
+                )
+            except Exception as exc:
+                logger.warning(f"保存趋势选题发布关联失败，发布流程继续: {exc}")
         return local_id
+
+    @staticmethod
+    def _mark_trend_brief_used(
+        request: AutoPublishRequest,
+        local_id: str,
+        post_id: str,
+    ) -> None:
+        if not (
+            request.trend_brief_id
+            or request.opportunity_id
+            or request.opportunity_script_id
+        ):
+            return
+        try:
+            from src.trend_intelligence.repository import TrendRepository
+
+            repository = TrendRepository()
+            if request.trend_brief_id:
+                repository.update_brief_status(request.trend_brief_id, "used")
+            if request.opportunity_id:
+                repository.update_opportunity_status(request.opportunity_id, "used")
+            if request.opportunity_script_id:
+                repository.update_opportunity_script_status(
+                    request.opportunity_script_id, "used"
+                )
+            if local_id and post_id:
+                repository.attach_video_id(local_id, post_id)
+        except Exception as exc:
+            logger.warning(f"更新趋势选题使用状态失败，发布流程继续: {exc}")
 
     def _close_adapter(self) -> None:
         """关闭适配器"""

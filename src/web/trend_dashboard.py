@@ -93,7 +93,7 @@ def page_trend_operations() -> None:
     with briefs_tab:
         _render_briefs(repository, service, account_repository)
     with feedback_tab:
-        _render_feedback(repository)
+        _render_feedback(repository, account_repository)
 
 
 def _render_collection(
@@ -895,6 +895,33 @@ def _render_briefs(
                     ):
                         opportunity_service.approve_script(script.script_id)
                         st.rerun()
+                    if st.button(
+                        f"脚本 {script.variant_id} 带入视频制作",
+                        disabled=script.status != "approved",
+                        key=f"trend_use_script_{script.script_id}",
+                    ):
+                        st.session_state["trend_publish_prefill"] = {
+                            "keywords": ",".join(opportunity.topic_labels)
+                            or opportunity.title,
+                            "title": script.title,
+                            "description": script.beats[0].voiceover,
+                            "tags": ",".join(opportunity.topic_labels),
+                            "brief_id": opportunity.brief_id,
+                            "cluster_id": opportunity.cluster_id,
+                            "hook_type": opportunity.recommended_hook_type,
+                            "account_uuid": opportunity.account_uuid,
+                            "account_profile_version": opportunity.profile_version,
+                            "domain_strategy_id": opportunity.domain_strategy_id,
+                            "strategy_version": opportunity.strategy_version,
+                            "opportunity_id": opportunity.opportunity_id,
+                            "opportunity_script_id": script.script_id,
+                            "script_variant": script.variant_id,
+                            "presentation_type": opportunity.recommended_presentation,
+                            "pacing": opportunity.recommended_pacing,
+                            "publish_window": opportunity.recommended_publish_window,
+                            "workflow_profile": opportunity.recommended_workflow_profile,
+                        }
+                        st.success("脚本和归因参数已带入视频制作。")
         else:
             st.info("暂无机会卡。先完成采集和内容分析，再刷新账号机会排行。")
     else:
@@ -979,17 +1006,53 @@ def _render_briefs(
             st.success("已带入制作参数，请打开左侧“视频”页面继续。")
 
 
-def _render_feedback(repository: TrendRepository) -> None:
-    section_header("发布效果复盘", "至少两个指标快照才能计算增长速度。")
+def _render_feedback(
+    repository: TrendRepository,
+    account_repository: AccountProfileRepository,
+) -> None:
+    section_header(
+        "发布效果复盘",
+        "按 1h/6h/24h/72h/7d 窗口，并按脚本、钩子、展示方式、工作流和发布时间归因。",
+    )
+    profiles = account_repository.list_active()
+    selected_profile = None
+    if profiles:
+        feedback_account_key = st.selectbox(
+            "复盘账号",
+            [item.account_key for item in profiles],
+            format_func=lambda value: _account_profile_label(profiles, value),
+            key="trend_feedback_account",
+        )
+        selected_profile = next(
+            item for item in profiles if item.account_key == feedback_account_key
+        )
     feedback = OperationsFeedbackService(repository)
-    results = feedback.performance_results()
-    recommendation = feedback.recommend_next_cycle()
+    account_uuid = selected_profile.account_uuid if selected_profile else ""
+    results = feedback.performance_results(account_uuid=account_uuid)
+    recommendation = feedback.recommend_next_cycle(account_uuid=account_uuid)
     st.info(recommendation.summary)
     metrics = st.columns(4)
     metrics[0].metric("有效样本", recommendation.sample_size)
     metrics[1].metric("策略状态", recommendation.status)
     metrics[2].metric("验证题材", len(recommendation.proven_topics))
     metrics[3].metric("实验比例", f"{recommendation.experiment_share:.0%}")
+    due = feedback.due_snapshot_windows(account_uuid=account_uuid)
+    if due:
+        st.warning(f"有 {len(due)} 个指标时间窗待同步。")
+        with st.expander("待同步时间窗"):
+            st.dataframe(
+                [
+                    {
+                        "视频": item.video_id or item.local_id,
+                        "窗口": item.window,
+                        "目标时间": item.target_at,
+                        "逾期小时": item.overdue_hours,
+                    }
+                    for item in due
+                ],
+                width="stretch",
+                hide_index=True,
+            )
     if results:
         st.dataframe(
             [
@@ -1001,6 +1064,12 @@ def _render_feedback(repository: TrendRepository) -> None:
                     "每小时播放增长": result.view_velocity,
                     "每千播放互动": result.engagement_per_1k,
                     "相对表现": result.relative_performance,
+                    "指标窗口": result.latest_window,
+                    "脚本版本": result.script_variant,
+                    "钩子": result.hook_type,
+                    "展示方式": result.presentation_type,
+                    "工作流": result.workflow_profile,
+                    "发布时间窗": result.publish_window,
                 }
                 for result in results
             ],
@@ -1009,6 +1078,37 @@ def _render_feedback(repository: TrendRepository) -> None:
         )
     else:
         st.info("尚无包含两个快照的已关联视频。每次同步创作者作品都会自动保存快照。")
+    dimensions = feedback.dimension_performance(account_uuid=account_uuid)
+    if dimensions:
+        with st.expander("多维归因", expanded=True):
+            st.dataframe(
+                [
+                    {
+                        "维度": item.dimension,
+                        "取值": item.value,
+                        "样本": item.sample_size,
+                        "相对表现": item.average_relative_performance,
+                        "播放增速": item.average_view_velocity,
+                        "每千播放互动": item.average_engagement_per_1k,
+                        "胜率": item.win_rate,
+                        "置信度": item.confidence,
+                    }
+                    for item in dimensions
+                ],
+                width="stretch",
+                hide_index=True,
+            )
+    if selected_profile and st.button(
+        "生成并保存下一轮学习报告", key="trend_build_feedback_report"
+    ):
+        report = feedback.build_learning_report(
+            account_uuid=selected_profile.account_uuid,
+            profile_version=selected_profile.profile_version,
+        )
+        st.success(
+            f"学习报告已保存：{report.sample_size} 个有效视频，"
+            f"{len(report.score_adjustments)} 个维度调权。"
+        )
 
 
 def _build_run_policy(reference: str, *, planned_pages: int) -> SourcePolicy:

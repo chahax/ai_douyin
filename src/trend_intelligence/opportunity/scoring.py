@@ -55,6 +55,9 @@ class ContentOpportunityScorer:
                 window_days=14, limit=100_000
             )
         }
+        feedback_report = self.repository.latest_feedback_learning_report(
+            profile.account_uuid
+        )
         opportunities = [
             self._score_one(
                 cluster,
@@ -62,6 +65,7 @@ class ContentOpportunityScorer:
                 profile,
                 latest_analysis,
                 signals,
+                feedback_report.score_adjustments if feedback_report else {},
                 current,
             )
             for cluster in clusters
@@ -79,6 +83,7 @@ class ContentOpportunityScorer:
         profile: AccountProfile,
         analyses: dict[str, VideoContentAnalysis],
         signals: dict[str, VideoTrendSignal],
+        feedback_adjustments: dict[str, float],
         now: datetime,
     ) -> ContentOpportunity:
         item_analyses = [
@@ -147,14 +152,27 @@ class ContentOpportunityScorer:
         elif profile.allowed_formats and presentation not in profile.allowed_formats:
             feasibility = 65.0
         risk_penalty = float(cluster.score_breakdown.get("risk_penalty", 0.0))
-        feedback_prior = 50.0
+        feedback_keys = [
+            f"topic:{cluster.cluster_id}",
+            f"hook:{hook}",
+            f"presentation:{presentation}",
+            f"workflow:{profile.workflow_profile}",
+            f"publish_window:{profile.publishing_windows[0] if profile.publishing_windows else ''}",
+        ]
+        matched_feedback = [
+            feedback_adjustments[key]
+            for key in feedback_keys
+            if key in feedback_adjustments
+        ]
+        feedback_prior = mean(matched_feedback) if matched_feedback else 50.0
         score = (
-            0.24 * traffic
-            + 0.22 * temporal
-            + 0.22 * relevance
-            + 0.12 * content_confidence * 100
-            + 0.1 * freshness
-            + 0.1 * feasibility
+            0.2 * traffic
+            + 0.2 * temporal
+            + 0.2 * relevance
+            + 0.1 * content_confidence * 100
+            + 0.08 * freshness
+            + 0.07 * feasibility
+            + 0.15 * feedback_prior
             - 0.5 * saturation_penalty
             - risk_penalty
         )
@@ -191,6 +209,7 @@ class ContentOpportunityScorer:
             f"流量基础分 {traffic:.1f}；视频动量 {temporal:.1f}（置信度 {temporal_confidence:.2f}）",
             f"账号内容相关度 {relevance:.1f}；内容证据完整度 {content_confidence:.2f}",
             f"建议展示方式 {presentation}，钩子 {hook}，节奏 {pacing}",
+            f"历史同账号策略先验 {feedback_prior:.1f}（无有效反馈时为中性 50）",
         ]
         if brief is not None:
             evidence.extend(brief.evidence[:3])

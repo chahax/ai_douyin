@@ -18,6 +18,8 @@ from .models import (
     ContentAnalysisBatchResult,
     ContentEvidence,
     ContentOpportunity,
+    DimensionPerformance,
+    FeedbackLearningReport,
     ContentSegment,
     PublishedContentContext,
     OpportunityScript,
@@ -36,7 +38,7 @@ from .collection.planner import AccountCollectionPlan
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DB_PATH = PROJECT_ROOT / "data" / "trend_intelligence.db"
-TREND_SCHEMA_VERSION = 5
+TREND_SCHEMA_VERSION = 6
 
 
 SCHEMA_SQL = """
@@ -267,8 +269,28 @@ CREATE TABLE IF NOT EXISTS published_content_context (
     content_format TEXT NOT NULL DEFAULT '',
     duration_seconds REAL,
     published_at TEXT NOT NULL DEFAULT '',
+    account_uuid TEXT NOT NULL DEFAULT '',
+    account_profile_version INTEGER NOT NULL DEFAULT 0,
+    domain_strategy_id TEXT NOT NULL DEFAULT '',
+    strategy_version TEXT NOT NULL DEFAULT '',
+    opportunity_id TEXT NOT NULL DEFAULT '',
+    script_id TEXT NOT NULL DEFAULT '',
+    script_variant TEXT NOT NULL DEFAULT '',
+    presentation_type TEXT NOT NULL DEFAULT '',
+    pacing TEXT NOT NULL DEFAULT '',
+    publish_window TEXT NOT NULL DEFAULT '',
     created_at TEXT NOT NULL,
     updated_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS trend_feedback_learning_reports (
+    report_id TEXT PRIMARY KEY,
+    account_uuid TEXT NOT NULL,
+    profile_version INTEGER NOT NULL,
+    sample_size INTEGER NOT NULL,
+    status TEXT NOT NULL,
+    payload_json TEXT NOT NULL,
+    created_at TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS video_metric_snapshots (
@@ -311,6 +333,8 @@ CREATE INDEX IF NOT EXISTS idx_opportunity_validity
     ON trend_content_opportunities(valid_until, status);
 CREATE INDEX IF NOT EXISTS idx_opportunity_scripts
     ON trend_opportunity_scripts(opportunity_id, status);
+CREATE INDEX IF NOT EXISTS idx_feedback_report_account
+    ON trend_feedback_learning_reports(account_uuid, created_at);
 """
 
 
@@ -344,6 +368,7 @@ class TrendRepository:
             self._ensure_observation_columns(conn)
             self._ensure_item_columns(conn)
             self._ensure_collection_run_columns(conn)
+            self._ensure_published_context_columns(conn)
             conn.execute(
                 "CREATE INDEX IF NOT EXISTS idx_trend_observations_query "
                 "ON trend_observations(query_kind, query_value, collected_at)"
@@ -411,6 +436,30 @@ class TrendRepository:
             if name not in existing:
                 conn.execute(
                     f"ALTER TABLE trend_collection_runs ADD COLUMN {name} {definition}"
+                )
+
+    @staticmethod
+    def _ensure_published_context_columns(conn: sqlite3.Connection) -> None:
+        existing = {
+            row["name"]
+            for row in conn.execute("PRAGMA table_info(published_content_context)")
+        }
+        additions = {
+            "account_uuid": "TEXT NOT NULL DEFAULT ''",
+            "account_profile_version": "INTEGER NOT NULL DEFAULT 0",
+            "domain_strategy_id": "TEXT NOT NULL DEFAULT ''",
+            "strategy_version": "TEXT NOT NULL DEFAULT ''",
+            "opportunity_id": "TEXT NOT NULL DEFAULT ''",
+            "script_id": "TEXT NOT NULL DEFAULT ''",
+            "script_variant": "TEXT NOT NULL DEFAULT ''",
+            "presentation_type": "TEXT NOT NULL DEFAULT ''",
+            "pacing": "TEXT NOT NULL DEFAULT ''",
+            "publish_window": "TEXT NOT NULL DEFAULT ''",
+        }
+        for name, definition in additions.items():
+            if name not in existing:
+                conn.execute(
+                    f"ALTER TABLE published_content_context ADD COLUMN {name} {definition}"
                 )
 
     def save_collection_plan(self, plan: AccountCollectionPlan) -> None:
@@ -1309,8 +1358,11 @@ class TrendRepository:
                 INSERT INTO published_content_context (
                     local_id, video_id, brief_id, cluster_id, script_version,
                     workflow_profile, hook_type, content_format, duration_seconds,
-                    published_at, created_at, updated_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    published_at, account_uuid, account_profile_version,
+                    domain_strategy_id, strategy_version, opportunity_id,
+                    script_id, script_variant, presentation_type, pacing,
+                    publish_window, created_at, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON CONFLICT(local_id) DO UPDATE SET
                     video_id = CASE
                         WHEN excluded.video_id != '' THEN excluded.video_id
@@ -1324,6 +1376,16 @@ class TrendRepository:
                     content_format = excluded.content_format,
                     duration_seconds = excluded.duration_seconds,
                     published_at = excluded.published_at,
+                    account_uuid = excluded.account_uuid,
+                    account_profile_version = excluded.account_profile_version,
+                    domain_strategy_id = excluded.domain_strategy_id,
+                    strategy_version = excluded.strategy_version,
+                    opportunity_id = excluded.opportunity_id,
+                    script_id = excluded.script_id,
+                    script_variant = excluded.script_variant,
+                    presentation_type = excluded.presentation_type,
+                    pacing = excluded.pacing,
+                    publish_window = excluded.publish_window,
                     updated_at = excluded.updated_at
                 """,
                 (
@@ -1337,6 +1399,16 @@ class TrendRepository:
                     context.content_format,
                     context.duration_seconds,
                     context.published_at,
+                    context.account_uuid,
+                    max(0, context.account_profile_version),
+                    context.domain_strategy_id,
+                    context.strategy_version,
+                    context.opportunity_id,
+                    context.script_id,
+                    context.script_variant,
+                    context.presentation_type,
+                    context.pacing,
+                    context.publish_window,
                     now,
                     now,
                 ),
@@ -1397,6 +1469,16 @@ class TrendRepository:
                 content_format=row["content_format"],
                 duration_seconds=row["duration_seconds"],
                 published_at=row["published_at"],
+                account_uuid=row["account_uuid"],
+                account_profile_version=row["account_profile_version"],
+                domain_strategy_id=row["domain_strategy_id"],
+                strategy_version=row["strategy_version"],
+                opportunity_id=row["opportunity_id"],
+                script_id=row["script_id"],
+                script_variant=row["script_variant"],
+                presentation_type=row["presentation_type"],
+                pacing=row["pacing"],
+                publish_window=row["publish_window"],
             )
             for row in rows
         ]
@@ -1434,6 +1516,51 @@ class TrendRepository:
             for row in rows
         ]
 
+    def save_feedback_learning_report(
+        self, report: FeedbackLearningReport
+    ) -> None:
+        with self.connection() as conn:
+            conn.execute(
+                """
+                INSERT OR REPLACE INTO trend_feedback_learning_reports (
+                    report_id, account_uuid, profile_version, sample_size,
+                    status, payload_json, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    report.report_id,
+                    report.account_uuid,
+                    report.profile_version,
+                    report.sample_size,
+                    report.status,
+                    json.dumps(asdict(report), ensure_ascii=False),
+                    report.created_at,
+                ),
+            )
+
+    def latest_feedback_learning_report(
+        self, account_uuid: str
+    ) -> FeedbackLearningReport | None:
+        with self.connection() as conn:
+            row = conn.execute(
+                """
+                SELECT payload_json
+                FROM trend_feedback_learning_reports
+                WHERE account_uuid = ?
+                ORDER BY created_at DESC
+                LIMIT 1
+                """,
+                (account_uuid,),
+            ).fetchone()
+        if row is None:
+            return None
+        payload = json.loads(row["payload_json"])
+        payload["dimensions"] = [
+            DimensionPerformance(**item)
+            for item in payload.get("dimensions", [])
+        ]
+        return FeedbackLearningReport(**payload)
+
     def summary(self) -> dict[str, int]:
         with self.connection() as conn:
             return {
@@ -1459,6 +1586,9 @@ class TrendRepository:
                 ).fetchone()[0],
                 "opportunity_scripts": conn.execute(
                     "SELECT COUNT(*) FROM trend_opportunity_scripts"
+                ).fetchone()[0],
+                "feedback_reports": conn.execute(
+                    "SELECT COUNT(*) FROM trend_feedback_learning_reports"
                 ).fetchone()[0],
             }
 

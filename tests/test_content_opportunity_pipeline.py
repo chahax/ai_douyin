@@ -13,6 +13,7 @@ from src.trend_intelligence.content_analysis import (
 )
 from src.trend_intelligence.models import (
     ContentOpportunity,
+    FeedbackLearningReport,
     OpportunityScript,
     ScriptBeat,
     TrendObservation,
@@ -236,6 +237,42 @@ def test_opportunity_and_script_status_transitions_are_persisted(tmp_path) -> No
     with pytest.raises(ValueError, match="invalid"):
         repository.update_opportunity_status(opportunity.opportunity_id, "bad")
     assert profile.account_uuid == opportunity.account_uuid
+
+
+def test_feedback_learning_adjusts_the_next_opportunity_score(tmp_path) -> None:
+    repository = TrendRepository(tmp_path / "trend.db")
+    profile, opportunities = _seed_legal_opportunity(repository)
+    before = opportunities[0]
+    keys = [
+        f"topic:{before.cluster_id}",
+        f"hook:{before.recommended_hook_type}",
+        f"presentation:{before.recommended_presentation}",
+        f"workflow:{before.recommended_workflow_profile}",
+        f"publish_window:{before.recommended_publish_window}",
+    ]
+    repository.save_feedback_learning_report(
+        FeedbackLearningReport(
+            report_id="feedback:high",
+            account_uuid=profile.account_uuid,
+            profile_version=profile.profile_version,
+            sample_size=10,
+            status="ready",
+            dimensions=[],
+            score_adjustments={key: 90.0 for key in keys},
+            proven_topics=[before.cluster_id],
+            next_cycle_allocation={
+                "proven": 0.7,
+                "adjacent": 0.2,
+                "experiment": 0.1,
+            },
+            summary="fixture",
+            created_at="2099-01-01T00:00:00+00:00",
+        )
+    )
+    after = ContentOpportunityService(repository).build_opportunities(profile)[0]
+    assert before.score_breakdown["feedback_prior"] == 50
+    assert after.score_breakdown["feedback_prior"] == 90
+    assert after.opportunity_score > before.opportunity_score
 
 
 class _EducationScriptStrategy:

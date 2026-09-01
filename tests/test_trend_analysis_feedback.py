@@ -141,6 +141,7 @@ def test_repository_persists_analysis_approval_and_snapshots(tmp_path) -> None:
         "content_analyses": 0,
         "opportunities": 0,
         "opportunity_scripts": 0,
+        "feedback_reports": 0,
     }
     assert repository.update_brief_status(briefs[0].brief_id, "approved") is True
     assert repository.get_brief(briefs[0].brief_id).status == "approved"
@@ -342,6 +343,16 @@ def test_auto_publish_database_step_links_trend_context(tmp_path, monkeypatch) -
         hook_type="question",
         script_version="v2",
         workflow_profile="legal-presenter",
+        account_uuid="account:legal",
+        account_profile_version=3,
+        domain_strategy_id="legal_services",
+        strategy_version="v1",
+        opportunity_id="opportunity-labor",
+        opportunity_script_id="script-labor-a",
+        script_variant="A",
+        presentation_type="talking_head",
+        pacing="fast",
+        publish_window="20:00-22:00",
     )
     service = object.__new__(auto_publish_service.AutoPublishService)
 
@@ -356,3 +367,11 @@ def test_auto_publish_database_step_links_trend_context(tmp_path, monkeypatch) -
     assert contexts[0].script_version == "v2"
     assert contexts[0].workflow_profile == "legal-presenter"
     assert contexts[0].duration_seconds == 18.5
+    assert contexts[0].account_uuid == "account:legal"
+    assert contexts[0].account_profile_version == 3
+    assert contexts[0].opportunity_id == "opportunity-labor"
+    assert contexts[0].script_id == "script-labor-a"
+    assert contexts[0].script_variant == "A"
+    assert contexts[0].presentation_type == "talking_head"
+    assert contexts[0].pacing == "fast"
+    assert contexts[0].publish_window == "20:00-22:00"

@@ -10,6 +10,7 @@ from src.platform_adapter.models import (
 )
 from src.platform_adapter.publish_workflow import PublishWorkflow
 from src.platform_adapter.sync_workflow import SyncWorkflow
+from src.shared.logger import logger
 
 
 class DouyinAdapter:
@@ -99,9 +100,38 @@ class DouyinAdapter:
         videos, api_success = self.sync_workflow.sync_videos(page_limit=page_limit, interactive=interactive)
 
         new_count = 0
+        trend_repository = None
+        try:
+            from src.trend_intelligence.repository import TrendRepository
+
+            trend_repository = TrendRepository()
+        except Exception as exc:
+            logger.warning(f"趋势指标快照存储不可用，视频同步继续: {exc}")
         for v in videos:
             if save_video(v):
                 new_count += 1
+            if trend_repository is not None and v.video_id and v.stats:
+                try:
+                    from src.services.video_service import get_video_by_id
+                    from src.trend_intelligence.models import VideoMetricSnapshot
+
+                    stored = get_video_by_id(v.video_id) or {}
+                    local_id = stored.get("local_id") or ""
+                    trend_repository.attach_video_id(local_id, v.video_id)
+                    trend_repository.record_video_snapshot(
+                        VideoMetricSnapshot(
+                            video_id=v.video_id,
+                            local_id=local_id,
+                            publish_time=v.publish_time or "",
+                            views=v.stats.play_count,
+                            likes=v.stats.like_count,
+                            comments=v.stats.comment_count,
+                            shares=v.stats.share_count,
+                            collects=v.stats.collect_count,
+                        )
+                    )
+                except Exception as exc:
+                    logger.warning(f"保存视频指标快照失败，视频同步继续: {exc}")
 
         # 标记在平台上已删除的视频为 failed
         # API成功但返回0个视频 → 平台上已无视频，应将所有 published 标记为 failed
