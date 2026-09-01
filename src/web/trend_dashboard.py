@@ -14,6 +14,10 @@ from src.operations_accounts import (
     stable_account_uuid,
 )
 from src.trend_intelligence.domain import get_default_domain_registry
+from src.trend_intelligence.content_analysis import (
+    ContentAnalysisBatchService,
+    ContentAnalysisRequest,
+)
 from src.trend_intelligence.feedback import OperationsFeedbackService
 from src.trend_intelligence.providers import (
     DOUYIN_SORTS,
@@ -339,6 +343,7 @@ def _render_collection(
 
     _render_tag_relationships(repository)
     _render_temporal_signals(repository)
+    _render_content_analysis(repository, account_profile)
 
 
 def _render_account_profiles(repository: AccountProfileRepository) -> None:
@@ -626,6 +631,150 @@ def _render_temporal_signals(repository: TrendRepository) -> None:
                     "排名": f"{item.best_rank_start} → {item.best_rank_end}",
                 }
                 for item in tags
+            ],
+            width="stretch",
+            hide_index=True,
+        )
+
+
+def _render_content_analysis(
+    repository: TrendRepository,
+    account_profile: AccountProfile | None,
+) -> None:
+    st.markdown("---")
+    section_header(
+        "候选视频内容分析",
+        "可人工切换元数据降级分析或本地 Qwen + Paraformer；结果按账号策略版本缓存。",
+    )
+    if account_profile is None:
+        st.info("选择账号后才能计算候选内容与账号定位的相关度。")
+        return
+    observations = repository.list_observations(limit=5000)
+    latest_by_item = {}
+    for item in observations:
+        latest_by_item.setdefault(item.item_id, item)
+    candidates = list(latest_by_item.values())
+    if not candidates:
+        st.info("暂无候选视频。完成采集后可批量分析。")
+        return
+    col_impl, col_count = st.columns(2)
+    with col_impl:
+        implementation_id = st.selectbox(
+            "内容分析实现",
+            ["metadata_heuristic", "local_qwen_paraformer"],
+            format_func=lambda value: {
+                "metadata_heuristic": "元数据分析（无需视频文件）",
+                "local_qwen_paraformer": "本地 Qwen + Paraformer（需授权媒体）",
+            }[value],
+            key="trend_content_analysis_impl",
+        )
+    with col_count:
+        candidate_count = st.slider(
+            "本批候选数",
+            1,
+            min(100, len(candidates)),
+            min(20, len(candidates)),
+            key="trend_content_analysis_count",
+        )
+    artifact_mapping: dict[str, object] = {}
+    run_toolchain = False
+    media_confirmed = False
+    if implementation_id == "local_qwen_paraformer":
+        mapping_text = st.text_area(
+            "本地媒体/分析产物映射 JSON",
+            value="{}",
+            help=(
+                '键为 item_id；值可以是视频路径，或 {"video": "...", '
+                '"qwen": "...", "transcript": "...", "scenes": "..."}。'
+            ),
+            key="trend_content_artifact_mapping",
+        )
+        try:
+            parsed_mapping = json.loads(mapping_text or "{}")
+            if isinstance(parsed_mapping, dict):
+                artifact_mapping = parsed_mapping
+            else:
+                st.error("产物映射必须是 JSON 对象。")
+        except json.JSONDecodeError as exc:
+            st.error(f"产物映射 JSON 无效：{exc}")
+        run_toolchain = st.checkbox(
+            "缺少产物时自动执行本地抽帧、Qwen 和 Paraformer 脚本",
+            value=False,
+            key="trend_run_local_content_toolchain",
+        )
+        media_confirmed = st.checkbox(
+            "我确认这些本地媒体有分析权限，仅用于内部选题研究",
+            value=False,
+            key="trend_local_media_authorized",
+        )
+    analyze_clicked = st.button(
+        "批量分析候选内容",
+        type="primary",
+        disabled=(implementation_id == "local_qwen_paraformer" and not media_confirmed),
+        key="trend_run_content_analysis",
+    )
+    if analyze_clicked:
+        requests = []
+        for item in candidates[:candidate_count]:
+            artifacts = artifact_mapping.get(item.item_id, {})
+            if isinstance(artifacts, str):
+                artifacts = {"video": artifacts}
+            if not isinstance(artifacts, dict):
+                artifacts = {}
+            requests.append(
+                ContentAnalysisRequest(
+                    item_id=item.item_id,
+                    video_id=item.video_id,
+                    title=item.title,
+                    author=item.author,
+                    hashtags=item.hashtags,
+                    raw_text=item.raw_text,
+                    account_profile=account_profile,
+                    media_access_mode=(
+                        "local_media_authorized"
+                        if implementation_id == "local_qwen_paraformer"
+                        else "metadata_only"
+                    ),
+                    local_video_path=str(artifacts.get("video") or ""),
+                    qwen_analysis_path=str(artifacts.get("qwen") or ""),
+                    transcript_path=str(artifacts.get("transcript") or ""),
+                    scene_alignment_path=str(artifacts.get("scenes") or ""),
+                )
+            )
+        with st.spinner("正在分析内容结构、展示方式与账号相关度..."):
+            result = ContentAnalysisBatchService(repository).analyze(
+                requests,
+                implementation_id=implementation_id,
+                allow_metadata_fallback=True,
+                run_local_toolchain=run_toolchain,
+            )
+        st.success(
+            f"分析完成：完整 {result.completed_count}，降级 {result.degraded_count}，"
+            f"失败 {result.failed_count}，缓存命中 {result.cached_count}。"
+        )
+        for error in result.errors:
+            st.warning(error)
+    analyses = repository.list_content_analyses(
+        account_uuid=account_profile.account_uuid,
+        limit=200,
+    )
+    if analyses:
+        st.dataframe(
+            [
+                {
+                    "视频": item.title,
+                    "状态": item.status,
+                    "实现": item.provider_id,
+                    "展示方式": item.presentation_type,
+                    "钩子": item.hook_type,
+                    "节奏": item.pacing,
+                    "账号相关度": item.relevance.score if item.relevance else None,
+                    "相关度置信度": (
+                        item.relevance.confidence if item.relevance else None
+                    ),
+                    "主题": "、".join(item.topic_labels),
+                }
+                for item in analyses
             ],
             width="stretch",
             hide_index=True,

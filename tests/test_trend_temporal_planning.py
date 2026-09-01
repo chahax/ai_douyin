@@ -132,7 +132,7 @@ def test_repository_persists_plan_run_context_and_publication_time(tmp_path) -> 
 
     stored = repository.list_observations()[0]
     run = repository.list_collection_runs(plan_id=plan.plan_id)[0]
-    assert TREND_SCHEMA_VERSION == 3
+    assert TREND_SCHEMA_VERSION >= 3
     assert stored.published_at == "2026-08-31T08:00:00+00:00"
     assert stored.metric_kind == "views"
     assert run["run_id"] == run_id

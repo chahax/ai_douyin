@@ -14,6 +14,10 @@ from typing import Iterator
 from src.shared.config import settings
 
 from .models import (
+    AccountContentRelevance,
+    ContentAnalysisBatchResult,
+    ContentEvidence,
+    ContentSegment,
     PublishedContentContext,
     TrendBrief,
     TrendCluster,
@@ -21,6 +25,7 @@ from .models import (
     TrendTagRelation,
     TrendTagTrafficSnapshot,
     VideoMetricSnapshot,
+    VideoContentAnalysis,
     utc_now_iso,
 )
 from .collection.planner import AccountCollectionPlan
@@ -28,7 +33,7 @@ from .collection.planner import AccountCollectionPlan
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DB_PATH = PROJECT_ROOT / "data" / "trend_intelligence.db"
-TREND_SCHEMA_VERSION = 3
+TREND_SCHEMA_VERSION = 4
 
 
 SCHEMA_SQL = """
@@ -62,6 +67,36 @@ CREATE TABLE IF NOT EXISTS trend_collection_plans (
     payload_json TEXT NOT NULL,
     created_at TEXT NOT NULL,
     updated_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS trend_content_analyses (
+    analysis_id TEXT PRIMARY KEY,
+    item_id TEXT NOT NULL,
+    video_id TEXT NOT NULL DEFAULT '',
+    account_uuid TEXT NOT NULL,
+    profile_version INTEGER NOT NULL,
+    provider_id TEXT NOT NULL,
+    provider_version TEXT NOT NULL,
+    input_fingerprint TEXT NOT NULL,
+    status TEXT NOT NULL,
+    presentation_type TEXT NOT NULL DEFAULT 'unknown',
+    relevance_score REAL,
+    payload_json TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS trend_content_analysis_batches (
+    batch_id TEXT PRIMARY KEY,
+    implementation_id TEXT NOT NULL,
+    account_uuid TEXT NOT NULL,
+    requested_count INTEGER NOT NULL,
+    completed_count INTEGER NOT NULL,
+    degraded_count INTEGER NOT NULL,
+    failed_count INTEGER NOT NULL,
+    cached_count INTEGER NOT NULL,
+    payload_json TEXT NOT NULL,
+    created_at TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS trend_items (
@@ -234,6 +269,10 @@ CREATE INDEX IF NOT EXISTS idx_tag_traffic_timeline
     ON trend_tag_traffic_snapshots(tag, sort_key, collected_at);
 CREATE INDEX IF NOT EXISTS idx_collection_plans_account
     ON trend_collection_plans(account_uuid, created_at);
+CREATE INDEX IF NOT EXISTS idx_content_analysis_account
+    ON trend_content_analyses(account_uuid, profile_version, created_at);
+CREATE INDEX IF NOT EXISTS idx_content_analysis_item
+    ON trend_content_analyses(item_id, account_uuid, created_at);
 """
 
 
@@ -824,6 +863,110 @@ class TrendRepository:
             for row in rows
         ]
 
+    def save_content_analysis(self, analysis: VideoContentAnalysis) -> None:
+        now = utc_now_iso()
+        relevance_score = (
+            analysis.relevance.score if analysis.relevance is not None else None
+        )
+        with self.connection() as conn:
+            conn.execute(
+                """
+                INSERT INTO trend_content_analyses (
+                    analysis_id, item_id, video_id, account_uuid,
+                    profile_version, provider_id, provider_version,
+                    input_fingerprint, status, presentation_type,
+                    relevance_score, payload_json, created_at, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(analysis_id) DO UPDATE SET
+                    status = excluded.status,
+                    presentation_type = excluded.presentation_type,
+                    relevance_score = excluded.relevance_score,
+                    payload_json = excluded.payload_json,
+                    updated_at = excluded.updated_at
+                """,
+                (
+                    analysis.analysis_id,
+                    analysis.item_id,
+                    analysis.video_id,
+                    analysis.account_uuid,
+                    analysis.profile_version,
+                    analysis.provider_id,
+                    analysis.provider_version,
+                    analysis.input_fingerprint,
+                    analysis.status,
+                    analysis.presentation_type,
+                    relevance_score,
+                    json.dumps(asdict(analysis), ensure_ascii=False),
+                    analysis.created_at,
+                    now,
+                ),
+            )
+
+    def get_content_analysis(
+        self, analysis_id: str
+    ) -> VideoContentAnalysis | None:
+        with self.connection() as conn:
+            row = conn.execute(
+                "SELECT payload_json FROM trend_content_analyses WHERE analysis_id = ?",
+                (analysis_id,),
+            ).fetchone()
+        if row is None:
+            return None
+        return _content_analysis_from_dict(json.loads(row["payload_json"]))
+
+    def list_content_analyses(
+        self,
+        *,
+        account_uuid: str = "",
+        item_id: str = "",
+        limit: int = 1000,
+    ) -> list[VideoContentAnalysis]:
+        query = "SELECT payload_json FROM trend_content_analyses"
+        clauses: list[str] = []
+        params: list[object] = []
+        if account_uuid:
+            clauses.append("account_uuid = ?")
+            params.append(account_uuid)
+        if item_id:
+            clauses.append("item_id = ?")
+            params.append(item_id)
+        if clauses:
+            query += " WHERE " + " AND ".join(clauses)
+        query += " ORDER BY created_at DESC LIMIT ?"
+        params.append(max(1, min(int(limit), 100_000)))
+        with self.connection() as conn:
+            rows = conn.execute(query, params).fetchall()
+        return [
+            _content_analysis_from_dict(json.loads(row["payload_json"]))
+            for row in rows
+        ]
+
+    def save_content_analysis_batch(
+        self, result: ContentAnalysisBatchResult
+    ) -> None:
+        with self.connection() as conn:
+            conn.execute(
+                """
+                INSERT OR REPLACE INTO trend_content_analysis_batches (
+                    batch_id, implementation_id, account_uuid,
+                    requested_count, completed_count, degraded_count,
+                    failed_count, cached_count, payload_json, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    result.batch_id,
+                    result.implementation_id,
+                    result.account_uuid,
+                    result.requested_count,
+                    result.completed_count,
+                    result.degraded_count,
+                    result.failed_count,
+                    result.cached_count,
+                    json.dumps(asdict(result), ensure_ascii=False),
+                    result.created_at,
+                ),
+            )
+
     def save_analysis(
         self,
         clusters: list[TrendCluster],
@@ -1076,6 +1219,9 @@ class TrendRepository:
                 "plans": conn.execute(
                     "SELECT COUNT(*) FROM trend_collection_plans"
                 ).fetchone()[0],
+                "content_analyses": conn.execute(
+                    "SELECT COUNT(*) FROM trend_content_analyses"
+                ).fetchone()[0],
             }
 
 
@@ -1087,3 +1233,22 @@ def _json_string_list(value: str | None) -> list[str]:
     if not isinstance(parsed, list):
         return []
     return [str(item) for item in parsed if str(item)]
+
+
+def _content_analysis_from_dict(payload: dict[str, object]) -> VideoContentAnalysis:
+    data = dict(payload)
+    data["segments"] = [
+        ContentSegment(**item) for item in data.get("segments", [])
+    ]
+    data["evidence"] = [
+        ContentEvidence(**item) for item in data.get("evidence", [])
+    ]
+    relevance = data.get("relevance")
+    if isinstance(relevance, dict):
+        relevance_data = dict(relevance)
+        relevance_data["evidence"] = [
+            ContentEvidence(**item)
+            for item in relevance_data.get("evidence", [])
+        ]
+        data["relevance"] = AccountContentRelevance(**relevance_data)
+    return VideoContentAnalysis(**data)

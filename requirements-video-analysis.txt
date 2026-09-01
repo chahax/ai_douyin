@@ -1,0 +1,7 @@
+# Optional local video-understanding runtime.
+# Install after the main requirements into the project .venv.
+# Install the CUDA-compatible PyTorch build for this machine separately.
+transformers==5.8.1
+qwen-vl-utils==0.0.14
+scenedetect==0.7.1
+funasr==1.3.26

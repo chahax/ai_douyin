@@ -209,3 +209,79 @@ class TagFamilyTrendSignal:
     confidence: float
     direction: str
     latest_collected_at: str
+
+
+@dataclass(slots=True)
+class ContentEvidence:
+    channel: str
+    text: str
+    start_seconds: float | None = None
+    end_seconds: float | None = None
+    confidence: float = 0.0
+
+
+@dataclass(slots=True)
+class ContentSegment:
+    start_seconds: float
+    end_seconds: float
+    role: str
+    summary: str
+
+
+@dataclass(slots=True)
+class AccountContentRelevance:
+    score: float
+    confidence: float
+    matched_seed_keywords: list[str] = field(default_factory=list)
+    matched_profile_terms: list[str] = field(default_factory=list)
+    matched_topic_terms: list[str] = field(default_factory=list)
+    excluded_terms: list[str] = field(default_factory=list)
+    reasons: list[str] = field(default_factory=list)
+    evidence: list[ContentEvidence] = field(default_factory=list)
+
+
+@dataclass(slots=True)
+class VideoContentAnalysis:
+    analysis_id: str
+    item_id: str
+    video_id: str
+    account_uuid: str
+    profile_version: int
+    provider_id: str
+    provider_version: str
+    input_fingerprint: str
+    status: str
+    media_access_mode: str
+    title: str
+    content_summary: str
+    transcript_summary: str = ""
+    visual_summary: str = ""
+    topic_labels: list[str] = field(default_factory=list)
+    user_intents: list[str] = field(default_factory=list)
+    hook_type: str = "unknown"
+    hook_text: str = ""
+    presentation_type: str = "unknown"
+    presentation_features: list[str] = field(default_factory=list)
+    pacing: str = "unknown"
+    duration_seconds: float | None = None
+    segments: list[ContentSegment] = field(default_factory=list)
+    evidence: list[ContentEvidence] = field(default_factory=list)
+    uncertainties: list[str] = field(default_factory=list)
+    originality_boundaries: list[str] = field(default_factory=list)
+    relevance: AccountContentRelevance | None = None
+    created_at: str = field(default_factory=utc_now_iso)
+
+
+@dataclass(slots=True)
+class ContentAnalysisBatchResult:
+    batch_id: str
+    implementation_id: str
+    account_uuid: str
+    requested_count: int
+    completed_count: int
+    degraded_count: int
+    failed_count: int
+    cached_count: int
+    analyses: list[VideoContentAnalysis] = field(default_factory=list)
+    errors: list[str] = field(default_factory=list)
+    created_at: str = field(default_factory=utc_now_iso)
