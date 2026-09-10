@@ -1,0 +1,100 @@
+{
+  "schema": "approved_script_git_checkpoint/v1",
+  "created_at_bjt": "2026-09-10T19:54:49.439679+08:00",
+  "user_decision": "用户认可此版本，要求先传Git再制作改进候选",
+  "workflow_completed_at_bjt": "2026-09-10T19:28:20.169832+08:00",
+  "review_schema": "script_editorial_evidence_review/v2",
+  "candidate_sha256": "d72c433ce540b21212d1be3499643c1986a775053121baa1dd750ab672778cdb",
+  "evidence_sha256": "cd1c24075c27a145a583410a8ca78d965a2b37977e492eec813f82fbf4ab6814",
+  "text_review_status_at_export": "current_passed",
+  "short_seconds": 45,
+  "long_seconds": 180,
+  "video_generation_submitted": false,
+  "files": {
+    "short.screenplay.json": {
+      "source": "data/qa/new_rules_scripts_20260910/short_story_v4/screenplay.json",
+      "sha256": "380ee0ee53104b398c40035ada45565e2ea12f30d5d399721c99c17dac1375af",
+      "bytes": 11220,
+      "transform": "verbatim"
+    },
+    "short.production.json": {
+      "source": "data/qa/new_rules_scripts_20260910/short_production_v2/production.json",
+      "sha256": "8b5784041f5d84af073665f7e286d539a06e16d73af4b7eef2233c5f3f334e37",
+      "bytes": 4662,
+      "transform": "verbatim"
+    },
+    "short.story-review.json": {
+      "source": "data/qa/new_rules_scripts_20260910/short_story_v4/independent_review.json",
+      "sha256": "f00b82d4551079684abaa250deddfc7bce11198d6e5de4fcb5dcb54b344e3b06",
+      "bytes": 14364,
+      "transform": "verbatim"
+    },
+    "short.production-review.json": {
+      "source": "data/qa/new_rules_scripts_20260910/short_production_v2/independent_production_review.json",
+      "sha256": "b01734b7ecd167a31645505c70ad581f468a5d684192bf7d19150896659cbcbe",
+      "bytes": 10697,
+      "transform": "verbatim"
+    },
+    "long.screenplay.json": {
+      "source": "data/qa/new_rules_scripts_20260910/long_state_v5/screenplay.json",
+      "sha256": "61bdce41aacec88d463f3ea23ba5ac32671cfb97f82b39b5e72f1ea396319f68",
+      "bytes": 28834,
+      "transform": "verbatim"
+    },
+    "long.production.json": {
+      "source": "data/qa/new_rules_scripts_20260910/long_production_v3/production.json",
+      "sha256": "0250498e50008441572113080dc393f72f75bb375809e3333b49c76d6a597c93",
+      "bytes": 10731,
+      "transform": "verbatim"
+    },
+    "long.story-review.json": {
+      "source": "data/qa/new_rules_scripts_20260910/long_state_v5/root_independent_review.json",
+      "sha256": "97acacfffa248148656aa2194093aee6f3b649bf89c7b43deaa248f5dc67aa80",
+      "bytes": 26926,
+      "transform": "verbatim"
+    },
+    "long.production-review.json": {
+      "source": "data/qa/new_rules_scripts_20260910/long_production_v3/independent_production_review.json",
+      "sha256": "06e7175e5030ac4f379aaa7bb24536c90bdc011ef1cd1c255c7519a994db6e72",
+      "bytes": 24884,
+      "transform": "verbatim"
+    },
+    "pair.final-review.json": {
+      "source": "data/qa/new_rules_scripts_20260910/final_pair_v6_m3/_runs/3b762d33689a429f818d62766b59018f/review_1.json",
+      "sha256": "645666975c321ac4cf2d6b7afe0b0a4721f2b48200a3cbee21332d4625c09d38",
+      "bytes": 84046,
+      "transform": "verbatim"
+    },
+    "pair.accepted-model-response.json": {
+      "source": "data/qa/new_rules_scripts_20260910/final_pair_v6_m3/_runs/3b762d33689a429f818d62766b59018f/review_1_response_2.txt",
+      "sha256": "36b911abdbf56b9a542b40e6aef4d551d9c412575b4520f767b72692f354e628",
+      "bytes": 71125,
+      "transform": "verbatim"
+    },
+    "short.script.json": {
+      "source": "data/qa/new_rules_scripts_20260910/final_pair_v6_m3/detailed-script_277a213ef20f814390746981-short.json",
+      "sha256": "ae6d73e6788ff1058db78f209536bdfdad1874251f682be3a06ce8f927e10f6a",
+      "bytes": 189548,
+      "transform": "verbatim"
+    },
+    "long.script.json": {
+      "source": "data/qa/new_rules_scripts_20260910/final_pair_v6_m3/detailed-script_c9de71bcece86a1bd754ca12-long.json",
+      "sha256": "1039321339d0f92f0be524338b61d1f9737285569c85fe21948ef80c8332f1ad",
+      "bytes": 371381,
+      "transform": "verbatim"
+    },
+    "short.md": {
+      "source": "data/qa/new_rules_scripts_20260910/reviewable_scripts/短视频45秒_待用户审核.md",
+      "source_sha256": "acd6630fe31ba92d79d1af6190c4bbe0cd5b5216e7fcf5075c6299a93d014788",
+      "sha256": "6d01c5cb8ce2f7d1508ac9935064c53d01b3b66fea457ed99d55ef95f1f7962a",
+      "transform": "verbatim_fields_with_relative_script_link"
+    },
+    "long.md": {
+      "source": "data/qa/new_rules_scripts_20260910/reviewable_scripts/长视频180秒_待用户审核.md",
+      "source_sha256": "a6c035b5e8efae193d451d55ec824d1ae64c813c95b771c3284ade3de8034edd",
+      "sha256": "a87110ea5ac9e267132adab28dbbc014fac98106268f794346acaa7caf339671",
+      "transform": "verbatim_fields_with_relative_script_link"
+    }
+  },
+  "restoration_note": "归档包含原始剧本与审核响应；完整来源媒体、数据库、API凭据和运行缓存保留本地。迁移后的当前审核状态须重新核对原工作流及来源，不由此历史清单自动授予。"
+}

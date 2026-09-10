@@ -1,0 +1,106 @@
+{
+  "schema": "screenplay_production_editorial_review/v1",
+  "reviewer": "Codex independent evidence review",
+  "reviewed_at": "2026-09-10T17:38:46.356943+08:00",
+  "decision": "passed",
+  "story_sha256": "380ee0ee53104b398c40035ada45565e2ea12f30d5d399721c99c17dac1375af",
+  "story_review_sha256": "f00b82d4551079684abaa250deddfc7bce11198d6e5de4fcb5dcb54b344e3b06",
+  "production_sha256": "8b5784041f5d84af073665f7e286d539a06e16d73af4b7eef2233c5f3f334e37",
+  "compiled_sha256": "5bd6e15369b14a0f24a5e3355c23a1fd4cbd6b955530a7276062078007122d63",
+  "workflow_request_sha256": "881bd37e8506637512affd44322c572eb473bd8bbd6f6394629caba507298926",
+  "source_evidence_sha256": "1824df2bb832d1232ef9f02cb189ba8c42e753f9cd0608269d15fea73de0bb40",
+  "issues": [],
+  "checks": {
+    "story_preserved": true,
+    "fixed_spatial_camera": true,
+    "framing_and_subtitle_space": true,
+    "prop_state_not_overridden": true,
+    "performance_grounded": true,
+    "speaker_voice_instructions_consistent": true,
+    "source_interpretation_faithful": true,
+    "cut_state_continuity": true
+  },
+  "scene_review": {
+    "camera_angle_quote": "以陈守诚朝张敏的有向视线轴为左右参照，机位位于该轴线右侧、靠近桌中央并轻微偏向陈守诚一侧，保持轻俯角；两人脸部侧向轮廓、嘴部与桌面关键手区均可见，不沿视线轴拍摄、不过肩遮嘴、不越轴，两人仍朝向彼此、不为露脸转向镜头",
+    "composition_quote": "9:16固定双人中景，画面纵向覆盖两人头顶至桌面手部接触区，手与纸笔动作区位于画面底部字幕安全区上方",
+    "lighting_quote": "主光为右上方柔和日光灯冷白光，辅以左下方低位暖黄补光，桌面纸面均匀受光，背景茶室墙略压暗呈中性灰",
+    "finding": "同一有向视线轴右侧、桌中央旁略偏陈侧的固定轻俯机位与陈画面左/张画面右、两人隔桌相对相容；取景要求两人侧脸轮廓与嘴部可见，不要求转向镜头。脸部至桌面手区进入 9:16 中景，关键动作在底部字幕区上方，未要求读清纸面小字。原共享冷白主光、暖色补光保持连续。"
+  },
+  "shot_reviews": [
+    {
+      "shot_id": "S01",
+      "decision": "passed",
+      "action_quote": "陈守诚左手把P1推到桌面中央偏左，纸尾款与签名页正对张敏；右手越过P3上方，食指指向P1右下角签字栏。张敏视线从P2抬向P1，嘴唇未动。",
+      "dialogue_quote": "张总，这份您再过一遍。签完字，我明天就让工人进场。",
+      "composition_quote": "9:16固定双人中景，画面纵向覆盖两人头顶至桌面手部接触区，陈守诚在画面左侧、张敏在画面右侧，两人脸部轮廓与嘴部均在画面内，手与纸笔动作区位于画面底部字幕安全区上方",
+      "emotion_and_performance_quote": "陈守诚语气简短直接、节奏明快，落于催促落笔；张敏嘴闭，神色平稳",
+      "audio_quote": "场内对白；说话人：陈守诚；声线：中低音，语速中等偏快，措辞简短直接、节奏明快。",
+      "finding": "构图只规定脸嘴和桌面手区，不再把 P1 已推至中央当起点；催促语气与陈的实际条件安排相符，张闭嘴，视线仍由原动作控制。"
+    },
+    {
+      "shot_id": "S02",
+      "decision": "passed",
+      "action_quote": "张敏左手把P2推到桌面中央偏右，与P1左右错开并列；左手食指先点P1尾款数字、再点P2尾款数字。陈守诚右手收回搭在桌沿，左手也离开P1右下角回到桌沿，目光从P1移到P2。",
+      "dialogue_quote": "先等一下，尾款这条对不上。你那份四万二，我这份六万二。",
+      "composition_quote": "9:16固定双人中景，画面纵向覆盖两人头顶至桌面手部接触区，陈守诚在画面左侧、张敏在画面右侧，两人脸部轮廓与嘴部均在画面内，手与纸笔动作区位于画面底部字幕安全区上方",
+      "emotion_and_performance_quote": "张敏口型清晰、语速平稳连贯，语调为按数字差异提出核对；陈守诚嘴闭，眉间微收",
+      "audio_quote": "场内对白；说话人：张敏；声线：稳定中音，语速平稳连贯，表达清楚利落，先听后答，遇疑点当面核对。",
+      "finding": "构图未提前固定 P2 并列或手指悬停；张清楚提出差异，陈眉间微收没有另加目光跟随路线，原 S02 双手撤回动作保持。"
+    },
+    {
+      "shot_id": "S03",
+      "decision": "passed",
+      "action_quote": "陈守诚右手拿起P3，笔尖朝下指向P1签字栏。张敏左手从P2抬起，掌根压住P1右下角按住不动，目光直视陈守诚。",
+      "dialogue_quote": "工人都在等，材料也订了。今天先把这份落了，别的后面再谈。",
+      "composition_quote": "9:16固定双人中景，画面纵向覆盖两人头顶至桌面手部接触区，陈守诚在画面左侧、张敏在画面右侧，两人脸部轮廓与嘴部均在画面内，手与纸笔动作区位于画面底部字幕安全区上方",
+      "emotion_and_performance_quote": "陈守诚语气带催促、咬字紧，强调当天落笔不容拖；张敏嘴闭，神色不让步",
+      "audio_quote": "场内对白；说话人：陈守诚；声线：中低音，语速中等偏快，措辞简短直接、节奏明快。",
+      "finding": "画面容纳拿笔、按纸与双方表情的发生空间，没有把笔已在手或掌根已压纸写为全镜持态；催促与不让步表情有实际台词和动作支持。"
+    },
+    {
+      "shot_id": "S04",
+      "decision": "passed",
+      "action_quote": "张敏左手从P1收回至桌沿。陈守诚右手把P3从P1上方移到两人中间桌面、笔尖朝向张敏一侧搁平；目光落在P1尾款数字上。",
+      "dialogue_quote": "两份纸数字对不上，这字我不能落。先核对清楚再说。",
+      "composition_quote": "9:16固定双人中景，画面纵向覆盖两人头顶至桌面手部接触区，陈守诚在画面左侧、张敏在画面右侧，两人脸部轮廓与嘴部均在画面内，手与纸笔动作区位于画面底部字幕安全区上方",
+      "emotion_and_performance_quote": "张敏口型稳定、语气利落坚定，明确拒签并要求核对；陈守诚嘴闭，神情顿挫",
+      "audio_quote": "场内对白；说话人：张敏；声线：稳定中音，语速平稳连贯，表达清楚利落，先听后答，遇疑点当面核对。",
+      "finding": "P3 从陈手中落桌完全由原动作推进，构图不再写已落桌；拒签语气和陈的受挫表情未增加停顿时长或新视线。"
+    },
+    {
+      "shot_id": "S05",
+      "decision": "passed",
+      "action_quote": "陈守诚左手把P1拉回自己面前桌面左侧；张敏右手把P2拉回自己面前桌面右侧。两人目光从纸面抬起对视一瞬。",
+      "dialogue_quote": "行，今天这字咱不落。各自把这份带回去，核完再约。",
+      "composition_quote": "9:16固定双人中景，画面纵向覆盖两人头顶至桌面手部接触区，陈守诚在画面左侧、张敏在画面右侧，两人脸部轮廓与嘴部均在画面内，手与纸笔动作区位于画面底部字幕安全区上方",
+      "emotion_and_performance_quote": "陈守诚语气短促干脆，落于同意停签并约下次；张敏嘴闭",
+      "audio_quote": "场内对白；说话人：陈守诚；声线：中低音，语速中等偏快，措辞简短直接、节奏明快。",
+      "finding": "短促接受停签与实际对白一致；构图没有先把两份纸拉回，两人取回各自纸和短暂对视仍依原动作，不假演带回或离场。"
+    },
+    {
+      "shot_id": "S06",
+      "decision": "passed",
+      "action_quote": "陈守诚左手把P1左上角再向自己面前拢定；张敏右手把P2左上角再向自己面前拢定。两人目光各自落回自己那份合同尾款数字。",
+      "dialogue_quote": "好，核完再约。今天这字，咱俩都没落。",
+      "composition_quote": "9:16固定双人中景，画面纵向覆盖两人头顶至桌面手部接触区，陈守诚在画面左侧、张敏在画面右侧，两人脸部轮廓与嘴部均在画面内，手与纸笔动作区位于画面底部字幕安全区上方",
+      "emotion_and_performance_quote": "张敏口型平稳、语速不变，落于确认双方均未落字；陈守诚嘴闭",
+      "audio_quote": "场内对白；说话人：张敏；声线：稳定中音，语速平稳连贯，表达清楚利落，先听后答，遇疑点当面核对。",
+      "finding": "表演只确认本场均未签，未减慢语速或增加再次收笔、抬头等动作；构图允许已在本人面前的纸继续拢定，未重置起点。"
+    }
+  ],
+  "interpretation_review": {
+    "source_pattern_rationale_quote": "参考源7659321000265354511为面对面催款受阻结构：A0001为催付者反问质疑对方以甲方未付款为由转嫁压力，A0002–A0003串联家庭生计与工友压力并要求当天给付不容推脱；本片仅借用其催促、现实压力与当面受阻的表达机制，装修合同签字、四万二与六万二的金额差异、纸笔动作及当场停签决定均为本片原创；本稿对白不出现反问，不将来源主张当作已核实法律结论",
+    "finding": "来源被准确标为面对面催款受阻；A0001 与 A0002–A0003 的反问和现实压力归属来源，合同金额、纸笔与停签归属原创，不为模仿反问改变当前对白。账号契合说明未声称已加入咨询引导或双方已完成金额核实。"
+  },
+  "verification": {
+    "authorized_production_strings_changed": 15,
+    "compiled_photography_strings_changed": 19,
+    "other_compiled_fields_unchanged": true,
+    "production_patch_replayed": true,
+    "compile_screenplay_equals_saved_compiled": true,
+    "exact_inherited_cut_count": 5,
+    "duration_seconds": 45
+  },
+  "scope": "实际阅读全部 production 与六镜 compiled 摄影/表演/声音指令，并与已审 short_story_v4 及全部初末状态逐镜对照；程序重放真实模型补丁，确认未授权字段未改。本结论是摄影文本可执行性审核，不等同最终双稿总审或实际生成音视频通过。未生成媒体、未听看本候选的实际声音/口型/动作速度/字幕。",
+  "summary": "短摄影 v2 通过本次限域独立审核。原 v1 的末态提前、视线复写、机位参照及来源题材错误已消除；故事和五处首尾继承保持原样。"
+}
