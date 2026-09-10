@@ -535,3 +535,37 @@ def test_two_characters_wrong_spoken_endpoints_are_diagnosed_together_and_failur
     assert result['passed'] is False and result['checks']['shot_continuity'] is False
     assert result['format_attempts'] == 2
     assert all(kwargs['caller'] == 'pre_video_script_review' for _, kwargs in client.calls)
+
+
+@pytest.mark.parametrize('defect', ['other_stage', 'source_evidence', 'other_field'])
+def test_conflict_wrong_citation_location_is_explicit_and_diagnostics_do_not_select_quotes(review_case, defect):
+    payload, raw, _ = review_case
+    short = next(row for row in payload['scripts'] if row['format_kind'] == 'short')
+    if defect == 'source_evidence':
+        source = payload['evidence']['source_evidence'][0]
+        evidence = source['expression_analysis']['evidence'][0]
+        citation = {'source_id': source['source_id'], 'evidence_id': evidence['id'], 'quote': evidence['text']}
+    else:
+        shot = short['shots'][-1] if defect == 'other_stage' else short['shots'][0]
+        field = 'action' if defect == 'other_stage' else 'start_frame'
+        citation = {'script': 'short', 'shot_id': shot['shot_id'], 'field': field, 'quote': shot[field]}
+    group = raw['conflict_audit'][0]['evidence']['opening']
+    # Keep valid action/dialogue coverage: this extra wrong-stage citation was
+    # previously omitted from aggregate diagnostics despite failing the gate.
+    citation_index = len(group)
+    group.append(citation)
+    raw['checks']['spoken_fit'] = False
+    before = copy.deepcopy(raw)
+    with pytest.raises(ValueError, match='conflict_audit不得使用') as error:
+        module.validate_script_review_report(raw, payload)
+    detail = json.loads(str(error.value).split('；', 1)[1])
+    assert detail == {'location': 'short.conflict_audit.opening', 'citation_index': citation_index,
+        'received': {key: value for key, value in citation.items() if key != 'quote'},
+        'allowed_shot_ids': ['S01'], 'allowed_fields': ['action', 'dialogue'], 'expected_script': 'short'}
+    diagnostics = module._review_evidence_diagnostics(raw, payload)
+    assert len(diagnostics) == 1
+    assert diagnostics[0]['path'] == f'$.conflict_audit[0].evidence.opening[{citation_index}]'
+    assert all(diagnostics[0][key] == value for key, value in detail.items())
+    assert 'quote' not in json.dumps(diagnostics, ensure_ascii=False)
+    assert raw == before and raw['checks']['spoken_fit'] is False
+    assert module.plan_review_evidence_patch(raw, payload) is None

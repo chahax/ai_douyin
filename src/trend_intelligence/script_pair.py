@@ -923,6 +923,15 @@ def _review_conflict_coverage_detail(script, group, allowed, required, covered):
             'covered': sorted(covered), 'missing': sorted(required - covered)}
 
 
+def _review_conflict_location_detail(script, group, allowed, citation, citation_index):
+    return {'location': f'{script}.conflict_audit.{group}',
+            'citation_index': citation_index,
+            'received': {key: citation[key] for key in ('source_id', 'evidence_id', 'script', 'shot_id', 'field')
+                         if key in citation},
+            'allowed_shot_ids': sorted(allowed), 'allowed_fields': ['action', 'dialogue'],
+            'expected_script': script}
+
+
 def _review_character_endpoint_detail(script, name, endpoints, performance):
     required = list(endpoints)
     received = list(performance) if isinstance(performance, dict) else []
@@ -1122,11 +1131,13 @@ def _validate_script_review_report(report, payload, *, _evidence_errors=None):
             if not isinstance(refs, list) or not refs:
                 raise ValueError('conflict_audit各阶段必须引用真实动作和实际对白；'
                     + json.dumps(_review_conflict_coverage_detail(kind, group, allowed, required, covered), ensure_ascii=False))
-            for citation in refs:
+            for citation_index, citation in enumerate(refs):
                 _validate_review_citation(citation, payload)
                 if ('source_id' in citation or citation['script'] != kind
                         or citation['shot_id'] not in allowed or citation['field'] not in ('action', 'dialogue')):
-                    raise ValueError('conflict_audit不得使用别版、别阶段或元数据代替当前阶段的动作对白')
+                    raise ValueError('conflict_audit不得使用别版、别阶段或元数据代替当前阶段的动作对白；'
+                        + json.dumps(_review_conflict_location_detail(kind, group, allowed, citation, citation_index),
+                                     ensure_ascii=False))
                 covered.add(citation['field'])
             if not required <= covered:
                 raise ValueError('conflict_audit漏引当前阶段实际动作或对白；'
@@ -1305,15 +1316,21 @@ def _review_evidence_diagnostics(report, payload, *, limit=16):
             if any(actual_shots[(kind, shot_id)]['dialogue'] for shot_id in allowed):
                 required.add('dialogue')
             refs = groups.get(group)
-            for citation in refs if isinstance(refs, list) else []:
+            for citation_index, citation in enumerate(refs if isinstance(refs, list) else []):
+                if len(errors) >= limit:
+                    break
                 try:
                     _validate_review_citation(citation, payload)
                 except (TypeError, ValueError, KeyError):
                     continue
-                if ('source_id' not in citation and citation['script'] == kind
-                        and citation['shot_id'] in allowed and citation['field'] in ('action', 'dialogue')):
-                    covered.add(citation['field'])
-            if not required <= covered:
+                if ('source_id' in citation or citation['script'] != kind
+                        or citation['shot_id'] not in allowed or citation['field'] not in ('action', 'dialogue')):
+                    errors.append({'path': f'$.conflict_audit[{index}].evidence.{group}[{citation_index}]',
+                        'reason': '引用身份不属于当前版本、争议阶段或动作对白字段；不代选引文',
+                        **_review_conflict_location_detail(kind, group, allowed, citation, citation_index)})
+                    continue
+                covered.add(citation['field'])
+            if not required <= covered and len(errors) < limit:
                 errors.append({'path': f'$.conflict_audit[{index}].evidence.{group}',
                     'reason': '缺少当前阶段真实动作或对白引用；只列缺项，不代选或填入引文',
                     **_review_conflict_coverage_detail(kind, group, allowed, required, covered)})
