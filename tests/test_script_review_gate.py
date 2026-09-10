@@ -157,6 +157,11 @@ def test_missing_audit_retries_review_format_only_then_stops():
 def test_quote_typo_retry_identifies_field_and_keeps_failed_judgment():
     class TypoReviewer(EvidenceReviewer):
         def chat_completion_tracked(self, messages, **kwargs):
+            payload = json.loads(messages[1]['content'])
+            if payload.get('schema') == 'script_review_evidence_patch/v1':
+                self.calls.append((copy.deepcopy(messages), kwargs))
+                return json.dumps({target['path']: target['source_text']
+                    for target in payload['evidence_targets']}, ensure_ascii=False)
             raw = json.loads(super().chat_completion_tracked(messages, **kwargs))
             raw['checks']['spoken_fit'] = False
             if len(self.calls) == 1:
@@ -168,10 +173,10 @@ def test_quote_typo_retry_identifies_field_and_keeps_failed_judgment():
     result = module.review_pair(client, parse(pair_payload()),
                                 {'source_evidence': fixture_source_evidence()})
     assert len(client.calls) == 2
-    feedback = client.calls[1][0][-1]['content']
-    assert 'short.S01.audio' in feedback
-    assert 'source_context' in feedback and 'received_context' in feedback
-    assert '引文误增字' in feedback
+    patch_request = json.loads(client.calls[1][0][1]['content'])
+    assert patch_request['allowed_paths'] == ['/shot_audit/0/cross_field_evidence/audio']
+    assert patch_request['evidence_targets'][0]['required_match'] == 'full'
+    assert patch_request['parent_report']['shot_audit'][0]['cross_field_evidence']['audio'].endswith('引文误增字')
     assert result['passed'] is False and result['checks']['spoken_fit'] is False
     assert result['format_attempts'] == 2
 

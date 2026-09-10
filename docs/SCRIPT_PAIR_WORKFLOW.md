@@ -90,7 +90,7 @@
 
 结构合格只得到 `candidate_pending_independent_review`。工具保留 `model_output.json`、真实请求、反馈、完整来源副本及 `run.json` 中的 SHA、模型参数和北京时间起止时间；预检拒绝记录 `model_calls=0`。一次显式阶段调用不会因失败自行重跑模型。时间来自运行记录，不使用文件修改时间。
 
-有效故事候选需要返修时，向同一原工作流提供新的具体反馈，并追加 `--previous-screenplay "<上一版有效故事候选的screenplay.json>"`，输出到新目录。关联稿必须有同目录 `run.json`，与原工作流、完整来源、版本及候选字节 SHA 一致。只有格式失败的 `model_output.json` 不能冒充有效故事候选；保留其失败依据，在新的故事阶段处理。
+有效故事候选需要整稿重新构思时，可在 `--stage story` 下提供新的具体反馈，并追加 `--previous-screenplay "<上一版有效故事候选的screenplay.json>"`，输出到新目录。这仍是完整故事输出；只修已定位文字应使用下面的 `story-revise`。关联稿必须有同目录 `run.json`，与原工作流、完整来源、版本及候选字节 SHA 一致。只有格式失败的 `model_output.json` 不能冒充有效故事候选；保留其失败依据，在新的故事阶段处理。
 
 短稿实际审过后，用其模型原稿约束长稿的共同核心与人物，仍需单独审长稿：
 
@@ -99,6 +99,22 @@
 ```
 
 `--companion-screenplay` 验证相反版本候选的来源和运行绑定，不自动授予审核通过。两版必须保持相同核心、人物姓名和身份；长版至少比短版多3镜，并有实际增量。
+
+#### 完整故事只修指定文字：story-revise
+
+完整故事已经成立、只剩明确文字问题时，使用同一入口的 `story-revise`。例如只修第4镜的对白与动作（数组索引从0开始）：
+
+```powershell
+.\.venv\Scripts\python.exe scripts/run_screenplay_stage.py --stage story-revise --kind short --workflow-request "<同一原_runs/request.json路径>" --previous-screenplay "<同批有效父故事目录/screenplay.json>" --editor-feedback-file "<本轮指定文字问题.md路径>" --reference-source-id "<与父稿相同的详细来源ID1>" --reference-source-id "<与父稿相同的详细来源ID2>" --revise-field "/version/shots/3/dialogue" --revise-field "/version/shots/3/action" --output-dir "<data下不存在的新故事修订目录>"
+```
+
+允许路径复用剧情修订白名单：既有镜头的 `dialogue`、`action`、`beat`，角色的 `performance_arc`，以及版本的标题、剧情摘要、目标、阻碍、代价、结局、法律复核说明、场景和空间说明字符串。每次只能改显式列出的叶字段；schema、核心、人物姓名与身份、声线、镜号、说话人、时长、道具、来源引用及全部初末态均冻结。原 companion 自动继承并重新核验，不能另传 `--companion-screenplay` 替换它。
+
+模型只返回“精确 JSON pointer → 非空完整字符串”的 JSON 对象，键集合必须恰好等于本轮请求。路径必须带开头 `/`；缺值、多键、重复 JSON 键或路径、对象替换和不存在的路径均拒绝。程序复制父稿并仅替换所选叶字段，再执行完整 `validate_screenplay`。`model_output.json` 保存原始模型补丁，`story_revision.json` 保存解析后的补丁，`screenplay.json` 才是程序合并的完整新候选；不能把合并稿称为模型整稿原始响应。
+
+`run.json` 记录真实请求、模型调用、父稿与父运行记录 SHA、补丁 SHA、合并前后 SHA 和未选字段保留标志。读取修订候选时，逐层核验父稿、请求与模型输出，重放补丁并比较整稿；仅改 SHA 或“未变”标志不能绕过检查。新目录不覆盖旧稿，失败响应仍保留，失败候选不能作为下一轮有效父稿。
+
+成功合并仍只标 `candidate_pending_independent_review`。未指定字段冻结不等于语义通过：新动作可能与冻结状态、对白或人物设定冲突，必须按下一节重新逐镜审核完整新稿，并绑定合并稿的新 SHA。旧故事审核不能沿用；本阶段不自动启动摄影、正式双稿审核或视频。
 
 ### 2. 保存有原文证据的故事审核
 
@@ -204,7 +220,15 @@ loader 逐文件验证字节 SHA、原请求与完整来源绑定，再要求完
 
 随后仍必须经过现有 `parse_pair` 和 `review_pair`。正式报告为 `script_editorial_evidence_review/v2`，绑定本次实际送审稿件与证据规范 JSON 的 SHA。它保留十五项总 `checks`，并在完整逐镜 `shot_audit` 中增加 `cross_field_evidence`、`cross_checks` 和 `dialogue_action_note`：八项对应字段原文中，`dialogue`、`audio`、`camera_angle` 必须全文匹配；每镜另判 `dialogue_action`、`voice_performance`、`spatial` 三项。两版各有 `resolution`/`ending` 的 `result_audit`，还须完整填写逐版逐角色 `character_audit` 与每版一个 `conflict_audit`。任一专项失败都独立阻止通过，不能靠总检查为真覆盖。字段和证据范围详见 [正式双稿审核 v2](SCRIPT_CROSS_FIELD_REVIEW.md#正式双稿审核-v2-的证据覆盖)。
 
-故事审核的十三项与正式双稿的十五项总检查是两个不同协议，不合并成十九项。新最终规则同时用于网页、直接生成、续稿与 staged bundle 的正式审核；保存报告仍须用 `validate_saved_script_review_report` 对当前稿件和实际证据重验，旧 v1 不自动迁移。模型审稿格式失败仅按既有规则修复审稿格式，不改写故事。
+故事审核的十三项与正式双稿的十五项总检查是两个不同协议，不合并成十九项。新最终规则同时用于网页、直接生成、续稿与 staged bundle 的正式审核；保存报告仍须用 `validate_saved_script_review_report` 对当前稿件和实际证据重验，旧 v1 不自动迁移。模型审稿格式失败仅修复审稿格式，不改写故事。
+
+正式审稿先调用一次模型返回完整报告。若 JSON 已成功解析、结构与审核覆盖完整，而且错误仅为逐镜 `cross_field_evidence` 或角色审核中既有字符串引文不符，后续调用可只让模型返回指定 JSON pointer 到完整引文字符串的映射。程序严格合并所选引文，冻结所有判断、问题列表、摘要、发现、说明及其余字段，然后重新执行完整原审核门禁。缺结构、缺覆盖、问题列表或来源引用的错误继续走完整报告重试。所有形式合计最多3次模型调用，不增加额外编剧调用。
+
+后续新请求的 `validated_structure.required_audit_coverage` 从实际送审稿生成每版镜号、每角色全部发声镜号与按 `participants` 确定的首末入画镜号，以及各争议阶段可用镜号和需引用的 `action`/`dialogue` 类型。参与但沉默的角色仍有入画检查范围；全静默阶段仅要求动作类型。这份清单只帮助模型自查遗漏，不提供引文、判断或通过标志，不替代审核报告及严格覆盖校验。已保存的请求仍使用原 payload 重放，不回填新清单或改写历史 SHA。
+
+局部引文模型使用独立 `script_pair_review_evidence_patch.md`，不会替换正式审核提示词。如果真实引文会动摇原说明或判断，必须返回单键 `full_review_required` 及具体原因；有剩余次数时转完整复审，次数耗尽则失败，不能为维持通过而另挑一句引文。程序不自动补字，也不把“只改引文”视为语义通过。
+
+新运行保存实际 `review_N_request_M.json`、`review_N_response_M.txt`、补丁合并报告 `review_N_merged_M.json` 及 `review_N_attempt_chain.json`。最终报告的 `format_trace_sha256` 绑定完整修复链；链记录父报告、允许路径、各请求与原始响应、合并报告和独立提示词 SHA。保存恢复器逐轮重放真实响应并核验当前规则，缺原响应、越权修改或合并不一致都不能取得当前通过状态；已有修复链却删除其绑定，也不能降级走旧报告校验。未使用该新链的既有当前协议报告仍按原完整响应验证，不把历史报告改写成补丁链。
 
 此入口只作最终复核，`generation.method=staged_screenplay_bundle`、`generation_api_calls=0` 表示本次没有调用编剧，**不表示没有调用审稿模型**。它不运行作者补丁、自动调时或重写首态；`bundle.provenance.json`、编译稿、最终审稿与失败尝试记录均保留。两版同时通过才由原 service 写出正式 Markdown、JSON、来源审计和双稿清单，之后仍需代理实际复核并交用户审核。
 

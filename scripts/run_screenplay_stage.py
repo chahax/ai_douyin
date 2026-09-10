@@ -16,8 +16,11 @@ from src.trend_intelligence.script_outline import build_outline_messages
 from src.trend_intelligence.production_revision import (
     parse_unique_json, validate_production_revision_fields, apply_production_revision,
 )
+from src.trend_intelligence.script_drama import validate_revision_fields
+from src.trend_intelligence.story_revision import apply_story_revision
 
 MAX_PRODUCTION_LINEAGE = 64
+MAX_STORY_LINEAGE = 64
 
 
 def now():
@@ -39,22 +42,91 @@ def read_artifact(value):
 from src.trend_intelligence.script_screenplay import verify_story_review
 
 
-def read_related_story(value, kind, duration, *, workflow_sha, source_sha, sources):
+def read_related_story(value, kind, duration, *, workflow_sha, source_sha, sources,
+                       reference_source_ids=None, expected_run_sha='', _lineage=(), _verify_origin=False):
     """Use only a completed candidate from this workflow; this is not story approval."""
+    candidate = Path(value).resolve()
+    if candidate in _lineage or len(_lineage) >= MAX_STORY_LINEAGE:
+        raise ValueError('story revision lineage cycle or bounded depth exceeded')
     path, raw, data = read_artifact(value)
     run_path, run_raw, run = read_artifact(path.with_name('run.json'))
     if (not isinstance(run, dict) or run.get('schema') != 'script_screenplay_stage_run/v1'
-            or (run.get('stage') != 'story' and not (
+            or (run.get('stage') not in ('story', 'story-revise') and not (
                 run.get('stage') in ('state', 'state-revise') and run.get('pipeline') == 'drama_then_state/v1'
                 and (run.get('frozen_drama_preserved') is True if run.get('stage') == 'state'
                      else run.get('non_state_fields_preserved') is True))) or run.get('kind') != kind
             or run.get('status') != 'candidate_pending_independent_review'
             or run.get('candidate_sha256') != sha(raw)
             or run.get('workflow_request_sha256') != workflow_sha
-            or run.get('source_evidence_sha256') != source_sha):
+            or run.get('source_evidence_sha256') != source_sha
+            or (expected_run_sha and sha(run_raw) != expected_run_sha)):
         raise ValueError('关联稿须来自同一原工作流和来源批次、对应版本的已完成故事候选；不能沿用旧SHA或摄影产物')
     from src.trend_intelligence.script_screenplay import validate_screenplay
-    validate_screenplay(data, kind, duration, sources)
+    selection = reference_source_ids
+    if run.get('stage') == 'story-revise' or _verify_origin:
+        if run.get('stage') in ('state', 'state-revise'):
+            from scripts.run_screenplay_drama import read_state_screenplay
+            selected = run.get('reference_source_ids') if selection is None else selection
+            replay, *_ = read_state_screenplay(path, kind, duration, workflow_sha=workflow_sha,
+                source_sha=source_sha, sources=sources, reference_source_ids=selected,
+                expected_run_sha=sha(run_raw))
+            if replay != data:
+                raise ValueError('story state origin replay differs')
+            selection = selected
+        else:
+            if path.name != 'screenplay.json' or run.get('model_calls') != 1 or not isinstance(run.get('inputs'), dict):
+                raise ValueError('story revision requires a real completed story run')
+            _, request_raw, request = read_artifact(path.with_name('request.json'))
+            if (run.get('request_sha256') != sha(request_raw) or not isinstance(request, list)
+                    or len(request) != 2 or not isinstance(request[1], dict)):
+                raise ValueError('story request bytes or shape changed')
+            payload = parse_unique_json(request[1]['content'])
+            scope = payload.get('planning_evidence_scope', {})
+            selected = scope.get('reference_source_ids', []) if isinstance(scope, dict) else None
+            if (not isinstance(selected, list) or (selection is not None and selected != list(selection))):
+                raise ValueError('story revision reference selection changed')
+            selection = selected
+            _, model_raw, model = read_artifact(path.with_name('model_output.json'))
+            if run.get('model_output_sha256') != sha(model_raw):
+                raise ValueError('story model output bytes changed')
+            companion, companion_identity = None, run['inputs'].get('companion_screenplay')
+            if companion_identity is not None:
+                if not isinstance(companion_identity, dict) or not isinstance(companion_identity.get('path'), str):
+                    raise ValueError('story companion provenance is invalid')
+                other = 'long' if kind == 'short' else 'short'
+                companion, actual = read_related_story(companion_identity['path'], other,
+                    180 if other == 'long' else 45, workflow_sha=workflow_sha, source_sha=source_sha,
+                    sources=sources, _lineage=(*_lineage, path))
+                if actual != companion_identity or payload.get('companion_screenplay') != companion:
+                    raise ValueError('story companion bytes or request changed')
+            if run['stage'] == 'story-revise':
+                previous = run['inputs'].get('previous_screenplay')
+                if (not isinstance(previous, dict) or set(previous) != {'path', 'sha256', 'run_path', 'run_sha256'}
+                        or any(not isinstance(v, str) or not v for v in previous.values())
+                        or run.get('story_revision_before_sha256') != previous['sha256']
+                        or run.get('story_revision_after_sha256') != sha(raw)
+                        or run.get('unchanged_story_fields_preserved') is not True
+                        or run.get('reference_source_ids') != selection):
+                    raise ValueError('story revision parent provenance is invalid')
+                parent, identity = read_related_story(previous['path'], kind, duration,
+                    workflow_sha=workflow_sha, source_sha=source_sha, sources=sources,
+                    reference_source_ids=selection, expected_run_sha=previous['run_sha256'],
+                    _lineage=(*_lineage, path), _verify_origin=True)
+                _, _, parent_run = read_artifact(Path(previous['path']).with_name('run.json'))
+                if (identity != previous or payload.get('previous_screenplay') != parent
+                        or parent_run.get('inputs', {}).get('companion_screenplay') != companion_identity):
+                    raise ValueError('story revision parent bytes or inherited companion changed')
+                _, patch_raw, patch = read_artifact(path.with_name('story_revision.json'))
+                if (run.get('story_revision_output_sha256') != sha(patch_raw) or model != patch
+                        or payload.get('allowed_revision_fields') != run.get('allowed_revision_fields')):
+                    raise ValueError('story revision patch or requested fields changed')
+                replay = apply_story_revision(parent, patch, run.get('allowed_revision_fields'),
+                    kind, duration, sources, selection, companion)
+                if replay != data:
+                    raise ValueError('story revision replay differs; frozen fields changed')
+            elif model != data:
+                raise ValueError('original story differs from actual model output')
+    validate_screenplay(data, kind, duration, sources, reference_source_ids=selection or ())
     return data, {'path': str(path), 'sha256': sha(raw),
                   'run_path': str(run_path), 'run_sha256': sha(run_raw)}
 
@@ -135,7 +207,7 @@ def main():
     p.add_argument('--editor-feedback-file', required=True)
     p.add_argument('--output-dir', required=True)
     p.add_argument('--kind', choices=('short', 'long'), required=True)
-    p.add_argument('--stage', choices=('story', 'production', 'production-revise'), default='story')
+    p.add_argument('--stage', choices=('story', 'story-revise', 'production', 'production-revise'), default='story')
     p.add_argument('--reference-source-id', action='append', default=[])
     p.add_argument('--previous-screenplay', default='')
     p.add_argument('--companion-screenplay', default='')
@@ -157,8 +229,10 @@ def main():
     try:
         save('run.json',state)
         if ((args.stage == 'production-revise') != bool(args.previous_production)
-                or (args.stage == 'production-revise') != bool(args.revise_field)):
-            raise ValueError('production-revise requires previous-production and revise-field; other stages cannot use them')
+                or (args.stage in ('production-revise', 'story-revise')) != bool(args.revise_field)):
+            raise ValueError('revision stages require revise-field; previous-production is production-revise only')
+        if args.stage == 'story-revise' and (not args.previous_screenplay or args.companion_screenplay):
+            raise ValueError('story-revise requires previous-screenplay and inherits its original companion')
         workflow_path, workflow_raw, workflow = read_artifact(args.workflow_request)
         workflow_path.relative_to(ROOT / 'data/pre_video_scripts/_runs')
         if workflow_path.name != 'request.json':
@@ -209,9 +283,29 @@ def main():
                                    (args.companion_screenplay, 'companion_screenplay', opposite)):
                 if arg:
                     data, identity = read_related_story(arg, kind, evidence[f'{kind}_seconds'],
-                        workflow_sha=sha(workflow_raw), source_sha=sha(full_raw), sources=full_sources)
+                        workflow_sha=sha(workflow_raw), source_sha=sha(full_raw), sources=full_sources,
+                        reference_source_ids=args.reference_source_id if args.stage == 'story-revise' else None,
+                        _verify_origin=args.stage == 'story-revise')
                     evidence[key], state['inputs'][key] = data, identity
             prompt_name = 'script_screenplay.md'
+            if args.stage == 'story-revise':
+                previous_story = evidence['previous_screenplay']
+                fields = validate_revision_fields(previous_story, args.revise_field)
+                _, _, parent_run = read_artifact(Path(args.previous_screenplay).with_name('run.json'))
+                inherited = parent_run['inputs'].get('companion_screenplay')
+                if inherited is not None:
+                    companion, identity = read_related_story(inherited['path'], opposite,
+                        evidence[f'{opposite}_seconds'], workflow_sha=sha(workflow_raw),
+                        source_sha=sha(full_raw), sources=full_sources)
+                    if identity != inherited:
+                        raise ValueError('story revision inherited companion changed')
+                    evidence['companion_screenplay'] = companion
+                    state['inputs']['companion_screenplay'] = identity
+                state['allowed_revision_fields'] = list(fields)
+                state['reference_source_ids'] = list(args.reference_source_id)
+                state['story_revision_before_sha256'] = state['inputs']['previous_screenplay']['sha256']
+                evidence['allowed_revision_fields'] = list(fields)
+                prompt_name = 'script_screenplay_revision.md'
         # Editing requirements are last and apply to the actual requested stage.
         evidence['current_editor_feedback'] = evidence.pop('current_editor_feedback')
         messages = [{'role':'system','content':(ROOT / 'src/trend_intelligence/prompts' / prompt_name).read_text(encoding='utf-8')},
@@ -240,7 +334,12 @@ def main():
         if not raw:
             raise RuntimeError('模型未返回可用内容；没有候选，不自动重试')
         result=parse_unique_json(raw)
-        if args.stage == 'story':
+        if args.stage in ('story', 'story-revise'):
+            if args.stage == 'story-revise':
+                state['story_revision_output_sha256'] = save('story_revision.json', result)
+                result = apply_story_revision(previous_story, result, fields, args.kind,
+                    evidence['duration_seconds'], full_sources, args.reference_source_id,
+                    evidence.get('companion_screenplay'))
             validate_screenplay(result,args.kind,evidence['duration_seconds'],full_sources,
                                 reference_source_ids=args.reference_source_id)
             if args.companion_screenplay:
@@ -251,6 +350,9 @@ def main():
                 if args.kind == 'long' and len(result['version']['shots']) < len(companion['version']['shots'])+3:
                     raise ValueError('长版须至少比短版多3镜')
             state['candidate_sha256']=save('screenplay.json',result)
+            if args.stage == 'story-revise':
+                state['story_revision_after_sha256'] = state['candidate_sha256']
+                state['unchanged_story_fields_preserved'] = True
         else:
             if args.stage == 'production-revise':
                 state['production_revision_output_sha256'] = save('production_revision.json',result)

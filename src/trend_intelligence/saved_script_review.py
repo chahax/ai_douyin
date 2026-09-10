@@ -110,6 +110,50 @@ def require_current_saved_script_review(script_json_path, *, allowed_root=None):
         raise ValueError('绑定双稿工件不可读取或字段不完整，需按当前协议复核') from exc
 
 
+def _verify_review_attempt_chain(report, payload, prompt, trace, attempt, output_root):
+    """Replay actual full responses and model quote patches; trust no merged flag."""
+    from .script_pair import ScriptReviewRetryState, script_review_binding
+    from .review_evidence_patch import TRACE_SCHEMA
+
+    path = _within(trace / f'review_{attempt}_attempt_chain.json', output_root)
+    raw = path.read_bytes()
+    _require(hashlib.sha256(raw).hexdigest() == report.get('format_trace_sha256'),
+             '审稿格式修复链文件缺失绑定或已变化')
+    chain = _json(raw)
+    _require(isinstance(chain, dict) and set(chain) == {
+        'schema', 'candidate_sha256', 'evidence_sha256', 'prompt_sha256', 'attempts'}
+        and chain['schema'] == TRACE_SCHEMA
+        and all(chain.get(key) == value for key, value in script_review_binding(payload).items())
+        and chain['prompt_sha256'] == hashlib.sha256(prompt.encode('utf-8')).hexdigest()
+        and isinstance(chain['attempts'], list) and len(chain['attempts']) == report['format_attempts'],
+        '审稿格式修复链身份、规则或轮次不一致')
+    retry = ScriptReviewRetryState(payload, prompt)
+    for number, recorded in enumerate(chain['attempts'], 1):
+        request_path = _within(trace / f'review_{attempt}_request_{number}.json', output_root)
+        request_raw = request_path.read_bytes()
+        messages = _json(request_raw)
+        _require(_canonical(messages) == _canonical(retry.messages),
+                 '审稿修复请求与实际父报告、允许引文路径或当前提示词不一致')
+        response_path = _within(trace / f'review_{attempt}_response_{number}.txt', output_root)
+        response_raw = response_path.read_bytes()
+        _require(bool(response_raw), '审稿修复缺少真实模型响应')
+        replayed, effective = retry.consume(response_raw.decode('utf-8'), number)
+        replayed.update(request_sha256=hashlib.sha256(request_raw).hexdigest(),
+                        response_sha256=hashlib.sha256(response_raw).hexdigest(), merged_report_sha256=None)
+        if replayed['mode'] == 'evidence_patch' and effective is not None:
+            merged_path = _within(trace / f'review_{attempt}_merged_{number}.json', output_root)
+            merged_raw = merged_path.read_bytes()
+            _require(_canonical(_json(merged_raw)) == _canonical(effective),
+                     '已保存合并报告与原始父报告及模型引文补丁重放不一致')
+            replayed['merged_report_sha256'] = hashlib.sha256(merged_raw).hexdigest()
+        _require(_canonical(recorded) == _canonical(replayed),
+                 '保存报告与真实模型响应不一致：审稿格式修复链、请求、父报告或合并SHA不一致')
+        _require(replayed['valid'] is (number == len(chain['attempts'])),
+                 '审稿修复必须在首次完整验证完成时结束，最终轮不能仍未通过格式验证')
+    _require(retry.report is not None, '审稿格式修复链没有完整的严格验证结果')
+    return retry.report
+
+
 def _verify(items, allowed_root):
     from .pre_video_script import render_script_markdown
     from .script_pair import (CURRENT_SCRIPT_REVIEW_SCHEMA, SCRIPT_REVIEW_MAX_FORMAT_ATTEMPTS,
@@ -222,8 +266,15 @@ def _verify(items, allowed_root):
     format_attempt = report.get('format_attempts')
     _require(type(format_attempt) is int and 1 <= format_attempt <= SCRIPT_REVIEW_MAX_FORMAT_ATTEMPTS,
              '缺少真实审稿响应轮次')
-    raw_report = _read(_within(trace / f'review_{attempt}_response_{format_attempt}.txt', output_root))
-    raw_validated = validate_script_review_report(raw_report, payload)
+    if 'format_trace_sha256' in report:
+        raw_validated = _verify_review_attempt_chain(report, payload, prompt, trace, attempt, output_root)
+    else:
+        _require(not _within(trace / f'review_{attempt}_attempt_chain.json', output_root).exists(),
+                 '已存在审稿修复链但报告缺少绑定，不能降级为旧完整响应验证')
+        # Historical current-v2 full-report traces remain readable. A patch
+        # response cannot pass this branch as a complete raw review report.
+        raw_report = _read(_within(trace / f'review_{attempt}_response_{format_attempt}.txt', output_root))
+        raw_validated = validate_script_review_report(raw_report, payload)
     _require(all(report.get(key) == value for key, value in raw_validated.items()),
              '保存报告与真实模型响应不一致，需复核')
     return {'status': 'current_passed', 'current_passed': True, 'reason': '',

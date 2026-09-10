@@ -813,6 +813,26 @@ def _review_structural_facts(script_rows):
             raise ValueError('实际送审版本缺少镜头')
         for shot in row['shots']:
             _validate_shot_production(shot, names=names, kind=row['format_kind'])
+    coverage = {}
+    for row in script_rows:
+        shots = row['shots']
+        characters = []
+        for character in row['characters']:
+            name = character['name']
+            visible = [shot['shot_id'] for shot in shots if name in shot['participants']]
+            characters.append({'character_name': name,
+                'spoken_shot_ids': [shot['shot_id'] for shot in shots
+                                    if shot['dialogue_speaker'] == name and shot['dialogue']],
+                'first_last_visible_shot_ids': list(dict.fromkeys(visible[:1] + visible[-1:]))})
+        groups = {}
+        for group, roles in REVIEW_CONFLICT_GROUPS.items():
+            allowed = {shot_id for beat in row['story_beats'] if beat['role'] in roles
+                       for shot_id in beat['shot_ids']}
+            actual = [shot for shot in shots if shot['shot_id'] in allowed]
+            groups[group] = {'allowed_shot_ids': [shot['shot_id'] for shot in actual],
+                'required_evidence_fields': ['action'] + (['dialogue'] if any(shot['dialogue'] for shot in actual) else [])}
+        coverage[row['format_kind']] = {'shot_ids': [shot['shot_id'] for shot in shots],
+            'characters': characters, 'conflict_groups': groups}
     return {
         'closing_line_matches_own_last_dialogue': {
             row['format_kind']: row['closing_line'] == row['shots'][-1]['dialogue'] for row in script_rows},
@@ -821,6 +841,7 @@ def _review_structural_facts(script_rows):
         'narration_forbidden': True,
         'device_dialogue_requires_defined_character_and_in_scene_source': True,
         'verification': 'recomputed_from_current_review_scripts_not_inherited_approval',
+        'required_audit_coverage': coverage,
     }
 
 
@@ -915,7 +936,28 @@ def _review_character_endpoint_detail(script, name, endpoints, performance):
             'notice': '按participants判断该角色首末入画镜头，不按dialogue_speaker的首末发声镜头；只说明缺项，不代填表演引文。'}
 
 
+class _EvidenceQuoteErrors(ValueError):
+    def __init__(self, targets):
+        super().__init__('审核结构与覆盖有效，但已有字符串引文需模型逐字修正')
+        self.targets = targets
+
+
 def validate_script_review_report(report, payload):
+    return _validate_script_review_report(report, payload)
+
+
+def plan_review_evidence_patch(report, payload):
+    """Classify quote-only format failure without filling text or granting a pass."""
+    try:
+        _validate_script_review_report(report, payload, _evidence_errors=[])
+    except _EvidenceQuoteErrors as exc:
+        return exc.targets
+    except (TypeError, ValueError, KeyError, IndexError):
+        return None
+    return None
+
+
+def _validate_script_review_report(report, payload, *, _evidence_errors=None):
     """Validate evidence coverage and version binding; never infer meaning from a score."""
     if not isinstance(report, dict) or set(report) != REVIEW_RAW_FIELDS:
         raise ValueError('审稿须完整返回checks/issues/summary、两项SHA、shot_audit/result_audit/character_audit/conflict_audit')
@@ -982,16 +1024,24 @@ def validate_script_review_report(report, payload):
     shot_lookup = {(row['format_kind'], shot['shot_id']): shot
                    for row in payload['scripts'] for shot in row['shots']}
 
-    quote_matches = _review_quote_matches
+    def quote_matches(quote, original, *, full=False, empty=False, location='', path=''):
+        try:
+            _review_quote_matches(quote, original, full=full, empty=empty, location=location)
+        except ValueError:
+            if _evidence_errors is None or not isinstance(quote, str) or not isinstance(original, str) or not path:
+                raise
+            _evidence_errors.append({'path': path, 'source_text': original,
+                'required_match': 'full' if full else 'contiguous_excerpt', 'empty_allowed': empty})
 
-    for row in shots:
+    for index, row in enumerate(shots):
         actual = shot_lookup[(row['script'], row['shot_id'])]
         quotes, checks = row['cross_field_evidence'], row['cross_checks']
         if not isinstance(quotes, dict) or set(quotes) != set(REVIEW_CROSS_FIELDS):
             raise ValueError('cross_field_evidence必须逐镜覆盖全部指定字段')
         for field, quote in quotes.items():
             quote_matches(quote, actual[field], full=field in ('dialogue', 'audio', 'camera_angle'),
-                          empty=field == 'dialogue', location=f"{row['script']}.{row['shot_id']}.{field}")
+                          empty=field == 'dialogue', location=f"{row['script']}.{row['shot_id']}.{field}",
+                          path=f'/shot_audit/{index}/cross_field_evidence/{field}')
         if (not isinstance(checks, dict) or set(checks) != set(REVIEW_CROSS_CHECKS)
                 or any(check not in ('passed', 'failed') for check in checks.values())):
             raise ValueError('cross_checks必须明确审核对白动作、声音表演和空间关系，缺审或未知不得通过')
@@ -1002,7 +1052,7 @@ def validate_script_review_report(report, payload):
                         'dialogue_quotes', 'voice_quote', 'performance_quotes', 'assessment'}
     if not isinstance(characters, list):
         raise ValueError('character_audit必须逐版覆盖全部角色')
-    for row in characters:
+    for index, row in enumerate(characters):
         if not isinstance(row, dict) or set(row) != character_fields:
             raise ValueError('character_audit字段不完整或含未知字段')
         location = (_text(row, 'script'), _text(row, 'character_name'))
@@ -1018,12 +1068,18 @@ def validate_script_review_report(report, payload):
         if row['spoken_shot_ids'] != [shot['shot_id'] for shot in spoken]:
             raise ValueError('character_audit发声镜头须按实际顺序完整覆盖，不能遗漏或借用他人对白')
         expected_dialogue = {shot['shot_id']: shot['dialogue'] for shot in spoken}
-        if row['dialogue_quotes'] != expected_dialogue:
+        if not isinstance(row['dialogue_quotes'], dict) or set(row['dialogue_quotes']) != set(expected_dialogue):
             raise ValueError('character_audit须逐字覆盖该角色全部实际对白')
+        for shot_id, original in expected_dialogue.items():
+            quote_matches(row['dialogue_quotes'][shot_id], original, full=True,
+                location=f'{location[0]}.character.{name}.dialogue_quotes.{shot_id}',
+                path=f'/character_audit/{index}/dialogue_quotes/{shot_id}')
         quote_matches(row['performance_arc_quote'], character['performance_arc'], full=True,
-                      location=f'{location[0]}.character.{name}.performance_arc_quote')
+                      location=f'{location[0]}.character.{name}.performance_arc_quote',
+                      path=f'/character_audit/{index}/performance_arc_quote')
         quote_matches(row['voice_quote'], spoken[0]['audio'] if spoken else '', full=True, empty=not spoken,
-                      location=f'{location[0]}.character.{name}.voice_quote')
+                      location=f'{location[0]}.character.{name}.voice_quote',
+                      path=f'/character_audit/{index}/voice_quote')
         endpoints = {shot['shot_id']: shot for shot in (visible[:1] + visible[-1:])}
         performance = row['performance_quotes']
         if not isinstance(performance, dict) or set(performance) != set(endpoints):
@@ -1031,7 +1087,8 @@ def validate_script_review_report(report, payload):
                 + json.dumps(_review_character_endpoint_detail(location[0], name, endpoints, performance), ensure_ascii=False))
         for shot_id, quote in performance.items():
             quote_matches(quote, endpoints[shot_id]['emotion_and_performance'],
-                          location=f'{location[0]}.character.{name}.performance_quotes.{shot_id}')
+                          location=f'{location[0]}.character.{name}.performance_quotes.{shot_id}',
+                          path=f'/character_audit/{index}/performance_quotes/{shot_id}')
         _text(row, 'assessment')
     if seen != expected_characters:
         raise ValueError('character_audit漏审实际角色')
@@ -1076,6 +1133,8 @@ def validate_script_review_report(report, payload):
                     + json.dumps(_review_conflict_coverage_detail(kind, group, allowed, required, covered), ensure_ascii=False))
     if seen != set(versions):
         raise ValueError('conflict_audit漏审版本')
+    if _evidence_errors:
+        raise _EvidenceQuoteErrors(_evidence_errors)
     validated = copy.deepcopy(report)
     validated['schema'] = CURRENT_SCRIPT_REVIEW_SCHEMA
     validated['passed'] = (all(report['checks'].values()) and not report['issues']
@@ -1087,7 +1146,8 @@ def validate_script_review_report(report, payload):
 def validate_saved_script_review_report(report, payload):
     """Recheck a saved report against the current exact review payload, not its saved flag."""
     raw_fields = REVIEW_RAW_FIELDS
-    saved_fields = {'schema', 'passed', 'format_attempts', 'prompt_sha256', 'legal_review_status', 'source_review_scope'}
+    saved_fields = {'schema', 'passed', 'format_attempts', 'prompt_sha256', 'legal_review_status', 'source_review_scope',
+                    'format_trace_sha256'}
     if (not isinstance(report, dict) or not raw_fields.issubset(report)
             or set(report) - raw_fields - saved_fields
             or report.get('schema') != CURRENT_SCRIPT_REVIEW_SCHEMA
@@ -1206,6 +1266,27 @@ def _review_evidence_diagnostics(report, payload, *, limit=16):
             errors.append({'path': f'$.character_audit[{index}].performance_quotes',
                 'reason': '角色表演引文镜号未覆盖实际首末入画镜头',
                 **_review_character_endpoint_detail(kind, name, endpoints, performance)})
+        character = next(c for c in versions[kind]['characters'] if c['name'] == name)
+        spoken = [shot for shot in versions[kind]['shots'] if shot['dialogue_speaker'] == name and shot['dialogue']]
+        quote_targets = [
+            ('performance_arc_quote', row.get('performance_arc_quote'), character['performance_arc'], True, False),
+            ('voice_quote', row.get('voice_quote'), spoken[0]['audio'] if spoken else '', True, not spoken)]
+        dialogue = row.get('dialogue_quotes')
+        if isinstance(dialogue, dict):
+            quote_targets.extend((f'dialogue_quotes.{shot["shot_id"]}', dialogue[shot['shot_id']],
+                shot['dialogue'], True, False) for shot in spoken if shot['shot_id'] in dialogue)
+        if isinstance(performance, dict):
+            quote_targets.extend((f'performance_quotes.{shot_id}', performance[shot_id],
+                shot['emotion_and_performance'], False, False)
+                for shot_id, shot in endpoints.items() if shot_id in performance)
+        for field, quote, original, full, empty in quote_targets:
+            if len(errors) >= limit:
+                break
+            try:
+                _review_quote_matches(quote, original, full=full, empty=empty,
+                    location=f'{kind}.character.{name}.{field}')
+            except ValueError as exc:
+                record(f'$.character_audit[{index}].{field}', exc)
     conflicts = report.get('conflict_audit', []) if isinstance(report, dict) else []
     for index, row in enumerate(conflicts if isinstance(conflicts, list) else []):
         if len(errors) >= limit:
@@ -1258,6 +1339,83 @@ def _review_format_feedback(exc, response, *, evidence_diagnostics=None):
     return feedback
 
 
+class ScriptReviewRetryState:
+    """One bounded report/quote-patch chain, shared by live calls and saved replay."""
+
+    def __init__(self, payload, prompt):
+        self.payload = payload
+        self.full_messages = [{'role': 'system', 'content': prompt},
+            {'role': 'user', 'content': json.dumps(payload, ensure_ascii=False)}]
+        self.messages = copy.deepcopy(self.full_messages)
+        self.mode, self.parent, self.parent_attempt, self.targets = 'full_report', None, None, []
+        self.report = None
+        self.error = None
+
+    def consume(self, response, attempt):
+        from .review_evidence_patch import (FullReviewRequired, apply_evidence_patch,
+            build_evidence_patch_messages, canonical_sha)
+        mode, parent, parent_attempt, targets = self.mode, self.parent, self.parent_attempt, self.targets
+        record = {'attempt': attempt, 'mode': mode, 'parent_attempt': parent_attempt,
+            'parent_report_sha256': canonical_sha(parent) if parent is not None else None,
+            'allowed_paths': [target['path'] for target in targets],
+            'patch_prompt_sha256': hashlib.sha256(self.messages[0]['content'].encode('utf-8')).hexdigest()
+                if mode == 'evidence_patch' else None,
+            'effective_report_sha256': None, 'valid': False, 'full_review_required': None}
+        effective, force_full = None, None
+        try:
+            if not response:
+                raise ValueError('审稿模型没有返回内容')
+            model_value = _parse_script_review_json(response)
+            if mode == 'evidence_patch':
+                effective = apply_evidence_patch(parent, model_value, targets)
+            else:
+                effective = model_value
+            record['effective_report_sha256'] = canonical_sha(effective)
+            self.report = validate_script_review_report(effective, self.payload)
+            record['valid'] = True
+            self.error = None
+        except FullReviewRequired as exc:
+            self.error, force_full = exc, str(exc)
+            record['full_review_required'] = force_full
+        except (TypeError, ValueError) as exc:
+            self.error = exc
+        if record['valid']:
+            return record, effective
+        if mode == 'full_report':
+            diagnostics = _review_evidence_diagnostics(effective, self.payload) if effective is not None else None
+            self.full_messages.extend([{'role': 'assistant', 'content': response},
+                {'role': 'user', 'content': _review_format_feedback(self.error, response,
+                    evidence_diagnostics=diagnostics)}])
+        if force_full:
+            self.full_messages.append({'role': 'user', 'content':
+                '引文修复模型认为真实引文可能改变原审核结论，不能仅修引文维持既有判断。'
+                '请对同一原稿与证据完整重新审核；不得改稿或忽略实质失败。原因：' + force_full
+                + '\n需重新核对的父报告（仅作为历史记录，不代表通过）：'
+                + json.dumps(parent, ensure_ascii=False)})
+            self.mode, self.parent, self.parent_attempt, self.targets = 'full_report', None, None, []
+            self.messages = copy.deepcopy(self.full_messages)
+        else:
+            planned = plan_review_evidence_patch(effective, self.payload) if effective is not None else None
+            if planned:
+                self.mode, self.parent, self.parent_attempt, self.targets = 'evidence_patch', effective, attempt, planned
+                self.messages = build_evidence_patch_messages(effective, self.payload, planned)
+            elif mode == 'evidence_patch' and effective is None:
+                # Bad patch JSON/mapping does not erase its true parent or open
+                # permission to rewrite a decision. Retry the same leaf scope.
+                self.messages = build_evidence_patch_messages(parent, self.payload, targets)
+                self.messages.extend([{'role': 'assistant', 'content': response},
+                    {'role': 'user', 'content': '补丁格式错误：' + str(self.error)
+                     + '。仍只返回同一allowed_paths的完整字符串映射；若真实引文动摇判断，返回full_review_required。'}])
+            else:
+                if mode == 'evidence_patch':
+                    self.full_messages.append({'role': 'user', 'content':
+                        '局部引文补丁后完整门禁仍发现结构问题，须完整复审；不得修改剧本。'
+                        + _review_format_feedback(self.error, response)})
+                self.mode, self.parent, self.parent_attempt, self.targets = 'full_report', None, None, []
+                self.messages = copy.deepcopy(self.full_messages)
+        return record, effective
+
+
 def review_pair(client, scripts, evidence, *, trace_path=None):
     prompt = PROMPT_PATH.with_name('script_pair_review.md').read_text(encoding='utf-8')
     evidence = copy.deepcopy(evidence)
@@ -1286,32 +1444,41 @@ def review_pair(client, scripts, evidence, *, trace_path=None):
         payload['continuous_production'] = copy.deepcopy(shared)
     payload['validated_structure'] = _review_structural_facts(payload['scripts'])
     payload.update(script_review_binding(payload))
-    messages = [
-        {'role': 'system', 'content': prompt},
-        {'role': 'user', 'content': json.dumps(payload, ensure_ascii=False)}]
+    from .review_evidence_patch import TRACE_SCHEMA, trace_bytes
+    retry = ScriptReviewRetryState(payload, prompt)
+    chain = {'schema': TRACE_SCHEMA, **script_review_binding(payload),
+             'prompt_sha256': hashlib.sha256(prompt.encode('utf-8')).hexdigest(), 'attempts': []}
     for review_attempt in range(SCRIPT_REVIEW_MAX_FORMAT_ATTEMPTS):
+        messages = retry.messages
+        request_raw = trace_bytes(messages)
         if trace_path:
-            trace_path.with_name(f'{trace_path.stem}_request_{review_attempt+1}.json').write_text(
-                json.dumps(messages, ensure_ascii=False, indent=2), encoding='utf-8')
+            trace_path.with_name(f'{trace_path.stem}_request_{review_attempt+1}.json').write_bytes(request_raw)
         response = client.chat_completion_tracked(messages,
             caller='pre_video_script_review', temperature=0.1, json_mode=True, use_cache=False)
+        response_raw = (response or '').encode('utf-8')
         if trace_path:
-            trace_path.with_name(f'{trace_path.stem}_response_{review_attempt+1}.txt').write_text(response or '', encoding='utf-8')
+            trace_path.with_name(f'{trace_path.stem}_response_{review_attempt+1}.txt').write_bytes(response_raw)
         if not response:
             raise RuntimeError('审稿模型请求失败或未返回可用内容；停止重写，保留草稿，请检查模型连接或超时日志')
-        raw_report = None
-        try:
-            raw_report = _parse_script_review_json(response)
-            report = validate_script_review_report(raw_report, payload)
+        entry, effective = retry.consume(response, review_attempt + 1)
+        entry.update(request_sha256=hashlib.sha256(request_raw).hexdigest(),
+                     response_sha256=hashlib.sha256(response_raw).hexdigest(), merged_report_sha256=None)
+        if entry['mode'] == 'evidence_patch' and effective is not None:
+            merged_raw = trace_bytes(effective)
+            entry['merged_report_sha256'] = hashlib.sha256(merged_raw).hexdigest()
+            if trace_path:
+                trace_path.with_name(f'{trace_path.stem}_merged_{review_attempt+1}.json').write_bytes(merged_raw)
+        chain['attempts'].append(entry)
+        chain_raw = trace_bytes(chain)
+        if trace_path:
+            trace_path.with_name(f'{trace_path.stem}_attempt_chain.json').write_bytes(chain_raw)
+        if entry['valid']:
+            report = retry.report
             break
-        except (TypeError, ValueError) as exc:
-            if review_attempt == SCRIPT_REVIEW_MAX_FORMAT_ATTEMPTS - 1:
-                raise RuntimeError(f'审稿结果格式无效，未完成审稿，未修改剧本：{exc}') from exc
-            diagnostics = _review_evidence_diagnostics(raw_report, payload) if raw_report is not None else None
-            messages.extend([{'role':'assistant', 'content':response},
-                             {'role':'user', 'content': _review_format_feedback(
-                                 exc, response, evidence_diagnostics=diagnostics)}])
+        if review_attempt == SCRIPT_REVIEW_MAX_FORMAT_ATTEMPTS - 1:
+            raise RuntimeError(f'审稿结果格式无效，未完成审稿，未修改剧本：{retry.error}') from retry.error
     report['format_attempts'] = review_attempt + 1
+    report['format_trace_sha256'] = hashlib.sha256(chain_raw).hexdigest()
     report['prompt_sha256'] = hashlib.sha256(prompt.encode()).hexdigest()
     report['legal_review_status'] = 'pending_human_review'
     if evidence.get('script_reference_selection'):
