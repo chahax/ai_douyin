@@ -739,6 +739,8 @@ REVIEW_CHECKS = ('domain_fit', 'core_clear', 'opening_answered', 'ending_complet
 
 CURRENT_SCRIPT_REVIEW_SCHEMA = 'script_editorial_evidence_review/v2'
 SCRIPT_REVIEW_MAX_FORMAT_ATTEMPTS = 3
+SCRIPT_REVIEW_MAX_EVIDENCE_PATCH_ATTEMPTS = 2
+SCRIPT_REVIEW_MAX_TOTAL_ATTEMPTS = SCRIPT_REVIEW_MAX_FORMAT_ATTEMPTS + SCRIPT_REVIEW_MAX_EVIDENCE_PATCH_ATTEMPTS
 REVIEW_RAW_FIELDS = {'checks', 'issues', 'summary', 'candidate_sha256', 'evidence_sha256',
                      'shot_audit', 'result_audit', 'character_audit', 'conflict_audit'}
 REVIEW_CROSS_FIELDS = ('dialogue', 'audio', 'emotion_and_performance', 'blocking',
@@ -1367,8 +1369,20 @@ class ScriptReviewRetryState:
         self.mode, self.parent, self.parent_attempt, self.targets = 'full_report', None, None, []
         self.report = None
         self.error = None
+        self.mode_attempts = {'full_report': 0, 'evidence_patch': 0}
+
+    def assert_can_call(self, attempt):
+        if (type(attempt) is not int or attempt != sum(self.mode_attempts.values()) + 1
+                or attempt > SCRIPT_REVIEW_MAX_TOTAL_ATTEMPTS or self.report is not None):
+            raise ValueError('审稿调用轮次无效或已完成；总调用最多5次')
+        limits = {'full_report': SCRIPT_REVIEW_MAX_FORMAT_ATTEMPTS,
+                  'evidence_patch': SCRIPT_REVIEW_MAX_EVIDENCE_PATCH_ATTEMPTS}
+        if self.mode not in limits or self.mode_attempts[self.mode] >= limits[self.mode]:
+            raise ValueError(f'审稿{self.mode}调用余额已耗尽；完整报告最多3次，引文补丁最多2次')
 
     def consume(self, response, attempt):
+        self.assert_can_call(attempt)
+        self.mode_attempts[self.mode] += 1
         from .review_evidence_patch import (FullReviewRequired, apply_evidence_patch,
             build_evidence_patch_messages, canonical_sha)
         mode, parent, parent_attempt, targets = self.mode, self.parent, self.parent_attempt, self.targets
@@ -1465,7 +1479,11 @@ def review_pair(client, scripts, evidence, *, trace_path=None):
     retry = ScriptReviewRetryState(payload, prompt)
     chain = {'schema': TRACE_SCHEMA, **script_review_binding(payload),
              'prompt_sha256': hashlib.sha256(prompt.encode('utf-8')).hexdigest(), 'attempts': []}
-    for review_attempt in range(SCRIPT_REVIEW_MAX_FORMAT_ATTEMPTS):
+    for review_attempt in range(SCRIPT_REVIEW_MAX_TOTAL_ATTEMPTS):
+        try:
+            retry.assert_can_call(review_attempt + 1)
+        except ValueError as exc:
+            raise RuntimeError(f'审稿结果格式无效，未完成审稿，未修改剧本：{exc}；{retry.error}') from exc
         messages = retry.messages
         request_raw = trace_bytes(messages)
         if trace_path:
@@ -1492,7 +1510,7 @@ def review_pair(client, scripts, evidence, *, trace_path=None):
         if entry['valid']:
             report = retry.report
             break
-        if review_attempt == SCRIPT_REVIEW_MAX_FORMAT_ATTEMPTS - 1:
+        if review_attempt == SCRIPT_REVIEW_MAX_TOTAL_ATTEMPTS - 1:
             raise RuntimeError(f'审稿结果格式无效，未完成审稿，未修改剧本：{retry.error}') from retry.error
     report['format_attempts'] = review_attempt + 1
     report['format_trace_sha256'] = hashlib.sha256(chain_raw).hexdigest()

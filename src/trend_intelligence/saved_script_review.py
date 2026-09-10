@@ -157,6 +157,7 @@ def _verify_review_attempt_chain(report, payload, prompt, trace, attempt, output
 def _verify(items, allowed_root):
     from .pre_video_script import render_script_markdown
     from .script_pair import (CURRENT_SCRIPT_REVIEW_SCHEMA, SCRIPT_REVIEW_MAX_FORMAT_ATTEMPTS,
+                              SCRIPT_REVIEW_MAX_TOTAL_ATTEMPTS,
                               PROMPT_PATH, build_script_review_rows, parse_pair,
                               project_source_evidence, validate_saved_script_review_report,
                               validate_script_review_report)
@@ -264,7 +265,8 @@ def _verify(items, allowed_root):
     validated = validate_saved_script_review_report(report, payload)
     _require(validated['passed'] is True, '当前逐镜审核未通过，不能沿用历史通过状态')
     format_attempt = report.get('format_attempts')
-    _require(type(format_attempt) is int and 1 <= format_attempt <= SCRIPT_REVIEW_MAX_FORMAT_ATTEMPTS,
+    format_limit = SCRIPT_REVIEW_MAX_TOTAL_ATTEMPTS if 'format_trace_sha256' in report else SCRIPT_REVIEW_MAX_FORMAT_ATTEMPTS
+    _require(type(format_attempt) is int and 1 <= format_attempt <= format_limit,
              '缺少真实审稿响应轮次')
     if 'format_trace_sha256' in report:
         raw_validated = _verify_review_attempt_chain(report, payload, prompt, trace, attempt, output_root)
