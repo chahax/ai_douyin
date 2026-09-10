@@ -107,6 +107,8 @@ class VideoItem:
     publish_time: Optional[str] = None
     cover_url: Optional[str] = None
     stats: Optional[VideoStats] = None
+    account_uuid: str = ""
+    account_key: str = ""
 
 
 @dataclass

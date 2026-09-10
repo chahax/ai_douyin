@@ -58,6 +58,19 @@ class DouyinWarmupService:
     def get_account(self, account_id: str) -> WarmupAccount:
         return self._load_account(account_id)
 
+    def build_browser_session(
+        self, account_id: str, *, headless: bool = False
+    ) -> BrowserSession:
+        """Create a browser session backed by one account's isolated profile."""
+        account = self._load_account(account_id)
+        if account.status != "active":
+            raise ValueError(
+                f"账号 {account.account_id} 当前状态为 {account.status}，不能创建浏览器会话。"
+            )
+        config = self._build_session_config(account)
+        config.headless = headless
+        return BrowserSession(config)
+
     def list_accounts(self) -> list[WarmupAccount]:
         accounts_root = self.root_dir / "accounts"
         if not accounts_root.exists():
@@ -176,7 +189,9 @@ class DouyinWarmupService:
             raise ValueError("comment_scrolls 不能小于 0。")
 
         account = self._load_account(account_id)
-        session_id = datetime.now().strftime("%Y%m%d_%H%M%S")
+        if account.status != "active":
+            raise ValueError(f"账号 {account.account_id} 当前状态为 {account.status}，不能运行账号维护。")
+        session_id = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
         keyword_pool = account.keywords or DEFAULT_KEYWORDS
         selected_keyword = keyword.strip() or random.choice(keyword_pool)
         result = WarmupResult(
@@ -194,22 +209,38 @@ class DouyinWarmupService:
         likes_done = 0
         comment_likes_done = 0
         comment_opens_done = 0
+        seen_video_ids: set[str] = set()
 
         try:
             target_url = self._build_start_url(selected_keyword, mode, start_url=start_url, use_search=use_search)
             page = session.open_page(target_url)
             page.wait_for_timeout(random.randint(2500, 5000))
-            self._prepare_recommend_page(page)
+            content_ready = self._prepare_content_page(page, use_search=use_search)
 
             if self._looks_blocked(page):
                 account.login_status = "expired"
                 result.status = "blocked"
                 result.message = "检测到登录页、验证码或异常提示，已停止。"
+            elif not content_ready:
+                result.status = "parser_broken"
+                result.message = "没有进入包含真实 video_id 的视频页面，本次不计为有效账号维护。"
             else:
                 for index in range(max_videos):
                     if max_seconds is not None and time.time() - started_at >= max_seconds:
                         result.message = "达到本次任务时长上限。"
                         break
+
+                    identity = self._get_video_identity(page)
+                    video_id = str(identity.get("video_id") or "")
+                    if not video_id:
+                        result.status = "partial" if result.videos_seen else "parser_broken"
+                        result.message = "当前页面无法确认真实视频 ID，已停止并拒绝虚报浏览数量。"
+                        break
+                    if video_id in seen_video_ids:
+                        result.status = "partial" if result.videos_seen else "parser_broken"
+                        result.message = f"检测到重复视频 {video_id}，切换未生效，已停止。"
+                        break
+                    seen_video_ids.add(video_id)
 
                     has_comment_button = self._has_comment_entry(page)
                     video_timing = self._get_video_timing(page)
@@ -223,10 +254,10 @@ class DouyinWarmupService:
                         duration_ratio_max=duration_ratio_max,
                     )
                     watch_seconds = watch_plan["watch_seconds"]
-                    title = self._safe_eval(page, "document.title || ''")
-                    current_url = page.url
+                    title = str(identity.get("title") or "")
+                    current_url = str(identity.get("url") or page.url)
                     logger.info(
-                        f"养号浏览 {index + 1}/{max_videos}: watch={watch_seconds}s, "
+                        f"账号维护 {index + 1}/{max_videos}: video_id={video_id}, watch={watch_seconds}s, "
                         f"has_comment={has_comment_button}, duration={video_timing.get('duration_text', '')}, "
                         f"ratio={watch_plan.get('duration_ratio', '')}, reason={watch_plan.get('reason', '')}, "
                         f"live={video_timing.get('is_live', False)}, url={current_url}"
@@ -265,18 +296,20 @@ class DouyinWarmupService:
                     result.items.append(
                         {
                             "index": index + 1,
+                            "video_id": video_id,
                             "title": title,
-                        "url": current_url,
-                        "watch_seconds": watch_seconds,
-                        "has_comment_button": has_comment_button,
-                        "video_timing": video_timing,
-                        "watch_plan": watch_plan,
-                        "opened_comments": opened_comments,
-                        "comment_scrolls": comment_scrolls if opened_comments else 0,
-                        "comment_likes": comment_likes,
-                        "liked": liked,
-                    }
-                )
+                            "author": str(identity.get("author") or ""),
+                            "url": current_url,
+                            "watch_seconds": watch_seconds,
+                            "has_comment_button": has_comment_button,
+                            "video_timing": video_timing,
+                            "watch_plan": watch_plan,
+                            "opened_comments": opened_comments,
+                            "comment_scrolls": comment_scrolls if opened_comments else 0,
+                            "comment_likes": comment_likes,
+                            "liked": liked,
+                        }
+                    )
                     result.videos_seen += 1
 
                     if self._looks_blocked(page):
@@ -287,13 +320,19 @@ class DouyinWarmupService:
 
                     if index < max_videos - 1:
                         page.wait_for_timeout(random.randint(1000, 8000))
-                        self._scroll_to_next(page)
-                        page.wait_for_timeout(random.randint(1200, 3500))
+                        if not self._advance_to_distinct_video(page, seen_video_ids):
+                            result.status = "partial"
+                            result.message = "未能切换到新的真实视频，已停止并保留已验证记录。"
+                            break
 
             if result.status == "blocked" and keep_open_on_blocked and not headless:
                 self._wait_for_manual_resolution(session)
-                account.login_status = "logged_in"
-                result.message = f"{result.message} 已等待用户人工处理并保存浏览器会话。"
+                if not self._looks_blocked(page) and self._get_video_identity(page).get("video_id"):
+                    account.login_status = "logged_in"
+                    result.message = f"{result.message} 已完成人工处理并保存浏览器会话。"
+                else:
+                    account.login_status = "expired"
+                    result.message = f"{result.message} 人工处理后仍未通过页面验证。"
 
             if result.status == "completed" and not result.message:
                 result.message = "养号浏览完成。"
@@ -338,9 +377,131 @@ class DouyinWarmupService:
             return f"https://www.douyin.com/search/{quote(keyword)}?type=video"
         return DEFAULT_RECOMMEND_URL
 
+    def _prepare_content_page(self, page, *, use_search: bool) -> bool:
+        if re.search(r"/video/\d+", page.url):
+            return bool(self._get_video_identity(page).get("video_id"))
+        if use_search or "/search/" in page.url:
+            links = page.locator('a[href*="/video/"]')
+            if links.count() == 0:
+                return False
+            try:
+                links.first().click()
+            except Exception as exc:
+                logger.warning(f"打开首个搜索视频失败: {exc}")
+                return False
+            page.wait_for_timeout(random.randint(1800, 3200))
+        else:
+            self._prepare_recommend_page(page)
+        return bool(self._get_video_identity(page).get("video_id"))
+
+    def _get_video_identity(self, page) -> dict:
+        js = r"""
+        (() => {
+          const visible = el => {
+            if (!el) return false;
+            const style = getComputedStyle(el);
+            const rect = el.getBoundingClientRect();
+            return style.display !== 'none' && style.visibility !== 'hidden'
+              && rect.width > 0 && rect.height > 0;
+          };
+          const activeVideo = Array.from(document.querySelectorAll('video')).find(visible);
+          if (!activeVideo) return {};
+          let url = location.href || '';
+          let match = url.match(/\/video\/(\d+)/);
+          const activeContainer = activeVideo.closest('[data-e2e-vid], [data-e2e="feed-active-video"]');
+          const containerVideoId = activeContainer?.getAttribute('data-e2e-vid')
+            || String(activeContainer?.className || '').match(/(?:^|\s)video_(\d+)(?:\s|$)/)?.[1]
+            || '';
+          if (!match && /^\d+$/.test(containerVideoId)) {
+            match = ['', containerVideoId];
+            url = `https://www.douyin.com/video/${containerVideoId}`;
+          }
+          if (!match) {
+            const scope = activeVideo.closest('[data-e2e="feed-item"], article, li, [data-e2e], [class*="video"]')
+              || activeVideo.parentElement?.parentElement
+              || document;
+            const link = scope.querySelector?.('a[href*="/video/"]')
+              || Array.from(document.querySelectorAll('a[href*="/video/"]')).find(visible);
+            if (link) {
+              url = link.href || link.getAttribute('href') || url;
+              match = url.match(/\/video\/(\d+)/);
+            }
+          }
+          if (!match) return {};
+          const itemScope = activeVideo.closest('[data-e2e="feed-item"]') || document;
+          const titleNode = [
+            itemScope.querySelector('[data-e2e="video-desc"]'),
+            itemScope.querySelector('[class*="video-info-detail"]'),
+            document.querySelector('meta[property="og:title"]'),
+          ].find(Boolean);
+          const authorNode = itemScope.querySelector('[data-e2e="video-author"]')
+            || itemScope.querySelector('[class*="author"]');
+          const title = titleNode?.content || titleNode?.innerText || '';
+          return {
+            video_id: match[1],
+            url,
+            title: title.trim().slice(0, 500),
+            author: (authorNode?.innerText || '').trim().slice(0, 200),
+          };
+        })()
+        """
+        value = self._safe_eval(page, js, default={})
+        return value if isinstance(value, dict) else {}
+
+    def _advance_to_distinct_video(self, page, seen_video_ids: set[str]) -> bool:
+        for _ in range(3):
+            self._scroll_to_next(page)
+            page.wait_for_timeout(random.randint(1200, 3500))
+            video_id = str(self._get_video_identity(page).get("video_id") or "")
+            if video_id and video_id not in seen_video_ids:
+                return True
+        return False
+
     def _open_comment_area(self, page) -> bool:
         if self._is_comment_area_open(page):
             return True
+
+        # Current Douyin recommend UI (2026-08): the right action rail uses
+        # hashed classes and 24x24 SVGs.  Its numeric action groups are ordered
+        # as like, comment, favorite and share.  Mark the second group and use
+        # a real Playwright click so React receives trusted pointer events.
+        mark_js = r"""
+        (() => {
+          document.querySelectorAll('[data-warmup-comment-entry]').forEach(el =>
+            el.removeAttribute('data-warmup-comment-entry'));
+          const visible = el => {
+            const style = getComputedStyle(el);
+            const rect = el.getBoundingClientRect();
+            return style.display !== 'none' && style.visibility !== 'hidden'
+              && rect.width > 0 && rect.height > 0;
+          };
+          const numeric = /^\s*[\d.]+(?:万|亿)?\s*$/;
+          const groups = Array.from(document.querySelectorAll('div')).filter(el => {
+            const rect = el.getBoundingClientRect();
+            const text = (el.innerText || '').trim();
+            return visible(el)
+              && rect.x > innerWidth * 0.82
+              && rect.y > 180 && rect.y < innerHeight - 100
+              && rect.width >= 30 && rect.width <= 100
+              && rect.height >= 40 && rect.height <= 100
+              && numeric.test(text) && el.querySelector('svg');
+          }).sort((a, b) => a.getBoundingClientRect().y - b.getBoundingClientRect().y);
+          const unique = groups.filter((el, index) =>
+            !groups.some((other, otherIndex) => otherIndex < index && other.contains(el)));
+          if (unique.length < 2) return false;
+          unique[1].setAttribute('data-warmup-comment-entry', '1');
+          return true;
+        })()
+        """
+        if self._safe_eval(page, mark_js, default=False):
+            try:
+                page.locator('[data-warmup-comment-entry="1"]').click()
+                page.wait_for_timeout(random.randint(1000, 2200))
+                if self._is_comment_area_open(page):
+                    logger.info("已打开评论区。")
+                    return True
+            except Exception as exc:
+                logger.debug(f"新版评论入口点击失败，回退旧定位逻辑: {exc}")
 
         js = r"""
         (() => {
@@ -472,6 +633,22 @@ class DouyinWarmupService:
         js = r"""
         (() => {
           if (document.querySelector('#videoSideCard, #relatedVideoCard')) return true;
+          const visible = el => {
+            const style = getComputedStyle(el);
+            const rect = el.getBoundingClientRect();
+            return style.display !== 'none' && style.visibility !== 'hidden'
+              && rect.width > 0 && rect.height > 0;
+          };
+          const numeric = /^\s*[\d.]+(?:万|亿)?\s*$/;
+          const actionGroups = Array.from(document.querySelectorAll('div')).filter(el => {
+            const rect = el.getBoundingClientRect();
+            return visible(el) && rect.x > innerWidth * 0.82
+              && rect.y > 180 && rect.y < innerHeight - 100
+              && rect.width >= 30 && rect.width <= 100
+              && rect.height >= 40 && rect.height <= 100
+              && numeric.test((el.innerText || '').trim()) && el.querySelector('svg');
+          });
+          if (actionGroups.length >= 2) return true;
           const commentSvg = Array.from(document.querySelectorAll('svg[viewBox="0 0 99 99"]')).find(svg => {
             const pathText = Array.from(svg.querySelectorAll('path')).map(path => path.getAttribute('d') || '').join(' ');
             return /C-3\.56,3\.75|-2\.25,-1\.29|C-7\.29,-11\.25/.test(pathText);
@@ -628,6 +805,16 @@ class DouyinWarmupService:
         return clicked
 
     def _scroll_to_next(self, page) -> None:
+        # Prefer the visible next-video control in the current recommend UI.
+        # A real click is more reliable than synthetic wheel/keyboard events.
+        try:
+            next_button = page.locator('.xgplayer-playswitch-next')
+            if next_button.count() > 0:
+                next_button.first().click()
+                return
+        except Exception as exc:
+            logger.debug(f"下一条按钮点击失败，回退滚轮切换: {exc}")
+
         js = r"""
         (() => {
           const keyDown = new KeyboardEvent('keydown', {key: 'ArrowDown', code: 'ArrowDown', keyCode: 40, which: 40, bubbles: true});

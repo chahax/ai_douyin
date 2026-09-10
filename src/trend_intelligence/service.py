@@ -12,9 +12,17 @@ from .collection import (
     TrendCollectionPlanner,
 )
 from .models import PublishedContentContext, VideoMetricSnapshot
+from .models import ContentEvidence
+from .content_analysis.classification import score_account_relevance
+from .tag_graph import (
+    build_keyword_tag_relations,
+    build_tag_cooccurrence_relations,
+    build_tag_traffic_snapshots,
+)
 from .providers.base import TrendCollectionRequest, TrendCollectionResult, TrendProvider
 from .repository import TrendRepository
 from .source_policy import SourcePolicy
+from .sample_gate import batch_observations, require_sample
 
 
 class TrendOperationsService:
@@ -39,6 +47,43 @@ class TrendOperationsService:
         batch: PlannedCollectionBatch | None = None,
     ) -> tuple[str | None, TrendCollectionResult]:
         result = provider.collect(request, policy=policy)
+        if account_profile is not None and result.observations:
+            original_count = len(result.observations)
+            relevant = []
+            for item in result.observations:
+                relevance = score_account_relevance(
+                    account_profile,
+                    title=item.title,
+                    hashtags=item.hashtags,
+                    content_text=item.raw_text or item.title,
+                    evidence=[
+                        ContentEvidence(
+                            channel="visible_metadata",
+                            text=" ".join(
+                                part
+                                for part in (item.title, item.raw_text)
+                                if part
+                            )[:1500],
+                            confidence=0.8,
+                        )
+                    ],
+                )
+                item.relevance_score = relevance.score
+                item.relevance_terms = list(
+                    dict.fromkeys(
+                        relevance.matched_seed_keywords
+                        + relevance.matched_profile_terms
+                        + relevance.matched_topic_terms
+                    )
+                )
+                if relevance.score >= 30 and not relevance.excluded_terms:
+                    relevant.append(item)
+            result.observations = relevant
+            filtered_count = original_count - len(relevant)
+            result.warnings.append(
+                f"账号相关度预检：保留 {len(relevant)} 条，跳过 {filtered_count} 条不相关内容。"
+            )
+            self._rebuild_filtered_tag_graph(result, request)
         if not result.observations:
             return None, result
         run_id = self.repository.save_collection(
@@ -61,6 +106,30 @@ class TrendOperationsService:
             wave_kind=(batch.wave_kind if batch else ""),
         )
         return run_id, result
+
+    @staticmethod
+    def _rebuild_filtered_tag_graph(
+        result: TrendCollectionResult,
+        request: TrendCollectionRequest,
+    ) -> None:
+        relations, roots_by_tag = build_keyword_tag_relations(
+            result.observations,
+            max_tags_per_keyword=request.max_related_tags_per_keyword,
+            max_total_tags=request.max_total_related_tags,
+        )
+        observations_by_tag: dict[str, list] = {}
+        for item in result.observations:
+            if item.query_kind == "tag" and item.query_value:
+                observations_by_tag.setdefault(item.query_value, []).append(item)
+        result.tag_relations = relations + build_tag_cooccurrence_relations(
+            observations_by_tag,
+            roots_by_tag,
+        )
+        result.tag_traffic_snapshots = build_tag_traffic_snapshots(
+            observations_by_tag,
+            roots_by_tag,
+            limit_per_sort=request.limit_per_sort,
+        )
 
     def create_collection_plan(
         self,
@@ -150,8 +219,14 @@ class TrendOperationsService:
         preferred_topics: list[str] | None = None,
         account_profile: AccountProfile | None = None,
         limit: int = 2000,
+        collection_run_id: str = "",
     ):
-        observations = self.repository.list_observations(limit=limit)
+        observations = batch_observations(self.repository,
+            limit=limit,
+            run_id=collection_run_id,
+            account_uuid=(account_profile.account_uuid if account_profile else ""),
+        )
+        require_sample(observations)
         clusters, briefs = self.analyzer.analyze(
             observations,
             preferred_topics=preferred_topics or [],

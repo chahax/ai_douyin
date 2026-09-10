@@ -38,10 +38,19 @@ from .collection.planner import AccountCollectionPlan
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DB_PATH = PROJECT_ROOT / "data" / "trend_intelligence.db"
-TREND_SCHEMA_VERSION = 6
+TREND_SCHEMA_VERSION = 8
 
 
 SCHEMA_SQL = """
+CREATE TABLE IF NOT EXISTS trend_metric_confirmations (
+    confirmation_id TEXT PRIMARY KEY,
+    run_id TEXT NOT NULL,
+    account_uuid TEXT NOT NULL,
+    metric_kind TEXT NOT NULL,
+    confirmed_at TEXT NOT NULL,
+    statement TEXT NOT NULL,
+    observations_json TEXT NOT NULL
+);
 CREATE TABLE IF NOT EXISTS trend_collection_runs (
     run_id TEXT PRIMARY KEY,
     provider TEXT NOT NULL,
@@ -166,6 +175,9 @@ CREATE TABLE IF NOT EXISTS trend_observations (
     query_depth INTEGER NOT NULL DEFAULT 0,
     root_keywords_json TEXT NOT NULL DEFAULT '[]',
     hashtags_json TEXT NOT NULL DEFAULT '[]',
+    duration_seconds REAL,
+    relevance_score REAL,
+    relevance_terms_json TEXT NOT NULL DEFAULT '[]',
     UNIQUE(run_id, item_id, keyword, sort_key),
     FOREIGN KEY (run_id) REFERENCES trend_collection_runs(run_id),
     FOREIGN KEY (item_id) REFERENCES trend_items(item_id)
@@ -398,6 +410,9 @@ class TrendRepository:
             "metric_kind": "TEXT NOT NULL DEFAULT 'displayed_unknown'",
             "published_at": "TEXT NOT NULL DEFAULT ''",
             "published_at_text": "TEXT NOT NULL DEFAULT ''",
+            "duration_seconds": "REAL",
+            "relevance_score": "REAL",
+            "relevance_terms_json": "TEXT NOT NULL DEFAULT '[]'",
         }
         for name, definition in additions.items():
             if name not in existing:
@@ -461,6 +476,36 @@ class TrendRepository:
                 conn.execute(
                     f"ALTER TABLE published_content_context ADD COLUMN {name} {definition}"
                 )
+
+    def confirm_batch_likes(self, *, run_id: str, account_uuid: str, statement: str) -> dict:
+        """Record an explicit user's interpretation for this batch only, atomically."""
+        if not statement.strip() or not run_id or not account_uuid:
+            raise ValueError('指标确认必须包含批次、账号和用户确认原文')
+        with self.connection() as conn:
+            batch = conn.execute('SELECT account_uuid FROM trend_collection_runs WHERE run_id=?', (run_id,)).fetchone()
+            if batch is None or batch['account_uuid'] != account_uuid:
+                raise ValueError('指标确认的批次不属于该账号')
+            rows = conn.execute("SELECT id,item_id,keyword,sort_key,metric_kind,metric_text,metric_value,collected_at "
+                                "FROM trend_observations WHERE run_id=? AND metric_kind='displayed_unknown'", (run_id,)).fetchall()
+            if not rows:
+                raise ValueError('该批次没有待确认的展示指标')
+            record = dict(confirmation_id='metric-confirmation:' + uuid.uuid4().hex,
+                          run_id=run_id, account_uuid=account_uuid, metric_kind='likes_user_confirmed',
+                          confirmed_at=utc_now_iso(), statement=statement.strip(),
+                          observations=[dict(row) for row in rows])
+            conn.execute('INSERT INTO trend_metric_confirmations VALUES (?,?,?,?,?,?,?)',
+                         (record['confirmation_id'], run_id, account_uuid, record['metric_kind'],
+                          record['confirmed_at'], record['statement'], json.dumps(record['observations'], ensure_ascii=False)))
+            conn.execute("UPDATE trend_observations SET metric_kind='likes_user_confirmed' "
+                         "WHERE run_id=? AND metric_kind='displayed_unknown'", (run_id,))
+        return record
+
+    def list_metric_confirmations(self, *, run_id: str, account_uuid: str) -> list[dict]:
+        with self.connection() as conn:
+            rows = conn.execute('SELECT confirmation_id,run_id,metric_kind,confirmed_at,statement '
+                                'FROM trend_metric_confirmations WHERE run_id=? AND account_uuid=?',
+                                (run_id, account_uuid)).fetchall()
+        return [dict(row) for row in rows]
 
     def save_collection_plan(self, plan: AccountCollectionPlan) -> None:
         payload = json.dumps(plan.to_dict(), ensure_ascii=False)
@@ -638,7 +683,8 @@ class TrendRepository:
                         metric_kind, published_at, published_at_text,
                         query_kind, query_value, query_depth,
                         root_keywords_json, hashtags_json
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        ,duration_seconds, relevance_score, relevance_terms_json
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     ON CONFLICT(run_id, item_id, keyword, sort_key) DO UPDATE SET
                         sort_label = excluded.sort_label,
                         rank = excluded.rank,
@@ -654,6 +700,9 @@ class TrendRepository:
                         query_depth = excluded.query_depth,
                         root_keywords_json = excluded.root_keywords_json,
                         hashtags_json = excluded.hashtags_json
+                        ,duration_seconds = excluded.duration_seconds
+                        ,relevance_score = excluded.relevance_score
+                        ,relevance_terms_json = excluded.relevance_terms_json
                     """,
                     (
                         run_id,
@@ -674,6 +723,9 @@ class TrendRepository:
                         max(0, item.query_depth),
                         json.dumps(item.root_keywords, ensure_ascii=False),
                         json.dumps(item.hashtags, ensure_ascii=False),
+                        item.duration_seconds,
+                        item.relevance_score,
+                        json.dumps(item.relevance_terms, ensure_ascii=False),
                     ),
                 )
                 for ordinal, tag in enumerate(item.hashtags, start=1):
@@ -816,11 +868,15 @@ class TrendRepository:
             (tag, tag, captured_at, captured_at),
         )
 
-    def list_observations(self, limit: int = 2000) -> list[TrendObservation]:
+    def list_observations(
+        self,
+        limit: int = 2000,
+        *,
+        run_id: str = "",
+        account_uuid: str = "",
+    ) -> list[TrendObservation]:
         safe_limit = max(1, min(int(limit), 100_000))
-        with self.connection() as conn:
-            rows = conn.execute(
-                """
+        query = """
                 SELECT i.item_id, i.video_id, i.url, i.title, i.author,
                        o.run_id,
                        o.keyword, o.sort_key, o.sort_label, o.rank,
@@ -828,13 +884,26 @@ class TrendRepository:
                        o.metric_kind, o.published_at, o.published_at_text,
                        o.query_kind, o.query_value, o.query_depth,
                        o.root_keywords_json, o.hashtags_json
+                       ,o.duration_seconds, o.relevance_score,
+                       o.relevance_terms_json
                 FROM trend_observations o
                 JOIN trend_items i ON i.item_id = o.item_id
-                ORDER BY o.collected_at DESC, o.rank ASC
-                LIMIT ?
-                """,
-                (safe_limit,),
-            ).fetchall()
+                JOIN trend_collection_runs r ON r.run_id = o.run_id
+        """
+        clauses: list[str] = []
+        params: list[object] = []
+        if run_id:
+            clauses.append("o.run_id = ?")
+            params.append(run_id)
+        if account_uuid:
+            clauses.append("r.account_uuid = ?")
+            params.append(account_uuid)
+        if clauses:
+            query += " WHERE " + " AND ".join(clauses)
+        query += " ORDER BY o.collected_at DESC, o.rank ASC LIMIT ?"
+        params.append(safe_limit)
+        with self.connection() as conn:
+            rows = conn.execute(query, params).fetchall()
         return [
             TrendObservation(
                 item_id=row["item_id"],
@@ -859,6 +928,9 @@ class TrendRepository:
                 query_depth=row["query_depth"],
                 root_keywords=_json_string_list(row["root_keywords_json"]),
                 hashtags=_json_string_list(row["hashtags_json"]),
+                duration_seconds=row["duration_seconds"],
+                relevance_score=row["relevance_score"],
+                relevance_terms=_json_string_list(row["relevance_terms_json"]),
             )
             for row in rows
         ]

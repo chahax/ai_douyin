@@ -6,6 +6,7 @@ import argparse
 import json
 import os
 import sys
+import time
 from pathlib import Path
 
 
@@ -34,6 +35,14 @@ def main() -> None:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
     args = parse_args()
+    low_memory = os.environ.get("SOURCE_ANALYSIS_LOW_MEMORY", "0") == "1"
+    if low_memory:
+        for key in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS", "NUMEXPR_NUM_THREADS"):
+            os.environ[key] = "2"
+        import psutil
+        while psutil.virtual_memory().available < 6 * 2**30:
+            print("Waiting for memory before loading local ASR: need 6 GiB available", flush=True)
+            time.sleep(15)
     audio = args.audio.resolve()
     output = args.output.resolve()
     model_root = args.model_root.resolve()
@@ -47,15 +56,18 @@ def main() -> None:
         "device": "cpu",
         "disable_update": True,
     }
+    if low_memory:
+        model_options["ncpu"] = 2
     if not args.without_punctuation:
         model_options["punc_model"] = str(model_root / "ct-punc")
     model = AutoModel(
         **model_options,
     )
-    result = model.generate(input=str(audio), batch_size_s=60, hotword=args.hotword)
+    result = model.generate(input=str(audio), batch_size_s=15 if low_memory else 60, hotword=args.hotword)
     payload = {
         "schema": "local_video_transcript/v1",
         "audio": str(audio),
+        "runtime": {"low_memory": low_memory, "batch_size_s": 15 if low_memory else 60},
         "models": {
             "asr": "paraformer-zh",
             "vad": "fsmn-vad",

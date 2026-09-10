@@ -14,6 +14,7 @@ from src.trend_intelligence.models import (
 )
 
 from .base import ContentAnalysisRequest, stable_analysis_id
+from .artifacts import parse_model_json, sha256, transcript_evidence, validate_expression, verify_expression_evidence, require_no_semantic_rejection
 from .classification import (
     classify_hook,
     classify_presentation,
@@ -23,7 +24,7 @@ from .classification import (
 
 class LocalQwenParaformerProvider:
     provider_id = "local_qwen_paraformer"
-    provider_version = "v1"
+    provider_version = "v2"
     max_parallelism = 1
 
     def analyze(self, request: ContentAnalysisRequest) -> VideoContentAnalysis:
@@ -31,7 +32,10 @@ class LocalQwenParaformerProvider:
             raise PermissionError("local analysis requires local_media_authorized")
         if not request.qwen_analysis_path and not request.transcript_path:
             raise ValueError("local analysis requires a Qwen or transcript artifact")
+        if request.qwen_analysis_path:
+            require_no_semantic_rejection(request.qwen_analysis_path)
 
+        visual_payload = _read_json(request.qwen_analysis_path) if request.qwen_analysis_path else {}
         visual = _load_qwen(request.qwen_analysis_path) if request.qwen_analysis_path else {}
         transcript_payload = (
             _read_json(request.transcript_path) if request.transcript_path else {}
@@ -42,6 +46,15 @@ class LocalQwenParaformerProvider:
             else {}
         )
         transcript = _transcript_text(transcript_payload)
+        media = _media_evidence(request, visual_payload, transcript_payload)
+        expression = visual.get("expression_analysis") or {}
+        if expression:
+            expression = validate_expression(expression, expression.get("evidence") or [],
+                                             float(media.get("duration_seconds") or request.duration_seconds or 0))
+            if visual_payload.get("schema") == "local_qwen_frame_analysis/v2":
+                verify_expression_evidence(expression, _read_json(visual_payload["frame_manifest_path"]),
+                                           transcript_payload, visual_batches=visual_payload.get("batches") or [],
+                                           observation_review=visual_payload.get("observation_review"))
         visual_summary = str(visual.get("summary") or "").strip()
         visible_text = _strings(visual.get("visible_text"))
         editing_style = _strings(visual.get("editing_style"))
@@ -57,6 +70,11 @@ class LocalQwenParaformerProvider:
             )
         )
         evidence = _visual_evidence(visual)
+        if expression:
+            evidence = [ContentEvidence(channel=item["channel"], text=item["text"],
+                        start_seconds=item["start_seconds"], end_seconds=item["end_seconds"],
+                        confidence=.75 if item["channel"] == "visual" else .82)
+                        for item in expression["evidence"]]
         evidence.extend(_scene_evidence(scene_payload))
         if transcript and not any(item.channel == "asr" for item in evidence):
             evidence.append(
@@ -81,6 +99,14 @@ class LocalQwenParaformerProvider:
             }
             else inferred_presentation
         )
+        modes = {item.get("mode") for item in expression.get("expression_modes") or []}
+        if modes:
+            presentation = ("story_drama" if modes & {"conflict_drama", "case_reenactment"}
+                            else "screen_recording" if modes == {"screen_demonstration"}
+                            else "text_cards" if modes == {"text_cards"}
+                            else "interview" if modes == {"interview"}
+                            else "talking_head" if modes <= {"direct_explanation", "question_answer"}
+                            else "mixed")
         presentation_features = _unique([*presentation_features, *editing_style])
         hook_text = retention[0] if retention else request.title
         hook_type, _ = classify_hook(hook_text)
@@ -96,7 +122,9 @@ class LocalQwenParaformerProvider:
             uncertainties.append("未取得可用语音转写，口播内容和对白判断不完整。")
         if not visual:
             uncertainties.append("未取得 Qwen 关键帧分析，视觉展示方式判断不完整。")
-        return VideoContentAnalysis(
+        uncertainties.append("仅完成抽样画面理解和语音文字识别；声线、语气、音乐、音效和口型匹配未分析。")
+        uncertainties.append("核心表达及表达方式属于模型自动归纳候选，须独立复核语义保真，不能把结构校验当作人工通过。")
+        analysis = VideoContentAnalysis(
             analysis_id=stable_analysis_id(
                 request,
                 provider_id=self.provider_id,
@@ -109,7 +137,7 @@ class LocalQwenParaformerProvider:
             provider_id=self.provider_id,
             provider_version=self.provider_version,
             input_fingerprint=request.input_fingerprint(),
-            status="completed" if visual and transcript else "degraded",
+            status="completed" if expression and media["visual"]["status"] == "completed" else "degraded",
             media_access_mode=request.media_access_mode,
             title=request.title,
             content_summary=visual_summary or transcript[:500] or request.title,
@@ -141,7 +169,15 @@ class LocalQwenParaformerProvider:
                 "不得复用原视频完整转写、连续对白、独特镜头顺序或可识别角色设定。",
             ],
             relevance=relevance,
+            expression_analysis=expression,
+            media_evidence=media,
         )
+        from src.trend_intelligence.media_evidence import media_readiness
+        readiness = media_readiness(analysis)
+        if not readiness["ready"]:
+            analysis.status = "degraded"
+            analysis.uncertainties = _unique([*analysis.uncertainties, *readiness["reasons"]])
+        return analysis
 
 
 def _load_qwen(value: str) -> dict[str, Any]:
@@ -151,20 +187,73 @@ def _load_qwen(value: str) -> dict[str, Any]:
         return answer
     if not isinstance(answer, str):
         return {}
-    normalized = answer.strip()
-    normalized = re.sub(r"^```(?:json)?\s*", "", normalized, flags=re.I)
-    normalized = re.sub(r"\s*```$", "", normalized)
-    try:
-        parsed = json.loads(normalized)
-    except json.JSONDecodeError:
-        match = re.search(r"\{.*\}", normalized, flags=re.S)
-        if not match:
-            return {"summary": normalized[:1000]}
-        try:
-            parsed = json.loads(match.group(0))
-        except json.JSONDecodeError:
-            return {"summary": normalized[:1000]}
-    return parsed if isinstance(parsed, dict) else {}
+    return parse_model_json(answer)
+
+
+def _media_evidence(request, visual, transcript):
+    output = {
+        "schema": "local_media_evidence/v1", "source_video_path": request.local_video_path,
+        "source_video_sha256": "", "duration_seconds": request.duration_seconds,
+        "visual": {"status": "unverified" if visual else "missing"},
+        "audio": {"status": "unverified" if transcript else "missing", "prosody_status": "not_analyzed",
+                  "speaker_identity_status": "not_analyzed", "lip_sync_status": "not_analyzed"},
+    }
+    if request.local_video_path and Path(request.local_video_path).is_file():
+        output["source_video_sha256"] = sha256(request.local_video_path)
+    if visual.get("schema") != "local_qwen_frame_analysis/v2":
+        return output
+    source_sha = output["source_video_sha256"]
+    if not source_sha or visual.get("source_video_sha256") != source_sha:
+        raise ValueError("Qwen artifact is not bound to the current original video")
+    manifest_path = Path(visual["frame_manifest_path"])
+    if sha256(manifest_path) != visual.get("frame_manifest_sha256"):
+        raise ValueError("Qwen frame manifest changed")
+    manifest = _read_json(str(manifest_path))
+    if manifest.get("schema") != "local_video_frame_manifest/v2" or manifest.get("source_video_sha256") != source_sha:
+        raise ValueError("frame manifest source mismatch")
+    frames = manifest.get("frames") or []
+    observed = visual.get("analyzed_frame_ids") or []
+    if len(set(observed)) != len(frames) or len(observed) != len(frames) or set(observed) != {f["id"] for f in frames}:
+        raise ValueError("not every sampled frame was actually analyzed")
+    for frame in frames:
+        if sha256(frame["path"]) != frame["sha256"]:
+            raise ValueError("sampled frame changed since analysis")
+    times = [frame["time_seconds"] for frame in frames]
+    output["duration_seconds"] = manifest["duration_seconds"]
+    output["visual"] = {"status": "completed", "artifact_path": request.qwen_analysis_path,
+        "artifact_sha256": sha256(request.qwen_analysis_path), "frame_manifest_path": str(manifest_path),
+        "frame_manifest_sha256": sha256(manifest_path), "sample_times_seconds": times,
+        "total_sampled_frame_count": len(frames), "analyzed_frame_count": len(observed),
+        "coverage_start_seconds": min(times), "coverage_end_seconds": max(times),
+        "scope": "sampled images only; no continuous action or lip-sync verification"}
+    provenance = transcript.get("provenance") or {}
+    if (provenance.get("schema") != "local_audio_evidence/v2" or
+            provenance.get("source_video_sha256") != source_sha or
+            visual.get("transcript_sha256") != sha256(request.transcript_path)):
+        raise ValueError("transcript provenance or Qwen fusion input changed")
+    if provenance.get("audio_path") and sha256(provenance["audio_path"]) != provenance.get("audio_sha256"):
+        raise ValueError("extracted audio changed since transcription")
+    status = provenance.get("status")
+    if status == "transcribed" and not transcript_evidence(transcript):
+        raise ValueError("transcribed status requires actual timestamped speech")
+    if status == "verified_no_speech":
+        reason = provenance.get("status_reason")
+        if not reason or transcript_evidence(transcript):
+            raise ValueError("no-speech conclusion lacks evidence or contradicts transcription")
+        if not provenance.get("audio_path"):
+            probe = provenance.get("source_probe") or {}
+            if "streams" not in probe or any(s.get("codec_type") == "audio" for s in probe["streams"]):
+                raise ValueError("no-audio conclusion requires actual probe evidence")
+        else:
+            from .toolchain import _silent_pcm
+            silent, covered = _silent_pcm(Path(provenance["audio_path"]))
+            if not silent or covered < output["duration_seconds"] - .25:
+                raise ValueError("no-speech conclusion requires full verified silent PCM")
+    output["audio"].update({key: provenance.get(key) for key in (
+        "status", "status_reason", "audio_path", "audio_sha256", "coverage_start_seconds", "coverage_end_seconds")})
+    output["audio"].update({"artifact_path": request.transcript_path,
+                            "artifact_sha256": sha256(request.transcript_path)})
+    return output
 
 
 def _read_json(value: str) -> dict[str, Any]:

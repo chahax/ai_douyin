@@ -88,6 +88,84 @@ class AccountProfile:
         )
 
 
+@dataclass(slots=True)
+class DouyinIdentity:
+    """Verified public identity; never contains a password or access token."""
+
+    nickname: str
+    avatar_url: str = ""
+    public_uid: str = ""
+    open_id: str = ""
+    union_id: str = ""
+    sec_uid: str = ""
+    verification_source: str = "page_verified"
+    verified_at: str = ""
+    auth_expires_at: str = ""
+
+    @property
+    def platform_identity_key(self) -> str:
+        if self.open_id:
+            return f"open_id:{self.open_id}"
+        if self.sec_uid:
+            return f"sec_uid:{self.sec_uid}"
+        if self.public_uid:
+            return f"public_uid:{self.public_uid}"
+        return ""
+
+    def validate(self) -> None:
+        if not self.nickname.strip():
+            raise ValueError("抖音身份缺少昵称，不能确认绑定。")
+        if not self.platform_identity_key:
+            raise ValueError("抖音身份缺少 open_id、公开 UID 或 sec_uid，不能确认绑定。")
+        if self.verification_source not in {"official_oauth", "page_verified"}:
+            raise ValueError("不支持的抖音身份验证来源。")
+
+
+@dataclass(slots=True)
+class AccountBinding:
+    """One-to-one account, browser environment and Douyin identity binding."""
+
+    account_uuid: str
+    account_key: str
+    browser_environment_key: str
+    browser_profile_dir: str
+    storage_state_path: str
+    platform_identity_key: str
+    nickname: str
+    avatar_url: str = ""
+    public_uid: str = ""
+    open_id: str = ""
+    union_id: str = ""
+    sec_uid: str = ""
+    verification_source: str = "page_verified"
+    status: str = "active"
+    verified_at: str = ""
+    last_health_at: str = ""
+    auth_expires_at: str = ""
+    last_error: str = ""
+    confirmed_by: str = ""
+    created_at: str = ""
+    updated_at: str = ""
+
+    @property
+    def display_identity(self) -> str:
+        uid = self.public_uid or self.open_id or self.sec_uid
+        return f"{self.nickname}（{uid}）" if uid else self.nickname
+
+
+@dataclass(slots=True)
+class AccountRuntimeState:
+    account_uuid: str
+    day_key: str = ""
+    daily_runs: int = 0
+    last_run_at: str = ""
+    lock_owner: str = ""
+    lock_expires_at: str = ""
+    consecutive_failures: int = 0
+    circuit_open_until: str = ""
+    updated_at: str = ""
+
+
 def stable_account_uuid(account_key: str) -> str:
     normalized = str(account_key or "").strip()
     if not _SAFE_ID.fullmatch(normalized):

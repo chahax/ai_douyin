@@ -52,6 +52,7 @@ def save_comment(comment: CommentRecord, video_id: str) -> bool:
 def get_comments(
     video_id: Optional[str] = None,
     is_replied: Optional[int] = None,
+    account_uuid: Optional[str] = None,
     limit: int = 50,
     offset: int = 0,
 ) -> list[dict]:
@@ -61,6 +62,7 @@ def get_comments(
     Args:
         video_id: 筛选视频ID（None 表示全部）
         is_replied: 筛选回复状态（0=未回复, 1=已回复, None=全部）
+        account_uuid: 只返回指定运营账号作品下的评论
         limit: 每页数量
         offset: 跳过数量
 
@@ -75,8 +77,14 @@ def get_comments(
             conditions.append("video_id = ?")
             params.append(video_id)
         if is_replied is not None:
-            conditions.append("is_replied = ?")
+            conditions.append("comments.is_replied = ?")
             params.append(is_replied)
+        if account_uuid is not None:
+            conditions.append(
+                "EXISTS (SELECT 1 FROM videos v "
+                "WHERE v.video_id = comments.video_id AND v.account_uuid = ?)"
+            )
+            params.append(account_uuid)
 
         where = " AND ".join(conditions) if conditions else "1=1"
         cursor.execute(f"""
@@ -107,6 +115,7 @@ def mark_comment_replied(comment_id: str, reply_content: str) -> bool:
 def count_comments(
     video_id: Optional[str] = None,
     is_replied: Optional[int] = None,
+    account_uuid: Optional[str] = None,
 ) -> int:
     """统计评论数量"""
     with get_db() as conn:
@@ -117,31 +126,34 @@ def count_comments(
             conditions.append("video_id = ?")
             params.append(video_id)
         if is_replied is not None:
-            conditions.append("is_replied = ?")
+            conditions.append("comments.is_replied = ?")
             params.append(is_replied)
+        if account_uuid is not None:
+            conditions.append(
+                "EXISTS (SELECT 1 FROM videos v "
+                "WHERE v.video_id = comments.video_id AND v.account_uuid = ?)"
+            )
+            params.append(account_uuid)
 
         where = " AND ".join(conditions) if conditions else "1=1"
         cursor.execute(f"SELECT COUNT(*) FROM comments WHERE {where}", params)
         return cursor.fetchone()[0]
 
 
-def count_replied_comments() -> int:
+def count_replied_comments(account_uuid: Optional[str] = None) -> int:
     """统计已回复的评论数"""
-    with get_db() as conn:
-        cursor = conn.cursor()
-        cursor.execute("SELECT COUNT(*) FROM comments WHERE is_replied = 1")
-        return cursor.fetchone()[0]
+    return count_comments(is_replied=1, account_uuid=account_uuid)
 
 
-def get_reply_rate() -> float:
+def get_reply_rate(account_uuid: Optional[str] = None) -> float:
     """
     计算评论回复率。
 
     Returns:
         0.0 ~ 1.0 的回复率
     """
-    total = count_comments()
+    total = count_comments(account_uuid=account_uuid)
     if total == 0:
         return 0.0
-    replied = count_comments(is_replied=1)
+    replied = count_comments(is_replied=1, account_uuid=account_uuid)
     return replied / total

@@ -35,6 +35,9 @@ class TrendObservation:
     query_depth: int = 0
     root_keywords: list[str] = field(default_factory=list)
     hashtags: list[str] = field(default_factory=list)
+    duration_seconds: float | None = None
+    relevance_score: float | None = None
+    relevance_terms: list[str] = field(default_factory=list)
 
 
 @dataclass(slots=True)
@@ -329,6 +332,8 @@ class VideoContentAnalysis:
     originality_boundaries: list[str] = field(default_factory=list)
     relevance: AccountContentRelevance | None = None
     created_at: str = field(default_factory=utc_now_iso)
+    expression_analysis: dict[str, Any] = field(default_factory=dict)
+    media_evidence: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass(slots=True)

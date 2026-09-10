@@ -11,6 +11,7 @@ from typing import Callable
 from urllib.parse import quote
 
 from src.platform_adapter.browser_session import BrowserSession
+from src.platform_adapter.douyin_identity import has_visible_douyin_challenge
 from src.platform_adapter.models import BrowserSessionConfig
 from src.shared.config import settings
 from src.trend_intelligence.analysis import metric_to_number, stable_item_id
@@ -44,7 +45,10 @@ DOUYIN_SORTS = (
     DouyinSort("latest", "最新发布"),
 )
 SORTS_BY_KEY = {sort.key: sort for sort in DOUYIN_SORTS}
-BLOCK_TEXT = re.compile(r"扫码登录|验证码登录|安全验证|访问异常|账号异常|操作频繁")
+BLOCK_TEXT = re.compile(
+    r"扫码登录|验证码登录|安全验证|访问异常|账号异常|操作频繁|"
+    r"点击两个形状相同的物体|拖动滑块|请完成验证"
+)
 MAX_RELATED_TAGS_PER_KEYWORD = 3
 MAX_TOTAL_RELATED_TAGS = 6
 
@@ -65,11 +69,30 @@ EXTRACT_SCRIPT = r"""(() => {
       || ''
     ).slice(0, 500);
     const author = lines.find((value) => value.startsWith('@')) || '';
-    const metricText = lines.find(
+    let metricText = lines.find(
       (value) => /^(?:\d+(?:\.\d+)?)(?:万|亿)?$/.test(value)
     ) || '';
+    let metricKind = 'displayed_unknown';
+    // A bare number remains unknown. Explicit UI semantics take precedence.
+    const likeElements = card?.querySelectorAll(
+      '[data-e2e="like-icon"], [data-e2e="video-like"], [aria-label*="点赞"], [aria-label*="喜欢"]'
+    ) || [];
+    for (const element of likeElements) {
+      const candidates = [element.getAttribute('aria-label') || '', element.innerText || ''];
+      if (element.getAttribute('data-e2e') === 'like-icon') {
+        candidates.push(element.parentElement?.innerText || '');
+      }
+      const values = candidates.flatMap((text) => text.trim().split(/\n+/));
+      const found = values.map((text) => text.trim().match(
+        /^(?:点赞|喜欢)?\s*(\d+(?:\.\d+)?(?:万|亿)?)\s*(?:次?点赞|次?喜欢)?$/
+      )).find(Boolean);
+      if (found) { metricText = found[1]; metricKind = 'likes'; break; }
+    }
     const publishedAtText = lines.find(
       (value) => /^(?:刚刚|昨天|前天|\d+(?:分钟|小时|天)前|\d{1,2}-\d{1,2}|\d{4}-\d{1,2}-\d{1,2})$/.test(value)
+    ) || '';
+    const durationText = lines.find(
+      (value) => /^(?:\d{1,2}:)?\d{1,2}:\d{2}$/.test(value)
     ) || '';
     const hashtags = Array.from(
       raw.matchAll(/[#＃]([0-9A-Za-z_\u3400-\u9fff]{1,40})/gu),
@@ -80,7 +103,9 @@ EXTRACT_SCRIPT = r"""(() => {
       title,
       author,
       metricText,
+      metricKind,
       publishedAtText,
+      durationText,
       hashtags,
       rawText: raw.slice(0, 1000),
     };
@@ -175,6 +200,16 @@ def build_douyin_trend_session(*, headless: bool = False) -> BrowserSession:
     )
 
 
+def build_account_douyin_trend_session(
+    account_key: str, *, headless: bool = False
+) -> BrowserSession:
+    """Resolve the selected account through the unified runtime binding."""
+    from src.operations_accounts import AccountRuntimeService
+
+    context = AccountRuntimeService().resolve(account_key)
+    return context.create_browser_session(headless=headless)
+
+
 class DouyinWebTrendProvider:
     provider_id = "douyin_authorized_web"
 
@@ -188,6 +223,15 @@ class DouyinWebTrendProvider:
             lambda headless: build_douyin_trend_session(headless=headless)
         )
         self.policy_gate = policy_gate or SourcePolicyGate()
+
+    @classmethod
+    def for_account(cls, account_key: str) -> "DouyinWebTrendProvider":
+        return cls(
+            session_factory=lambda headless: build_account_douyin_trend_session(
+                account_key,
+                headless=headless,
+            )
+        )
 
     def collect(
         self,
@@ -230,6 +274,7 @@ class DouyinWebTrendProvider:
                     "displayed_metrics",
                     "published_at",
                     "hashtags",
+                    "duration_seconds",
                     "tag_relationships",
                     "tag_traffic_snapshots",
                 }
@@ -259,6 +304,9 @@ class DouyinWebTrendProvider:
         tag_relations = []
         tag_traffic_snapshots = []
         last_navigation_started = 0.0
+        verification_deadline = time.monotonic() + (
+            min(600, max(0, request.manual_verification_timeout_seconds)) if not request.headless else 0
+        )
 
         def collect_sort(
             *,
@@ -286,6 +334,7 @@ class DouyinWebTrendProvider:
                 sort=sort,
                 limit=safe_limit,
                 retain_raw=policy.raw_retention_days > 0,
+                manual_verification_seconds=max(0, verification_deadline - time.monotonic()),
             )
 
         try:
@@ -384,13 +433,16 @@ class DouyinWebTrendProvider:
         sort: DouyinSort,
         limit: int,
         retain_raw: bool,
+        manual_verification_seconds: float = 0,
     ) -> tuple[list[TrendObservation], str]:
         # Every sort starts from a fresh page so comprehensive is the real
         # default and filter/scroll state cannot leak into the next ranking.
         page = session.open_page(build_douyin_search_url(query))
         self._wait_until_ready(page)
         if self._is_blocked(page):
-            return [], "human_required"
+            if not self._await_manual_verification(page, manual_verification_seconds):
+                return [], "human_required"
+            session.cmd('save_visible_state', path=session.config.storage_state_path)
         if sort.key != "comprehensive" and not self._select_sort(page, sort.label):
             return [], "sort_unconfirmed"
 
@@ -434,7 +486,7 @@ class DouyinWebTrendProvider:
                     rank=rank,
                     metric_text=metric_text,
                     metric_value=metric_to_number(metric_text),
-                    metric_kind="displayed_unknown",
+                    metric_kind="likes" if row.get("metricKind") == "likes" else "displayed_unknown",
                     collected_at=collected_at,
                     published_at=parse_visible_publish_time(
                         published_at_text, collected_at=collected_at
@@ -446,12 +498,30 @@ class DouyinWebTrendProvider:
                     query_depth=query_depth,
                     root_keywords=list(root_keywords),
                     hashtags=hashtags,
+                    duration_seconds=_duration_to_seconds(
+                        str(row.get("durationText") or "")
+                    ),
                 )
             )
         return output, ""
 
     @staticmethod
+    def _await_manual_verification(page, timeout_seconds):
+        if timeout_seconds <= 0:
+            return False
+        print('等待人工验证：请在当前采集窗口完成验证码，保持窗口打开；验证通过后本次采集直接继续。', flush=True)
+        deadline = time.monotonic() + timeout_seconds
+        while time.monotonic() < deadline:
+            page.wait_for_timeout(1000)
+            if not DouyinWebTrendProvider._is_blocked(page) and page.locator('a[href*="/video/"]').count() > 0:
+                print('当前采集窗口已显示视频结果，继续本次采集。', flush=True)
+                return True
+        return False
+
+    @staticmethod
     def _is_blocked(page) -> bool:
+        if has_visible_douyin_challenge(page):
+            return True
         text = page.locator("body").inner_text()
         links = page.locator('a[href*="/video/"]').count()
         return links == 0 and bool(BLOCK_TEXT.search(text or ""))
@@ -461,8 +531,7 @@ class DouyinWebTrendProvider:
         for _ in range(20):
             if page.locator('a[href*="/video/"]').count() > 0:
                 return
-            body_text = page.locator("body").inner_text()
-            if BLOCK_TEXT.search(body_text or ""):
+            if DouyinWebTrendProvider._is_blocked(page):
                 return
             page.wait_for_timeout(500)
 
@@ -546,6 +615,21 @@ def _row_hashtags(row: dict, *, raw_text: str) -> list[str]:
             seen.add(tag)
             output.append(tag)
     return output
+
+
+def _duration_to_seconds(value: str) -> float | None:
+    parts = str(value or "").strip().split(":")
+    if len(parts) not in {2, 3} or not all(part.isdigit() for part in parts):
+        return None
+    values = [int(part) for part in parts]
+    if len(values) == 2:
+        minutes, seconds = values
+        hours = 0
+    else:
+        hours, minutes, seconds = values
+    if minutes >= 60 or seconds >= 60:
+        return None
+    return float(hours * 3600 + minutes * 60 + seconds)
 
 
 def parse_visible_publish_time(value: str, *, collected_at: str) -> str:

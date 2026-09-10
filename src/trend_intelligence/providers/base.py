@@ -23,6 +23,7 @@ class TrendCollectionRequest:
     expand_related_tags: bool = False
     max_related_tags_per_keyword: int = 2
     max_total_related_tags: int = 6
+    manual_verification_timeout_seconds: int = 0
 
 
 @dataclass(slots=True)

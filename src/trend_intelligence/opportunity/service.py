@@ -23,9 +23,9 @@ class ContentOpportunityService:
         self.script_registry = script_registry or default_script_registry()
 
     def build_opportunities(
-        self, profile: AccountProfile
+        self, profile: AccountProfile, *, collection_run_id: str = ""
     ) -> list[ContentOpportunity]:
-        opportunities = self.scorer.build(profile)
+        opportunities = self.scorer.build(profile, collection_run_id=collection_run_id)
         for item in opportunities:
             self.repository.save_opportunity(item)
         return opportunities

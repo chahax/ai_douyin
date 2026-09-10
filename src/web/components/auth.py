@@ -15,6 +15,7 @@ import hmac
 import json
 import secrets
 import time
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Optional
 
@@ -57,7 +58,7 @@ def get_client_ip() -> str:
 # Cookie 签名密钥管理
 # ──────────────────────────────────────────────────────────────
 
-_SECRET_FILE = Path("data/.session_secret")
+_SECRET_FILE = Path(__file__).resolve().parents[3] / "data" / ".session_secret"
 _session_secret_cache: Optional[str] = None
 
 
@@ -137,29 +138,40 @@ def _verify_token(token: str) -> Optional[dict]:
 
 
 # ──────────────────────────────────────────────────────────────
-# CookieManager 单例（必须在脚本顶层实例化）
+# CookieManager（每次 Streamlit 脚本执行时初始化一次）
 # ──────────────────────────────────────────────────────────────
 
-_COOKIE_KEY = "auth_cookies_singleton"
+_LOGOUT_PENDING_KEY = "_auth_logout_pending"
+_COOKIE_WRITE_PENDING_KEY = "_auth_cookie_write_pending"
 
 
-@st.cache_resource
+def _browser_cookie(cookies):
+    """Read browser echo only: CookieManager.get() also includes unsaved writes."""
+    from src.shared.config import settings
+    snapshot = getattr(cookies, "_cookies", None)
+    return snapshot.get(settings.SESSION_COOKIE_NAME) if snapshot is not None else None
+
+
 def _get_cookie_manager():
-    """懒初始化 CookieManager；首次渲染时 ready() 为 False，需要 st.stop 等待。"""
-    # streamlit_cookies_manager 0.2.0 的加密变体（EncryptedCookieManager）
-    # 内部用了 Streamlit 已废弃的 @st.cache。一旦被 import 就会刷一屏警告。
-    # 我们只用普通 CookieManager，加密版完全不需要加载。
-    # 解法：在子模块真正加载前，往 sys.modules 注入桩，让 Python 不去读
-    # encrypted_cookie_manager.py。这是从 import 层面切断废弃 API 的最小手术。
-    import sys
-    import types as _types
-    _stub_key = "streamlit_cookies_manager.encrypted_cookie_manager"
-    if _stub_key not in sys.modules:
-        _stub = _types.ModuleType(_stub_key)
-        _stub.EncryptedCookieManager = None  # type: ignore[attr-defined]
-        sys.modules[_stub_key] = _stub
+    """创建当前浏览器会话的 CookieManager。
+
+    CookieManager 本身会在 ``st.session_state`` 中维护待写队列，不能用
+    ``st.cache_resource`` 做全局缓存，否则其他浏览器会话不会渲染负责同步
+    Cookie 的前端组件。
+    """
     from streamlit_cookies_manager.cookie_manager import CookieManager
-    return CookieManager(key=_COOKIE_KEY)
+    from src.shared.config import settings
+
+    class AcknowledgedCookieManager(CookieManager):
+        def save(self):
+            if self._queue:
+                # The library's saveOnly=True never returns an acknowledgement.
+                # Keep a readback component alive until the browser echoes the write.
+                self._run_component(save_only=False, key="CookieManager.sync_cookies.save")
+
+    cookies = AcknowledgedCookieManager(path="/")
+    cookies._default_expiry = datetime.now() + timedelta(days=settings.SESSION_COOKIE_DAYS)
+    return cookies
 
 
 # ──────────────────────────────────────────────────────────────
@@ -213,41 +225,69 @@ def login_user(username: str, password: str) -> tuple[bool, str]:
 
 
 def logout_user() -> None:
+    """清除内存登录态，并安排在下一次重绘时删除持久 Cookie。"""
     st.session_state.pop("user", None)
     st.session_state.pop("user_role", None)
-    # 同时清掉 cookie
-    try:
-        from src.shared.config import settings
-        cookies = _get_cookie_manager()
-        if cookies.ready():
-            cookies.delete(settings.SESSION_COOKIE_NAME)
-            cookies.save()
-    except Exception:
-        pass
+    st.session_state.pop(_COOKIE_WRITE_PENDING_KEY, None)
+    st.session_state[_LOGOUT_PENDING_KEY] = True
 
 
-def _try_restore_session_from_cookie() -> bool:
+def _delete_session_cookie(cookies) -> None:
+    """删除浏览器中的持久登录 Cookie。"""
+    from src.shared.config import settings
+
+    queue = getattr(cookies, "_queue", None)
+    if queue is not None:
+        # Cancel an in-flight login write too, even if no cookie was echoed yet.
+        queue[settings.SESSION_COOKIE_NAME] = dict(value=None, path="/")
+        cookies.save()
+    elif settings.SESSION_COOKIE_NAME in cookies:
+        del cookies[settings.SESSION_COOKIE_NAME]
+        cookies.save()
+
+
+def _persist_session_cookie(cookies, username: str, role: str) -> None:
+    """保存签名登录令牌；Cookie 中不包含密码。"""
+    from src.shared.config import settings
+
+    token = st.session_state.get(_COOKIE_WRITE_PENDING_KEY)
+    if not token:
+        token = _sign_token(username, role)
+        st.session_state[_COOKIE_WRITE_PENDING_KEY] = token
+    cookies[settings.SESSION_COOKIE_NAME] = token
+    cookies.save()
+
+
+def _confirm_cookie_write(cookies) -> bool:
+    token = st.session_state.get(_COOKIE_WRITE_PENDING_KEY)
+    if token and _browser_cookie(cookies) == token and _verify_token(token):
+        st.session_state.pop(_COOKIE_WRITE_PENDING_KEY, None)
+        return True
+    return False
+
+
+def _wait_for_cookie(message: str) -> None:
+    st.info(message)
+    st.caption("请稍候，正在等待浏览器确认。若一直未完成，请检查此站点是否允许 Cookie。")
+    st.button("重新检查登录状态", key="auth_cookie_retry")
+    st.stop()
+
+
+def _try_restore_session_from_cookie(cookies) -> bool:
     """
     若 cookie 里存在有效 token，则回填 session_state 并返回 True。
-    CookieManager 首次渲染未就绪时跳过（依赖下一次 render 重试）。
+    调用方负责确保 CookieManager 已经 ready。
     """
-    try:
-        from src.shared.config import settings
-        cookies = _get_cookie_manager()
-    except Exception:
-        return False
-    if not cookies.ready():
-        return False
+    from src.shared.config import settings
 
-    token = cookies.get(settings.SESSION_COOKIE_NAME)
+    token = _browser_cookie(cookies)
     if not token:
         return False
     data = _verify_token(token)
     if not data:
         # cookie 损坏或过期 → 清掉，避免一直挡着登录页
         try:
-            cookies.delete(settings.SESSION_COOKIE_NAME)
-            cookies.save()
+            _delete_session_cookie(cookies)
         except Exception:
             pass
         return False
@@ -258,50 +298,101 @@ def _try_restore_session_from_cookie() -> bool:
 
 
 def render_login_page() -> bool:
-    # 0. session_state 已有用户 → 直接放行
-    if st.session_state.get("user"):
+    st.set_page_config(page_title="Douyin Studio · 内容创作与运营", page_icon="✦", layout="wide")
+    from src.web.components.ui import inject_app_theme
+
+    inject_app_theme()
+
+    # Cookie 组件必须在每次脚本执行时渲染一次。首次加载时等待组件把浏览器
+    # Cookie 同步给 Python，避免先错误地显示登录页或漏写登录令牌。
+    cookies = None
+    cookie_error = None
+    try:
+        cookies = _get_cookie_manager()
+    except Exception as exc:
+        cookie_error = exc
+
+    if cookies is not None and not cookies.ready():
+        st.caption("正在恢复登录状态…")
+        st.stop()
+
+    # 退出按钮在上一轮设置此标记；本轮 CookieManager 已就绪，可以可靠删除。
+    logged_out = bool(st.session_state.get(_LOGOUT_PENDING_KEY, False))
+    if logged_out and cookies is not None:
+        if _browser_cookie(cookies) is not None:
+            _delete_session_cookie(cookies)
+            _wait_for_cookie("已退出当前会话，正在确认浏览器登录凭证已删除…")
+        # The readback is absent. Clear any queued write left from the old session.
+        queue = getattr(cookies, "_queue", {})
+        from src.shared.config import settings
+        queue.pop(settings.SESSION_COOKIE_NAME, None)
+        st.session_state.pop(_LOGOUT_PENDING_KEY, None)
+
+    # Always mount cookie sync, including authenticated reruns. Do not treat the
+    # pending write queue as proof that the browser persisted the credential.
+    if st.session_state.get("user") and not logged_out:
+        if cookies is None:
+            st.warning("当前仅保持临时登录：Cookie组件不可用，刷新后可能需要重新登录。")
+            return True
+        if st.session_state.get(_COOKIE_WRITE_PENDING_KEY):
+            if not _confirm_cookie_write(cookies):
+                cookies.save()
+                _wait_for_cookie("登录已验证，正在确认免登录凭证已保存…")
+        else:
+            saved = _verify_token(_browser_cookie(cookies) or "")
+            if not saved or saved.get("u") != st.session_state["user"]:
+                _persist_session_cookie(cookies, st.session_state["user"], st.session_state["user_role"])
+                _wait_for_cookie("正在保存本次登录，确认完成后进入后台…")
         return True
 
-    # 1. 尝试从 cookie 恢复（刷新后免登录）
-    if _try_restore_session_from_cookie():
-        st.rerun()
+    # 尝试从 cookie 恢复（刷新后免登录）
+    if not logged_out and cookies is not None and _try_restore_session_from_cookie(cookies):
         return True
 
-    # 2. 渲染登录页
-    st.set_page_config(page_title="AI Douyin 管理后台", page_icon="🚀", layout="wide")
-    st.title("🚀 AI Douyin 管理后台")
-
-    # 展示当前 IP 和剩余注册名额
-    from src.services.user_profile_service import count_ip_accounts, MAX_ACCOUNTS_PER_IP
-    ip = get_client_ip()
-    current_count = count_ip_accounts(ip)
-    remaining = MAX_ACCOUNTS_PER_IP - current_count
-    if remaining > 0:
-        st.caption(f"📍 当前 IP {ip} 剩余注册名额：{remaining}/{MAX_ACCOUNTS_PER_IP}")
-    else:
-        st.caption("⚠️ 当前 IP 已达到账号上限，如需新账号请联系管理员")
-
-    with st.form("login_form"):
-        username = st.text_input("用户名", placeholder="请输入用户名")
-        password = st.text_input("密码", type="password", placeholder="请输入密码")
-        submitted = st.form_submit_button("登录 / 注册", use_container_width=True)
-        if submitted and username and password:
-            ok, role = login_user(username.strip(), password)
-            if ok:
-                # 写 cookie（30 天有效）
+    # Two-column introduction and focused login surface; authentication is unchanged.
+    left, right = st.columns([1.25, 1], gap="large")
+    with left:
+        st.markdown('''<div class="studio-brand"><span class="studio-brand-mark">✦</span>
+<div>Douyin Studio<small>内容创作与运营</small></div></div>
+<div class="studio-login-hero"><div class="studio-eyebrow">YOUR NEXT STORY STARTS HERE</div>
+<h1>好内容，<br>从一个<em>好想法</em>开始。</h1>
+<p>发现值得讲述的选题，打磨每一个镜头。<br>在同一个工作空间，连接灵感、作品与观众。</p>
+<div class="studio-login-steps"><span>01 发现选题</span><span>02 打磨作品</span><span>03 持续运营</span></div></div>''', unsafe_allow_html=True)
+    with right, st.container(key="login_panel"):
+        st.markdown("## 欢迎回到工作台")
+        st.caption("登录，继续你的内容创作。")
+        if cookie_error is not None:
+            st.warning("登录状态暂时无法保存；本次仍可登录。请检查 Cookie 组件依赖。")
+        with st.form("login_form"):
+            username = st.text_input("用户名", placeholder="输入你的用户名")
+            password = st.text_input("密码", type="password", placeholder="输入密码")
+            submitted = st.form_submit_button("进入工作台 →", type="primary", width="stretch")
+        from src.services.user_profile_service import count_ip_accounts, MAX_ACCOUNTS_PER_IP
+        ip = get_client_ip()
+        remaining = MAX_ACCOUNTS_PER_IP - count_ip_accounts(ip)
+        if remaining > 0:
+            st.caption(f"新用户名将自动注册 · 当前网络还可注册 {remaining} 个账号")
+        else:
+            st.caption("使用已有账号登录；如需新账号，请联系管理员。")
+    # Cookie readback must live OUTSIDE the form: forms batch component changes
+    # until submission, which would prevent the automatic acknowledgement rerun.
+    if submitted and username and password:
+        ok, role = login_user(username.strip(), password)
+        if ok:
+            if cookies is not None:
                 try:
-                    from src.shared.config import settings
-                    cookies = _get_cookie_manager()
-                    if cookies.ready():
-                        cookies[settings.SESSION_COOKIE_NAME] = _sign_token(username.strip(), role)
-                        cookies.save()
+                    _persist_session_cookie(cookies, username.strip(), role)
                 except Exception:
-                    pass  # cookie 写失败不影响本次登录
-                st.rerun()
-            else:
-                st.error(role)
-        elif submitted:
-            st.warning("请输入用户名和密码")
+                    st.warning("登录成功，但保存登录状态失败。请重新检查；未确认前不要刷新页面。")
+                # Keep both components mounted; their readback triggers the rerun.
+                st.info("登录已验证，正在保存免登录凭证；浏览器确认后自动进入后台。")
+                st.button("重新检查登录状态", key="auth_cookie_retry")
+                return False
+            st.rerun()
+        else:
+            st.error(role)
+    elif submitted:
+        st.warning("请输入用户名和密码")
     return False
 
 

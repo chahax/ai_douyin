@@ -62,7 +62,9 @@ def score_account_relevance(
     strategy = active_registry.resolve(profile)
     topic = DomainTopicContext(
         title=title,
-        keywords=list(profile.seed_keywords),
+        # Do not inject account seeds as if they appeared in the sample; doing
+        # so makes every collected item look relevant before inspecting it.
+        keywords=[],
         representative_titles=[content_text[:500]],
         hashtags=list(hashtags),
         sample_count=1,

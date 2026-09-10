@@ -32,7 +32,9 @@ CREATE TABLE IF NOT EXISTS videos (
     stats_comments INTEGER DEFAULT 0,          -- 评论数
     last_synced_at TEXT,                       -- 最后同步时间
     created_at     TEXT,                       -- 首次入库时间
-    rag_context    TEXT                        -- 视频生成时 RAG 检索的知识片段（用于回复增强）
+    rag_context    TEXT,                       -- 视频生成时 RAG 检索的知识片段（用于回复增强）
+    account_uuid   TEXT DEFAULT '',            -- 运营账号稳定 UUID
+    account_key    TEXT DEFAULT ''             -- 运营账号标识
 );
 
 -- 评论表
@@ -151,6 +153,7 @@ def _ensure_tables(conn: sqlite3.Connection) -> None:
     _migrate_user_configs(cursor)
     # 迁移 videos 表：添加 rag_context 列
     _migrate_videos_rag_context(cursor)
+    _migrate_videos_account_context(cursor)
     # 初始化违禁词
     _init_blocked_words(cursor)
     conn.commit()
@@ -184,6 +187,8 @@ def _migrate_videos_table(cursor: sqlite3.Cursor) -> None:
                 stats_comments INTEGER DEFAULT 0,
                 last_synced_at TEXT,
                 created_at     TEXT
+                ,account_uuid  TEXT DEFAULT ''
+                ,account_key   TEXT DEFAULT ''
             )
         """)
         # 迁移旧数据（video_id -> video_id, title -> title）
@@ -218,6 +223,19 @@ def _migrate_videos_rag_context(cursor: sqlite3.Cursor) -> None:
     columns = {row[1] for row in cursor.fetchall()}
     if "rag_context" not in columns:
         cursor.execute("ALTER TABLE videos ADD COLUMN rag_context TEXT")
+
+
+def _migrate_videos_account_context(cursor: sqlite3.Cursor) -> None:
+    """Add immutable operation-account ownership to published video rows."""
+    cursor.execute("PRAGMA table_info(videos)")
+    columns = {row[1] for row in cursor.fetchall()}
+    if "account_uuid" not in columns:
+        cursor.execute("ALTER TABLE videos ADD COLUMN account_uuid TEXT DEFAULT ''")
+    if "account_key" not in columns:
+        cursor.execute("ALTER TABLE videos ADD COLUMN account_key TEXT DEFAULT ''")
+    cursor.execute(
+        "CREATE INDEX IF NOT EXISTS idx_videos_account ON videos(account_uuid, status)"
+    )
 
 
 def _migrate_auto_reply_rules(cursor: sqlite3.Cursor) -> None:

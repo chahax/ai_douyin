@@ -47,12 +47,16 @@ def save_video(video: VideoItem) -> bool:
                         publish_time = COALESCE(?, publish_time),
                         cover_url = COALESCE(?, cover_url),
                         stats_views = ?, stats_likes = ?, stats_comments = ?,
+                        account_uuid = CASE WHEN ? != '' THEN ? ELSE account_uuid END,
+                        account_key = CASE WHEN ? != '' THEN ? ELSE account_key END,
                         last_synced_at = ?
                     WHERE local_id = ?
                 """, (
                     video.video_id, video.title, video.description, status,
                     video.publish_time, video.cover_url,
                     play_count, like_count, comment_count,
+                    video.account_uuid, video.account_uuid,
+                    video.account_key, video.account_key,
                     now, video.local_id,
                 ))
                 conn.commit()
@@ -69,12 +73,16 @@ def save_video(video: VideoItem) -> bool:
                         publish_time = COALESCE(?, publish_time),
                         cover_url = COALESCE(?, cover_url),
                         stats_views = ?, stats_likes = ?, stats_comments = ?,
+                        account_uuid = CASE WHEN ? != '' THEN ? ELSE account_uuid END,
+                        account_key = CASE WHEN ? != '' THEN ? ELSE account_key END,
                         last_synced_at = ?
                     WHERE video_id = ?
                 """, (
                     video.title, video.description, status,
                     video.publish_time, video.cover_url,
                     play_count, like_count, comment_count,
+                    video.account_uuid, video.account_uuid,
+                    video.account_key, video.account_key,
                     now, video.video_id,
                 ))
                 conn.commit()
@@ -85,17 +93,27 @@ def save_video(video: VideoItem) -> bool:
             cursor.execute("""
                 SELECT id FROM videos
                 WHERE title = ? AND status = 'pending_review'
+                  AND (? = '' OR account_uuid = ?)
                 LIMIT 1
-            """, (video.title,))
+            """, (video.title, video.account_uuid, video.account_uuid))
             row = cursor.fetchone()
             if row:
                 cursor.execute("""
                     UPDATE videos SET
                         video_id = ?,
                         status = 'published',
+                        account_uuid = CASE WHEN ? != '' THEN ? ELSE account_uuid END,
+                        account_key = CASE WHEN ? != '' THEN ? ELSE account_key END,
                         last_synced_at = ?
                     WHERE title = ? AND status = 'pending_review'
-                """, (video.video_id, now, video.title))
+                      AND (? = '' OR account_uuid = ?)
+                """, (
+                    video.video_id,
+                    video.account_uuid, video.account_uuid,
+                    video.account_key, video.account_key,
+                    now, video.title,
+                    video.account_uuid, video.account_uuid,
+                ))
                 conn.commit()
                 return True
 
@@ -104,8 +122,8 @@ def save_video(video: VideoItem) -> bool:
             INSERT INTO videos (
                 local_id, video_id, title, description, status, publish_time,
                 cover_url, stats_views, stats_likes, stats_comments,
-                last_synced_at, created_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                last_synced_at, created_at, account_uuid, account_key
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             video.local_id,
             video.video_id or None,
@@ -119,6 +137,8 @@ def save_video(video: VideoItem) -> bool:
             comment_count,
             now,
             now,
+            video.account_uuid,
+            video.account_key,
         ))
         conn.commit()
         return True
@@ -128,6 +148,7 @@ def get_videos(
     status: Optional[str] = None,
     limit: int = 50,
     offset: int = 0,
+    account_uuid: str = "",
 ) -> list[dict]:
     """
     分页查询视频列表，支持状态筛选。
@@ -142,7 +163,21 @@ def get_videos(
     """
     with get_db() as conn:
         cursor = conn.cursor()
-        if status:
+        if status and account_uuid:
+            cursor.execute("""
+                SELECT * FROM videos
+                WHERE status = ? AND account_uuid = ?
+                ORDER BY created_at DESC
+                LIMIT ? OFFSET ?
+            """, (status, account_uuid, limit, offset))
+        elif account_uuid:
+            cursor.execute("""
+                SELECT * FROM videos
+                WHERE account_uuid = ?
+                ORDER BY created_at DESC
+                LIMIT ? OFFSET ?
+            """, (account_uuid, limit, offset))
+        elif status:
             cursor.execute("""
                 SELECT * FROM videos
                 WHERE status = ?
@@ -182,11 +217,21 @@ def update_video_stats(video_id: str, stats: VideoStats) -> bool:
         return cursor.rowcount > 0
 
 
-def count_videos(status: Optional[str] = None) -> int:
+def count_videos(status: Optional[str] = None, *, account_uuid: str = "") -> int:
     """统计视频数量"""
     with get_db() as conn:
         cursor = conn.cursor()
-        if status:
+        if status and account_uuid:
+            cursor.execute(
+                "SELECT COUNT(*) FROM videos WHERE status = ? AND account_uuid = ?",
+                (status, account_uuid),
+            )
+        elif account_uuid:
+            cursor.execute(
+                "SELECT COUNT(*) FROM videos WHERE account_uuid = ?",
+                (account_uuid,),
+            )
+        elif status:
             cursor.execute("SELECT COUNT(*) FROM videos WHERE status = ?", (status,))
         else:
             cursor.execute("SELECT COUNT(*) FROM videos")
@@ -202,7 +247,12 @@ def delete_video(video_id: str) -> bool:
         return cursor.rowcount > 0
 
 
-def mark_videos_deleted(existing_video_ids: list[str], allow_empty: bool = False) -> int:
+def mark_videos_deleted(
+    existing_video_ids: list[str],
+    allow_empty: bool = False,
+    *,
+    account_uuid: str = "",
+) -> int:
     """
     标记在平台上已删除的视频为 failed。
 
@@ -225,18 +275,22 @@ def mark_videos_deleted(existing_video_ids: list[str], allow_empty: bool = False
         # 同时清理孤儿 pending_review（video_id=NULL），这些是本地发布失败留下的记录
         with get_db() as conn:
             cursor = conn.cursor()
-            cursor.execute(f"""
+            cursor.execute("""
                 UPDATE videos
                 SET status = 'failed', last_synced_at = ?
                 WHERE status = 'published' AND video_id IS NOT NULL
-            """, (_now_iso(),))
-            cursor.execute(f"""
+                  AND (? = '' OR account_uuid = ?)
+            """, (_now_iso(), account_uuid, account_uuid))
+            first_count = cursor.rowcount
+            cursor.execute("""
                 UPDATE videos
                 SET status = 'failed', last_synced_at = ?
                 WHERE status IN ('pending_review', 'publishing') AND video_id IS NULL
-            """, (_now_iso(),))
+                  AND (? = '' OR account_uuid = ?)
+            """, (_now_iso(), account_uuid, account_uuid))
+            second_count = cursor.rowcount
             conn.commit()
-            return cursor.rowcount
+            return first_count + second_count
 
     with get_db() as conn:
         cursor = conn.cursor()
@@ -247,7 +301,8 @@ def mark_videos_deleted(existing_video_ids: list[str], allow_empty: bool = False
             WHERE status = 'published'
               AND video_id IS NOT NULL
               AND video_id NOT IN ({placeholders})
-        """, (_now_iso(), *existing_video_ids))
+              AND (? = '' OR account_uuid = ?)
+        """, (_now_iso(), *existing_video_ids, account_uuid, account_uuid))
         conn.commit()
         return cursor.rowcount
 

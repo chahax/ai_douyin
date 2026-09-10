@@ -14,11 +14,23 @@ from src.shared.logger import logger
 
 
 class DouyinAdapter:
-    def __init__(self, session: BrowserSession | None = None):
+    def __init__(self, session: BrowserSession | None = None, runtime_context=None):
         self.session = session or BrowserSession(build_default_browser_session_config())
+        self.runtime_context = runtime_context
+        self._identity_verified = False
         self.publish_workflow = PublishWorkflow(self.session)
         self.comment_workflow = CommentWorkflow(self.session)
         self.sync_workflow = SyncWorkflow(self.session)
+
+    @classmethod
+    def for_account(cls, account_key: str, *, headless: bool = False):
+        from src.operations_accounts import AccountRuntimeService
+
+        context = AccountRuntimeService().resolve(account_key)
+        return cls(
+            session=context.create_browser_session(headless=headless),
+            runtime_context=context,
+        )
 
     def prepare_session(self) -> SessionState:
         return self.session.start()
@@ -54,6 +66,9 @@ class DouyinAdapter:
         pause_seconds: int = 600,
         wait_for_enter: bool = False,
     ) -> SessionState:
+        check = self._require_runtime_identity(force=True)
+        if check is not None:
+            raise RuntimeError(check[1])
         return self.session.open_page_and_click_button(
             url=url,
             button_text="上传视频",
@@ -62,10 +77,38 @@ class DouyinAdapter:
         )
 
     def publish_video(self, request: PublishRequest, interactive: bool = False) -> PublishResult:
+        check = self._require_runtime_identity(force=True)
+        if check is not None:
+            return PublishResult(
+                success=False,
+                status=check[0],
+                message=check[1],
+            )
+        request.extra_metadata["account_key"] = self.runtime_context.account_key
+        request.extra_metadata["douyin_identity"] = (
+            self.runtime_context.identity_label
+        )
+        logger.info(
+            "即将使用抖音账号 {} 发布（运营账号 {}）。",
+            self.runtime_context.identity_label,
+            self.runtime_context.account_key,
+        )
         return self.publish_workflow.publish(request, interactive=interactive)
 
-    def reply_to_comment(self, post_id: str, comment_id: str, content: str) -> bool:
+    def reply_to_comment(
+        self,
+        post_id: str,
+        comment_id: str,
+        content: str,
+        *,
+        human_confirmed: bool = False,
+    ) -> bool:
         """对指定评论发送回复"""
+        if not human_confirmed:
+            logger.warning("评论回复需要人工逐次确认，本次未发送。")
+            return False
+        if self._require_runtime_identity(force=True) is not None:
+            return False
         success = self.comment_workflow.reply_to_comment(post_id, comment_id, content)
         if success:
             from src.services.comment_service import mark_comment_replied
@@ -73,6 +116,13 @@ class DouyinAdapter:
         return success
 
     def fetch_comments(self, query: CommentQuery) -> CommentSyncResult:
+        check = self._require_runtime_identity()
+        if check is not None:
+            return CommentSyncResult(
+                success=False,
+                status=check[0],
+                message=check[1],
+            )
         result = self.comment_workflow.fetch_comments(query)
         if result.success and result.comments:
             from src.services.comment_service import save_comment
@@ -92,6 +142,10 @@ class DouyinAdapter:
         Returns:
             SyncResult: 包含视频列表
         """
+        check = self._require_runtime_identity()
+        if check is not None:
+            return SyncResult(success=False, status=check[0], message=check[1])
+
         from datetime import datetime
         from src.services.sync_history_service import record_sync
         from src.services.video_service import save_video, mark_videos_deleted
@@ -108,6 +162,8 @@ class DouyinAdapter:
         except Exception as exc:
             logger.warning(f"趋势指标快照存储不可用，视频同步继续: {exc}")
         for v in videos:
+            v.account_uuid = self.runtime_context.account_uuid
+            v.account_key = self.runtime_context.account_key
             if save_video(v):
                 new_count += 1
             if trend_repository is not None and v.video_id and v.stats:
@@ -136,7 +192,11 @@ class DouyinAdapter:
         # 标记在平台上已删除的视频为 failed
         # API成功但返回0个视频 → 平台上已无视频，应将所有 published 标记为 failed
         existing_ids = [v.video_id for v in videos if v.video_id]
-        deleted_count = mark_videos_deleted(existing_ids, allow_empty=(api_success and len(videos) == 0))
+        deleted_count = mark_videos_deleted(
+            existing_ids,
+            allow_empty=(api_success and len(videos) == 0),
+            account_uuid=self.runtime_context.account_uuid,
+        )
 
         finished_at = datetime.now().isoformat()
         status = "success" if videos else "failed"
@@ -155,3 +215,42 @@ class DouyinAdapter:
 
     def close(self) -> None:
         self.session.stop()
+
+    def verify_runtime_identity(self, *, force: bool = True):
+        """Verify that the current browser still belongs to the bound account."""
+        from src.operations_accounts import AccountRuntimeError, AccountRuntimeService
+
+        if self.runtime_context is None:
+            raise AccountRuntimeError(
+                "account_binding_required",
+                "该操作必须选择已绑定真实抖音身份的运营账号。",
+            )
+        if self._identity_verified and not force:
+            from src.operations_accounts.runtime import RuntimeIdentityCheck
+
+            return RuntimeIdentityCheck(
+                healthy=True,
+                status="active",
+                message="当前浏览器身份已通过校验。",
+                expected=self.runtime_context.binding,
+            )
+        check = AccountRuntimeService().verify_identity(
+            self.runtime_context,
+            session=self.session,
+        )
+        self._identity_verified = bool(check.healthy)
+        return check
+
+    def _require_runtime_identity(self, *, force: bool = False):
+        if self.runtime_context is None:
+            return (
+                "account_binding_required",
+                "该操作必须选择已绑定真实抖音身份的运营账号。",
+            )
+        if self._identity_verified and not force:
+            return None
+        check = self.verify_runtime_identity(force=True)
+        if not check.healthy:
+            return (check.status, check.message)
+        self._identity_verified = True
+        return None

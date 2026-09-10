@@ -15,6 +15,7 @@ V4 pipeline 后台调用（script_gen / scene_plan / tag）走限流路径。
         return provider.chat_completion(...)
 """
 
+import asyncio
 import os
 from typing import Optional
 
@@ -36,20 +37,29 @@ def _get_qps() -> int:
 
 # 全局限流器（懒初始化以读取最新 env）
 _limiter: Optional[AsyncLimiter] = None
+_limiter_loop_id: Optional[int] = None
 
 
 def _get_limiter() -> AsyncLimiter:
-    global _limiter
-    if _limiter is None:
+    """返回当前事件循环的限流器（跨循环时重建，消除 aiolimiter 警告）。"""
+    global _limiter, _limiter_loop_id
+    try:
+        current_loop_id = id(asyncio.get_running_loop())
+    except RuntimeError:
+        current_loop_id = None
+
+    if _limiter is None or _limiter_loop_id != current_loop_id:
         qps = _get_qps()
         _limiter = AsyncLimiter(max_rate=qps, time_period=1.0)
+        _limiter_loop_id = current_loop_id
     return _limiter
 
 
 def reset_limiter() -> None:
     """测试用：重置限流器到新 QPS。"""
-    global _limiter
+    global _limiter, _limiter_loop_id
     _limiter = None
+    _limiter_loop_id = None
 
 
 # Agent 交互路径不参与限流（要求低延迟）

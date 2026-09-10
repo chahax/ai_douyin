@@ -17,6 +17,7 @@ from src.trend_intelligence.models import (
 )
 from src.trend_intelligence.repository import TrendRepository
 from src.trend_intelligence.temporal import TemporalTrendService
+from src.trend_intelligence.sample_gate import batch_observations, require_sample
 
 
 class ContentOpportunityScorer:
@@ -28,14 +29,20 @@ class ContentOpportunityScorer:
         profile: AccountProfile,
         *,
         now: datetime | None = None,
+        collection_run_id: str = "",
     ) -> list[ContentOpportunity]:
         current = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
+        observations = batch_observations(self.repository,
+            account_uuid=profile.account_uuid, run_id=collection_run_id)
+        require_sample(observations)
+        batch_items = {item.item_id for item in observations}
         clusters = [
             item
             for item in self.repository.list_clusters(limit=500)
             if item.account_uuid == profile.account_uuid
             and item.domain_strategy_id == profile.domain_strategy_id
             and item.strategy_version == profile.strategy_version
+            and set(item.item_ids).issubset(batch_items)
         ]
         briefs = {
             item.cluster_id: item

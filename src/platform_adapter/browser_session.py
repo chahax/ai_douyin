@@ -6,17 +6,216 @@ WindowsSelectorEventLoop / ProactorEventLoop 不支持 subprocess_exec 的问题
 """
 
 import json
+import hashlib
+import ipaddress
 import os
+import socket
 import subprocess
 import sys
 import threading
 import time
 from pathlib import Path
 from typing import Any
+from urllib.parse import urljoin, urlsplit, urlunsplit
 
 from src.platform_adapter.models import BrowserSessionConfig, SessionState
 from src.shared.config import settings
 from src.shared.logger import logger
+
+
+class BinaryDownloadError(RuntimeError):
+    """A download failed validation; its message contains no signed URL/body."""
+
+
+def _download_target(value: str | Path, workspace_root: str | Path | None = None) -> Path:
+    root = Path(workspace_root or Path(__file__).resolve().parents[2]).resolve()
+    target = Path(value).resolve()
+    if target == root or not target.is_relative_to(root):
+        raise BinaryDownloadError("binary download target must be inside the project workspace")
+    if target.is_dir():
+        raise BinaryDownloadError("binary download target is a directory")
+    return target
+
+
+def _url_identity(url: str) -> dict:
+    parsed = urlsplit(url)
+    # Queries/fragments and userinfo can contain signed credentials. Neither
+    # logging nor the subprocess JSON reply needs those values.
+    host = parsed.hostname or ""
+    if ":" in host:
+        host = f"[{host}]"
+    port = f":{parsed.port}" if parsed.port else ""
+    return {"safe_url": urlunsplit((parsed.scheme, host + port, parsed.path, "", "")),
+            "sha256": hashlib.sha256(url.encode("utf-8")).hexdigest()}
+
+
+def _validate_download_url(url: str, allowed_hosts: list[str], *, allow_loopback: bool = False) -> None:
+    parsed = urlsplit(url)
+    host = (parsed.hostname or "").lower().rstrip(".")
+    if not host or parsed.username or parsed.password or parsed.scheme not in {"https", "http"}:
+        raise BinaryDownloadError("binary download requires an HTTP(S) URL without embedded credentials")
+    permitted = False
+    for pattern in allowed_hosts:
+        pattern = str(pattern).lower().rstrip(".")
+        if pattern.startswith("*."):
+            permitted = permitted or (host.endswith(pattern[1:]) and host != pattern[2:])
+        else:
+            permitted = permitted or host == pattern
+    if not permitted:
+        raise BinaryDownloadError("binary download redirect host is outside the allowed hosts")
+    try:
+        addresses = {ipaddress.ip_address(item[4][0].split("%", 1)[0]) for item in
+                     socket.getaddrinfo(host, parsed.port or (443 if parsed.scheme == "https" else 80), type=socket.SOCK_STREAM)}
+    except (OSError, ValueError):
+        raise BinaryDownloadError("binary download host could not be validated") from None
+    is_loopback_fixture = allow_loopback and addresses and all(address.is_loopback for address in addresses)
+    if parsed.scheme != "https" and not is_loopback_fixture:
+        raise BinaryDownloadError("binary download requires HTTPS on every redirect")
+    if not addresses or (not is_loopback_fixture and any(not address.is_global for address in addresses)):
+        raise BinaryDownloadError("binary download rejects private or non-public network addresses")
+
+
+def _download_binary_response(request_context, url: str, output_path: str | Path,
+                              headers: dict | None = None, timeout: int = 30000, *,
+                              max_bytes: int = 256 * 1024 * 1024,
+                              expected_content_types: list[str] | None = None,
+                              allowed_hosts: list[str] | None = None, max_redirects: int = 3,
+                              overwrite: bool = False, workspace_root: str | Path | None = None,
+                              _allow_loopback_fixture: bool = False) -> dict:
+    """Use an existing authenticated context and write its unmodified bytes.
+
+    APIRequestContext buffers the response internally. The explicit limit bounds
+    accepted/saved bodies; Content-Length is rejected before calling body().
+    """
+    import tempfile
+
+    if type(max_bytes) is not int or max_bytes <= 0:
+        raise BinaryDownloadError("max_bytes must be a positive integer")
+    if type(max_redirects) is not int or not 0 <= max_redirects <= 10:
+        raise BinaryDownloadError("max_redirects must be between 0 and 10")
+    if type(timeout) is not int or timeout <= 0:
+        raise BinaryDownloadError("timeout must be a positive millisecond value")
+    target = _download_target(output_path, workspace_root)
+    if target.exists() and not overwrite:
+        raise BinaryDownloadError("binary download target already exists")
+    hosts = list(allowed_hosts) if allowed_hosts is not None else [urlsplit(url).hostname or ""]
+    expected = [value.lower().split(";", 1)[0].strip() for value in (expected_content_types or [])]
+    original_id = hashlib.sha256(url.encode("utf-8")).hexdigest()
+    current, redirect_count = url, 0
+    current_headers = dict(headers or {})
+    temporary = None
+    while True:
+        _validate_download_url(current, hosts, allow_loopback=_allow_loopback_fixture)
+        response = None
+        try:
+            try:
+                response = request_context.get(current, headers=current_headers, timeout=timeout,
+                                               max_redirects=0, fail_on_status_code=False)
+            except Exception as exc:
+                raise BinaryDownloadError(f"binary request failed ({type(exc).__name__}; request_sha256={original_id[:16]})") from None
+            status = int(response.status)
+            response_headers = {key.lower(): value for key, value in response.headers.items()}
+            if status in {301, 302, 303, 307, 308}:
+                if redirect_count >= max_redirects:
+                    raise BinaryDownloadError("binary download exceeded its redirect limit")
+                location = response_headers.get("location")
+                if not location:
+                    raise BinaryDownloadError("binary download redirect has no Location")
+                next_url = urljoin(current, location)
+                before, after = urlsplit(current), urlsplit(next_url)
+                if (before.scheme, before.netloc) != (after.scheme, after.netloc):
+                    # Context cookies still follow their real domain rules.
+                    # Explicit credentials must not follow a cross-origin hop.
+                    current_headers = {key: value for key, value in current_headers.items()
+                                       if key.lower() not in {"authorization", "proxy-authorization", "cookie"}}
+                current = next_url
+                redirect_count += 1
+                continue
+            # Do not accept 206 partial media or empty 204 as a whole source.
+            if status != 200:
+                raise BinaryDownloadError(f"binary download HTTP status {status}; no output saved")
+            content_type = response_headers.get("content-type", "").split(";", 1)[0].strip().lower()
+            if expected and not any(content_type == value or
+                    (value.endswith("/*") and content_type.startswith(value[:-1])) for value in expected):
+                raise BinaryDownloadError("binary download Content-Type is not allowed")
+            length = response_headers.get("content-length")
+            if length is not None:
+                try:
+                    declared_length = int(length)
+                except (ValueError, TypeError):
+                    raise BinaryDownloadError("binary download has an invalid Content-Length") from None
+                if declared_length <= 0 or declared_length > max_bytes:
+                    raise BinaryDownloadError("binary download declared size is empty or exceeds max_bytes")
+            body = response.body()
+            if not isinstance(body, bytes):
+                raise BinaryDownloadError("binary response body was not raw bytes")
+            if not 0 < len(body) <= max_bytes:
+                raise BinaryDownloadError("binary download body is empty or exceeds max_bytes")
+            if length is not None and not response_headers.get("content-encoding") and len(body) != declared_length:
+                raise BinaryDownloadError("binary download body differs from declared Content-Length")
+            final_url = response.url
+            _validate_download_url(final_url, hosts, allow_loopback=_allow_loopback_fixture)
+            identity = _url_identity(final_url)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            # Check the resolved parent again after creation, before writing.
+            target = _download_target(target, workspace_root)
+            fd, temporary = tempfile.mkstemp(prefix=target.name + ".", suffix=".part", dir=target.parent)
+            with os.fdopen(fd, "wb") as output:
+                output.write(body)
+                output.flush()
+                os.fsync(output.fileno())
+            if target.exists() and not overwrite:
+                raise BinaryDownloadError("binary download target appeared during download")
+            os.replace(temporary, target)
+            temporary = None
+            return {"status": status, "path": str(target), "size": len(body),
+                    "sha256": hashlib.sha256(body).hexdigest(), "content_type": content_type,
+                    "final_url": identity["safe_url"], "final_url_sha256": identity["sha256"],
+                    "request_url_sha256": original_id, "redirect_count": redirect_count,
+                    "final_url_redacted": True}
+        except BinaryDownloadError:
+            raise
+        except Exception as exc:
+            raise BinaryDownloadError(f"binary download failed ({type(exc).__name__}; request_sha256={original_id[:16]})") from None
+        finally:
+            if temporary and os.path.exists(temporary):
+                os.unlink(temporary)
+            if response is not None:
+                try:
+                    response.dispose()
+                except Exception:
+                    pass
+
+
+def _checkpoint_open_login_pages(context, state_path, origins):
+    """Save cookies and existing frames only; never create or navigate a page."""
+    import tempfile
+
+    pages = [page for page in context.pages if not page.is_closed()]
+    if not pages:
+        return False
+    cookies = context.cookies()
+    for page in pages:
+        for frame in page.frames:
+            try:
+                entry = frame.evaluate("""() => ({origin: location.origin,
+                    localStorage: Object.entries(localStorage).map(([name, value]) => ({name, value}))})""")
+            except Exception:
+                # A frame can navigate/close while the user finishes verification.
+                continue
+            if str(entry.get('origin', '')).startswith(('https://', 'http://')):
+                origins[entry['origin']] = entry
+    target = Path(state_path)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    fd, temporary = tempfile.mkstemp(prefix=target.name + '.', suffix='.tmp', dir=target.parent)
+    try:
+        with os.fdopen(fd, 'w', encoding='utf-8') as output:
+            json.dump({'cookies': cookies, 'origins': list(origins.values())}, output, ensure_ascii=False)
+        os.replace(temporary, target)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+    return True
 
 
 # ─── 子进程 bootstrap（独立 Python 进程，无 Streamlit 事件循环）──────────────
@@ -42,6 +241,7 @@ def main():
     timeout_ms = init.get("timeout_ms", 30000)
     channel = init.get("channel", "")
     chromium_sandbox = init.get("chromium_sandbox", False)
+    storage_state_path = init.get("storage_state_path", "")
 
     from playwright.sync_api import sync_playwright
 
@@ -58,10 +258,70 @@ def main():
 
     context = pw.chromium.launch_persistent_context(**kwargs)
     context.set_default_timeout(timeout_ms)
+
+    # 恢复 storage state（cookies + localStorage）
+    restored_cookies = 0
+    restored_origins = 0
+    restored_cookie_domains = []
+    restored_origin_names = []
+    if storage_state_path:
+        import os as _os
+        if _os.path.exists(storage_state_path):
+            try:
+                with open(storage_state_path, "r", encoding="utf-8") as _f:
+                    _state = json.loads(_f.read())
+            except json.JSONDecodeError as _exc:
+                sys.stdout.write(json.dumps({"status": "error", "msg": "storage_state JSON 损坏: " + str(_exc)}) + "\n")
+                sys.stdout.flush()
+                context.close()
+                pw.stop()
+                return
+            except OSError as _exc:
+                sys.stdout.write(json.dumps({"status": "error", "msg": "storage_state 读取失败: " + str(_exc)}) + "\n")
+                sys.stdout.flush()
+                context.close()
+                pw.stop()
+                return
+
+            _cookies = _state.get("cookies", [])
+            if _cookies:
+                _allowed = {"name", "value", "url", "domain", "path", "expires", "httpOnly", "secure", "sameSite"}
+                _clean = []
+                for _c in _cookies:
+                    _clean.append({_k: _v for _k, _v in _c.items() if _k in _allowed})
+                context.add_cookies(_clean)
+                restored_cookies = len(_clean)
+                restored_cookie_domains = sorted(set(_c.get("domain", "") for _c in _clean if _c.get("domain")))
+
+            _origins = _state.get("origins", [])
+            if _origins:
+                _origin_map = {}
+                for _o in _origins:
+                    _on = _o.get("origin", "")
+                    _ls = _o.get("localStorage", [])
+                    if _on and _ls:
+                        _entries = {}
+                        for _li in _ls:
+                            if "name" in _li and "value" in _li:
+                                _entries[_li["name"]] = _li["value"]
+                        if _entries:
+                            _origin_map[_on] = _entries
+                if _origin_map:
+                    _script = "(function(){\nvar _m=" + json.dumps(_origin_map) + ";\nvar _d=_m[window.location.origin];\nif(_d){for(var _k in _d){try{localStorage.setItem(_k,_d[_k]);}catch(_e){}}}\n})()"
+                    context.add_init_script(_script)
+                    restored_origins = len(_origin_map)
+                    restored_origin_names = sorted(_origin_map.keys())
+
     page = context.pages[0] if context.pages else context.new_page()
 
     # 确认就绪
-    sys.stdout.write(json.dumps({"status": "ready"}) + "\n")
+    sys.stdout.write(json.dumps({
+        "status": "ready",
+        "restored_cookies": restored_cookies,
+        "restored_origins": restored_origins,
+        "restored_cookie_domains": restored_cookie_domains,
+        "restored_origin_names": restored_origin_names,
+    }) + "\n")
     sys.stdout.flush()
 
     # 主循环：处理命令
@@ -153,6 +413,44 @@ def main():
                     "candidates": candidates,
                 }, ensure_ascii=False) + "\n")
 
+            elif action == "interact_visible_exact_text":
+                text = str(cmd.get("text", ""))
+                operation = str(cmd.get("operation", "inspect"))
+                prefer_parent = bool(cmd.get("prefer_parent", False))
+                if operation not in {"inspect", "hover", "click"}:
+                    raise ValueError(f"unsupported visible-text operation: {operation}")
+
+                candidates = page.get_by_text(text, exact=True)
+                matched = None
+                candidate_count = candidates.count()
+                for index in range(candidate_count - 1, -1, -1):
+                    candidate = candidates.nth(index)
+                    if not candidate.is_visible():
+                        continue
+                    target = candidate
+                    if prefer_parent:
+                        interactive = candidate.locator(
+                            "xpath=ancestor-or-self::*["
+                            "@tabindex or self::button or @role='button'"
+                            "][1]"
+                        )
+                        if interactive.count() > 0:
+                            target = interactive
+                    matched = {
+                        "index": index,
+                        "tag": candidate.evaluate("element => element.tagName"),
+                    }
+                    if operation == "hover":
+                        target.hover()
+                    elif operation == "click":
+                        target.click()
+                    break
+                sys.stdout.write(json.dumps({
+                    "status": "ok",
+                    "matched": matched,
+                    "candidate_count": candidate_count,
+                }, ensure_ascii=False) + "\n")
+
             elif action == "wait_for_timeout":
                 page.wait_for_timeout(cmd["ms"])
                 sys.stdout.write(json.dumps({"status": "ok"}) + "\n")
@@ -218,18 +516,45 @@ def main():
                 context.storage_state(path=cmd.get("path", ""))
                 sys.stdout.write(json.dumps({"status": "ok"}) + "\n")
 
+            elif action == "save_visible_state":
+                from src.platform_adapter.browser_session import _checkpoint_open_login_pages
+                saved = _checkpoint_open_login_pages(context, cmd['path'], {})
+                sys.stdout.write(json.dumps({"status": "ok", "state_saved": saved}) + "\n")
+
             elif action == "wait_for_close":
+                from src.platform_adapter.browser_session import _checkpoint_open_login_pages
                 timeout_sec = cmd.get("timeout", 1800)
+                login_state_path = cmd.get("path") or storage_state_path
+                login_origins = {}
+                state_saved = False
                 start = time.time()
                 while time.time() - start < timeout_sec:
                     try:
                         pages = context.pages
                         if not pages or all(p.is_closed() for p in pages):
                             break
+                        # Drive Playwright's event loop so user-initiated closes
+                        # are observed. Preserve login state while the context
+                        # is still alive; saving only after close is too late.
+                        if login_state_path:
+                            state_saved = _checkpoint_open_login_pages(
+                                context, login_state_path, login_origins) or state_saved
+                        next(p for p in pages if not p.is_closed()).wait_for_timeout(1000)
                     except Exception:
                         break
-                    time.sleep(1)
-                sys.stdout.write(json.dumps({"status": "ok"}) + "\n")
+                sys.stdout.write(json.dumps({"status": "ok", "state_saved": state_saved}) + "\n")
+
+            elif action == "api_download":
+                from src.platform_adapter.browser_session import _download_binary_response
+                summary = _download_binary_response(
+                    context.request, cmd["url"], cmd["output_path"],
+                    headers=cmd.get("headers"), timeout=cmd.get("timeout", 30000),
+                    max_bytes=cmd.get("max_bytes", 256 * 1024 * 1024),
+                    expected_content_types=cmd.get("expected_content_types"),
+                    allowed_hosts=cmd.get("allowed_hosts"), max_redirects=cmd.get("max_redirects", 3),
+                    overwrite=bool(cmd.get("overwrite", False)),
+                )
+                sys.stdout.write(json.dumps({"status": "ok", "download": summary}) + "\n")
 
             elif action == "api_request":
                 req_url = cmd["url"]
@@ -282,7 +607,11 @@ def main():
             else:
                 sys.stdout.write(json.dumps({"status": "error", "msg": f"unknown action: {action}"}) + "\n")
         except Exception as exc:
-            sys.stdout.write(json.dumps({"status": "error", "msg": str(exc)}) + "\n")
+            if action == "api_download" and type(exc).__name__ != "BinaryDownloadError":
+                message = "binary download failed (" + type(exc).__name__ + ")"
+            else:
+                message = str(exc)
+            sys.stdout.write(json.dumps({"status": "error", "msg": message}) + "\n")
 
         sys.stdout.flush()
 
@@ -297,6 +626,49 @@ if __name__ == "__main__":
     t.start()
     t.join()
 """
+
+
+# ─── 纯辅助函数（从 _PW_SCRIPT 逻辑中提取，供测试使用）──────────────────
+
+
+def _sanitize_cookies_for_add(cookies: list[dict]) -> list[dict]:
+    """Pure helper: strip unsupported fields from cookies before add_cookies().
+
+    Extracted for testability -- mirrors the logic inside _PW_SCRIPT.
+    """
+    _allowed = {"name", "value", "url", "domain", "path", "expires", "httpOnly", "secure", "sameSite"}
+    result = []
+    for _c in cookies:
+        result.append({_k: _v for _k, _v in _c.items() if _k in _allowed})
+    return result
+
+
+def _build_storage_state_init_script(origins: list[dict]) -> str | None:
+    """Pure helper: build a JS init script that restores localStorage per exact origin.
+
+    Returns None if origins contain no usable localStorage entries.
+    Extracted for testability -- mirrors the logic inside _PW_SCRIPT.
+    """
+    origin_map: dict[str, dict[str, str]] = {}
+    for _o in origins:
+        _on = _o.get("origin", "")
+        _ls = _o.get("localStorage", [])
+        if _on and _ls:
+            _entries: dict[str, str] = {}
+            for _li in _ls:
+                if "name" in _li and "value" in _li:
+                    _entries[_li["name"]] = _li["value"]
+            if _entries:
+                origin_map[_on] = _entries
+    if not origin_map:
+        return None
+    return (
+        "(function(){"
+        "var _m=" + json.dumps(origin_map) + ";"
+        "var _d=_m[window.location.origin];"
+        "if(_d){for(var _k in _d){try{localStorage.setItem(_k,_d[_k]);}catch(_e){}}}"
+        "})()"
+    )
 
 
 def build_default_browser_session_config() -> BrowserSessionConfig:
@@ -396,11 +768,12 @@ class BrowserSession:
         )
 
         try:
-            self._send({"action": "wait_for_close", "timeout": timeout_seconds})
-            try:
-                self.save_storage_state()
-            except Exception as exc:
-                logger.warning(f"保存 storage_state 失败，已保留浏览器用户目录登录态: {exc}")
+            result = self._send({"action": "wait_for_close", "timeout": timeout_seconds,
+                                 "path": self.config.storage_state_path})
+            if result.get("state_saved"):
+                logger.info("登录窗口状态已保存。")
+            else:
+                logger.warning("登录窗口关闭前未能导出状态，已保留浏览器用户目录登录态。")
             return self.get_state()
         finally:
             self.stop()
@@ -509,6 +882,7 @@ class BrowserSession:
             "timeout_ms": self.config.timeout_ms,
             "channel": self.config.browser_channel or self._detect_browser_channel(),
             "chromium_sandbox": self.config.chromium_sandbox,
+            "storage_state_path": self.config.storage_state_path,
         }
         self._proc.stdin.write(json.dumps(init).encode())
         self._proc.stdin.write(b"\n")
@@ -522,6 +896,15 @@ class BrowserSession:
         result = json.loads(resp)
         if result.get("status") != "ready":
             raise RuntimeError(f"Playwright 子进程未就绪: {result}")
+
+        if result.get("restored_cookies"):
+            logger.info(
+                "storage_state 已加载: "
+                f"cookies={result['restored_cookies']} "
+                f"(domains: {result.get('restored_cookie_domains', [])}), "
+                f"origins={result.get('restored_origins', 0)} "
+                f"(names: {result.get('restored_origin_names', [])})"
+            )
 
         self.active = True
 
@@ -643,6 +1026,22 @@ class Page:
 
     def click_button_by_text(self, texts: list[str]) -> dict:
         return self._session.cmd("click_button_by_text", texts=texts)
+
+    def interact_visible_exact_text(
+        self,
+        text: str,
+        *,
+        operation: str = "inspect",
+        prefer_parent: bool = False,
+    ) -> bool:
+        """Inspect, hover, or click the last visible exact-text match."""
+        result = self._session.cmd(
+            "interact_visible_exact_text",
+            text=text,
+            operation=operation,
+            prefer_parent=prefer_parent,
+        )
+        return bool(result.get("matched"))
 
     @property
     def request(self) -> "APIRequestContext":
@@ -796,3 +1195,21 @@ class APIRequestContext:
             timeout=timeout,
         )
         return APIResponse(self._session, result.get("response", {}))
+
+    def download(self, url: str, output_path: str | Path, headers: dict | None = None,
+                 timeout: int = 30000, *, max_bytes: int = 256 * 1024 * 1024,
+                 expected_content_types: list[str] | None = None,
+                 allowed_hosts: list[str] | None = None, max_redirects: int = 3,
+                 overwrite: bool = False) -> dict:
+        """Save binary bytes in the existing authenticated subprocess.
+
+        final_url in the returned summary is redacted; final_url_sha256 binds
+        the complete actual URL. The old get/post text interface is unchanged.
+        """
+        target = _download_target(output_path)
+        result = self._session.cmd(
+            "api_download", url=url, output_path=str(target), headers=headers or {}, timeout=timeout,
+            max_bytes=max_bytes, expected_content_types=expected_content_types,
+            allowed_hosts=allowed_hosts, max_redirects=max_redirects, overwrite=overwrite,
+        )
+        return result.get("download", {})

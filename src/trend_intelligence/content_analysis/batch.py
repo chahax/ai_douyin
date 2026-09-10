@@ -17,6 +17,7 @@ from .local import LocalQwenParaformerProvider
 from .metadata import MetadataContentAnalysisProvider
 from .registry import ContentAnalysisProviderRegistry
 from .toolchain import LocalContentToolchain
+from ..sample_gate import batch_observations, require_sample
 
 
 class ContentAnalysisBatchService:
@@ -38,14 +39,23 @@ class ContentAnalysisBatchService:
         requests: list[ContentAnalysisRequest],
         *,
         implementation_id: str = "metadata_heuristic",
-        allow_metadata_fallback: bool = True,
+        allow_metadata_fallback: bool = False,
         run_local_toolchain: bool = False,
+        collection_run_id: str = "",
     ) -> ContentAnalysisBatchResult:
         if not requests:
             raise ValueError("content analysis batch cannot be empty")
         accounts = {item.account_profile.account_uuid for item in requests}
         if len(accounts) != 1:
             raise ValueError("one content analysis batch must belong to one account")
+        observations = batch_observations(self.repository,
+            account_uuid=next(iter(accounts)), run_id=collection_run_id)
+        identities = {(item.item_id, item.video_id) for item in requests}
+        selected = [item for item in observations if (item.item_id, item.video_id) in identities]
+        require_sample(selected)
+        if identities != {(item.item_id, item.video_id) for item in selected}:
+            raise ValueError("分析请求包含不属于当前账号采集批次的视频")
+        requests = list({item.video_id: item for item in requests}.values())
         provider = self.registry.get(implementation_id)
         workers = min(
             self.max_concurrency,
@@ -98,8 +108,7 @@ class ContentAnalysisBatchService:
                 implementation_id == "local_qwen_paraformer"
                 and run_local_toolchain
                 and request.local_video_path
-                and not request.qwen_analysis_path
-                and not request.transcript_path
+                and (not request.qwen_analysis_path or not request.transcript_path)
             ):
                 active_request = self.toolchain.prepare_request(request)
             analysis_id = stable_analysis_id(
@@ -109,6 +118,12 @@ class ContentAnalysisBatchService:
             )
             cached = self.repository.get_content_analysis(analysis_id)
             if cached is not None:
+                if implementation_id == "local_qwen_paraformer":
+                    # The cache fingerprint does not enumerate every extracted
+                    # image. Revalidate the complete evidence graph before reuse.
+                    checked = provider.analyze(active_request)
+                    self.repository.save_content_analysis(checked)
+                    return checked, True, ""
                 return cached, True, ""
             analysis = provider.analyze(active_request)
             self.repository.save_content_analysis(analysis)

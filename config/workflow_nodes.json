@@ -1,20 +1,20 @@
 {
   "schema_version": "workflow_node_selection/v1",
-  "revision": 1,
+  "revision": 2,
   "active_profile": "production",
-  "updated_at": "2026-08-28T00:00:00+00:00",
+  "updated_at": "2026-09-04T23:08:23+08:00",
   "profiles": {
     "production": {
-      "description": "默认生产工作流；网页保存后立即更新当前选择",
+      "description": "运营研究与发布适配保留；全部视频生成节点已停用并等待 V2 验收",
       "selections": {
         "llm": "openai_compatible",
         "tts": "edge",
-        "background": "comfyui_flux",
-        "video_pipeline": "presenter_anime",
-        "portrait_animation": "sonic",
-        "video_generation": "ltx_i2v",
-        "frame_interpolation": "rife",
-        "composition": "ffmpeg",
+        "background": "disabled_pending_redesign",
+        "video_pipeline": "disabled_pending_redesign",
+        "portrait_animation": "disabled_pending_redesign",
+        "video_generation": "disabled_pending_redesign",
+        "frame_interpolation": "disabled_pending_redesign",
+        "composition": "disabled_pending_redesign",
         "publishing": "douyin_playwright"
       }
     }
