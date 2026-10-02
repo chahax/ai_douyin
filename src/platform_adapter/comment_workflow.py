@@ -21,6 +21,19 @@ from src.shared.logger import logger
 
 # 视频页 URL 模板
 VIDEO_URL_TEMPLATE = "https://www.douyin.com/video/{video_id}"
+COMMENT_EXTRACT_SCRIPT = r"""(() => Array.from(
+  document.querySelectorAll('[data-e2e="comment-item"]')
+).map((item) => {
+  const text = (selector) => (item.querySelector(selector)?.innerText || '').trim();
+  const tooltip = item.querySelector('[id^="tooltip_"]')?.id || '';
+  const idMatch = tooltip.match(/tooltip_(\d+)/);
+  return {
+    comment_id: idMatch ? idMatch[1] : '',
+    author_name: text('[data-e2e="comment-user-name"], .mQdPVwNH, a[href*="/user/"]'),
+    content: text('[data-e2e="comment-content"], [data-e2e="comment-item-content"], .WFJiGxr7, p'),
+    created_at: text('[data-e2e="comment-time"], .fJhvAqos'),
+  };
+}).filter((item) => item.content))()"""
 
 
 class CommentWorkflow:
@@ -143,7 +156,7 @@ class CommentWorkflow:
         for sel in selectors:
             count = page.locator(sel).count()
             if count > 0:
-                locator = page.locator(sel).first
+                locator = page.locator(sel).first()
                 # hover 到元素本身，唤出controls
                 try:
                     locator.hover(force=True, timeout=5000)
@@ -153,19 +166,27 @@ class CommentWorkflow:
                 # force=True 直接点击，绕过 visibility/stable 检查
                 try:
                     locator.click(force=True, timeout=5000)
+                except TypeError:
+                    locator.click()
                 except Exception:
                     pass
                 page.wait_for_timeout(1500)
                 return
         # 备选：滚动到页面中部评论区域
-        page.evaluate("window.scrollTo(0, document.body.scrollHeight * 0.5)")
+        page.locator("body").evaluate("window.scrollTo(0, document.body.scrollHeight * 0.5)")
         page.wait_for_timeout(1000)
 
     def _wait_for_comment_list(self, page: Page, timeout: int = 15000) -> None:
         """等待评论区容器出现"""
         start = time.time()
         while time.time() - start < timeout:
-            if page.locator("[data-e2e='comment-list']").count() > 0:
+            if (
+                page.locator("[data-e2e='comment-list']").count() > 0
+                or page.locator("[data-e2e='comment-item']").count() > 0
+            ):
+                return
+            body_text = page.locator("body").inner_text()
+            if "暂无评论" in body_text or "还没有评论" in body_text:
                 return
             page.wait_for_timeout(500)
         raise RuntimeError("评论区加载超时")
@@ -179,7 +200,7 @@ class CommentWorkflow:
 
         while no_new_count < 3:
             # 滚动到评论区底部
-            page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+            page.locator("body").evaluate("window.scrollTo(0, document.body.scrollHeight)")
             page.wait_for_timeout(800)
 
             current = page.locator("[data-e2e='comment-item']").count()
@@ -200,18 +221,18 @@ class CommentWorkflow:
         解析页面上的所有评论。
         返回 CommentRecord 列表。
         """
-        items = page.locator("[data-e2e='comment-item']").all()
+        rows = page.locator("body").evaluate(COMMENT_EXTRACT_SCRIPT) or []
         comments = []
-
-        for item in items:
-            try:
-                record = self._parse_single_comment(item, video_url)
-                if record:
-                    comments.append(record)
-            except Exception as exc:
-                logger.warning(f"  解析单条评论异常: {exc}")
+        for row in rows:
+            content = str(row.get("content") or "").strip()
+            if not content:
                 continue
-
+            comments.append(CommentRecord(
+                comment_id=str(row.get("comment_id") or ""),
+                author_name=str(row.get("author_name") or ""),
+                content=content,
+                created_at=str(row.get("created_at") or ""),
+            ))
         return comments
 
     def _parse_single_comment(self, item, video_url: str) -> Optional[CommentRecord]:

@@ -1,0 +1,216 @@
+{
+  "schema_version": "creative_runtime_sources/v1",
+  "source_hash": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+  "created_at": "2026-10-02T12:02:21.536128+00:00",
+  "implementation_status": "offline_implemented_not_production_validated",
+  "sources": [
+    {
+      "path": "src/content_factory/creative_action_plan_v2.py",
+      "sha256": "74bef6f461fa3884e39707f6ea533cc13ed71bcb20d14534e2fce9b39a514970"
+    },
+    {
+      "path": "src/content_factory/creative_state_plan_v6.py",
+      "sha256": "1cc460eaecf0d71ec05a0b2e6bc1a35a3a7f650ec15ec2b99d8520aee97704bb"
+    },
+    {
+      "path": "src/content_factory/creative_review_packet.py",
+      "sha256": "3a190b106277fb4c4b5216bf6fc2440256383c7af588d4ea6063b2a33ea241ca"
+    },
+    {
+      "path": "src/content_factory/creative_review_resolution.py",
+      "sha256": "a394f7bf6103524b81dd4b3548dad4db7a1783b794c2ab7af654f552819dedae"
+    },
+    {
+      "path": "src/content_factory/creative_focused_review_stage.py",
+      "sha256": "7107e7e971f37f215114ab140f78ed1e2a08ea073a98e162bfe8fe0a132a2057"
+    },
+    {
+      "path": "src/content_factory/creative_governed_runtime.py",
+      "sha256": "1d761f7f9ec659b607c9b9cf17664165fd9bf0a386a495e1e9eb0cedae39f7b6"
+    },
+    {
+      "path": "src/content_factory/creative_workflow.py",
+      "sha256": "fcf843f6a929eb4135d050682ff23503705c7c60349ea1be8cc33b6cf689dc92"
+    },
+    {
+      "path": "src/content_factory/creative_plan_patch.py",
+      "sha256": "0ea9f2a260a74f60fe365d91f531f6a0a018e87d59c309293d8dc526cc1e2cf7"
+    },
+    {
+      "path": "src/content_factory/creative_segmented_director.py",
+      "sha256": "f241b567bda2a76881ce469b2c4d0218ce5f4fb0995d673b0a0a3239c843d7a3"
+    },
+    {
+      "path": "src/content_factory/creative_state_plan_binding.py",
+      "sha256": "b8bf8ec912e15bb1adc900c5f10a12b026bb934cded10e2eba7cb08f003e9a68"
+    },
+    {
+      "path": "src/content_factory/creative_rule_registry.py",
+      "sha256": "95a1dac7650006c2ab200bb2646e95f5add27046eda02140cc66e8d7d3e49fac"
+    },
+    {
+      "path": "src/content_factory/creative_evaluation.py",
+      "sha256": "14e152c68a7e026d474e736c502f9ca8a53cc69b8cead8e478d5af3514ef4090"
+    },
+    {
+      "path": "src/content_factory/creative_narrative_focus.py",
+      "sha256": "b73c43fb64633c16e4abb294e4d21eb4f9d41329e35142ae2e15b60c56e089e6"
+    },
+    {
+      "path": "src/content_factory/creative_narrative_transfer.py",
+      "sha256": "8022b3c6c9aefc703ef7f1fe972c1f666eccb1dc7ac6caf7da06d908baf8da11"
+    },
+    {
+      "path": "src/content_factory/creative_seedance_segments.py",
+      "sha256": "04641b4ddce8b38494502ba2664ea18a6d8a5dfe70f2b6c9b2f937832ea025ca"
+    },
+    {
+      "path": "src/content_factory/creative_event_recovery.py",
+      "sha256": "78f8788c3e16552a12804c95e323fb861c1c4d05299ba185a8f3bd61fa8f4904"
+    },
+    {
+      "path": "src/content_factory/creative_event_script.py",
+      "sha256": "510cc0c37306f6f627c19f1d078afc95365ca6753f06e92d527dd1e39ec8fdfc"
+    },
+    {
+      "path": "src/content_factory/creative_brief.py",
+      "sha256": "22e83b70eead1d4d10b93e4cf8b6fb00bbe1d6e3e94275edfddd9ae9495c23c1"
+    },
+    {
+      "path": "src/content_factory/creative_original_prompt.py",
+      "sha256": "a15a66b5b030c39be92783cc5eec310e9cd7cfe381831b6d17409d752d33cb6a"
+    },
+    {
+      "path": "src/content_factory/creative_workflow_contract.py",
+      "sha256": "b91df553261252944f704514f2db5f95b7c18c66fe236ae504d98c335836aa36"
+    },
+    {
+      "path": "src/content_factory/creative_full_script_revision.py",
+      "sha256": "127b43ba1b43ae14bd8e72eff0449c13ef64c186bb1833ac88c81d9e7d00bf0b"
+    },
+    {
+      "path": "scripts/run_creative_workflow.py",
+      "sha256": "482ba5f8178c70ca295f72a0fb7a707bc3c61cf680ad80dd5e15922eefe15a70"
+    },
+    {
+      "path": "config/creative_workflow_budget_v5.json",
+      "sha256": "21e42547ddbfc9fbeaf36d57f7f74a669ccc89457a148ccd14f9ab5fb8876c95"
+    },
+    {
+      "path": "src/web/creative_workflow_dashboard.py",
+      "sha256": "51d10bf8034bf93ef87f3cad8f0a6c2808cbd6cbc95981e5b8e07e28909b767a"
+    },
+    {
+      "path": "src/content_factory/creative_reference_expression.py",
+      "sha256": "8bd192af8e29bea967744396ee32b01a6ff375cd603cb6f4e8096c159dfbb7e0"
+    },
+    {
+      "path": "config/creative_reference_defaults.json",
+      "sha256": "72d9422b2a3615fd25af5acf086779ea281b65f81590375e00d1af3d1b8ee1a1"
+    },
+    {
+      "path": "data/reference_reviews/reusable_expression_20261001/EXPRESSION_REFERENCE.md",
+      "sha256": "f007ea01a63dfb6c280b9cb3203774fe9828fe469582a03a060a82eee58f3216"
+    },
+    {
+      "path": "data/reference_reviews/reusable_expression_20261001/SELECTION.json",
+      "sha256": "27cca9e9c2cb8a520561e14f85c43ef80fc556bc0856a59cd4774bafe5628927"
+    },
+    {
+      "path": "scripts/resume_failed_plan_production.py",
+      "sha256": "9a18224191dc159160cd07a8ebcba8ce0cdc8366ecc21007437472d6e311397d"
+    },
+    {
+      "path": "src/content_factory/creative_stage_debug.py",
+      "sha256": "15cc1383ca32d7318de52b9b6cc6dd553f5f581b77b483ff74dc3dbd374dfc9c"
+    },
+    {
+      "path": "scripts/debug_creative_workflow.py",
+      "sha256": "22e2bd2077c7403be9a2dbf1f111fbe80f23c6f2f2efcbae896b9d75324342fc"
+    },
+    {
+      "path": "src/content_factory/media_review_policy.py",
+      "sha256": "fea26ce29e71a4a918dc3c61f7a46d95e913081589ed81f6afe8862f0b8e8661"
+    },
+    {
+      "path": "src/scheduler/queue.py",
+      "sha256": "d8a0572079513cff53a08849972bd5533515aec8a4a1332c04930955e1b936d2"
+    },
+    {
+      "path": "src/content_factory/creative_stage_runtime.py",
+      "sha256": "c5130a22357614a7d12630818c6495d559473a7c9123f3a0446f7f536d73fd18"
+    },
+    {
+      "path": "src/content_factory/creative_stage_contracts.py",
+      "sha256": "a8929c40b0bdeed43f96dbda2023818b2d3299d5cafb662ee33171baab8c6cfc"
+    },
+    {
+      "path": "src/content_factory/creative_execution_control.py",
+      "sha256": "d610aefc7f4d4a28d8d5e8e265679f5156cbbf42bbd1c14a2d215d847a9a0583"
+    },
+    {
+      "path": "src/content_factory/creative_segment_execution.py",
+      "sha256": "202f9e1c12462c9f289ddad225d7524e41114b3083baa22ee542bb6677756c65"
+    },
+    {
+      "path": "src/content_factory/creative_media_workbench.py",
+      "sha256": "e4a9a942c1bfdab272f0543c0b5df498e939c436c89c73b65e10546b52fe7aaa"
+    },
+    {
+      "path": "src/content_factory/creative_delivery.py",
+      "sha256": "1525ba5b9a9ff78eba439169ed9f4100eeeba1dbf30df879cf939f2ad5d24896"
+    },
+    {
+      "path": "src/content_factory/creative_quality_evidence.py",
+      "sha256": "ae28a6dcdaf886a9362b5b7914976ca8f1be05fa7a008fa303696ffd32c16eaf"
+    },
+    {
+      "path": "src/web/creative_workbench_panel.py",
+      "sha256": "8b7f77114af63f0623b98000750911432bf272e6b9aea5b912884da8277a58f1"
+    },
+    {
+      "path": "scripts/run_creative_seedance_segment.py",
+      "sha256": "c8009a3acefbe63d36ca2782f766806a470fa9e1b430ef8e1e6d80d426014337"
+    },
+    {
+      "path": "scripts/compile_creative_seedance_segments.py",
+      "sha256": "f686a33e37afee213828cc7e1eb9aadb4fe77ae0f0b8ca1a87622b2c3739b06a"
+    },
+    {
+      "path": "scripts/creative_workbench.py",
+      "sha256": "1985f5b91e43751529baf43eb1ebcc8c30311924c0086a326150405d18a45e8f"
+    },
+    {
+      "path": "src/platform_adapter/douyin_adapter.py",
+      "sha256": "c7da8fa154afd6e49820b8a90e17c8a1db774ecd3fdd9a2ed2938904911a2204"
+    },
+    {
+      "path": "src/platform_adapter/publish_workflow.py",
+      "sha256": "8344bb61557c63e95347c4e62f3df3249d8766733dda35cf6f5d42b0febcd248"
+    },
+    {
+      "path": "src/platform_adapter/publish_verification.py",
+      "sha256": "435e0f55030f4c33d0a65b70e0eee014628c2f423fac13d371215d928af720d8"
+    },
+    {
+      "path": "src/platform_adapter/models.py",
+      "sha256": "9899f853dbfaee4623229317ccb8ab7eef5d535b4feeb75b2a7229adc9a214ff"
+    },
+    {
+      "path": "src/platform_adapter/ai_content_declaration.py",
+      "sha256": "dd9d5e9826e95a0938043a7ef2f95df3ef4f6311d34608b9b438724a2aea6e5d"
+    },
+    {
+      "path": "src/platform_adapter/browser_session.py",
+      "sha256": "064971dfa8b2d17c34de822d8d561c057a4c6f27d0044b4c843e338f73d6e4dc"
+    },
+    {
+      "path": "src/services/content_performance.py",
+      "sha256": "628d47e21bb87412fc09c5c5d2224a3784be88c1b45031162e26ffdf562213c6"
+    }
+  ],
+  "rule_inventory_coverage_claim": false,
+  "supersedes": "data/creative_governance/20261002_v21_platform_refactor_multi_feedback",
+  "change": "P2/P3/P4 workbench boundaries: immutable exact stage inputs/results and consumed field projections; strict whole-request compatibility reuse; stop/resume and exclusive dispatch; source-bound media previews, provider task recovery, timed human feedback and approved assembly; approved full-film delivery into existing browser publishing and operations receipts; candidate/gold/holdout quality evidence and honest cost accounting. No live content-quality claim.",
+  "revision_note": "Historical 20261002_v21_platform_refactor_multi_feedback pack remains unchanged. Existing runs remain historical and must not be silently rebound; see MIGRATION.md for explicit restart/revalidation."
+}

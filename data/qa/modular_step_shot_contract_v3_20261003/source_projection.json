@@ -1,0 +1,177 @@
+{
+  "schema": "linear_step_shot_source_contract_offline_v3",
+  "status": "source_order_valid_pending_physical_binding",
+  "raw_linear_script": {
+    "title": "单拍多镜顺序夹具",
+    "premise": "拒绝后各自承担",
+    "selected_candidate_id": "FIXTURE",
+    "beats": [
+      {
+        "id": "B1",
+        "duration_seconds": 8,
+        "event": "仅摘要，不用于生成动作",
+        "trigger": "听后反应承接选择",
+        "steps": [
+          {
+            "kind": "action",
+            "speaker": "",
+            "text": "乙把杯子放到桌上。"
+          },
+          {
+            "kind": "dialogue",
+            "speaker": "乙",
+            "text": "这次你自己做。"
+          },
+          {
+            "kind": "action",
+            "speaker": "",
+            "text": "甲听完后停两秒，看着乙。"
+          },
+          {
+            "kind": "action",
+            "speaker": "",
+            "text": "乙拿起笔，开始核对。"
+          }
+        ]
+      }
+    ]
+  },
+  "raw_linear_script_sha256": "48864dd2c0ef292fabf604a6592edaf9008117b44d61483d82e23591ef244ae6",
+  "context_sha256": "4c38d2ba466632b1585ece7ccdc1ea9b3ace1af941ea29a0d353c459976df133",
+  "direction_sha256": "f03ef553850b734c488b62201429236ef0b3e398e735df2313338036c0bed413",
+  "ordered_execution": [
+    {
+      "shot_id": "S1",
+      "source_step_ref": "raw_linear_script.beats.0.steps.0",
+      "source_step": {
+        "kind": "action",
+        "speaker": "",
+        "text": "乙把杯子放到桌上。"
+      },
+      "groups": [
+        {
+          "id": "G0",
+          "action_ref": "raw_linear_script.beats.0.steps.0",
+          "semantic_role": "action",
+          "kind": "action",
+          "duration_seconds": 1,
+          "hold_subject": ""
+        }
+      ],
+      "dialogue_ref": null
+    },
+    {
+      "shot_id": "S1",
+      "source_step_ref": "raw_linear_script.beats.0.steps.1",
+      "source_step": {
+        "kind": "dialogue",
+        "speaker": "乙",
+        "text": "这次你自己做。"
+      },
+      "groups": [],
+      "dialogue_ref": "raw_linear_script.beats.0.steps.1"
+    },
+    {
+      "shot_id": "S2",
+      "source_step_ref": "raw_linear_script.beats.0.steps.2",
+      "source_step": {
+        "kind": "action",
+        "speaker": "",
+        "text": "甲听完后停两秒，看着乙。"
+      },
+      "groups": [
+        {
+          "id": "G2",
+          "action_ref": "raw_linear_script.beats.0.steps.2",
+          "semantic_role": "reaction",
+          "kind": "hold",
+          "duration_seconds": 2,
+          "hold_subject": "C01"
+        }
+      ],
+      "dialogue_ref": null
+    },
+    {
+      "shot_id": "S2",
+      "source_step_ref": "raw_linear_script.beats.0.steps.3",
+      "source_step": {
+        "kind": "action",
+        "speaker": "",
+        "text": "乙拿起笔，开始核对。"
+      },
+      "groups": [
+        {
+          "id": "G3",
+          "action_ref": "raw_linear_script.beats.0.steps.3",
+          "semantic_role": "action",
+          "kind": "action",
+          "duration_seconds": 1,
+          "hold_subject": ""
+        }
+      ],
+      "dialogue_ref": null
+    }
+  ],
+  "source_map": [
+    {
+      "source_step_ref": "raw_linear_script.beats.0.steps.0",
+      "shot_id": "S1",
+      "kind": "action",
+      "source_step_sha256": "9f3d8311a9ef6c508019f2aea94b4b5ff7da8824bba87c07b94a4e1c52d8a843",
+      "group_ids": [
+        "G0"
+      ]
+    },
+    {
+      "source_step_ref": "raw_linear_script.beats.0.steps.1",
+      "shot_id": "S1",
+      "kind": "dialogue",
+      "source_step_sha256": "1cf9d25f8f3173744435aa0fd1407e52d295c665d62123b72fd71260f20ae345",
+      "group_ids": []
+    },
+    {
+      "source_step_ref": "raw_linear_script.beats.0.steps.2",
+      "shot_id": "S2",
+      "kind": "action",
+      "source_step_sha256": "f738742efabd3390b99fc298db5b6a3ca68ab53d4f30274afc7163e9f751d1c4",
+      "group_ids": [
+        "G2"
+      ]
+    },
+    {
+      "source_step_ref": "raw_linear_script.beats.0.steps.3",
+      "shot_id": "S2",
+      "kind": "action",
+      "source_step_sha256": "12508e39316118471757abc53f040c1f7869d18af74a7888fea0074cabc11e3b",
+      "group_ids": [
+        "G3"
+      ]
+    }
+  ],
+  "source_coverage_passed": true,
+  "source_order_passed": true,
+  "source_text_rewritten": false,
+  "dialogue_once_in_original_order": true,
+  "event_summary_used_as_action": false,
+  "physical_compile_attempted": false,
+  "physical_state_verified": false,
+  "action_semantics_verified": false,
+  "reaction_timing_verified": false,
+  "semantic_approval": false,
+  "production_ready": false,
+  "automatic_media_submit": false,
+  "compiler_boundary": {
+    "required_next": [
+      "typed operations grounded in each original action_ref",
+      "compiler-derived start state and physical preconditions per shot",
+      "prove v2 scheduled action/dialogue trace equals original steps order",
+      "reaction duration/subject/trigger windows and full semantic review"
+    ],
+    "unsupported_without_new_adapter": [
+      "direct use of event-owner v2 bridge for multi-step beats",
+      "splitting one source step across shots",
+      "critical action/dialogue simultaneity"
+    ],
+    "reason": "现有v2接受before/during/after组与对白窗口；需要源steps索引适配及排程回读校验，不能直接把本投影当物理通过"
+  }
+}

@@ -1,0 +1,10 @@
+usage: creative_workbench.py [-h]
+                             run_dir
+                             {inspect-media,register-candidate,review-media,assembly-chain,prepare-segment,assemble,prepare-delivery,publish,verify-publish,collect-operations,collect-quality-case,annotate-quality,freeze-quality,quality-report} ...
+
+positional arguments:
+  run_dir
+  {inspect-media,register-candidate,review-media,assembly-chain,prepare-segment,assemble,prepare-delivery,publish,verify-publish,collect-operations,collect-quality-case,annotate-quality,freeze-quality,quality-report}
+
+options:
+  -h, --help            show this help message and exit

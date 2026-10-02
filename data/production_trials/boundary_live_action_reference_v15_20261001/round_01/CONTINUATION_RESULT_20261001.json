@@ -1,0 +1,88 @@
+{
+  "schema": "creative_production_continuation_result/v1",
+  "created_at": "2026-10-01T13:26:55.123876+00:00",
+  "status": "needs_attention",
+  "text_production_complete": false,
+  "content_passed": false,
+  "video_generated": false,
+  "calls_before": 14,
+  "calls_after": 17,
+  "additional_paid_calls": 3,
+  "max_calls": 20,
+  "reported_tokens_before": 195507,
+  "reported_tokens_after": 245469,
+  "new_calls_reported_tokens": 49962,
+  "shared_content_revision_rounds": 2,
+  "max_revisions": 5,
+  "contract_repairs_used": 6,
+  "static_manifest": "validated_structure_only; E09/E10 fixed chairs, actual assets not generated",
+  "state_last_error": "plan_patch: PLAN_PATCH_VALUE_SCHEMA: beats.1.groups: '' is not of type 'array'",
+  "latest_repair_syntax": "valid JSON; nested operations value is an empty string, required array",
+  "timing_budget": [
+    {
+      "beat_id": "B1",
+      "shot_seconds": 14,
+      "minimum_dialogue_seconds": 3.0,
+      "preferred_dialogue_seconds": 4.585714,
+      "maximum_action_and_hold_seconds": 11.0,
+      "current_action_and_hold_seconds": 11.0,
+      "shortfall_seconds": 0
+    },
+    {
+      "beat_id": "B2",
+      "shot_seconds": 11,
+      "minimum_dialogue_seconds": 2.4,
+      "preferred_dialogue_seconds": 3.728571,
+      "maximum_action_and_hold_seconds": 8.6,
+      "current_action_and_hold_seconds": 10.5,
+      "shortfall_seconds": 1.9
+    },
+    {
+      "beat_id": "B3",
+      "shot_seconds": 10,
+      "minimum_dialogue_seconds": 2.0,
+      "preferred_dialogue_seconds": 3.157143,
+      "maximum_action_and_hold_seconds": 8.0,
+      "current_action_and_hold_seconds": 10.0,
+      "shortfall_seconds": 2.0
+    },
+    {
+      "beat_id": "B4",
+      "shot_seconds": 12,
+      "minimum_dialogue_seconds": 1.6,
+      "preferred_dialogue_seconds": 2.585714,
+      "maximum_action_and_hold_seconds": 10.4,
+      "current_action_and_hold_seconds": 12.0,
+      "shortfall_seconds": 1.6
+    },
+    {
+      "beat_id": "B5",
+      "shot_seconds": 10,
+      "minimum_dialogue_seconds": 0,
+      "preferred_dialogue_seconds": 0,
+      "maximum_action_and_hold_seconds": 10,
+      "current_action_and_hold_seconds": 10.0,
+      "shortfall_seconds": 0
+    }
+  ],
+  "minimum_remaining_calls": 4,
+  "remaining_calls": 3,
+  "next_request": "CONTINUATION_NEXT_REQUEST.json",
+  "source_receipts": [
+    "static_visual_manifest.json",
+    "director_state_plan__00.json",
+    "director_state_plan__00__contract_repair.json",
+    "USAGE_RECONCILIATION_V17.json"
+  ],
+  "formal_artifacts_exist": {
+    "SCREENPLAY.md": false,
+    "SCREENPLAY.json": false,
+    "STORYBOARD.json": false,
+    "STATE_PLAN.json": false,
+    "PRODUCTION_DESIGN.json": false,
+    "EXECUTION_DRAFT.json": false,
+    "MEDIA_HANDOFF.json": false
+  },
+  "offline_tests": "52 passed; test_creative_failed_usage, test_failed_plan_production_recovery, test_creative_plan_patch, test_creative_plan_patch_integration, test_creative_governed_protocol",
+  "actual_invalid_field": "patches.0.value.3.operations"
+}

@@ -1,0 +1,371 @@
+{
+  "schema": "whole_film_state_plan_v3",
+  "initial_state": {
+    "C01": {
+      "posture": "standing",
+      "position": "at Lin Yao's own desk (near E04), on the room side facing Chen He's desk",
+      "gaze": "toward Chen He's general direction as she readies to leave",
+      "affect": "polite end-of-day composure, gently ready to depart"
+    },
+    "C02": {
+      "posture": "standing",
+      "position": "beside her own desk (E01), folder within reach on the desk surface",
+      "gaze": "down at the folder on her own desk",
+      "affect": "quietly focused on wrapping up evening work"
+    },
+    "P01": {
+      "holder": "none",
+      "location": "on top of Chen He's desk (E01)"
+    },
+    "P02": {
+      "holder": "C01",
+      "location": "worn crossbody on Lin Yao's shoulder"
+    }
+  },
+  "beats": [
+    {
+      "beat_id": "B1",
+      "purpose": "Establish the evening office: Lin Yao shoulders her bag and drifts toward Chen He's desk to say goodbye; Chen He reaches to her own desk, lifts the folder and gently calls out a small favor as she looks up to Lin Yao.",
+      "composition": "Medium two-shot at Chen He's desk area: Lin Yao enters from frame-left (her desk side), Chen He stands behind her own desk on frame-right with the desk lamp spilling warm key light across the surface between them; folder visible on the desk at start.",
+      "camera": "Static medium shot with a barely perceptible slow push-in; eye level, slight warm desk-lamp dominance, cool ambient fill from off-screen window.",
+      "dialogue_mode": "画内对白",
+      "cut_reason": "Chen He holds folder mid-air and asks her favor out loud — the request is delivered, opening beat ends on a small ask hanging between the two of them.",
+      "events": [
+        {
+          "start": 0.0,
+          "end": 5.0,
+          "phase": "before_first_line",
+          "script_slot": "before",
+          "dialogue_index": -1,
+          "performance": "Lin Yao drifts the last few steps toward Chen He's desk, slowing as she reaches it, body softening into a departure posture. At nearly the same moment, Chen He reaches down to her own desk, picks up the kraft-brown folder with her right hand, and lifts her eyes to meet Lin Yao's.",
+          "operations": [
+            {
+              "kind": "move",
+              "actor": "C01",
+              "target": "",
+              "value": "Chen He's desk side"
+            },
+            {
+              "kind": "affect",
+              "actor": "C01",
+              "target": "",
+              "value": "polite readiness to say goodbye"
+            },
+            {
+              "kind": "take",
+              "actor": "C02",
+              "target": "P01",
+              "value": "P01"
+            },
+            {
+              "kind": "gaze",
+              "actor": "C02",
+              "target": "",
+              "value": "Lin Yao's eyes"
+            },
+            {
+              "kind": "affect",
+              "actor": "C02",
+              "target": "",
+              "value": "polite, mildly hopeful asking"
+            }
+          ]
+        },
+        {
+          "start": 5.0,
+          "end": 9.014285714285714,
+          "phase": "first_line_delivery",
+          "script_slot": "dialogue_performance",
+          "dialogue_index": 0,
+          "performance": "Chen He speaks her line at a low, conversational volume; mouth opens and closes naturally around each phrase, breath steady; eyes remain on Lin Yao throughout; the hand holding the folder stays softly lifted near her own shoulder, not extended toward Lin Yao.",
+          "operations": []
+        },
+        {
+          "start": 9.014285714285714,
+          "end": 10,
+          "phase": "after_last_line",
+          "script_slot": "after",
+          "dialogue_index": -1,
+          "performance": "保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长",
+          "operations": []
+        }
+      ],
+      "dialogue_windows": [
+        {
+          "start": 5.0,
+          "end": 9.014285714285714
+        }
+      ],
+      "reaction_window": {
+        "start": 5.0,
+        "end": 9.014285714285714,
+        "subject": "C01",
+        "meaning": "Lin Yao arrives to say goodbye, hears Chen He call her by name and ask a small favor — she pauses inside, the friendly ask landing mid-departure."
+      }
+    },
+    {
+      "beat_id": "B2",
+      "purpose": "Lay the core of the scene: Lin Yao pauses, takes in the folder, and for the first time clearly and calmly refuses out loud. Chen He does not push the folder forward; she keeps it held in mid-air, neutral, waiting.",
+      "composition": "Tighter medium shot biased toward Lin Yao at the desk edge; Chen He's hand holding the folder visible in the foreground right, soft lamp glow on the kraft cover; both characters in same frame so the held-state is legible.",
+      "camera": "Static with micro settle; eye level, shallow depth keeping Lin Yao's face and the folder sharp together.",
+      "dialogue_mode": "画内对白",
+      "cut_reason": "Lin Yao's measured refusal lands — the central, uncomfortable beat of the scene completes on the spoken no.",
+      "events": [
+        {
+          "start": 0.0,
+          "end": 2.5,
+          "phase": "before_first_line",
+          "script_slot": "before",
+          "dialogue_index": -1,
+          "performance": "Lin Yao's gaze drops from Chen He's eyes down to the kraft-brown folder in Chen He's hand; a small visible swallow, breath held a beat, shoulders settle very slightly as she decides.",
+          "operations": [
+            {
+              "kind": "gaze",
+              "actor": "C01",
+              "target": "",
+              "value": "the folder in Chen He's hand"
+            },
+            {
+              "kind": "affect",
+              "actor": "C01",
+              "target": "",
+              "value": "quiet pre-refusal tension"
+            }
+          ]
+        },
+        {
+          "start": 2.5,
+          "end": 5.085714285714285,
+          "phase": "first_line_delivery",
+          "script_slot": "dialogue_performance",
+          "dialogue_index": 0,
+          "performance": "Lin Yao delivers the refusal in a measured, even tone; mouth shapes the words cleanly without apology phrasing; breath held briefly before the line, then a small exhale after; her gaze lifts from the folder back up toward Chen He as she finishes.",
+          "operations": []
+        },
+        {
+          "start": 5.085714285714285,
+          "end": 9.085714285714285,
+          "phase": "after_last_line",
+          "script_slot": "during",
+          "dialogue_index": -1,
+          "performance": "Chen He keeps her arm and hand softly in place; the folder hovers mid-air between them without being extended toward Lin Yao; her expression stays open and neutral, listening posture, no retreat and no push.",
+          "operations": []
+        },
+        {
+          "start": 9.085714285714285,
+          "end": 10,
+          "phase": "after_last_line",
+          "script_slot": "after",
+          "dialogue_index": -1,
+          "performance": "保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长",
+          "operations": []
+        }
+      ],
+      "dialogue_windows": [
+        {
+          "start": 2.5,
+          "end": 5.085714285714285
+        }
+      ],
+      "reaction_window": {
+        "start": 2.5,
+        "end": 5.085714285714285,
+        "subject": "C02",
+        "meaning": "Chen He hears the refusal land; she neither withdraws the folder nor pushes it forward — simply holds her ground and waits, face still neutral and open, no hurt on the surface."
+      }
+    },
+    {
+      "beat_id": "B3",
+      "purpose": "Hold the silence long enough for the refusal to truly register (both of them); then Chen He softens her face and lays the folder back flat on her own desk — her calm acceptance made visible through action, not words alone.",
+      "composition": "Medium two-shot framed so both faces are clearly visible at eye level, desk lamp edge-lighting their features; the folder becomes a visible object that travels from Chen He's hand down onto her own desk surface within the frame.",
+      "camera": "Static two-shot, eye level; slow, almost imperceptible settling of framing on their held gaze; cut on the moment the folder touches the desk surface.",
+      "dialogue_mode": "画内对白",
+      "cut_reason": "Chen He places the folder down on her own desk and quietly accepts out loud — the held silence resolves into acceptance, refusal honored, relationship intact.",
+      "events": [
+        {
+          "start": 0.0,
+          "end": 1.5,
+          "phase": "before_first_line",
+          "script_slot": "before",
+          "dialogue_index": -1,
+          "performance": "Lin Yao lifts her gaze slowly from the folder up to Chen He's eyes, a small deliberate motion; face careful, not apologetic.",
+          "operations": [
+            {
+              "kind": "gaze",
+              "actor": "C01",
+              "target": "",
+              "value": "Chen He's eyes"
+            }
+          ]
+        },
+        {
+          "start": 1.5,
+          "end": 3.5,
+          "phase": "before_first_line",
+          "script_slot": "before",
+          "dialogue_index": -1,
+          "performance": "Both women hold each other's gaze in a fully readable 2-second silence; shoulder lines do not move; Lin Yao's cardigan rises and falls with visible breath; Chen He's face stays neutral through the pause, taking it in.",
+          "operations": []
+        },
+        {
+          "start": 3.5,
+          "end": 6.5,
+          "phase": "before_first_line",
+          "script_slot": "before",
+          "dialogue_index": -1,
+          "performance": "Chen He's expression softens — brow and jaw ease; she brings her hand down and lays the kraft-brown folder flat on her own desk surface next to her other papers, releasing it without ceremony; no further gesture toward Lin Yao.",
+          "operations": [
+            {
+              "kind": "affect",
+              "actor": "C02",
+              "target": "",
+              "value": "quiet acceptance, softened face"
+            },
+            {
+              "kind": "place",
+              "actor": "C02",
+              "target": "P01",
+              "value": "on Chen He's desk (E01)"
+            }
+          ]
+        },
+        {
+          "start": 6.5,
+          "end": 9.371428571428572,
+          "phase": "first_line_delivery",
+          "script_slot": "dialogue_performance",
+          "dialogue_index": 0,
+          "performance": "Chen He speaks her acceptance line calmly after the pause; mouth opens and closes simply, voice steady and small; she is already softened in posture from the previous group, so the words land as confirmation rather than new decision.",
+          "operations": []
+        },
+        {
+          "start": 9.371428571428572,
+          "end": 10,
+          "phase": "after_last_line",
+          "script_slot": "after",
+          "dialogue_index": -1,
+          "performance": "保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长",
+          "operations": []
+        }
+      ],
+      "dialogue_windows": [
+        {
+          "start": 6.5,
+          "end": 9.371428571428572
+        }
+      ],
+      "reaction_window": {
+        "start": 1.5,
+        "end": 3.5,
+        "subject": "C02",
+        "meaning": "After truly sitting with the refused silence, Chen He accepts — she softens her face, returns the folder to her own desk, and takes the errand back on herself without flinching."
+      }
+    },
+    {
+      "beat_id": "B4",
+      "purpose": "Land the release: hearing Chen He accept, Lin Yao's shoulders soften, she nods and says a clean goodbye, then walks two unhurried steps toward the indoor door. Chen He turns back to her own desk and sits down to resume her work. Both parties remain fine.",
+      "composition": "Wider medium shot that includes both the desk area and the door on frame-left; Lin Yao's movement toward the door stays within frame; Chen He's turn-and-sit happens inside the same composition at her desk.",
+      "camera": "Static wide two-shot at eye level; composition holds both the desk and the indoor door so the walk-out registers without re-framing.",
+      "dialogue_mode": "画内对白",
+      "cut_reason": "Lin Yao says goodbye, walks away; Chen He sits back to her own work — relationship settled, scene closes on each returning to her own responsibilities.",
+      "events": [
+        {
+          "start": 0.0,
+          "end": 2.0,
+          "phase": "before_first_line",
+          "script_slot": "before",
+          "dialogue_index": -1,
+          "performance": "Lin Yao's shoulders drop a clear notch from their previously held line; a small visible exhale; she gives one unhurried nod; her face eases from careful to simply warm.",
+          "operations": [
+            {
+              "kind": "affect",
+              "actor": "C01",
+              "target": "",
+              "value": "visible relief, warmth returning"
+            }
+          ]
+        },
+        {
+          "start": 2.0,
+          "end": 4.3,
+          "phase": "first_line_delivery",
+          "script_slot": "dialogue_performance",
+          "dialogue_index": 0,
+          "performance": "Lin Yao says the parting line warmly, voice lighter now that the tension has released; mouth forms a brief closed-mouth smile around 明天见; her turn toward the door and her steps away carry the same ease.",
+          "operations": []
+        },
+        {
+          "start": 4.3,
+          "end": 7.3,
+          "phase": "after_last_line",
+          "script_slot": "during",
+          "dialogue_index": -1,
+          "performance": "Lin Yao turns her body toward the indoor door on frame-left and walks two natural steps in that direction; her pace stays unhurried, no glance back, the bag stays settled on her shoulder.",
+          "operations": [
+            {
+              "kind": "gaze",
+              "actor": "C01",
+              "target": "",
+              "value": "toward the indoor door"
+            },
+            {
+              "kind": "move",
+              "actor": "C01",
+              "target": "",
+              "value": "toward the indoor door (E06), two steps"
+            }
+          ]
+        },
+        {
+          "start": 7.3,
+          "end": 9.3,
+          "phase": "after_last_line",
+          "script_slot": "after",
+          "dialogue_index": -1,
+          "performance": "Chen He turns her torso back to face her own desk, steps behind her chair, and sits down with a small settling motion; her hands come to rest near the papers on the desk surface, ready to resume working.",
+          "operations": [
+            {
+              "kind": "gaze",
+              "actor": "C02",
+              "target": "",
+              "value": "her own desk surface"
+            },
+            {
+              "kind": "affect",
+              "actor": "C02",
+              "target": "",
+              "value": "calm focus, returning to work"
+            },
+            {
+              "kind": "sit",
+              "actor": "C02",
+              "target": "E02",
+              "value": "E02"
+            }
+          ]
+        },
+        {
+          "start": 9.3,
+          "end": 10,
+          "phase": "after_last_line",
+          "script_slot": "after",
+          "dialogue_index": -1,
+          "performance": "保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长",
+          "operations": []
+        }
+      ],
+      "dialogue_windows": [
+        {
+          "start": 2.0,
+          "end": 4.3
+        }
+      ],
+      "reaction_window": {
+        "start": 0.0,
+        "end": 2.0,
+        "subject": "C01",
+        "meaning": "Now that Chen He has calmly accepted the no, Lin Yao's held tension dissolves — her shoulders drop, she nods, and she is free to leave without guilt or rupture between them."
+      }
+    }
+  ]
+}

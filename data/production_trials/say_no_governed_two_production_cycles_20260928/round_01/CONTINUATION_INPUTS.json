@@ -1,0 +1,305 @@
+{
+  "schema": "approved_screenplay_continuation_inputs/v1",
+  "same_story": true,
+  "parent_run": "D:\\IT\\ai_douyin\\data\\creative_workflows\\say_no_reviewed_segments_20260927",
+  "parent_state_sha256": "9a22d511c7aa8b8b2dee4c08e54db5eca4b62c2c169bfb71345e74074d515c34",
+  "parent_calls_started": 30,
+  "parent_revision_rounds": 6,
+  "approved_screenplay_path": "D:\\IT\\ai_douyin\\data\\production_trials\\say_no_reviewed_segments_20260927\\REVIEWED_SCREENPLAY.json",
+  "script": {
+    "title": "这次先回去",
+    "premise": "晚间办公室，林遥背起包走到陈禾桌边准备离开，陈禾拿起一只文件夹开口请求帮忙顺路带一下；林遥第一次平静拒绝，陈禾先听完再把文件夹平放回自己桌面并口头接受，林遥听见后才放松，自然道别走向门口，陈禾坐回接手自己工作，关系保持正常。",
+    "selected_candidate_id": "C01",
+    "duration_seconds": 40,
+    "beats": [
+      {
+        "id": "B1",
+        "duration_seconds": 10,
+        "event": "晚间办公室，林遥背起包走到陈禾桌边准备道别；陈禾从桌面拿起一只文件夹，抬眼叫住她。",
+        "trigger": "陈禾持文件夹叫住林遥，请求信号显形",
+        "before": "林遥背起包走到陈禾桌边，脚步放缓准备道别。\n陈禾从桌面拿起一只文件夹，抬眼看向林遥。",
+        "during": "（无新增动作）",
+        "after": "（无新增动作）",
+        "dialogue": [
+          {
+            "speaker": "陈禾",
+            "text": "这份今天能顺路帮我带一下吗？"
+          }
+        ]
+      },
+      {
+        "id": "B2",
+        "duration_seconds": 10,
+        "event": "林遥停下看着文件夹，短暂停顿后口头拒绝。",
+        "trigger": "林遥明确拒绝，拒绝由本人清晰对白完成",
+        "before": "林遥停下脚步，目光落在陈禾手中文件夹上。",
+        "during": "陈禾的手仍持文件夹，没递出，停在半空。",
+        "after": "（无新增动作）",
+        "dialogue": [
+          {
+            "speaker": "林遥",
+            "text": "今天不行，我赶时间。"
+          }
+        ]
+      },
+      {
+        "id": "B3",
+        "duration_seconds": 10,
+        "event": "两人完成至少两秒可读沉默后，陈禾把文件夹平放回自己桌面，并口头接受。",
+        "trigger": "陈禾先听完再表态，等待可读后再开口接受",
+        "before": "林遥从陈禾手中的文件夹抬眼看向陈禾。\n两人保持沉默对视至少2秒，肩线不动，呼吸可见。\n陈禾面部先软化，把文件夹平放回自己桌面。",
+        "during": "（无新增动作）",
+        "after": "（无新增动作）",
+        "dialogue": [
+          {
+            "speaker": "陈禾",
+            "text": "那我明早自己跑一趟。"
+          }
+        ]
+      },
+      {
+        "id": "B4",
+        "duration_seconds": 10,
+        "event": "林遥听见接受后肩膀微松、点头道别，朝门口走出两步；陈禾转身面向桌面，坐下接手工作。",
+        "trigger": "林遥放松发生在听到接受之后，结尾只兑现离开与各自承担",
+        "before": "林遥肩膀微松，点了点头。",
+        "during": "林遥转身朝室内门口走出两步，自然道别离开。",
+        "after": "陈禾转身面向自己的桌面，坐下接手工作。",
+        "dialogue": [
+          {
+            "speaker": "林遥",
+            "text": "麻烦你了，明天见。"
+          }
+        ]
+      }
+    ],
+    "screenplay_markdown": "# 这次先回去\n\n## B1 晚间办公室，林遥背起包走到陈禾桌边准备道别；陈禾从桌面拿起一只文件夹，抬眼叫住她。\n\n林遥背起包走到陈禾桌边，脚步放缓准备道别。\n陈禾从桌面拿起一只文件夹，抬眼看向林遥。\n\n**陈禾**：这份今天能顺路帮我带一下吗？\n\n（无新增动作）\n\n（无新增动作）\n\n## B2 林遥停下看着文件夹，短暂停顿后口头拒绝。\n\n林遥停下脚步，目光落在陈禾手中文件夹上。\n\n**林遥**：今天不行，我赶时间。\n\n陈禾的手仍持文件夹，没递出，停在半空。\n\n（无新增动作）\n\n## B3 两人完成至少两秒可读沉默后，陈禾把文件夹平放回自己桌面，并口头接受。\n\n林遥从陈禾手中的文件夹抬眼看向陈禾。\n两人保持沉默对视至少2秒，肩线不动，呼吸可见。\n陈禾面部先软化，把文件夹平放回自己桌面。\n\n**陈禾**：那我明早自己跑一趟。\n\n（无新增动作）\n\n（无新增动作）\n\n## B4 林遥听见接受后肩膀微松、点头道别，朝门口走出两步；陈禾转身面向桌面，坐下接手工作。\n\n林遥肩膀微松，点了点头。\n\n**林遥**：麻烦你了，明天见。\n\n林遥转身朝室内门口走出两步，自然道别离开。\n\n陈禾转身面向自己的桌面，坐下接手工作。"
+  },
+  "director_brief": {
+    "style_options": [
+      {
+        "id": "S01",
+        "medium": "二维手绘动画",
+        "palette": "低饱和办公空间；暖色台灯主光、冷调窗外余光；米白桌面、淡灰墙、墨蓝文件夹做唯一可识别色块",
+        "performance_fit": "二维手绘能稳定呈现成年女性比例与克制微表情（肩松、停顿呼吸、眼睑回落），同时用线条轻收的方式承担≥2秒可读的沉默张力",
+        "source_basis": "creative_brief 显式指定\"电影感二维手绘动画\"，候选C01全程两人同室、单道具、单向视线，表演主导，无需实拍或三维",
+        "tradeoff": "手绘在竖屏9:16下若全身镜头过多会牺牲表情可读性；需用近景/中近景为主、把空间信息压缩进背景层"
+      },
+      {
+        "id": "S02",
+        "medium": "实拍",
+        "palette": "自然低饱和办公暖光",
+        "performance_fit": "实拍能拿到最自然的微表情与节奏呼吸，对≥2秒等待的\"可读沉默\"最有利",
+        "source_basis": "无原文锁定媒介；candidate_lock 选用 C01，但媒介未在编剧阶段硬定",
+        "tradeoff": "简报已显式写出\"电影感二维手绘动画\"，实拍会与用户硬约束冲突；此外本片表演精度依赖分镜特写，实拍在36–44秒短时长内反而更易显粗糙"
+      }
+    ],
+    "selected_style_id": "S01",
+    "visual_strategy": "建立：竖屏9:16 中景，陈禾持文件夹=请求视觉信号，林遥背包到桌边；空间锚定办公桌短边。上升：切至林遥中近景正面，停步、对白拒绝，眼神停留文件夹。转折：约2秒双人沉默，画面停在陈禾手与文件夹上，等待可读。峰值：陈禾把文件夹平放回自己桌面并口头接受，切到林遥肩部松沉的中近景。余波：林遥转身两步走向门口，陈禾转身坐回桌前；空间从桌边扩展到门口短距，构图由双人收紧变为单人侧后景，单灯光不变。视觉状态递进≥3次：景别由中景→中近景→特写肩部→侧后景；人物距离由并肩→对视→背向。",
+    "spatial_strategy": "同一间办公室，桌边到室内门口短距离；不切外景。选这一单空间而非换场的原因：①简报硬约束禁止外景与新角色；②本片情绪弧完全靠两人对视距离与文件夹归属变化推进，无需新空间；③从\"桌边对视\"到\"走向门口\"本身已提供空间信息递进——把镜头从两人同框切到林遥单人侧后景，陈禾留在前景桌面，构成关系正常但各自承担的收束画面。",
+    "performance_strategy": "建立阶段：陈禾抬眼、文件夹由桌面到手=请求显形；林遥步态平稳、肩线微紧。上升阶段：林遥口型清晰、语速平稳，目光短停在文件夹；陈禾手未递出，保持原位。转折阶段：两人约2秒可读沉默，呼吸可见但不夸张，肩线不变。陈禾面部先软化再开口，避免抢在林遥之前表态。峰值阶段：林遥肩部下沉1–2厘米、眨眼频率回落，陈禾把文件夹平放回桌面（手不离画框太久）。余波阶段：林遥转身步幅自然、回头一句短道别即收；陈禾转身面向桌面、视线落到自己工作上，不再看林遥。",
+    "feasibility_notes": [
+      "二维手绘在36–44秒内以6–7拍完成，单拍平均5–7秒；每拍≤两句对白，留足沉默帧。",
+      "文件夹从陈禾手中到桌面只需一次平放动作，不要求她再打开或递出，避免被理解为交接。",
+      "不调用 asset_catalog 中的人物与场景 reuse_key：角色名（林遥/陈禾）与资产名（陈默/林屿/方澄/画室/物业前台/法院窗口）不匹配，场景（办公室晚间）也未在 catalog 中提供；本片角色外形与办公空间独立设定。",
+      "结尾≤10秒只演林遥走向门口两步与陈禾坐回接手工作，不补客套、不补新任务。"
+    ],
+    "writer_feedback": [
+      {
+        "issue": "C01 conflict 拍把请求措辞写为\"今晚这份顺路帮我捎给物业？\"，引入\"物业\"作为收件方，候选其他拍与简报均未提及；该地点信息无依据，且会暗示剧本需要交代去哪送、谁接收，挤占本就紧张的36–44秒",
+        "scope": "conflict",
+        "proposal": "将请求对白改为不含收件地点的版本，例如\"这份今天能顺路帮我带一下吗？\"或\"这份今晚能帮我跑一趟吗？\"，把\"我自己明天送\"的承接对白对应调整为\"那我明早自己跑一趟\"，保持因果链不变、不新增任何场景外事实"
+      },
+      {
+        "issue": "candidate_lock 已选 C01 并禁用 C03，但 format_reconciliations 显示 C03 仍带有一份嵌套 end_quote 对象且 reason 字段为空；上游在协调前需把 C03 完整清出，避免导演稿与编剧稿同时引用两个不同收束方案",
+        "scope": "format",
+        "proposal": "删除 C03 的 end_quote 与 selection_reason 残留，确认 candidate_lock 与本稿只引用 C01 的四拍结构与结尾措辞"
+      },
+      {
+        "issue": "analysis.summary 写\"C02 实际提交时若需严格落在简报下限内，应选 C01\"，等于把简报下限36秒硬绑到 C01；但 C01 标称40秒、C02 标称34秒，若后续导演把 C02 调回到≥36秒的紧凑版仍属于简报允许区间，需给编剧留出明确许可",
+        "scope": "format",
+        "proposal": "把 C02 的可选性写清：若导演在协调阶段同意把简报下限36秒作为软目标而非硬下限，可在保留全部因果硬约束的前提下启用 C02；否则维持 C01。不要让\"必须选 C01\"成为唯一可执行结果"
+      }
+    ],
+    "source_scope": {}
+  },
+  "writer_prompt_binding": {
+    "version": "original_events_v3",
+    "modules": [
+      "emotion"
+    ],
+    "creative_brief": {
+      "schema": "creative_brief/v1",
+      "theme": "一个习惯答应同事额外请求的人，第一次平静拒绝，发现关系并没有因此破裂。",
+      "duration_seconds": [
+        36,
+        44
+      ],
+      "delegated_fields": [],
+      "audience": "在工作中不敢说不的成年人",
+      "relationships": "林遥和陈禾是平级成年女同事，互相尊重；陈禾提出临时帮忙请求，林遥决定拒绝。没有上司施压、恋爱或亲属关系。",
+      "audience_emotion": "从怕让人失望的小紧张，到说出界限后的等待，最后释然；自然温暖，不讲道理。",
+      "visual_style": "竖屏9:16，电影感二维手绘动画，低饱和办公空间、柔和晚间灯光，稳定成年人物比例。",
+      "turn": "林遥明确拒绝后，陈禾实际听完并接受，自己收回待办；林遥看到对方态度才放松，不把拒绝改成勉强答应。",
+      "ending": "林遥自然道别、松开紧绷的姿势，朝房间门口走出两步；陈禾留在桌边接手自己的工作，双方关系保持正常。",
+      "constraints": [
+        "仅林遥、陈禾两名成年人，场景固定同一间办公室桌边到室内门口的短距离，不切外景。",
+        "唯一关键可移动道具是一只文件夹，始终由提出请求的陈禾持有或放在她自己桌面，不能交给林遥。桌椅为固定场景资产。",
+        "关键拒绝和接受由本人清晰对白表达，不靠手机、屏幕、小字、旁白或闪回承担因果。",
+        "重要拒绝后有至少2秒可读等待反应，再由陈禾自然接受；林遥在听见接受后才明显放松。",
+        "每拍最多两句对白。结尾不超过10秒，只兑现离开与各自承担，不增加解释或新任务。"
+      ],
+      "avoid": [
+        "把平级同事写成刻薄上司",
+        "道歉独白、励志说教、突然冲突反转",
+        "用反复握手、搬椅子和文件交接填时长"
+      ]
+    },
+    "prompt": "【identity】\n你是原创短片编剧。只按本次creative_brief/brief与候选锁创作。保持人物具体、对白自然、转折可见。优先选择简单但成立的故事，不为电影感增加无用物件和反复微动作。不要借用其他项目的人物和桥段。\n\n【contract】\n只输出给定schema的完整JSON。selected_candidate_id取candidate_lock.id。拍ID严格按required_beat_ids（若提供）；否则连续编号。总时长等于各拍时长和。每拍events就是实际播放的唯一顺序，动作只写一次，台词只写在dialogue事件。事件格式kind/speaker/text，action的speaker为空字符串，dialogue的speaker为人物姓名。必须采用下面三种模式之一：无对白[action,action,action]；一句对白[action,dialogue,action,action]；两句对白[action,dialogue,action,dialogue,action]。每条动作尽量一个短句（约20—60字），只写实际可见动作，不再写“说、问、解释、道歉、承认”等发言概述。\n\n【requirements】\n先在内部把简报逐项转为验收条件：人物身份和关系、允许道具、禁止桥段、谁作出转折选择、结尾由谁对谁完成什么动作、时长。特别保留语义角色：被帮助者和帮助者不能交换结尾的主动权。每项须有实际动作或对白证据，不能只写进premise/event/trigger。禁止的桥段不要换同类物件变相重复。结尾先确定一个准确兑现要求的动作，再倒推前因；不用多余道具或第二次解释表达同一意思。\n\n【timeline】\n先在脑中按实际秒数播放，再逐条写events。动作和对白只有这一个顺序来源：说话者先看见刺激才能开口，听者只在实际听到相应台词之后反应，手先取物才能交付，通信先接通再发言。两句台词间如必须有多个复杂动作，简化为一个明确变化。event/trigger只是摘要，不承担独有的可见证据；不要用它们补救events遗漏。\n\n【continuity】\n写作时内部维护逐拍状态：人物所在区域和面向；每个关键物唯一持有人/支撑面、开闭/完好状态；每个人已经知道什么。下一拍从上拍末状态开始，拿放/开合/交接只发生一次，不允许靠泛称“他”换人。发生误会时，事实状态和人物认知分开：揭示必须提供此前没有被看到的证据，不能让同一人先否认自己做过的关键行动却无理由认领。场景方向统一用固定地标（窗侧/墙侧等），不混人物左右与镜头左右。结尾不临时变出礼物，解决办法符合普通物理常识。\n\n【dramaturgy】\n先让观众明白一件具体的困难及人物不同选择，再用可见事实改变判断，最后通过行动兑现关系变化。每拍只推进一个主要变化，动作句简洁可执行。重要对白前后留表演时间，总对白按每秒约3个汉字预算，另留动作和至少2秒反应；不能用多个微动作填满空白。最后一拍通常只完成一个选择或交接，不堆起身、绕桌、取物、返回、再道歉。\n\n【self_read】\n只按events从头读到尾，逐项核对brief。谁给谁什么、为什么改变判断、谁完成结尾选择，都必须从真实事件可见。转折必须有事实依据；微表情不代替前因。禁止桥段不要替换名字后重复。核对每个关键物的持有人和支撑面，确认时长可容纳对白与动作；不成立则先简化。不要输出自评分。\n\n【emotion】\n关系修复必须由具体行为承担代价，不能靠说教、突然认错或煽情事故替代动机。明确谁受哪句或哪个动作触动、态度如何改变；既不抢在刺激前反应，也不把所有表演塞到最后。"
+  },
+  "asset_catalog": [
+    {
+      "reuse_key": "CHENMO_THREE_VIEW",
+      "kind": "character",
+      "canonical_name": "陈默",
+      "aliases": [
+        "陈默",
+        "chenmo"
+      ],
+      "tags": [
+        "adult_male",
+        "black_short_hair",
+        "charcoal_jacket",
+        "photoreal"
+      ],
+      "reuse_conditions": [
+        "same character identity and wardrobe",
+        "source hashes unchanged",
+        "actual review remains passed"
+      ]
+    },
+    {
+      "reuse_key": "LINYU_THREE_VIEW_V3",
+      "kind": "character",
+      "canonical_name": "林屿",
+      "aliases": [
+        "林屿",
+        "linyu"
+      ],
+      "tags": [
+        "adult_female",
+        "shoulder_black_hair",
+        "offwhite_cardigan",
+        "photoreal"
+      ],
+      "reuse_conditions": [
+        "same character identity and wardrobe",
+        "source hashes unchanged",
+        "actual review remains passed"
+      ]
+    },
+    {
+      "reuse_key": "FANGCHENG_THREE_VIEW",
+      "kind": "character",
+      "canonical_name": "方澄",
+      "aliases": [
+        "方澄",
+        "fangcheng"
+      ],
+      "tags": [
+        "adult_female",
+        "low_ponytail",
+        "navy_suit",
+        "photoreal"
+      ],
+      "reuse_conditions": [
+        "same character identity and wardrobe",
+        "source hashes unchanged",
+        "actual review remains passed"
+      ]
+    },
+    {
+      "reuse_key": "STUDIO_DAY_PHOTOREAL",
+      "kind": "scene",
+      "canonical_name": "画室_日间",
+      "aliases": [
+        "日间画室",
+        "studio_day"
+      ],
+      "tags": [
+        "studio",
+        "day",
+        "warm_window_light",
+        "photoreal"
+      ],
+      "reuse_conditions": [
+        "same location architecture and lighting period",
+        "source hashes unchanged",
+        "actual review remains passed"
+      ]
+    },
+    {
+      "reuse_key": "STUDIO_NIGHT_PHOTOREAL",
+      "kind": "scene",
+      "canonical_name": "画室_夜间",
+      "aliases": [
+        "夜间画室",
+        "studio_night"
+      ],
+      "tags": [
+        "studio",
+        "night",
+        "warm_lamp_cool_window",
+        "photoreal"
+      ],
+      "reuse_conditions": [
+        "same location architecture and lighting period",
+        "source hashes unchanged",
+        "actual review remains passed"
+      ]
+    },
+    {
+      "reuse_key": "PROPERTY_FRONT_DESK_PHOTOREAL_V3",
+      "kind": "scene",
+      "canonical_name": "物业前台",
+      "aliases": [
+        "物业前台",
+        "property_front_desk"
+      ],
+      "tags": [
+        "property",
+        "front_desk",
+        "photoreal",
+        "empty_background"
+      ],
+      "reuse_conditions": [
+        "same location architecture and lighting period",
+        "source hashes unchanged",
+        "actual review remains passed"
+      ]
+    },
+    {
+      "reuse_key": "COURT_WINDOW_PHOTOREAL",
+      "kind": "scene",
+      "canonical_name": "法院窗口",
+      "aliases": [
+        "法院立案窗口",
+        "court_window"
+      ],
+      "tags": [
+        "court",
+        "service_window",
+        "photoreal",
+        "empty_background"
+      ],
+      "reuse_conditions": [
+        "same location architecture and lighting period",
+        "source hashes unchanged",
+        "actual review remains passed"
+      ]
+    }
+  ],
+  "series": "20260928_governed_two",
+  "prior_series_ledger": "D:\\IT\\ai_douyin\\data\\production_trials\\say_no_action_one_production_cycle_20260928\\THREE_CYCLE_LEDGER.json",
+  "prior_series_ledger_sha256": "660e6b88901e724a2fe92bf50aa6b0d83c7d7f2be5f0db9613385ea01e2f10f4"
+}

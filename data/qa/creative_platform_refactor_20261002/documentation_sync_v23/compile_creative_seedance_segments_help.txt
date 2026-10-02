@@ -1,0 +1,11 @@
+usage: compile_creative_seedance_segments.py [-h] [--revised] run_dir output
+
+离线编译创作分镜到 Seedance 请求模板；绝不提交远程任务
+
+positional arguments:
+  run_dir
+  output
+
+options:
+  -h, --help  show this help message and exit
+  --revised

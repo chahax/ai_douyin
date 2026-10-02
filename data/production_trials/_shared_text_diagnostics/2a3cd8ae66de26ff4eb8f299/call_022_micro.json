@@ -1,0 +1,67 @@
+{
+  "schema": "creative_production_interface_diagnostic_call/v1",
+  "label": "micro",
+  "ordinal": 22,
+  "status": "contract_validated",
+  "started_at": "2026-10-02T18:54:20.460254+00:00",
+  "request": {
+    "messages": [
+      {
+        "role": "system",
+        "content": "这是文本接口验收请求。用指定工具提交结果。"
+      },
+      {
+        "role": "user",
+        "content": "{\"task\": \"调用submit_creative_json，提交probe=repaired_interface_20261003及accepted=true。\"}"
+      }
+    ],
+    "structured_schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "probe",
+        "accepted"
+      ],
+      "properties": {
+        "probe": {
+          "const": "repaired_interface_20261003"
+        },
+        "accepted": {
+          "type": "boolean",
+          "const": true
+        }
+      }
+    },
+    "parameters": {
+      "max_completion_tokens": 1024,
+      "temperature": 0.4,
+      "thinking": "disabled",
+      "model": "MiniMax-M3",
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "submit_creative_json"
+        }
+      }
+    }
+  },
+  "request_sha256": "37a34935450711e061ec3ef51da3588ec9c319acf01e32f0ebea6f513e9a592c",
+  "token_reservation": 1426,
+  "automatic_retry": false,
+  "response_metadata": {
+    "role": "writer",
+    "provider": "minimax",
+    "requested_model": "MiniMax-M3",
+    "response_model": "MiniMax-M3",
+    "response_id": "070f30e2f9cda3cecc7cc73d98b6c3ae",
+    "finish_reason": "tool_calls",
+    "thinking_mode": "disabled",
+    "output_mode": "tool_call",
+    "prompt_tokens": 455,
+    "completion_tokens": 43,
+    "total_tokens": 498
+  },
+  "response_text": "{\"probe\":\"repaired_interface_20261003\",\"accepted\":true}",
+  "completed_at": "2026-10-02T18:54:25.702957+00:00",
+  "semantic_approval": false
+}

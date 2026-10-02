@@ -1,0 +1,68 @@
+{
+  "schema": "creative_documentation_validation/v1",
+  "document_count": 15,
+  "local_links_checked": 140,
+  "missing_links": [],
+  "format_errors": [],
+  "original_AGENTS_policy_preserved": true,
+  "dated_production_record_bodies_preserved": true,
+  "runtime_sources_checked": 53,
+  "runtime_changes": [],
+  "frozen_packs": [
+    {
+      "pack": "data/creative_governance/20261002_v18_platform_refactor",
+      "files": 48,
+      "changed": []
+    },
+    {
+      "pack": "data/creative_governance/20261002_v19_platform_refactor_p1_recovery",
+      "files": 49,
+      "changed": []
+    },
+    {
+      "pack": "data/creative_governance/20261002_v19_platform_refactor_p1_recovery_draft_pre_replay_fix",
+      "files": 49,
+      "changed": []
+    },
+    {
+      "pack": "data/creative_governance/20261002_v20_platform_refactor_repair_resume",
+      "files": 49,
+      "changed": []
+    },
+    {
+      "pack": "data/creative_governance/20261002_v21_platform_refactor_multi_feedback",
+      "files": 49,
+      "changed": []
+    },
+    {
+      "pack": "data/creative_governance/20261002_v22_platform_refactor_workbench",
+      "files": 55,
+      "changed": []
+    },
+    {
+      "pack": "data/creative_governance/20261002_v23_feedback_consistency",
+      "files": 55,
+      "changed": []
+    }
+  ],
+  "git_diff_check": {
+    "exit_code": 0,
+    "output": "warning: in the working copy of 'AGENTS.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ARCHITECTURE_STATUS.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/CURRENT_CAPABILITIES.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/DEVELOPMENT_PROGRESS.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/PROJECT_INTRO.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/README.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/SCRIPT_VIDEO_RUN.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/SYSTEM_ARCHITECTURE.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/USER_GUIDE.md', LF will be replaced by CRLF the next time Git touches it\n"
+  },
+  "business_tests_rerun": false,
+  "paid_calls": false,
+  "real_media_inspected": false,
+  "published": false,
+  "local_heading_anchors": [
+    {
+      "source": "README.md",
+      "target": "docs/CREATIVE_WORKFLOW_IMPLEMENTATION.md#独立复核后的剩余项"
+    },
+    {
+      "source": "docs/USER_GUIDE.md",
+      "target": "AI_PROJECT_GUIDE.md#执行入口与副作用"
+    }
+  ],
+  "cli_help_verified": 6,
+  "documents_unchanged_since_review": true
+}

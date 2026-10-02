@@ -1,0 +1,10 @@
+{
+  "schema": "creative_historical_usage_reconciliation/v1",
+  "source_receipt": "director_state_plan__00.json",
+  "source_sha256": "171b34cdfd66805820531fd0842a9348bb5f7790a700344913be72c6070f032a",
+  "basis": "Known total_tokens and response_id explicitly preserved in original safe API error; prompt/completion unavailable.",
+  "response_metadata": {
+    "response_id": "070980b7b40d4c8f9059a82651d87d5e",
+    "total_tokens": 24569
+  }
+}

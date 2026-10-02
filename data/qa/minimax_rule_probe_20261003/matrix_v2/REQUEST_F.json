@@ -1,0 +1,144 @@
+{
+  "case_id": "F",
+  "title": "逐拍Schema加入if/then条件",
+  "compare_to": "E",
+  "input_context_sha256": "42c3763ae6b77b009c4bd983c1a4c77a59a55947154e09fabd67f634d4e75ae3",
+  "request_sha256": "8e4bd9716841ef5ff425d817c8b83dedeac4bc9a9c61a9733f79cc021e1f1f0e",
+  "request": {
+    "model": "MiniMax-M3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "用指定工具提交本任务的完整结果。不要写分析或其他正文。\nbeats必须是仅含本拍B1的数组。performance_requirements必须直接是数组，不能用item或items对象包裹。每项是一个对象，包含id、subject、stimulus_source、relation、minimum_seconds。id互不重复；subject是被观察的人物编号。stimulus_source只能是script.beats.0.event或script.beats.0.dialogue.0.text。relation说明观察窗口相对刺激的时间：before在刺激之前，during在刺激期间，after在刺激结束之后。本协议事件来源只能选before/after；对白来源允许before/during/after。minimum_seconds是数值。"
+      },
+      {
+        "role": "user",
+        "content": "{\"characters\":[{\"id\":\"C01\",\"name\":\"甲\"},{\"id\":\"C02\",\"name\":\"乙\"}],\"fixture_only\":true,\"schema\":\"synthetic_rule_probe_context/v1\",\"script\":{\"beats\":[{\"dialogue\":[{\"speaker\":\"C02\",\"text\":\"今晚我自己弄，你先走。\"}],\"event\":\"甲把杯子放到桌面。\",\"id\":\"B1\"}]},\"task\":\"只提交两项表演要求：第一项，放杯事件结束后观察甲两秒；第二项，乙说这句对白期间观察甲两秒。来源填写对应剧本字段路径。\"}"
+      }
+    ],
+    "temperature": 0.4,
+    "max_completion_tokens": 1024,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "submit_creative_json",
+          "description": "提交本阶段完整结构化创作结果",
+          "parameters": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "beats"
+            ],
+            "properties": {
+              "beats": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 1,
+                "items": false,
+                "prefixItems": [
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "beat_id",
+                      "performance_requirements"
+                    ],
+                    "properties": {
+                      "beat_id": {
+                        "enum": [
+                          "B1"
+                        ]
+                      },
+                      "performance_requirements": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "required": [
+                            "id",
+                            "subject",
+                            "stimulus_source",
+                            "relation",
+                            "minimum_seconds"
+                          ],
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "subject": {
+                              "type": "string",
+                              "enum": [
+                                "C01",
+                                "C02"
+                              ]
+                            },
+                            "stimulus_source": {
+                              "type": "string",
+                              "enum": [
+                                "script.beats.0.event",
+                                "script.beats.0.dialogue.0.text"
+                              ]
+                            },
+                            "relation": {
+                              "enum": [
+                                "before",
+                                "during",
+                                "after"
+                              ]
+                            },
+                            "minimum_seconds": {
+                              "type": "number",
+                              "exclusiveMinimum": 0
+                            }
+                          },
+                          "allOf": [
+                            {
+                              "if": {
+                                "properties": {
+                                  "stimulus_source": {
+                                    "const": "script.beats.0.event"
+                                  }
+                                },
+                                "required": [
+                                  "stimulus_source"
+                                ]
+                              },
+                              "then": {
+                                "properties": {
+                                  "relation": {
+                                    "enum": [
+                                      "before",
+                                      "after"
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    ],
+    "tool_choice": {
+      "type": "function",
+      "function": {
+        "name": "submit_creative_json"
+      }
+    }
+  },
+  "conservative_token_reservation": 3109
+}

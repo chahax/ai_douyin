@@ -1,0 +1,128 @@
+{
+  "schema": "creative_production_interface_diagnostic_result/v1",
+  "diagnostic_root": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299",
+  "frozen_parent_unchanged": true,
+  "source_binding_unchanged": true,
+  "paid_text_calls": 3,
+  "frozen_parent_calls": 21,
+  "effective_calls_started": 24,
+  "max_calls": 24,
+  "parent_reported_tokens": 354328,
+  "diagnostic_reported_tokens": 24698,
+  "unknown_token_reservations": 0,
+  "effective_reported_tokens": 379026,
+  "max_total_tokens": 500000,
+  "remaining_calls": 0,
+  "remaining_token_budget_after_reservations": 120974,
+  "calls": [
+    {
+      "ordinal": 22,
+      "label": "micro",
+      "status": "contract_validated",
+      "response_metadata": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f30e2f9cda3cecc7cc73d98b6c3ae",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 455,
+        "completion_tokens": 43,
+        "total_tokens": 498
+      },
+      "failure": null,
+      "validation_error": null
+    },
+    {
+      "ordinal": 23,
+      "label": "direction",
+      "status": "validation_rejected",
+      "response_metadata": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f310213740f3812d880f0e4733df9",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 7143,
+        "completion_tokens": 4377,
+        "total_tokens": 11520
+      },
+      "failure": {
+        "schema": "creative_failure/v1",
+        "code": "MODULE_REQUIREMENT_SOURCE",
+        "category": "validation",
+        "next_action": "existing_bounded_contract_repair",
+        "response_received": true,
+        "automatic_retry": false,
+        "blocks_handoff": true
+      },
+      "validation_error": {
+        "type": "CreativeContractError",
+        "message": "MODULE_REQUIREMENT_SOURCE: 要求ID重复或刺激引用不属于本拍",
+        "detail": {
+          "code": "MODULE_REQUIREMENT_SOURCE",
+          "path": "beats.0",
+          "blocks_handoff": true,
+          "automatic_retry": false,
+          "semantic_approval": false
+        }
+      }
+    },
+    {
+      "ordinal": 24,
+      "label": "direction_source_enum",
+      "status": "validation_rejected",
+      "response_metadata": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f32aad4ba52ed667cb5f15b2e18a6",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 8912,
+        "completion_tokens": 3768,
+        "total_tokens": 12680
+      },
+      "failure": {
+        "schema": "creative_failure/v1",
+        "code": "MODULE_SCHEMA_INVALID",
+        "category": "state_contract",
+        "next_action": "complete_new_draft_then_full_review",
+        "response_received": true,
+        "automatic_retry": false,
+        "blocks_handoff": true
+      },
+      "validation_error": {
+        "type": "ValidationError",
+        "message": "{'item': [{'id': 'PR1.1', 'subject': 'C01', 'stimulus_source': 'script.beats.0.dialogue.0.text', 'relation': 'during', 'minimum_seconds': 2}, {'id': 'PR1.2', 'subject': 'C01', 'stimulus_source': 'script.beats.0.event', 'relation': 'after', 'minimum_seconds': 2}, {'id': 'PR1.3', 'subject': 'C02', 'stimulus_source': 'script.beats.0.event', 'relation': 'during', 'minimum_seconds': 2}]} is not of type 'array'\n\nFailed validating 'type' in schema['properties']['beats']['prefixItems'][0]['properties']['performance_requirements']:\n    {'type': 'array',\n     'items': {'type': 'object',\n               'additionalProperties': False,\n               'required': ['id',\n                            'subject',\n                            'stimulus_source',\n                            'relation',\n                            'minimum_seconds'],\n               'properties': {'id': {'type': 'string', 'minLength': 1},\n                              'subject': {'type': 'string',\n                                          'enum': ['C01', 'C02']},\n                              'stimulus_source': {'type': 'string',\n                                                  'enum': ['script.beats.0.event',\n                                                           'script.beats.0.dialogue.0.text']},\n                              'relation': {'enum': ['before',\n                                                    'during',\n                                                    'after']},\n                              'minimum_seconds': {'type': 'number',\n                                                  'exclusiveMinimum': 0}},\n               'allOf': [{'if': {'properties': {'stimulus_source': {'const': 'script.beats.0.event'}},\n                                 'required': ['stimulus_source']},\n                          'then': {'properties': {'relation': {'enum': ['before',\n                                                                        'after']}}}}]}}\n\nOn instance['beats'][0]['performance_requirements']:\n    {'item': [{'id': 'PR1.1',\n               'subject': 'C01',\n               'stimulus_source': 'script.beats.0.dialogue.0.text',\n               'relation': 'during',\n               'minimum_seconds': 2},\n              {'id': 'PR1.2',\n               'subject': 'C01',\n               'stimulus_source': 'script.beats.0.event',\n               'relation': 'after',\n               'minimum_seconds': 2},\n              {'id': 'PR1.3',\n               'subject': 'C02',\n               'stimulus_source': 'script.beats.0.event',\n               'relation': 'during',\n               'minimum_seconds': 2}]}",
+        "detail": null
+      }
+    }
+  ],
+  "reference_evidence": [
+    {
+      "source": "D:\\IT\\ai_douyin\\data\\reference_reviews\\reusable_expression_20261001\\EXPRESSION_REFERENCE.md",
+      "text_sha256": "5f98e1122524a5d2ee4ef3f8849660a974c25c723e1e225a6804fd7ea9186479",
+      "characters": 2259,
+      "frozen_request_contains_full_text": true,
+      "source_text_sha256": "4c032931d933f51db8f893f4d596195815ca218b5672104923aedfb98d5059f3",
+      "normalization": "project material loader strips boundary whitespace only"
+    }
+  ],
+  "limitations": [
+    "only interface and partial modular contract verification",
+    "no actual selected images exist in this parent input",
+    "no five-beat complete compilation or DeepSeek full-text review",
+    "no server internal telemetry; thinking execution cannot be proven from request intent"
+  ],
+  "semantic_approval": false,
+  "media_calls": 0,
+  "production_governance_migration": false
+}

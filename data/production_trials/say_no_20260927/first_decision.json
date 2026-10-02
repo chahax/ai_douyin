@@ -1,0 +1,44 @@
+{
+  "schema": "creative_evidence_review_decision/v1",
+  "packet_sha256": "b5644b779af48e30c858e19ad8bf78778908e6a2cdfac26adf650798035cf52a",
+  "reviewed_by": "assistant",
+  "reviewed_full_text": true,
+  "summary": "主审和独立审查阅读全文，核心拒绝—等待—接受—放松成立，DeepSeek漏掉两次放笔和10秒约48字加动作。集中修B1/B2，道具只保留文件夹承担实际操作，B3/B4/B5保持。",
+  "decisions": [],
+  "additional_issues": [
+    {
+      "id": "A01",
+      "owner": "writer",
+      "location": "B1",
+      "severity": "major",
+      "rule": "关键动作道具归属连续，避免多余操作",
+      "evidence": "暖色台灯下，林遥站在自己桌边把笔收进笔筒，肩包带搭在肩上。",
+      "evidence_refs": [
+        {
+          "path": "script.beats.0.before",
+          "quote": "暖色台灯下，林遥站在自己桌边把笔收进笔筒，肩包带搭在肩上。"
+        }
+      ],
+      "contradiction": "B1已把笔放进笔筒，B2却再次放下笔，没有重新拿取。笔/笔筒又增加不承担因果的操作。",
+      "impact": "B1已把笔放进笔筒，B2却再次放下笔，没有重新拿取。笔/笔筒又增加不承担因果的操作。",
+      "proposal": "删除B1收笔及B2放笔的整条操作，不用新道具替代。靠已有身体姿态和下班准备表达，文件夹仍唯一关键行动道具，林遥绝不接过。"
+    },
+    {
+      "id": "A02",
+      "owner": "writer",
+      "location": "B2",
+      "severity": "major",
+      "rule": "平静明确拒绝，台词与动作能在10秒自然完成",
+      "evidence": "这次先回去吧，今晚家里有事，时间上安排不开。",
+      "evidence_refs": [
+        {
+          "path": "script.beats.1.dialogue.1.text",
+          "quote": "这次先回去吧，今晚家里有事，时间上安排不开。"
+        }
+      ],
+      "contradiction": "两句对白约48字占满10秒且还要停手转身，不留自然停顿。林遥“这次先回去吧”又像请求别人回去，拒绝方向不够明确。",
+      "impact": "两句对白约48字占满10秒且还要停手转身，不留自然停顿。林遥“这次先回去吧”又像请求别人回去，拒绝方向不够明确。",
+      "proposal": "把陈禾请求和林遥拒绝都缩为自然短句，合计尽量20字上下，明确林遥这次不能帮忙要回去。保持请求→林遥身体紧张→明确拒绝顺序。林遥可省去解释性理由，不得勉强答应。B2保持10秒，不改B3/B4/B5；root摘要同步反映实际，未发生的笔动作不再继承。"
+    }
+  ]
+}

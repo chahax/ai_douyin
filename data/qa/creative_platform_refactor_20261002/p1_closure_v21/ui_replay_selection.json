@@ -1,0 +1,5 @@
+[
+  "tests/test_creative_workflow_ui.py",
+  "tests/test_creative_real_receipt_replay.py",
+  "tests/test_creative_full_script_revision.py"
+]

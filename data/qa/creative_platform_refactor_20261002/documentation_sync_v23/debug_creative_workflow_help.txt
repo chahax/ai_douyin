@@ -1,0 +1,12 @@
+usage: debug_creative_workflow.py [-h]
+                                  run_dir
+                                  {inspect,stop,resume,compare,feedback} ...
+
+创作阶段调试：只读检查、版本比较或绑定反馈，不调用模型
+
+positional arguments:
+  run_dir
+  {inspect,stop,resume,compare,feedback}
+
+options:
+  -h, --help            show this help message and exit

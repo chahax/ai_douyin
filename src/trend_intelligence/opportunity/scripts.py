@@ -213,76 +213,111 @@ class NovelOpportunityScriptStrategy:
             or "引导在授权平台内搜索书名或继续阅读"
         )
         title = opportunity.title
+        driver = str(
+            profile.domain_config.get("script_driver") or "novel_highlight"
+        )
+        if driver not in {"novel_highlight", "reference_video"}:
+            raise ValueError(f"unsupported novel script driver: {driver}")
+        driver_label = (
+            "参考视频结构驱动" if driver == "reference_video" else "小说高光驱动"
+        )
+        duration = _novel_duration(profile, opportunity)
+        cuts = _proportional_cuts(duration)
         if variant_id == "A":
             beats = [
                 ScriptBeat(
-                    0,
-                    5,
-                    "conflict_hook",
-                    "用授权章节中的最高压关系冲突开场，第一秒显示人物身份落差。",
-                    "【主角】被所有人判定出局时，【对手】还不知道真正的底牌已经出现。",
-                    f"{title}｜她真的输了？",
+                    cuts[0], cuts[1], "highlight_flash",
+                    "闪回选中高光里的失控结果或关键动作，不先解释答案。",
+                    "【高光报告中的原文关键句或动作，不得补写】",
+                    f"{title}｜事情已经失控",
                 ),
                 ScriptBeat(
-                    5,
-                    10,
-                    "escalation",
-                    "只展示授权章节已发生的证据、身份或关系变化，不新增剧情事实。",
-                    "【对手】刚说完最后一句狠话，现场却出现了谁也解释不了的证据。",
-                    "她以为局面已定",
+                    cuts[1], cuts[2], "necessary_setup",
+                    "回到高光前因，只保留理解人物目标、关系和代价所需的事实。",
+                    "【主角】为何必须这样做，以高光区间内的原文事实建立。",
+                    "冲突从这里开始",
                 ),
                 ScriptBeat(
-                    10,
-                    15,
-                    "cliffhanger",
-                    "脚步、来电或文件停在揭晓前一拍，画面切黑。",
-                    "【主角】抬头只说了一句：现在，轮到我问你了。",
-                    "反转将在下一秒发生",
+                    cuts[2], cuts[3], "pressure_escalation",
+                    "连续呈现原文冲突升级；优先人物行动和对白，减少解释旁白。",
+                    "【从高光报告绑定的原文区间提炼升级过程】",
+                    "退路正在消失",
+                ),
+                ScriptBeat(
+                    cuts[3], cuts[4], "emotional_peak",
+                    "放大情绪爆发：关键对白前的压抑、说话时的动作、说完后的对手反应都要入镜。",
+                    "【逐字核对原文关键对白；没有原话时只写原文已有行动】",
+                    "关系在这一刻改变",
+                ),
+                ScriptBeat(
+                    cuts[4], cuts[5], "aftershock_cliffhanger",
+                    "保留峰值余波，再停在原文下一步行动或秘密揭晓之前。",
+                    "【人物反应与原文悬念断点】",
+                    "书名与授权平台｜继续阅读",
                 ),
             ]
         else:
             beats = [
                 ScriptBeat(
-                    0,
-                    5,
-                    "outcome_first",
-                    "先给授权章节中的高能结果画面，再快速回到冲突起点。",
-                    "后来他们才知道，今天亲手赶走的人，才是决定结局的那一个。",
-                    "他们赶走了最不该得罪的人",
+                    cuts[0], cuts[1], "emotion_first",
+                    "从选中高光的情绪峰值人物反应开场，隐藏造成反应的最后一个信息。",
+                    "【主角】在高光报告中的峰值反应。",
+                    "这个反应从何而来？",
                 ),
                 ScriptBeat(
-                    5,
-                    10,
-                    "relationship_pressure",
-                    "用两到三个近景强化误判、背叛或身份压力。",
-                    "【主角】没有解释，只把那份藏了很久的东西放到桌上。",
-                    "她不解释，只亮证据",
+                    cuts[1], cuts[2], "relationship_setup",
+                    "用原文中的关系、误判或承诺建立人物此前的情绪位置。",
+                    "【授权原文中的关系事实】",
+                    "他们原本不是这样",
                 ),
                 ScriptBeat(
-                    10,
-                    15,
-                    "search_intent",
-                    "停在授权章节的原有悬念点，出现书名/平台占位。",
-                    "门外的人叫出她真正的身份，全场突然安静。",
-                    "书名与授权平台｜待素材绑定",
+                    cuts[2], cuts[3], "conflict_collision",
+                    "让双方目标正面碰撞；至少安排一次动作—对白—对方反应链。",
+                    "【授权原文中的冲突对白或行动】",
+                    "一句话把关系推到悬崖边",
+                ),
+                ScriptBeat(
+                    cuts[3], cuts[4], "turn_and_peak",
+                    "呈现原文转折并延长峰值，不在关键对白后立刻切走。",
+                    "【原文转折、峰值动作与情绪变化】",
+                    "局势彻底反转",
+                ),
+                ScriptBeat(
+                    cuts[4], cuts[5], "reaction_and_search_intent",
+                    "把人物余波落地，停在原文已有悬念处，随后出现书名与平台。",
+                    "【原文人物反应，不提前泄露下一段结果】",
+                    "书名与授权平台｜继续阅读",
                 ),
             ]
         return _script(
             profile,
             opportunity,
             variant_id=variant_id,
-            title=f"{title}｜15秒小说推广 {variant_id}",
+            title=f"{title}｜{driver_label} {variant_id}",
             beats=beats,
             cta=reading_cta,
+            target_duration_seconds=duration,
             source_requirements=[
-                "绑定目标小说、授权平台、授权章节范围和书名。",
+                "绑定目标小说、授权平台、授权文本范围和书名；文本可以超过前10章。",
+                (
+                    "当前使用参考视频驱动：必须先取得带时间证据的钩子和冲突峰值位置，"
+                    "再把该结构映射到小说原文候选。"
+                    if driver == "reference_video"
+                    else "当前使用小说高光驱动：由原文冲突强度、情绪台阶和跨度决定高光与时长。"
+                ),
+                "先生成 novel_highlight_analysis/v1，高光必须用原文起止引文和字符位置定位。",
+                "热门视频只提供高光出现位置、镜头节奏和情绪表达方式，不能提供剧情事实。",
+                "选中的原文区间必须覆盖必要前因、冲突升级、情绪峰值和峰值余波。",
                 "将【主角】【对手】等占位符替换为授权原文中的角色与事实。",
                 "每个剧情事实必须能回指授权章节，不得凭热门样本补写目标小说情节。",
             ],
             fact_checks=[
                 "核对人物关系、身份、证据、事件顺序和悬念点与授权章节一致。",
+                "核对情绪峰值前后的动作和反应均来自选中原文区间。",
+                "核对成片时长由高光完整性决定，没有为了固定15秒截断峰值或余波。",
                 "不得泄露核心大结局，不得使用盗版、免费全集或虚假收益引导。",
             ],
+            workflow_snapshot_overrides={"script_driver": driver},
         )
 
 
@@ -303,6 +338,8 @@ def _script(
     cta: str,
     source_requirements: list[str],
     fact_checks: list[str],
+    target_duration_seconds: float = 15.0,
+    workflow_snapshot_overrides: dict[str, object] | None = None,
 ) -> OpportunityScript:
     script_id = "script:" + hashlib.sha256(
         "|".join(
@@ -323,7 +360,7 @@ def _script(
         variant_id=variant_id,
         title=title,
         status="draft",
-        target_duration_seconds=15.0,
+        target_duration_seconds=target_duration_seconds,
         beats=beats,
         cta=cta,
         source_requirements=source_requirements,
@@ -338,8 +375,31 @@ def _script(
             "content_analysis": "selected_at_opportunity_build",
             "presentation": opportunity.recommended_presentation,
             "workflow_profile": opportunity.recommended_workflow_profile,
+            **(workflow_snapshot_overrides or {}),
         },
     )
+
+
+def _novel_duration(
+    profile: AccountProfile,
+    opportunity: ContentOpportunity,
+) -> float:
+    minimum = float(profile.domain_config.get("min_video_seconds") or 45)
+    default = float(profile.domain_config.get("default_video_seconds") or 60)
+    maximum = float(profile.domain_config.get("max_video_seconds") or 180)
+    recommended = float(opportunity.recommended_duration_seconds or 0)
+    # The legacy opportunity scorer emitted 15 seconds for every domain. Treat
+    # that value as "not yet highlight-aware" and use the novel default.
+    if recommended < minimum:
+        recommended = default
+    return max(minimum, min(maximum, recommended))
+
+
+def _proportional_cuts(duration: float) -> list[float]:
+    ratios = (0.0, 0.10, 0.25, 0.50, 0.75, 1.0)
+    cuts = [round(duration * ratio, 2) for ratio in ratios]
+    cuts[-1] = float(duration)
+    return cuts
 
 
 def _validate_binding(

@@ -1,0 +1,47 @@
+{
+  "schema": "modular_trial_frozen_evidence_verification/v1",
+  "original_parent_and_prior_governance_hashes_verified_by_inherited_check": true,
+  "base_dispatched_source_manifest_matches": true,
+  "prior_evidence_unchanged": true,
+  "new_receipts_unchanged": true,
+  "old_budget_reset": false,
+  "old_governance_migrated": false,
+  "media_calls": 0,
+  "actual_request_reference_checks": [
+    {
+      "ordinal": 43,
+      "full_reference_pack_in_actual_request": true,
+      "receipt_sha256": "4be4be08b679a0825940b0686e0f9e5e1e325c69f3e8b7aa6154abe39edaf6bc"
+    },
+    {
+      "ordinal": 44,
+      "full_reference_pack_in_actual_request": true,
+      "receipt_sha256": "fe96f7f978aabb0e12dacc1c8d257fa0474dbe25262c9fb3b57c670da80e8b7f"
+    },
+    {
+      "ordinal": 45,
+      "full_reference_pack_in_actual_request": true,
+      "receipt_sha256": "76dce6ef8121b19ed5c9721e0e9d6497690d2ba9a54637ab40fd7c3b3b8930b8"
+    },
+    {
+      "ordinal": 46,
+      "full_reference_pack_in_actual_request": true,
+      "receipt_sha256": "e91290ad82b3b1acb1e350013d8d79a150dadb1b99d0ebfa2137be0003815ce3"
+    },
+    {
+      "ordinal": 47,
+      "full_reference_pack_in_actual_request": true,
+      "receipt_sha256": "c84580ea8cbf82ee4e9ee77ffe0ec6961d9840a328eedc04c9eec9693ba755fa"
+    },
+    {
+      "ordinal": 48,
+      "full_reference_pack_in_actual_request": true,
+      "receipt_sha256": "70e350f76d4f6f19ea6f591e9006d989d1a9c7ffdc88e12453eb8ec9eb7a3ead"
+    },
+    {
+      "ordinal": 49,
+      "full_reference_pack_in_actual_request": true,
+      "receipt_sha256": "7b48039ab0af310827cb1d38f85148eef17f802df7816893fee467c602672b1f"
+    }
+  ]
+}

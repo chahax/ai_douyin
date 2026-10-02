@@ -1,0 +1,68 @@
+{
+  "schema": "creative_continuation_request_proposal/v1",
+  "status": "prepared_not_submitted",
+  "model_role": "director",
+  "transport_config_role": "writer",
+  "provider": "minimax",
+  "stage": "director_state_plan__00",
+  "requires_new_total_call_limit": true,
+  "current_calls_started": 17,
+  "current_max_calls": 20,
+  "minimum_remaining_calls": 4,
+  "proposed_max_calls": 24,
+  "numeric_timing_budget": [
+    {
+      "beat_id": "B1",
+      "shot_seconds": 14,
+      "minimum_dialogue_seconds": 3.0,
+      "preferred_dialogue_seconds": 4.585714,
+      "maximum_action_and_hold_seconds": 11.0,
+      "current_action_and_hold_seconds": 11.0,
+      "shortfall_seconds": 0
+    },
+    {
+      "beat_id": "B2",
+      "shot_seconds": 11,
+      "minimum_dialogue_seconds": 2.4,
+      "preferred_dialogue_seconds": 3.728571,
+      "maximum_action_and_hold_seconds": 8.6,
+      "current_action_and_hold_seconds": 10.5,
+      "shortfall_seconds": 1.9
+    },
+    {
+      "beat_id": "B3",
+      "shot_seconds": 10,
+      "minimum_dialogue_seconds": 2.0,
+      "preferred_dialogue_seconds": 3.157143,
+      "maximum_action_and_hold_seconds": 8.0,
+      "current_action_and_hold_seconds": 10.0,
+      "shortfall_seconds": 2.0
+    },
+    {
+      "beat_id": "B4",
+      "shot_seconds": 12,
+      "minimum_dialogue_seconds": 1.6,
+      "preferred_dialogue_seconds": 2.585714,
+      "maximum_action_and_hold_seconds": 10.4,
+      "current_action_and_hold_seconds": 12.0,
+      "shortfall_seconds": 1.6
+    },
+    {
+      "beat_id": "B5",
+      "shot_seconds": 10,
+      "minimum_dialogue_seconds": 0,
+      "preferred_dialogue_seconds": 0,
+      "maximum_action_and_hold_seconds": 10,
+      "current_action_and_hold_seconds": 10.0,
+      "shortfall_seconds": 0
+    }
+  ],
+  "requirements": "提交完整whole_film_action_plan_v2，沿用当前已生成办公室静态清单（E09/E10为椅子），保留当前完整剧本事件与对白。逐拍先给对白自然语速留时间，再安排必要动作与情绪反应；不能将action/hold之和写满拍长。对照numeric_timing_budget检查每一拍，不能只修B2；如确实无法容纳完整动作和自然对白，应返回具体表达冲突，不删剧情。允许重分配非必要hold。script_slot during是第一句完整说完之后，不是对白进行中；实际说话中表演只用dialogue_performance。所有数组必须是真实JSON数组，空operations用[]；duration_seconds用number。完整计划必须通过原编译和独立文本审查，不能以接口成功代替审核通过。",
+  "next_stages": [
+    "MiniMax重新生成完整动作计划并编译",
+    "DeepSeek独立审查动作计划；助手复核证据",
+    "MiniMax生成资产与首帧设计",
+    "DeepSeek联合文本复核；助手确认正式交付"
+  ],
+  "human_video_review": "后续视频仍由用户人工审查，此方案不授权视频付费调用或助手音画审查。"
+}

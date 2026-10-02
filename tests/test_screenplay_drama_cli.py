@@ -37,6 +37,9 @@ def case(tmp_path, monkeypatch, workflow):
     feedback.write_text('合成测试不产生审核通过。', encoding='utf-8')
     def story(kind='short'):
         data = screenplay(kind)
+        if kind == 'short':
+            for shot, seconds in zip(data['version']['shots'], [5, 10, 10, 10, 5, 5]):
+                shot['duration_seconds'] = seconds
         data['version']['reference_usage'][0]['source_id'] = sources[0]['source_id']
         return data
     def drama(kind='short'):
@@ -568,3 +571,15 @@ def test_state_revision_parent_chain_detects_frozen_forgery_cycles_and_depth(cas
     monkeypatch.setattr(stage, 'MAX_DRAMA_LINEAGE', 2)
     with pytest.raises(ValueError, match='bounded depth'):
         read_bound_state(case, second)
+
+
+def test_flat_new_draft_is_retained_as_raw_failure_without_retry(case, monkeypatch):
+    draft = case.drama()
+    for shot, seconds in zip(draft['version']['shots'], [7, 8, 7, 8, 8, 7]):
+        shot['duration_seconds'] = seconds
+    calls = client_for(monkeypatch, json.dumps(draft, ensure_ascii=False))
+    with pytest.raises(ValueError, match='dramatic pacing'):
+        stage.main()
+    assert not (case.output / 'drama.json').exists()
+    assert (case.output / 'model_output.json').exists()
+    assert len([call for call in calls if call[0] == 'call']) == 1

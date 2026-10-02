@@ -1,0 +1,176 @@
+{
+  "schema_version": "creative_fixture_index/v1",
+  "source_hash": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+  "created_at": "2026-09-28T13:58:18.903886+00:00",
+  "implementation_status": "offline_implemented_not_production_validated",
+  "cases": [
+    {
+      "case_id": "R01_BAD",
+      "path": "fixtures/R01_BAD.json",
+      "sha256": "1a3b599f83053a5d2f697db2388b7581ac6e56b87f6cc33d3c604c2dac434d47",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "R01_OK_CANDIDATE",
+      "path": "fixtures/R01_OK_CANDIDATE.json",
+      "sha256": "67914c3a56036e2648801d010c9d686b6843ba49abb3633c4bbfeba55dbd3396",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "R02_BAD",
+      "path": "fixtures/R02_BAD.json",
+      "sha256": "0399b6f608c21099bf0ff95ff9d86c67acc467b1d7622534d79f4a5b165391c3",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "R02_OK_CANDIDATE",
+      "path": "fixtures/R02_OK_CANDIDATE.json",
+      "sha256": "1bf8c0432459cb593e00d50f6b7739bf0b42364396b8ea045c093fd277578147",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "R03_BAD",
+      "path": "fixtures/R03_BAD.json",
+      "sha256": "7176d611805872d2544bda046ecb823374fd519d55e35322bad77c1555a779ca",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "R03_OK_CANDIDATE",
+      "path": "fixtures/R03_OK_CANDIDATE.json",
+      "sha256": "69bcd8b70122bb6eda4f55679c8dd409a21c206d915d86ade48d850960ad5bd5",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "STATE_OK",
+      "path": "fixtures/STATE_OK.json",
+      "sha256": "866156e9d3aef4f41f6cef0087cd941eb2ef383f9e7edcbfba436f91d6f12beb",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "STATE_BAD",
+      "path": "fixtures/STATE_BAD.json",
+      "sha256": "d1966a0762829aa4bde89826423853d3249c2af4cc3afd6f07e6a9b7feda4fa9",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "HOLD_OK",
+      "path": "fixtures/HOLD_OK.json",
+      "sha256": "44e18d3392c7b9379b69d5bdb3c86d75936d5c394203da86c328d70466bf29c9",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "HOLD_BAD",
+      "path": "fixtures/HOLD_BAD.json",
+      "sha256": "c94413e6b2d3422ea799eabf4197a6caed54b5da8fc7e8d731fdc7c554543248",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "SOURCE_OK",
+      "path": "fixtures/SOURCE_OK.json",
+      "sha256": "470c71b6f5e0245ffb5c0cc1d46d63490e738e45a277dddb84ea1e6dd91e5f67",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "SOURCE_BAD",
+      "path": "fixtures/SOURCE_BAD.json",
+      "sha256": "22d1f5ae6f94e72e91e23b058928e5325ef98a4b69c19bb25b840c2acaa50de9",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "BOUNDARY_CONFLICT_1",
+      "path": "fixtures/BOUNDARY_CONFLICT_1.json",
+      "sha256": "fa71bfeabcc76c8ace2aa694dfc84b5ad5d9d6d53d33d94a5406eae892b16ba9",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "BOUNDARY_CONFLICT_2",
+      "path": "fixtures/BOUNDARY_CONFLICT_2.json",
+      "sha256": "d6428376c6262db85a079ef6da92fbd80533039211e0f4de1cc979cc026bfc8e",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "BOUNDARY_EXPRESSION_1",
+      "path": "fixtures/BOUNDARY_EXPRESSION_1.json",
+      "sha256": "cf1ced699da04b8f975d134050bcf61a51aa2c9cc7d1b61338ba105c8d4e944a",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "BOUNDARY_EXPRESSION_2",
+      "path": "fixtures/BOUNDARY_EXPRESSION_2.json",
+      "sha256": "7fc4ebb58a3e85c723e9a241dcae249f5104f4c25245e101833264e92490c469",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "BOUNDARY_SIMULTANEOUS_1",
+      "path": "fixtures/BOUNDARY_SIMULTANEOUS_1.json",
+      "sha256": "86feb126bb070a333bd1a8bd9c63bdd31841442860ecac9c5bda16d2b3690b6b",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "BOUNDARY_SIMULTANEOUS_2",
+      "path": "fixtures/BOUNDARY_SIMULTANEOUS_2.json",
+      "sha256": "40ae66bb78c1d37cca784cc0c6c15966d62853626d420d78bb38e450f85b6a76",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "BOUNDARY_AMBIGUOUS_1",
+      "path": "fixtures/BOUNDARY_AMBIGUOUS_1.json",
+      "sha256": "c30eebc966e2e1b083aecf94a44e3fc69363b3989228b2807b2a451b0ec201c6",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "BOUNDARY_AMBIGUOUS_2",
+      "path": "fixtures/BOUNDARY_AMBIGUOUS_2.json",
+      "sha256": "5a862588f0abde47de73f85d3b73475322ddad9eb8b446c29f9a454132962aa9",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "BOUNDARY_CORRECT_1",
+      "path": "fixtures/BOUNDARY_CORRECT_1.json",
+      "sha256": "2be8363924c95af290c11d107d4fe2f25db6965d44e11184764068202a574014",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "BOUNDARY_CORRECT_2",
+      "path": "fixtures/BOUNDARY_CORRECT_2.json",
+      "sha256": "1b755193828d5ddfab5e0c8c241d6a420fc87485c56030cf42b4413de557a784",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "P1_CUT_OK",
+      "path": "fixtures/P1_CUT_OK.json",
+      "sha256": "fa5b6395cdf7adbb5b9e9ef8100390c8268bff8db9a4d4f3fbeec55f19a7af52",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "P1_CUT_BAD",
+      "path": "fixtures/P1_CUT_BAD.json",
+      "sha256": "825553605ff59534cd10000ddcdbcbe80bacbb092bd2ec380518180b7bb958d0",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "P1_SEAT_OK",
+      "path": "fixtures/P1_SEAT_OK.json",
+      "sha256": "dbe97ed42ab604a4fabc15e3a273514f97ede6652621b118be6c0d095685b98c",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "P1_SEAT_BAD",
+      "path": "fixtures/P1_SEAT_BAD.json",
+      "sha256": "e0bd9e3fe8a2ee200c598690fcad9422f6575d050e54ad31a80709dafa58821d",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "P1_BOUNDARY_OK",
+      "path": "fixtures/P1_BOUNDARY_OK.json",
+      "sha256": "dbe14af37e5661928bf157e7094d87cc1b13542563f5dc08a0e1e8cac000c9c3",
+      "label_status": "candidate"
+    },
+    {
+      "case_id": "P1_BOUNDARY_BAD",
+      "path": "fixtures/P1_BOUNDARY_BAD.json",
+      "sha256": "c2b97b0d9da75f45508425ef88516b58d65beb86d46629414f9c9801a1b7486a",
+      "label_status": "candidate"
+    }
+  ]
+}

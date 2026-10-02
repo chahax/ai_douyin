@@ -1,0 +1,34 @@
+{
+  "downstream_feedback_gate": {
+    "downstream_blocked": true,
+    "exception": "阶段 writer_analysis 存在未修复的 must_fix 反馈；已在 writer_script 调用前阻断，需先修订责任阶段"
+  },
+  "responsible_stage_resume": {
+    "normal_resume_reached_target": false,
+    "new_model_calls": 0,
+    "workflow_status": "needs_attention",
+    "last_error": "阶段 director_brief 存在未修复的 must_fix 反馈；已在 writer_analysis 调用前阻断，需先修订责任阶段",
+    "pending_feedback": "revision_required"
+  },
+  "media_identity": {
+    "changed_candidate_rejected": true,
+    "exception": "approved decision is not current on the source receipt"
+  },
+  "worker_late_result": {
+    "result_before": {},
+    "recovered": 1,
+    "status_after_recovery": "outcome_unknown",
+    "status_after_late_result": "outcome_unknown",
+    "result_saved": {},
+    "late_result_fenced": true
+  },
+  "governance_binding": {
+    "directory": "data/creative_governance/20261002_v18_platform_refactor",
+    "runtime_mismatches": [
+      "src/content_factory/creative_workflow.py",
+      "src/content_factory/creative_stage_debug.py"
+    ],
+    "governed_stage_gate_passed": false,
+    "exception": "RUNTIME_SOURCE_CHANGED: src/content_factory/creative_workflow.py"
+  }
+}

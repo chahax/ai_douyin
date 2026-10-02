@@ -10,6 +10,7 @@ from script_pair_fixture import FixtureClient
 from test_pre_video_script import NOW, _Profiles, _Repository, _expanded_rows, _row
 from source_media_fixture import complete_media_analysis
 from src.trend_intelligence.pre_video_script import PreVideoScriptRequest, PreVideoScriptService
+from src.trend_intelligence import pre_video_script as pre_video_module
 from src.trend_intelligence import saved_script_review as saved
 from src.trend_intelligence import script_pair
 from src.web.trend_dashboard import _load_saved_script_pair
@@ -37,13 +38,15 @@ def isolated_service(client, root):
 
 
 @pytest.fixture
-def case(tmp_path):
+def case(tmp_path, monkeypatch):
+    monkeypatch.setattr(pre_video_module, 'PROJECT_ROOT', tmp_path)
+    output = tmp_path / 'data'
     client = FixtureClient()
     pair = isolated_service(client, tmp_path).generate(PreVideoScriptRequest(
         account_key='account01', short_seconds=60, recent_video_types=('mixed',),
-        output_dir=str(tmp_path)), now=NOW)
-    items = _load_saved_script_pair(pair.short.script.account_uuid, tmp_path)
-    return {'root': tmp_path, 'client': client, 'pair': pair, 'items': items,
+        output_dir=str(output)), now=NOW)
+    items = _load_saved_script_pair(pair.short.script.account_uuid, output)
+    return {'root': output, 'client': client, 'pair': pair, 'items': items,
             'manifest': Path(pair.manifest_path),
             'trace': Path(pair.short.script.generation['trace_dir'])}
 
@@ -60,13 +63,15 @@ class ThirdFormatResponseClient(FixtureClient):
 
 
 @pytest.fixture
-def three_round_case(tmp_path):
+def three_round_case(tmp_path, monkeypatch):
+    monkeypatch.setattr(pre_video_module, 'PROJECT_ROOT', tmp_path)
+    output = tmp_path / 'data'
     client = ThirdFormatResponseClient()
     pair = isolated_service(client, tmp_path).generate(PreVideoScriptRequest(
         account_key='account01', short_seconds=60, recent_video_types=('mixed',),
-        output_dir=str(tmp_path)), now=NOW)
-    return {'root': tmp_path, 'client': client, 'pair': pair,
-            'items': _load_saved_script_pair(pair.short.script.account_uuid, tmp_path),
+        output_dir=str(output)), now=NOW)
+    return {'root': output, 'client': client, 'pair': pair,
+            'items': _load_saved_script_pair(pair.short.script.account_uuid, output),
             'manifest': Path(pair.manifest_path),
             'trace': Path(pair.short.script.generation['trace_dir'])}
 
@@ -314,13 +319,15 @@ def test_unbound_malformed_history_still_renders_without_passed_badge():
     assert any('历史稿原文' in element.value for element in app.markdown)
 
 
-def test_focused_review_retains_twenty_source_binding(tmp_path):
+def test_focused_review_retains_twenty_source_binding(tmp_path, monkeypatch):
+    monkeypatch.setattr(pre_video_module, 'PROJECT_ROOT', tmp_path)
+    output = tmp_path / 'data'
     client = FixtureClient()
     pair = isolated_service(client, tmp_path).generate(PreVideoScriptRequest(
         account_key='account01', short_seconds=60, recent_video_types=('mixed',),
-        script_reference_source_ids=('labor-0',), output_dir=str(tmp_path)), now=NOW)
-    items = _load_saved_script_pair(pair.short.script.account_uuid, tmp_path)
-    result = saved.current_saved_script_review(items, allowed_root=tmp_path)
+        script_reference_source_ids=('labor-0',), output_dir=str(output)), now=NOW)
+    items = _load_saved_script_pair(pair.short.script.account_uuid, output)
+    result = saved.current_saved_script_review(items, allowed_root=output)
     assert result['current_passed'], result
     assert len(read_json(Path(pair.short.script.generation['trace_dir']) / 'source_evidence.full.json')) == 20
     assert len(client.calls) == 2

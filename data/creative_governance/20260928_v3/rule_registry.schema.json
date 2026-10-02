@@ -1,0 +1,265 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "source_hash",
+    "created_at",
+    "implementation_status",
+    "inventory_scope",
+    "rules"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "creative_rule_registry/v1"
+    },
+    "source_hash": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "implementation_status": {
+      "type": "string"
+    },
+    "inventory_scope": {
+      "type": "object",
+      "required": [
+        "coverage_denominator",
+        "mapped",
+        "excluded",
+        "unmapped",
+        "repository_wide_complete",
+        "exclusions"
+      ],
+      "properties": {
+        "coverage_denominator": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "mapped": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "excluded": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unmapped": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "repository_wide_complete": {
+          "const": false
+        },
+        "exclusions": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "rule_id",
+          "category",
+          "root_cause",
+          "priority",
+          "severity",
+          "stage",
+          "trigger",
+          "field_paths",
+          "authority_field",
+          "source_refs",
+          "checker",
+          "checker_kind",
+          "failure_code",
+          "positive_case_ids",
+          "negative_case_ids",
+          "version",
+          "replaces",
+          "replacement_rule_ids",
+          "status",
+          "repair_owner",
+          "unknown_disposition",
+          "change_action"
+        ],
+        "properties": {
+          "rule_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "category": {
+            "enum": [
+              "action",
+              "interaction",
+              "space",
+              "camera",
+              "source",
+              "interface",
+              "handoff"
+            ]
+          },
+          "root_cause": {
+            "type": "string"
+          },
+          "priority": {
+            "enum": [
+              "P0",
+              "P1",
+              "P2"
+            ]
+          },
+          "severity": {
+            "enum": [
+              "blocking",
+              "major",
+              "advisory"
+            ]
+          },
+          "stage": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "trigger": {
+            "type": "object",
+            "required": [
+              "any_features"
+            ],
+            "properties": {
+              "any_features": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": false
+          },
+          "field_paths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "authority_field": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_refs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "anchor"
+              ],
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string"
+                },
+                "anchor": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "checker": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "checker_kind": {
+            "enum": [
+              "deterministic",
+              "semantic",
+              "manual"
+            ]
+          },
+          "failure_code": {
+            "type": "string"
+          },
+          "positive_case_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "negative_case_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "version": {
+            "type": "string"
+          },
+          "replaces": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "replacement_rule_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "enum": [
+              "proposed",
+              "active",
+              "deprecated",
+              "retired"
+            ]
+          },
+          "repair_owner": {
+            "type": "string"
+          },
+          "unknown_disposition": {
+            "enum": [
+              "advisory_pending",
+              "review_required",
+              "blocked"
+            ]
+          },
+          "change_action": {
+            "enum": [
+              "retain",
+              "merge",
+              "move_to_code",
+              "move_to_cases",
+              "deprecate",
+              "propose"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false,
+  "x-artifact-metadata": {
+    "schema_version": "creative_schema_artifact/v1",
+    "source_hash": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+    "created_at": "2026-09-28T13:55:55.609742+00:00",
+    "implementation_status": "offline_implemented_not_production_validated"
+  }
+}

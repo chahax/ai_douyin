@@ -1,0 +1,128 @@
+{
+  "schema_version": "creative_runtime_sources/v1",
+  "source_hash": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+  "created_at": "2026-10-01T12:56:17.884739+00:00",
+  "implementation_status": "offline_implemented_not_production_validated",
+  "sources": [
+    {
+      "path": "src/content_factory/creative_action_plan_v2.py",
+      "sha256": "74bef6f461fa3884e39707f6ea533cc13ed71bcb20d14534e2fce9b39a514970"
+    },
+    {
+      "path": "src/content_factory/creative_state_plan_v6.py",
+      "sha256": "1cc460eaecf0d71ec05a0b2e6bc1a35a3a7f650ec15ec2b99d8520aee97704bb"
+    },
+    {
+      "path": "src/content_factory/creative_review_packet.py",
+      "sha256": "3a190b106277fb4c4b5216bf6fc2440256383c7af588d4ea6063b2a33ea241ca"
+    },
+    {
+      "path": "src/content_factory/creative_review_resolution.py",
+      "sha256": "a394f7bf6103524b81dd4b3548dad4db7a1783b794c2ab7af654f552819dedae"
+    },
+    {
+      "path": "src/content_factory/creative_focused_review_stage.py",
+      "sha256": "489a09d9a0b8b75a484097dca7cb4620c2a91a46f7c64a084545b5a63363067d"
+    },
+    {
+      "path": "src/content_factory/creative_governed_runtime.py",
+      "sha256": "ecf5ff90a7672098e4d9cff59549fd2ce5372267114657de92be58c51d0e2f52"
+    },
+    {
+      "path": "src/content_factory/creative_workflow.py",
+      "sha256": "ef9ce6d71b1a928ab2a907b9ad84fb6042850b64646f1847a6740ea35b02a6fa"
+    },
+    {
+      "path": "src/content_factory/creative_plan_patch.py",
+      "sha256": "0ea9f2a260a74f60fe365d91f531f6a0a018e87d59c309293d8dc526cc1e2cf7"
+    },
+    {
+      "path": "src/content_factory/creative_segmented_director.py",
+      "sha256": "4ee428059f92c0cae91a91ab86ddcc9f0944136d39c50a8459f3d7a16ed69925"
+    },
+    {
+      "path": "src/content_factory/creative_state_plan_binding.py",
+      "sha256": "b8bf8ec912e15bb1adc900c5f10a12b026bb934cded10e2eba7cb08f003e9a68"
+    },
+    {
+      "path": "src/content_factory/creative_rule_registry.py",
+      "sha256": "95a1dac7650006c2ab200bb2646e95f5add27046eda02140cc66e8d7d3e49fac"
+    },
+    {
+      "path": "src/content_factory/creative_evaluation.py",
+      "sha256": "14e152c68a7e026d474e736c502f9ca8a53cc69b8cead8e478d5af3514ef4090"
+    },
+    {
+      "path": "src/content_factory/creative_narrative_focus.py",
+      "sha256": "b73c43fb64633c16e4abb294e4d21eb4f9d41329e35142ae2e15b60c56e089e6"
+    },
+    {
+      "path": "src/content_factory/creative_narrative_transfer.py",
+      "sha256": "8022b3c6c9aefc703ef7f1fe972c1f666eccb1dc7ac6caf7da06d908baf8da11"
+    },
+    {
+      "path": "src/content_factory/creative_seedance_segments.py",
+      "sha256": "04641b4ddce8b38494502ba2664ea18a6d8a5dfe70f2b6c9b2f937832ea025ca"
+    },
+    {
+      "path": "src/content_factory/creative_event_recovery.py",
+      "sha256": "78f8788c3e16552a12804c95e323fb861c1c4d05299ba185a8f3bd61fa8f4904"
+    },
+    {
+      "path": "src/content_factory/creative_event_script.py",
+      "sha256": "510cc0c37306f6f627c19f1d078afc95365ca6753f06e92d527dd1e39ec8fdfc"
+    },
+    {
+      "path": "src/content_factory/creative_brief.py",
+      "sha256": "22e83b70eead1d4d10b93e4cf8b6fb00bbe1d6e3e94275edfddd9ae9495c23c1"
+    },
+    {
+      "path": "src/content_factory/creative_original_prompt.py",
+      "sha256": "a15a66b5b030c39be92783cc5eec310e9cd7cfe381831b6d17409d752d33cb6a"
+    },
+    {
+      "path": "src/content_factory/creative_workflow_contract.py",
+      "sha256": "b91df553261252944f704514f2db5f95b7c18c66fe236ae504d98c335836aa36"
+    },
+    {
+      "path": "src/content_factory/creative_full_script_revision.py",
+      "sha256": "127b43ba1b43ae14bd8e72eff0449c13ef64c186bb1833ac88c81d9e7d00bf0b"
+    },
+    {
+      "path": "scripts/run_creative_workflow.py",
+      "sha256": "eda5623537a446081f2090537b7c098a7c72ae746af2de0fce017a0d8dd1eb76"
+    },
+    {
+      "path": "config/creative_workflow_budget_v5.json",
+      "sha256": "21e42547ddbfc9fbeaf36d57f7f74a669ccc89457a148ccd14f9ab5fb8876c95"
+    },
+    {
+      "path": "src/web/creative_workflow_dashboard.py",
+      "sha256": "ed13d2ccb1197b9f621661ea843c1a7be70cdb7918d0d10888f1e9863635f88b"
+    },
+    {
+      "path": "src/content_factory/creative_reference_expression.py",
+      "sha256": "8bd192af8e29bea967744396ee32b01a6ff375cd603cb6f4e8096c159dfbb7e0"
+    },
+    {
+      "path": "config/creative_reference_defaults.json",
+      "sha256": "72d9422b2a3615fd25af5acf086779ea281b65f81590375e00d1af3d1b8ee1a1"
+    },
+    {
+      "path": "data/reference_reviews/reusable_expression_20261001/EXPRESSION_REFERENCE.md",
+      "sha256": "f007ea01a63dfb6c280b9cb3203774fe9828fe469582a03a060a82eee58f3216"
+    },
+    {
+      "path": "data/reference_reviews/reusable_expression_20261001/SELECTION.json",
+      "sha256": "27cca9e9c2cb8a520561e14f85c43ef80fc556bc0856a59cd4774bafe5628927"
+    },
+    {
+      "path": "scripts/resume_failed_plan_production.py",
+      "sha256": "9a18224191dc159160cd07a8ebcba8ce0cdc8366ecc21007437472d6e311397d"
+    }
+  ],
+  "rule_inventory_coverage_claim": false,
+  "supersedes": "data/creative_governance/20261001_v15_reference_expression",
+  "change": "Explicit bounded rebuild of unreviewed scene/plan, preserve paid history; timing repair scopes affected beat and exposes speech/action shared limits.",
+  "revision_note": "User requested continuation. New source binding upgrade receipt required on this task; no budget reset or automatic semantic approval."
+}

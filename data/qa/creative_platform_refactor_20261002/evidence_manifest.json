@@ -1,0 +1,215 @@
+{
+  "schema": "creative_platform_refactor_direction/v1",
+  "created_at": "2026-10-01T16:42:55.689782+00:00",
+  "product_direction": "AI screenplay and video production platform",
+  "user_confirmed_debug_scope": [
+    "text_stages",
+    "video_segments"
+  ],
+  "status": "proposal_only",
+  "snapshot_rechecked_count": 15,
+  "all_rechecked_match_prior_snapshot": true,
+  "prior_graphify_audit": {
+    "manifest": "../architecture_audit_20261001/audit_manifest.json",
+    "graphify_version": "0.9.73",
+    "git_head": "2baa701a3c600314e30e6a491f243071c4a60ec5",
+    "new_graph_extraction_performed": false,
+    "tests_not_repeated": {
+      "total": 127,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "current_dataset": {
+    "case_count": 28,
+    "approved_cases": 0,
+    "approved_labels": 0,
+    "candidate_case_count": 28
+  },
+  "current_budget": {
+    "policy_version": "v5_20261001",
+    "max_calls": 20,
+    "max_total_tokens": 500000,
+    "max_contract_repairs": 8,
+    "max_revisions": 5,
+    "applies_to": "new_creative_tasks_only",
+    "reason": "用户要求内容返修由生成模型提交完整新版，随后全文审查；最多五轮返修，通过即结束。总调用、tokens、技术修复额度维持原上限，历史任务预算保留。"
+  },
+  "source_files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "6558825e75b7eacbbf1fd74132de1e509bcb48a7f6eb0e1a6046cecf48be3fd0",
+      "lines": 19,
+      "size_bytes": 4044,
+      "matches_prior_graphify_snapshot": true
+    },
+    {
+      "path": "scripts/run_creative_workflow.py",
+      "sha256": "eda5623537a446081f2090537b7c098a7c72ae746af2de0fce017a0d8dd1eb76",
+      "lines": 284,
+      "size_bytes": 15507,
+      "matches_prior_graphify_snapshot": true
+    },
+    {
+      "path": "src/content_factory/creative_workflow.py",
+      "sha256": "ef9ce6d71b1a928ab2a907b9ad84fb6042850b64646f1847a6740ea35b02a6fa",
+      "lines": 8244,
+      "size_bytes": 455311,
+      "matches_prior_graphify_snapshot": true
+    },
+    {
+      "path": "src/content_factory/creative_segmented_director.py",
+      "sha256": "4ee428059f92c0cae91a91ab86ddcc9f0944136d39c50a8459f3d7a16ed69925",
+      "lines": 403,
+      "size_bytes": 29282,
+      "matches_prior_graphify_snapshot": true
+    },
+    {
+      "path": "src/content_factory/creative_full_script_revision.py",
+      "sha256": "127b43ba1b43ae14bd8e72eff0449c13ef64c186bb1833ac88c81d9e7d00bf0b",
+      "lines": 24,
+      "size_bytes": 1817,
+      "matches_prior_graphify_snapshot": true
+    },
+    {
+      "path": "src/content_factory/creative_seedance_segments.py",
+      "sha256": "04641b4ddce8b38494502ba2664ea18a6d8a5dfe70f2b6c9b2f937832ea025ca",
+      "lines": 252,
+      "size_bytes": 14150,
+      "matches_prior_graphify_snapshot": true
+    },
+    {
+      "path": "scripts/run_creative_seedance_segment.py",
+      "sha256": "e88bcc85c0163c94b3844c92b686ac93ee6aec462cb57a8e1f9c2e21fc542848",
+      "lines": 62,
+      "size_bytes": 5735,
+      "matches_prior_graphify_snapshot": true
+    },
+    {
+      "path": "scripts/run_manual_review_deferred_segment.py",
+      "sha256": "d5f91b11c3a95ad01916dd2d928005775099c9ea457d865f27a00a3c8cdad4da",
+      "lines": 55,
+      "size_bytes": 5587,
+      "matches_prior_graphify_snapshot": true
+    },
+    {
+      "path": "src/web/creative_workflow_dashboard.py",
+      "sha256": "ed13d2ccb1197b9f621661ea843c1a7be70cdb7918d0d10888f1e9863635f88b",
+      "lines": 254,
+      "size_bytes": 15114,
+      "matches_prior_graphify_snapshot": true
+    },
+    {
+      "path": "src/content_factory/creative_evaluation.py",
+      "sha256": "14e152c68a7e026d474e736c502f9ca8a53cc69b8cead8e478d5af3514ef4090",
+      "lines": 213,
+      "size_bytes": 18824,
+      "matches_prior_graphify_snapshot": true
+    },
+    {
+      "path": "src/content_factory/creative_governed_runtime.py",
+      "sha256": "ecf5ff90a7672098e4d9cff59549fd2ce5372267114657de92be58c51d0e2f52",
+      "lines": 78,
+      "size_bytes": 4425,
+      "matches_prior_graphify_snapshot": true
+    },
+    {
+      "path": "docs/REUSABLE_VIDEO_WORKFLOW.md",
+      "sha256": "5101bf8766f57d05a4cfb18326cd904e2e63cf37db646808fa5a32c6f6c586df",
+      "lines": 269,
+      "size_bytes": 37824,
+      "matches_prior_graphify_snapshot": true
+    },
+    {
+      "path": "docs/SCRIPT_VIDEO_RUN.md",
+      "sha256": "94581868ea0a1b83042433b5e2d23139762e1bcc2a3ca9dcaeb68330f8af60cc",
+      "lines": 401,
+      "size_bytes": 64135,
+      "matches_prior_graphify_snapshot": true
+    },
+    {
+      "path": "README.md",
+      "sha256": "0d25568699fff266fc3adde1cd7791dad6a0f5052508cd1a55c14a882b4c2bfd",
+      "lines": 29,
+      "size_bytes": 1538,
+      "matches_prior_graphify_snapshot": true
+    },
+    {
+      "path": "docs/SYSTEM_ARCHITECTURE.md",
+      "sha256": "08a85120a9c390e5f6c659418c2e5545674f82d880e234274b77ce51d44fe9a4",
+      "lines": 28,
+      "size_bytes": 629,
+      "matches_prior_graphify_snapshot": true
+    },
+    {
+      "path": "config/creative_workflow_budget_v5.json",
+      "sha256": "21e42547ddbfc9fbeaf36d57f7f74a669ccc89457a148ccd14f9ab5fb8876c95",
+      "lines": 9,
+      "size_bytes": 408
+    },
+    {
+      "path": "data/creative_governance/20261001_v17_history_usage/dataset_manifest.json",
+      "sha256": "705b14ff4a0d8909d6c1068faa9a79ad1f724c3fb3b583999d19ad3e5dd0d2ab",
+      "lines": 791,
+      "size_bytes": 31810
+    },
+    {
+      "path": "data/creative_governance/20261001_v17_history_usage/labels.json",
+      "sha256": "b7a936a6fbbdbbee071b5d7ac0762866815139da7e154922bb4e5d6c95703bf2",
+      "lines": 346,
+      "size_bytes": 10464
+    },
+    {
+      "path": "src/content_factory/creative_workflow_roles.py",
+      "sha256": "c33b1d3745a5ebd4f04031102fd645f1d276e48cdc126ee6589277e18d489a68",
+      "lines": 220,
+      "size_bytes": 9567
+    },
+    {
+      "path": "src/content_factory/creative_narrative_transfer.py",
+      "sha256": "8022b3c6c9aefc703ef7f1fe972c1f666eccb1dc7ac6caf7da06d908baf8da11",
+      "lines": 74,
+      "size_bytes": 3708
+    },
+    {
+      "path": "src/content_factory/script_video_review.py",
+      "sha256": "d8d79204e3bf07e1a721a13c69d2301489f23f91ffe2e083cf27aece22ff55a1",
+      "lines": 124,
+      "size_bytes": 7082
+    },
+    {
+      "path": "scripts/run_script_video.py",
+      "sha256": "5c02ee6f9fe9bc28d8eec02daf4535e75742181216e0cac35023c30be2878a16",
+      "lines": 1012,
+      "size_bytes": 63559
+    }
+  ],
+  "external_sources": [
+    {
+      "url": "https://www.iso.org/standard/74393.html",
+      "purpose": "Architecture description scope, official abstract only"
+    },
+    {
+      "url": "https://www.anthropic.com/engineering/building-effective-agents",
+      "purpose": "Workflow and intermediate checks, vendor engineering practice"
+    },
+    {
+      "url": "https://airc.nist.gov/airmf-resources/playbook/measure/",
+      "purpose": "Evaluation methods and measurement limitations"
+    }
+  ],
+  "work_performed": {
+    "business_code_modified": false,
+    "existing_documents_modified": false,
+    "historical_task_records_modified": false,
+    "paid_calls_started": 0,
+    "media_generated": false,
+    "video_or_audio_content_inspected": false,
+    "production_publishing_performed": false
+  },
+  "report": {
+    "path": "direction_report.html",
+    "sha256": "22a095eebea4269624a5cc779b33cd11353cd59a596370b6b786274c52b69d9d"
+  }
+}

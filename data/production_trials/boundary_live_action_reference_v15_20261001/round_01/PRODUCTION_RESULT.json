@@ -1,0 +1,20 @@
+{
+  "schema": "production_reference_trial_result/v1",
+  "status": "needs_attention",
+  "script_status": "text_preflight_accepted",
+  "director_status": "plan_contract_failed",
+  "paid_calls_started": 14,
+  "reported_tokens": 195507,
+  "content_revision_rounds": 1,
+  "contract_repairs_used": 5,
+  "media_calls": 0,
+  "duration_seconds": 57,
+  "all_reference_requests_match": true,
+  "runtime_registry": "data/creative_governance/20261001_v15_reference_expression",
+  "last_error": "plan_patch: PLAN_PATCH_VALUE_SCHEMA: beats.1.groups.0.duration_seconds: ['4'] is not of type 'number'",
+  "actual_fees": null,
+  "fee_reason": "未取得供应商账单，不以tokens伪算费用",
+  "script_readable": "PRODUCTION_SCREENPLAY.md",
+  "reference_delivery": "REFERENCE_DELIVERY.json",
+  "whole_workflow_pass": false
+}

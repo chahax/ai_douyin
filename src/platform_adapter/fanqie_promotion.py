@@ -2,7 +2,7 @@ import json
 import re
 import time
 from dataclasses import asdict, dataclass, field
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from string import Template
 from urllib.parse import quote
@@ -19,7 +19,7 @@ from src.shared.logger import logger
 FANQIE_ROOT = Path("data/fanqie_promotion")
 FANQIE_NOVEL_CONTENT_URL = "https://kol.fanqieopen.com/page/content?tab_type=2&top_tab_genre=-1"
 FANQIE_AUDIO_CONTENT_URL = "https://kol.fanqieopen.com/page/content?tab_type=3&top_tab_genre=-1"
-FANQIE_NOVEL_LIST_URL = "https://kol.fanqieopen.com/page/content?tab_type=2&top_tab_genre=-1"
+FANQIE_NOVEL_LIST_URL = "https://kol.fanqieopen.com/page/promotion-list?tab_type=2&top_tab_genre=-1"
 FANQIE_AUDIO_LIST_URL = "https://kol.fanqieopen.com/page/content?tab_type=3&top_tab_genre=-1"
 FANQIE_NOVEL_HOME = "https://fanqienovel.com"
 
@@ -29,6 +29,7 @@ FANQIE_ALIAS_STATUS_MAP = {
     "审核中": "under_review",
     "审核不通过": "rejected",
     "已失效": "expired",
+    "强制失效": "expired",
 }
 
 # 弹窗发文类型下拉的实际选项（用户从 kol.fanqieopen.com 抓取）。
@@ -338,52 +339,96 @@ async () => {
 """
 
 
-# 扫推广列表页：每行 { alias, book_name, book_id, content_type, publish_type, alias_status, book_status, fill_status, created_at, valid_range }
+# 扫推广列表页：按中文表头建立列索引，避免页面列重排后串字段。
 LIST_PROMOTIONS_JS = r"""
 () => {
-  const sleep = ms => new Promise(r => setTimeout(r, ms));
-  const textOf = el => (el.innerText || el.textContent || '').trim();
-  const rows = Array.from(document.querySelectorAll('.arco-table-tr'));
+  const textOf = el => (el && (el.innerText || el.textContent) || '')
+    .trim().replace(/\s+/g, ' ').trim();
+  const visible = el => {
+    if (!el) return false;
+    const style = getComputedStyle(el);
+    const rect = el.getBoundingClientRect();
+    return style.display !== 'none' && style.visibility !== 'hidden'
+      && rect.width > 0 && rect.height > 0;
+  };
+  // `.arco-spin` is the persistent wrapper and remains visible after loading;
+  // treating it as an active spinner makes a fully rendered table wait forever.
+  // Only explicit active-state markers count as loading.
+  const loading = Array.from(document.querySelectorAll(
+    '.arco-spin-loading, .arco-spin-loading-layer, [aria-busy="true"]'
+  )).some(visible);
 
-  // 过滤：跳过 thead
-  const dataRows = rows.filter(r => r.closest('thead') === null);
-  const out = dataRows.map(row => {
-    const cells = Array.from(row.querySelectorAll('.arco-table-td'));
-    // 用 first-child textContent 提取列（部分 cell 内含嵌套 div）
-    const cellText = i => cells[i] ? textOf(cells[i]).replace(/\s+/g, ' ').trim() : '';
-
-    // 别名状态：.alias-status-ButiOZ 文本（去除 svg 等）
-    const statusEl = row.querySelector('.alias-status-ButiOZ');
-    const aliasStatusText = statusEl ? textOf(statusEl) : '';
-
-    // 书本信息：.book-name-iHil3A + .extra-info-hpGb2J
-    const bookNameEl = row.querySelector('.book-name-iHil3A');
-    const extraEl = row.querySelector('.extra-info-hpGb2J');
-    const bookName = bookNameEl ? textOf(bookNameEl) : '';
-    const extraText = extraEl ? textOf(extraEl) : '';
-    const bookIdMatch = extraText.match(/id:\s*(\d+)/);
-    const bookId = bookIdMatch ? bookIdMatch[1] : '';
-
-    // 回填状态：第 7 列（"未填写" 或带"回填发文" link）
-    const fillText = cellText(6);
-    const hasFillLink = !!row.querySelector('.arco-table-cell .link');
-
+  const headerRow = document.querySelector('thead .arco-table-tr, thead tr');
+  if (!headerRow) {
+    return { count: 0, items: [], parse_error: 'no_table_header', loading };
+  }
+  const headerCells = Array.from(headerRow.querySelectorAll('th, .arco-table-th'));
+  const headers = headerCells.map(th => textOf(th.querySelector('.arco-table-th-title') || th));
+  const headerMap = {
+    '关键词': 'alias',
+    '书本信息': 'combined_book_info',
+    '体裁': 'content_type',
+    '发文类型': 'publish_type',
+    '别名状态': 'alias_status',
+    '书籍状态': 'book_status',
+    '发文详情': 'fill_detail',
+    '创建时间': 'created_at',
+    '有效期': 'valid_range',
+    '结算截止日': 'settlement_deadline',
+    '操作': 'actions',
+  };
+  // Keep this boundary identical to the P0 publish-authorization validator.
+  const required = ['关键词', '书本信息', '发文类型', '别名状态', '书籍状态', '发文详情'];
+  const missing = required.filter(name => !headers.includes(name));
+  if (missing.length) {
     return {
-      alias: cellText(0),
-      book_name: bookName,
-      book_id: bookId,
-      content_type: cellText(2),
-      publish_type: cellText(3),
-      alias_status: aliasStatusText,
-      book_status: cellText(5),
-      fill_status: fillText,
-      has_fill_link: hasFillLink,
-      created_at: cellText(7),
-      valid_range: cellText(8),
+      count: 0, items: [], parse_error: 'missing_required_headers',
+      missing_headers: missing, all_headers: headers, loading,
     };
-  }).filter(r => r.alias);
+  }
+  const columns = headers.map((name, index) => headerMap[name] || `_unknown_${index}`);
+  const rows = Array.from(document.querySelectorAll('tbody .arco-table-tr, tbody tr'));
+  const items = rows.map(row => {
+    const cells = Array.from(row.querySelectorAll('.arco-table-td, td'));
+    const entry = {};
+    for (let index = 0; index < cells.length; index++) {
+      const cell = cells[index];
+      const key = columns[index];
+      const raw = textOf(cell);
+      if (key === 'alias') entry.alias = raw;
+      else if (key === 'combined_book_info') {
+        const nameEl = cell.querySelector('.book-name-iHil3A, [class*="book-name"]');
+        const extraEl = cell.querySelector('.extra-info-hpGb2J, [class*="extra-info"]');
+        const idMatch = textOf(extraEl || cell).match(/\bid\s*[:：]\s*(\d{10,24})/i)
+          || raw.match(/\b(\d{10,24})\b/);
+        entry.book_name = textOf(nameEl) || raw.replace(/\s*\(?\s*id\s*[:：]\s*\d{10,24}\s*\)?\s*$/i, '').trim();
+        entry.book_id = idMatch ? idMatch[1] : '';
+      }
+      else if (key === 'content_type') entry.content_type = raw;
+      else if (key === 'publish_type') entry.publish_type = raw;
+      else if (key === 'alias_status') {
+        entry.alias_status = textOf(cell.querySelector('.alias-status-ButiOZ')) || raw;
+      }
+      else if (key === 'book_status') entry.book_status = raw;
+      else if (key === 'fill_detail') {
+        entry.fill_status = raw || '未填写';
+        entry.has_fill_link = Array.from(cell.querySelectorAll('a, button, .link'))
+          .some(el => visible(el) && /回填|填写/.test(textOf(el)));
+      }
+      else if (key === 'created_at') entry.created_at = raw;
+      else if (key === 'valid_range') entry.valid_range = raw;
+    }
+    if (entry.has_fill_link === undefined) entry.has_fill_link = false;
+    return entry;
+  }).filter(item => item.alias);
 
-  return { count: out.length, items: out };
+  const emptyState = items.length === 0 && Array.from(document.querySelectorAll(
+    '.arco-empty, .arco-table-empty, [class*="empty"]'
+  )).some(visible);
+  return {
+    count: items.length, items, all_headers: headers,
+    table_ready: true, loading, empty_state: emptyState,
+  };
 }
 """
 
@@ -541,6 +586,7 @@ class FanqiePromotionService:
         content_type: str = "novel",
         headless: bool = False,
         sync_to_tasks: bool = True,
+        wait_timeout_ms: int = 60_000,
     ) -> dict:
         """扫推广列表页，返回所有别名状态；可选同步到 tasks/<id>/task.json。
 
@@ -551,8 +597,84 @@ class FanqiePromotionService:
         session = self._open_browser_cache_session(headless=headless)
         try:
             page = session.open_page(url)
-            page.wait_for_timeout(3000)  # 等表格异步加载
-            result = page.locator("").evaluate(LIST_PROMOTIONS_JS)
+            logger.info(
+                f"等待番茄推广列表加载，最长 {max(1, wait_timeout_ms // 1000)} 秒..."
+            )
+            deadline = time.monotonic() + max(1, wait_timeout_ms) / 1000
+            result = {}
+            stable_signature = ""
+            stable_polls = 0
+            required_item_fields = (
+                "alias", "book_name", "book_id", "publish_type", "alias_status"
+            )
+            required_snapshot_headers = {
+                "关键词", "书本信息", "发文类型", "别名状态", "书籍状态", "发文详情",
+            }
+            while time.monotonic() < deadline:
+                result = page.locator("").evaluate(LIST_PROMOTIONS_JS) or {}
+                items = result.get("items") or []
+                headers = result.get("all_headers") or []
+                headers_complete = required_snapshot_headers.issubset(set(headers))
+                complete_items = headers_complete and bool(items) and all(
+                    all(str(item.get(field) or "").strip() for field in required_item_fields)
+                    for item in items
+                    if isinstance(item, dict)
+                ) and all(isinstance(item, dict) for item in items)
+                ready_empty = (
+                    result.get("table_ready")
+                    and result.get("empty_state")
+                    and not result.get("loading")
+                    and headers_complete
+                )
+                if not result.get("loading") and (complete_items or ready_empty):
+                    signature = json.dumps(
+                        items if complete_items else {"empty": True},
+                        ensure_ascii=False,
+                        sort_keys=True,
+                    )
+                    if signature == stable_signature:
+                        stable_polls += 1
+                    else:
+                        stable_signature = signature
+                        stable_polls = 1
+                else:
+                    stable_signature = ""
+                    stable_polls = 0
+                # Four identical, non-loading snapshots guarantee at least
+                # three additional browser ticks after the first rendered row.
+                # This avoids returning React's partially hydrated placeholder.
+                if stable_polls >= 4:
+                    break
+                page.wait_for_timeout(1000)
+            else:
+                items = result.get("items") or []
+                incomplete = [
+                    {
+                        "index": index,
+                        "missing": [
+                            field for field in required_item_fields
+                            if not str(item.get(field) or "").strip()
+                        ],
+                    }
+                    for index, item in enumerate(items)
+                    if isinstance(item, dict)
+                    and any(
+                        not str(item.get(field) or "").strip()
+                        for field in required_item_fields
+                    )
+                ]
+                detail = result.get("parse_error") or (
+                    f"incomplete_rows={incomplete}" if incomplete else "rows_not_stable"
+                )
+                headers = result.get("all_headers") or []
+                missing_headers = sorted(required_snapshot_headers - set(headers))
+                if missing_headers:
+                    detail = f"missing_publish_gate_headers={missing_headers}"
+                raise RuntimeError(
+                    f"推广列表等待超时（{wait_timeout_ms}ms）: {detail}; "
+                    f"headers={headers}"
+                )
+
             items = result.get("items") or []
             # 文案 → 内部状态
             for it in items:
@@ -562,12 +684,22 @@ class FanqiePromotionService:
             synced_task_ids: list[str] = []
             if sync_to_tasks and items:
                 synced_task_ids = self._sync_promotion_status(content_type, items)
+            captured_at = datetime.now(timezone.utc)
             return {
+                "schema_version": "fanqie_live_promotion_snapshot/v1",
+                "capture_method": "fanqie-promo-list/live-browser",
+                "captured_at": captured_at.isoformat(),
+                "expires_at": (captured_at + timedelta(minutes=15)).isoformat(),
                 "content_type": content_type,
                 "url": url,
+                "source_url": url,
                 "count": len(items),
                 "items": items,
                 "synced_task_ids": synced_task_ids,
+                "table_headers": result.get("all_headers") or [],
+                "empty_state": bool(result.get("empty_state")),
+                "complete_rows_verified": True,
+                "stable_poll_count": stable_polls,
             }
         finally:
             session.stop()
@@ -603,28 +735,42 @@ class FanqiePromotionService:
             changed = False
             # 1) 推进状态
             internal = item.get("alias_status_internal") or "unknown"
-            if data.get("apply_status") in ("pending_review", "submitted", "started"):
-                if internal in ("active", "under_review", "rejected", "expired"):
-                    data["apply_status"] = internal
-                    data["apply_message"] = (
-                        f"list 页同步：{item.get('alias_status')}"
-                        f"（创建 {item.get('created_at')}，"
-                        f"有效期 {item.get('valid_range')}）"
-                    )
-                    changed = True
+            current_status = data.get("apply_status") or "unknown"
+            allowed_targets = {
+                "started": {"under_review", "active", "rejected", "expired"},
+                "submitted": {"under_review", "active", "rejected", "expired"},
+                "pending_review": {"under_review", "active", "rejected", "expired"},
+                "under_review": {"active", "rejected", "expired"},
+                "active": {"rejected", "expired"},
+            }
+            if (
+                internal != current_status
+                and internal in allowed_targets.get(current_status, set())
+            ):
+                data["apply_status"] = internal
+                data["apply_message"] = (
+                    f"list 页同步：{item.get('alias_status')}"
+                    f"（创建 {item.get('created_at')}，"
+                    f"有效期 {item.get('valid_range')}）"
+                )
+                changed = True
             # 2) 补充 book_id / publish_type / valid_range
-            if item.get("book_id") and not data.get("book_url"):
-                # 记录 book_id（之前用 book_url 字段存；这里新加 fanqie_book_id 更准）
+            if item.get("book_id") and data.get("fanqie_book_id") != item["book_id"]:
                 data["fanqie_book_id"] = item["book_id"]
                 changed = True
-            if item.get("publish_type") and not data.get("publish_type"):
+            if item.get("publish_type") and data.get("publish_type") != item["publish_type"]:
                 data["publish_type"] = item["publish_type"]
                 changed = True
-            if item.get("valid_range") and not data.get("valid_range"):
+            if item.get("valid_range") and data.get("valid_range") != item["valid_range"]:
                 data["valid_range"] = item["valid_range"]
                 changed = True
-            if item.get("has_fill_link") is not None:
+            if (
+                item.get("has_fill_link") is not None
+                and data.get("has_fill_link") != item["has_fill_link"]
+            ):
                 data["has_fill_link"] = item["has_fill_link"]
+                changed = True
+            if data.get("fill_status") != item.get("fill_status", ""):
                 data["fill_status"] = item.get("fill_status", "")
                 changed = True
             if changed:
@@ -655,8 +801,10 @@ class FanqiePromotionService:
     def fetch_book(
         self,
         book_name: str,
-        chapters: int = 10,
+        chapters: int = 20,
         headless: bool = True,
+        session = None,   # 共享 BrowserSession（多本批量用同一个浏览器）
+        book_id: str = "",
     ) -> FanqieBookFetchResult:
         """抓小说正文。流程：
         1. 跳达人中心 /page/content，用搜索框过滤（前端 in-memory）
@@ -667,50 +815,128 @@ class FanqiePromotionService:
         """
         if not book_name.strip():
             raise RuntimeError("缺少小说名称。")
-        session = self._open_browser_cache_session(headless=headless)
+        own_session = session is None
+        if own_session:
+            session = self._open_browser_cache_session(headless=headless)
         try:
-            # 1) 跳达人中心 + 搜索 + 找书卡 + click
+            if book_id:
+                if not re.fullmatch(r"[0-9]{10,24}", str(book_id)):
+                    raise RuntimeError("book_id 必须是 10-24 位数字")
+                return self._fetch_book_from_known_id(
+                    session,
+                    book_name=book_name.strip(),
+                    book_id=str(book_id),
+                    chapters=chapters,
+                )
+            # 1) 跳达人中心 + 遍历 4 个榜单（爆款/阅读/潜力/全部内容）搜书名
+            #    每个榜单首屏只 10 本，书只在某个榜单里。
+            #    搜索是前端 in-memory filter，每个榜单独立过滤。
             list_url = "https://kol.fanqieopen.com/page/content?tab_type=2&top_tab_genre=-1"
             page = session.open_page(list_url)
-            page.wait_for_timeout(3000)
+            try:
+                page.wait_for_selector(".book-hQ7GYr", timeout=10_000)
+            except Exception:
+                raise RuntimeError("达人中心书卡未渲染")
+            page.wait_for_timeout(2000)
 
-            # 在搜索框输入书名（前端过滤）
-            search_input_js = """
-            () => {
-              const wanted = %s;
-              const inputs = Array.from(document.querySelectorAll('input[placeholder]'));
-              const target = inputs.find(i => i.offsetParent !== null) || inputs[0];
-              if (!target) return { error: 'no search input' };
-              const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
-              setter.call(target, wanted);
-              target.dispatchEvent(new Event('input', { bubbles: true }));
-              target.dispatchEvent(new Event('change', { bubbles: true }));
-              return { ok: true };
-            }
-            """ % json.dumps(book_name.strip(), ensure_ascii=False)
-            page.locator("").evaluate(search_input_js)
-            page.wait_for_timeout(2000)  # 等前端过滤
-
-            # 找匹配书卡
-            click_js = """
-            () => {
-              const wanted = %s;
-              const cards = Array.from(document.querySelectorAll('.book-hQ7GYr'));
-              for (const c of cards) {
-                const t = c.querySelector('.book-title-txt-_CIhYa');
-                const title = t ? t.innerText.trim() : '';
-                if (title === wanted || title.includes(wanted) || wanted.includes(title)) {
-                  c.click();
-                  return { clicked: true, title };
+            # 找匹配书卡（在前 4 个榜单之一）
+            # 用 evaluate 查 .book-hQ7GYr（不用 click）
+            def check_book_in_cards() -> tuple[bool, str]:
+                """返回 (是否找到, 标题)"""
+                js = """
+                () => {
+                  const wanted = %s;
+                  const cards = Array.from(document.querySelectorAll('.book-hQ7GYr'));
+                  for (const c of cards) {
+                    const t = c.querySelector('.book-title-txt-_CIhYa');
+                    const title = t ? t.innerText.trim() : '';
+                    if (title === wanted || title.includes(wanted) || wanted.includes(title)) {
+                      return { found: true, title, idx: cards.indexOf(c) };
+                    }
+                  }
+                  return { found: false };
                 }
-              }
-              return { clicked: false, message: '搜索后未找到匹配书名' };
-            }
-            """ % json.dumps(book_name.strip(), ensure_ascii=False)
-            click_result = page.locator("").evaluate(click_js)
-            if not click_result or not click_result.get("clicked"):
-                raise RuntimeError(f"达人中心搜索未匹配: {book_name}")
-            book_title = click_result.get("title") or book_name
+                """ % json.dumps(book_name.strip(), ensure_ascii=False)
+                r = page.locator("").evaluate(js) or {}
+                if r.get("found"):
+                    return True, r.get("title", "")
+                return False, ""
+
+            # 4 个榜单 = 爆款榜 / 阅读榜 / 潜力榜 / 全部内容
+            RANKINGS = [
+                "爆款榜",   # 默认（首次）
+                "阅读榜",
+                "潜力榜",
+                "全部内容",
+            ]
+            book_title = None
+            ranking_used = None
+
+            for i, ranking in enumerate(RANKINGS):
+                if i > 0:
+                    # click 切榜单
+                    page.locator(".task-menu-second .task-menu-second-item").nth(i).click()
+                    page.wait_for_timeout(2500)
+
+                # 搜索（用 Playwright fill 触发 React 状态）
+                # 先清空再 fill（让 React 状态同步）
+                # 用 .nth(0) 而非 .first：Page.first 和 _Locator.first 都是 method
+                # 不是 property，链式 .first.fill 解析错误
+                search_input = page.locator("input[placeholder]").nth(0)
+                search_input.fill("")
+                page.wait_for_timeout(300)
+                search_input.fill(book_name.strip())
+                page.wait_for_timeout(1500)
+
+                # 找书
+                found, found_title = check_book_in_cards()
+                logger.debug(
+                    f"[fetch_book] ranking={ranking} search='{book_name}' found={found}"
+                )
+                if found:
+                    book_title = found_title or book_name
+                    ranking_used = ranking
+                    logger.info(f"[fetch_book] 找到 '{book_title}' (in {ranking})")
+                    # click 匹配书卡
+                    # 找书卡 index（再 evaluate 一次拿 index）
+                    js_idx = """
+                    () => {
+                      const wanted = %s;
+                      const cards = Array.from(document.querySelectorAll('.book-hQ7GYr'));
+                      for (let i = 0; i < cards.length; i++) {
+                        const t = cards[i].querySelector('.book-title-txt-_CIhYa');
+                        const title = t ? t.innerText.trim() : '';
+                        if (title === wanted || title.includes(wanted) || wanted.includes(title)) {
+                          return { idx: i };
+                        }
+                      }
+                      return { idx: -1 };
+                    }
+                    """ % json.dumps(book_name.strip(), ensure_ascii=False)
+                    r_idx = page.locator("").evaluate(js_idx) or {}
+                    idx = r_idx.get("idx", -1)
+                    if idx >= 0:
+                        page.locator(".book-hQ7GYr").nth(idx).click()
+                    else:
+                        # fallback: 第一个匹配 .book-title-txt-_CIhYa 父级
+                        page.locator("").evaluate("""
+                        () => {
+                          const wanted = %s;
+                          const cards = document.querySelectorAll('.book-hQ7GYr');
+                          for (const c of cards) {
+                            const t = c.querySelector('.book-title-txt-_CIhYa');
+                            if (t && (t.innerText.trim() === wanted || t.innerText.trim().includes(wanted))) {
+                              c.click();
+                              return;
+                            }
+                          }
+                        }
+                        """ % json.dumps(book_name.strip(), ensure_ascii=False))
+                    break
+            else:
+                # for 循环完整跑完没 break
+                raise RuntimeError(f"达人中心 4 榜单都未匹配: {book_name}")
+
             page.wait_for_timeout(3500)
             book_id = self._get_book_id_from_url(page)
             if not book_id:
@@ -718,8 +944,12 @@ class FanqiePromotionService:
             detail_url = page.url
             logger.info(f"详情页: {detail_url}, book_id={book_id}")
 
+            # 1.5) 滚详情页触底，让 lazy load 把全部 chapter 加载
+            self._scroll_detail_to_load_all_chapters(page)
+            page.wait_for_timeout(2000)
+
             # 2) 抓所有可见目录项（拿全，让 meta.total_chapters_seen 准确）
-            catalogue = self._collect_catalogue_items(page, max_count=10000)
+            catalogue = self._collect_catalogue_items(page, max_count=50000)
             if not catalogue:
                 raise RuntimeError(f"详情页未找到章节目录: {detail_url}")
 
@@ -737,7 +967,12 @@ class FanqiePromotionService:
             chapters_dir.mkdir(parents=True, exist_ok=True)
             fetched = []
             paywall_hit = False
-            for idx, item in enumerate(catalogue[:chapters], start=1):
+            to_fetch = catalogue if chapters <= 0 else catalogue[:chapters]
+            logger.info(
+                f"[fetch_book] 准备抓 {len(to_fetch)} 章 "
+                f"(requested={chapters}, catalogue={len(catalogue)})"
+            )
+            for idx, item in enumerate(to_fetch, start=1):
                 chapter_title = item.get("title") or f"第{idx}章"
                 # 点击该目录项触发 pushState
                 click_item_js = """
@@ -748,15 +983,33 @@ class FanqiePromotionService:
                     const t = it.querySelector('.catalogue__item-text-Dcm6hj, [class*="catalogue__item-text"]');
                     return t && t.innerText.trim() === wanted;
                   });
-                  if (target) { target.click(); return true; }
-                  return false;
+                  if (!target) return { clicked: false };
+                  // 检测锁定：含 svg.catalogue__item-icon-VgbkwJ 就是锁定章节
+                  const is_locked = !!target.querySelector('svg.catalogue__item-icon-VgbkwJ');
+                  if (is_locked) return { clicked: false, locked: true };
+                  target.click();
+                  return { clicked: true, locked: false };
                 }
                 """ % json.dumps(chapter_title.strip(), ensure_ascii=False)
-                clicked = page.locator("").evaluate(click_item_js)
-                if not clicked:
-                    logger.warning(f"未找到/未点击目录项: {chapter_title}")
+                click_result = page.locator("").evaluate(click_item_js) or {}
+                if click_result.get("locked"):
+                    logger.info(f"[fetch_book] 锁定章节: {chapter_title} - 停止抓取")
+                    paywall_hit = True
+                    meta["paywall_at_chapter"] = idx
+                    meta["paywall_reason"] = "chapter_locked"
+                    break
+                if not click_result.get("clicked"):
+                    # React 异步渲染：等 500ms 重试 1 次
+                    page.wait_for_timeout(500)
+                    click_result = page.locator("").evaluate(click_item_js) or {}
+                    if not click_result.get("clicked"):
+                        logger.warning(f"未找到/未点击目录项（重试后）: {chapter_title}")
+                        continue
+                # dedup: 章节标题和上一章一样 → pushState 没切, skip
+                if fetched and fetched[-1].get("title") == chapter_title:
+                    logger.debug(f"[fetch_book] dedup same title, skip: {chapter_title}")
                     continue
-                page.wait_for_timeout(1200)
+                page.wait_for_timeout(800)  # 缩短等 pushState + 渲染
                 item_id = self._get_item_id_from_url(page)
                 # 抓 #content 段落
                 content_js = """
@@ -771,11 +1024,16 @@ class FanqiePromotionService:
 
                 # 付费墙检测
                 is_paywall, paywall_reason = self._detect_paywall(text)
-                if is_paywall:
-                    logger.info(f"[{idx}] 付费墙: {chapter_title} ({paywall_reason})")
+                # 内容极短 (<50 字符) 也算 paywall: 番茄"试读结束" 等 placeholder
+                short_content = 0 < len(text) < 50
+                if is_paywall or short_content:
+                    logger.info(
+                        f"[{idx}] 付费墙: {chapter_title} "
+                        f"({paywall_reason or 'short_content'})"
+                    )
                     paywall_hit = True
                     meta["paywall_at_chapter"] = idx
-                    meta["paywall_reason"] = paywall_reason
+                    meta["paywall_reason"] = paywall_reason or "short_content"
                     break
 
                 if not text:
@@ -824,7 +1082,140 @@ class FanqiePromotionService:
                 chapters=fetched,
             )
         finally:
-            session.stop()
+            if own_session:
+                session.stop()
+
+    def _fetch_book_from_known_id(
+        self,
+        session,
+        *,
+        book_name: str,
+        book_id: str,
+        chapters: int,
+    ) -> FanqieBookFetchResult:
+        """Recover visible chapter material for a previously bound promotion book."""
+        detail_url = (
+            "https://kol.fanqieopen.com/page/content/book-detail"
+            f"?tab_type=2&top_tab_genre=-1&book_id={book_id}&genre=0"
+        )
+        page = session.open_page(detail_url)
+        page.wait_for_timeout(3500)
+        if self._get_book_id_from_url(page) != book_id:
+            raise RuntimeError(f"详情页未保持目标 book_id: {page.url}")
+        self._scroll_detail_to_load_all_chapters(page)
+        page.wait_for_timeout(2000)
+        catalogue = self._collect_catalogue_items(page, max_count=50000)
+        if not catalogue:
+            raise RuntimeError(f"已绑定书籍详情页没有可见章节目录: {detail_url}")
+
+        meta = self._extract_book_meta(page)
+        book_title = str(meta.get("book_name") or book_name).strip() or book_name
+        meta.update(
+            book_id=book_id,
+            book_name=book_title,
+            source_url=detail_url,
+            scraped_at=self._now(),
+            total_chapters_seen=len(catalogue),
+            recovery_mode="known_bound_book_id",
+        )
+        book_dir = self.root_dir / "books" / f"{book_id}_{self._safe_name(book_title)}"
+        chapters_dir = book_dir / "chapters"
+        chapters_dir.mkdir(parents=True, exist_ok=True)
+        fetched = []
+        paywall_hit = False
+        to_fetch = catalogue if chapters <= 0 else catalogue[:chapters]
+        logger.info(
+            f"[fetch_book_by_id] 准备抓 {len(to_fetch)} 章 "
+            f"(requested={chapters}, catalogue={len(catalogue)})"
+        )
+        for idx, item in enumerate(to_fetch, start=1):
+            chapter_title = item.get("title") or f"第{idx}章"
+            click_item_js = """
+            () => {
+              const wanted = %s;
+              const items = Array.from(document.querySelectorAll('.catalogue__item-ImEeJx, [class*="catalogue__item"]:not([class*="text"]):not([class*="header"]):not([class*="list"])'));
+              const target = items.find(it => {
+                const t = it.querySelector('.catalogue__item-text-Dcm6hj, [class*="catalogue__item-text"]');
+                return t && t.innerText.trim() === wanted;
+              });
+              if (!target) return { clicked: false };
+              const is_locked = !!target.querySelector('svg.catalogue__item-icon-VgbkwJ');
+              if (is_locked) return { clicked: false, locked: true };
+              target.click();
+              return { clicked: true, locked: false };
+            }
+            """ % json.dumps(chapter_title.strip(), ensure_ascii=False)
+            click_result = page.locator("").evaluate(click_item_js) or {}
+            if click_result.get("locked"):
+                paywall_hit = True
+                meta["paywall_at_chapter"] = idx
+                meta["paywall_reason"] = "chapter_locked"
+                break
+            if not click_result.get("clicked"):
+                page.wait_for_timeout(500)
+                click_result = page.locator("").evaluate(click_item_js) or {}
+                if not click_result.get("clicked"):
+                    logger.warning(f"未找到/未点击目录项（重试后）: {chapter_title}")
+                    continue
+            page.wait_for_timeout(800)
+            item_id = self._get_item_id_from_url(page)
+            text = page.locator("").evaluate("""
+            () => {
+              const el = document.querySelector('#content, [class*="chapter-content"]');
+              if (!el) return '';
+              return Array.from(el.querySelectorAll('p')).map(p => p.innerText.trim()).filter(Boolean).join('\\n\\n');
+            }
+            """) or ""
+            text = self._clean_chapter_text(text)
+            is_paywall, paywall_reason = self._detect_paywall(text)
+            if is_paywall or 0 < len(text) < 50:
+                paywall_hit = True
+                meta["paywall_at_chapter"] = idx
+                meta["paywall_reason"] = paywall_reason or "short_content"
+                break
+            if not text:
+                logger.warning(f"章节内容为空: {chapter_title}")
+                continue
+            chapter_path = chapters_dir / f"{idx:03d}.txt"
+            self._write_text(chapter_path, f"{chapter_title}\n\n{text}\n")
+            fetched.append(
+                {
+                    "index": idx,
+                    "title": chapter_title,
+                    "item_id": item_id,
+                    "char_count": len(text),
+                    "file": str(chapter_path),
+                }
+            )
+            logger.info(f"[{idx}/{len(to_fetch)}] {chapter_title} ({len(text)} chars)")
+
+        meta["chapters_fetched"] = len(fetched)
+        meta["paywall_hit"] = paywall_hit
+        meta["fetch_log"] = fetched
+        meta_path = book_dir / "meta.json"
+        meta_path.write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
+        material_path = book_dir / "material.txt"
+        material = [
+            f"小说名称：{book_title}",
+            f"书籍 ID：{book_id}",
+            f"作者：{meta.get('author', '')}",
+            f"分类标签：{' / '.join(meta.get('tags', []))}",
+            f"作品简介：{meta.get('abstract', '')}",
+            f"详情页：{detail_url}",
+            "",
+        ]
+        for item in fetched:
+            material.append(Path(item["file"]).read_text(encoding="utf-8"))
+            material.append("\n")
+        self._write_text(material_path, "\n".join(material).strip() + "\n")
+        return FanqieBookFetchResult(
+            book_name=book_title,
+            book_id=book_id,
+            book_url=detail_url,
+            chapters_dir=str(chapters_dir),
+            material_path=str(material_path),
+            chapters=fetched,
+        )
 
     def generate_promo_video(
         self,
@@ -861,6 +1252,7 @@ class FanqiePromotionService:
             output_dir=output_dir,
             max_segments=max_segments,
             use_comfy_background=not no_comfy_background,
+            preserve_engagement_cta=True,
         )
         result = presenter.run_assets_preview(request) if assets_only else presenter.run(request)
         if not result.success:
@@ -965,7 +1357,44 @@ class FanqiePromotionService:
                 return {"title": item["title"], "book_id": ""}
         return {}
 
+
+    def _scroll_detail_to_load_all_chapters(self, page) -> int:
+        """滚详情页触底，让 lazy load 把全部 chapter 加载进 DOM。"""
+        js = r"""
+        () => {
+          const scrollTarget = document.querySelector('.muye-reader-content-16')
+            || document.querySelector('.muye-reader-box')
+            || document.body;
+          if (scrollTarget && scrollTarget.scrollHeight) {
+            scrollTarget.scrollTop = scrollTarget.scrollHeight;
+          } else {
+            window.scrollTo(0, document.body.scrollHeight);
+          }
+        }
+        """
+        last_count = 0
+        stable = 0
+        # 滚到底让 lazy load 把全部 catalogue item 加载。
+        # KOL 用户对所有 chapter 都可点（未解锁章节 click 后会被标记为 locked）。
+        for n in range(1, 31):  # 最多 30 次
+            page.locator("").evaluate(js)
+            page.wait_for_timeout(800)
+            cnt = page.locator("").evaluate(
+                "() => document.querySelectorAll('.catalogue__item-ImEeJx').length"
+            )
+            logger.debug(f"[scroll-chapters] #{n}: {cnt} chapter items")
+            if cnt > last_count:
+                last_count = cnt
+                stable = 0
+            else:
+                stable += 1
+                if stable >= 5:
+                    break
+        logger.info(f"[scroll-chapters] 滚到底可见 {last_count} 章")
+        return last_count
+
     def _get_book_id_from_url(self, page) -> str:
+
         """从当前 URL 拿 book_id"""
         js = "() => new URL(location.href).searchParams.get('book_id') || ''"
         result = page.locator("").evaluate(js) or ""
@@ -1101,12 +1530,13 @@ class FanqiePromotionService:
     def _generate_script(self, task: FanqiePromotionTask) -> str:
         material = Path(task.material_path).read_text(encoding="utf-8")
         material = material[:12000]
+        cta_keyword = task.promotion_alias.strip() or task.book_name
         prompt = f"""请根据下面小说前文素材，生成一条60-90秒中文短视频推广口播稿。
 要求：
 1. 开头3秒必须有剧情钩子，不要说“大家好”。
 2. 不剧透大结局，只提炼人物冲突、爽点、悬念和情绪张力。
-3. 结尾给评论区搜索引导：想看原文，在评论区搜“{task.book_name}”。
-4. 不要输出Markdown，只输出JSON：{{"title":"","script_content":"","comment_keyword":""}}。
+3. 结尾给评论区搜索引导：想看原文，在评论区搜“{cta_keyword}”。
+4. 不要输出Markdown，只输出JSON：{{“title”:””,”script_content”:””,”comment_keyword”:””}}。
 
 小说名：{task.book_name}
 推广别名：{task.promotion_alias}
@@ -1132,12 +1562,13 @@ class FanqiePromotionService:
         return self._fallback_script(task)
 
     def _fallback_script(self, task: FanqiePromotionTask) -> str:
+        cta_keyword = task.promotion_alias.strip() or task.book_name
         return (
             f"如果一个人明明被所有人看轻，却偏偏藏着最不服输的底牌，你会不会继续看下去？\n"
             f"这本《{task.book_name}》开局就把人物冲突拉满，主角被传成绝世天才，可真正的麻烦也跟着来了。\n"
             "有人等着看他露馅，有人想借他的名声布局，还有人一步步把他推到风口浪尖。\n"
             "前几章最抓人的地方，不是单纯变强，而是主角怎么在误会、质疑和机会之间，把局面一点点翻回来。\n"
-            f"想看原文，在评论区搜“{task.book_name}”。"
+            f'想看原文，在评论区搜“{cta_keyword}”。'
         )
 
     def _load_or_create_task(self, task_file: str, book_name: str, alias: str) -> FanqiePromotionTask:

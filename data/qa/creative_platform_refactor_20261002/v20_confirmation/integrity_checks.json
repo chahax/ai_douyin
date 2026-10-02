@@ -1,0 +1,293 @@
+{
+  "packs": {
+    "v20": {
+      "directory": "data/creative_governance/20261002_v20_platform_refactor_repair_resume",
+      "artifact_count": 49,
+      "artifact_mismatches": [],
+      "manifest_sha256": "42882e59e94483ca1beb37377afdd906cdae0d354515dd84b636b5eb229f01ea",
+      "runtime_manifest_sha256": "23fad17bea36c87c5dd92ab45866f1334a0e280d4c46cb8780f58078dac92350",
+      "runtime_source_count": 33,
+      "runtime_mismatches": []
+    },
+    "v19": {
+      "directory": "data/creative_governance/20261002_v19_platform_refactor_p1_recovery",
+      "artifact_count": 49,
+      "artifact_mismatches": [],
+      "manifest_sha256": "5744b0681fa9b80dbb46593883f62f326d16c4bb143bbdf09c43c177863e2a0b",
+      "runtime_manifest_sha256": "100a9f8cd9743cbc5dce288603c1146466f868ef4b0f35e4a2fad33f3b7ec42d",
+      "manifest_matches_v20_frozen_base": true,
+      "runtime_manifest_matches_v20_frozen_base": true,
+      "manifest_unchanged_from_prior_confirmation": true,
+      "runtime_manifest_unchanged_from_prior_confirmation": true
+    },
+    "v18": {
+      "directory": "data/creative_governance/20261002_v18_platform_refactor",
+      "artifact_count": 48,
+      "artifact_mismatches": [],
+      "manifest_sha256": "04ef58715f4cd3d8130d44b2ff60baff3c9acc64e708cd10c8852951ed750998",
+      "runtime_manifest_sha256": "527f57493ac58c9611a6c51df3be0a1dff1e2119c05d8b6c0a2026a5e0af4c4c",
+      "manifest_unchanged_from_prior_confirmation": true,
+      "runtime_manifest_unchanged_from_prior_confirmation": true
+    }
+  },
+  "new_task_binding": {
+    "schema_version": "creative_rule_registry_binding/v1",
+    "registry_dir": "data/creative_governance/20261002_v20_platform_refactor_repair_resume",
+    "artifact_manifest_sha256": "42882e59e94483ca1beb37377afdd906cdae0d354515dd84b636b5eb229f01ea",
+    "rules_sha256": "5b4af265c0dd49f80f67a0195398cbd574bc6edde127e726a1a953fb9143fa9f",
+    "repository_wide_complete": false,
+    "automatic_rule_activation": false
+  },
+  "governance_validation": {
+    "binding": {
+      "schema_version": "creative_rule_registry_binding/v1",
+      "registry_dir": "data/creative_governance/20261002_v20_platform_refactor_repair_resume",
+      "artifact_manifest_sha256": "42882e59e94483ca1beb37377afdd906cdae0d354515dd84b636b5eb229f01ea",
+      "rules_sha256": "5b4af265c0dd49f80f67a0195398cbd574bc6edde127e726a1a953fb9143fa9f",
+      "repository_wide_complete": false,
+      "automatic_rule_activation": false
+    },
+    "validation": {
+      "schema_valid": true,
+      "inventory_complete_within_declared_scope": true,
+      "repository_wide_complete": false,
+      "rule_count": 10,
+      "runtime_sources": {
+        "status": "verified",
+        "source_count": 33,
+        "rule_inventory_coverage_claim": false
+      }
+    },
+    "activation": {
+      "active_rule_ids": [
+        "EVIDENCE.BIND.001"
+      ],
+      "excluded": [
+        {
+          "rule_id": "STATE.PRECONDITION.001",
+          "reason": "different_stage"
+        },
+        {
+          "rule_id": "TIME.HOLD.001",
+          "reason": "different_stage"
+        },
+        {
+          "rule_id": "SOURCE.BIND.001",
+          "reason": "different_stage"
+        },
+        {
+          "rule_id": "ACT.GAZE.001",
+          "reason": "status_proposed"
+        },
+        {
+          "rule_id": "CUT.COMPLETION.001",
+          "reason": "status_proposed"
+        },
+        {
+          "rule_id": "SPACE.SEAT.001",
+          "reason": "status_proposed"
+        },
+        {
+          "rule_id": "CUT.EXECUTION.002",
+          "reason": "different_stage"
+        },
+        {
+          "rule_id": "SPACE.SEAT_TYPED.002",
+          "reason": "different_stage"
+        },
+        {
+          "rule_id": "STATE.BOUNDARY.002",
+          "reason": "different_stage"
+        }
+      ],
+      "semantic_rule_count": 0,
+      "semantic_limit": 12,
+      "requires_split_or_merge": false,
+      "serialized_characters": 877,
+      "token_count": null,
+      "token_count_status": "not_tokenized; characters_are_not_tokens",
+      "silently_truncated": false
+    }
+  },
+  "source_checks": [
+    {
+      "path": "src/content_factory/creative_action_plan_v2.py",
+      "sha256": "74bef6f461fa3884e39707f6ea533cc13ed71bcb20d14534e2fce9b39a514970",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/creative_state_plan_v6.py",
+      "sha256": "1cc460eaecf0d71ec05a0b2e6bc1a35a3a7f650ec15ec2b99d8520aee97704bb",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/creative_review_packet.py",
+      "sha256": "3a190b106277fb4c4b5216bf6fc2440256383c7af588d4ea6063b2a33ea241ca",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/creative_review_resolution.py",
+      "sha256": "a394f7bf6103524b81dd4b3548dad4db7a1783b794c2ab7af654f552819dedae",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/creative_focused_review_stage.py",
+      "sha256": "489a09d9a0b8b75a484097dca7cb4620c2a91a46f7c64a084545b5a63363067d",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/creative_governed_runtime.py",
+      "sha256": "1c44c7a1de1c2d3d220f8f2c2c20d7e9fe435849ef4de5cc2ec8a97156c6054e",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/creative_workflow.py",
+      "sha256": "66fc4ea8824ffa18d31ecfd581928cb04d1c039807b03bae96e3cd791548335c",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/creative_plan_patch.py",
+      "sha256": "0ea9f2a260a74f60fe365d91f531f6a0a018e87d59c309293d8dc526cc1e2cf7",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/creative_segmented_director.py",
+      "sha256": "4ee428059f92c0cae91a91ab86ddcc9f0944136d39c50a8459f3d7a16ed69925",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/creative_state_plan_binding.py",
+      "sha256": "b8bf8ec912e15bb1adc900c5f10a12b026bb934cded10e2eba7cb08f003e9a68",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/creative_rule_registry.py",
+      "sha256": "95a1dac7650006c2ab200bb2646e95f5add27046eda02140cc66e8d7d3e49fac",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/creative_evaluation.py",
+      "sha256": "14e152c68a7e026d474e736c502f9ca8a53cc69b8cead8e478d5af3514ef4090",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/creative_narrative_focus.py",
+      "sha256": "b73c43fb64633c16e4abb294e4d21eb4f9d41329e35142ae2e15b60c56e089e6",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/creative_narrative_transfer.py",
+      "sha256": "8022b3c6c9aefc703ef7f1fe972c1f666eccb1dc7ac6caf7da06d908baf8da11",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/creative_seedance_segments.py",
+      "sha256": "04641b4ddce8b38494502ba2664ea18a6d8a5dfe70f2b6c9b2f937832ea025ca",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/creative_event_recovery.py",
+      "sha256": "78f8788c3e16552a12804c95e323fb861c1c4d05299ba185a8f3bd61fa8f4904",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/creative_event_script.py",
+      "sha256": "510cc0c37306f6f627c19f1d078afc95365ca6753f06e92d527dd1e39ec8fdfc",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/creative_brief.py",
+      "sha256": "22e83b70eead1d4d10b93e4cf8b6fb00bbe1d6e3e94275edfddd9ae9495c23c1",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/creative_original_prompt.py",
+      "sha256": "a15a66b5b030c39be92783cc5eec310e9cd7cfe381831b6d17409d752d33cb6a",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/creative_workflow_contract.py",
+      "sha256": "b91df553261252944f704514f2db5f95b7c18c66fe236ae504d98c335836aa36",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/creative_full_script_revision.py",
+      "sha256": "127b43ba1b43ae14bd8e72eff0449c13ef64c186bb1833ac88c81d9e7d00bf0b",
+      "syntax_valid": true
+    },
+    {
+      "path": "scripts/run_creative_workflow.py",
+      "sha256": "482ba5f8178c70ca295f72a0fb7a707bc3c61cf680ad80dd5e15922eefe15a70",
+      "syntax_valid": true
+    },
+    {
+      "path": "config/creative_workflow_budget_v5.json",
+      "sha256": "21e42547ddbfc9fbeaf36d57f7f74a669ccc89457a148ccd14f9ab5fb8876c95",
+      "syntax_valid": null
+    },
+    {
+      "path": "src/web/creative_workflow_dashboard.py",
+      "sha256": "f2c4b4a2fc9b4828370ea7df38bf482266bdaa10c3b981d712ca1d86754af934",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/creative_reference_expression.py",
+      "sha256": "8bd192af8e29bea967744396ee32b01a6ff375cd603cb6f4e8096c159dfbb7e0",
+      "syntax_valid": true
+    },
+    {
+      "path": "config/creative_reference_defaults.json",
+      "sha256": "72d9422b2a3615fd25af5acf086779ea281b65f81590375e00d1af3d1b8ee1a1",
+      "syntax_valid": null
+    },
+    {
+      "path": "data/reference_reviews/reusable_expression_20261001/EXPRESSION_REFERENCE.md",
+      "sha256": "f007ea01a63dfb6c280b9cb3203774fe9828fe469582a03a060a82eee58f3216",
+      "syntax_valid": null
+    },
+    {
+      "path": "data/reference_reviews/reusable_expression_20261001/SELECTION.json",
+      "sha256": "27cca9e9c2cb8a520561e14f85c43ef80fc556bc0856a59cd4774bafe5628927",
+      "syntax_valid": null
+    },
+    {
+      "path": "scripts/resume_failed_plan_production.py",
+      "sha256": "9a18224191dc159160cd07a8ebcba8ce0cdc8366ecc21007437472d6e311397d",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/creative_stage_debug.py",
+      "sha256": "89cce6a6b2cf3ef3830675b5cb96298f796e5e08edf380d06867ca0f00e5dd4c",
+      "syntax_valid": true
+    },
+    {
+      "path": "scripts/debug_creative_workflow.py",
+      "sha256": "c1f2d13ac69ce298abf599313baca1921afea62297fd62ca313ccc64d266b4f2",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/media_review_policy.py",
+      "sha256": "774420e3fe06b1a8e5ea12ddb3a0b29cd6b27853ec923fff97e2323a60f086d0",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/scheduler/queue.py",
+      "sha256": "d8a0572079513cff53a08849972bd5533515aec8a4a1332c04930955e1b936d2",
+      "syntax_valid": true
+    }
+  ],
+  "diff_checks": {
+    "scoped": {
+      "exit_code": 0,
+      "errors": []
+    },
+    "global": {
+      "exit_code": 2,
+      "errors": [
+        "src/shared/llm_providers/base.py:156: new blank line at EOF.",
+        "tests/test_script_llm_response.py:70: new blank line at EOF."
+      ]
+    }
+  },
+  "migration_document_sha256": "e33e00e62613d827657f7e883124783e7af9c397b84b3b13a5665bd222769cb3"
+}

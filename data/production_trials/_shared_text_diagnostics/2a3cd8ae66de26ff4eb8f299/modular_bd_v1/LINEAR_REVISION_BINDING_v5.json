@@ -1,0 +1,8 @@
+{
+  "version": "evidence_adjudicated_linear_revision_v5",
+  "source_manifest": {
+    "scripts/revise_linear_script_probe_v5.py": "3b7443dfaf9283e0d190460dab9e3f0b688c52f2959f3480f85fe6d9fee5925c",
+    "scripts/creative_linear_script_v2.py": "cdce92447fbdc7a8296aeb44123160141f2188d2aec3a9c0950eea0b27a66bfe"
+  },
+  "previous_linear_binding_sha256": "5f16d4bab727f5b6e3e2ac173d7b73b9a54e33274b83ef0316c015944a16d4be"
+}

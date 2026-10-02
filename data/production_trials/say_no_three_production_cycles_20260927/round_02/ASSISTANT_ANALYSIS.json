@@ -1,0 +1,33 @@
+{
+  "schema": "production_cycle_assistant_analysis/v1",
+  "round": 2,
+  "passed": false,
+  "reached": "director_shots__beat_01_00",
+  "calls_started": 4,
+  "reported_tokens": 19967,
+  "findings": [
+    {
+      "cause": "模型重写已由manifest确定的style；修复器只允许镜头内字段，无法修根style",
+      "evidence": "style_lock mismatch → repair生成shots[0].style_lock不存在路径，补丁只能替换已有字段"
+    },
+    {
+      "cause": "首帧与动作起点相互矛盾",
+      "evidence": "start_state林遥已立于桌边；visible_performance 0–1.5秒从画面左缘走入到桌边"
+    },
+    {
+      "cause": "对白窗口过短",
+      "evidence": "陈禾请求13个汉字（含问号14字符）仅4.5–6.5秒，约6.5汉字每秒，未给标点和自然停顿时间；当前prompt预算每秒5单位也不足。"
+    },
+    {
+      "cause": "当前站坐选择未服从后续动作前提",
+      "evidence": "B1陈禾已经坐着；已锁B4要求转身坐下，中途没有起身事件"
+    },
+    {
+      "cause": "视线内部矛盾",
+      "evidence": "end_state林遥目光落文件夹，同时宣称两人对视"
+    }
+  ],
+  "improvements_from_round1": "manifest v2合法on与专用修复已生效，静态清单通过；真实内容未通过",
+  "requested_fix": "权威style由程序注入并留投影回执；导演检查动作先决条件、首尾状态与实际时间轴、自然对白时长；修复器依据正确层级修补。",
+  "media_calls": 0
+}

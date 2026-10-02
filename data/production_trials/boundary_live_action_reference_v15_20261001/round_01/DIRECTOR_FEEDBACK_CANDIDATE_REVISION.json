@@ -1,0 +1,35 @@
+{
+  "schema": "creative_director_feedback_candidate_revision/v1",
+  "status": "writer_reconciled_director_feedback",
+  "original_analysis_sha256": "498eb860682dfad3bdebb7ad68fab5542185632a25913cb0893a7b635ab5866c",
+  "director_brief_sha256": "27752d3cc36ede0f66930d565e900bd84b308812bafff3d7da92df4266e34589",
+  "selected_source_sha256": "3515405a25c052ddb1c52ff0a6d28f889cfdaa76981dd5d406a3e84a3652f296",
+  "writer_feedback_count": 3,
+  "model_output_sha256": "7c3256647f5352f95570f29f1c7363fafc8dc8fabd6608eeaffa9bf9722a5510",
+  "changed_candidate_fields": [
+    "setup",
+    "conflict",
+    "turn",
+    "peak",
+    "aftermath",
+    "selection_reason"
+  ],
+  "feedback_responses": [
+    {
+      "feedback_index": 0,
+      "decision": "accepted_in_script",
+      "reason": "采纳为导演执行层事项：场景设定维持傍晚办公室，但需在场景提示与最终视频提示词中说明使用原画室资产并重新打光为傍晚办公室灯光，不在候选声明层改动叙事；此为视觉与资产执行问题，由导演负责落实。"
+    },
+    {
+      "feedback_index": 1,
+      "decision": "accepted_candidate_change",
+      "reason": "已将林屿桌前物件由泛称\\\"结算单\\\"具体化为\\\"客户明细单\\\"，并在 conflict 中加入\\\"林屿像往常一样抬头说'今晚又得麻烦你帮我对一下'\\\"作为刺激前可读的物件信息入口，使观众在台词前能从桌面看到这份具体物件；同步在 aftermath 中以\\\"没对完的客户明细单\\\"延续同一物件线索，确保对白刺激与可见证据一致。"
+    },
+    {
+      "feedback_index": 2,
+      "decision": "accepted_candidate_change",
+      "reason": "已删除候选原写的\\\"回过头对方澄说'我们明天再聊怎么处理'\\\"这句口头处理过程，peak 改为\\\"方澄在门口停一下，没有回头，推门走出去\\\"，把收尾动作完全收束在选段发生的可见行为上，不承诺后续和解或心理结论，符合简报\\\"不预先规定两人必须和解\\\"与\\\"以新的行动兑现边界及关系变化\\\"。"
+    }
+  ],
+  "effective_analysis_sha256": "9b31ad9d8d5544c10491a43fda1a6a344de2678898b2f774c710a22dfea00d8a"
+}

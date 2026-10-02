@@ -1,0 +1,331 @@
+{
+  "narrative_focus_binding": null,
+  "reference_expression_version": null,
+  "script_revision_binding": null,
+  "schema": "creative_workflow_state/v1",
+  "model_profile": "legacy_writer_minimax_director_deepseek",
+  "writer_prompt_version": "legacy",
+  "review_policy_version": "legacy",
+  "production_protocol": "legacy",
+  "segmented_director_binding": null,
+  "original_director_binding": null,
+  "original_brief_priority_binding": null,
+  "writer_prompt_binding": null,
+  "created_at": "2026-10-02T07:08:26.567302+00:00",
+  "status": "debug_breakpoint",
+  "source_driver": "novel",
+  "creative_focus": "",
+  "logical_task_id": null,
+  "material_sha256": "7b1db88ccf45fc25fc2903664cdec309cae7e155af3e0cc039084fd1fef7b76d",
+  "calls_started": 7,
+  "max_calls": 20,
+  "max_total_tokens": 500000,
+  "max_revisions": 5,
+  "budget_policy_version": "v5_20261001",
+  "max_contract_repairs": 8,
+  "contract_repairs_used": 0,
+  "format_repairs_used": 0,
+  "revision_rounds": 0,
+  "revision_committed": [],
+  "stages": [
+    {
+      "name": "writer_analysis",
+      "role": "writer",
+      "input_sha256": "09139daf5f72740d5cae62dcfbfabcc65f0dc6774860e0a58d55e81a574d63e5",
+      "output_sha256": "4717243b05f3deeba97565c488e878b02d38542546c5c4c5511e3f55a0de5ecc",
+      "context_budget": {
+        "schema": "creative_context_budget/v1",
+        "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+        "serialized_input_characters": 3889,
+        "estimated_input_tokens": 3889,
+        "requested_max_output_tokens": 12000,
+        "estimated_total_tokens": 15889,
+        "provider": "minimax",
+        "model": "MiniMax-M3",
+        "planning_context_window_tokens": 512000,
+        "advertised_context_window_tokens": 1000000,
+        "source_url": "https://www.minimax.io/models/text/m3",
+        "verified_on": "2026-09-24"
+      },
+      "usage": {
+        "role": "writer",
+        "requested_model": "test",
+        "total_tokens": 1
+      }
+    },
+    {
+      "name": "director_brief",
+      "role": "director",
+      "input_sha256": "78982e6583351d3648779e32209251545bdfe9e9988b60abd3e71e7ded63ba0c",
+      "output_sha256": "f6d3fd0ed92ddcee4024f85dd9cdab1eb49269dc0149068028c8658d3c00ffdb",
+      "context_budget": {
+        "schema": "creative_context_budget/v1",
+        "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+        "serialized_input_characters": 4882,
+        "estimated_input_tokens": 4882,
+        "requested_max_output_tokens": 20000,
+        "estimated_total_tokens": 24882,
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "planning_context_window_tokens": 1000000,
+        "advertised_context_window_tokens": 1000000,
+        "source_url": "https://api-docs.deepseek.com/quick_start/pricing/",
+        "verified_on": "2026-09-24"
+      },
+      "usage": {
+        "role": "director",
+        "requested_model": "test",
+        "total_tokens": 1
+      }
+    },
+    {
+      "name": "writer_script",
+      "role": "writer",
+      "input_sha256": "1ba170e4fc3c582c5265c5124a9400efd52ce1b3cfb1d345d0b5bb6aaf850b1c",
+      "output_sha256": "a808bfb254eebafee4ddbcf09f53beb76d5813bba1835ea5a0cb44939b56524a",
+      "context_budget": {
+        "schema": "creative_context_budget/v1",
+        "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+        "serialized_input_characters": 9682,
+        "estimated_input_tokens": 9682,
+        "requested_max_output_tokens": 12000,
+        "estimated_total_tokens": 21682,
+        "provider": "minimax",
+        "model": "MiniMax-M3",
+        "planning_context_window_tokens": 512000,
+        "advertised_context_window_tokens": 1000000,
+        "source_url": "https://www.minimax.io/models/text/m3",
+        "verified_on": "2026-09-24"
+      },
+      "usage": {
+        "role": "writer",
+        "requested_model": "test",
+        "total_tokens": 1
+      }
+    },
+    {
+      "name": "director_brief",
+      "role": "director",
+      "input_sha256": "e19ff9b0d0e5379f8a5d8e5cd2865647c3cdf6ce93f70e44687049e6333cb838",
+      "output_sha256": "0ad0185daaf2fa1af166abc5a342969fe593ff1cb72f8ecd9780571406d4e58f",
+      "context_budget": {
+        "schema": "creative_context_budget/v1",
+        "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+        "serialized_input_characters": 5231,
+        "estimated_input_tokens": 5231,
+        "requested_max_output_tokens": 20000,
+        "estimated_total_tokens": 25231,
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "planning_context_window_tokens": 1000000,
+        "advertised_context_window_tokens": 1000000,
+        "source_url": "https://api-docs.deepseek.com/quick_start/pricing/",
+        "verified_on": "2026-09-24"
+      },
+      "usage": {
+        "role": "director",
+        "requested_model": "test",
+        "total_tokens": 1
+      }
+    },
+    {
+      "name": "writer_script",
+      "role": "writer",
+      "input_sha256": "599fe7d440e692373c56cde4216a0a6ebf8b3895483daa8966a94103727c8c5f",
+      "output_sha256": "2d2dee139d6349536e5dd19afddb2867993ece82d83329bc27f57053ad7746a0",
+      "context_budget": {
+        "schema": "creative_context_budget/v1",
+        "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+        "serialized_input_characters": 9705,
+        "estimated_input_tokens": 9705,
+        "requested_max_output_tokens": 12000,
+        "estimated_total_tokens": 21705,
+        "provider": "minimax",
+        "model": "MiniMax-M3",
+        "planning_context_window_tokens": 512000,
+        "advertised_context_window_tokens": 1000000,
+        "source_url": "https://www.minimax.io/models/text/m3",
+        "verified_on": "2026-09-24"
+      },
+      "usage": {
+        "role": "writer",
+        "requested_model": "test",
+        "total_tokens": 1
+      }
+    },
+    {
+      "name": "writer_script",
+      "role": "writer",
+      "input_sha256": "1ec484a005cbcf7ec28d1fe290f9b75fc3d953e042b2198aca5b85c5bff76387",
+      "output_sha256": "270d4f684afd258d4a87d4bf46d3a03e3abe3538a9bb193c6d7c20b7320894e0",
+      "context_budget": {
+        "schema": "creative_context_budget/v1",
+        "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+        "serialized_input_characters": 10055,
+        "estimated_input_tokens": 10055,
+        "requested_max_output_tokens": 12000,
+        "estimated_total_tokens": 22055,
+        "provider": "minimax",
+        "model": "MiniMax-M3",
+        "planning_context_window_tokens": 512000,
+        "advertised_context_window_tokens": 1000000,
+        "source_url": "https://www.minimax.io/models/text/m3",
+        "verified_on": "2026-09-24"
+      },
+      "usage": {
+        "role": "writer",
+        "requested_model": "test",
+        "total_tokens": 1
+      }
+    },
+    {
+      "name": "writer_script",
+      "role": "writer",
+      "input_sha256": "7e866b8bbe244a85463895316d177a2f84add7a8132363141216d46d4c2f95dc",
+      "output_sha256": "c54cdc67263d6b1dcec41fc0400ec69160597e70875d4aa11114796dec6d8b5b",
+      "context_budget": {
+        "schema": "creative_context_budget/v1",
+        "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+        "serialized_input_characters": 10055,
+        "estimated_input_tokens": 10055,
+        "requested_max_output_tokens": 12000,
+        "estimated_total_tokens": 22055,
+        "provider": "minimax",
+        "model": "MiniMax-M3",
+        "planning_context_window_tokens": 512000,
+        "advertised_context_window_tokens": 1000000,
+        "source_url": "https://www.minimax.io/models/text/m3",
+        "verified_on": "2026-09-24"
+      },
+      "usage": {
+        "role": "writer",
+        "requested_model": "test",
+        "total_tokens": 1
+      }
+    }
+  ],
+  "assistant_review_required": true,
+  "calibration_milestone_at_start": null,
+  "workflow_profile_sha256": "23da5d7b74b9703fd7e95c9b00f0718f588eac820fb90cb3a48b32848d73149d",
+  "input_profile_sha256": "f3c3041c37159255f7218cc46d2175fad490054338c70a625ca2ad711b470e16",
+  "calibrated_style_classes_at_start": [],
+  "review_reopen_reasons": [],
+  "text_pass_sequence": 0,
+  "video_pass_sequence": 0,
+  "reported_tokens": 7,
+  "context_strategy": {
+    "mode": "full",
+    "direct_context_limit_characters": 42000,
+    "initial_payload_serialized_characters": 695,
+    "source_sha256": "ad30b4a7c29ddc4f3e9c1b443b4d2dc5e4e27556a4e792de859d38f6a48ddbcb",
+    "reference_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "sent_payload_sha256": "09139daf5f72740d5cae62dcfbfabcc65f0dc6774860e0a58d55e81a574d63e5"
+  },
+  "debug_stage_dependencies": {
+    "writer_analysis": [],
+    "director_brief": [
+      "writer_analysis"
+    ],
+    "writer_script": [
+      "director_brief"
+    ]
+  },
+  "debug_stage_validity": {
+    "writer_analysis": "current",
+    "director_brief": "current",
+    "writer_script": "current"
+  },
+  "style_class": "cinematic_realism",
+  "debug_feedback": [
+    {
+      "feedback_id": "ff5b04711c164eff84e9",
+      "stage_id": "director_brief",
+      "output_sha256": "f6d3fd0ed92ddcee4024f85dd9cdab1eb49269dc0149068028c8658d3c00ffdb",
+      "disposition": "must_fix",
+      "receipt": ".creative_debug/feedback/director_brief/ff5b04711c164eff84e9.json",
+      "resolved_by_output_sha256": "0ad0185daaf2fa1af166abc5a342969fe593ff1cb72f8ecd9780571406d4e58f",
+      "resolution_receipt": ".creative_debug/feedback/director_brief/ff5b04711c164eff84e9.resolution.json"
+    },
+    {
+      "feedback_id": "45ad8eb3c68336a60512",
+      "stage_id": "writer_script",
+      "output_sha256": "2d2dee139d6349536e5dd19afddb2867993ece82d83329bc27f57053ad7746a0",
+      "disposition": "must_fix",
+      "receipt": ".creative_debug/feedback/writer_script/45ad8eb3c68336a60512.json",
+      "resolved_by_output_sha256": "270d4f684afd258d4a87d4bf46d3a03e3abe3538a9bb193c6d7c20b7320894e0",
+      "resolution_receipt": ".creative_debug/feedback/writer_script/45ad8eb3c68336a60512.resolution.json"
+    },
+    {
+      "feedback_id": "b0f7e46cc83ef4ff57ed",
+      "stage_id": "writer_script",
+      "output_sha256": "270d4f684afd258d4a87d4bf46d3a03e3abe3538a9bb193c6d7c20b7320894e0",
+      "disposition": "must_fix",
+      "receipt": ".creative_debug/feedback/writer_script/b0f7e46cc83ef4ff57ed.json",
+      "resolved_by_output_sha256": "c54cdc67263d6b1dcec41fc0400ec69160597e70875d4aa11114796dec6d8b5b",
+      "resolution_receipt": ".creative_debug/feedback/writer_script/b0f7e46cc83ef4ff57ed.resolution.json"
+    }
+  ],
+  "debug_feedback_status": "resolved",
+  "debug_breakpoint_history": [
+    {
+      "schema": "creative_stage_breakpoint/v1",
+      "stage_id": "writer_script",
+      "reason": "requested_stage",
+      "input_sha256": "1ba170e4fc3c582c5265c5124a9400efd52ce1b3cfb1d345d0b5bb6aaf850b1c",
+      "output_sha256": "a808bfb254eebafee4ddbcf09f53beb76d5813bba1835ea5a0cb44939b56524a",
+      "calls_started": 3,
+      "stopped_at": "2026-10-02T07:08:26.631158+00:00",
+      "automatic_media_submit": false
+    },
+    {
+      "schema": "creative_stage_breakpoint/v1",
+      "stage_id": "director_brief",
+      "reason": "requested_stage",
+      "input_sha256": "e19ff9b0d0e5379f8a5d8e5cd2865647c3cdf6ce93f70e44687049e6333cb838",
+      "output_sha256": "0ad0185daaf2fa1af166abc5a342969fe593ff1cb72f8ecd9780571406d4e58f",
+      "calls_started": 4,
+      "stopped_at": "2026-10-02T07:08:26.675409+00:00",
+      "automatic_media_submit": false
+    },
+    {
+      "schema": "creative_stage_breakpoint/v1",
+      "stage_id": "writer_script",
+      "reason": "requested_stage",
+      "input_sha256": "599fe7d440e692373c56cde4216a0a6ebf8b3895483daa8966a94103727c8c5f",
+      "output_sha256": "2d2dee139d6349536e5dd19afddb2867993ece82d83329bc27f57053ad7746a0",
+      "calls_started": 5,
+      "stopped_at": "2026-10-02T07:08:26.723456+00:00",
+      "automatic_media_submit": false
+    },
+    {
+      "schema": "creative_stage_breakpoint/v1",
+      "stage_id": "writer_script",
+      "reason": "next_stage_completed",
+      "input_sha256": "1ec484a005cbcf7ec28d1fe290f9b75fc3d953e042b2198aca5b85c5bff76387",
+      "output_sha256": "270d4f684afd258d4a87d4bf46d3a03e3abe3538a9bb193c6d7c20b7320894e0",
+      "calls_started": 6,
+      "stopped_at": "2026-10-02T07:08:26.917938+00:00",
+      "automatic_media_submit": false
+    },
+    {
+      "schema": "creative_stage_breakpoint/v1",
+      "stage_id": "writer_script",
+      "reason": "requested_stage",
+      "input_sha256": "1ec484a005cbcf7ec28d1fe290f9b75fc3d953e042b2198aca5b85c5bff76387",
+      "output_sha256": "270d4f684afd258d4a87d4bf46d3a03e3abe3538a9bb193c6d7c20b7320894e0",
+      "calls_started": 6,
+      "stopped_at": "2026-10-02T07:08:26.948189+00:00",
+      "automatic_media_submit": false
+    }
+  ],
+  "debug_breakpoint": {
+    "schema": "creative_stage_breakpoint/v1",
+    "stage_id": "writer_script",
+    "reason": "next_stage_completed",
+    "input_sha256": "7e866b8bbe244a85463895316d177a2f84add7a8132363141216d46d4c2f95dc",
+    "output_sha256": "c54cdc67263d6b1dcec41fc0400ec69160597e70875d4aa11114796dec6d8b5b",
+    "calls_started": 7,
+    "stopped_at": "2026-10-02T07:08:27.208970+00:00",
+    "automatic_media_submit": false
+  }
+}

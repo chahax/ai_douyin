@@ -1,0 +1,12 @@
+{
+  "schema": "creative_director_feedback_candidate_revision/v1",
+  "status": "no_writer_feedback",
+  "original_analysis_sha256": "d9b5d40271eea3093c2c38313ffbf381943c207cef7d90e962f5c57864c36613",
+  "director_brief_sha256": "47862b773ed406aef8cd6206f486a1997d5ebe6658b06c3048a64259f0d597a7",
+  "selected_source_sha256": "3515405a25c052ddb1c52ff0a6d28f889cfdaa76981dd5d406a3e84a3652f296",
+  "writer_feedback_count": 0,
+  "model_output_sha256": null,
+  "changed_candidate_fields": [],
+  "feedback_responses": [],
+  "effective_analysis_sha256": "d9b5d40271eea3093c2c38313ffbf381943c207cef7d90e962f5c57864c36613"
+}

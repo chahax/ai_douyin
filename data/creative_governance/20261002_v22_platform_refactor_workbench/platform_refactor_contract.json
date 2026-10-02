@@ -1,0 +1,20 @@
+{
+  "schema": "creative_platform_refactor_contract/v1",
+  "priorities": [
+    "P1",
+    "P2",
+    "P3",
+    "P4"
+  ],
+  "source_direction_report": "data/qa/creative_platform_refactor_20261002/direction_report.html",
+  "direction_report_sha256": "22a095eebea4269624a5cc779b33cd11353cd59a596370b6b786274c52b69d9d",
+  "stage_input_schema": "creative_stage_input/v1",
+  "stage_result_schema": "creative_stage_result/v1",
+  "automatic_media_review": false,
+  "automatic_paid_submit": false,
+  "quality_improvement_verified": false,
+  "historical_packs_retained": [
+    "20261002_v21_platform_refactor_multi_feedback",
+    "20261002_v20_platform_refactor_repair_resume"
+  ]
+}

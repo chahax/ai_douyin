@@ -1,0 +1,129 @@
+........................................................................ [  9%]
+...F.................................................................... [ 19%]
+........................................................................ [ 29%]
+..........................FF............................................ [ 39%]
+........................................................................ [ 49%]
+.................................F.F.F.................................. [ 59%]
+........................................................................ [ 68%]
+........................................................................ [ 78%]
+........................................................................ [ 88%]
+........................................................................ [ 98%]
+............                                                             [100%]
+================================== FAILURES ===================================
+________ test_effective_replay_is_stable_and_tampering_not_overwritten ________
+tests\test_creative_director_authority.py:56: in test_effective_replay_is_stable_and_tampering_not_overwritten
+    generate_reviewed_beats(w3, w3.answers[2], w3.answers[1], {})
+src\content_factory\creative_segmented_director.py:238: in generate_reviewed_beats
+    _save_effective_storyboard(workflow, director_key, shots)
+src\content_factory\creative_segmented_director.py:119: in _save_effective_storyboard
+    persist_derived(workflow, stage_name, path, record)
+src\content_factory\creative_stage_contracts.py:212: in persist_derived
+    raise ValueError("derived artifact changed without a revised source stage")
+E   ValueError: derived artifact changed without a revised source stage
+_ test_bound_review_version_survives_resume_and_joint_review[evidence_review_v1] _
+tests\test_creative_review_gate.py:201: in test_bound_review_version_survives_resume_and_joint_review
+    assert prompt==review_prompt(version)
+E   AssertionError: assert '你是DeepSeek独立...最终提示词丢失表达归导演。' == '你是DeepSeek独立...口型或表演通过/失败。\n'
+E     
+E     Skipping 1531 identical leading characters in diff, use -v to show
+E       型或表演通过/失败。
+E     + 
+E     + 叙事表达优先：先兑现本次简报的人物处境、关系、选择及转折，再处理动作/道具/结构细节。仅从实际播放的动作和对白判断观众能够获得什么信息，premise/event/trigger、目的说明及情绪标签不算额外演出。“总是/习惯/第一次/终于”等前史或变化不能仅靠一次开本子、握包或伸手推知；可用自然且具体的对白、可见后果或对照建立，不强制闪回、旁白、字幕。建立关键事实应早于依赖该事实的情绪转折。观众感受是创作目标，不是已经测得的效果。创作及文本审查以情感表达、事件表达、画面表达为主要顺序。情感：人物被什么具体刺激触动、怎样犹豫/选择、对方如何回应、结尾情绪是否由行动收束；看刺激前、中、后的表演是否可读。事件：前因、信息变化、选择与后果能否仅从实际动作/对白理解。画面：关键事实与反应有没有在分镜及最终提示词中可见的主体、景别、构图和窗口，是否保留题材与画风。三者可以由自然动作、对照、沉默或对白成立，不强迫角色口头解释感情，不把多写情绪标签当改进。duration_policy=flexible时总长是参考，依据内容安排，可长可短；不能仅因偏离参考或候选估计时长判必修，也不按相等时...
+E     
+E     ...Full output truncated (2 lines hidden), use '-vv' to show
+_ test_bound_review_version_survives_resume_and_joint_review[evidence_review_v2] _
+tests\test_creative_review_gate.py:201: in test_bound_review_version_survives_resume_and_joint_review
+    assert prompt==review_prompt(version)
+E   AssertionError: assert '你是DeepSeek独立...最终提示词丢失表达归导演。' == '你是DeepSeek独立...。不要重复列同一根因。\n'
+E     
+E     Skipping 2202 identical leading characters in diff, use -v to show
+E       不要重复列同一根因。
+E     + 
+E     + 叙事表达优先：先兑现本次简报的人物处境、关系、选择及转折，再处理动作/道具/结构细节。仅从实际播放的动作和对白判断观众能够获得什么信息，premise/event/trigger、目的说明及情绪标签不算额外演出。“总是/习惯/第一次/终于”等前史或变化不能仅靠一次开本子、握包或伸手推知；可用自然且具体的对白、可见后果或对照建立，不强制闪回、旁白、字幕。建立关键事实应早于依赖该事实的情绪转折。观众感受是创作目标，不是已经测得的效果。创作及文本审查以情感表达、事件表达、画面表达为主要顺序。情感：人物被什么具体刺激触动、怎样犹豫/选择、对方如何回应、结尾情绪是否由行动收束；看刺激前、中、后的表演是否可读。事件：前因、信息变化、选择与后果能否仅从实际动作/对白理解。画面：关键事实与反应有没有在分镜及最终提示词中可见的主体、景别、构图和窗口，是否保留题材与画风。三者可以由自然动作、对照、沉默或对白成立，不强迫角色口头解释感情，不把多写情绪标签当改进。duration_policy=flexible时总长是参考，依据内容安排，可长可短；不能仅因偏离参考或候选估计时长判必修，也不按相等时...
+E     
+E     ...Full output truncated (2 lines hidden), use '-vv' to show
+___________ test_v4_routes_new_workflow_and_keeps_real_review_gate ____________
+tests\test_creative_v4_integration.py:35: in test_v4_routes_new_workflow_and_keeps_real_review_gate
+    assert record['request']['messages'][0]['content']==build_review_prompt(context)
+E   assert '你是DeepSeek独立...最终提示词丢失表达归导演。' == '你是DeepSeek独立..."B01", "B02"]'
+E     
+E     Skipping 2345 identical leading characters in diff, use -v to show
+E     - 01", "B02"]
+E     + 01", "B02"]
+E     ?            +
+E     + 叙事表达优先：先兑现本次简报的人物处境、关系、选择及转折，再处理动作/道具/结构细节。仅从实际播放的动作和对白判断观众能够获得什么信息，premise/event/trigger、目的说明及情绪标签不算额外演出。“总是/习惯/第一次/终于”等前史或变化不能仅靠一次开本子、握包或伸手推知；可用自然且具体的对白、可见后果或对照建立，不强制闪回、旁白、字幕。建立关键事实应早于依赖该事实的情绪转折。观众感受是创作目标，不是已经测得的效果。创作及文本审查以情感表达、事件表达、画面表达为主要顺序。情感：人物被什么具体刺激触动、怎样犹豫/选择、对方如何回应、结尾情绪是否由行动收束；看刺激前、中、后的表演是否可读。事件：前因、信息变化、选择与后果能否仅从实际动作/对白理解。画面：关键事实与反应有没有在分镜及最终提示词中可见的主体、景别、构图和窗口，是否保留题材与画风。三者可以由自然动作、对照、沉默或对白成立，不强迫角色口头解释感情，不把多写情绪标签当改进。duration_policy=flexible时总长是参考，依据内容安排，可长可短...
+E     
+E     ...Full output truncated (2 lines hidden), use '-vv' to show
+___ test_v5_review_routes_deepseek_and_preserves_assistant_gate_and_receipt ___
+tests\test_creative_v5_integration.py:34: in test_v5_review_routes_deepseek_and_preserves_assistant_gate_and_receipt
+    assert receipt['request']['messages'][0]['content'] == build_review_prompt(context)
+E   AssertionError: assert '你是DeepSeek独立...最终提示词丢失表达归导演。' == '你是DeepSeek独立...因镜内局部正确被放过。\n'
+E     
+E     Skipping 3386 identical leading characters in diff, use -v to show
+E       镜内局部正确被放过。
+E     + 
+E     + 叙事表达优先：先兑现本次简报的人物处境、关系、选择及转折，再处理动作/道具/结构细节。仅从实际播放的动作和对白判断观众能够获得什么信息，premise/event/trigger、目的说明及情绪标签不算额外演出。“总是/习惯/第一次/终于”等前史或变化不能仅靠一次开本子、握包或伸手推知；可用自然且具体的对白、可见后果或对照建立，不强制闪回、旁白、字幕。建立关键事实应早于依赖该事实的情绪转折。观众感受是创作目标，不是已经测得的效果。创作及文本审查以情感表达、事件表达、画面表达为主要顺序。情感：人物被什么具体刺激触动、怎样犹豫/选择、对方如何回应、结尾情绪是否由行动收束；看刺激前、中、后的表演是否可读。事件：前因、信息变化、选择与后果能否仅从实际动作/对白理解。画面：关键事实与反应有没有在分镜及最终提示词中可见的主体、景别、构图和窗口，是否保留题材与画风。三者可以由自然动作、对照、沉默或对白成立，不强迫角色口头解释感情，不把多写情绪标签当改进。duration_policy=flexible时总长是参考，依据内容安排，可长可短；不能仅因偏离参考或候选估计时长判必修，也不按相等时...
+E     
+E     ...Full output truncated (2 lines hidden), use '-vv' to show
+______ test_v4_run_cannot_silently_inherit_v5_prompt_or_static_manifest _______
+tests\test_creative_v5_integration.py:71: in test_v4_run_cannot_silently_inherit_v5_prompt_or_static_manifest
+    assert receipt['request']['messages'][0]['content'] == v4_prompt(context)
+E   assert '你是DeepSeek独立...最终提示词丢失表达归导演。' == '你是DeepSeek独立..."B01", "B02"]'
+E     
+E     Skipping 2345 identical leading characters in diff, use -v to show
+E     - 01", "B02"]
+E     + 01", "B02"]
+E     ?            +
+E     + 叙事表达优先：先兑现本次简报的人物处境、关系、选择及转折，再处理动作/道具/结构细节。仅从实际播放的动作和对白判断观众能够获得什么信息，premise/event/trigger、目的说明及情绪标签不算额外演出。“总是/习惯/第一次/终于”等前史或变化不能仅靠一次开本子、握包或伸手推知；可用自然且具体的对白、可见后果或对照建立，不强制闪回、旁白、字幕。建立关键事实应早于依赖该事实的情绪转折。观众感受是创作目标，不是已经测得的效果。创作及文本审查以情感表达、事件表达、画面表达为主要顺序。情感：人物被什么具体刺激触动、怎样犹豫/选择、对方如何回应、结尾情绪是否由行动收束；看刺激前、中、后的表演是否可读。事件：前因、信息变化、选择与后果能否仅从实际动作/对白理解。画面：关键事实与反应有没有在分镜及最终提示词中可见的主体、景别、构图和窗口，是否保留题材与画风。三者可以由自然动作、对照、沉默或对白成立，不强迫角色口头解释感情，不把多写情绪标签当改进。duration_policy=flexible时总长是参考，依据内容安排，可长可短...
+E     
+E     ...Full output truncated (2 lines hidden), use '-vv' to show
+============================== warnings summary ===============================
+src\shared\database.py:7
+  D:\IT\ai_douyin\src\shared\database.py:7: MovedIn20Warning: The ``declarative_base()`` function is now available as sqlalchemy.orm.declarative_base(). (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    Base = declarative_base()
+
+tests/test_publish_status_propagation.py::test_worker_keeps_pending_publish_out_of_completed_state
+tests/test_publish_status_propagation.py::test_worker_keeps_pending_publish_out_of_completed_state
+tests/test_publish_status_propagation.py::test_worker_keeps_pending_publish_out_of_completed_state
+tests/test_task_queue_claim.py::test_sqlite_conditional_claim_has_exactly_one_winner
+tests/test_task_queue_claim.py::test_sqlite_conditional_claim_has_exactly_one_winner
+tests/test_task_queue_claim.py::test_sqlite_conditional_claim_has_exactly_one_winner
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+  D:\IT\ai_douyin\.venv\Lib\site-packages\sqlalchemy\sql\schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+
+tests/test_publish_status_propagation.py::test_worker_keeps_pending_publish_out_of_completed_state
+tests/test_task_queue_claim.py::test_sqlite_conditional_claim_has_exactly_one_winner
+tests/test_task_queue_claim.py::test_sqlite_conditional_claim_has_exactly_one_winner
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+  D:\IT\ai_douyin\src\scheduler\queue.py:141: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_publish_status_propagation.py::test_worker_keeps_pending_publish_out_of_completed_state
+  D:\IT\ai_douyin\src\scheduler\queue.py:269: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+  D:\IT\ai_douyin\src\scheduler\queue.py:237: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+  D:\IT\ai_douyin\tests\test_task_queue_claim.py:74: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    TaskExecution.lease_expires_at: datetime.utcnow() - timedelta(seconds=1),
+
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+  D:\IT\ai_douyin\src\scheduler\queue.py:346: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = now or datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_creative_director_authority.py::test_effective_replay_is_stable_and_tampering_not_overwritten
+FAILED tests/test_creative_review_gate.py::test_bound_review_version_survives_resume_and_joint_review[evidence_review_v1]
+FAILED tests/test_creative_review_gate.py::test_bound_review_version_survives_resume_and_joint_review[evidence_review_v2]
+FAILED tests/test_creative_v4_integration.py::test_v4_routes_new_workflow_and_keeps_real_review_gate
+FAILED tests/test_creative_v5_integration.py::test_v5_review_routes_deepseek_and_preserves_assistant_gate_and_receipt
+FAILED tests/test_creative_v5_integration.py::test_v4_run_cannot_silently_inherit_v5_prompt_or_static_manifest
+6 failed, 726 passed, 18 warnings in 177.83s (0:02:57)
+ACCEPTANCE_EXIT_CODE=1

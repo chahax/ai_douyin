@@ -1,0 +1,672 @@
+{
+  "schema": "creative_evidence_review_packet/v1",
+  "key": "script_review__story_00_01",
+  "review": {
+    "story_preserved": true,
+    "issues": [],
+    "suggestions": [
+      {
+        "location": "beat_3",
+        "proposal": "在方澄说出“今晚不行”之前，给一个更明确的可读近景反应窗口（如视线从文件夹移回林屿、喉部或手指的细微停顿），让“担心拒绝伤及关系”的犹豫在画面上成立，而不是只靠event说明。",
+        "reason": "简报要求关键反应使用可读近景，且观众要替她的选择紧张；当前犹豫主要写在before与event里，实际可拍反应偏少。"
+      },
+      {
+        "location": "beat_5",
+        "proposal": "把“锁屏上没有新消息提醒”处理成观众可读的可见信息（如屏幕特写或明确的空通知栏构图），避免仅靠event/trigger说明。",
+        "reason": "结尾以新行动兑现关系变化，但“没有抱怨消息”这一关键信息若不在画面中可读，观众可能只看到看手机，关系变化的落点会变弱。"
+      }
+    ],
+    "calibration_focus": [
+      "beat_3 方澄拒绝前犹豫反应是否在最终视频提示词中有可读近景与明确窗口。",
+      "beat_5 手机锁屏“无新消息”是否在最终画面中可读，以兑现关系变化。",
+      "全片写实真人实拍质感、自然光与生活化服装是否在最终提示词中保持，未回退为动画风格。"
+    ],
+    "coverage": [
+      {
+        "id": "beat_1",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "邻座同事台词“你不是每次都帮林屿收尾吗”与两张历史加班便利贴共同在拒绝前交代她过去不止一次替林屿加班，符合简报硬约束；演出票也建立她想离开的原因。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.0.dialogue.0.text",
+                "quote": "又走啦？你不是每次都帮林屿收尾吗。"
+              },
+              {
+                "path": "script.beats.0.before",
+                "quote": "傍晚办公区暖白窗光下，方澄把笔插进笔筒，合上自己的笔记本。\n台历上贴着一张演出票，旁边两份旧报告贴满红色便利贴，一张写着'上次的报价单已校对'，一张写着'周三排版OK'。"
+              },
+              {
+                "path": "creative_brief.constraints.0",
+                "quote": "观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "本拍为同事一句刺激后，方澄低头笑一下没接话并放票，反应顺序清楚；10秒内完成收拾、台词与放票，无对白窗口冲突。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.0.dialogue.0.text",
+                "quote": "又走啦？你不是每次都帮林屿收尾吗。"
+              },
+              {
+                "path": "script.beats.0.during",
+                "quote": "方澄低头笑一下没接话，把演出票小心放进包里。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "本拍为首拍，内部连续：方澄先收拾桌面，再在同事说话后放票；台历、旧报告、便利贴与包的位置关系清楚，无上一镜可对照。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.0.before",
+                "quote": "傍晚办公区暖白窗光下，方澄把笔插进笔筒，合上自己的笔记本。\n台历上贴着一张演出票，旁边两份旧报告贴满红色便利贴，一张写着'上次的报价单已校对'，一张写着'周三排版OK'。"
+              },
+              {
+                "path": "script.beats.0.during",
+                "quote": "方澄低头笑一下没接话，把演出票小心放进包里。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "pass",
+            "reason": "邻座同事台词约16个中文字，10秒窗口充足；方澄“低头笑一下没接话”作为反应可串行完成，无速度压力。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.0.dialogue.0.text",
+                "quote": "又走啦？你不是每次都帮林屿收尾吗。"
+              },
+              {
+                "path": "script.beats.0.during",
+                "quote": "方澄低头笑一下没接话，把演出票小心放进包里。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "本段为剧本beat，不是分镜首帧；首帧检查适用于分镜。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "not_applicable",
+            "reason": "本段为剧本beat，未提供production_design资产映射；当前可见需求为办公区、方澄、邻座同事、演出票、旧报告与便利贴，待后续联合审查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "beat_2",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "林屿抱文件夹快步走来并把报告搁到方澄桌上，请她再帮对数据，动作熟稳，兑现“对方原本把她的帮忙视为理所当然”。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.1.before",
+                "quote": "窗光转低色温，林屿抱着文件夹快步走来，边走边翻。"
+              },
+              {
+                "path": "script.beats.1.during",
+                "quote": "她边说边把文件夹往方澄桌上一搁，动作熟稳。"
+              },
+              {
+                "path": "creative_brief.turn",
+                "quote": "对方原本把她的帮忙视为理所当然；她明确拒绝后，对方必须面对这一点，再通过具体行动回应。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "林屿边走边翻并说出台词，随后把文件夹搁下；刺激到回应顺序为走来→台词→搁文件，9秒内可完成。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.1.before",
+                "quote": "窗光转低色温，林屿抱着文件夹快步走来，边走边翻。"
+              },
+              {
+                "path": "script.beats.1.dialogue.0.text",
+                "quote": "澄姐，这份客户报告明早九点要，你能再帮我对一遍数据吗？"
+              },
+              {
+                "path": "script.beats.1.during",
+                "quote": "她边说边把文件夹往方澄桌上一搁，动作熟稳。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "上一拍方澄已把演出票放进包里，本拍林屿抱文件夹走来并搁在方澄桌上；方澄位置未重置，林屿从外部进入，空间关系合理。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.0.during",
+                "quote": "方澄低头笑一下没接话，把演出票小心放进包里。"
+              },
+              {
+                "path": "script.beats.1.before",
+                "quote": "窗光转低色温，林屿抱着文件夹快步走来，边走边翻。"
+              },
+              {
+                "path": "script.beats.1.during",
+                "quote": "她边说边把文件夹往方澄桌上一搁，动作熟稳。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "pass",
+            "reason": "林屿台词约24个中文字，9秒窗口充足；“边说边把文件夹往桌上一搁”可与说话并行，不额外挤占对白时间。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.1.dialogue.0.text",
+                "quote": "澄姐，这份客户报告明早九点要，你能再帮我对一遍数据吗？"
+              },
+              {
+                "path": "script.beats.1.during",
+                "quote": "她边说边把文件夹往方澄桌上一搁，动作熟稳。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "本段为剧本beat，不是分镜首帧；首帧检查适用于分镜。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "not_applicable",
+            "reason": "本段为剧本beat，未提供production_design资产映射；当前可见需求为林屿、文件夹、方澄工位与低色温窗光，待后续联合审查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "beat_3",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "方澄手停在包上、目光在文件夹与林屿之间犹豫，随后明确拒绝；林屿以“你不是……每次都……”接话，兑现第一次把自己的时间放在前面及对方面对拒绝。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.2.before",
+                "quote": "方澄手停在包上，目光落在搁过来的文件夹上，又抬回林屿脸。"
+              },
+              {
+                "path": "script.beats.2.dialogue.0.text",
+                "quote": "今晚不行，林屿，我有事。"
+              },
+              {
+                "path": "script.beats.2.dialogue.1.text",
+                "quote": "你不是……每次都……"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "顺序为方澄犹豫→说“今晚不行”→林屿接“你不是……每次都……”，10秒内两句短对白与反应窗口可串行完成。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.2.before",
+                "quote": "方澄手停在包上，目光落在搁过来的文件夹上，又抬回林屿脸。"
+              },
+              {
+                "path": "script.beats.2.dialogue.0.text",
+                "quote": "今晚不行，林屿，我有事。"
+              },
+              {
+                "path": "script.beats.2.dialogue.1.text",
+                "quote": "你不是……每次都……"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "上一拍林屿把文件夹搁在方澄桌上，本拍方澄手停在包上、目光落在文件夹再抬回林屿脸；持物与视线关系连续。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.1.during",
+                "quote": "她边说边把文件夹往方澄桌上一搁，动作熟稳。"
+              },
+              {
+                "path": "script.beats.2.before",
+                "quote": "方澄手停在包上，目光落在搁过来的文件夹上，又抬回林屿脸。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "pass",
+            "reason": "方澄台词约10个中文字，林屿台词约8个中文字，10秒窗口充足；两句之间有方澄拒绝后的反应空间。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.2.dialogue.0.text",
+                "quote": "今晚不行，林屿，我有事。"
+              },
+              {
+                "path": "script.beats.2.dialogue.1.text",
+                "quote": "你不是……每次都……"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "本段为剧本beat，不是分镜首帧；首帧检查适用于分镜。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "not_applicable",
+            "reason": "本段为剧本beat，未提供production_design资产映射；当前可见需求为方澄、林屿、包、文件夹与工位，待后续联合审查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "beat_3b",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "方澄站起并拎起演出票那侧包带，再次明确拒绝“这次不行，你自己先对一遍”，兑现第二次拒绝与边界。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.3.before",
+                "quote": "方澄站起，把演出票那侧的包带拎起来。"
+              },
+              {
+                "path": "script.beats.3.dialogue.0.text",
+                "quote": "这次不行，你自己先对一遍。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "本拍先站起拎包带，再说拒绝台词；6秒内完成一个起身动作与一句短对白，节奏可行。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.3.before",
+                "quote": "方澄站起，把演出票那侧的包带拎起来。"
+              },
+              {
+                "path": "script.beats.3.dialogue.0.text",
+                "quote": "这次不行，你自己先对一遍。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "上一拍方澄手停在包上，本拍从该状态站起并拎包带；包仍在演出票那侧，动作承接合理。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.2.before",
+                "quote": "方澄手停在包上，目光落在搁过来的文件夹上，又抬回林屿脸。"
+              },
+              {
+                "path": "script.beats.3.before",
+                "quote": "方澄站起，把演出票那侧的包带拎起来。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "pass",
+            "reason": "方澄台词约12个中文字，6秒窗口充足；站起拎包带可在说话前或同时完成，无速度压力。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.3.before",
+                "quote": "方澄站起，把演出票那侧的包带拎起来。"
+              },
+              {
+                "path": "script.beats.3.dialogue.0.text",
+                "quote": "这次不行，你自己先对一遍。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "本段为剧本beat，不是分镜首帧；首帧检查适用于分镜。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "not_applicable",
+            "reason": "本段为剧本beat，未提供production_design资产映射；当前可见需求为方澄、包与工位，待后续联合审查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "beat_4",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "林屿收回搭在文件夹上的手，把文件夹抱回胸前，说“好，那我回去看看”并转身回工位，兑现面对拒绝后通过具体行动回应。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.4.before",
+                "quote": "林屿收回搭在文件夹上的手，把文件夹抱回自己胸前。"
+              },
+              {
+                "path": "script.beats.4.dialogue.0.text",
+                "quote": "好，那我回去看看。"
+              },
+              {
+                "path": "script.beats.4.during",
+                "quote": "她转身往自己工位走，脚步比来时慢。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "顺序为林屿收回手抱回文件夹→说“好，那我回去看看”→转身走；8秒内完成，反应窗口清楚。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.4.before",
+                "quote": "林屿收回搭在文件夹上的手，把文件夹抱回自己胸前。"
+              },
+              {
+                "path": "script.beats.4.dialogue.0.text",
+                "quote": "好，那我回去看看。"
+              },
+              {
+                "path": "script.beats.4.during",
+                "quote": "她转身往自己工位走，脚步比来时慢。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "上一拍方澄站起拒绝，本拍林屿收回搭在文件夹上的手并抱回胸前；文件夹从方澄桌上回到林屿胸前，持物者变化有动作交代。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.3.before",
+                "quote": "方澄站起，把演出票那侧的包带拎起来。"
+              },
+              {
+                "path": "script.beats.4.before",
+                "quote": "林屿收回搭在文件夹上的手，把文件夹抱回自己胸前。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "pass",
+            "reason": "林屿台词约8个中文字，8秒窗口充足；抱回文件夹与转身可在台词前后完成，无速度压力。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.4.dialogue.0.text",
+                "quote": "好，那我回去看看。"
+              },
+              {
+                "path": "script.beats.4.during",
+                "quote": "她转身往自己工位走，脚步比来时慢。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "本段为剧本beat，不是分镜首帧；首帧检查适用于分镜。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "not_applicable",
+            "reason": "本段为剧本beat，未提供production_design资产映射；当前可见需求为林屿、文件夹与工位方向，待后续联合审查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "beat_5",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "方澄走进电梯间、按按钮、看手机，锁屏无新消息且演出票时间亮着，随后把手机扣在胸口并松肩；以新行动兑现边界与关系变化，未强行和解或口号收尾。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.5.before",
+                "quote": "方澄拎包走进电梯间，按下按钮，电梯门缓缓合上。"
+              },
+              {
+                "path": "script.beats.5.during",
+                "quote": "她掏出手机，锁屏上没有新消息提醒，演出票的时间安静亮着。"
+              },
+              {
+                "path": "script.beats.5.after",
+                "quote": "她把手机扣在胸口，深吸一口气，肩线松下来一点点。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "顺序为走进电梯间按按钮→掏手机看锁屏→把手机扣在胸口深吸气；12秒内完成，无对白窗口冲突。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.5.before",
+                "quote": "方澄拎包走进电梯间，按下按钮，电梯门缓缓合上。"
+              },
+              {
+                "path": "script.beats.5.during",
+                "quote": "她掏出手机，锁屏上没有新消息提醒，演出票的时间安静亮着。"
+              },
+              {
+                "path": "script.beats.5.after",
+                "quote": "她把手机扣在胸口，深吸一口气，肩线松下来一点点。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "上一拍林屿转身回工位，本拍方澄已拎包进入电梯间；场景切换有“走进电梯间”动作交代，方澄持包状态延续。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.4.during",
+                "quote": "她转身往自己工位走，脚步比来时慢。"
+              },
+              {
+                "path": "script.beats.5.before",
+                "quote": "方澄拎包走进电梯间，按下按钮，电梯门缓缓合上。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "not_applicable",
+            "reason": "本拍无对白，只有动作与手机信息；不涉及台词速度核算。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.5.during",
+                "quote": "她掏出手机，锁屏上没有新消息提醒，演出票的时间安静亮着。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "本段为剧本beat，不是分镜首帧；首帧检查适用于分镜。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "not_applicable",
+            "reason": "本段为剧本beat，未提供production_design资产映射；当前可见需求为方澄、包、手机、电梯间与演出票时间，待后续联合审查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          }
+        }
+      }
+    ]
+  },
+  "context": {
+    "creative_brief": {
+      "schema": "creative_brief/v1",
+      "theme": "总替同事收尾的人，第一次把自己的时间放在前面",
+      "duration_seconds": [
+        45,
+        60
+      ],
+      "delegated_fields": [],
+      "audience": "喜欢生活情绪短片的成年观众",
+      "relationships": "方澄与同事林屿；林屿已习惯她会答应，方澄担心拒绝会伤及两人的关系。",
+      "audience_emotion": "先看懂她为什么难拒绝，再替她的选择紧张，最后感到关系发生了真实变化。",
+      "visual_style": "写实真人实拍质感的AI短片，成年普通人外貌，真实皮肤纹理、自然光与生活化服装，克制自然表演，关键反应使用可读近景。",
+      "turn": "对方原本把她的帮忙视为理所当然；她明确拒绝后，对方必须面对这一点，再通过具体行动回应。",
+      "ending": "以新的行动兑现边界及关系变化；不预先规定两人必须和解，不用主题口号收尾。",
+      "constraints": [
+        "观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。",
+        "她想离开和担心拒绝的原因要在实际事件中成立。",
+        "关键反应的构图和窗口必须写入最终视频提示词。",
+        "剧情先按完整故事创作，再拆成生成段；不能为固定八秒切段编造操作。"
+      ],
+      "avoid": [
+        "用一次开本子或摸包代替习惯性的付出历史",
+        "靠陪家人看病等新事故替代原本的关系矛盾",
+        "强行争吵、突然完美理解、鸡汤总结",
+        "为了沿用动画尾帧而改回手绘风格"
+      ]
+    },
+    "script": {
+      "title": "周五傍晚的拒绝",
+      "premise": "周五傍晚，写字楼办公区日光渐暗。方澄收拾桌面，台历演出票与两张旧报告上的红色便利贴交代她过去不止一次替林屿加班收尾；邻座同事路过随口点破，她低头笑而不接。林屿抱着文件夹快步走来，理所当然地把明早要交的报告往桌上一搁，请她再帮忙对数据。方澄手停在包上，担心这次拒绝会伤及两人关系，目光在文件夹与林屿之间短暂犹豫；她明确开口拒绝，林屿下意识接出\"你不是每次都……\"。方澄站起拎起演出票那侧包带，再次把今晚留给自己。林屿沉默片刻，把文件夹抱回自己胸前，转身回工位自己处理。方澄走进电梯间，掏出手机——锁屏上没有抱怨消息，演出票的时间安静亮着。她把手机扣在胸口，深吸一口气，肩线松下来一点点。",
+      "selected_candidate_id": "C01",
+      "duration_seconds": 55,
+      "beats": [
+        {
+          "id": "beat_1",
+          "duration_seconds": 10,
+          "event": "方澄收拾桌面，台历演出票与两张历史加班便利贴交代习惯性付出，邻座同事随口点破",
+          "trigger": "邻座同事一句'又走啦？你不是每次都帮林屿收尾吗'暴露方澄不止一次替林屿加班的事实",
+          "before": "傍晚办公区暖白窗光下，方澄把笔插进笔筒，合上自己的笔记本。\n台历上贴着一张演出票，旁边两份旧报告贴满红色便利贴，一张写着'上次的报价单已校对'，一张写着'周三排版OK'。",
+          "during": "方澄低头笑一下没接话，把演出票小心放进包里。",
+          "after": "（无新增动作）",
+          "dialogue": [
+            {
+              "speaker": "邻座同事",
+              "text": "又走啦？你不是每次都帮林屿收尾吗。"
+            }
+          ]
+        },
+        {
+          "id": "beat_2",
+          "duration_seconds": 9,
+          "event": "林屿抱文件夹快步走来，理所当然地把明早报告往方澄桌上一搁，请她再帮忙对数据",
+          "trigger": "林屿搁文件的熟练动作暴露她习惯把方澄的帮忙视为理所当然",
+          "before": "窗光转低色温，林屿抱着文件夹快步走来，边走边翻。",
+          "during": "她边说边把文件夹往方澄桌上一搁，动作熟稳。",
+          "after": "（无新增动作）",
+          "dialogue": [
+            {
+              "speaker": "林屿",
+              "text": "澄姐，这份客户报告明早九点要，你能再帮我对一遍数据吗？"
+            }
+          ]
+        },
+        {
+          "id": "beat_3",
+          "duration_seconds": 10,
+          "event": "方澄手停在包上，目光在文件夹与林屿之间犹豫，担心拒绝会伤及两人关系，随后开口拒绝",
+          "trigger": "方澄第一次主动把自己的时间（演出）放在同事请求前面，林屿本能地以'每次都'接话",
+          "before": "方澄手停在包上，目光落在搁过来的文件夹上，又抬回林屿脸。",
+          "during": "（无新增动作）",
+          "after": "（无新增动作）",
+          "dialogue": [
+            {
+              "speaker": "方澄",
+              "text": "今晚不行，林屿，我有事。"
+            },
+            {
+              "speaker": "林屿",
+              "text": "你不是……每次都……"
+            }
+          ]
+        },
+        {
+          "id": "beat_3b",
+          "duration_seconds": 6,
+          "event": "方澄站起拎包带，再次明确拒绝，划清今晚的边界",
+          "trigger": "方澄第二次明确拒绝，把自己的演出排在同事请求之前",
+          "before": "方澄站起，把演出票那侧的包带拎起来。",
+          "during": "（无新增动作）",
+          "after": "（无新增动作）",
+          "dialogue": [
+            {
+              "speaker": "方澄",
+              "text": "这次不行，你自己先对一遍。"
+            }
+          ]
+        },
+        {
+          "id": "beat_4",
+          "duration_seconds": 8,
+          "event": "林屿面对拒绝，把文件夹抱回自己胸前，转身回工位自己处理",
+          "trigger": "林屿用具体行动而非道歉来面对方澄的边界",
+          "before": "林屿收回搭在文件夹上的手，把文件夹抱回自己胸前。",
+          "during": "她转身往自己工位走，脚步比来时慢。",
+          "after": "（无新增动作）",
+          "dialogue": [
+            {
+              "speaker": "林屿",
+              "text": "好，那我回去看看。"
+            }
+          ]
+        },
+        {
+          "id": "beat_5",
+          "duration_seconds": 12,
+          "event": "方澄在电梯间看手机，锁屏上没有抱怨消息，肩线松下来一点点",
+          "trigger": "无人追来的安静以新行动兑现边界与关系变化",
+          "before": "方澄拎包走进电梯间，按下按钮，电梯门缓缓合上。",
+          "during": "她掏出手机，锁屏上没有新消息提醒，演出票的时间安静亮着。",
+          "after": "她把手机扣在胸口，深吸一口气，肩线松下来一点点。",
+          "dialogue": []
+        }
+      ],
+      "screenplay_markdown": "# 周五傍晚的拒绝\n\n## beat_1 方澄收拾桌面，台历演出票与两张历史加班便利贴交代习惯性付出，邻座同事随口点破\n\n傍晚办公区暖白窗光下，方澄把笔插进笔筒，合上自己的笔记本。\n台历上贴着一张演出票，旁边两份旧报告贴满红色便利贴，一张写着'上次的报价单已校对'，一张写着'周三排版OK'。\n\n**邻座同事**：又走啦？你不是每次都帮林屿收尾吗。\n\n方澄低头笑一下没接话，把演出票小心放进包里。\n\n（无新增动作）\n\n## beat_2 林屿抱文件夹快步走来，理所当然地把明早报告往方澄桌上一搁，请她再帮忙对数据\n\n窗光转低色温，林屿抱着文件夹快步走来，边走边翻。\n\n**林屿**：澄姐，这份客户报告明早九点要，你能再帮我对一遍数据吗？\n\n她边说边把文件夹往方澄桌上一搁，动作熟稳。\n\n（无新增动作）\n\n## beat_3 方澄手停在包上，目光在文件夹与林屿之间犹豫，担心拒绝会伤及两人关系，随后开口拒绝\n\n方澄手停在包上，目光落在搁过来的文件夹上，又抬回林屿脸。\n\n**方澄**：今晚不行，林屿，我有事。\n\n（无新增动作）\n\n**林屿**：你不是……每次都……\n\n（无新增动作）\n\n## beat_3b 方澄站起拎包带，再次明确拒绝，划清今晚的边界\n\n方澄站起，把演出票那侧的包带拎起来。\n\n**方澄**：这次不行，你自己先对一遍。\n\n（无新增动作）\n\n（无新增动作）\n\n## beat_4 林屿面对拒绝，把文件夹抱回自己胸前，转身回工位自己处理\n\n林屿收回搭在文件夹上的手，把文件夹抱回自己胸前。\n\n**林屿**：好，那我回去看看。\n\n她转身往自己工位走，脚步比来时慢。\n\n（无新增动作）\n\n## beat_5 方澄在电梯间看手机，锁屏上没有抱怨消息，肩线松下来一点点\n\n方澄拎包走进电梯间，按下按钮，电梯门缓缓合上。\n\n她掏出手机，锁屏上没有新消息提醒，演出票的时间安静亮着。\n\n她把手机扣在胸口，深吸一口气，肩线松下来一点点。"
+    },
+    "candidate_lock": {
+      "id": "C01",
+      "title": "周五傍晚的拒绝",
+      "setup": "周五傍晚，写字楼办公区日光渐暗。方澄（navy_suit, low_ponytail）收拾桌面，台历上贴着一张演出票，旁边摊开两份贴满红色便利贴的旧报告——便利贴上分别写着'上次的报价单已校对'、'周三排版OK'，是之前替林屿加班的痕迹。邻座同事路过随口一句'又走啦？你不是每次都帮林屿收尾吗'，方澄低头笑一下没接话，把演出票小心放进包里。",
+      "conflict": "林屿（offwhite_cardigan, shoulder_black_hair）抱着文件夹快步走过来，边走边翻，停在方澄工位旁，语气轻快：'澄姐，这份客户报告明早九点要，你能再帮我对一遍数据吗？'边说边把文件夹往方澄桌上一搁，动作已经像过去很多次那样熟稳。",
+      "turn": "方澄手停在包上，没有去接文件夹。她抬头看着林屿，声音平稳但清楚：'今晚不行，林屿，我有事。'林屿表情顿住，手还搭在文件夹上：'你不是……每次都……'方澄站起，把演出票那侧的包带拎起来：'这次不行，你自己先对一遍。'",
+      "peak": "短暂沉默。林屿收回搭在文件夹上的手，把文件夹抱回自己胸前，声音低了一档：'……好，那我回去看看。'她转身往自己工位走，脚步比来时慢。办公室日光灯嗡嗡响，方澄站在原位没动。",
+      "aftermath": "方澄拎着包走进电梯间，按下按钮。电梯门关上前她掏出手机——没有新消息提醒，锁屏上安静躺着演出票的时间。她把手机扣在胸口，深吸一口气，肩线松下来一点点。电梯门合上，她的倒影里嘴角没笑出来，但眼睛里那点紧也跟着退了。",
+      "start_quote": "",
+      "end_quote": "",
+      "duration_seconds": 55,
+      "selection_reason": "完整覆盖简报硬约束：1）开场邻座同事随口一句+桌面两张历史加班便利贴+林屿自己开口'你不是每次都'三重视角兑现'不止一次替同事加班'的可听可见后果，不是靠人物背景；2）拒绝原因（演出票）和拒绝场景在同一工位上同时成立；3）林屿面对拒绝的具体行动是'把文件夹抱回自己胸前，转身回工位自己处理'，兑现了'必须面对这一点再通过具体行动回应'；4）结尾以新行动（电梯间看手机确认林屿没发抱怨消息）兑现边界与关系变化，不强行和解，不鸡汤收尾；5）时长55秒在45-60区间，五个阶段各有可拍因果。资产使用方澄、林屿角色卡，场景为通用办公区日光过渡到傍晚，未挪用与主题不符的画室/物业前台/法院窗口。"
+    },
+    "selected_source": {
+      "candidate_id": "C01",
+      "story_source": "原创简报驱动"
+    }
+  },
+  "context_sha256": "a3d8e18348a31f72d668c57a4bb279258917074ad2af08ddab1a0cebadbb80a8",
+  "review_sha256": "d8e8f7138ad9f10144a29481d87294ab494880964d6932870e08d7774b85c2d7",
+  "automatic_media_submit": false
+}

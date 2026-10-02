@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="19" time="2.392" timestamp="2026-10-02T14:50:55.772880+08:00" hostname="DESKTOP-DP111LI"><testcase classname="tests.test_creative_stage_debug" name="test_breakpoint_and_next_stage_reuse_saved_budget_and_artifacts" time="0.084" /><testcase classname="tests.test_creative_stage_debug" name="test_feedback_binds_current_hash_and_invalidates_only_downstream_debug_view" time="0.059" /><testcase classname="tests.test_creative_stage_debug" name="test_immutable_versions_have_deterministic_diff" time="0.012" /><testcase classname="tests.test_creative_stage_debug" name="test_noninitial_must_fix_resume_replays_valid_upstream_and_reaches_target" time="0.086" /><testcase classname="tests.test_creative_stage_debug" name="test_resolved_repair_context_replays_then_rebuilds_invalidated_downstream" time="0.169" /><testcase classname="data.qa.creative_platform_refactor_20261002.v20_confirmation.test_extended_recovery" name="test_new_feedback_after_rebuild_binds_current_output" time="0.164" /><testcase classname="data.qa.creative_platform_refactor_20261002.v20_confirmation.test_extended_recovery" name="test_second_feedback_reaches_target_after_prior_stage_revision" time="0.218" /><testcase classname="data.qa.creative_platform_refactor_20261002.v20_confirmation.test_extended_recovery" name="test_clean_replay_after_rebuild_preserves_budget_without_model_calls" time="0.175" /><testcase classname="data.qa.creative_platform_refactor_20261002.v20_confirmation.test_extended_recovery" name="test_tampered_resolved_feedback_receipt_stops_before_model_call[feedback]" time="0.189" /><testcase classname="data.qa.creative_platform_refactor_20261002.v20_confirmation.test_extended_recovery" name="test_tampered_resolved_feedback_receipt_stops_before_model_call[resolution]" time="0.177" /><testcase classname="data.qa.creative_platform_refactor_20261002.v20_confirmation.test_recovery_boundaries" name="test_unverified_upstream_cannot_skip_feedback_target[prompt_hash]" time="0.070" /><testcase classname="data.qa.creative_platform_refactor_20261002.v20_confirmation.test_recovery_boundaries" name="test_unverified_upstream_cannot_skip_feedback_target[input_hash]" time="0.076" /><testcase classname="data.qa.creative_platform_refactor_20261002.v20_confirmation.test_recovery_boundaries" name="test_unverified_upstream_cannot_skip_feedback_target[output_hash]" time="0.066" /><testcase classname="data.qa.creative_platform_refactor_20261002.v20_confirmation.test_recovery_boundaries" name="test_unverified_upstream_cannot_skip_feedback_target[uncertain_status]" time="0.069" /><testcase classname="data.qa.creative_platform_refactor_20261002.v20_confirmation.test_recovery_boundaries" name="test_unverified_upstream_cannot_skip_feedback_target[invalidated]" time="0.068" /><testcase classname="data.qa.creative_platform_refactor_20261002.v20_confirmation.test_recovery_boundaries" name="test_unverified_upstream_cannot_skip_feedback_target[missing_receipt]" time="0.062" /><testcase classname="data.qa.creative_platform_refactor_20261002.v20_confirmation.test_recovery_boundaries" name="test_unchanged_repair_output_cannot_resolve_must_fix" time="0.085" /><testcase classname="data.qa.creative_platform_refactor_20261002.v20_confirmation.test_recovery_boundaries" name="test_repair_breakpoint_then_next_resume_reaches_invalidated_downstream" time="0.153" /><testcase classname="data.qa.creative_platform_refactor_20261002.v20_confirmation.test_recovery_boundaries" name="test_old_v18_task_binding_is_rejected_without_silent_rebind" time="0.079"><failure message="ValueError: RUNTIME_SOURCE_CHANGED: src/content_factory/creative_workflow.py">tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/p1_closure_v21/targeted_tmp_2/test_old_v18_task_binding_is_r0')
+
+    def test_old_v18_task_binding_is_rejected_without_silent_rebind(tmp_path):
+     from src.content_factory.creative_governed_runtime import verify_rules
+     from src.content_factory.creative_rule_registry import file_hash
+     from test_creative_governed_protocol import workflow
+     root=Path(__file__).resolve().parents[4];old='data/creative_governance/20261002_v18_platform_refactor'
+&gt;    w,clients=workflow(tmp_path,[])
+               ^^^^^^^^^^^^^^^^^^^^^
+
+data\qa\creative_platform_refactor_20261002\v20_confirmation\test_recovery_boundaries.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_creative_governed_protocol.py:25: in workflow
+    w.state["rule_registry_binding"] = bind_new_task()
+                                       ^^^^^^^^^^^^^^^
+src\content_factory\creative_governed_runtime.py:12: in bind_new_task
+    return bind_registry(ROOT, REGISTRY_DIRECTORY)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_rule_registry.py:126: in bind_registry
+    validate_registry_binding(binding,root)
+src\content_factory\creative_rule_registry.py:143: in validate_registry_binding
+    validation['runtime_sources']=validate_runtime_sources(directory,root)
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/IT/ai_douyin/data/creative_governance/20261002_v20_platform_refactor_repair_resume')
+root = WindowsPath('D:/IT/ai_douyin')
+
+    def validate_runtime_sources(directory, root):
+        """Versioned runtime binding is separate from the scoped rule inventory."""
+        path=Path(directory)/'runtime_sources.json'
+        if not path.exists():return {'status':'legacy_pack_without_runtime_binding','source_count':0}
+        document=json.loads(path.read_text(encoding='utf-8'));root=Path(root).resolve()
+        if document.get('schema_version')!='creative_runtime_sources/v1':raise ValueError('RUNTIME_SOURCE_SCHEMA')
+        for row in document['sources']:
+            source=(root/row['path']).resolve()
+            if not source.is_relative_to(root) or not source.is_file():raise ValueError('RUNTIME_SOURCE_MISSING: '+row['path'])
+&gt;           if file_hash(source)!=row['sha256']:raise ValueError('RUNTIME_SOURCE_CHANGED: '+row['path'])
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           ValueError: RUNTIME_SOURCE_CHANGED: src/content_factory/creative_workflow.py
+
+src\content_factory\creative_rule_registry.py:157: ValueError</failure></testcase></testsuite></testsuites>

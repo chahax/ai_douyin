@@ -23,6 +23,7 @@ from sqlalchemy import Column, Integer, String, Text, DateTime, JSON
 from sqlalchemy.orm import Session
 
 from src.shared.database import Base, SessionLocal
+from src.memory.models import ConversationSession  # noqa: F401  # used by _enrich_message_async
 
 
 class ProblemStatus(str, Enum):
@@ -219,22 +220,29 @@ class MemoryLayerManager:
 
             # 如果 LLM 重新判定为 problem 而快路径是 normal，补建 ProblemMemory
             if data["memory_type"] == "problem":
-                # 简单 dedup：LIKE 检查
+                # 简单 dedup：LIKE 检查（user_id 通过 session_id 查 ConversationSession）
+                user_id = "default"
+                sess_row = self.session.query(ConversationSession).filter_by(id=row.session_id).first()
+                if sess_row:
+                    user_id = sess_row.user_id
                 existing = self._find_similar_problem(
-                    row.session.user_id if hasattr(row.session, "user_id") else "default",
+                    user_id,
                     content,
                 )
                 if not existing:
                     self._add_problem(
                         row.session_id,
-                        "default",
+                        user_id,
                         content,
                         "problem",
                         tags=data.get("topics", []),
                     )
             return data
-        except Exception:
-            logger.exception("_enrich_message_async 失败")
+        except Exception as exc:
+            # 不依赖 logger（这个文件早期版本没有 import logger）
+            print(f"[problem_memory] _enrich_message_async failed: {type(exc).__name__}: {exc}")
+            import traceback
+            traceback.print_exc()
             return None
 
     # 旧的 _classify_message 保留为私有别名（向后兼容老调用方）
@@ -375,13 +383,34 @@ class MemoryLayerManager:
         content: str,
         memory_type: str,
     ):
-        msg = ConversationMemory(
+        # 双写：
+        #   1. ConversationMemory：滑动窗口（max 20，丢老的）
+        #   2. ConversationMessage：永久历史（streamlit chat_history 视图读这个）
+        # P1 streaming + 用户反馈"对话消息没入库"的 bug：原来 mlm.add_message
+        # 只写 ConversationMemory，streamlit 永远看不到 user 消息。
+        # 修复：两个表都写。
+        from src.memory.models import ConversationMessage
+
+        # 滑动窗口（自带 trim）
+        mem = ConversationMemory(
             session_id=session_id,
             role=role,
             content=content[:2000],
             memory_type=memory_type,
         )
-        self.session.add(msg)
+        self.session.add(mem)
+
+        # 永久历史（streamlit 用）
+        perm = ConversationMessage(
+            session_id=session_id,
+            role=role,
+            content=content[:2000],
+            skill_name="",
+            tool_success=True,
+            tool_error="",
+        )
+        self.session.add(perm)
+
         self.session.commit()
 
     def _upsert_user_memory(self, session_id: int, user_id: str, pref: dict):

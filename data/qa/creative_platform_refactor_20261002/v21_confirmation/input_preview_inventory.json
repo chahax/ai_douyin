@@ -1,0 +1,71 @@
+{
+  "schema": "p1_input_preview_surface_inventory/v1",
+  "direction_requirement": "P1 文本阶段调试：冻结输入预览",
+  "ui_labels": {
+    "button": [
+      "创建并运行新版文本流程",
+      "刷新状态",
+      "比较该阶段最近两版",
+      "绑定阶段反馈",
+      "运行下一阶段",
+      "运行到此阶段"
+    ],
+    "selectbox": [
+      "故事来源",
+      "查看已有任务",
+      "反馈责任阶段",
+      "反馈类型"
+    ],
+    "checkbox": [
+      "显示历史阶段版本（只读）"
+    ],
+    "text_input": [
+      "项目标题",
+      "本次对照焦点（可选）",
+      "已获取小说正文绝对路径",
+      "书籍元数据绝对路径（可选）",
+      "创作简报 JSON 路径（原创必需，其他来源可选）",
+      "运行到阶段（精确 stage_id）"
+    ],
+    "text_area": [
+      "表达参考分析路径（可选，每行一个）",
+      "反馈原话"
+    ],
+    "expander": [
+      "阶段调试与不可变版本"
+    ]
+  },
+  "ui_exception_count": 0,
+  "current_model_input_displayed_in_code_view": false,
+  "current_model_prompt_displayed_in_code_view": false,
+  "cli_commands": [
+    "inspect",
+    "compare",
+    "feedback"
+  ],
+  "runner_debug_options": [
+    "--stop-after-stage",
+    "--next-stage"
+  ],
+  "inspect_current_stage_keys": [
+    "ordinal",
+    "stage_id",
+    "role",
+    "input_sha256",
+    "output_sha256",
+    "version_count",
+    "artifact",
+    "artifact_verified",
+    "validity",
+    "usage"
+  ],
+  "stage_receipt_has_request_messages": true,
+  "command_service_public_methods": [
+    "inspect",
+    "compare",
+    "feedback"
+  ],
+  "finding": "Request messages are persisted, but the shared command service and debug UI have no frozen input/full prompt preview entry. Existing inspect exposes hashes and artifact paths; no preview command or before-call preview control is wired.",
+  "model_calls_started": 0,
+  "media_review_performed": false
+}

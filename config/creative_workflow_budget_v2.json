@@ -1,0 +1,9 @@
+{
+  "policy_version": "v2_20260922",
+  "max_calls": 20,
+  "max_total_tokens": 500000,
+  "max_contract_repairs": 2,
+  "max_revisions": 2,
+  "applies_to": "new_creative_tasks_only",
+  "reason": "真实试跑的两轮常被首份完整稿出现前的字段与来源契约修复耗尽；保留两轮成稿后编剧导演共用的实质返修，同时所有修复继续共享调用与 token 总预算。"
+}

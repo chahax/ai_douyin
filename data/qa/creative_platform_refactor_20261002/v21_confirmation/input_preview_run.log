@@ -1,0 +1,3 @@
+2026-10-02 15:26:35.162 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2026-10-02 15:26:35.256 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+{"ui_exception_count": 0, "current_model_input_displayed_in_code_view": false, "current_model_prompt_displayed_in_code_view": false, "cli_commands": ["inspect", "compare", "feedback"], "runner_debug_options": ["--stop-after-stage", "--next-stage"], "command_service_public_methods": ["inspect", "compare", "feedback"], "stage_receipt_has_request_messages": true}

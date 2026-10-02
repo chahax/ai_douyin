@@ -1,0 +1,432 @@
+{
+  "schema_version": "creative_rule_registry/v1",
+  "source_hash": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+  "created_at": "2026-09-28T14:36:59.681531+00:00",
+  "implementation_status": "offline_implemented_not_production_validated",
+  "inventory_scope": {
+    "coverage_denominator": 11,
+    "mapped": 10,
+    "excluded": 1,
+    "unmapped": 0,
+    "repository_wide_complete": false,
+    "exclusions": [
+      {
+        "scope": "Other prompts, legacy protocols, publishing/media/audio rules",
+        "reason": "Not exhaustively inventoried in this P0 pack; existing execution remains authoritative; requires separate inventory."
+      }
+    ]
+  },
+  "rules": [
+    {
+      "rule_id": "STATE.PRECONDITION.001",
+      "category": "action",
+      "root_cause": "contract_precondition",
+      "priority": "P1",
+      "severity": "major",
+      "stage": [
+        "plan_validation"
+      ],
+      "trigger": {
+        "any_features": []
+      },
+      "field_paths": [
+        "state_plan.initial_state.*.posture",
+        "state_plan.beats[*].groups[*].operations"
+      ],
+      "authority_field": "state_plan.initial_state.*.posture",
+      "source_refs": [
+        {
+          "path": "src/content_factory/creative_state_plan_v2.py",
+          "sha256": "98e089b56744a04521e4fff6d197f0a479326c0b874761014eb5c166873d62e9",
+          "anchor": "def _apply_operation("
+        }
+      ],
+      "checker": "src/content_factory/creative_state_plan_v2.py:_apply_operation",
+      "checker_kind": "deterministic",
+      "failure_code": "STATE_PRECONDITION_001",
+      "positive_case_ids": [
+        "STATE_OK"
+      ],
+      "negative_case_ids": [
+        "STATE_BAD"
+      ],
+      "version": "1",
+      "replaces": [],
+      "replacement_rule_ids": [],
+      "status": "active",
+      "repair_owner": "action_plan",
+      "unknown_disposition": "blocked",
+      "change_action": "retain"
+    },
+    {
+      "rule_id": "TIME.HOLD.001",
+      "category": "interaction",
+      "root_cause": "deterministic_timing",
+      "priority": "P1",
+      "severity": "major",
+      "stage": [
+        "scheduling"
+      ],
+      "trigger": {
+        "any_features": []
+      },
+      "field_paths": [
+        "state_plan.beats[*].groups[*].duration_seconds"
+      ],
+      "authority_field": "state_plan.beats[*].groups[*].duration_seconds",
+      "source_refs": [
+        {
+          "path": "src/content_factory/creative_action_plan_v1.py",
+          "sha256": "cfc455b9f2da0deb39791baf808547fc9f904613a58396fe52114962489bfda1",
+          "anchor": "def schedule_action_plan("
+        }
+      ],
+      "checker": "src/content_factory/creative_action_plan_v1.py:schedule_action_plan",
+      "checker_kind": "deterministic",
+      "failure_code": "TIME_HOLD_001",
+      "positive_case_ids": [
+        "HOLD_OK"
+      ],
+      "negative_case_ids": [
+        "HOLD_BAD"
+      ],
+      "version": "1",
+      "replaces": [],
+      "replacement_rule_ids": [],
+      "status": "active",
+      "repair_owner": "action_plan",
+      "unknown_disposition": "blocked",
+      "change_action": "retain"
+    },
+    {
+      "rule_id": "SOURCE.BIND.001",
+      "category": "source",
+      "root_cause": "source_lineage",
+      "priority": "P0",
+      "severity": "blocking",
+      "stage": [
+        "handoff"
+      ],
+      "trigger": {
+        "any_features": []
+      },
+      "field_paths": [
+        "state_plan",
+        "script",
+        "shots"
+      ],
+      "authority_field": "state_plan",
+      "source_refs": [
+        {
+          "path": "src/content_factory/creative_state_plan_binding.py",
+          "sha256": "b8bf8ec912e15bb1adc900c5f10a12b026bb934cded10e2eba7cb08f003e9a68",
+          "anchor": "def bind_reviewed_state_plan("
+        }
+      ],
+      "checker": "src/content_factory/creative_state_plan_binding.py:bind_reviewed_state_plan",
+      "checker_kind": "deterministic",
+      "failure_code": "SOURCE_BIND_001",
+      "positive_case_ids": [
+        "SOURCE_OK"
+      ],
+      "negative_case_ids": [
+        "SOURCE_BAD"
+      ],
+      "version": "1",
+      "replaces": [],
+      "replacement_rule_ids": [],
+      "status": "active",
+      "repair_owner": "workflow",
+      "unknown_disposition": "blocked",
+      "change_action": "retain"
+    },
+    {
+      "rule_id": "EVIDENCE.BIND.001",
+      "category": "interface",
+      "root_cause": "review_reference",
+      "priority": "P0",
+      "severity": "blocking",
+      "stage": [
+        "review"
+      ],
+      "trigger": {
+        "any_features": []
+      },
+      "field_paths": [
+        "shots.shots[*].start_state"
+      ],
+      "authority_field": "shots.shots[*].start_state",
+      "source_refs": [
+        {
+          "path": "src/content_factory/creative_review_evidence_ids.py",
+          "sha256": "8ee16a20165ae5e6a9a90adbddc2a1af024fbba8b79c359bb1b8e82cb6e823f9",
+          "anchor": "def expand_review_ids("
+        }
+      ],
+      "checker": "src/content_factory/creative_review_evidence_ids.py:expand_review_ids",
+      "checker_kind": "deterministic",
+      "failure_code": "EVIDENCE_BIND_001",
+      "positive_case_ids": [
+        "SOURCE_OK"
+      ],
+      "negative_case_ids": [
+        "SOURCE_BAD"
+      ],
+      "version": "1",
+      "replaces": [],
+      "replacement_rule_ids": [],
+      "status": "active",
+      "repair_owner": "workflow",
+      "unknown_disposition": "blocked",
+      "change_action": "retain"
+    },
+    {
+      "rule_id": "ACT.GAZE.001",
+      "category": "interaction",
+      "root_cause": "semantic_double_authority",
+      "priority": "P1",
+      "severity": "major",
+      "stage": [
+        "plan_review"
+      ],
+      "trigger": {
+        "any_features": []
+      },
+      "field_paths": [
+        "state_plan.beats[*].groups[*].operations",
+        "state_plan.beats[*].dialogue_performance"
+      ],
+      "authority_field": "state_plan.beats[*].groups[*].operations",
+      "source_refs": [
+        {
+          "path": "docs/VIDEO_PRODUCTION_ROOT_CAUSE_AND_CHANGE_PLAN_20260928.md",
+          "sha256": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+          "anchor": "ACT"
+        }
+      ],
+      "checker": "proposed:check_gaze_text_consistency",
+      "checker_kind": "semantic",
+      "failure_code": "PLAN_GAZE_TEXT_CONFLICT",
+      "positive_case_ids": [
+        "R01_OK_CANDIDATE"
+      ],
+      "negative_case_ids": [
+        "R01_BAD"
+      ],
+      "version": "1",
+      "replaces": [],
+      "replacement_rule_ids": [],
+      "status": "proposed",
+      "repair_owner": "action_plan",
+      "unknown_disposition": "review_required",
+      "change_action": "propose"
+    },
+    {
+      "rule_id": "CUT.COMPLETION.001",
+      "category": "camera",
+      "root_cause": "cut_authority",
+      "priority": "P1",
+      "severity": "major",
+      "stage": [
+        "plan_review"
+      ],
+      "trigger": {
+        "any_features": []
+      },
+      "field_paths": [
+        "state_plan.beats[*].camera",
+        "state_plan.beats[*].cut_reason"
+      ],
+      "authority_field": "proposed:cut_after_event_id",
+      "source_refs": [
+        {
+          "path": "docs/VIDEO_PRODUCTION_ROOT_CAUSE_AND_CHANGE_PLAN_20260928.md",
+          "sha256": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+          "anchor": "CUT"
+        }
+      ],
+      "checker": "proposed:check_camera_cut_consistency",
+      "checker_kind": "semantic",
+      "failure_code": "PLAN_CUT_TEXT_CONFLICT",
+      "positive_case_ids": [
+        "R02_OK_CANDIDATE"
+      ],
+      "negative_case_ids": [
+        "R02_BAD"
+      ],
+      "version": "1",
+      "replaces": [],
+      "replacement_rule_ids": [],
+      "status": "proposed",
+      "repair_owner": "action_plan",
+      "unknown_disposition": "review_required",
+      "change_action": "propose"
+    },
+    {
+      "rule_id": "SPACE.SEAT.001",
+      "category": "space",
+      "root_cause": "space_precondition",
+      "priority": "P1",
+      "severity": "major",
+      "stage": [
+        "plan_review"
+      ],
+      "trigger": {
+        "any_features": []
+      },
+      "field_paths": [
+        "state_plan.initial_state",
+        "state_plan.beats[*].groups[*].operations"
+      ],
+      "authority_field": "state_plan.initial_state",
+      "source_refs": [
+        {
+          "path": "docs/VIDEO_PRODUCTION_ROOT_CAUSE_AND_CHANGE_PLAN_20260928.md",
+          "sha256": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+          "anchor": "统一事实来源"
+        }
+      ],
+      "checker": "proposed:check_sit_preconditions",
+      "checker_kind": "semantic",
+      "failure_code": "PLAN_SEAT_ACCESS_UNKNOWN",
+      "positive_case_ids": [
+        "R03_OK_CANDIDATE"
+      ],
+      "negative_case_ids": [
+        "R03_BAD"
+      ],
+      "version": "1",
+      "replaces": [],
+      "replacement_rule_ids": [],
+      "status": "proposed",
+      "repair_owner": "action_plan",
+      "unknown_disposition": "review_required",
+      "change_action": "propose"
+    },
+    {
+      "rule_id": "CUT.EXECUTION.002",
+      "category": "camera",
+      "root_cause": "typed_cut_completion",
+      "priority": "P1",
+      "severity": "major",
+      "stage": [
+        "plan_validation",
+        "scheduling"
+      ],
+      "trigger": {
+        "any_features": []
+      },
+      "field_paths": [
+        "p1_checker.plan.beats[*].cut_after_event_id",
+        "p1_checker.plan.beats[*].completion_condition"
+      ],
+      "authority_field": "p1_checker.plan.beats[*].cut_after_event_id",
+      "source_refs": [
+        {
+          "path": "src/content_factory/creative_action_plan_v2.py",
+          "sha256": "74bef6f461fa3884e39707f6ea533cc13ed71bcb20d14534e2fce9b39a514970",
+          "anchor": "def check_cut_completion("
+        }
+      ],
+      "checker": "src/content_factory/creative_action_plan_v2.py:check_cut_completion",
+      "checker_kind": "deterministic",
+      "failure_code": "PLAN_CUT_BEFORE_REQUIRED_EVENT",
+      "positive_case_ids": [
+        "P1_CUT_OK"
+      ],
+      "negative_case_ids": [
+        "P1_CUT_BAD"
+      ],
+      "version": "1",
+      "replaces": [],
+      "replacement_rule_ids": [],
+      "status": "active",
+      "repair_owner": "action_plan",
+      "unknown_disposition": "blocked",
+      "change_action": "retain"
+    },
+    {
+      "rule_id": "SPACE.SEAT_TYPED.002",
+      "category": "space",
+      "root_cause": "typed_seat_precondition",
+      "priority": "P1",
+      "severity": "major",
+      "stage": [
+        "plan_validation",
+        "scheduling"
+      ],
+      "trigger": {
+        "any_features": []
+      },
+      "field_paths": [
+        "p1_checker.plan.spatial_contract.seats",
+        "p1_checker.plan.initial_state"
+      ],
+      "authority_field": "p1_checker.plan.spatial_contract.seats",
+      "source_refs": [
+        {
+          "path": "src/content_factory/creative_action_plan_v2.py",
+          "sha256": "74bef6f461fa3884e39707f6ea533cc13ed71bcb20d14534e2fce9b39a514970",
+          "anchor": "def check_sit_preconditions("
+        }
+      ],
+      "checker": "src/content_factory/creative_action_plan_v2.py:check_sit_preconditions",
+      "checker_kind": "deterministic",
+      "failure_code": "PLAN_SEAT_ACCESS_INVALID",
+      "positive_case_ids": [
+        "P1_SEAT_OK"
+      ],
+      "negative_case_ids": [
+        "P1_SEAT_BAD"
+      ],
+      "version": "1",
+      "replaces": [],
+      "replacement_rule_ids": [],
+      "status": "active",
+      "repair_owner": "action_plan",
+      "unknown_disposition": "blocked",
+      "change_action": "retain"
+    },
+    {
+      "rule_id": "STATE.BOUNDARY.002",
+      "category": "action",
+      "root_cause": "compiled_state_continuity",
+      "priority": "P1",
+      "severity": "major",
+      "stage": [
+        "handoff"
+      ],
+      "trigger": {
+        "any_features": []
+      },
+      "field_paths": [
+        "p1_checker.shots.shots[*].start_state",
+        "p1_checker.shots.shots[*].end_state"
+      ],
+      "authority_field": "p1_checker.shots.shots[*].start_state",
+      "source_refs": [
+        {
+          "path": "src/content_factory/creative_action_plan_v2.py",
+          "sha256": "74bef6f461fa3884e39707f6ea533cc13ed71bcb20d14534e2fce9b39a514970",
+          "anchor": "def check_adjacent_state_transition("
+        }
+      ],
+      "checker": "src/content_factory/creative_action_plan_v2.py:check_adjacent_state_transition",
+      "checker_kind": "deterministic",
+      "failure_code": "PLAN_BOUNDARY_STATE_CONFLICT",
+      "positive_case_ids": [
+        "P1_BOUNDARY_OK"
+      ],
+      "negative_case_ids": [
+        "P1_BOUNDARY_BAD"
+      ],
+      "version": "1",
+      "replaces": [],
+      "replacement_rule_ids": [],
+      "status": "active",
+      "repair_owner": "action_plan",
+      "unknown_disposition": "blocked",
+      "change_action": "retain"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "schema": "creative_platform_refactor_implementation/v1",
+  "created_at_bjt": "2026-10-02T01:50:11.7250060+08:00",
+  "source_report": "direction_report.html",
+  "git_baseline": "2baa701a3c600314e30e6a491f243071c4a60ec5",
+  "status": "implemented_and_offline_verified",
+  "product_direction": "AI screenplay and video production platform",
+  "implementation": {
+    "P0": {
+      "status": "implemented",
+      "items": [
+        "Centralized generated-media state as technical success plus awaiting_human_review; no automated content pass.",
+        "Required an immutable explicit-user decision receipt and unchanged hashes before a provider raw tail can continue a sequence.",
+        "Completed Mock and Ollama tool-call provider contracts.",
+        "Added SQLite-compatible conditional queue claiming, leases, heartbeats, expired-lease recovery to outcome_unknown, and no blind retry.",
+        "Made database migration/readiness checks strict and versioned the governed runtime source baseline."
+      ]
+    },
+    "P1": {
+      "status": "implemented",
+      "items": [
+        "Added stop-after-stage and next-stage workflow controls.",
+        "Stored hash-addressed immutable stage artifacts and a resumable debug index.",
+        "Added stage inspection, unified JSON comparison, and exact-output feedback receipts.",
+        "Exposed the same command service to CLI and Streamlit UI."
+      ]
+    },
+    "P2": {
+      "status": "implemented_conservatively",
+      "items": [
+        "Must-fix stage feedback marks the selected stage needs_revision and invalidates downstream debug validity without deleting prior artifacts.",
+        "Media rejection is bound to the exact candidate and blocks raw-tail continuation."
+      ],
+      "not_implemented": "Field-level dependency narrowing; invalidation remains stage-level to avoid unsafe partial reuse."
+    },
+    "P3": {
+      "status": "not_evaluated",
+      "reason": "The governance dataset still has zero approved human labels and is not qualified for a creative-quality claim."
+    },
+    "P4": {
+      "status": "implemented",
+      "items": [
+        "Publish pending is propagated as awaiting_verification rather than completed.",
+        "Unknown publish outcomes keep the lock and prohibit automatic resubmission."
+      ]
+    }
+  },
+  "version_bindings": {
+    "platform_policy": "config/creative_platform_refactor_v1.json",
+    "database_head": "0008_task_execution_leases",
+    "governance_pack": "data/creative_governance/20261002_v18_platform_refactor",
+    "governance_pack_supersedes": "data/creative_governance/20261001_v17_history_usage",
+    "historical_pack_modified": false
+  },
+  "primary_artifacts": [
+    "src/content_factory/media_review_policy.py",
+    "src/content_factory/creative_stage_debug.py",
+    "src/content_factory/creative_workflow.py",
+    "src/scheduler/queue.py",
+    "src/agent/registry.py",
+    "src/shared/migration.py",
+    "scripts/debug_creative_workflow.py",
+    "scripts/review_media_candidate.py",
+    "scripts/check_service_readiness.py",
+    "scripts/run_script_video.py",
+    "src/web/creative_workflow_dashboard.py",
+    "docs/CREATIVE_STAGE_DEBUGGING.md",
+    "data/creative_governance/20261002_v18_platform_refactor"
+  ],
+  "safety_record": {
+    "paid_calls_started": 0,
+    "media_generated": false,
+    "video_or_audio_content_inspected": false,
+    "production_publishing_performed": false,
+    "content_pass_claimed": false,
+    "unrelated_workspace_changes_preserved": true
+  },
+  "test_receipt": "test_results.json"
+}

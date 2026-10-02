@@ -1,0 +1,35 @@
+{
+  "schema": "creative_evidence_review_decision/v1",
+  "packet_sha256": "061aa97582eb9224274807d3323cb822336a5a6ba45884d9141b8c7d72d02ee4",
+  "reviewed_by": "assistant",
+  "reviewed_full_text": true,
+  "summary": "阅读全文并对照简报：过去多次替同事收尾由实际对白建立，票说明离开的原因，抱回文件回应边界成立；但担心拒绝会伤及关系的原因仍停在人物背景，实际事件未建立这一选择的关系代价。手机无消息不证明永久关系变化。补充一处必修，其余结尾节奏属于可选。",
+  "decisions": [],
+  "additional_issues": [
+    {
+      "id": "A01",
+      "owner": "writer",
+      "location": "beat_3",
+      "severity": "major",
+      "rule": "简报constraints[1]要求她想离开和担心拒绝的原因要在实际事件中成立。",
+      "evidence": "拒绝前只有手停在包上和抬头，前拍低头笑而不接话；正文没有建立她担心拒绝会给两人关系带来什么具体后果。",
+      "contradiction": "停手可以显示犹豫，但无法区分她担心对方工作来不及与担心两人关系受损；后者仅由简报/人物背景解释，未成为观众可见的选择代价。",
+      "impact": "核心选择缺少已建立的关系代价，观众只看到一次普通拒绝，不能按简报先看懂她为什么难以拒绝。",
+      "proposal": "在拒绝及回应的实际事件中自然建立她对两人关系的担忧或可见依据；不要只改event/trigger或增加情绪标签，不强加新事故、争吵或完美和解。保持已建立的加班历史、自己的演出与结尾由对方取回工作；调整本拍实际对白/动作以容纳原因和反应。",
+      "evidence_refs": [
+        {
+          "path": "creative_brief.constraints.1",
+          "quote": "她想离开和担心拒绝的原因要在实际事件中成立。"
+        },
+        {
+          "path": "script.beats.2.before",
+          "quote": "方澄手停在包上，没有去接文件夹，抬头看着林屿。"
+        },
+        {
+          "path": "script.beats.0.during",
+          "quote": "方澄低头笑一下没接话，把演出票小心放进包里。"
+        }
+      ]
+    }
+  ]
+}

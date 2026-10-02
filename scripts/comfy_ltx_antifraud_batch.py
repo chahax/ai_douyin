@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import shutil
+import subprocess
 import time
 import urllib.request
 import uuid
@@ -124,6 +125,23 @@ def find_saved_video(history: dict, output_root: Path) -> Path:
     raise RuntimeError("ComfyUI history did not contain a saved video")
 
 
+def extract_last_frame(video: Path, output: Path) -> None:
+    output.parent.mkdir(parents=True, exist_ok=True)
+    result = subprocess.run(
+        [
+            "ffmpeg", "-y", "-loglevel", "error", "-sseof", "-0.08",
+            "-i", str(video), "-frames:v", "1", str(output),
+        ],
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        timeout=180,
+    )
+    if result.returncode != 0 or not output.is_file():
+        raise RuntimeError(f"failed to extract continuity frame from {video}: {result.stderr[-1000:]}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate the anti-fraud baseline LTX video clips.")
     parser.add_argument("project")
@@ -131,13 +149,28 @@ def main() -> None:
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--base-url", default="http://127.0.0.1:8190")
     parser.add_argument("--comfy-output", default=r"D:\IT\AI_vido\ComfyUI\output")
+    parser.add_argument("--comfy-input", default=r"D:\IT\AI_vido\ComfyUI\input")
+    parser.add_argument(
+        "--keyframe-dir",
+        help="Optional selected keyframe directory. Files are copied into the dedicated ComfyUI input prefix before rendering.",
+    )
     parser.add_argument("--input-prefix", default="anti_fraud_police_chibi_v1/old")
     parser.add_argument("--variant", default="old", choices=("old", "new"))
     parser.add_argument("--seed-offset", type=int, default=1000)
     parser.add_argument("--only", action="append", help="Generate only a selected shot id; repeat as needed.")
+    parser.add_argument(
+        "--render-mode",
+        action="append",
+        help="Generate only shots whose project render_mode matches this value; repeat as needed.",
+    )
     parser.add_argument("--overrides", help="Optional JSON mapping shot ids to prompt and motion overrides.")
     parser.add_argument("--filename-prefix", help="ComfyUI SaveVideo filename prefix.")
     parser.add_argument("--first-prompt-id", help="Resume an already queued first shot instead of submitting it again.")
+    parser.add_argument(
+        "--ignore-continuity",
+        action="store_true",
+        help="Start selected shots from their own keyframe even when the project declares a continuity predecessor.",
+    )
     parser.add_argument("--skip-existing", action="store_true")
     parser.add_argument("--timeout-seconds", type=int, default=7200)
     args = parser.parse_args()
@@ -147,8 +180,10 @@ def main() -> None:
     output_dir = Path(args.output_dir).resolve()
     workflow_dir = output_dir / "workflows"
     clip_dir = output_dir / "clips"
+    continuity_dir = output_dir / "continuity_inputs"
     workflow_dir.mkdir(parents=True, exist_ok=True)
     clip_dir.mkdir(parents=True, exist_ok=True)
+    continuity_dir.mkdir(parents=True, exist_ok=True)
     report_path = output_dir / "run_report.json"
     report = json.loads(report_path.read_text(encoding="utf-8")) if report_path.is_file() else []
     overrides = (
@@ -157,15 +192,43 @@ def main() -> None:
     )
     done_ids = {item["id"] for item in report if item.get("status") in {"generated", "skipped"}}
     client_id = str(uuid.uuid4())
+    resumed_first_prompt = False
+    keyframe_dir = Path(args.keyframe_dir).resolve() if args.keyframe_dir else None
+    comfy_input_dir = Path(args.comfy_input).resolve() / Path(args.input_prefix.replace("/", "\\"))
+    if keyframe_dir is not None:
+        comfy_input_dir.mkdir(parents=True, exist_ok=True)
 
     for shot in project["shots"]:
         shot_id = shot["id"]
         if args.only and shot_id not in args.only:
             continue
+        if args.render_mode and str(shot.get("render_mode")) not in set(args.render_mode):
+            continue
         destination = clip_dir / f"{shot_id}.mp4"
         if args.skip_existing and (destination.is_file() or shot_id in done_ids):
             print(f"skipped {shot_id}", flush=True)
             continue
+
+        first_frame_source: Path | None = None
+        declared_continuity_from = str(shot.get("continuity_from") or "").strip()
+        continuity_from = "" if args.ignore_continuity else declared_continuity_from
+        if continuity_from:
+            predecessor = clip_dir / f"{continuity_from}.mp4"
+            if not predecessor.is_file():
+                raise FileNotFoundError(f"continuity predecessor missing for {shot_id}: {predecessor}")
+            first_frame_source = continuity_dir / f"{shot_id}_from_{continuity_from}.png"
+            extract_last_frame(predecessor, first_frame_source)
+        elif keyframe_dir is not None:
+            first_frame_source = keyframe_dir / f"{shot_id}.png"
+            if not first_frame_source.is_file():
+                raise FileNotFoundError(first_frame_source)
+        if first_frame_source is not None:
+            comfy_input_path = comfy_input_dir / f"{shot_id}.png"
+            shutil.copy2(first_frame_source, comfy_input_path)
+            print(
+                f"prepared first frame {shot_id}: {first_frame_source} -> {comfy_input_path}",
+                flush=True,
+            )
 
         workflow = json.loads(json.dumps(template))
         override = overrides.get(shot_id, {})
@@ -211,8 +274,9 @@ def main() -> None:
 
         workflow_path = workflow_dir / f"{shot_id}.api.json"
         workflow_path.write_text(json.dumps(workflow, ensure_ascii=False, indent=2), encoding="utf-8")
-        if args.first_prompt_id and shot_id == project["shots"][0]["id"]:
+        if args.first_prompt_id and not resumed_first_prompt:
             prompt_id = args.first_prompt_id
+            resumed_first_prompt = True
             print(f"resuming {shot_id}: {prompt_id}", flush=True)
         else:
             response = request_json(f"{args.base_url}/prompt", {"prompt": workflow, "client_id": client_id})
@@ -231,6 +295,10 @@ def main() -> None:
             "output": str(destination),
             "seed": workflow["10"]["inputs"]["seed"],
             "frames": workflow["9"]["inputs"]["length"],
+            "first_frame_source": str(first_frame_source) if first_frame_source else None,
+            "continuity_from": continuity_from or None,
+            "declared_continuity_from": declared_continuity_from or None,
+            "continuity_ignored": bool(args.ignore_continuity and declared_continuity_from),
         })
         report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
         print(f"generated {shot_id}: {destination}", flush=True)

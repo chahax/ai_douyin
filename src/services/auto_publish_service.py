@@ -23,7 +23,6 @@ from typing import List, Optional
 from src.content_factory.video_composer import compose_dual_character_sequence_video, compose_video, get_duration
 from src.content_factory.presenter_pipeline import PresenterPipeline
 from src.content_factory.presenter.models import PresenterRequest
-from src.platform_adapter.browser_session import BrowserSession, build_default_browser_session_config
 from src.platform_adapter.douyin_adapter import DouyinAdapter
 from src.platform_adapter.models import PublishRequest, VideoItem, VideoStatus
 from src.services.generation_service import DialogueGenerationRequest, GenerationService, QuickGenerationRequest
@@ -36,6 +35,12 @@ DEFAULT_BGM_VOLUME = 0.2
 VIDEO_MODE_SINGLE_TEMPLATE = "single_template"
 VIDEO_MODE_DUAL_FRAMEPACK_ACTIVE = "dual_framepack_active"
 VIDEO_MODE_PRESENTER_ANIME = "presenter_anime"
+VIDEO_MODE_DISABLED_PENDING_REDESIGN = "disabled_pending_redesign"
+RETIRED_VIDEO_MODES = {
+    VIDEO_MODE_SINGLE_TEMPLATE,
+    VIDEO_MODE_DUAL_FRAMEPACK_ACTIVE,
+    VIDEO_MODE_PRESENTER_ANIME,
+}
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DUAL_BACKGROUND = "data/videos/bg_comfy_green_loop_motion.mp4"
@@ -46,6 +51,7 @@ DEFAULT_DUAL_ROLE_B_SEQUENCE = "data/framepack/frames_looped/n3_idle_v1/%06d.png
 @dataclass
 class AutoPublishRequest:
     """自动发布请求"""
+    account_key: str = ""          # 已绑定真实抖音身份的运营账号标识
     keywords: str = ""              # 关键字（触发 RAG 生成脚本）
     title: str = ""                # 视频标题（空则自动生成）
     description: str = ""           # 视频描述
@@ -55,10 +61,11 @@ class AutoPublishRequest:
     bgm_volume: float = DEFAULT_BGM_VOLUME
     tts_provider: str = "workflow_default"  # 空/current/workflow_default = 跟随当前工作流
     voice: str = ""                # 声音ID/参考音频
-    video_mode: str = "workflow_default"  # presenter_anime / dual_framepack_active / single_template
-    background_provider: str = "workflow_default"  # comfyui_flux / local_fallback
+    video_mode: str = "workflow_default"  # production generation is disabled pending redesign
+    background_provider: str = "workflow_default"  # production selection is disabled pending redesign
     publish_headless: bool = True   # 自动发布默认后台运行浏览器
     output_dir: str = "data/videos"  # 输出目录
+    quality_profile: str = "publish"  # preview / publish / master
     interactive: bool = False       # 交互模式（每步暂停）
     auto_hashtags: bool = True     # 自动生成话题标签
     visibility: str = "public"     # 可见性：public / private / friends
@@ -88,6 +95,7 @@ class AutoPublishResult:
     post_id: str = ""              # 抖音视频ID
     publish_url: str = ""          # 抖音视频链接
     db_video_id: str = ""          # 数据库记录ID
+    status: str = ""
 
 
 class AutoPublishService:
@@ -96,6 +104,8 @@ class AutoPublishService:
     def __init__(self):
         self.gen_service = GenerationService()
         self.adapter: Optional[DouyinAdapter] = None
+        self._runtime_lock_owner = ""
+        self._runtime_operation_succeeded = False
 
     def publish(self, request: AutoPublishRequest) -> AutoPublishResult:
         """
@@ -105,6 +115,43 @@ class AutoPublishService:
         """
         try:
             self._apply_workflow_selections(request)
+
+            if request.video_mode == VIDEO_MODE_DISABLED_PENDING_REDESIGN:
+                return AutoPublishResult(
+                    success=False,
+                    message=(
+                        "视频生成主流程已重置，旧 Presenter、双角色 FramePack 和"
+                        "模板视频路线已停用；请等待新流程通过质量验收后再启用发布。"
+                    ),
+                )
+
+            # 发布前置门禁：先解析账号绑定并在真实页面核验身份，避免生成完成后才发现账号错配。
+            logger.info("=" * 50)
+            logger.info("[发布前置校验] 核验运营账号、浏览器环境和真实抖音身份...")
+            self._init_adapter(request)
+            identity_check = self.adapter.verify_runtime_identity(force=True)
+            if not identity_check.healthy:
+                return AutoPublishResult(
+                    success=False,
+                    message=f"发布账号校验失败：{identity_check.message}",
+                )
+            logger.info(
+                "即将使用抖音账号 {} 发布（运营账号 {}）。",
+                self.adapter.runtime_context.identity_label,
+                request.account_key,
+            )
+            import uuid as _uuid
+
+            self._runtime_lock_owner = f"publish:{_uuid.uuid4().hex}"
+            from src.operations_accounts import AccountBindingRepository
+
+            AccountBindingRepository().acquire_runtime(
+                self.adapter.runtime_context.account_uuid,
+                owner=self._runtime_lock_owner,
+                daily_limit=20,
+                cooldown_seconds=0,
+                lock_seconds=7200,
+            )
 
             # Step 1: 生成内容
             logger.info("=" * 50)
@@ -129,12 +176,9 @@ class AutoPublishService:
                 return AutoPublishResult(success=False, message="视频合成失败")
             logger.info(f"[OK] 视频合成成功: {video_path}")
 
-            # Step 3: 初始化发布适配器
+            # Step 3: 发布环境已在生成前完成校验
             logger.info("=" * 50)
-            logger.info("[Step 3/6] 初始化浏览器...")
-            self._init_adapter(request)
-            if not self._ensure_authenticated():
-                return AutoPublishResult(success=False, message="未检测到登录态，请先运行 python main.py douyin-login")
+            logger.info("[Step 3/6] 发布账号身份校验已通过")
 
             # Step 4: 写入数据库（pending状态），发布失败时标记为 failed
             logger.info("=" * 50)
@@ -144,18 +188,21 @@ class AutoPublishService:
                 video_path=video_path,
             )
             logger.info(f"[OK] 已写入数据库: local_id={db_video_id}, status=PENDING")
+            from src.services.video_service import update_video_status_by_local
+            update_video_status_by_local(db_video_id, 'uploading')
 
             # Step 5: 发布视频
             logger.info("=" * 50)
             logger.info("[Step 5/6] 开始发布视频...")
             try:
                 post_id, publish_url = self._publish_video(request, video_path)
+                update_video_status_by_local(db_video_id, getattr(self, '_last_publish_status', 'pending_review'))
                 logger.info(f"[OK] 发布成功: post_id={post_id}, url={publish_url}")
             except Exception as exc:
                 # 发布失败，回滚数据库状态为 failed
                 logger.warning(f"发布失败，回滚数据库状态: {exc}")
                 from src.services.video_service import update_video_status_by_local
-                update_video_status_by_local(db_video_id, "failed")
+                update_video_status_by_local(db_video_id, getattr(exc, 'status', 'failed'))
                 raise
 
             self._mark_trend_brief_used(request, db_video_id, post_id)
@@ -184,9 +231,11 @@ class AutoPublishService:
             logger.info(f"  本地ID: {db_video_id}")
             logger.info("  抖音ID: （sync 后补上）")
 
+            self._runtime_operation_succeeded = True
             return AutoPublishResult(
                 success=True,
                 message="发布已提交，等待抖音审核/同步",
+                status=getattr(self, '_last_publish_status', 'pending_review'),
                 video_path=video_path,
                 post_id=post_id,
                 publish_url=publish_url,
@@ -195,8 +244,21 @@ class AutoPublishService:
 
         except Exception as exc:
             logger.exception("自动发布流程异常")
-            return AutoPublishResult(success=False, message=f"异常: {exc}")
+            return AutoPublishResult(success=False, message=f"异常: {exc}", status=getattr(exc, 'status', 'failed'))
         finally:
+            if self._runtime_lock_owner and self.adapter is not None:
+                try:
+                    from src.operations_accounts import AccountBindingRepository
+
+                    AccountBindingRepository().release_runtime(
+                        self.adapter.runtime_context.account_uuid,
+                        owner=self._runtime_lock_owner,
+                        success=self._runtime_operation_succeeded,
+                    )
+                except Exception as exc:
+                    logger.warning(f"释放账号发布锁失败: {exc}")
+                self._runtime_lock_owner = ""
+                self._runtime_operation_succeeded = False
             self._close_adapter()
 
     # ─── 分步实现 ────────────────────────────────────────
@@ -342,6 +404,7 @@ class AutoPublishService:
             video_clip_path=template,
             audio_path=audio_path,
             output_dir=output_dir,
+            quality_profile=request.quality_profile,
         )
         return video_path
 
@@ -375,7 +438,7 @@ class AutoPublishService:
             role_a_y=480,
             role_b_x=540,
             role_b_y=480,
-            crf=23,
+            quality_profile=request.quality_profile,
             active_speaker_timeline=content.get("active_speaker_timeline"),
         )
         return video_path
@@ -400,6 +463,7 @@ class AutoPublishService:
             background_style="anime",
             bgm=request.bgm or "",
             output_dir=request.output_dir or "data/videos",
+            quality_profile=request.quality_profile,
             audio_path="",
             max_segments=16,
             use_comfy_background=request.background_provider == "comfyui_flux",
@@ -456,23 +520,27 @@ class AutoPublishService:
         return PROJECT_ROOT / value
 
     def _init_adapter(self, request: AutoPublishRequest) -> None:
-        """Step 3: 初始化浏览器适配器"""
-        session_config = build_default_browser_session_config()
-        session_config.headless = bool(request.publish_headless) and not request.interactive
+        """初始化与运营账号唯一绑定的浏览器适配器。"""
+        if not request.account_key.strip():
+            raise ValueError("请选择已绑定真实抖音身份的运营账号后再发布。")
+        headless = bool(request.publish_headless) and not request.interactive
         logger.info(
             "发布浏览器模式: "
-            f"{'后台无头' if session_config.headless else '调试可见窗口'} "
+            f"{'后台无头' if headless else '调试可见窗口'} "
             f"(publish_headless={request.publish_headless}, interactive={request.interactive})"
         )
-        self.adapter = DouyinAdapter(session=BrowserSession(session_config))
-
-    def _ensure_authenticated(self) -> bool:
-        """确保已登录"""
-        if self.adapter is None:
-            return False
-        user_data = self.adapter.session.config.user_data_dir
-        from pathlib import Path
-        return Path(user_data).exists()
+        self.adapter = DouyinAdapter.for_account(request.account_key, headless=headless)
+        context = self.adapter.runtime_context
+        if request.account_uuid and request.account_uuid != context.account_uuid:
+            raise ValueError(
+                "选题卡所属运营账号与当前发布账号不一致，已拒绝执行。"
+            )
+        request.account_uuid = context.account_uuid
+        request.account_profile_version = context.profile.profile_version
+        request.domain_strategy_id = context.profile.domain_strategy_id
+        request.strategy_version = context.profile.strategy_version
+        if not request.workflow_profile:
+            request.workflow_profile = context.profile.workflow_profile
 
     def _publish_video(self, request: AutoPublishRequest, video_path: str) -> tuple[str, str]:
         """Step 4: 发布视频"""
@@ -493,13 +561,17 @@ class AutoPublishService:
             description=request.description,
             hashtags=hashtags,
             visibility=getattr(request, "visibility", "public"),
+            ai_generated=True,
+            extra_metadata={'account_uuid': request.account_uuid, 'account_key': request.account_key},
         )
 
         result = self.adapter.publish_video(publish_req, interactive=request.interactive)
 
         if not result.success:
-            raise RuntimeError(f"发布失败: {result.message}")
+            from src.platform_adapter.publish_workflow import PublishWorkflowError
+            raise PublishWorkflowError(result)
 
+        self._last_publish_status = result.status
         return result.post_id, result.publish_url
 
     def _save_to_database(
@@ -532,12 +604,15 @@ class AutoPublishService:
             publish_time=datetime.now().strftime("%Y年%m月%d日 %H:%M"),
             cover_url=None,
             stats=None,
+            account_uuid=request.account_uuid,
+            account_key=request.account_key,
         )
 
         save_video(video)
         logger.info(f"[OK] 已保存到数据库: local_id={local_id}, status=PENDING")
         if (
-            request.trend_brief_id
+            request.account_uuid
+            or request.trend_brief_id
             or request.trend_cluster_id
             or request.opportunity_id
             or request.opportunity_script_id

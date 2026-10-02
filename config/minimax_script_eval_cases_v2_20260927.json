@@ -1,0 +1,366 @@
+{
+  "schema": "script_eval/v2",
+  "cases": [
+    {
+      "id": "C01",
+      "label": "亲情与边界",
+      "beat_count": 5,
+      "required_beat_ids": [
+        "B01",
+        "B02",
+        "B03",
+        "B04",
+        "B05"
+      ],
+      "prompt_modules": [
+        "emotion"
+      ],
+      "brief": {
+        "schema": "creative_brief/v1",
+        "theme": "父亲第一次认真尊重成年女儿的选择",
+        "duration_seconds": [
+          55,
+          70
+        ],
+        "audience": "成年短片观众",
+        "relationships": "许宁（成年女儿）和许建（父亲），两人厨房对话",
+        "audience_emotion": "先被具体处境吸引，再理解人物选择",
+        "visual_style": "写实电影感、自然表演、单一主要场景",
+        "turn": "父亲看见女儿已经自己处理了他担心的实际困难",
+        "ending": "父亲停止替她收拾行李，转而按她的请求帮一件小事",
+        "constraints": [
+          "女儿准备独自搬家，不用生病或事故煽情",
+          "钥匙串和纸箱各一个，交接必须清楚",
+          "结尾最多12秒"
+        ],
+        "avoid": [
+          "解释性旁白",
+          "靠手机小字或大段字幕讲清因果",
+          "反复无意义拿放物品"
+        ]
+      },
+      "split": "regression",
+      "max_ending_seconds": 12
+    },
+    {
+      "id": "C02",
+      "label": "朋友重逢",
+      "beat_count": 4,
+      "required_beat_ids": [
+        "B01",
+        "B02",
+        "B03",
+        "B04"
+      ],
+      "prompt_modules": [
+        "emotion"
+      ],
+      "brief": {
+        "schema": "creative_brief/v1",
+        "theme": "许久未联系的朋友如何重新建立信任",
+        "duration_seconds": [
+          45,
+          60
+        ],
+        "audience": "成年短片观众",
+        "relationships": "林晓和周岚，两名成年老朋友，在即将关门的咖啡店",
+        "audience_emotion": "先被具体处境吸引，再理解人物选择",
+        "visual_style": "写实电影感、自然表演、单一主要场景",
+        "turn": "来访者记得对方不爱被公开庆祝，只用一件小事表达关心",
+        "ending": "被关心者主动留出身旁的位置，不解释主题",
+        "constraints": [
+          "不用画室、画具或推凳桥段",
+          "不用生日蛋糕或突发危机",
+          "结尾最多10秒"
+        ],
+        "avoid": [
+          "解释性旁白",
+          "靠手机小字或大段字幕讲清因果",
+          "反复无意义拿放物品"
+        ]
+      },
+      "split": "regression",
+      "max_ending_seconds": 10
+    },
+    {
+      "id": "C03",
+      "label": "三人信息差",
+      "beat_count": 4,
+      "required_beat_ids": [
+        "B01",
+        "B02",
+        "B03",
+        "B04"
+      ],
+      "prompt_modules": [
+        "ensemble"
+      ],
+      "brief": {
+        "schema": "creative_brief/v1",
+        "theme": "共享工作室里一把雨伞引发的误会",
+        "duration_seconds": [
+          45,
+          60
+        ],
+        "audience": "成年短片观众",
+        "relationships": "程禾（伞主人）、宋青（同事）、陆安（新同事），三名成年人",
+        "audience_emotion": "先被具体处境吸引，再理解人物选择",
+        "visual_style": "写实电影感、自然表演、单一主要场景",
+        "turn": "以可见的动作证据说明拿伞不是偷拿，而是避免它被误扔",
+        "ending": "伞主人用一个具体举动弥补自己的误解",
+        "constraints": [
+          "三人都必须有叙事作用",
+          "一把长柄伞，一个废纸箱",
+          "每句说话人和雨伞持有人明确，不增加第四个人"
+        ],
+        "avoid": [
+          "解释性旁白",
+          "靠手机小字或大段字幕讲清因果",
+          "反复无意义拿放物品"
+        ]
+      },
+      "split": "regression"
+    },
+    {
+      "id": "C04",
+      "label": "无对白轻喜剧",
+      "beat_count": 3,
+      "required_beat_ids": [
+        "B01",
+        "B02",
+        "B03"
+      ],
+      "prompt_modules": [
+        "silent"
+      ],
+      "brief": {
+        "schema": "creative_brief/v1",
+        "theme": "两个陌生人抢着保持礼貌，反而互相堵住路",
+        "duration_seconds": [
+          24,
+          32
+        ],
+        "audience": "成年短片观众",
+        "relationships": "江遥和杜林，两名成年人，在宽敞办公室门口",
+        "audience_emotion": "先被具体处境吸引，再理解人物选择",
+        "visual_style": "写实电影感、自然表演、单一主要场景",
+        "turn": "二人同时改变让路方式，反而再一次挡住对方",
+        "ending": "其中一人用明确可见的邀请动作解决僵局",
+        "constraints": [
+          "全片零对白、零旁白、零字幕、零文字信息",
+          "无肢体冲撞，不堵紧急出口",
+          "只用人、门和一个手提纸袋"
+        ],
+        "avoid": [
+          "解释性旁白",
+          "靠手机小字或大段字幕讲清因果",
+          "反复无意义拿放物品"
+        ]
+      },
+      "split": "regression"
+    },
+    {
+      "id": "C05",
+      "label": "日常悬念",
+      "beat_count": 4,
+      "required_beat_ids": [
+        "B01",
+        "B02",
+        "B03",
+        "B04"
+      ],
+      "prompt_modules": [
+        "suspense"
+      ],
+      "brief": {
+        "schema": "creative_brief/v1",
+        "theme": "夜班管理员误把规律声响当成有人故意捣乱",
+        "duration_seconds": [
+          40,
+          55
+        ],
+        "audience": "成年短片观众",
+        "relationships": "罗青（管理员）和吴川（同事），仅两人，在办公室",
+        "audience_emotion": "先被具体处境吸引，再理解人物选择",
+        "visual_style": "写实电影感、自然表演、单一主要场景",
+        "turn": "已有画面线索指向一个普通物理原因，而非超自然或坏人",
+        "ending": "管理员自己修正判断并完成一个轻松的小动作",
+        "constraints": [
+          "不涉及犯罪或危险场景",
+          "前半段必须有能回看理解的真实线索",
+          "不靠手机信息或画外讲解揭秘"
+        ],
+        "avoid": [
+          "解释性旁白",
+          "靠手机小字或大段字幕讲清因果",
+          "反复无意义拿放物品"
+        ]
+      },
+      "split": "regression"
+    },
+    {
+      "id": "C06",
+      "label": "轻科幻选择",
+      "beat_count": 5,
+      "required_beat_ids": [
+        "B01",
+        "B02",
+        "B03",
+        "B04",
+        "B05"
+      ],
+      "prompt_modules": [
+        "speculative",
+        "emotion"
+      ],
+      "brief": {
+        "schema": "creative_brief/v1",
+        "theme": "一个只能撤回最后一句话一次的装置，让人决定不再逃避道歉",
+        "duration_seconds": [
+          60,
+          75
+        ],
+        "audience": "成年短片观众",
+        "relationships": "顾言和沈秋，两名成年人，在家中餐桌旁",
+        "audience_emotion": "先被具体处境吸引，再理解人物选择",
+        "visual_style": "写实电影感、自然表演、单一主要场景",
+        "turn": "顾言发现撤回能消除一句话，却不能替他承担实际责任",
+        "ending": "不用第二次超能力，顾言以真实行动修补关系",
+        "constraints": [
+          "规则只有一次撤回机会，使用后指示灯永久熄灭",
+          "桌上一个装置和一只破裂空杯，不涉及危险",
+          "灯亮灭必须与使用次数一致",
+          "不让角色长篇解释装置规则"
+        ],
+        "avoid": [
+          "解释性旁白",
+          "靠手机小字或大段字幕讲清因果",
+          "反复无意义拿放物品"
+        ]
+      },
+      "split": "regression"
+    },
+    {
+      "id": "H01",
+      "label": "收回抢功",
+      "beat_count": 4,
+      "required_beat_ids": [
+        "B01",
+        "B02",
+        "B03",
+        "B04"
+      ],
+      "prompt_modules": [
+        "emotion"
+      ],
+      "brief": {
+        "schema": "creative_brief/v1",
+        "theme": "同事承认一次小小抢功",
+        "duration_seconds": [
+          40,
+          50
+        ],
+        "audience": "成年短片观众",
+        "relationships": "林墨（设计者）、方舟（同事），两名成年人，在办公室一张桌旁",
+        "audience_emotion": "看懂具体选择，感到自然可信",
+        "visual_style": "写实电影感，单一场景，自然表演",
+        "turn": "方舟看见林墨保存的早期草图，承认自己把合作成果说成独自完成",
+        "ending": "方舟主动把成果纸移回两人中间，并当面把功劳说清楚",
+        "constraints": [
+          "仅一张成果纸、一张草图；不新增电话、奖杯、咖啡",
+          "不靠坏人或领导训话逼迫认错",
+          "结尾最多10秒"
+        ],
+        "avoid": [
+          "解释性旁白",
+          "靠手机小字或大段字幕讲清因果",
+          "无意义反复拿放"
+        ]
+      },
+      "split": "holdout",
+      "max_ending_seconds": 10
+    },
+    {
+      "id": "H02",
+      "label": "先让一步",
+      "beat_count": 3,
+      "required_beat_ids": [
+        "B01",
+        "B02",
+        "B03"
+      ],
+      "prompt_modules": [
+        "silent"
+      ],
+      "brief": {
+        "schema": "creative_brief/v1",
+        "theme": "两人同时想给同一盆花浇水",
+        "duration_seconds": [
+          24,
+          30
+        ],
+        "audience": "成年短片观众",
+        "relationships": "陈平、叶澄，两名成年室友，在阳台",
+        "audience_emotion": "看懂具体选择，感到自然可信",
+        "visual_style": "写实电影感，单一场景，自然表演",
+        "turn": "两人各举自己的空手示意对方，才发现都没拿水壶",
+        "ending": "一人拿起唯一水壶浇水，另一人扶稳花盆",
+        "constraints": [
+          "全片无对白无文字；仅一盆花、一把水壶",
+          "水壶起初在台面，只有一次拿起",
+          "不能浇两遍水或浇到人身上"
+        ],
+        "avoid": [
+          "解释性旁白",
+          "靠手机小字或大段字幕讲清因果",
+          "无意义反复拿放"
+        ]
+      },
+      "split": "holdout"
+    },
+    {
+      "id": "H03",
+      "label": "歪掉的相框",
+      "beat_count": 4,
+      "required_beat_ids": [
+        "B01",
+        "B02",
+        "B03",
+        "B04"
+      ],
+      "prompt_modules": [
+        "suspense"
+      ],
+      "brief": {
+        "schema": "creative_brief/v1",
+        "theme": "店员以为有人偷偷挪动相框",
+        "duration_seconds": [
+          40,
+          50
+        ],
+        "audience": "成年短片观众",
+        "relationships": "闻安、赵朔，两名成年店员，在打烊书店柜台旁",
+        "audience_emotion": "看懂具体选择，感到自然可信",
+        "visual_style": "写实电影感，单一场景，自然表演",
+        "turn": "柜台上早已可见的松动支脚使相框滑动，闻安亲手验证",
+        "ending": "闻安扶稳柜台并与同事一起垫平支脚",
+        "constraints": [
+          "前半段实际画面出现松动支脚的线索",
+          "只用柜台、一个相框、一片硬纸板；无第三人",
+          "不能用破坏性动作或神秘力量",
+          "结尾最多12秒"
+        ],
+        "avoid": [
+          "解释性旁白",
+          "靠手机小字或大段字幕讲清因果",
+          "无意义反复拿放"
+        ]
+      },
+      "split": "holdout",
+      "max_ending_seconds": 12
+    }
+  ],
+  "maximum_remote_calls": 30,
+  "maximum_revision_rounds": 2,
+  "acceptance": "所有最终稿无已确认major，结构和合同检查通过；旧6例+新3例必须全部复核。仅文本，不等于媒体通过。"
+}

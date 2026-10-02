@@ -1,0 +1,73 @@
+...F.......                                                              [100%]
+================================== FAILURES ===================================
+_____________ test_page_can_reopen_saved_run_after_fresh_session ______________
+
+tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/independent_confirmation/ui_tmp/test_page_can_reopen_saved_run0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001C8BCBE60F0>
+
+    def test_page_can_reopen_saved_run_after_fresh_session(tmp_path, monkeypatch):
+        run_dir = tmp_path / "saved_run"
+        run_dir.mkdir()
+        (run_dir / "state.json").write_text(json.dumps({
+            "status": "needs_attention", "source_driver": "novel",
+            "last_error": "�԰�ʱ������",
+        }, ensure_ascii=False), encoding="utf-8")
+        monkeypatch.setattr(page, "RUNS", tmp_path)
+        app = _app()
+        assert not app.exception
+        choices = app.selectbox[1].options
+        assert run_dir.name in choices
+>       app.selectbox[1].set_value(run_dir.name).run()
+
+tests\test_creative_workflow_ui.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\streamlit\testing\v1\element_tree.py:158: in run
+    return self.root.run(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\streamlit\testing\v1\element_tree.py:2426: in run
+    return self._runner._run(widget_states, timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\streamlit\testing\v1\app_test.py:372: in _run
+    self._tree = script_runner.run(
+.venv\Lib\site-packages\streamlit\testing\v1\local_script_runner.py:147: in run
+    require_widgets_deltas(self, timeout)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+runner = LocalScriptRunner(forward_msg_queue=<streamlit.runtime.forward_msg_queue.ForwardMsgQueue object at 0x000001C8BCEDE750>...rsor"
+  installed_agents: "opencode"
+}
+}, {}, {'client_state': page_script_hash: "c332c3b34d5dd87cbfcea33bb729a7a5"
+}])
+timeout = 3
+
+    def require_widgets_deltas(runner: LocalScriptRunner, timeout: float = 3) -> None:
+        """Wait for the given ScriptRunner to emit a completion event. If the timeout
+        is reached, the runner will be shutdown and an error will be thrown.
+        """
+    
+        t0 = time.time()
+        while time.time() - t0 < timeout:
+            time.sleep(0.001)
+            if runner.script_stopped():
+                return
+    
+        # If we get here, the runner hasn't yet completed before our
+        # timeout. Create an error string for debugging.
+        err_string = f"AppTest script run timed out after {timeout}(s)"
+    
+        # Shutdown the runner before throwing an error, so that the script
+        # doesn't hang forever.
+        runner.request_stop()
+        runner.join()
+    
+>       raise RuntimeError(err_string)
+E       RuntimeError: AppTest script run timed out after 3(s)
+
+.venv\Lib\site-packages\streamlit\testing\v1\local_script_runner.py:195: RuntimeError
+---------------------------- Captured stderr call -----------------------------
+2026-10-02 02:24:59.323 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+------------------------------ Captured log call ------------------------------
+WARNING  streamlit.runtime.scriptrunner_utils.script_run_context:script_run_context.py:258 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+=========================== short test summary info ===========================
+FAILED tests/test_creative_workflow_ui.py::test_page_can_reopen_saved_run_after_fresh_session
+1 failed, 10 passed in 4.64s

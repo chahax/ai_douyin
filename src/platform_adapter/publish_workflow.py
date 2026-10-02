@@ -6,19 +6,24 @@ publish_workflow.py — 抖音视频发布工作流
   2. 注入视频文件（隐藏的 input[type=file]）
   3. 等待视频上传完成（进度条消失）
   4. 填写标题 + 描述 + 话题标签
-  5. 点击发布
-  6. 提取发布结果（post_id / 链接）
-  7. 通过标题匹配从 work_list API 获取真实视频 ID
+  5. 主动选择并读回“内容由AI生成”声明
+  6. 点击发布（声明未确认时停止）
+  7. 提取发布结果（post_id / 链接）
+  8. 浏览器打开对应作品，核验声明、播放器与审核提示并保存证据
 """
 
 import re
 import time
+import json
+import hashlib
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 from playwright.sync_api import Page
 
 from src.platform_adapter.browser_session import BrowserSession
 from src.platform_adapter.models import PublishRequest, PublishResult
+from src.platform_adapter.publish_verification import FICTION_NOTICE, EDITORS, declared_description, video_id
 from src.shared.logger import logger
 
 
@@ -27,10 +32,81 @@ UPLOAD_URL = "https://creator.douyin.com/creator-micro/content/upload"
 MANAGE_URL = "https://creator.douyin.com/creator-micro/content/manage"
 
 
+class PublishWorkflowError(RuntimeError):
+    def __init__(self, result):
+        super().__init__(result.message)
+        self.status = result.status
+
+
+class AIDeclarationUnverified(RuntimeError):
+    pass
+
+
+class FictionDeclarationUnverified(RuntimeError):
+    pass
+
+
 class PublishWorkflow:
     def __init__(self, session: BrowserSession):
         self.session = session
         self._last_publish_title = ""
+        self._submission_started = False
+        self._journal_path = None
+        self._ai_declaration_required = True
+        self._fiction_declaration_required = False
+
+    def _record(self, stage: str, **details) -> None:
+        if self._journal_path is not None:
+            with self._journal_path.open('a', encoding='utf8') as handle:
+                handle.write(json.dumps({'at_bjt': datetime.now(timezone(timedelta(hours=8))).isoformat(),
+                    'stage': stage, **details}, ensure_ascii=False)+'\n')
+            state = {'stage': stage, 'at_bjt': datetime.now(timezone(timedelta(hours=8))).isoformat(), **details}
+            target = self._journal_path.with_suffix('.status.json')
+            temporary = target.with_suffix('.tmp')
+            temporary.write_text(json.dumps(state, ensure_ascii=False), encoding='utf-8')
+            temporary.replace(target)
+
+    def _start_journal(self, request: PublishRequest) -> None:
+        root = Path(__file__).resolve().parents[2] / 'data' / 'publish_runs'
+        root.mkdir(parents=True, exist_ok=True)
+        digest = hashlib.sha256()
+        with Path(request.video_path).open('rb') as handle:
+            for block in iter(lambda: handle.read(1024*1024), b''):
+                digest.update(block)
+        identity = {'account': request.extra_metadata.get('account_key', ''),
+                    'video_sha256': digest.hexdigest()}
+        if not identity['account']:
+            raise ValueError('发布前必须绑定运营账号')
+        key = hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()
+        legacy_lock = root / (key+'.submitted.json')
+        if legacy_lock.exists():
+            raise ValueError('该账号与视频已有历史提交记录；先核对平台结果，禁止重复提交')
+        platform_identity = request.extra_metadata.get('platform_identity_key')
+        if not platform_identity:
+            raise ValueError('发布缺少已验证的平台身份快照')
+        identity.update(account_uuid=request.extra_metadata.get('account_uuid'),
+                        platform_identity_key=platform_identity,
+                        binding_verified_at=request.extra_metadata.get('binding_verified_at'))
+        key = hashlib.sha256(json.dumps({'platform_identity_key': platform_identity,
+                                         'video_sha256': identity['video_sha256']}, sort_keys=True).encode()).hexdigest()
+        self._submission_lock = root / (key+'.submitted.json')
+        if self._submission_lock.exists():
+            raise ValueError('该账号与视频已有提交记录；先核对平台结果，禁止重复提交')
+        stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%f')
+        self._journal_path = root / (key+'.'+stamp+'.jsonl')
+        self._record('prepared', **identity, video_path=str(Path(request.video_path).resolve()),
+                     title=request.title, description=request.description,
+                     hashtags=request.normalized_hashtags(), visibility=request.visibility,
+                     ai_declaration_required=request.ai_generated,
+                     fiction_declaration_required=request.fictional_story,
+                     effective_description=declared_description(request.description, request.fictional_story))
+
+    def _reserve_submission(self):
+        # Exclusive creation survives an uncertain click/timeout and blocks blind retries.
+        with self._submission_lock.open('x', encoding='utf8') as handle:
+            json.dump({'journal': str(self._journal_path), 'status': 'submission_started'}, handle)
+        self._submission_started = True
+        self._record('submission_started')
 
     def publish(self, request: PublishRequest, interactive: bool = False) -> PublishResult:
         validation_error = self._validate_request(request)
@@ -41,32 +117,44 @@ class PublishWorkflow:
                 message=validation_error,
             )
 
-        self.session.start()
-
-        if not self.session.is_authenticated():
-            return PublishResult(
-                success=False,
-                status="login_required",
-                message="未检测到登录态，发布前请先完成浏览器登录。",
-            )
-
         try:
-            return self._do_publish(request, interactive=interactive)
+            self._journal_path = None
+            self._submission_started = False
+            self._ai_declaration_required = request.ai_generated
+            self._fiction_declaration_required = request.fictional_story
+            self._start_journal(request)
+            self._record('checking_login')
+            self.session.start()
+            if not self.session.is_authenticated():
+                result = PublishResult(success=False, status='login_required', message='未检测到登录态，请先登录所选账号的创作者中心。')
+            else:
+                result = self._do_publish(request, interactive=interactive)
+            self._record(result.status, message=result.message, post_id=result.post_id, publish_url=result.publish_url)
+            return result
+        except (AIDeclarationUnverified, FictionDeclarationUnverified) as exc:
+            status = 'submission_unknown' if self._submission_started else ('ai_declaration_unverified' if isinstance(exc, AIDeclarationUnverified) else 'fiction_declaration_unverified')
+            self._record(status, message=str(exc))
+            return PublishResult(success=False, status=status, message=str(exc))
         except Exception as exc:
+            self._record('submission_unknown' if self._submission_started else 'failed', error_type=type(exc).__name__)
             logger.exception("发布流程异常")
             return PublishResult(
                 success=False,
-                status="error",
+                status="submission_unknown" if self._submission_started else "error",
                 message=f"发布异常: {exc}",
             )
 
     # ─── 验证 ────────────────────────────────────────────────
 
     def _validate_request(self, request: PublishRequest) -> str:
+        if type(request.fictional_story) is not bool:
+            return 'fictional_story 必须为布尔值'
+        if type(request.ai_generated) is not bool:
+            return "ai_generated 必须为布尔值，不能用字符串跳过声明"
         video_path = Path(request.video_path)
         if not request.video_path:
             return "video_path 不能为空"
-        if not video_path.exists():
+        if not video_path.is_file():
             return f"视频文件不存在: {video_path}"
         if video_path.stat().st_size == 0:
             return f"视频文件为空: {video_path}"
@@ -101,6 +189,8 @@ class PublishWorkflow:
 
         # 2. 上传视频文件
         self._upload_video_file(page, request.video_path)
+        self._record('file_selected')
+        self._record('uploading')
         logger.info(f"[OK] 视频文件已注入: {request.video_path}")
         logger.info("  等待上传完成...")
         wait_confirm("准备等待上传完成")
@@ -113,6 +203,7 @@ class PublishWorkflow:
                 message="视频上传超时或失败，请检查网络或文件。",
             )
         logger.info("[OK] 视频上传完成")
+        self._record('upload_complete')
         wait_confirm("准备填写标题")
 
         # 4. 填写标题
@@ -121,9 +212,10 @@ class PublishWorkflow:
         wait_confirm("准备填写描述")
 
         # 5. 填写描述（可选）
-        if request.description:
-            self._fill_description(page, request.description)
-            logger.info(f"[OK] 描述已填写: {request.description[:50]}...")
+        description = declared_description(request.description, request.fictional_story)
+        if description:
+            self._fill_description(page, description)
+            logger.info(f"[OK] 描述已填写: {description[:50]}...")
         else:
             logger.info("  描述为空，跳过")
         wait_confirm("准备添加话题标签")
@@ -148,7 +240,20 @@ class PublishWorkflow:
         self._set_visibility(page, request.visibility)
         logger.info(f"[OK] 可见性已设置为: {request.visibility}")
 
+        # AI declaration is a platform setting, not a caption or hashtag.
+        if request.ai_generated:
+            self._record('setting_ai_declaration')
+            self._require_ai_declaration(page, set_selected=True)
+
         wait_confirm("准备点击发布按钮")
+
+        if request.ai_generated:
+            self._require_ai_declaration(page)  # Re-read after any interactive pause.
+        if request.fictional_story:
+            self._require_fiction_declaration(page)
+        self._record('form_prepared', title=request.title, hashtags=request.normalized_hashtags(),
+                     ai_declaration_verified=request.ai_generated)
+        self._reserve_submission()
 
         # 8. 点击发布
         self._click_publish(page, interactive=interactive)
@@ -159,17 +264,20 @@ class PublishWorkflow:
         # 9. 等待发布结果（页面跳转或成功提示）
         post_id, publish_url = self._wait_for_publish_result(page, interactive=interactive)
         logger.info(f"  发布结果 - post_id: {post_id}, url: {publish_url}")
+        evidence = self._verify_published_work(page, post_id, publish_url, request)
+        status = 'published' if evidence.get('verified') is True else 'post_publish_verification_pending'
+        self._record(status, post_id=post_id, publish_url=publish_url, evidence=evidence)
 
         # 注意：不在发布时获取 post_id。发布后数据库记录 status=PENDING，
         # 由独立 sync 流程通过标题匹配补上 video_id 和 status=published。
 
         return PublishResult(
             success=True,
-            status="published",
+            status=status,
             platform="douyin",
             post_id=post_id,
             publish_url=publish_url,
-            message="发布完成！video_id 由后续 sync 流程补上",
+            message="作品展示及声明已核验" if status == 'published' else "平台已接受提交，发布后检查待核验；禁止重复上传",
         )
 
     # ─── 分步实现 ────────────────────────────────────────────
@@ -210,11 +318,10 @@ class PublishWorkflow:
         start = time.time()
         last_status = ""
         while time.time() - start < timeout:
-            # 检查视频预览是否出现（最可靠的完成标志）
-            video_preview = page.locator("video").first()
-            if video_preview.count() > 0:
-                log("检测到 video 元素出现，上传完成")
-                return True
+            # A local video preview can appear before upload completes.
+            body = page.locator('body').inner_text()
+            if any(marker in body for marker in ('上传失败', '上传出错', '重新上传失败')):
+                return False
 
             # 检查上传进度条状态
             progress_bars = page.locator("[class*='progress']")
@@ -226,8 +333,7 @@ class PublishWorkflow:
                 last_status = current_status
 
             # 检查上传完成标志
-            upload_done = page.locator("[class*='upload-done'], [class*='upload-success'], [class*='complete']")
-            if upload_done.count() > 0:
+            if any(marker in body for marker in ('上传成功', '上传完成')):
                 log("检测到上传完成标志")
                 return True
 
@@ -239,8 +345,8 @@ class PublishWorkflow:
 
             page.wait_for_timeout(2000)
 
-        log("上传等待超时，但仍返回成功（视频可能已上传）")
-        return True
+        log("上传等待超时，未确认成功，停止后续发布")
+        return False
 
     def _fill_title(self, page: Page, title: str) -> None:
         """填写视频标题"""
@@ -256,7 +362,7 @@ class PublishWorkflow:
                 page.locator(sel).first().fill(title)
                 logger.info(f"标题已填写: {title}")
                 return
-        logger.warning("未找到标题输入框，请检查页面结构")
+        raise RuntimeError("未找到标题输入框，停止发布")
 
     def _fill_description(self, page: Page, description: str) -> None:
         """填写视频描述（简介）"""
@@ -274,7 +380,7 @@ class PublishWorkflow:
                 editor.fill(description)
                 logger.info(f"描述已填写: {description[:50]}...")
                 return
-        logger.warning("未找到描述输入框，跳过")
+        raise RuntimeError("未找到描述输入框，停止发布")
 
     def _add_hashtags(self, page: Page, hashtags: list[str]) -> None:
         """
@@ -297,8 +403,7 @@ class PublishWorkflow:
                 break
 
         if not editor:
-            logger.warning("未找到简介编辑器，跳过添加话题标签")
-            return
+            raise RuntimeError("未找到简介编辑器，停止发布")
 
         # 诊断日志：记录各 selector 的 count
         for sel in stable_selectors:
@@ -309,6 +414,10 @@ class PublishWorkflow:
         for tag in hashtags:
             editor.type_hashtag(tag, selectors=stable_selectors)
             logger.info(f"  已添加话题: #{tag}")
+        content = editor.inner_text()
+        missing = [tag for tag in hashtags if '#' + tag not in content]
+        if missing:
+            raise RuntimeError('话题未完整写入，停止发布：' + '、'.join(missing))
         logger.info(f"已添加话题: {hashtags}")
 
     def _upload_cover(self, page: Page, cover_path: str) -> None:
@@ -319,7 +428,7 @@ class PublishWorkflow:
             page.wait_for_timeout(1000)
             logger.info("封面已上传")
         else:
-            logger.warning("未找到封面上传 input")
+            raise RuntimeError('未找到指定封面的上传入口，停止发布')
 
     def _set_visibility(self, page: Page, visibility: str) -> None:
         """
@@ -355,10 +464,53 @@ class PublishWorkflow:
         except Exception as exc:
             logger.warning(f"设置可见性失败: {exc}")
 
-        logger.warning(f"未能自动设置可见性（{visibility}），请手动选择")
+        raise RuntimeError(f'未能设置可见性（{visibility}），停止发布')
+
+    def _require_fiction_declaration(self, page):
+        for selector in EDITORS:
+            editors = page.locator(selector)
+            if editors.count() == 1:
+                if FICTION_NOTICE in editors.first().inner_text():
+                    self._record('fiction_declaration_verified', notice=FICTION_NOTICE)
+                    return
+                break
+        raise FictionDeclarationUnverified('简介中的剧情虚构声明未读回确认，已停止发布')
+
+    def _verify_published_work(self, page, post_id, publish_url, request):
+        evidence = {'verified': False, 'reason': '尚未取得准确作品链接'}
+        try:
+            if post_id and video_id(publish_url) == post_id:
+                page.goto(publish_url, timeout=30000)
+                page.wait_for_timeout(2000)
+                path = str(self._journal_path.with_suffix('.published-work.png')) if self._journal_path else None
+                evidence = page.inspect_published_video(post_id, ai_required=request.ai_generated,
+                            fiction_required=request.fictional_story, evidence_path=path)
+        except Exception as exc:
+            evidence = {'verified': False, 'reason': str(exc), 'post_id': post_id, 'url': publish_url}
+        self._record('post_publish_checked', evidence=evidence)
+        return evidence
+
+    def _require_ai_declaration(self, page: Page, *, set_selected=False) -> dict:
+        evidence_path = None
+        if self._journal_path is not None:
+            suffix = '.ai-declaration-selected.png' if set_selected else '.ai-declaration-verified.png'
+            evidence_path = str(self._journal_path.with_suffix(suffix))
+        try:
+            evidence = page.ai_content_declaration(set_selected=set_selected, evidence_path=evidence_path)
+        except Exception as exc:
+            raise AIDeclarationUnverified('未能设置或核验“内容由AI生成”自主声明，已停止发布：' + str(exc)) from exc
+        if evidence.get('verified') is not True:
+            self._record('ai_declaration_unverified', evidence=evidence)
+            raise AIDeclarationUnverified('未确认“内容由AI生成”自主声明，已停止发布。' + evidence.get('reason', ''))
+        self._record('ai_declaration_verified', evidence=evidence, set_selected=bool(set_selected))
+        return evidence
 
     def _click_publish(self, page: Page, interactive: bool = False) -> None:
         """点击发布按钮"""
+        if self._ai_declaration_required:
+            self._require_ai_declaration(page)
+        if self._fiction_declaration_required:
+            self._require_fiction_declaration(page)
         def log(msg):
             logger.info(msg)
             if interactive:
@@ -408,7 +560,7 @@ class PublishWorkflow:
             log(f"点击后 URL: {page.url}")
             return
 
-        logger.warning("未找到发布按钮")
+        raise RuntimeError("未找到发布按钮")
 
     def _wait_for_publish_result(self, page: Page, timeout: int = 45, interactive: bool = False) -> tuple[str, str]:
         """
@@ -481,7 +633,8 @@ class PublishWorkflow:
             log("请手动检查页面状态，确认发布是否成功")
             input("  按回车确认发布结果...")
             final_url = page.url
-            return self._extract_post_id(final_url), final_url
+            if self._is_final_video_url(final_url):
+                return self._extract_post_id(final_url), final_url
 
         raise RuntimeError(f"发布结果确认超时，最终URL: {final_url}")
 
@@ -526,6 +679,17 @@ class PublishWorkflow:
 
             if self._page_contains_title(page, title):
                 log("作品管理页已找到本次发布标题")
+                links = page.locator('a[href]')
+                matches = set()
+                for index in range(links.count()):
+                    link = links.nth(index)
+                    href = link.get_attribute('href') or ''
+                    if href.startswith('/video/'):
+                        href = 'https://www.douyin.com' + href
+                    if video_id(href) and link.inner_text().strip() == title:
+                        matches.add(href)
+                if len(matches) == 1:
+                    return matches.pop()
                 return current_url or MANAGE_URL
 
             elapsed = int(time.time() - start)
@@ -558,11 +722,7 @@ class PublishWorkflow:
         if not normalized_title:
             return False
 
-        candidates = [normalized_title]
-        if len(normalized_title) >= 12:
-            candidates.append(normalized_title[:12])
-
-        return any(candidate and candidate in page_text for candidate in candidates)
+        return normalized_title in page_text
 
     def _page_requires_login(self, page: Page) -> bool:
         try:

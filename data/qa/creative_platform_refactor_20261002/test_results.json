@@ -1,0 +1,58 @@
+{
+  "schema": "creative_platform_refactor_test_results/v1",
+  "created_at_bjt": "2026-10-02T01:50:11.7250060+08:00",
+  "status": "passed",
+  "results": [
+    {
+      "name": "refactor_combined_regression",
+      "scope": "creative workflow, stage debugging, media review policy, script-video entry points, provider contracts, queue leases, timeout outcome, publish propagation, migration readiness",
+      "passed": 331,
+      "failed": 0,
+      "duration_seconds": 132.22
+    },
+    {
+      "name": "architecture_audit_baseline",
+      "scope": "the same 14 test modules represented by the prior 127-test audit baseline",
+      "passed": 127,
+      "failed": 0,
+      "duration_seconds": 62.55,
+      "prior_baseline_failures": 2
+    },
+    {
+      "name": "creative_workflow_ui",
+      "scope": "Streamlit workflow and stage-debug UI",
+      "passed": 11,
+      "failed": 0,
+      "duration_seconds": 1.38,
+      "note": "One earlier run hit Streamlit AppTest's fixed three-second startup timeout; the isolated case and complete clean rerun both passed."
+    },
+    {
+      "name": "governance_pack_verify",
+      "passed": true,
+      "artifact_hashes_valid": true,
+      "runtime_source_count": 31,
+      "rule_count": 10,
+      "dataset_qualified": false,
+      "dataset_reason": "No approved human gold labels or holdout set."
+    },
+    {
+      "name": "migration_graph",
+      "passed": true,
+      "heads": [
+        "0008_task_execution_leases"
+      ]
+    },
+    {
+      "name": "python_compile_check",
+      "passed": true,
+      "scope": "new and modified refactor core modules"
+    }
+  ],
+  "warnings": [
+    "SQLAlchemy reports existing utcnow/declarative_base deprecations.",
+    "Pytest could not update its repository-level cache because of the workspace ACL; test execution and assertions were unaffected."
+  ],
+  "media_review_performed": false,
+  "paid_calls_started": 0,
+  "production_publishing_performed": false
+}

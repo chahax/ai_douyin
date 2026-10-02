@@ -1,0 +1,12 @@
+{
+  "schema_version": "creative_governance_runtime_upgrade/v1",
+  "created_at": "2026-10-02T06:17:27.175210+00:00",
+  "base_directory": "data/creative_governance/20261002_v19_platform_refactor_p1_recovery",
+  "base_artifact_manifest_sha256": "5744b0681fa9b80dbb46593883f62f326d16c4bb143bbdf09c43c177863e2a0b",
+  "base_runtime_sources_sha256": "100a9f8cd9743cbc5dce288603c1146466f868ef4b0f35e4a2fad33f3b7ec42d",
+  "runtime_sources_sha256": "23fad17bea36c87c5dd92ab45866f1334a0e280d4c46cb8780f58078dac92350",
+  "semantic_rules_changed": false,
+  "quality_claim_added": false,
+  "media_review_performed": false,
+  "existing_task_migration": "20261002_v19_platform_refactor_p1_recovery task state is never silently rebound. Completed runs remain immutable history. For an in-progress task, preserve the 20261002_v19_platform_refactor_p1_recovery run read-only and start a new 20261002_v20_platform_refactor_repair_resume run from the same source materials; revalidate every carried stage artifact and re-register unresolved must-fix feedback. Reuse a media approval only when its candidate identity still validates; otherwise request human reapproval."
+}

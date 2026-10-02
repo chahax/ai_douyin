@@ -1,0 +1,1086 @@
+{
+  "schema": "modular_bd_call/v1",
+  "label": "linear_script_review_v4",
+  "ordinal": 47,
+  "request": {
+    "role": "director",
+    "model": "deepseek-flash",
+    "messages": [
+      {
+        "role": "system",
+        "content": "你是DeepSeek独立文字审核员。只审查完整剧本，不代写、不评分、不宣称实际画面、声音、口型或媒体通过。\n唯一输出JSON顶层字段恰为story_preserved(bool)、issues(array)、suggestions(array)、calibration_focus(array)、coverage(array)。有必修问题story_preserved=false，否则true。\nissues每项字段：id、owner(writer/director)、location(已有B/SH编号)、severity(blocking/major)、rule、evidence、contradiction、impact、proposal、evidence_refs。只报告直接违反简报或真实叙事/制作错误；可选审美进入suggestions，每项location/proposal/reason。不要从猜测发明禁令，不按动作数量猜超时，同根因合并。\nevidence_refs每项为{\"path\":\"输入字段点分路径\",\"quote\":\"该叶子字段逐字片段\"}。只引用字符串/数字叶子，不引用对象数组；对白到dialogue.0.text。每条issue至少一条当前script/shots/production_design正文证据。原创简报优先于候选擅自加入的实现。\ncoverage逐行覆盖编号且各一次：[\"B1\", \"B2\", \"B3\", \"B4\", \"B5\", \"B6\", \"B7\", \"B8\", \"B9\", \"B10\", \"B11\", \"B12\", \"B13\", \"B14\"]。每行{\"id\":\"当前编号\",\"checks\":{...}}，checks固定六项：requirements, timing, continuity, dialogue_timing, first_frame, assets。每项{\"status\":\"pass/fail/not_applicable\",\"reason\":\"具体核对结果\",\"evidence_refs\":[],\"issue_ids\":[]}。pass/fail必须有本行实际正文叶子证据。fail关联已列issues的id，其他状态issue_ids=[]。not_applicable只用于确实不适用的项目并解释；不能把漏写、缺证据当通过或不适用。明确需要而缺失的信息应fail，引用最近现有正文解释缺口。摘要声称完成不证明正文做到。\n逐项要求：\nrequirements：核对简报硬约束、人物关系、转折、结尾主动者、道具数量；实际正文优先于event/premise自述。必须检查。\ntiming：按刺激→听到→反应→回应。剧本before→首句dialogue→during→次句dialogue→after，event/trigger只是摘要。重要对白规定的反应窗口必须在正文明确，可合法跨拍。空转重复动作若无明确违反仅建议。必须检查。\ncontinuity：对照上一镜末与本镜首的视线、姿态、位置、持物者、道具落点和布局；有上一镜必须引用双方正文。分段首镜若有previous_shot就引用previous_shot，否则引用shots.shots前项。真正将已完成转头/坐下/交物重置到未发生起点才是错误；自然小动作和合理步行省略不自动构成矛盾。首拍描述初始状态，无上一镜也要检查内部连续性。必须检查。\ndialogue_timing：有对白写实际台词字数、可用秒数、必要前后动作与反应所占时间，核算速度是否自然；不要只看总时长或将同时动作全部相加。无对白可not_applicable说明原因。不能声称已听过语速或声线。\nfirst_frame：分镜首帧必须为动作发生前状态。逐项核对是否提前转头、站起、递出、接物、移杯、坐下或情绪反应；与上一镜尾及全局左右/朝向布局对照。分镜必须检查；剧本可not_applicable。文字通过不等于实际图片通过。\nassets：核对所见人物、场景、道具与资产id/定义、画风、服装、左右布局匹配。区分历史合适资产和待生成资产，不假定复用已成功。未提供production_design的单段只检查当前可见需求，完整映射明确待后续联合审查，不把尚未生成的后续文件列缺失。剧本可not_applicable。\ncalibration_focus只列后续媒体验证项，不把已驳回假设变新硬条件。没问题/建议时数组为空。自己核查，不复制示例结论。\n本版本采用简洁对照证据，不要求把所有执行字段逐字重复六遍。每项仍须当前镜正文及相应来源；下方规定的路径前缀只需各一条真实相关叶子，不代表引用了就审查通过。reason说明双方是否相符。\n全片state_plan是被审核的计划，不是正确答案：对照剧本实际先后、初始状态、events动作与changes、对白窗口、反应窗口；检查将来坐下/拿取等动作的前置条件是否在先前成立。不能因程序契约通过就忽略自由文本和状态变化不一致。\n首态是t=0，0秒开始的动作区间并不要求先增加静止等待；已经到达目的地却又重复到达才是矛盾。末态里的“抬眼看向/已坐下”通常记录动作结果，不默认是新动作或再做一次。固定摄影机允许人物移动、走向纵深、自然改变画面占比；只有明确要求全程不变才产生冲突。\n对白按真实字数/已分配对白窗口核算；中文字计1，拉丁词计2。5单位/秒为执行上限，低于上限且有串行反应空间不能仅凭“偏紧、可能、未声明语速”列必修；审美慢读放suggestions，实际语速留媒体审核。不同人物并行动作不重复扣时。明确停顿/情绪要求仍须核查。\n审查production_design时核对其资产映射和opening_prompt与对应镜首态；计划及编译prompt若相冲突必须报告，不能只审其中一个。\n\n每镜每项最少对照来源前缀：{}\nscript由完整新模型稿steps顺序无损映射；真实顺序before→首句dialogue→during→次句dialogue→after，空槽“（无新增动作）”不代表追加行动。每项pass/fail至少引用该拍script.beats.N的真实正文叶子；assets若检查manifest，也需本拍正文。quote截必要逐字片段，reason简短具体。\n叙事拍可含多个必要镜头，由后续导演分配，不能以一拍多观察对象本身报创作错误。独立检查票根和便签数量/初态/去向、拿包实际位置、拒绝前目光准备和说后听者反应、笔的当前持有与结尾重新写字、结尾主动者。program求和和格式通过不证明内容通过。不可假定实际图片已选定或被导演看到。\n"
+      },
+      {
+        "role": "user",
+        "content": "{\"script\": {\"title\": \"这次我先走\", \"premise\": \"傍晚办公室里，方澄把林屿桌沿滑落的咖啡杯端回去后，回到自己并排的工位准备离开。林屿又一次理所当然地开口让她帮忙对账，并顺口提起上次也是她对完的。方澄在看到桌面残留的多张善后便利贴与今晚院线票根并排摆着后，第一次放下刚搭上的包带、合上包口，明确说出拒绝，独自推门离开。林屿面对空掉的方澄工位，把桌角那些替人善后留下的便利贴揭下收进自己抽屉，拿出自己那份结算单重新开始。\", \"selected_candidate_id\": \"C01\", \"duration_seconds\": 122, \"beats\": [{\"id\": \"B1\", \"duration_seconds\": 10, \"event\": \"傍晚办公室，方澄走到林屿桌边把滑到桌沿的咖啡杯端回桌中央，林屿抬头随口提起上次帮忙，又低头回到客户明细单。\", \"trigger\": \"观众从林屿自然对白里看到上一次帮忙，让习惯性的依赖先在语言里露出来。\", \"before\": \"傍晚办公室里，方澄走到林屿桌边，弯腰伸手把滑到桌沿的白色陶瓷马克杯端回林屿桌中央。\", \"during\": \"（无新增动作）\", \"after\": \"林屿说完没抬头，签字笔笔尖重新落到A4横版客户明细单上对数字。\", \"dialogue\": [{\"speaker\": \"林屿\", \"text\": \"上次那批也是你帮我对完的，谢谢啊。\"}]}, {\"id\": \"B2\", \"duration_seconds\": 9, \"event\": \"方澄从林屿桌边转身走回自己并排的工位，在椅背前站定，目光落在自己桌面。\", \"trigger\": \"观众跟随方澄回到她自己的桌面，准备看见她今晚和过去留下的痕迹。\", \"before\": \"方澄从林屿桌边转身，沿两张并排的浅木色办公桌之间走回自己的工位。\\n她在自己的黑色网面靠背转椅椅背前站定，目光落到桌面上。\", \"during\": \"（无新增动作）\", \"after\": \"（无新增动作）\", \"dialogue\": []}, {\"id\": \"B3\", \"duration_seconds\": 9, \"event\": \"方澄工位桌面近景：挎包敞口搁在椅背上，桌角靠抽屉柜一侧并排摆着三张不同日期的善后便利贴，紧挨着的是一张竖版院线票根。\", \"trigger\": \"观众从桌面近景同时看到三张善后便签与今晚院线票根，明确她过去不止一次替林屿善后，也清楚她今晚另有安排。\", \"before\": \"方澄工位桌面近景：米灰色金属扣的软皮小号斜挎包敞口搁在椅背上，桌角靠抽屉柜一侧并排摆着三张正方形便利贴，浅黄写\\\\\\\"对账\\\\\\\"、浅粉写\\\\\\\"改明细\\\\\\\"、浅蓝写\\\\\\\"收尾\\\\\\\"。\\n紧挨着这三张便利贴摆着一张竖版院线票根，米白底深红字，今晚开场时间与座位号清晰可读。\", \"during\": \"（无新增动作）\", \"after\": \"（无新增动作）\", \"dialogue\": []}, {\"id\": \"B4\", \"duration_seconds\": 8, \"event\": \"方澄伸手从椅背上拿起挎包，把包带搭上右肩，手指捏住带扣。\", \"trigger\": \"方澄准备离开的肢体动作已经起来，离开的意图先落到手上。\", \"before\": \"方澄伸手从椅背上拿起那只敞口挎包。\\n她把包带搭上右肩，抬起右手手指捏住米灰色金属带扣。\", \"during\": \"（无新增动作）\", \"after\": \"（无新增动作）\", \"dialogue\": []}, {\"id\": \"B5\", \"duration_seconds\": 9, \"event\": \"方澄中近景：她抬眼看向林屿，又低头看向桌角那排便签和票根，包带在指尖收紧；林屿抬头随口请求。\", \"trigger\": \"方澄在自己已有时间与林屿的请求之间犹豫，让观众替她的选择紧张。\", \"before\": \"方澄中近景：她抬眼看了林屿一眼，又低头看向桌角那排便签和票根，挎包带在她指尖收紧。\", \"during\": \"（无新增动作）\", \"after\": \"（无新增动作）\", \"dialogue\": [{\"speaker\": \"林屿\", \"text\": \"今晚又得麻烦你帮我对一下。\"}]}, {\"id\": \"B6\", \"duration_seconds\": 9, \"event\": \"方澄把挎包带从肩上放下，挎包放回椅背，双手合上包口。\", \"trigger\": \"把包放下、合上包口的动作把拒绝的决定先落到手上，台词之前身体先表态。\", \"before\": \"方澄松开捏着带扣的手指，把挎包带从右肩上放下。\\n她把挎包放回椅背上，双手抬到翻盖处，把包口合上，米灰色金属扣扣紧。\", \"during\": \"（无新增动作）\", \"after\": \"（无新增动作）\", \"dialogue\": []}, {\"id\": \"B7\", \"duration_seconds\": 8, \"event\": \"方澄中近景抬头看着林屿，清楚地说出拒绝。\", \"trigger\": \"拒绝由方澄自己看着对方说出来，被看见也承担。\", \"before\": \"方澄抬起头，目光从挎包上移开，对上林屿的脸。\", \"during\": \"（无新增动作）\", \"after\": \"（无新增动作）\", \"dialogue\": [{\"speaker\": \"方澄\", \"text\": \"这次我先走，你自己对吧。\"}]}, {\"id\": \"B8\", \"duration_seconds\": 8, \"event\": \"林屿手部近景：签字笔笔尖停住，没签完的字在客户明细单上划出一道短斜线。\", \"trigger\": \"把拒绝落到对方手上，让转折由具体动作承担，不靠表情解释。\", \"before\": \"机位切到林屿手部近景：黑色细头签字笔的金属笔夹反着夕光。\\n笔尖在A4横版客户明细单上突然停住，没签完的字划出一道短斜线，红笔批注旁多出一道歪斜的墨痕。\", \"during\": \"（无新增动作）\", \"after\": \"（无新增动作）\", \"dialogue\": []}, {\"id\": \"B9\", \"duration_seconds\": 9, \"event\": \"方澄背起挎包，穿过办公室走到门口，手搭上门把。\", \"trigger\": \"方澄以行动兑现拒绝，离开从语言落到脚步。\", \"before\": \"方澄低头重新拿起椅背上那只合好口的挎包，单肩背起，转身离开自己的工位。\\n她穿过两排并排的浅木色办公桌之间，走到房间远端侧墙那扇米灰色木纹平板门，手搭上金属横拉把手。\", \"during\": \"（无新增动作）\", \"after\": \"（无新增动作）\", \"dialogue\": []}, {\"id\": \"B10\", \"duration_seconds\": 8, \"event\": \"林屿坐在自己桌前没有抬头，低声说出一句依赖式回应。\", \"trigger\": \"把依赖的反应留进独立镜头，由说话本身承担，不让方澄的离开被任何解释冲淡。\", \"before\": \"林屿坐在自己桌前没有抬头，目光仍落在被划出短斜线的客户明细单上。\", \"during\": \"（无新增动作）\", \"after\": \"（无新增动作）\", \"dialogue\": [{\"speaker\": \"林屿\", \"text\": \"我以为你会帮我的。\"}]}, {\"id\": \"B11\", \"duration_seconds\": 9, \"event\": \"方澄在门口的侧背影：她停一下，没有回头，推门走出去，门在她身后缓缓合上。\", \"trigger\": \"门口的停顿与不回头，把离开和拒绝同时承住，留下余白。\", \"before\": \"机位给到方澄在门口的侧背影：她手搭着金属横拉把手停一下，没有回头。\\n她推门走出去，米灰色木纹平板门在她身后缓缓关上，室内只剩夕光和顶灯。\", \"during\": \"（无新增动作）\", \"after\": \"（无新增动作）\", \"dialogue\": []}, {\"id\": \"B12\", \"duration_seconds\": 8, \"event\": \"林屿过肩近景：他抬头看向空掉的方澄工位，视线落在桌角那三张便利贴和紧挨着的院线票根上。\", \"trigger\": \"让林屿的目光去触及过去留下的善后痕迹和方澄今晚原本属于自己的时间。\", \"before\": \"机位给到林屿独坐桌前的过肩近景。\\n林屿慢慢抬起头，越过自己桌沿看向并排相邻、已经空掉的方澄工位，视线落在桌角那三张并排的便利贴和紧挨着的那张竖版院线票根上。\", \"during\": \"（无新增动作）\", \"after\": \"（无新增动作）\", \"dialogue\": []}, {\"id\": \"B13\", \"duration_seconds\": 10, \"event\": \"林屿从椅子里站起，走到相邻的方澄桌边，依次把桌角那三张便利贴揭下，叠齐收进自己身后贴墙的浅木色三斗抽屉柜里。\", \"trigger\": \"善后痕迹由林屿亲手收走，关系变化由具体动作承担，不靠台词收束。\", \"before\": \"林屿从黑色网面靠背转椅里站起，走到相邻、空掉的方澄桌边。\\n他伸手依次揭下桌角那三张并排的便利贴——浅黄\\\\\\\"对账\\\\\\\"、浅粉\\\\\\\"改明细\\\\\\\"、浅蓝\\\\\\\"收尾\\\\\\\"，叠齐后转身走到自己身后贴墙的浅木色三斗抽屉柜前，拉开抽屉，把叠好的三张便利贴收进去。\", \"during\": \"（无新增动作）\", \"after\": \"（无新增动作）\", \"dialogue\": []}, {\"id\": \"B14\", \"duration_seconds\": 8, \"event\": \"林屿回到自己桌前坐下，从桌边抽出自己那份A4纵版结算单，翻到空白页，落下笔尖开始对账。\", \"trigger\": \"用林屿自己动手对账这一具体行动收尾，边界和关系变化都由新行为承担。\", \"before\": \"林屿关上抽屉，走回自己的浅木色办公桌前坐下。\\n他从桌边抽出自己那份A4纵版结算单，右上角彩色公司logo条和浅蓝色表头可见，翻到空白页，黑色细头签字笔落下笔尖，开始对账。\", \"during\": \"（无新增动作）\", \"after\": \"（无新增动作）\", \"dialogue\": []}], \"screenplay_markdown\": \"# 这次我先走\\n\\n## B1 傍晚办公室，方澄走到林屿桌边把滑到桌沿的咖啡杯端回桌中央，林屿抬头随口提起上次帮忙，又低头回到客户明细单。\\n\\n傍晚办公室里，方澄走到林屿桌边，弯腰伸手把滑到桌沿的白色陶瓷马克杯端回林屿桌中央。\\n\\n**林屿**：上次那批也是你帮我对完的，谢谢啊。\\n\\n林屿说完没抬头，签字笔笔尖重新落到A4横版客户明细单上对数字。\\n\\n## B2 方澄从林屿桌边转身走回自己并排的工位，在椅背前站定，目光落在自己桌面。\\n\\n方澄从林屿桌边转身，沿两张并排的浅木色办公桌之间走回自己的工位。\\n\\n她在自己的黑色网面靠背转椅椅背前站定，目光落到桌面上。\\n\\n## B3 方澄工位桌面近景：挎包敞口搁在椅背上，桌角靠抽屉柜一侧并排摆着三张不同日期的善后便利贴，紧挨着的是一张竖版院线票根。\\n\\n方澄工位桌面近景：米灰色金属扣的软皮小号斜挎包敞口搁在椅背上，桌角靠抽屉柜一侧并排摆着三张正方形便利贴，浅黄写\\\\\\\"对账\\\\\\\"、浅粉写\\\\\\\"改明细\\\\\\\"、浅蓝写\\\\\\\"收尾\\\\\\\"。\\n\\n紧挨着这三张便利贴摆着一张竖版院线票根，米白底深红字，今晚开场时间与座位号清晰可读。\\n\\n## B4 方澄伸手从椅背上拿起挎包，把包带搭上右肩，手指捏住带扣。\\n\\n方澄伸手从椅背上拿起那只敞口挎包。\\n\\n她把包带搭上右肩，抬起右手手指捏住米灰色金属带扣。\\n\\n## B5 方澄中近景：她抬眼看向林屿，又低头看向桌角那排便签和票根，包带在指尖收紧；林屿抬头随口请求。\\n\\n方澄中近景：她抬眼看了林屿一眼，又低头看向桌角那排便签和票根，挎包带在她指尖收紧。\\n\\n**林屿**：今晚又得麻烦你帮我对一下。\\n\\n## B6 方澄把挎包带从肩上放下，挎包放回椅背，双手合上包口。\\n\\n方澄松开捏着带扣的手指，把挎包带从右肩上放下。\\n\\n她把挎包放回椅背上，双手抬到翻盖处，把包口合上，米灰色金属扣扣紧。\\n\\n## B7 方澄中近景抬头看着林屿，清楚地说出拒绝。\\n\\n方澄抬起头，目光从挎包上移开，对上林屿的脸。\\n\\n**方澄**：这次我先走，你自己对吧。\\n\\n## B8 林屿手部近景：签字笔笔尖停住，没签完的字在客户明细单上划出一道短斜线。\\n\\n机位切到林屿手部近景：黑色细头签字笔的金属笔夹反着夕光。\\n\\n笔尖在A4横版客户明细单上突然停住，没签完的字划出一道短斜线，红笔批注旁多出一道歪斜的墨痕。\\n\\n## B9 方澄背起挎包，穿过办公室走到门口，手搭上门把。\\n\\n方澄低头重新拿起椅背上那只合好口的挎包，单肩背起，转身离开自己的工位。\\n\\n她穿过两排并排的浅木色办公桌之间，走到房间远端侧墙那扇米灰色木纹平板门，手搭上金属横拉把手。\\n\\n## B10 林屿坐在自己桌前没有抬头，低声说出一句依赖式回应。\\n\\n林屿坐在自己桌前没有抬头，目光仍落在被划出短斜线的客户明细单上。\\n\\n**林屿**：我以为你会帮我的。\\n\\n## B11 方澄在门口的侧背影：她停一下，没有回头，推门走出去，门在她身后缓缓合上。\\n\\n机位给到方澄在门口的侧背影：她手搭着金属横拉把手停一下，没有回头。\\n\\n她推门走出去，米灰色木纹平板门在她身后缓缓关上，室内只剩夕光和顶灯。\\n\\n## B12 林屿过肩近景：他抬头看向空掉的方澄工位，视线落在桌角那三张便利贴和紧挨着的院线票根上。\\n\\n机位给到林屿独坐桌前的过肩近景。\\n\\n林屿慢慢抬起头，越过自己桌沿看向并排相邻、已经空掉的方澄工位，视线落在桌角那三张并排的便利贴和紧挨着的那张竖版院线票根上。\\n\\n## B13 林屿从椅子里站起，走到相邻的方澄桌边，依次把桌角那三张便利贴揭下，叠齐收进自己身后贴墙的浅木色三斗抽屉柜里。\\n\\n林屿从黑色网面靠背转椅里站起，走到相邻、空掉的方澄桌边。\\n\\n他伸手依次揭下桌角那三张并排的便利贴——浅黄\\\\\\\"对账\\\\\\\"、浅粉\\\\\\\"改明细\\\\\\\"、浅蓝\\\\\\\"收尾\\\\\\\"，叠齐后转身走到自己身后贴墙的浅木色三斗抽屉柜前，拉开抽屉，把叠好的三张便利贴收进去。\\n\\n## B14 林屿回到自己桌前坐下，从桌边抽出自己那份A4纵版结算单，翻到空白页，落下笔尖开始对账。\\n\\n林屿关上抽屉，走回自己的浅木色办公桌前坐下。\\n\\n他从桌边抽出自己那份A4纵版结算单，右上角彩色公司logo条和浅蓝色表头可见，翻到空白页，黑色细头签字笔落下笔尖，开始对账。\"}, \"creative_brief\": {\"schema\": \"creative_brief/v1\", \"theme\": \"总替同事收尾的人，第一次把自己的时间放在前面\", \"duration_seconds\": [45, 60], \"delegated_fields\": [], \"duration_policy\": \"flexible\", \"audience\": \"喜欢生活情绪短片的成年观众\", \"relationships\": \"方澄与同事林屿；林屿已习惯她会答应，方澄担心拒绝会伤及两人的关系。\", \"audience_emotion\": \"先看懂她为什么难拒绝，再替她的选择紧张，最后感到关系发生了真实变化。\", \"visual_style\": \"写实真人实拍质感的AI短片，成年普通人外貌，真实皮肤纹理、自然光与生活化服装，克制自然表演，关键反应使用可读近景。\", \"turn\": \"对方原本把她的帮忙视为理所当然；她明确拒绝后，对方必须面对这一点，再通过具体行动回应。\", \"ending\": \"以新的行动兑现边界及关系变化；不预先规定两人必须和解，不用主题口号收尾。\", \"constraints\": [\"观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。\", \"她想离开和担心拒绝的原因要在实际事件中成立。\", \"关键反应的构图和窗口必须写入最终视频提示词。\", \"剧情先按完整故事创作，再拆成生成段；不能为固定八秒切段编造操作。\"], \"avoid\": [\"用一次开本子或摸包代替习惯性的付出历史\", \"靠陪家人看病等新事故替代原本的关系矛盾\", \"强行争吵、突然完美理解、鸡汤总结\", \"为了沿用动画尾帧而改回手绘风格\"]}, \"static_visual_manifest\": {\"schema\": \"static_visual_manifest_v2\", \"render\": {\"style_option_id\": \"S01\", \"visual_medium\": \"写实真人实拍质感的AI短片，自然皮肤纹理与生活化布光\", \"palette\": \"傍晚办公室暖调，浅木色桌面、米白墙、暖灰窗帘透橙黄夕光、人物服装为低饱和的灰蓝与米驼\", \"light_source\": \"临窗自然夕光为主，从办公桌侧面斜入，室内顶灯为辅补光，形成柔和侧光与轻微暖色阴影\"}, \"characters\": [{\"id\": \"C01\", \"name\": \"方澄\", \"age_group\": \"成年\", \"hair\": \"黑色齐肩直发，自然中分\", \"clothing\": \"灰蓝色薄针织开衫，内搭白色圆领T恤，下着深灰色直筒长裤\", \"body_shape\": \"中等偏瘦，肩线柔和\"}, {\"id\": \"C02\", \"name\": \"林屿\", \"age_group\": \"成年\", \"hair\": \"深栗色短碎发，稍长刘海\", \"clothing\": \"米驼色棉质衬衫，袖口挽至前臂，下着深藏蓝休闲长裤\", \"body_shape\": \"中等身高，肩宽略宽于方澄\"}], \"props\": [{\"id\": \"P01\", \"name\": \"挎包\", \"appearance\": \"软皮小号斜挎包，米灰色金属扣，单层翻盖\", \"owner_id\": \"C01\"}, {\"id\": \"P02\", \"name\": \"院线电影票根\", \"appearance\": \"竖版窄长纸片，米白底深红字，右侧带撕齿虚线，今晚院线开场时间与座位号可读\", \"owner_id\": \"C01\"}, {\"id\": \"P03\", \"name\": \"善后便利贴三张\", \"appearance\": \"正方形小纸片，分别为浅黄、浅粉、浅蓝底，深灰手写短词（对账/改明细/收尾）\", \"owner_id\": \"C01\"}, {\"id\": \"P04\", \"name\": \"咖啡杯\", \"appearance\": \"白色陶瓷马克杯，杯身外侧无图案，杯口微宽\", \"owner_id\": \"C02\"}, {\"id\": \"P05\", \"name\": \"客户明细单\", \"appearance\": \"A4横版打印表格纸，浅灰线条格，黑字数字，红笔批注\", \"owner_id\": \"C02\"}, {\"id\": \"P06\", \"name\": \"结算单\", \"appearance\": \"A4纵版表格纸，右上角有彩色公司logo条，浅蓝表头\", \"owner_id\": \"C02\"}, {\"id\": \"P07\", \"name\": \"签字笔\", \"appearance\": \"黑色细头签字笔，金属笔夹\", \"owner_id\": \"C02\"}], \"scene\": {\"name\": \"傍晚办公室\", \"elements\": [{\"id\": \"E01\", \"name\": \"方澄工位桌\", \"appearance\": \"浅木色长方形办公桌，金属细腿，桌面靠近窗户一侧\"}, {\"id\": \"E02\", \"name\": \"林屿工位桌\", \"appearance\": \"浅木色长方形办公桌，与方澄桌同款，平行摆放，靠近室内一侧\"}, {\"id\": \"E03\", \"name\": \"抽屉柜\", \"appearance\": \"浅木色三斗文件柜，贴墙放置，黑色拉手\"}, {\"id\": \"E04\", \"name\": \"办公室门\", \"appearance\": \"木纹平板门，米灰色，下半部带金属横拉把手，位于房间远端侧墙\"}, {\"id\": \"E05\", \"name\": \"窗户\", \"appearance\": \"宽幅铝合金推拉窗，米灰色半透明卷帘半垂，窗框占据外侧整面墙\"}, {\"id\": \"E06\", \"name\": \"顶灯\", \"appearance\": \"白色圆形吸顶灯，暖白光，位于房间正中天花板\"}, {\"id\": \"E07\", \"name\": \"地面\", \"appearance\": \"浅灰色PVC地板，哑光\"}, {\"id\": \"E08\", \"name\": \"墙面\", \"appearance\": \"米白色乳胶漆墙面，干净无装饰\"}, {\"id\": \"E09\", \"name\": \"办公椅（方澄）\", \"appearance\": \"黑色网面靠背转椅，灰色塑料五星脚\"}, {\"id\": \"E10\", \"name\": \"办公椅（林屿）\", \"appearance\": \"黑色网面靠背转椅，灰色塑料五星脚，与方澄椅同款\"}], \"relations\": [{\"subject\": \"E02\", \"relation\": \"right_of\", \"reference\": \"E01\"}, {\"subject\": \"E01\", \"relation\": \"next_to\", \"reference\": \"E05\"}, {\"subject\": \"E02\", \"relation\": \"next_to\", \"reference\": \"E01\"}, {\"subject\": \"E03\", \"relation\": \"behind\", \"reference\": \"E02\"}, {\"subject\": \"E04\", \"relation\": \"behind\", \"reference\": \"E01\"}, {\"subject\": \"E06\", \"relation\": \"above\", \"reference\": \"E01\"}, {\"subject\": \"E07\", \"relation\": \"below\", \"reference\": \"E01\"}, {\"subject\": \"E08\", \"relation\": \"behind\", \"reference\": \"E05\"}, {\"subject\": \"E09\", \"relation\": \"next_to\", \"reference\": \"E01\"}, {\"subject\": \"E10\", \"relation\": \"next_to\", \"reference\": \"E02\"}]}}, \"material_ref\": {\"source_driver\": \"original\", \"title\": \"这次我先走·参考表达生产\", \"creative_focus\": \"参考时长（可浮动）45—60秒。创作简报：{\\\"audience\\\": \\\"喜欢生活情绪短片的成年观众\\\", \\\"audience_emotion\\\": \\\"先看懂她为什么难拒绝，再替她的选择紧张，最后感到关系发生了真实变化。\\\", \\\"avoid\\\": [\\\"用一次开本子或摸包代替习惯性的付出历史\\\", \\\"靠陪家人看病等新事故替代原本的关系矛盾\\\", \\\"强行争吵、突然完美理解、鸡汤总结\\\", \\\"为了沿用动画尾帧而改回手绘风格\\\"], \\\"constraints\\\": [\\\"观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。\\\", \\\"她想离开和担心拒绝的原因要在实际事件中成立。\\\", \\\"关键反应的构图和窗口必须写入最终视频提示词。\\\", \\\"剧情先按完整故事创作，再拆成生成段；不能为固定八秒切段编造操作。\\\"], \\\"delegated_fields\\\": [], \\\"duration_policy\\\": \\\"flexible\\\", \\\"duration_seconds\\\": [45, 60], \\\"ending\\\": \\\"以新的行动兑现边界及关系变化；不预先规定两人必须和解，不用主题口号收尾。\\\", \\\"relationships\\\": \\\"方澄与同事林屿；林屿已习惯她会答应，方澄担心拒绝会伤及两人的关系。\\\", \\\"schema\\\": \\\"creative_brief/v1\\\", \\\"theme\\\": \\\"总替同事收尾的人，第一次把自己的时间放在前面\\\", \\\"turn\\\": \\\"对方原本把她的帮忙视为理所当然；她明确拒绝后，对方必须面对这一点，再通过具体行动回应。\\\", \\\"visual_style\\\": \\\"写实真人实拍质感的AI短片，成年普通人外貌，真实皮肤纹理、自然光与生活化服装，克制自然表演，关键反应使用可读近景。\\\"}。优先完整表达情绪、事件和画面；按实际对白、刺激与反应安排秒数，总长可随内容浮动，不为靠近参考范围删掉必要表演或增加填充动作。画风仍按简报；明确的局部时序要求仍生效。\", \"material_sha256\": \"b0f5dfe7dce0f300af26a517b56edae479868626faad80b595921812262d8575\", \"source_sha256\": \"e0f61a360a00f25759eec6f521f6b83af9775100fd886066a3b85bf59d16aa82\", \"reference_sha256\": \"bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1\"}, \"reference_pack\": [{\"id\": \"R01\", \"path\": \"D:\\\\IT\\\\ai_douyin\\\\data\\\\reference_reviews\\\\reusable_expression_20261001\\\\EXPRESSION_REFERENCE.md\", \"text\": \"# 已有参考片与教学分析：可复用表达参考\\n\\n用途：借鉴叙事、情绪和摄影表达机制；不是本次剧情来源或硬验收模板。用户当前主题、人物、真人画风、浮动时长和人工视频审核要求优先。不要照搬诈骗、老人、玄关或旧项目专用动作，也不要把所有参考技巧机械塞进短片。\\n\\n## 核心判断\\n\\n参考片用“虚假的关心—真实的付出—伤害—再次渴望关心”组织情绪。最有效的是末尾老人从愤怒到接电话后微笑的变化。画面中每个人在做有目的的事情，表情随具体刺激改变；不靠人物站定后用台词解释全部心理。\\n\\n## 时间轴证据\\n\\n| 时间 | 实际可见内容 | 导演作用 |\\n| --- | --- | --- |\\n| 0–5 秒 | 女生在霓虹街头看手机、展示转账、互相说笑 | 立即交代欺骗关系，让观众比受骗者知道得多 |\\n| 8–18 秒 | 多部手机；男子催促；女子开门进屋、靠近桌子 | 道具解释工作方式，进门动作建立人物和场景联系 |\\n| 20–31 秒 | 女子前景逐一回复手机；男子后景吃东西 | 同一画面有主次行动；她表演关心与身后人的冷漠形成反差 |\\n| 33.5–39 秒 | 老人独坐、看手机、转账界面、对手机讲话 | 将套路切到具体承受者，观众看到真实关切 |\\n| 48–50 秒 | 男子看收款消息，前倾、睁大眼、笑容扩大 | 收款触发贪婪，动作和情绪有因果 |\\n| 50.5–58 秒 | 叫醒女子，递泡面，拿手机催拍，手机取景画面 | 困倦被利用为卖惨素材；道具推动事件 |\\n| 63–78 秒 | 购买金饰、美容、购物、聚餐、泳池炫耀 | 场景变化用于交代骗款去向；不能直接照搬为家庭戏的装饰 |\\n| 77.5–85 秒 | 求还钱消息；泳池跳水切到夜间落水；岸边手机显示消息遭拒 | 剪辑把享乐与受害者绝望并置。人物身份及死亡结果不能仅凭这些帧完全确认 |\\n| 85.5–93 秒 | 抓捕、控制嫌疑人、手机取证 | 交代诈骗被查处，推进结局 |\\n| 93.5–103.5 秒 | 老人看新闻皱眉，随后接电话；字幕“吴叔叔在干嘛”“怎么不理我”，老人逐渐微笑 | 同一人的前后反应完成主题：愤怒没有消除对关心的渴望；来电者身份并未明确 |\\n\\n\\n## 二、四课分别带来的启发\\n\\n下列是基于转写与抽帧的简要归纳，时间用于回看定位，不是逐字引文。\\n\\n1. [0基础，带你做出你人生第一个AI视频](https://www.bilibili.com/video/BV1Z28P6HEGa/)：约3:00–6:10和7:35–9:05，展示剧本先转调度，再转模型提示与角色引用。对本项目的启发是把“镜头观察谁、人物做什么、空间如何呈现”与接口提示编译分层。作者关于一致性的强保证只是演示者判断，不能替代本项目实测。\\n2. [用“抄袭”思维做出AI视频](https://www.bilibili.com/video/BV1sPhE63ERj/)：约5:30–10:10分析构图、色光、参考图与公开工程；约15:45–18:55将已选资产回传给Agent，再校正调度。应学表达机制、记录自己的可复现试验。其首尾帧批评针对示例跳帧，不能据此取消用户当前接续门槛。\\n3. [AI视频究竟怎么学](https://www.bilibili.com/video/BV19fYf6kEnU/)：约8:30–13:10的咖啡店重做显示语音、杯子比例、相似景别切换和情绪出错，随后人工重写调度、局部返修、剪辑。可复用流程必须容纳明确的创作判断和失败处理，不能承诺一键首发全对。\\n4. [如何做出“电影级”AI视频](https://www.bilibili.com/video/BV1uGYE6XEB4/)：约1:00–3:40对比角色参考，约7:30–11:10讨论场景资产。可迁移的是减少身份参考里的杂乱背景、强阴影及不合适表情，同时让场景图服务真实动线。具体模型、4K和版式属于其示例设置，不作为普遍成功保证。\\n\\n教程展示过不同模型／平台及人工选片，不能把其效果直接归因于某段万能提示，也不能推定其接口与项目Mini端能力一致。样片的实际制作模型、提示词、废片率和后期投入未知。\\n\\n## 三、目标样片好在哪里\\n\\n| 观察窗口 | 实际画面与叙事作用 | 可迁移机制 |\\n| --- | --- | --- |\\n| 0–6秒 | 街头女子看手机、同伴交流，随后进入多手机的工作环境 | 开头给具体反差和疑问 |\\n| 20–30秒 | 女子前景回复手机，男子后景吃东西 | 同镜有主次行动，前后景共同传递信息 |\\n| 33–48秒 | 老人、转账界面、男子收款反应交替 | 道具证明信息，近景呈现信息对人的影响 |\\n| 63–78秒 | 消费、购物、聚餐、泳池环境变化 | 用场景变化交代后果与生活反差 |\\n| 93–104秒 | 老人看新闻皱眉，接电话后逐渐放松微笑 | 用刺激后的可见变化完成主题、留下余味 |\\n\\n关键不是表情数量或单张画面的精细度，而是观众的信息、人物的选择和摄影观察对象一起变化。末尾来电者身份不能只凭这些帧确定。目标样片和项目最新片同为720×1280；提高输出分辨率不能单独解决目前的内容差距。\\n\\n\\n### 每镜以观众收到什么为核心\\n\\n明确注意对象、新信息、刺激、反应前后差别、切镜理由、必须可见的证据。每段只传当前相关人物和状态。让对白方式、反应窗口、资产引用和状态由同一权威中间表示编译到最终请求，避免多层重复改写。\"}], \"reference_expression_rule\": \"reference_pack来自已获取的同类视频和教学表达分析。学习信息递进、刺激与反应、具体行动、观察主体及结尾余味；选与当前需求相关的机制，不照搬参考人物、对白、剧情、时长或画风。创作简报优先，不把参考偏好当硬禁令；未观察本次媒体不得宣称表演成功。\", \"script_revision_source\": {\"label\": \"linear_draft_v3\", \"ordinal\": 46, \"raw_sha256\": \"8620cc2c5ab74780f04d5cfadb675de3d5ca0d42edaf7f4481c0796815b8e54d\", \"adapter_sha256\": \"cdce92447fbdc7a8296aeb44123160141f2188d2aec3a9c0950eea0b27a66bfe\", \"complete_model_authored\": true, \"automatic_semantic_pass\": false}}"
+      }
+    ],
+    "structured_schema": null,
+    "parameters": {
+      "max_completion_tokens": 11000,
+      "temperature": 0.4,
+      "thinking": "disabled"
+    },
+    "operator_binding": {
+      "version": "linear_full_review_v4",
+      "path": "D:\\IT\\ai_douyin\\scripts\\review_linear_script_probe_v4.py",
+      "sha256": "ad6bdc5d4310e3132555550ae537d57c1a87354f4f5321bf3b9a810d456a7b84",
+      "linear_operator": {
+        "version": "linear_complete_script_probe_v3",
+        "source_manifest": {
+          "scripts/run_linear_script_probe_v3.py": "1ec73982c9eb93d87c5c06bdff01be64d6188ba6e0d865015cfa40b80777cbb6",
+          "scripts/creative_linear_script_v2.py": "cdce92447fbdc7a8296aeb44123160141f2188d2aec3a9c0950eea0b27a66bfe"
+        }
+      }
+    }
+  },
+  "request_sha256": "87f532810d722c4c59e2f0781df82cc9336e224b02a02338459dd61be122f8c6",
+  "source_binding_sha256": "5180a279106c7e370ad541d42b23714b0631692eec60b88b9c5ca6f6c5021c8c",
+  "status": "contract_valid",
+  "started_at": "2026-10-02T20:35:36.412388+00:00",
+  "token_reservation": 30737,
+  "retained_full_review_tokens": 8000,
+  "automatic_retry": false,
+  "semantic_approval": false,
+  "response_metadata": {
+    "role": "director",
+    "provider": "deepseek",
+    "requested_model": "deepseek-flash",
+    "response_model": "deepseek-flash",
+    "response_id": "a47abb41-7045-464d-a3e9-be708f511183",
+    "finish_reason": "stop",
+    "thinking_mode": "disabled",
+    "output_mode": "content",
+    "prompt_tokens": 9290,
+    "completion_tokens": 9134,
+    "total_tokens": 18424
+  },
+  "response_text": "{\n  \"story_preserved\": false,\n  \"issues\": [\n    {\n      \"id\": \"I01\",\n      \"owner\": \"writer\",\n      \"location\": \"B1\",\n      \"severity\": \"major\",\n      \"rule\": \"创作简报要求观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。\",\n      \"evidence\": \"B1 林屿台词为“上次那批也是你帮我对完的，谢谢啊。”，仅提及一次帮忙；B3 三张便利贴虽可见，但事件描述为“三张不同日期的善后便利贴”，正文未明确这些是方澄替林屿善后留下的。\",\n      \"contradiction\": \"简报要求“不止一次替同事加班”需通过自然对白或可见后果兑现；当前对白只提供一次，便利贴未与“替林屿善后”建立明确因果。\",\n      \"impact\": \"观众在拒绝前无法确知方澄过去已多次替林屿加班，削弱拒绝的合理性与情绪积累。\",\n      \"proposal\": \"在 B1 林屿台词中自然加入第二次以上帮忙的指涉，或在 B3 便利贴正文中明确“这三张都是方澄替林屿善后留下的”，使“不止一次”在拒绝前可被观众读到。\",\n      \"evidence_refs\": [\n        {\n          \"path\": \"script.beats.0.dialogue.0.text\",\n          \"quote\": \"上次那批也是你帮我对完的，谢谢啊。\"\n        },\n        {\n          \"path\": \"script.beats.2.event\",\n          \"quote\": \"三张不同日期的善后便利贴\"\n        }\n      ]\n    },\n    {\n      \"id\": \"I02\",\n      \"owner\": \"writer\",\n      \"location\": \"B5\",\n      \"severity\": \"major\",\n      \"rule\": \"创作简报要求关键反应的构图和窗口必须写入最终视频提示词；关键反应需有可读近景与反应窗口。\",\n      \"evidence\": \"B5 事件描述为“方澄中近景：她抬眼看向林屿，又低头看向桌角那排便签和票根，包带在指尖收紧；林屿抬头随口请求。”，但正文 before 仅写方澄动作，林屿的请求对白出现在 dialogue，未写明林屿抬头请求发生在方澄抬眼/低头之前、之中还是之后。\",\n      \"contradiction\": \"关键反应窗口（方澄在请求与自身时间之间的犹豫）需要明确刺激—反应顺序，当前正文未把林屿请求与方澄反应窗口绑定。\",\n      \"impact\": \"导演和视频提示词无法确定方澄的犹豫反应是对林屿请求的回应，关键反应窗口可能丢失。\",\n      \"proposal\": \"在 B5 正文中明确林屿抬头说出请求的时点，并写明方澄抬眼看向林屿、再低头看向便签和票根、包带收紧是对该请求的反应窗口。\",\n      \"evidence_refs\": [\n        {\n          \"path\": \"script.beats.4.event\",\n          \"quote\": \"方澄中近景：她抬眼看向林屿，又低头看向桌角那排便签和票根，包带在指尖收紧；林屿抬头随口请求。\"\n        },\n        {\n          \"path\": \"script.beats.4.dialogue.0.text\",\n          \"quote\": \"今晚又得麻烦你帮我对一下。\"\n        }\n      ]\n    },\n    {\n      \"id\": \"I03\",\n      \"owner\": \"writer\",\n      \"location\": \"B7\",\n      \"severity\": \"major\",\n      \"rule\": \"创作简报要求关键反应的构图和窗口必须写入最终视频提示词；拒绝后对方必须面对这一点，再通过具体行动回应。\",\n      \"evidence\": \"B7 方澄说出“这次我先走，你自己对吧。”后，B8 只写林屿手部近景笔尖停住，B10 林屿低头说“我以为你会帮我的。”，但 B7 正文未写林屿听到拒绝后的即时反应窗口，B8 也未写该反应与拒绝的因果绑定。\",\n      \"contradiction\": \"拒绝是核心转折，简报要求对方面对这一点；当前正文缺少林屿听到拒绝后的反应窗口，B8 手部动作未明确是对拒绝的反应。\",\n      \"impact\": \"转折的情绪落点不完整，观众可能看不到林屿“面对拒绝”的即时反应。\",\n      \"proposal\": \"在 B7 或 B8 正文中明确林屿听到拒绝后的反应窗口（如笔尖停住发生在方澄话音落下之后），并写明该反应由拒绝触发。\",\n      \"evidence_refs\": [\n        {\n          \"path\": \"script.beats.6.dialogue.0.text\",\n          \"quote\": \"这次我先走，你自己对吧。\"\n        },\n        {\n          \"path\": \"script.beats.7.event\",\n          \"quote\": \"林屿手部近景：签字笔笔尖停住，没签完的字在客户明细单上划出一道短斜线。\"\n        }\n      ]\n    },\n    {\n      \"id\": \"I04\",\n      \"owner\": \"writer\",\n      \"location\": \"B13\",\n      \"severity\": \"major\",\n      \"rule\": \"创作简报要求结尾以新的行动兑现边界及关系变化；林屿必须通过具体行动回应，且行动需与方澄拒绝后的边界变化一致。\",\n      \"evidence\": \"B13 林屿把三张便利贴收进“自己身后贴墙的浅木色三斗抽屉柜”，但 static_visual_manifest 中 E03 抽屉柜关系为“behind E02（林屿工位桌）”，B13 正文写林屿从方澄桌边转身走到自己身后抽屉柜，空间关系未与 manifest 的“贴墙放置”明确对应。\",\n      \"contradiction\": \"结尾行动的空间落点与资产布局存在未对齐风险，可能影响“关系变化由具体动作承担”的可读性。\",\n      \"impact\": \"若抽屉柜位置在画面中与方澄桌边距离或方向不明确，林屿收走便利贴的象征动作可能被空间混乱削弱。\",\n      \"proposal\": \"在 B13 正文中明确抽屉柜位于林屿工位后方贴墙处，并写明林屿从方澄桌边转身走到该柜前的空间路径，与 E03 关系一致。\",\n      \"evidence_refs\": [\n        {\n          \"path\": \"script.beats.12.event\",\n          \"quote\": \"叠齐收进自己身后贴墙的浅木色三斗抽屉柜里\"\n        },\n        {\n          \"path\": \"static_visual_manifest.scene.relations.3.relation\",\n          \"quote\": \"behind\"\n        }\n      ]\n    }\n  ],\n  \"suggestions\": [\n    {\n      \"location\": \"B3\",\n      \"proposal\": \"可在 B3 正文中把三张便利贴的日期或内容与“替林屿善后”建立更直接关联，例如写明每张对应一次林屿的请求。\",\n      \"reason\": \"增强观众对“不止一次”的可见证据，但不改变现有叙事。\"\n    },\n    {\n      \"location\": \"B10\",\n      \"proposal\": \"可考虑在 B10 林屿台词后补一个极短停顿或视线变化，让“我以为你会帮我的”有被拒绝后的余味。\",\n      \"reason\": \"强化依赖式回应的情绪落点，属审美优化。\"\n    }\n  ],\n  \"calibration_focus\": [\n    \"B5 方澄抬眼/低头/包带收紧与林屿请求的先后窗口是否在最终视频提示词中可读。\",\n    \"B7 拒绝台词后林屿听到拒绝的即时反应窗口是否在画面中成立。\",\n    \"B13 抽屉柜位置与林屿从方澄桌边转身走到的空间关系是否与资产布局一致。\"\n  ],\n  \"coverage\": [\n    {\n      \"id\": \"B1\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"fail\",\n          \"reason\": \"林屿台词只提一次帮忙，便利贴未明确是替林屿善后，未兑现“不止一次替同事加班”。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.0.dialogue.0.text\",\n              \"quote\": \"上次那批也是你帮我对完的，谢谢啊。\"\n            }\n          ],\n          \"issue_ids\": [\n            \"I01\"\n          ]\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"B1 先方澄端杯，再林屿对白，再林屿低头落笔，刺激与反应顺序成立。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.0.before\",\n              \"quote\": \"方澄走到林屿桌边，弯腰伸手把滑到桌沿的白色陶瓷马克杯端回林屿桌中央。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B1 为分段首镜，无上一镜；内部从端杯到林屿低头落笔连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.0.after\",\n              \"quote\": \"林屿说完没抬头，签字笔笔尖重新落到A4横版客户明细单上对数字。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"林屿一句约14字，10秒窗口充足，端杯与对白可串行。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.0.dialogue.0.text\",\n              \"quote\": \"上次那批也是你帮我对完的，谢谢啊。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B1 为剧本拍，非分镜首帧，不适用分镜首帧检查。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B1 可见咖啡杯 P04、客户明细单 P05、签字笔 P07，与 manifest 定义一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.0.before\",\n              \"quote\": \"白色陶瓷马克杯\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B2\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"pass\",\n          \"reason\": \"B2 方澄走回自己工位，为后续看到桌面痕迹建立位置。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.1.before\",\n              \"quote\": \"方澄从林屿桌边转身，沿两张并排的浅木色办公桌之间走回自己的工位。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"B2 无对白，转身走回并站定，9秒窗口合理。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.1.before\",\n              \"quote\": \"她在自己的黑色网面靠背转椅椅背前站定，目光落到桌面上。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B2 接 B1 林屿低头后，方澄从林屿桌边转身走回，位置连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.1.before\",\n              \"quote\": \"方澄从林屿桌边转身\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B2 无对白。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B2 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B2 可见浅木色办公桌 E01/E02、黑色网面靠背转椅 E09，与 manifest 一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.1.before\",\n              \"quote\": \"黑色网面靠背转椅椅背前站定\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B3\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"fail\",\n          \"reason\": \"三张便利贴可见但未明确是方澄替林屿善后留下，未兑现“不止一次”的可见后果。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.2.event\",\n              \"quote\": \"三张不同日期的善后便利贴\"\n            }\n          ],\n          \"issue_ids\": [\n            \"I01\"\n          ]\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"B3 为桌面近景静态展示，无对白，9秒窗口合理。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.2.before\",\n              \"quote\": \"方澄工位桌面近景：米灰色金属扣的软皮小号斜挎包敞口搁在椅背上\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B3 接 B2 方澄站定看桌面，桌面物品与 B2 目光落点连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.2.before\",\n              \"quote\": \"桌角靠抽屉柜一侧并排摆着三张正方形便利贴\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B3 无对白。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B3 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B3 可见挎包 P01、便利贴 P03、院线票根 P02，与 manifest 定义一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.2.before\",\n              \"quote\": \"米灰色金属扣的软皮小号斜挎包敞口搁在椅背上\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B4\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"pass\",\n          \"reason\": \"B4 方澄拿起挎包搭肩，离开意图落到手上，符合“她想离开”的原因成立。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.3.before\",\n              \"quote\": \"方澄伸手从椅背上拿起那只敞口挎包。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"B4 无对白，拿包搭肩捏带扣，8秒窗口合理。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.3.before\",\n              \"quote\": \"她把包带搭上右肩，抬起右手手指捏住米灰色金属带扣。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B4 接 B3 挎包敞口搁椅背，方澄拿起挎包，持物状态连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.3.before\",\n              \"quote\": \"方澄伸手从椅背上拿起那只敞口挎包。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B4 无对白。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B4 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B4 可见挎包 P01，米灰色金属带扣与 manifest 一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.3.before\",\n              \"quote\": \"米灰色金属带扣\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B5\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"fail\",\n          \"reason\": \"关键反应窗口未明确写入正文，林屿请求与方澄犹豫反应的先后未绑定。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.4.event\",\n              \"quote\": \"方澄中近景：她抬眼看向林屿，又低头看向桌角那排便签和票根，包带在指尖收紧；林屿抬头随口请求。\"\n            }\n          ],\n          \"issue_ids\": [\n            \"I02\"\n          ]\n        },\n        \"timing\": {\n          \"status\": \"fail\",\n          \"reason\": \"林屿对白“今晚又得麻烦你帮我对一下”与方澄抬眼/低头/包带收紧的刺激—反应顺序未在正文明确。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.4.dialogue.0.text\",\n              \"quote\": \"今晚又得麻烦你帮我对一下。\"\n            }\n          ],\n          \"issue_ids\": [\n            \"I02\"\n          ]\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B5 接 B4 方澄已搭包带捏带扣，B5 包带在指尖收紧，持物状态连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.4.before\",\n              \"quote\": \"挎包带在她指尖收紧\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"林屿一句约12字，9秒窗口充足，方澄反应可串行。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.4.dialogue.0.text\",\n              \"quote\": \"今晚又得麻烦你帮我对一下。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B5 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B5 可见挎包 P01、便利贴 P03、票根 P02，与 manifest 一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.4.before\",\n              \"quote\": \"桌角那排便签和票根\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B6\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"pass\",\n          \"reason\": \"B6 方澄放下包带、合上包口，身体先表态，符合拒绝决定落到手上。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.5.before\",\n              \"quote\": \"方澄松开捏着带扣的手指，把挎包带从右肩上放下。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"B6 无对白，放包合包口，9秒窗口合理。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.5.before\",\n              \"quote\": \"她把挎包放回椅背上，双手抬到翻盖处，把包口合上，米灰色金属扣扣紧。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B6 接 B5 包带在指尖收紧，B6 松开手指放下包带，持物状态连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.5.before\",\n              \"quote\": \"方澄松开捏着带扣的手指\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B6 无对白。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B6 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B6 可见挎包 P01，米灰色金属扣与 manifest 一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.5.before\",\n              \"quote\": \"米灰色金属扣扣紧\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B7\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"fail\",\n          \"reason\": \"拒绝后林屿听到拒绝的即时反应窗口未在 B7 正文明确，转折反应落点不完整。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.6.dialogue.0.text\",\n              \"quote\": \"这次我先走，你自己对吧。\"\n            }\n          ],\n          \"issue_ids\": [\n            \"I03\"\n          ]\n        },\n        \"timing\": {\n          \"status\": \"fail\",\n          \"reason\": \"方澄拒绝台词后，B7 正文未写林屿听到后的反应窗口，刺激—反应顺序缺失。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.6.before\",\n              \"quote\": \"方澄抬起头，目光从挎包上移开，对上林屿的脸。\"\n            }\n          ],\n          \"issue_ids\": [\n            \"I03\"\n          ]\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B7 接 B6 方澄合上包口，B7 抬头目光从挎包移开对上林屿，姿态连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.6.before\",\n              \"quote\": \"方澄抬起头，目光从挎包上移开，对上林屿的脸。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"方澄一句约10字，8秒窗口充足。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.6.dialogue.0.text\",\n              \"quote\": \"这次我先走，你自己对吧。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B7 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B7 可见方澄 C01、林屿 C02，与 manifest 一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.6.before\",\n              \"quote\": \"对上林屿的脸\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B8\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"fail\",\n          \"reason\": \"B8 手部动作未明确由方澄拒绝触发，林屿面对拒绝的反应窗口缺失。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.7.event\",\n              \"quote\": \"林屿手部近景：签字笔笔尖停住，没签完的字在客户明细单上划出一道短斜线。\"\n            }\n          ],\n          \"issue_ids\": [\n            \"I03\"\n          ]\n        },\n        \"timing\": {\n          \"status\": \"fail\",\n          \"reason\": \"B8 笔尖停住未写明发生在方澄拒绝台词之后，刺激—反应因果未绑定。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.7.before\",\n              \"quote\": \"笔尖在A4横版客户明细单上突然停住\"\n            }\n          ],\n          \"issue_ids\": [\n            \"I03\"\n          ]\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B8 接 B7 方澄拒绝，切林屿手部，签字笔与客户明细单持物状态连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.7.before\",\n              \"quote\": \"黑色细头签字笔的金属笔夹反着夕光\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B8 无对白。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B8 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B8 可见签字笔 P07、客户明细单 P05，与 manifest 一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.7.before\",\n              \"quote\": \"黑色细头签字笔的金属笔夹\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B9\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"pass\",\n          \"reason\": \"B9 方澄背起挎包走到门口，以行动兑现拒绝，符合结尾主动者要求。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.8.before\",\n              \"quote\": \"方澄低头重新拿起椅背上那只合好口的挎包，单肩背起，转身离开自己的工位。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"B9 无对白，背包走到门口手搭门把，9秒窗口合理。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.8.before\",\n              \"quote\": \"走到房间远端侧墙那扇米灰色木纹平板门，手搭上金属横拉把手。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B9 接 B8 后，方澄重新拿起 B6 已合好口的挎包，持物状态连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.8.before\",\n              \"quote\": \"方澄低头重新拿起椅背上那只合好口的挎包\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B9 无对白。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B9 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B9 可见挎包 P01、办公室门 E04，与 manifest 一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.8.before\",\n              \"quote\": \"米灰色木纹平板门\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B10\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"pass\",\n          \"reason\": \"B10 林屿低头说依赖式回应，把依赖反应留进独立镜头，符合转折后对方面对。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.9.dialogue.0.text\",\n              \"quote\": \"我以为你会帮我的。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"B10 林屿一句约8字，8秒窗口充足，低头说出台词自然。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.9.before\",\n              \"quote\": \"林屿坐在自己桌前没有抬头，目光仍落在被划出短斜线的客户明细单上。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B10 接 B8 客户明细单被划出短斜线，B10 目光仍落在该单上，道具状态连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.9.before\",\n              \"quote\": \"目光仍落在被划出短斜线的客户明细单上\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"林屿一句约8字，8秒窗口充足。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.9.dialogue.0.text\",\n              \"quote\": \"我以为你会帮我的。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B10 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B10 可见林屿 C02、客户明细单 P05，与 manifest 一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.9.before\",\n              \"quote\": \"被划出短斜线的客户明细单\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B11\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"pass\",\n          \"reason\": \"B11 方澄停一下不回头推门走出，离开和拒绝同时承住，符合结尾主动者。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.10.before\",\n              \"quote\": \"她手搭着金属横拉把手停一下，没有回头。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"B11 无对白，停一下推门走出，9秒窗口合理。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.10.before\",\n              \"quote\": \"她推门走出去，米灰色木纹平板门在她身后缓缓关上\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B11 接 B9 方澄手搭门把，B11 手搭金属横拉把手停一下，位置连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.10.before\",\n              \"quote\": \"她手搭着金属横拉把手停一下\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B11 无对白。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B11 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B11 可见办公室门 E04，米灰色木纹平板门与 manifest 一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.10.before\",\n              \"quote\": \"米灰色木纹平板门\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B12\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"pass\",\n          \"reason\": \"B12 林屿抬头看向空掉的方澄工位，视线落在便利贴和票根上，让林屿触及过去痕迹。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.11.before\",\n              \"quote\": \"林屿慢慢抬起头，越过自己桌沿看向并排相邻、已经空掉的方澄工位\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"B12 无对白，抬头看向空工位，8秒窗口合理。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.11.before\",\n              \"quote\": \"视线落在桌角那三张并排的便利贴和紧挨着的那张竖版院线票根上\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B12 接 B11 方澄离开，方澄工位已空，便利贴和票根仍在桌角，状态连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.11.before\",\n              \"quote\": \"已经空掉的方澄工位\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B12 无对白。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B12 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B12 可见便利贴 P03、院线票根 P02，与 manifest 一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.11.before\",\n              \"quote\": \"三张并排的便利贴和紧挨着的那张竖版院线票根\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B13\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"fail\",\n          \"reason\": \"林屿收走便利贴的行动空间落点与 E03 抽屉柜关系未明确对齐，可能削弱关系变化可读性。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.12.event\",\n              \"quote\": \"叠齐收进自己身后贴墙的浅木色三斗抽屉柜里\"\n            }\n          ],\n          \"issue_ids\": [\n            \"I04\"\n          ]\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"B13 无对白，站起走到方澄桌边揭便利贴再收进抽屉，10秒窗口合理。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.12.before\",\n              \"quote\": \"林屿从黑色网面靠背转椅里站起，走到相邻、空掉的方澄桌边。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B13 接 B12 林屿看向便利贴，B13 站起揭下三张便利贴，道具状态连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.12.before\",\n              \"quote\": \"他伸手依次揭下桌角那三张并排的便利贴\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B13 无对白。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B13 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B13 可见便利贴 P03、抽屉柜 E03，与 manifest 定义一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.12.before\",\n              \"quote\": \"浅木色三斗抽屉柜前\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B14\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"pass\",\n          \"reason\": \"B14 林屿回到自己桌前坐下，抽出自己那份结算单开始对账，以新行动兑现边界变化。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.13.before\",\n              \"quote\": \"他从桌边抽出自己那份A4纵版结算单，右上角彩色公司logo条和浅蓝色表头可见，翻到空白页，黑色细头签字笔落下笔尖，开始对账。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"B14 无对白，关抽屉走回坐下抽单落笔，8秒窗口合理。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.13.before\",\n              \"quote\": \"林屿关上抽屉，走回自己的浅木色办公桌前坐下。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B14 接 B13 林屿收好便利贴关抽屉，B14 关抽屉走回坐下，动作连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.13.before\",\n              \"quote\": \"林屿关上抽屉\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B14 无对白。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B14 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B14 可见结算单 P06、签字笔 P07，与 manifest 一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.13.before\",\n              \"quote\": \"A4纵版结算单，右上角彩色公司logo条和浅蓝色表头可见\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    }\n  ]\n}",
+  "response_payload": {
+    "id": "a47abb41-7045-464d-a3e9-be708f511183",
+    "model": "deepseek-flash",
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "message": {
+          "content": "{\n  \"story_preserved\": false,\n  \"issues\": [\n    {\n      \"id\": \"I01\",\n      \"owner\": \"writer\",\n      \"location\": \"B1\",\n      \"severity\": \"major\",\n      \"rule\": \"创作简报要求观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。\",\n      \"evidence\": \"B1 林屿台词为“上次那批也是你帮我对完的，谢谢啊。”，仅提及一次帮忙；B3 三张便利贴虽可见，但事件描述为“三张不同日期的善后便利贴”，正文未明确这些是方澄替林屿善后留下的。\",\n      \"contradiction\": \"简报要求“不止一次替同事加班”需通过自然对白或可见后果兑现；当前对白只提供一次，便利贴未与“替林屿善后”建立明确因果。\",\n      \"impact\": \"观众在拒绝前无法确知方澄过去已多次替林屿加班，削弱拒绝的合理性与情绪积累。\",\n      \"proposal\": \"在 B1 林屿台词中自然加入第二次以上帮忙的指涉，或在 B3 便利贴正文中明确“这三张都是方澄替林屿善后留下的”，使“不止一次”在拒绝前可被观众读到。\",\n      \"evidence_refs\": [\n        {\n          \"path\": \"script.beats.0.dialogue.0.text\",\n          \"quote\": \"上次那批也是你帮我对完的，谢谢啊。\"\n        },\n        {\n          \"path\": \"script.beats.2.event\",\n          \"quote\": \"三张不同日期的善后便利贴\"\n        }\n      ]\n    },\n    {\n      \"id\": \"I02\",\n      \"owner\": \"writer\",\n      \"location\": \"B5\",\n      \"severity\": \"major\",\n      \"rule\": \"创作简报要求关键反应的构图和窗口必须写入最终视频提示词；关键反应需有可读近景与反应窗口。\",\n      \"evidence\": \"B5 事件描述为“方澄中近景：她抬眼看向林屿，又低头看向桌角那排便签和票根，包带在指尖收紧；林屿抬头随口请求。”，但正文 before 仅写方澄动作，林屿的请求对白出现在 dialogue，未写明林屿抬头请求发生在方澄抬眼/低头之前、之中还是之后。\",\n      \"contradiction\": \"关键反应窗口（方澄在请求与自身时间之间的犹豫）需要明确刺激—反应顺序，当前正文未把林屿请求与方澄反应窗口绑定。\",\n      \"impact\": \"导演和视频提示词无法确定方澄的犹豫反应是对林屿请求的回应，关键反应窗口可能丢失。\",\n      \"proposal\": \"在 B5 正文中明确林屿抬头说出请求的时点，并写明方澄抬眼看向林屿、再低头看向便签和票根、包带收紧是对该请求的反应窗口。\",\n      \"evidence_refs\": [\n        {\n          \"path\": \"script.beats.4.event\",\n          \"quote\": \"方澄中近景：她抬眼看向林屿，又低头看向桌角那排便签和票根，包带在指尖收紧；林屿抬头随口请求。\"\n        },\n        {\n          \"path\": \"script.beats.4.dialogue.0.text\",\n          \"quote\": \"今晚又得麻烦你帮我对一下。\"\n        }\n      ]\n    },\n    {\n      \"id\": \"I03\",\n      \"owner\": \"writer\",\n      \"location\": \"B7\",\n      \"severity\": \"major\",\n      \"rule\": \"创作简报要求关键反应的构图和窗口必须写入最终视频提示词；拒绝后对方必须面对这一点，再通过具体行动回应。\",\n      \"evidence\": \"B7 方澄说出“这次我先走，你自己对吧。”后，B8 只写林屿手部近景笔尖停住，B10 林屿低头说“我以为你会帮我的。”，但 B7 正文未写林屿听到拒绝后的即时反应窗口，B8 也未写该反应与拒绝的因果绑定。\",\n      \"contradiction\": \"拒绝是核心转折，简报要求对方面对这一点；当前正文缺少林屿听到拒绝后的反应窗口，B8 手部动作未明确是对拒绝的反应。\",\n      \"impact\": \"转折的情绪落点不完整，观众可能看不到林屿“面对拒绝”的即时反应。\",\n      \"proposal\": \"在 B7 或 B8 正文中明确林屿听到拒绝后的反应窗口（如笔尖停住发生在方澄话音落下之后），并写明该反应由拒绝触发。\",\n      \"evidence_refs\": [\n        {\n          \"path\": \"script.beats.6.dialogue.0.text\",\n          \"quote\": \"这次我先走，你自己对吧。\"\n        },\n        {\n          \"path\": \"script.beats.7.event\",\n          \"quote\": \"林屿手部近景：签字笔笔尖停住，没签完的字在客户明细单上划出一道短斜线。\"\n        }\n      ]\n    },\n    {\n      \"id\": \"I04\",\n      \"owner\": \"writer\",\n      \"location\": \"B13\",\n      \"severity\": \"major\",\n      \"rule\": \"创作简报要求结尾以新的行动兑现边界及关系变化；林屿必须通过具体行动回应，且行动需与方澄拒绝后的边界变化一致。\",\n      \"evidence\": \"B13 林屿把三张便利贴收进“自己身后贴墙的浅木色三斗抽屉柜”，但 static_visual_manifest 中 E03 抽屉柜关系为“behind E02（林屿工位桌）”，B13 正文写林屿从方澄桌边转身走到自己身后抽屉柜，空间关系未与 manifest 的“贴墙放置”明确对应。\",\n      \"contradiction\": \"结尾行动的空间落点与资产布局存在未对齐风险，可能影响“关系变化由具体动作承担”的可读性。\",\n      \"impact\": \"若抽屉柜位置在画面中与方澄桌边距离或方向不明确，林屿收走便利贴的象征动作可能被空间混乱削弱。\",\n      \"proposal\": \"在 B13 正文中明确抽屉柜位于林屿工位后方贴墙处，并写明林屿从方澄桌边转身走到该柜前的空间路径，与 E03 关系一致。\",\n      \"evidence_refs\": [\n        {\n          \"path\": \"script.beats.12.event\",\n          \"quote\": \"叠齐收进自己身后贴墙的浅木色三斗抽屉柜里\"\n        },\n        {\n          \"path\": \"static_visual_manifest.scene.relations.3.relation\",\n          \"quote\": \"behind\"\n        }\n      ]\n    }\n  ],\n  \"suggestions\": [\n    {\n      \"location\": \"B3\",\n      \"proposal\": \"可在 B3 正文中把三张便利贴的日期或内容与“替林屿善后”建立更直接关联，例如写明每张对应一次林屿的请求。\",\n      \"reason\": \"增强观众对“不止一次”的可见证据，但不改变现有叙事。\"\n    },\n    {\n      \"location\": \"B10\",\n      \"proposal\": \"可考虑在 B10 林屿台词后补一个极短停顿或视线变化，让“我以为你会帮我的”有被拒绝后的余味。\",\n      \"reason\": \"强化依赖式回应的情绪落点，属审美优化。\"\n    }\n  ],\n  \"calibration_focus\": [\n    \"B5 方澄抬眼/低头/包带收紧与林屿请求的先后窗口是否在最终视频提示词中可读。\",\n    \"B7 拒绝台词后林屿听到拒绝的即时反应窗口是否在画面中成立。\",\n    \"B13 抽屉柜位置与林屿从方澄桌边转身走到的空间关系是否与资产布局一致。\"\n  ],\n  \"coverage\": [\n    {\n      \"id\": \"B1\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"fail\",\n          \"reason\": \"林屿台词只提一次帮忙，便利贴未明确是替林屿善后，未兑现“不止一次替同事加班”。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.0.dialogue.0.text\",\n              \"quote\": \"上次那批也是你帮我对完的，谢谢啊。\"\n            }\n          ],\n          \"issue_ids\": [\n            \"I01\"\n          ]\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"B1 先方澄端杯，再林屿对白，再林屿低头落笔，刺激与反应顺序成立。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.0.before\",\n              \"quote\": \"方澄走到林屿桌边，弯腰伸手把滑到桌沿的白色陶瓷马克杯端回林屿桌中央。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B1 为分段首镜，无上一镜；内部从端杯到林屿低头落笔连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.0.after\",\n              \"quote\": \"林屿说完没抬头，签字笔笔尖重新落到A4横版客户明细单上对数字。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"林屿一句约14字，10秒窗口充足，端杯与对白可串行。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.0.dialogue.0.text\",\n              \"quote\": \"上次那批也是你帮我对完的，谢谢啊。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B1 为剧本拍，非分镜首帧，不适用分镜首帧检查。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B1 可见咖啡杯 P04、客户明细单 P05、签字笔 P07，与 manifest 定义一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.0.before\",\n              \"quote\": \"白色陶瓷马克杯\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B2\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"pass\",\n          \"reason\": \"B2 方澄走回自己工位，为后续看到桌面痕迹建立位置。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.1.before\",\n              \"quote\": \"方澄从林屿桌边转身，沿两张并排的浅木色办公桌之间走回自己的工位。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"B2 无对白，转身走回并站定，9秒窗口合理。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.1.before\",\n              \"quote\": \"她在自己的黑色网面靠背转椅椅背前站定，目光落到桌面上。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B2 接 B1 林屿低头后，方澄从林屿桌边转身走回，位置连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.1.before\",\n              \"quote\": \"方澄从林屿桌边转身\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B2 无对白。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B2 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B2 可见浅木色办公桌 E01/E02、黑色网面靠背转椅 E09，与 manifest 一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.1.before\",\n              \"quote\": \"黑色网面靠背转椅椅背前站定\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B3\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"fail\",\n          \"reason\": \"三张便利贴可见但未明确是方澄替林屿善后留下，未兑现“不止一次”的可见后果。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.2.event\",\n              \"quote\": \"三张不同日期的善后便利贴\"\n            }\n          ],\n          \"issue_ids\": [\n            \"I01\"\n          ]\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"B3 为桌面近景静态展示，无对白，9秒窗口合理。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.2.before\",\n              \"quote\": \"方澄工位桌面近景：米灰色金属扣的软皮小号斜挎包敞口搁在椅背上\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B3 接 B2 方澄站定看桌面，桌面物品与 B2 目光落点连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.2.before\",\n              \"quote\": \"桌角靠抽屉柜一侧并排摆着三张正方形便利贴\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B3 无对白。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B3 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B3 可见挎包 P01、便利贴 P03、院线票根 P02，与 manifest 定义一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.2.before\",\n              \"quote\": \"米灰色金属扣的软皮小号斜挎包敞口搁在椅背上\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B4\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"pass\",\n          \"reason\": \"B4 方澄拿起挎包搭肩，离开意图落到手上，符合“她想离开”的原因成立。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.3.before\",\n              \"quote\": \"方澄伸手从椅背上拿起那只敞口挎包。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"B4 无对白，拿包搭肩捏带扣，8秒窗口合理。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.3.before\",\n              \"quote\": \"她把包带搭上右肩，抬起右手手指捏住米灰色金属带扣。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B4 接 B3 挎包敞口搁椅背，方澄拿起挎包，持物状态连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.3.before\",\n              \"quote\": \"方澄伸手从椅背上拿起那只敞口挎包。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B4 无对白。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B4 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B4 可见挎包 P01，米灰色金属带扣与 manifest 一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.3.before\",\n              \"quote\": \"米灰色金属带扣\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B5\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"fail\",\n          \"reason\": \"关键反应窗口未明确写入正文，林屿请求与方澄犹豫反应的先后未绑定。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.4.event\",\n              \"quote\": \"方澄中近景：她抬眼看向林屿，又低头看向桌角那排便签和票根，包带在指尖收紧；林屿抬头随口请求。\"\n            }\n          ],\n          \"issue_ids\": [\n            \"I02\"\n          ]\n        },\n        \"timing\": {\n          \"status\": \"fail\",\n          \"reason\": \"林屿对白“今晚又得麻烦你帮我对一下”与方澄抬眼/低头/包带收紧的刺激—反应顺序未在正文明确。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.4.dialogue.0.text\",\n              \"quote\": \"今晚又得麻烦你帮我对一下。\"\n            }\n          ],\n          \"issue_ids\": [\n            \"I02\"\n          ]\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B5 接 B4 方澄已搭包带捏带扣，B5 包带在指尖收紧，持物状态连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.4.before\",\n              \"quote\": \"挎包带在她指尖收紧\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"林屿一句约12字，9秒窗口充足，方澄反应可串行。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.4.dialogue.0.text\",\n              \"quote\": \"今晚又得麻烦你帮我对一下。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B5 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B5 可见挎包 P01、便利贴 P03、票根 P02，与 manifest 一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.4.before\",\n              \"quote\": \"桌角那排便签和票根\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B6\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"pass\",\n          \"reason\": \"B6 方澄放下包带、合上包口，身体先表态，符合拒绝决定落到手上。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.5.before\",\n              \"quote\": \"方澄松开捏着带扣的手指，把挎包带从右肩上放下。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"B6 无对白，放包合包口，9秒窗口合理。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.5.before\",\n              \"quote\": \"她把挎包放回椅背上，双手抬到翻盖处，把包口合上，米灰色金属扣扣紧。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B6 接 B5 包带在指尖收紧，B6 松开手指放下包带，持物状态连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.5.before\",\n              \"quote\": \"方澄松开捏着带扣的手指\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B6 无对白。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B6 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B6 可见挎包 P01，米灰色金属扣与 manifest 一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.5.before\",\n              \"quote\": \"米灰色金属扣扣紧\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B7\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"fail\",\n          \"reason\": \"拒绝后林屿听到拒绝的即时反应窗口未在 B7 正文明确，转折反应落点不完整。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.6.dialogue.0.text\",\n              \"quote\": \"这次我先走，你自己对吧。\"\n            }\n          ],\n          \"issue_ids\": [\n            \"I03\"\n          ]\n        },\n        \"timing\": {\n          \"status\": \"fail\",\n          \"reason\": \"方澄拒绝台词后，B7 正文未写林屿听到后的反应窗口，刺激—反应顺序缺失。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.6.before\",\n              \"quote\": \"方澄抬起头，目光从挎包上移开，对上林屿的脸。\"\n            }\n          ],\n          \"issue_ids\": [\n            \"I03\"\n          ]\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B7 接 B6 方澄合上包口，B7 抬头目光从挎包移开对上林屿，姿态连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.6.before\",\n              \"quote\": \"方澄抬起头，目光从挎包上移开，对上林屿的脸。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"方澄一句约10字，8秒窗口充足。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.6.dialogue.0.text\",\n              \"quote\": \"这次我先走，你自己对吧。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B7 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B7 可见方澄 C01、林屿 C02，与 manifest 一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.6.before\",\n              \"quote\": \"对上林屿的脸\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B8\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"fail\",\n          \"reason\": \"B8 手部动作未明确由方澄拒绝触发，林屿面对拒绝的反应窗口缺失。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.7.event\",\n              \"quote\": \"林屿手部近景：签字笔笔尖停住，没签完的字在客户明细单上划出一道短斜线。\"\n            }\n          ],\n          \"issue_ids\": [\n            \"I03\"\n          ]\n        },\n        \"timing\": {\n          \"status\": \"fail\",\n          \"reason\": \"B8 笔尖停住未写明发生在方澄拒绝台词之后，刺激—反应因果未绑定。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.7.before\",\n              \"quote\": \"笔尖在A4横版客户明细单上突然停住\"\n            }\n          ],\n          \"issue_ids\": [\n            \"I03\"\n          ]\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B8 接 B7 方澄拒绝，切林屿手部，签字笔与客户明细单持物状态连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.7.before\",\n              \"quote\": \"黑色细头签字笔的金属笔夹反着夕光\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B8 无对白。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B8 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B8 可见签字笔 P07、客户明细单 P05，与 manifest 一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.7.before\",\n              \"quote\": \"黑色细头签字笔的金属笔夹\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B9\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"pass\",\n          \"reason\": \"B9 方澄背起挎包走到门口，以行动兑现拒绝，符合结尾主动者要求。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.8.before\",\n              \"quote\": \"方澄低头重新拿起椅背上那只合好口的挎包，单肩背起，转身离开自己的工位。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"B9 无对白，背包走到门口手搭门把，9秒窗口合理。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.8.before\",\n              \"quote\": \"走到房间远端侧墙那扇米灰色木纹平板门，手搭上金属横拉把手。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B9 接 B8 后，方澄重新拿起 B6 已合好口的挎包，持物状态连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.8.before\",\n              \"quote\": \"方澄低头重新拿起椅背上那只合好口的挎包\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B9 无对白。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B9 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B9 可见挎包 P01、办公室门 E04，与 manifest 一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.8.before\",\n              \"quote\": \"米灰色木纹平板门\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B10\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"pass\",\n          \"reason\": \"B10 林屿低头说依赖式回应，把依赖反应留进独立镜头，符合转折后对方面对。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.9.dialogue.0.text\",\n              \"quote\": \"我以为你会帮我的。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"B10 林屿一句约8字，8秒窗口充足，低头说出台词自然。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.9.before\",\n              \"quote\": \"林屿坐在自己桌前没有抬头，目光仍落在被划出短斜线的客户明细单上。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B10 接 B8 客户明细单被划出短斜线，B10 目光仍落在该单上，道具状态连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.9.before\",\n              \"quote\": \"目光仍落在被划出短斜线的客户明细单上\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"林屿一句约8字，8秒窗口充足。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.9.dialogue.0.text\",\n              \"quote\": \"我以为你会帮我的。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B10 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B10 可见林屿 C02、客户明细单 P05，与 manifest 一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.9.before\",\n              \"quote\": \"被划出短斜线的客户明细单\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B11\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"pass\",\n          \"reason\": \"B11 方澄停一下不回头推门走出，离开和拒绝同时承住，符合结尾主动者。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.10.before\",\n              \"quote\": \"她手搭着金属横拉把手停一下，没有回头。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"B11 无对白，停一下推门走出，9秒窗口合理。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.10.before\",\n              \"quote\": \"她推门走出去，米灰色木纹平板门在她身后缓缓关上\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B11 接 B9 方澄手搭门把，B11 手搭金属横拉把手停一下，位置连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.10.before\",\n              \"quote\": \"她手搭着金属横拉把手停一下\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B11 无对白。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B11 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B11 可见办公室门 E04，米灰色木纹平板门与 manifest 一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.10.before\",\n              \"quote\": \"米灰色木纹平板门\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B12\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"pass\",\n          \"reason\": \"B12 林屿抬头看向空掉的方澄工位，视线落在便利贴和票根上，让林屿触及过去痕迹。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.11.before\",\n              \"quote\": \"林屿慢慢抬起头，越过自己桌沿看向并排相邻、已经空掉的方澄工位\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"B12 无对白，抬头看向空工位，8秒窗口合理。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.11.before\",\n              \"quote\": \"视线落在桌角那三张并排的便利贴和紧挨着的那张竖版院线票根上\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B12 接 B11 方澄离开，方澄工位已空，便利贴和票根仍在桌角，状态连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.11.before\",\n              \"quote\": \"已经空掉的方澄工位\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B12 无对白。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B12 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B12 可见便利贴 P03、院线票根 P02，与 manifest 一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.11.before\",\n              \"quote\": \"三张并排的便利贴和紧挨着的那张竖版院线票根\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B13\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"fail\",\n          \"reason\": \"林屿收走便利贴的行动空间落点与 E03 抽屉柜关系未明确对齐，可能削弱关系变化可读性。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.12.event\",\n              \"quote\": \"叠齐收进自己身后贴墙的浅木色三斗抽屉柜里\"\n            }\n          ],\n          \"issue_ids\": [\n            \"I04\"\n          ]\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"B13 无对白，站起走到方澄桌边揭便利贴再收进抽屉，10秒窗口合理。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.12.before\",\n              \"quote\": \"林屿从黑色网面靠背转椅里站起，走到相邻、空掉的方澄桌边。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B13 接 B12 林屿看向便利贴，B13 站起揭下三张便利贴，道具状态连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.12.before\",\n              \"quote\": \"他伸手依次揭下桌角那三张并排的便利贴\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B13 无对白。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B13 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B13 可见便利贴 P03、抽屉柜 E03，与 manifest 定义一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.12.before\",\n              \"quote\": \"浅木色三斗抽屉柜前\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"B14\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"pass\",\n          \"reason\": \"B14 林屿回到自己桌前坐下，抽出自己那份结算单开始对账，以新行动兑现边界变化。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.13.before\",\n              \"quote\": \"他从桌边抽出自己那份A4纵版结算单，右上角彩色公司logo条和浅蓝色表头可见，翻到空白页，黑色细头签字笔落下笔尖，开始对账。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"B14 无对白，关抽屉走回坐下抽单落笔，8秒窗口合理。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.13.before\",\n              \"quote\": \"林屿关上抽屉，走回自己的浅木色办公桌前坐下。\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"B14 接 B13 林屿收好便利贴关抽屉，B14 关抽屉走回坐下，动作连续。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.13.before\",\n              \"quote\": \"林屿关上抽屉\"\n            }\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B14 无对白。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"B14 为剧本拍，非分镜首帧。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"pass\",\n          \"reason\": \"B14 可见结算单 P06、签字笔 P07，与 manifest 一致。\",\n          \"evidence_refs\": [\n            {\n              \"path\": \"script.beats.13.before\",\n              \"quote\": \"A4纵版结算单，右上角彩色公司logo条和浅蓝色表头可见\"\n            }\n          ],\n          \"issue_ids\": []\n        }\n      }\n    }\n  ]\n}",
+          "reasoning_content": null,
+          "tool_calls": []
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 9290,
+      "completion_tokens": 9134,
+      "total_tokens": 18424
+    }
+  },
+  "completed_at": "2026-10-02T20:36:05.146124+00:00",
+  "output": {
+    "story_preserved": false,
+    "issues": [
+      {
+        "id": "I01",
+        "owner": "writer",
+        "location": "B1",
+        "severity": "major",
+        "rule": "创作简报要求观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。",
+        "evidence": "B1 林屿台词为“上次那批也是你帮我对完的，谢谢啊。”，仅提及一次帮忙；B3 三张便利贴虽可见，但事件描述为“三张不同日期的善后便利贴”，正文未明确这些是方澄替林屿善后留下的。",
+        "contradiction": "简报要求“不止一次替同事加班”需通过自然对白或可见后果兑现；当前对白只提供一次，便利贴未与“替林屿善后”建立明确因果。",
+        "impact": "观众在拒绝前无法确知方澄过去已多次替林屿加班，削弱拒绝的合理性与情绪积累。",
+        "proposal": "在 B1 林屿台词中自然加入第二次以上帮忙的指涉，或在 B3 便利贴正文中明确“这三张都是方澄替林屿善后留下的”，使“不止一次”在拒绝前可被观众读到。",
+        "evidence_refs": [
+          {
+            "path": "script.beats.0.dialogue.0.text",
+            "quote": "上次那批也是你帮我对完的，谢谢啊。"
+          },
+          {
+            "path": "script.beats.2.event",
+            "quote": "三张不同日期的善后便利贴"
+          }
+        ]
+      },
+      {
+        "id": "I02",
+        "owner": "writer",
+        "location": "B5",
+        "severity": "major",
+        "rule": "创作简报要求关键反应的构图和窗口必须写入最终视频提示词；关键反应需有可读近景与反应窗口。",
+        "evidence": "B5 事件描述为“方澄中近景：她抬眼看向林屿，又低头看向桌角那排便签和票根，包带在指尖收紧；林屿抬头随口请求。”，但正文 before 仅写方澄动作，林屿的请求对白出现在 dialogue，未写明林屿抬头请求发生在方澄抬眼/低头之前、之中还是之后。",
+        "contradiction": "关键反应窗口（方澄在请求与自身时间之间的犹豫）需要明确刺激—反应顺序，当前正文未把林屿请求与方澄反应窗口绑定。",
+        "impact": "导演和视频提示词无法确定方澄的犹豫反应是对林屿请求的回应，关键反应窗口可能丢失。",
+        "proposal": "在 B5 正文中明确林屿抬头说出请求的时点，并写明方澄抬眼看向林屿、再低头看向便签和票根、包带收紧是对该请求的反应窗口。",
+        "evidence_refs": [
+          {
+            "path": "script.beats.4.event",
+            "quote": "方澄中近景：她抬眼看向林屿，又低头看向桌角那排便签和票根，包带在指尖收紧；林屿抬头随口请求。"
+          },
+          {
+            "path": "script.beats.4.dialogue.0.text",
+            "quote": "今晚又得麻烦你帮我对一下。"
+          }
+        ]
+      },
+      {
+        "id": "I03",
+        "owner": "writer",
+        "location": "B7",
+        "severity": "major",
+        "rule": "创作简报要求关键反应的构图和窗口必须写入最终视频提示词；拒绝后对方必须面对这一点，再通过具体行动回应。",
+        "evidence": "B7 方澄说出“这次我先走，你自己对吧。”后，B8 只写林屿手部近景笔尖停住，B10 林屿低头说“我以为你会帮我的。”，但 B7 正文未写林屿听到拒绝后的即时反应窗口，B8 也未写该反应与拒绝的因果绑定。",
+        "contradiction": "拒绝是核心转折，简报要求对方面对这一点；当前正文缺少林屿听到拒绝后的反应窗口，B8 手部动作未明确是对拒绝的反应。",
+        "impact": "转折的情绪落点不完整，观众可能看不到林屿“面对拒绝”的即时反应。",
+        "proposal": "在 B7 或 B8 正文中明确林屿听到拒绝后的反应窗口（如笔尖停住发生在方澄话音落下之后），并写明该反应由拒绝触发。",
+        "evidence_refs": [
+          {
+            "path": "script.beats.6.dialogue.0.text",
+            "quote": "这次我先走，你自己对吧。"
+          },
+          {
+            "path": "script.beats.7.event",
+            "quote": "林屿手部近景：签字笔笔尖停住，没签完的字在客户明细单上划出一道短斜线。"
+          }
+        ]
+      },
+      {
+        "id": "I04",
+        "owner": "writer",
+        "location": "B13",
+        "severity": "major",
+        "rule": "创作简报要求结尾以新的行动兑现边界及关系变化；林屿必须通过具体行动回应，且行动需与方澄拒绝后的边界变化一致。",
+        "evidence": "B13 林屿把三张便利贴收进“自己身后贴墙的浅木色三斗抽屉柜”，但 static_visual_manifest 中 E03 抽屉柜关系为“behind E02（林屿工位桌）”，B13 正文写林屿从方澄桌边转身走到自己身后抽屉柜，空间关系未与 manifest 的“贴墙放置”明确对应。",
+        "contradiction": "结尾行动的空间落点与资产布局存在未对齐风险，可能影响“关系变化由具体动作承担”的可读性。",
+        "impact": "若抽屉柜位置在画面中与方澄桌边距离或方向不明确，林屿收走便利贴的象征动作可能被空间混乱削弱。",
+        "proposal": "在 B13 正文中明确抽屉柜位于林屿工位后方贴墙处，并写明林屿从方澄桌边转身走到该柜前的空间路径，与 E03 关系一致。",
+        "evidence_refs": [
+          {
+            "path": "script.beats.12.event",
+            "quote": "叠齐收进自己身后贴墙的浅木色三斗抽屉柜里"
+          },
+          {
+            "path": "static_visual_manifest.scene.relations.3.relation",
+            "quote": "behind"
+          }
+        ]
+      }
+    ],
+    "suggestions": [
+      {
+        "location": "B3",
+        "proposal": "可在 B3 正文中把三张便利贴的日期或内容与“替林屿善后”建立更直接关联，例如写明每张对应一次林屿的请求。",
+        "reason": "增强观众对“不止一次”的可见证据，但不改变现有叙事。"
+      },
+      {
+        "location": "B10",
+        "proposal": "可考虑在 B10 林屿台词后补一个极短停顿或视线变化，让“我以为你会帮我的”有被拒绝后的余味。",
+        "reason": "强化依赖式回应的情绪落点，属审美优化。"
+      }
+    ],
+    "calibration_focus": [
+      "B5 方澄抬眼/低头/包带收紧与林屿请求的先后窗口是否在最终视频提示词中可读。",
+      "B7 拒绝台词后林屿听到拒绝的即时反应窗口是否在画面中成立。",
+      "B13 抽屉柜位置与林屿从方澄桌边转身走到的空间关系是否与资产布局一致。"
+    ],
+    "coverage": [
+      {
+        "id": "B1",
+        "checks": {
+          "requirements": {
+            "status": "fail",
+            "reason": "林屿台词只提一次帮忙，便利贴未明确是替林屿善后，未兑现“不止一次替同事加班”。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.0.dialogue.0.text",
+                "quote": "上次那批也是你帮我对完的，谢谢啊。"
+              }
+            ],
+            "issue_ids": [
+              "I01"
+            ]
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "B1 先方澄端杯，再林屿对白，再林屿低头落笔，刺激与反应顺序成立。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.0.before",
+                "quote": "方澄走到林屿桌边，弯腰伸手把滑到桌沿的白色陶瓷马克杯端回林屿桌中央。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "B1 为分段首镜，无上一镜；内部从端杯到林屿低头落笔连续。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.0.after",
+                "quote": "林屿说完没抬头，签字笔笔尖重新落到A4横版客户明细单上对数字。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "pass",
+            "reason": "林屿一句约14字，10秒窗口充足，端杯与对白可串行。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.0.dialogue.0.text",
+                "quote": "上次那批也是你帮我对完的，谢谢啊。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "B1 为剧本拍，非分镜首帧，不适用分镜首帧检查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "pass",
+            "reason": "B1 可见咖啡杯 P04、客户明细单 P05、签字笔 P07，与 manifest 定义一致。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.0.before",
+                "quote": "白色陶瓷马克杯"
+              }
+            ],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "B2",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "B2 方澄走回自己工位，为后续看到桌面痕迹建立位置。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.1.before",
+                "quote": "方澄从林屿桌边转身，沿两张并排的浅木色办公桌之间走回自己的工位。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "B2 无对白，转身走回并站定，9秒窗口合理。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.1.before",
+                "quote": "她在自己的黑色网面靠背转椅椅背前站定，目光落到桌面上。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "B2 接 B1 林屿低头后，方澄从林屿桌边转身走回，位置连续。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.1.before",
+                "quote": "方澄从林屿桌边转身"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "not_applicable",
+            "reason": "B2 无对白。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "B2 为剧本拍，非分镜首帧。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "pass",
+            "reason": "B2 可见浅木色办公桌 E01/E02、黑色网面靠背转椅 E09，与 manifest 一致。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.1.before",
+                "quote": "黑色网面靠背转椅椅背前站定"
+              }
+            ],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "B3",
+        "checks": {
+          "requirements": {
+            "status": "fail",
+            "reason": "三张便利贴可见但未明确是方澄替林屿善后留下，未兑现“不止一次”的可见后果。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.2.event",
+                "quote": "三张不同日期的善后便利贴"
+              }
+            ],
+            "issue_ids": [
+              "I01"
+            ]
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "B3 为桌面近景静态展示，无对白，9秒窗口合理。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.2.before",
+                "quote": "方澄工位桌面近景：米灰色金属扣的软皮小号斜挎包敞口搁在椅背上"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "B3 接 B2 方澄站定看桌面，桌面物品与 B2 目光落点连续。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.2.before",
+                "quote": "桌角靠抽屉柜一侧并排摆着三张正方形便利贴"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "not_applicable",
+            "reason": "B3 无对白。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "B3 为剧本拍，非分镜首帧。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "pass",
+            "reason": "B3 可见挎包 P01、便利贴 P03、院线票根 P02，与 manifest 定义一致。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.2.before",
+                "quote": "米灰色金属扣的软皮小号斜挎包敞口搁在椅背上"
+              }
+            ],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "B4",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "B4 方澄拿起挎包搭肩，离开意图落到手上，符合“她想离开”的原因成立。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.3.before",
+                "quote": "方澄伸手从椅背上拿起那只敞口挎包。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "B4 无对白，拿包搭肩捏带扣，8秒窗口合理。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.3.before",
+                "quote": "她把包带搭上右肩，抬起右手手指捏住米灰色金属带扣。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "B4 接 B3 挎包敞口搁椅背，方澄拿起挎包，持物状态连续。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.3.before",
+                "quote": "方澄伸手从椅背上拿起那只敞口挎包。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "not_applicable",
+            "reason": "B4 无对白。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "B4 为剧本拍，非分镜首帧。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "pass",
+            "reason": "B4 可见挎包 P01，米灰色金属带扣与 manifest 一致。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.3.before",
+                "quote": "米灰色金属带扣"
+              }
+            ],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "B5",
+        "checks": {
+          "requirements": {
+            "status": "fail",
+            "reason": "关键反应窗口未明确写入正文，林屿请求与方澄犹豫反应的先后未绑定。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.4.event",
+                "quote": "方澄中近景：她抬眼看向林屿，又低头看向桌角那排便签和票根，包带在指尖收紧；林屿抬头随口请求。"
+              }
+            ],
+            "issue_ids": [
+              "I02"
+            ]
+          },
+          "timing": {
+            "status": "fail",
+            "reason": "林屿对白“今晚又得麻烦你帮我对一下”与方澄抬眼/低头/包带收紧的刺激—反应顺序未在正文明确。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.4.dialogue.0.text",
+                "quote": "今晚又得麻烦你帮我对一下。"
+              }
+            ],
+            "issue_ids": [
+              "I02"
+            ]
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "B5 接 B4 方澄已搭包带捏带扣，B5 包带在指尖收紧，持物状态连续。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.4.before",
+                "quote": "挎包带在她指尖收紧"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "pass",
+            "reason": "林屿一句约12字，9秒窗口充足，方澄反应可串行。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.4.dialogue.0.text",
+                "quote": "今晚又得麻烦你帮我对一下。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "B5 为剧本拍，非分镜首帧。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "pass",
+            "reason": "B5 可见挎包 P01、便利贴 P03、票根 P02，与 manifest 一致。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.4.before",
+                "quote": "桌角那排便签和票根"
+              }
+            ],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "B6",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "B6 方澄放下包带、合上包口，身体先表态，符合拒绝决定落到手上。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.5.before",
+                "quote": "方澄松开捏着带扣的手指，把挎包带从右肩上放下。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "B6 无对白，放包合包口，9秒窗口合理。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.5.before",
+                "quote": "她把挎包放回椅背上，双手抬到翻盖处，把包口合上，米灰色金属扣扣紧。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "B6 接 B5 包带在指尖收紧，B6 松开手指放下包带，持物状态连续。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.5.before",
+                "quote": "方澄松开捏着带扣的手指"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "not_applicable",
+            "reason": "B6 无对白。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "B6 为剧本拍，非分镜首帧。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "pass",
+            "reason": "B6 可见挎包 P01，米灰色金属扣与 manifest 一致。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.5.before",
+                "quote": "米灰色金属扣扣紧"
+              }
+            ],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "B7",
+        "checks": {
+          "requirements": {
+            "status": "fail",
+            "reason": "拒绝后林屿听到拒绝的即时反应窗口未在 B7 正文明确，转折反应落点不完整。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.6.dialogue.0.text",
+                "quote": "这次我先走，你自己对吧。"
+              }
+            ],
+            "issue_ids": [
+              "I03"
+            ]
+          },
+          "timing": {
+            "status": "fail",
+            "reason": "方澄拒绝台词后，B7 正文未写林屿听到后的反应窗口，刺激—反应顺序缺失。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.6.before",
+                "quote": "方澄抬起头，目光从挎包上移开，对上林屿的脸。"
+              }
+            ],
+            "issue_ids": [
+              "I03"
+            ]
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "B7 接 B6 方澄合上包口，B7 抬头目光从挎包移开对上林屿，姿态连续。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.6.before",
+                "quote": "方澄抬起头，目光从挎包上移开，对上林屿的脸。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "pass",
+            "reason": "方澄一句约10字，8秒窗口充足。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.6.dialogue.0.text",
+                "quote": "这次我先走，你自己对吧。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "B7 为剧本拍，非分镜首帧。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "pass",
+            "reason": "B7 可见方澄 C01、林屿 C02，与 manifest 一致。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.6.before",
+                "quote": "对上林屿的脸"
+              }
+            ],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "B8",
+        "checks": {
+          "requirements": {
+            "status": "fail",
+            "reason": "B8 手部动作未明确由方澄拒绝触发，林屿面对拒绝的反应窗口缺失。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.7.event",
+                "quote": "林屿手部近景：签字笔笔尖停住，没签完的字在客户明细单上划出一道短斜线。"
+              }
+            ],
+            "issue_ids": [
+              "I03"
+            ]
+          },
+          "timing": {
+            "status": "fail",
+            "reason": "B8 笔尖停住未写明发生在方澄拒绝台词之后，刺激—反应因果未绑定。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.7.before",
+                "quote": "笔尖在A4横版客户明细单上突然停住"
+              }
+            ],
+            "issue_ids": [
+              "I03"
+            ]
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "B8 接 B7 方澄拒绝，切林屿手部，签字笔与客户明细单持物状态连续。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.7.before",
+                "quote": "黑色细头签字笔的金属笔夹反着夕光"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "not_applicable",
+            "reason": "B8 无对白。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "B8 为剧本拍，非分镜首帧。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "pass",
+            "reason": "B8 可见签字笔 P07、客户明细单 P05，与 manifest 一致。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.7.before",
+                "quote": "黑色细头签字笔的金属笔夹"
+              }
+            ],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "B9",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "B9 方澄背起挎包走到门口，以行动兑现拒绝，符合结尾主动者要求。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.8.before",
+                "quote": "方澄低头重新拿起椅背上那只合好口的挎包，单肩背起，转身离开自己的工位。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "B9 无对白，背包走到门口手搭门把，9秒窗口合理。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.8.before",
+                "quote": "走到房间远端侧墙那扇米灰色木纹平板门，手搭上金属横拉把手。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "B9 接 B8 后，方澄重新拿起 B6 已合好口的挎包，持物状态连续。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.8.before",
+                "quote": "方澄低头重新拿起椅背上那只合好口的挎包"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "not_applicable",
+            "reason": "B9 无对白。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "B9 为剧本拍，非分镜首帧。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "pass",
+            "reason": "B9 可见挎包 P01、办公室门 E04，与 manifest 一致。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.8.before",
+                "quote": "米灰色木纹平板门"
+              }
+            ],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "B10",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "B10 林屿低头说依赖式回应，把依赖反应留进独立镜头，符合转折后对方面对。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.9.dialogue.0.text",
+                "quote": "我以为你会帮我的。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "B10 林屿一句约8字，8秒窗口充足，低头说出台词自然。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.9.before",
+                "quote": "林屿坐在自己桌前没有抬头，目光仍落在被划出短斜线的客户明细单上。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "B10 接 B8 客户明细单被划出短斜线，B10 目光仍落在该单上，道具状态连续。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.9.before",
+                "quote": "目光仍落在被划出短斜线的客户明细单上"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "pass",
+            "reason": "林屿一句约8字，8秒窗口充足。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.9.dialogue.0.text",
+                "quote": "我以为你会帮我的。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "B10 为剧本拍，非分镜首帧。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "pass",
+            "reason": "B10 可见林屿 C02、客户明细单 P05，与 manifest 一致。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.9.before",
+                "quote": "被划出短斜线的客户明细单"
+              }
+            ],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "B11",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "B11 方澄停一下不回头推门走出，离开和拒绝同时承住，符合结尾主动者。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.10.before",
+                "quote": "她手搭着金属横拉把手停一下，没有回头。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "B11 无对白，停一下推门走出，9秒窗口合理。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.10.before",
+                "quote": "她推门走出去，米灰色木纹平板门在她身后缓缓关上"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "B11 接 B9 方澄手搭门把，B11 手搭金属横拉把手停一下，位置连续。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.10.before",
+                "quote": "她手搭着金属横拉把手停一下"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "not_applicable",
+            "reason": "B11 无对白。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "B11 为剧本拍，非分镜首帧。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "pass",
+            "reason": "B11 可见办公室门 E04，米灰色木纹平板门与 manifest 一致。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.10.before",
+                "quote": "米灰色木纹平板门"
+              }
+            ],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "B12",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "B12 林屿抬头看向空掉的方澄工位，视线落在便利贴和票根上，让林屿触及过去痕迹。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.11.before",
+                "quote": "林屿慢慢抬起头，越过自己桌沿看向并排相邻、已经空掉的方澄工位"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "B12 无对白，抬头看向空工位，8秒窗口合理。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.11.before",
+                "quote": "视线落在桌角那三张并排的便利贴和紧挨着的那张竖版院线票根上"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "B12 接 B11 方澄离开，方澄工位已空，便利贴和票根仍在桌角，状态连续。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.11.before",
+                "quote": "已经空掉的方澄工位"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "not_applicable",
+            "reason": "B12 无对白。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "B12 为剧本拍，非分镜首帧。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "pass",
+            "reason": "B12 可见便利贴 P03、院线票根 P02，与 manifest 一致。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.11.before",
+                "quote": "三张并排的便利贴和紧挨着的那张竖版院线票根"
+              }
+            ],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "B13",
+        "checks": {
+          "requirements": {
+            "status": "fail",
+            "reason": "林屿收走便利贴的行动空间落点与 E03 抽屉柜关系未明确对齐，可能削弱关系变化可读性。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.12.event",
+                "quote": "叠齐收进自己身后贴墙的浅木色三斗抽屉柜里"
+              }
+            ],
+            "issue_ids": [
+              "I04"
+            ]
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "B13 无对白，站起走到方澄桌边揭便利贴再收进抽屉，10秒窗口合理。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.12.before",
+                "quote": "林屿从黑色网面靠背转椅里站起，走到相邻、空掉的方澄桌边。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "B13 接 B12 林屿看向便利贴，B13 站起揭下三张便利贴，道具状态连续。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.12.before",
+                "quote": "他伸手依次揭下桌角那三张并排的便利贴"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "not_applicable",
+            "reason": "B13 无对白。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "B13 为剧本拍，非分镜首帧。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "pass",
+            "reason": "B13 可见便利贴 P03、抽屉柜 E03，与 manifest 定义一致。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.12.before",
+                "quote": "浅木色三斗抽屉柜前"
+              }
+            ],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "B14",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "B14 林屿回到自己桌前坐下，抽出自己那份结算单开始对账，以新行动兑现边界变化。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.13.before",
+                "quote": "他从桌边抽出自己那份A4纵版结算单，右上角彩色公司logo条和浅蓝色表头可见，翻到空白页，黑色细头签字笔落下笔尖，开始对账。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "B14 无对白，关抽屉走回坐下抽单落笔，8秒窗口合理。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.13.before",
+                "quote": "林屿关上抽屉，走回自己的浅木色办公桌前坐下。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "B14 接 B13 林屿收好便利贴关抽屉，B14 关抽屉走回坐下，动作连续。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.13.before",
+                "quote": "林屿关上抽屉"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "not_applicable",
+            "reason": "B14 无对白。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "B14 为剧本拍，非分镜首帧。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "pass",
+            "reason": "B14 可见结算单 P06、签字笔 P07，与 manifest 一致。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.13.before",
+                "quote": "A4纵版结算单，右上角彩色公司logo条和浅蓝色表头可见"
+              }
+            ],
+            "issue_ids": []
+          }
+        }
+      }
+    ]
+  },
+  "validation": {
+    "full_script_evidence_valid": true,
+    "story_preserved": false,
+    "requires_assistant_evidence_verification": true,
+    "semantic_approval": false,
+    "review_context_sha256": "c825d4205be357a026e7c1fd67ec77620f0da846a2a71690745382a220688dfa"
+  }
+}

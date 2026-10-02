@@ -1,0 +1,21 @@
+{
+  "template": "keyframe_relight/v1",
+  "source_image": "../../data/qa/keyframe_relight_v1/source.png",
+  "mask_image": "../../data/qa/keyframe_relight_v1/mask.png",
+  "output_image": "../../data/qa/keyframe_relight_v1/output.png",
+  "mask_blur": 4,
+  "light": {
+    "direction": "top_left",
+    "highlight_ev": 0.32,
+    "shadow_ev": -0.06,
+    "color": [255, 214, 170],
+    "color_strength": 0.08,
+    "curve": 1.0
+  },
+  "safety": {
+    "maximum_mask_area_ratio": 0.65,
+    "maximum_mean_pixel_change": 28,
+    "minimum_mean_pixel_change": 0.8,
+    "minimum_directional_luma_shift": 1.5
+  }
+}

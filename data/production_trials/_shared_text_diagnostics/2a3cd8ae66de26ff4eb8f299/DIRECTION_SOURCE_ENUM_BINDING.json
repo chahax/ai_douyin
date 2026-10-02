@@ -1,0 +1,22 @@
+{
+  "schema": "creative_diagnostic_contract_extension/v1",
+  "created_at": "2026-10-02T19:01:57.741567+00:00",
+  "label": "direction_source_enum",
+  "authorization": "用户2026-10-03明确要求：之前的修复方案落实后生产接口测试。文本诊断占用原任务剩余最多3次调用，不新增预算、不生成媒体、不发布。",
+  "cause": "observed tool schema did not describe required script field paths",
+  "changes": [
+    "per-beat source path enum",
+    "event cannot use unsupported during relation"
+  ],
+  "messages_sha256_unchanged": "54f5a06040523857d282a7ff97823fee62a8c5730063905f3c06ddc3232bedf9",
+  "base_schema_sha256": "627031253ba9ceee73440173984352329931d8c31222c07b35c974730e48b362",
+  "constrained_schema_sha256": "dc50144f38551bf0b4b2e0a40d90aea8bb0b0cb27fa1ff3214f01d107d355696",
+  "additional_sources": {
+    "scripts/probe_creative_direction_source_enum.py": "e339dff828a308e9078dffc1dcbafa12e24a81f47fd5f23e95a7e19f58089538",
+    "scripts/creative_direction_source_schema.py": "727b80b883bc54c0c9110143ca6dac6e352f74c7b708f31539dcdba13932d0f4"
+  },
+  "model_temperature_thinking_messages_and_output_limit_unchanged": true,
+  "parent_budget_reset": false,
+  "automatic_retry": false,
+  "complete_model_submission_required": true
+}

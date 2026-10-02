@@ -1,0 +1,482 @@
+{
+  "schema": "creative_evidence_ids_expansion/v1",
+  "source_sha256": "a4527625b0012a668d689430807efd493697635e01e237297471cb73bb1390bf",
+  "not_an_approval": true,
+  "context_sha256": "89d5a821becff363aeb4c80f8ad2dd3ab5d07f1ddbd6f063d80d4f58b051bee1",
+  "catalog_sha256": "2bec441211285e7c3d3ffe67ab627c53de7e50fdd2f3db68fdd22606718c116c",
+  "raw_review_sha256": "519aca60a286b016ddcc33c791e4646532afc8394e7665ad7fccc7c93392b42b",
+  "effective_review_sha256": "6a0fecfdeba960ab8f46aad1e293e5bc795f41d7d7dae8560ef63df2a1802e57",
+  "effective_review": {
+    "story_preserved": true,
+    "issues": [],
+    "suggestions": [
+      {
+        "location": "SH01",
+        "proposal": "可在SH01的5–9.014秒对白段中，让林遥在听到请求后有一个极轻微的停顿/呼吸变化，使“请求落在道别途中”的反应更可读。",
+        "reason": "当前反应窗口与对白窗口完全重合，反应主要靠内心描述，画面可读性可再加强，但不违反简报。"
+      },
+      {
+        "location": "SH03",
+        "proposal": "可在陈禾放下文件夹后、开口接受前，保留一个更明确的视线从文件夹回到林遥的瞬间，强化“先听完再表态”。",
+        "reason": "当前3.5–6.5秒动作与6.5秒对白衔接自然，但视线落点变化可更清晰，属审美优化。"
+      }
+    ],
+    "calibration_focus": [
+      "SH01 陈禾持文件夹时是否始终未向林遥递出，文件夹是否保持在陈禾一侧。",
+      "SH02 林遥拒绝时口型与2.5–5.086秒对白窗口是否匹配，陈禾是否保持中性等待。",
+      "SH03 1.5–3.5秒沉默对视是否达到至少2秒可读等待，陈禾放文件夹是否落在自己桌面。",
+      "SH04 林遥放松是否发生在陈禾接受之后，陈禾坐下是否在同一构图内完成。"
+    ],
+    "coverage": [
+      {
+        "id": "SH01",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "仅林遥、陈禾两名成年人，同一办公室桌边，唯一关键可移动道具文件夹由陈禾拿起并持有，未交给林遥；陈禾清晰对白提出请求，符合简报硬约束。",
+            "evidence_refs": [
+              {
+                "path": "creative_brief.constraints.0",
+                "quote": "仅林遥、陈禾两名成年人，场景固定同一间办公室桌边到室内门口的短距离，不切外景。"
+              },
+              {
+                "path": "creative_brief.constraints.1",
+                "quote": "唯一关键可移动道具是一只文件夹，始终由提出请求的陈禾持有或放在她自己桌面，不能交给林遥。桌椅为固定场景资产。"
+              },
+              {
+                "path": "shots.shots.0.dialogue_lock.0.text",
+                "quote": "这份今天能顺路帮我带一下吗？"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "剧本B1先有林遥走近与陈禾拿起文件夹、抬眼，再在5–9.014秒说请求对白；刺激与首句对白顺序成立，反应窗口与对白窗口重合但未违反简报。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.0.before",
+                "quote": "林遥背起包走到陈禾桌边，脚步放缓准备道别。\n陈禾从桌面拿起一只文件夹，抬眼看向林遥。"
+              },
+              {
+                "path": "scheduled_state_plan.beats.0.dialogue_windows.0.start",
+                "quote": "5.0"
+              },
+              {
+                "path": "scheduled_state_plan.beats.0.dialogue_windows.0.end",
+                "quote": "9.014285714285714"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "本镜为分段首镜，无上一镜；内部连续性中林遥从自己桌边移动到陈禾桌边，陈禾从桌面拿起文件夹并抬眼，与初始状态和末态一致。",
+            "evidence_refs": [
+              {
+                "path": "state_plan.initial_state.C01.position",
+                "quote": "at Lin Yao's own desk (near E04), on the room side facing Chen He's desk"
+              },
+              {
+                "path": "state_plan.initial_state.P01.location",
+                "quote": "on top of Chen He's desk (E01)"
+              },
+              {
+                "path": "shots.shots.0.end_state",
+                "quote": "{\"C01(林遥)\": {\"affect\": \"polite readiness to say goodbye\", \"gaze\": \"toward Chen He's general direction as she readies to leave\", \"position\": \"Chen He's desk side\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"polite, mildly hopeful asking\", \"gaze\": \"Lin Yao's eyes\", \"position\": \"beside her own desk (E01), folder within reach on the desk surface\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"P01\"}, \"P02(林遥的单肩包)\": {\"holder\": \"C01\", \"location\": \"worn crossbody on Lin Yao's shoulder\"}}"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "pass",
+            "reason": "陈禾台词13字，分配4.014秒，约3.24字/秒，低于5单位/秒上限；对白前有5秒动作铺垫，语速自然。",
+            "evidence_refs": [
+              {
+                "path": "scheduling_report.beats.0.dialogue_units.0",
+                "quote": "13"
+              },
+              {
+                "path": "scheduling_report.beats.0.actual_dialogue_seconds.0",
+                "quote": "4.014285714285714"
+              },
+              {
+                "path": "scheduled_state_plan.beats.0.dialogue_windows.0.start",
+                "quote": "5.0"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "pass",
+            "reason": "首帧为动作发生前状态：林遥站在自己桌边准备离开，陈禾站在自己桌边、视线向下看文件夹，文件夹在陈禾桌面，未提前拿起或递出。",
+            "evidence_refs": [
+              {
+                "path": "shots.shots.0.start_state",
+                "quote": "{\"C01(林遥)\": {\"affect\": \"polite end-of-day composure, gently ready to depart\", \"gaze\": \"toward Chen He's general direction as she readies to leave\", \"position\": \"at Lin Yao's own desk (near E04), on the room side facing Chen He's desk\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"quietly focused on wrapping up evening work\", \"gaze\": \"down at the folder on her own desk\", \"position\": \"beside her own desk (E01), folder within reach on the desk surface\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"none\", \"location\": \"on top of Chen He's desk (E01)\"}, \"P02(林遥的单肩包)\": {\"holder\": \"C01\", \"location\": \"worn crossbody on Lin Yao's shoulder\"}}"
+              },
+              {
+                "path": "state_plan.initial_state.P01.location",
+                "quote": "on top of Chen He's desk (E01)"
+              }
+            ],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "pass",
+            "reason": "可见人物C01林遥、C02陈禾与资产定义一致；场景E01陈禾办公桌、E03台灯、E04林遥办公桌、E06室内门等与空间布局匹配；P01文件夹由C02持有，符合owner_id。",
+            "evidence_refs": [
+              {
+                "path": "shots.style.character_lock",
+                "quote": "确定2名人物的静态身份外观：[{\"age_group\": \"adult\", \"body_shape\": \"slim average adult female proportions, medium height\", \"clothing\": \"light beige knit cardigan over white crew-neck tee, dark grey straight-cut trousers, low black leather flats\", \"hair\": \"short bob, dark brown\", \"id\": \"C01\", \"name\": \"林遥\"}, {\"age_group\": \"adult\", \"body_shape\": \"average adult female proportions, similar height to Lin Yao\", \"clothing\": \"soft sage-green button-up blouse with rolled sleeves, charcoal A-line midi skirt, black low heels\", \"hair\": \"shoulder-length straight hair tied in low ponytail, natural black\", \"id\": \"C02\", \"name\": \"陈禾\"}]"
+              },
+              {
+                "path": "shots.style.spatial_layout",
+                "quote": "{\"elements\": [{\"appearance\": \"rectangular light oak wood desk, four legs, single shallow drawer on left, positioned against the back wall\", \"id\": \"E01\", \"name\": \"陈禾的办公桌\"}, {\"appearance\": \"mid-back office chair, matte black five-star base, charcoal mesh back, fixed gas lift\", \"id\": \"E02\", \"name\": \"陈禾的办公椅\"}, {\"appearance\": \"slim brass-arm desk lamp with dome shade, mounted at back-right corner of Chen He's desk\", \"id\": \"E03\", \"name\": \"台灯\"}, {\"appearance\": \"matching light oak rectangular desk, four legs, single shallow drawer on right, positioned to the left and slightly forward of Chen He's desk\", \"id\": \"E04\", \"name\": \"林遥的办公桌\"}, {\"appearance\": \"matching mid-back office chair, matte black five-star base, charcoal mesh back, fixed gas lift\", \"id\": \"E05\", \"name\": \"林遥的办公椅\"}, {\"appearance\": \"single flush wooden door with brushed steel lever handle, located on the front-left wall\", \"id\": \"E06\", \"name\": \"室内门\"}, {\"appearance\": \"muted teal painted wall, off-white painted baseboard, thin picture-rail molding near ceiling\", \"id\": \"E07\", \"name\": \"墙面与踢脚线\"}, {\"appearance\": \"pale grey vinyl composition tile, faint grid seams\", \"id\": \"E08\", \"name\": \"地面\"}, {\"appearance\": \"low open shelving unit against the right wall, light oak frame, holding neutral-toned binders and a small potted plant\", \"id\": \"E09\", \"name\": \"背景书架\"}], \"name\": \"晚间办公室\", \"relations\": [{\"reference\": \"E01\", \"relation\": \"in_front_of\", \"subject\": \"E02\"}, {\"reference\": \"E01\", \"relation\": \"on\", \"subject\": \"E03\"}, {\"reference\": \"E04\", \"relation\": \"in_front_of\", \"subject\": \"E05\"}, {\"reference\": \"E01\", \"relation\": \"left_of\", \"subject\": \"E04\"}, {\"reference\": \"E07\", \"relation\": \"below\", \"subject\": \"E06\"}, {\"reference\": \"E01\", \"relation\": \"left_of\", \"subject\": \"E06\"}, {\"reference\": \"E01\", \"relation\": \"right_of\", \"subject\": \"E09\"}, {\"reference\": \"E01\", \"relation\": \"below\", \"subject\": \"E08\"}]}"
+              },
+              {
+                "path": "state_plan.beats.0.groups.0.operations.2.value",
+                "quote": "P01"
+              }
+            ],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "SH02",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "林遥本人清晰对白拒绝，未把拒绝改成勉强答应；文件夹仍由陈禾持有，未交给林遥；每拍仅一句对白。",
+            "evidence_refs": [
+              {
+                "path": "creative_brief.constraints.2",
+                "quote": "关键拒绝和接受由本人清晰对白表达，不靠手机、屏幕、小字、旁白或闪回承担因果。"
+              },
+              {
+                "path": "shots.shots.1.dialogue_lock.0.text",
+                "quote": "今天不行，我赶时间。"
+              },
+              {
+                "path": "shots.shots.1.end_state",
+                "quote": "{\"C01(林遥)\": {\"affect\": \"quiet pre-refusal tension\", \"gaze\": \"the folder in Chen He's hand\", \"position\": \"Chen He's desk side\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"polite, mildly hopeful asking\", \"gaze\": \"Lin Yao's eyes\", \"position\": \"beside her own desk (E01), folder within reach on the desk surface\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"P01\"}, \"P02(林遥的单肩包)\": {\"holder\": \"C01\", \"location\": \"worn crossbody on Lin Yao's shoulder\"}}"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "剧本B2先写林遥停下看文件夹，再在2.5–5.086秒说拒绝对白；刺激到回应顺序成立，陈禾在5.086秒后保持等待。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.1.before",
+                "quote": "林遥停下脚步，目光落在陈禾手中文件夹上。"
+              },
+              {
+                "path": "scheduled_state_plan.beats.1.dialogue_windows.0.start",
+                "quote": "2.5"
+              },
+              {
+                "path": "scheduled_state_plan.beats.1.dialogue_windows.0.end",
+                "quote": "5.085714285714285"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "上一镜SH01末态为林遥在陈禾桌边、陈禾持文件夹并看向林遥；本镜首态一致，林遥视线从陈禾方向转向文件夹，无姿态或持物重置。",
+            "evidence_refs": [
+              {
+                "path": "shots.shots.0.end_state",
+                "quote": "{\"C01(林遥)\": {\"affect\": \"polite readiness to say goodbye\", \"gaze\": \"toward Chen He's general direction as she readies to leave\", \"position\": \"Chen He's desk side\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"polite, mildly hopeful asking\", \"gaze\": \"Lin Yao's eyes\", \"position\": \"beside her own desk (E01), folder within reach on the desk surface\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"P01\"}, \"P02(林遥的单肩包)\": {\"holder\": \"C01\", \"location\": \"worn crossbody on Lin Yao's shoulder\"}}"
+              },
+              {
+                "path": "shots.shots.1.start_state",
+                "quote": "{\"C01(林遥)\": {\"affect\": \"polite readiness to say goodbye\", \"gaze\": \"toward Chen He's general direction as she readies to leave\", \"position\": \"Chen He's desk side\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"polite, mildly hopeful asking\", \"gaze\": \"Lin Yao's eyes\", \"position\": \"beside her own desk (E01), folder within reach on the desk surface\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"P01\"}, \"P02(林遥的单肩包)\": {\"holder\": \"C01\", \"location\": \"worn crossbody on Lin Yao's shoulder\"}}"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "pass",
+            "reason": "林遥台词8字，分配2.586秒，约3.09字/秒，低于5单位/秒上限；对白前有2.5秒停顿，语速自然。",
+            "evidence_refs": [
+              {
+                "path": "scheduling_report.beats.1.dialogue_units.0",
+                "quote": "8"
+              },
+              {
+                "path": "scheduling_report.beats.1.actual_dialogue_seconds.0",
+                "quote": "2.5857142857142854"
+              },
+              {
+                "path": "scheduled_state_plan.beats.1.dialogue_windows.0.start",
+                "quote": "2.5"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "pass",
+            "reason": "首帧为动作发生前状态：林遥站在陈禾桌边、视线朝陈禾方向，陈禾持文件夹并看向林遥，未提前低头看文件夹或拒绝。",
+            "evidence_refs": [
+              {
+                "path": "shots.shots.1.start_state",
+                "quote": "{\"C01(林遥)\": {\"affect\": \"polite readiness to say goodbye\", \"gaze\": \"toward Chen He's general direction as she readies to leave\", \"position\": \"Chen He's desk side\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"polite, mildly hopeful asking\", \"gaze\": \"Lin Yao's eyes\", \"position\": \"beside her own desk (E01), folder within reach on the desk surface\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"P01\"}, \"P02(林遥的单肩包)\": {\"holder\": \"C01\", \"location\": \"worn crossbody on Lin Yao's shoulder\"}}"
+              },
+              {
+                "path": "shots.shots.1.end_state",
+                "quote": "{\"C01(林遥)\": {\"affect\": \"quiet pre-refusal tension\", \"gaze\": \"the folder in Chen He's hand\", \"position\": \"Chen He's desk side\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"polite, mildly hopeful asking\", \"gaze\": \"Lin Yao's eyes\", \"position\": \"beside her own desk (E01), folder within reach on the desk surface\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"P01\"}, \"P02(林遥的单肩包)\": {\"holder\": \"C01\", \"location\": \"worn crossbody on Lin Yao's shoulder\"}}"
+              }
+            ],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "pass",
+            "reason": "可见人物、场景、道具与资产定义一致；文件夹P01仍由C02陈禾持有，未转移给林遥。",
+            "evidence_refs": [
+              {
+                "path": "shots.style.character_lock",
+                "quote": "确定2名人物的静态身份外观：[{\"age_group\": \"adult\", \"body_shape\": \"slim average adult female proportions, medium height\", \"clothing\": \"light beige knit cardigan over white crew-neck tee, dark grey straight-cut trousers, low black leather flats\", \"hair\": \"short bob, dark brown\", \"id\": \"C01\", \"name\": \"林遥\"}, {\"age_group\": \"adult\", \"body_shape\": \"average adult female proportions, similar height to Lin Yao\", \"clothing\": \"soft sage-green button-up blouse with rolled sleeves, charcoal A-line midi skirt, black low heels\", \"hair\": \"shoulder-length straight hair tied in low ponytail, natural black\", \"id\": \"C02\", \"name\": \"陈禾\"}]"
+              },
+              {
+                "path": "shots.style.spatial_layout",
+                "quote": "{\"elements\": [{\"appearance\": \"rectangular light oak wood desk, four legs, single shallow drawer on left, positioned against the back wall\", \"id\": \"E01\", \"name\": \"陈禾的办公桌\"}, {\"appearance\": \"mid-back office chair, matte black five-star base, charcoal mesh back, fixed gas lift\", \"id\": \"E02\", \"name\": \"陈禾的办公椅\"}, {\"appearance\": \"slim brass-arm desk lamp with dome shade, mounted at back-right corner of Chen He's desk\", \"id\": \"E03\", \"name\": \"台灯\"}, {\"appearance\": \"matching light oak rectangular desk, four legs, single shallow drawer on right, positioned to the left and slightly forward of Chen He's desk\", \"id\": \"E04\", \"name\": \"林遥的办公桌\"}, {\"appearance\": \"matching mid-back office chair, matte black five-star base, charcoal mesh back, fixed gas lift\", \"id\": \"E05\", \"name\": \"林遥的办公椅\"}, {\"appearance\": \"single flush wooden door with brushed steel lever handle, located on the front-left wall\", \"id\": \"E06\", \"name\": \"室内门\"}, {\"appearance\": \"muted teal painted wall, off-white painted baseboard, thin picture-rail molding near ceiling\", \"id\": \"E07\", \"name\": \"墙面与踢脚线\"}, {\"appearance\": \"pale grey vinyl composition tile, faint grid seams\", \"id\": \"E08\", \"name\": \"地面\"}, {\"appearance\": \"low open shelving unit against the right wall, light oak frame, holding neutral-toned binders and a small potted plant\", \"id\": \"E09\", \"name\": \"背景书架\"}], \"name\": \"晚间办公室\", \"relations\": [{\"reference\": \"E01\", \"relation\": \"in_front_of\", \"subject\": \"E02\"}, {\"reference\": \"E01\", \"relation\": \"on\", \"subject\": \"E03\"}, {\"reference\": \"E04\", \"relation\": \"in_front_of\", \"subject\": \"E05\"}, {\"reference\": \"E01\", \"relation\": \"left_of\", \"subject\": \"E04\"}, {\"reference\": \"E07\", \"relation\": \"below\", \"subject\": \"E06\"}, {\"reference\": \"E01\", \"relation\": \"left_of\", \"subject\": \"E06\"}, {\"reference\": \"E01\", \"relation\": \"right_of\", \"subject\": \"E09\"}, {\"reference\": \"E01\", \"relation\": \"below\", \"subject\": \"E08\"}]}"
+              },
+              {
+                "path": "shots.shots.1.end_state",
+                "quote": "{\"C01(林遥)\": {\"affect\": \"quiet pre-refusal tension\", \"gaze\": \"the folder in Chen He's hand\", \"position\": \"Chen He's desk side\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"polite, mildly hopeful asking\", \"gaze\": \"Lin Yao's eyes\", \"position\": \"beside her own desk (E01), folder within reach on the desk surface\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"P01\"}, \"P02(林遥的单肩包)\": {\"holder\": \"C01\", \"location\": \"worn crossbody on Lin Yao's shoulder\"}}"
+              }
+            ],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "SH03",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "重要拒绝后有1.5–3.5秒可读沉默等待，再由陈禾自然接受；陈禾把文件夹平放回自己桌面，未交给林遥；每拍仅一句对白。",
+            "evidence_refs": [
+              {
+                "path": "creative_brief.constraints.3",
+                "quote": "重要拒绝后有至少2秒可读等待反应，再由陈禾自然接受；林遥在听见接受后才明显放松。"
+              },
+              {
+                "path": "shots.shots.2.dialogue_lock.0.text",
+                "quote": "那我明早自己跑一趟。"
+              },
+              {
+                "path": "shots.shots.2.end_state",
+                "quote": "{\"C01(林遥)\": {\"affect\": \"quiet pre-refusal tension\", \"gaze\": \"Chen He's eyes\", \"position\": \"Chen He's desk side\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"quiet acceptance, softened face\", \"gaze\": \"Lin Yao's eyes\", \"position\": \"beside her own desk (E01), folder within reach on the desk surface\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"none\", \"location\": \"on Chen He's desk (E01)\"}, \"P02(林遥的单肩包)\": {\"holder\": \"C01\", \"location\": \"worn crossbody on Lin Yao's shoulder\"}}"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "剧本B3先写林遥抬眼、两人沉默至少2秒、陈禾面部软化并放回文件夹，再在6.5–9.371秒说接受对白；等待反应先于接受，顺序成立。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.2.before",
+                "quote": "林遥从陈禾手中的文件夹抬眼看向陈禾。\n两人保持沉默对视至少2秒，肩线不动，呼吸可见。\n陈禾面部先软化，把文件夹平放回自己桌面。"
+              },
+              {
+                "path": "scheduled_state_plan.beats.2.dialogue_windows.0.start",
+                "quote": "6.5"
+              },
+              {
+                "path": "scheduled_state_plan.beats.2.dialogue_windows.0.end",
+                "quote": "9.371428571428572"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "上一镜SH02末态为林遥视线在文件夹、陈禾持文件夹；本镜首态一致，林遥抬眼看向陈禾，陈禾随后放回文件夹，无重置矛盾。",
+            "evidence_refs": [
+              {
+                "path": "shots.shots.1.end_state",
+                "quote": "{\"C01(林遥)\": {\"affect\": \"quiet pre-refusal tension\", \"gaze\": \"the folder in Chen He's hand\", \"position\": \"Chen He's desk side\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"polite, mildly hopeful asking\", \"gaze\": \"Lin Yao's eyes\", \"position\": \"beside her own desk (E01), folder within reach on the desk surface\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"P01\"}, \"P02(林遥的单肩包)\": {\"holder\": \"C01\", \"location\": \"worn crossbody on Lin Yao's shoulder\"}}"
+              },
+              {
+                "path": "shots.shots.2.start_state",
+                "quote": "{\"C01(林遥)\": {\"affect\": \"quiet pre-refusal tension\", \"gaze\": \"the folder in Chen He's hand\", \"position\": \"Chen He's desk side\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"polite, mildly hopeful asking\", \"gaze\": \"Lin Yao's eyes\", \"position\": \"beside her own desk (E01), folder within reach on the desk surface\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"P01\"}, \"P02(林遥的单肩包)\": {\"holder\": \"C01\", \"location\": \"worn crossbody on Lin Yao's shoulder\"}}"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "pass",
+            "reason": "陈禾台词9字，分配2.871秒，约3.13字/秒，低于5单位/秒上限；对白前有6.5秒沉默与放文件夹动作，语速自然。",
+            "evidence_refs": [
+              {
+                "path": "scheduling_report.beats.2.dialogue_units.0",
+                "quote": "9"
+              },
+              {
+                "path": "scheduling_report.beats.2.actual_dialogue_seconds.0",
+                "quote": "2.8714285714285714"
+              },
+              {
+                "path": "scheduled_state_plan.beats.2.dialogue_windows.0.start",
+                "quote": "6.5"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "pass",
+            "reason": "首帧为动作发生前状态：林遥视线在陈禾手中文件夹，陈禾持文件夹并看向林遥，未提前抬眼或放下文件夹。",
+            "evidence_refs": [
+              {
+                "path": "shots.shots.2.start_state",
+                "quote": "{\"C01(林遥)\": {\"affect\": \"quiet pre-refusal tension\", \"gaze\": \"the folder in Chen He's hand\", \"position\": \"Chen He's desk side\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"polite, mildly hopeful asking\", \"gaze\": \"Lin Yao's eyes\", \"position\": \"beside her own desk (E01), folder within reach on the desk surface\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"P01\"}, \"P02(林遥的单肩包)\": {\"holder\": \"C01\", \"location\": \"worn crossbody on Lin Yao's shoulder\"}}"
+              },
+              {
+                "path": "shots.shots.2.end_state",
+                "quote": "{\"C01(林遥)\": {\"affect\": \"quiet pre-refusal tension\", \"gaze\": \"Chen He's eyes\", \"position\": \"Chen He's desk side\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"quiet acceptance, softened face\", \"gaze\": \"Lin Yao's eyes\", \"position\": \"beside her own desk (E01), folder within reach on the desk surface\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"none\", \"location\": \"on Chen He's desk (E01)\"}, \"P02(林遥的单肩包)\": {\"holder\": \"C01\", \"location\": \"worn crossbody on Lin Yao's shoulder\"}}"
+              }
+            ],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "pass",
+            "reason": "可见人物、场景、道具与资产定义一致；文件夹P01从C02手中放到陈禾桌面E01，符合“由陈禾持有或放在她自己桌面”的约束。",
+            "evidence_refs": [
+              {
+                "path": "shots.style.character_lock",
+                "quote": "确定2名人物的静态身份外观：[{\"age_group\": \"adult\", \"body_shape\": \"slim average adult female proportions, medium height\", \"clothing\": \"light beige knit cardigan over white crew-neck tee, dark grey straight-cut trousers, low black leather flats\", \"hair\": \"short bob, dark brown\", \"id\": \"C01\", \"name\": \"林遥\"}, {\"age_group\": \"adult\", \"body_shape\": \"average adult female proportions, similar height to Lin Yao\", \"clothing\": \"soft sage-green button-up blouse with rolled sleeves, charcoal A-line midi skirt, black low heels\", \"hair\": \"shoulder-length straight hair tied in low ponytail, natural black\", \"id\": \"C02\", \"name\": \"陈禾\"}]"
+              },
+              {
+                "path": "shots.style.spatial_layout",
+                "quote": "{\"elements\": [{\"appearance\": \"rectangular light oak wood desk, four legs, single shallow drawer on left, positioned against the back wall\", \"id\": \"E01\", \"name\": \"陈禾的办公桌\"}, {\"appearance\": \"mid-back office chair, matte black five-star base, charcoal mesh back, fixed gas lift\", \"id\": \"E02\", \"name\": \"陈禾的办公椅\"}, {\"appearance\": \"slim brass-arm desk lamp with dome shade, mounted at back-right corner of Chen He's desk\", \"id\": \"E03\", \"name\": \"台灯\"}, {\"appearance\": \"matching light oak rectangular desk, four legs, single shallow drawer on right, positioned to the left and slightly forward of Chen He's desk\", \"id\": \"E04\", \"name\": \"林遥的办公桌\"}, {\"appearance\": \"matching mid-back office chair, matte black five-star base, charcoal mesh back, fixed gas lift\", \"id\": \"E05\", \"name\": \"林遥的办公椅\"}, {\"appearance\": \"single flush wooden door with brushed steel lever handle, located on the front-left wall\", \"id\": \"E06\", \"name\": \"室内门\"}, {\"appearance\": \"muted teal painted wall, off-white painted baseboard, thin picture-rail molding near ceiling\", \"id\": \"E07\", \"name\": \"墙面与踢脚线\"}, {\"appearance\": \"pale grey vinyl composition tile, faint grid seams\", \"id\": \"E08\", \"name\": \"地面\"}, {\"appearance\": \"low open shelving unit against the right wall, light oak frame, holding neutral-toned binders and a small potted plant\", \"id\": \"E09\", \"name\": \"背景书架\"}], \"name\": \"晚间办公室\", \"relations\": [{\"reference\": \"E01\", \"relation\": \"in_front_of\", \"subject\": \"E02\"}, {\"reference\": \"E01\", \"relation\": \"on\", \"subject\": \"E03\"}, {\"reference\": \"E04\", \"relation\": \"in_front_of\", \"subject\": \"E05\"}, {\"reference\": \"E01\", \"relation\": \"left_of\", \"subject\": \"E04\"}, {\"reference\": \"E07\", \"relation\": \"below\", \"subject\": \"E06\"}, {\"reference\": \"E01\", \"relation\": \"left_of\", \"subject\": \"E06\"}, {\"reference\": \"E01\", \"relation\": \"right_of\", \"subject\": \"E09\"}, {\"reference\": \"E01\", \"relation\": \"below\", \"subject\": \"E08\"}]}"
+              },
+              {
+                "path": "state_plan.beats.2.groups.2.operations.1.value",
+                "quote": "on Chen He's desk (E01)"
+              }
+            ],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "SH04",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "林遥在听见陈禾接受后才明显放松，自然道别并朝室内门口走出两步；陈禾留在桌边坐下接手工作；结尾不超过10秒，未增加解释或新任务。",
+            "evidence_refs": [
+              {
+                "path": "creative_brief.ending",
+                "quote": "林遥自然道别、松开紧绷的姿势，朝房间门口走出两步；陈禾留在桌边接手自己的工作，双方关系保持正常。"
+              },
+              {
+                "path": "creative_brief.constraints.4",
+                "quote": "每拍最多两句对白。结尾不超过10秒，只兑现离开与各自承担，不增加解释或新任务。"
+              },
+              {
+                "path": "shots.shots.3.event_lock",
+                "quote": "林遥听见接受后肩膀微松、点头道别，朝门口走出两步；陈禾转身面向桌面，坐下接手工作。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "剧本B4先写林遥肩膀微松、点头，再在2–4.3秒说告别对白，随后4.3–7.3秒转身走出两步；放松发生在听到接受之后，顺序成立。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.3.before",
+                "quote": "林遥肩膀微松，点了点头。"
+              },
+              {
+                "path": "scheduled_state_plan.beats.3.dialogue_windows.0.start",
+                "quote": "2.0"
+              },
+              {
+                "path": "scheduled_state_plan.beats.3.dialogue_windows.0.end",
+                "quote": "4.3"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "上一镜SH03末态为林遥视线在陈禾眼睛、陈禾已软化并放下文件夹；本镜首态一致，林遥随后放松、转身离开，陈禾转身坐下，无重置矛盾。",
+            "evidence_refs": [
+              {
+                "path": "shots.shots.2.end_state",
+                "quote": "{\"C01(林遥)\": {\"affect\": \"quiet pre-refusal tension\", \"gaze\": \"Chen He's eyes\", \"position\": \"Chen He's desk side\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"quiet acceptance, softened face\", \"gaze\": \"Lin Yao's eyes\", \"position\": \"beside her own desk (E01), folder within reach on the desk surface\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"none\", \"location\": \"on Chen He's desk (E01)\"}, \"P02(林遥的单肩包)\": {\"holder\": \"C01\", \"location\": \"worn crossbody on Lin Yao's shoulder\"}}"
+              },
+              {
+                "path": "shots.shots.3.start_state",
+                "quote": "{\"C01(林遥)\": {\"affect\": \"quiet pre-refusal tension\", \"gaze\": \"Chen He's eyes\", \"position\": \"Chen He's desk side\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"quiet acceptance, softened face\", \"gaze\": \"Lin Yao's eyes\", \"position\": \"beside her own desk (E01), folder within reach on the desk surface\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"none\", \"location\": \"on Chen He's desk (E01)\"}, \"P02(林遥的单肩包)\": {\"holder\": \"C01\", \"location\": \"worn crossbody on Lin Yao's shoulder\"}}"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "pass",
+            "reason": "林遥台词7字，分配2.3秒，约3.04字/秒，低于5单位/秒上限；对白前有2秒放松反应，语速自然。",
+            "evidence_refs": [
+              {
+                "path": "scheduling_report.beats.3.dialogue_units.0",
+                "quote": "7"
+              },
+              {
+                "path": "scheduling_report.beats.3.actual_dialogue_seconds.0",
+                "quote": "2.3"
+              },
+              {
+                "path": "scheduled_state_plan.beats.3.dialogue_windows.0.start",
+                "quote": "2.0"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "pass",
+            "reason": "首帧为动作发生前状态：林遥视线在陈禾眼睛、姿态仍带紧张，陈禾已软化并看向林遥，未提前放松或转身离开。",
+            "evidence_refs": [
+              {
+                "path": "shots.shots.3.start_state",
+                "quote": "{\"C01(林遥)\": {\"affect\": \"quiet pre-refusal tension\", \"gaze\": \"Chen He's eyes\", \"position\": \"Chen He's desk side\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"quiet acceptance, softened face\", \"gaze\": \"Lin Yao's eyes\", \"position\": \"beside her own desk (E01), folder within reach on the desk surface\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"none\", \"location\": \"on Chen He's desk (E01)\"}, \"P02(林遥的单肩包)\": {\"holder\": \"C01\", \"location\": \"worn crossbody on Lin Yao's shoulder\"}}"
+              },
+              {
+                "path": "shots.shots.3.end_state",
+                "quote": "{\"C01(林遥)\": {\"affect\": \"visible relief, warmth returning\", \"gaze\": \"toward the indoor door\", \"position\": \"toward the indoor door (E06), two steps\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"calm focus, returning to work\", \"gaze\": \"her own desk surface\", \"position\": \"E02\", \"posture\": \"sitting\"}, \"P01(文件夹)\": {\"holder\": \"none\", \"location\": \"on Chen He's desk (E01)\"}, \"P02(林遥的单肩包)\": {\"holder\": \"C01\", \"location\": \"worn crossbody on Lin Yao's shoulder\"}}"
+              }
+            ],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "pass",
+            "reason": "可见人物、场景、道具与资产定义一致；文件夹P01在陈禾桌面E01，林遥单肩包P02仍在C01身上，室内门E06位于前左墙，符合空间布局。",
+            "evidence_refs": [
+              {
+                "path": "shots.style.character_lock",
+                "quote": "确定2名人物的静态身份外观：[{\"age_group\": \"adult\", \"body_shape\": \"slim average adult female proportions, medium height\", \"clothing\": \"light beige knit cardigan over white crew-neck tee, dark grey straight-cut trousers, low black leather flats\", \"hair\": \"short bob, dark brown\", \"id\": \"C01\", \"name\": \"林遥\"}, {\"age_group\": \"adult\", \"body_shape\": \"average adult female proportions, similar height to Lin Yao\", \"clothing\": \"soft sage-green button-up blouse with rolled sleeves, charcoal A-line midi skirt, black low heels\", \"hair\": \"shoulder-length straight hair tied in low ponytail, natural black\", \"id\": \"C02\", \"name\": \"陈禾\"}]"
+              },
+              {
+                "path": "shots.style.spatial_layout",
+                "quote": "{\"elements\": [{\"appearance\": \"rectangular light oak wood desk, four legs, single shallow drawer on left, positioned against the back wall\", \"id\": \"E01\", \"name\": \"陈禾的办公桌\"}, {\"appearance\": \"mid-back office chair, matte black five-star base, charcoal mesh back, fixed gas lift\", \"id\": \"E02\", \"name\": \"陈禾的办公椅\"}, {\"appearance\": \"slim brass-arm desk lamp with dome shade, mounted at back-right corner of Chen He's desk\", \"id\": \"E03\", \"name\": \"台灯\"}, {\"appearance\": \"matching light oak rectangular desk, four legs, single shallow drawer on right, positioned to the left and slightly forward of Chen He's desk\", \"id\": \"E04\", \"name\": \"林遥的办公桌\"}, {\"appearance\": \"matching mid-back office chair, matte black five-star base, charcoal mesh back, fixed gas lift\", \"id\": \"E05\", \"name\": \"林遥的办公椅\"}, {\"appearance\": \"single flush wooden door with brushed steel lever handle, located on the front-left wall\", \"id\": \"E06\", \"name\": \"室内门\"}, {\"appearance\": \"muted teal painted wall, off-white painted baseboard, thin picture-rail molding near ceiling\", \"id\": \"E07\", \"name\": \"墙面与踢脚线\"}, {\"appearance\": \"pale grey vinyl composition tile, faint grid seams\", \"id\": \"E08\", \"name\": \"地面\"}, {\"appearance\": \"low open shelving unit against the right wall, light oak frame, holding neutral-toned binders and a small potted plant\", \"id\": \"E09\", \"name\": \"背景书架\"}], \"name\": \"晚间办公室\", \"relations\": [{\"reference\": \"E01\", \"relation\": \"in_front_of\", \"subject\": \"E02\"}, {\"reference\": \"E01\", \"relation\": \"on\", \"subject\": \"E03\"}, {\"reference\": \"E04\", \"relation\": \"in_front_of\", \"subject\": \"E05\"}, {\"reference\": \"E01\", \"relation\": \"left_of\", \"subject\": \"E04\"}, {\"reference\": \"E07\", \"relation\": \"below\", \"subject\": \"E06\"}, {\"reference\": \"E01\", \"relation\": \"left_of\", \"subject\": \"E06\"}, {\"reference\": \"E01\", \"relation\": \"right_of\", \"subject\": \"E09\"}, {\"reference\": \"E01\", \"relation\": \"below\", \"subject\": \"E08\"}]}"
+              },
+              {
+                "path": "shots.shots.3.end_state",
+                "quote": "{\"C01(林遥)\": {\"affect\": \"visible relief, warmth returning\", \"gaze\": \"toward the indoor door\", \"position\": \"toward the indoor door (E06), two steps\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"calm focus, returning to work\", \"gaze\": \"her own desk surface\", \"position\": \"E02\", \"posture\": \"sitting\"}, \"P01(文件夹)\": {\"holder\": \"none\", \"location\": \"on Chen He's desk (E01)\"}, \"P02(林遥的单肩包)\": {\"holder\": \"C01\", \"location\": \"worn crossbody on Lin Yao's shoulder\"}}"
+              }
+            ],
+            "issue_ids": []
+          }
+        }
+      }
+    ]
+  },
+  "automatic_approval": false
+}

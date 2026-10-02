@@ -1,0 +1,508 @@
+{
+  "schema": "creative_production_interface_diagnostic_call/v1",
+  "label": "direction",
+  "ordinal": 23,
+  "status": "validation_rejected",
+  "started_at": "2026-10-02T18:54:53.721656+00:00",
+  "request": {
+    "messages": [
+      {
+        "role": "system",
+        "content": "为完整剧本生成整片规划。你负责全片情绪、因果、逐拍新增信息、观察对象、刺激、切镜理由和表演窗口要求，以及合法初态和空间契约；局部动作和排时由后续模块安排。使用参考的表达机制，不照搬剧情。对白和事件仍以原剧本为准。用指定工具提交完整本阶段合同。"
+      },
+      {
+        "role": "user",
+        "content": "{\"context\": {\"script\": {\"title\": \"这次我先走\", \"premise\": \"傍晚办公室里，方澄准备离开去看院线电影，林屿又一次理所当然地开口让她帮忙对账。方澄在看到桌面残留的多次善后便签后，第一次放下包带，明确说出拒绝，独自离开；林屿面对空掉的桌面，揭下那些替人善后留下的便利贴，拿出自己那份结算单重新开始。\", \"selected_candidate_id\": \"C01\", \"duration_seconds\": 57, \"beats\": [{\"id\": \"B1\", \"duration_seconds\": 14, \"event\": \"傍晚办公室，方澄路过林屿桌边顺手端回散落的咖啡杯，林屿埋头对客户明细单；方澄回到自己桌前，挎包敞口露出今晚院线开场票根与三张不同日期、写着善后内容的便利贴。\", \"trigger\": \"观众从桌面物件与林屿自己提到的上次帮忙，看到方澄过去多次替林屿善后，并知道她今晚另有安排。\", \"before\": \"傍晚办公室里，方澄在林屿桌边停下，把滑到桌沿的咖啡杯端回林屿桌中央。\", \"during\": \"方澄走回自己工位，挎包敞口搁在椅背上，桌角露出今晚院线开场票根和三张不同日期的便利贴，分别写着\\\"对账\\\"\\\"改明细\\\"\\\"收尾\\\"。\", \"after\": \"林屿低头在客户明细单上对数字，笔尖在纸面划动。\", \"dialogue\": [{\"speaker\": \"林屿\", \"text\": \"上次那批也是你帮我对完的，谢谢啊。\"}]}, {\"id\": \"B2\", \"duration_seconds\": 11, \"event\": \"林屿抬头随口提出让方澄帮忙对完账，方澄手指捏住包带，目光在林屿脸与桌角票根之间来回。\", \"trigger\": \"林屿习惯性的请求落进方澄犹豫的窗口，让观众替她的选择紧张。\", \"before\": \"方澄拉起挎包带搭到肩上，手指捏住带扣。\", \"during\": \"方澄眼神从林屿抬起的脸移到桌角那张院线票根，包带在指尖收紧。\", \"after\": \"（无新增动作）\", \"dialogue\": [{\"speaker\": \"林屿\", \"text\": \"今晚又得麻烦你帮我对一下。\"}]}, {\"id\": \"B3\", \"duration_seconds\": 10, \"event\": \"方澄把挎包带放下，合上包口，中近景里轻声但清楚地拒绝；林屿手部近景，笔尖停住，客户明细单上没签完的字划出短斜线。\", \"trigger\": \"清楚的拒绝与停下笔同时被看见，转折落到事实。\", \"before\": \"方澄把挎包带重新放下，双手合上包口。\", \"during\": \"林屿手部近景，笔尖停住，没签完的字在明细单上划出一道短斜线。\", \"after\": \"（无新增动作）\", \"dialogue\": [{\"speaker\": \"方澄\", \"text\": \"这次我先走，你自己对吧。\"}]}, {\"id\": \"B4\", \"duration_seconds\": 12, \"event\": \"方澄背起挎包走到门口，林屿低声说出一句依赖式回应，方澄在门口停一下，没有回头，推门走出去。\", \"trigger\": \"门口的反应留出余白，拒绝与离开被双方各自承住。\", \"before\": \"方澄背起挎包走到办公室门口，手搭上门把。\", \"during\": \"方澄在门口停一下，没有回头，推门走出去。\", \"after\": \"（无新增动作）\", \"dialogue\": [{\"speaker\": \"林屿\", \"text\": \"我以为你会帮我的。\"}]}, {\"id\": \"B5\", \"duration_seconds\": 10, \"event\": \"林屿独坐桌前，把桌角那几张日期便签揭下整齐叠好放进抽屉，再从旁边拿出自己那份结算单，落笔开始对。\", \"trigger\": \"以林屿独坐和重新对账的具体行动收尾，关系变化由行为承担，不靠台词收束。\", \"before\": \"林屿把桌角剩的三张日期便签揭下，叠齐收进抽屉。\", \"during\": \"（无新增动作）\", \"after\": \"林屿从桌边抽出自己那份结算单，落下笔尖开始对账。\", \"dialogue\": []}], \"screenplay_markdown\": \"# 这次我先走\\n\\n## B1 傍晚办公室，方澄路过林屿桌边顺手端回散落的咖啡杯，林屿埋头对客户明细单；方澄回到自己桌前，挎包敞口露出今晚院线开场票根与三张不同日期、写着善后内容的便利贴。\\n\\n傍晚办公室里，方澄在林屿桌边停下，把滑到桌沿的咖啡杯端回林屿桌中央。\\n\\n**林屿**：上次那批也是你帮我对完的，谢谢啊。\\n\\n方澄走回自己工位，挎包敞口搁在椅背上，桌角露出今晚院线开场票根和三张不同日期的便利贴，分别写着\\\"对账\\\"\\\"改明细\\\"\\\"收尾\\\"。\\n\\n林屿低头在客户明细单上对数字，笔尖在纸面划动。\\n\\n## B2 林屿抬头随口提出让方澄帮忙对完账，方澄手指捏住包带，目光在林屿脸与桌角票根之间来回。\\n\\n方澄拉起挎包带搭到肩上，手指捏住带扣。\\n\\n**林屿**：今晚又得麻烦你帮我对一下。\\n\\n方澄眼神从林屿抬起的脸移到桌角那张院线票根，包带在指尖收紧。\\n\\n（无新增动作）\\n\\n## B3 方澄把挎包带放下，合上包口，中近景里轻声但清楚地拒绝；林屿手部近景，笔尖停住，客户明细单上没签完的字划出短斜线。\\n\\n方澄把挎包带重新放下，双手合上包口。\\n\\n**方澄**：这次我先走，你自己对吧。\\n\\n林屿手部近景，笔尖停住，没签完的字在明细单上划出一道短斜线。\\n\\n（无新增动作）\\n\\n## B4 方澄背起挎包走到门口，林屿低声说出一句依赖式回应，方澄在门口停一下，没有回头，推门走出去。\\n\\n方澄背起挎包走到办公室门口，手搭上门把。\\n\\n**林屿**：我以为你会帮我的。\\n\\n方澄在门口停一下，没有回头，推门走出去。\\n\\n（无新增动作）\\n\\n## B5 林屿独坐桌前，把桌角那几张日期便签揭下整齐叠好放进抽屉，再从旁边拿出自己那份结算单，落笔开始对。\\n\\n林屿把桌角剩的三张日期便签揭下，叠齐收进抽屉。\\n\\n（无新增动作）\\n\\n林屿从桌边抽出自己那份结算单，落下笔尖开始对账。\"}, \"creative_brief\": {\"schema\": \"creative_brief/v1\", \"theme\": \"总替同事收尾的人，第一次把自己的时间放在前面\", \"duration_seconds\": [45, 60], \"delegated_fields\": [], \"duration_policy\": \"flexible\", \"audience\": \"喜欢生活情绪短片的成年观众\", \"relationships\": \"方澄与同事林屿；林屿已习惯她会答应，方澄担心拒绝会伤及两人的关系。\", \"audience_emotion\": \"先看懂她为什么难拒绝，再替她的选择紧张，最后感到关系发生了真实变化。\", \"visual_style\": \"写实真人实拍质感的AI短片，成年普通人外貌，真实皮肤纹理、自然光与生活化服装，克制自然表演，关键反应使用可读近景。\", \"turn\": \"对方原本把她的帮忙视为理所当然；她明确拒绝后，对方必须面对这一点，再通过具体行动回应。\", \"ending\": \"以新的行动兑现边界及关系变化；不预先规定两人必须和解，不用主题口号收尾。\", \"constraints\": [\"观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。\", \"她想离开和担心拒绝的原因要在实际事件中成立。\", \"关键反应的构图和窗口必须写入最终视频提示词。\", \"剧情先按完整故事创作，再拆成生成段；不能为固定八秒切段编造操作。\"], \"avoid\": [\"用一次开本子或摸包代替习惯性的付出历史\", \"靠陪家人看病等新事故替代原本的关系矛盾\", \"强行争吵、突然完美理解、鸡汤总结\", \"为了沿用动画尾帧而改回手绘风格\"]}, \"static_visual_manifest\": {\"schema\": \"static_visual_manifest_v2\", \"render\": {\"style_option_id\": \"S01\", \"visual_medium\": \"写实真人实拍质感的AI短片，自然皮肤纹理与生活化布光\", \"palette\": \"傍晚办公室暖调，浅木色桌面、米白墙、暖灰窗帘透橙黄夕光、人物服装为低饱和的灰蓝与米驼\", \"light_source\": \"临窗自然夕光为主，从办公桌侧面斜入，室内顶灯为辅补光，形成柔和侧光与轻微暖色阴影\"}, \"characters\": [{\"id\": \"C01\", \"name\": \"方澄\", \"age_group\": \"成年\", \"hair\": \"黑色齐肩直发，自然中分\", \"clothing\": \"灰蓝色薄针织开衫，内搭白色圆领T恤，下着深灰色直筒长裤\", \"body_shape\": \"中等偏瘦，肩线柔和\"}, {\"id\": \"C02\", \"name\": \"林屿\", \"age_group\": \"成年\", \"hair\": \"深栗色短碎发，稍长刘海\", \"clothing\": \"米驼色棉质衬衫，袖口挽至前臂，下着深藏蓝休闲长裤\", \"body_shape\": \"中等身高，肩宽略宽于方澄\"}], \"props\": [{\"id\": \"P01\", \"name\": \"挎包\", \"appearance\": \"软皮小号斜挎包，米灰色金属扣，单层翻盖\", \"owner_id\": \"C01\"}, {\"id\": \"P02\", \"name\": \"院线电影票根\", \"appearance\": \"竖版窄长纸片，米白底深红字，右侧带撕齿虚线，今晚院线开场时间与座位号可读\", \"owner_id\": \"C01\"}, {\"id\": \"P03\", \"name\": \"善后便利贴三张\", \"appearance\": \"正方形小纸片，分别为浅黄、浅粉、浅蓝底，深灰手写短词（对账/改明细/收尾）\", \"owner_id\": \"C01\"}, {\"id\": \"P04\", \"name\": \"咖啡杯\", \"appearance\": \"白色陶瓷马克杯，杯身外侧无图案，杯口微宽\", \"owner_id\": \"C02\"}, {\"id\": \"P05\", \"name\": \"客户明细单\", \"appearance\": \"A4横版打印表格纸，浅灰线条格，黑字数字，红笔批注\", \"owner_id\": \"C02\"}, {\"id\": \"P06\", \"name\": \"结算单\", \"appearance\": \"A4纵版表格纸，右上角有彩色公司logo条，浅蓝表头\", \"owner_id\": \"C02\"}, {\"id\": \"P07\", \"name\": \"签字笔\", \"appearance\": \"黑色细头签字笔，金属笔夹\", \"owner_id\": \"C02\"}], \"scene\": {\"name\": \"傍晚办公室\", \"elements\": [{\"id\": \"E01\", \"name\": \"方澄工位桌\", \"appearance\": \"浅木色长方形办公桌，金属细腿，桌面靠近窗户一侧\"}, {\"id\": \"E02\", \"name\": \"林屿工位桌\", \"appearance\": \"浅木色长方形办公桌，与方澄桌同款，平行摆放，靠近室内一侧\"}, {\"id\": \"E03\", \"name\": \"抽屉柜\", \"appearance\": \"浅木色三斗文件柜，贴墙放置，黑色拉手\"}, {\"id\": \"E04\", \"name\": \"办公室门\", \"appearance\": \"木纹平板门，米灰色，下半部带金属横拉把手，位于房间远端侧墙\"}, {\"id\": \"E05\", \"name\": \"窗户\", \"appearance\": \"宽幅铝合金推拉窗，米灰色半透明卷帘半垂，窗框占据外侧整面墙\"}, {\"id\": \"E06\", \"name\": \"顶灯\", \"appearance\": \"白色圆形吸顶灯，暖白光，位于房间正中天花板\"}, {\"id\": \"E07\", \"name\": \"地面\", \"appearance\": \"浅灰色PVC地板，哑光\"}, {\"id\": \"E08\", \"name\": \"墙面\", \"appearance\": \"米白色乳胶漆墙面，干净无装饰\"}, {\"id\": \"E09\", \"name\": \"办公椅（方澄）\", \"appearance\": \"黑色网面靠背转椅，灰色塑料五星脚\"}, {\"id\": \"E10\", \"name\": \"办公椅（林屿）\", \"appearance\": \"黑色网面靠背转椅，灰色塑料五星脚，与方澄椅同款\"}], \"relations\": [{\"subject\": \"E02\", \"relation\": \"right_of\", \"reference\": \"E01\"}, {\"subject\": \"E01\", \"relation\": \"next_to\", \"reference\": \"E05\"}, {\"subject\": \"E02\", \"relation\": \"next_to\", \"reference\": \"E01\"}, {\"subject\": \"E03\", \"relation\": \"behind\", \"reference\": \"E02\"}, {\"subject\": \"E04\", \"relation\": \"behind\", \"reference\": \"E01\"}, {\"subject\": \"E06\", \"relation\": \"above\", \"reference\": \"E01\"}, {\"subject\": \"E07\", \"relation\": \"below\", \"reference\": \"E01\"}, {\"subject\": \"E08\", \"relation\": \"behind\", \"reference\": \"E05\"}, {\"subject\": \"E09\", \"relation\": \"next_to\", \"reference\": \"E01\"}, {\"subject\": \"E10\", \"relation\": \"next_to\", \"reference\": \"E02\"}]}}, \"material_ref\": {\"source_driver\": \"original\", \"title\": \"这次我先走·参考表达生产\", \"creative_focus\": \"参考时长（可浮动）45—60秒。创作简报：{\\\"audience\\\": \\\"喜欢生活情绪短片的成年观众\\\", \\\"audience_emotion\\\": \\\"先看懂她为什么难拒绝，再替她的选择紧张，最后感到关系发生了真实变化。\\\", \\\"avoid\\\": [\\\"用一次开本子或摸包代替习惯性的付出历史\\\", \\\"靠陪家人看病等新事故替代原本的关系矛盾\\\", \\\"强行争吵、突然完美理解、鸡汤总结\\\", \\\"为了沿用动画尾帧而改回手绘风格\\\"], \\\"constraints\\\": [\\\"观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。\\\", \\\"她想离开和担心拒绝的原因要在实际事件中成立。\\\", \\\"关键反应的构图和窗口必须写入最终视频提示词。\\\", \\\"剧情先按完整故事创作，再拆成生成段；不能为固定八秒切段编造操作。\\\"], \\\"delegated_fields\\\": [], \\\"duration_policy\\\": \\\"flexible\\\", \\\"duration_seconds\\\": [45, 60], \\\"ending\\\": \\\"以新的行动兑现边界及关系变化；不预先规定两人必须和解，不用主题口号收尾。\\\", \\\"relationships\\\": \\\"方澄与同事林屿；林屿已习惯她会答应，方澄担心拒绝会伤及两人的关系。\\\", \\\"schema\\\": \\\"creative_brief/v1\\\", \\\"theme\\\": \\\"总替同事收尾的人，第一次把自己的时间放在前面\\\", \\\"turn\\\": \\\"对方原本把她的帮忙视为理所当然；她明确拒绝后，对方必须面对这一点，再通过具体行动回应。\\\", \\\"visual_style\\\": \\\"写实真人实拍质感的AI短片，成年普通人外貌，真实皮肤纹理、自然光与生活化服装，克制自然表演，关键反应使用可读近景。\\\"}。优先完整表达情绪、事件和画面；按实际对白、刺激与反应安排秒数，总长可随内容浮动，不为靠近参考范围删掉必要表演或增加填充动作。画风仍按简报；明确的局部时序要求仍生效。\", \"material_sha256\": \"b0f5dfe7dce0f300af26a517b56edae479868626faad80b595921812262d8575\", \"source_sha256\": \"e0f61a360a00f25759eec6f521f6b83af9775100fd886066a3b85bf59d16aa82\", \"reference_sha256\": \"bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1\"}, \"reference_pack\": [{\"id\": \"R01\", \"path\": \"D:\\\\IT\\\\ai_douyin\\\\data\\\\reference_reviews\\\\reusable_expression_20261001\\\\EXPRESSION_REFERENCE.md\", \"text\": \"# 已有参考片与教学分析：可复用表达参考\\n\\n用途：借鉴叙事、情绪和摄影表达机制；不是本次剧情来源或硬验收模板。用户当前主题、人物、真人画风、浮动时长和人工视频审核要求优先。不要照搬诈骗、老人、玄关或旧项目专用动作，也不要把所有参考技巧机械塞进短片。\\n\\n## 核心判断\\n\\n参考片用“虚假的关心—真实的付出—伤害—再次渴望关心”组织情绪。最有效的是末尾老人从愤怒到接电话后微笑的变化。画面中每个人在做有目的的事情，表情随具体刺激改变；不靠人物站定后用台词解释全部心理。\\n\\n## 时间轴证据\\n\\n| 时间 | 实际可见内容 | 导演作用 |\\n| --- | --- | --- |\\n| 0–5 秒 | 女生在霓虹街头看手机、展示转账、互相说笑 | 立即交代欺骗关系，让观众比受骗者知道得多 |\\n| 8–18 秒 | 多部手机；男子催促；女子开门进屋、靠近桌子 | 道具解释工作方式，进门动作建立人物和场景联系 |\\n| 20–31 秒 | 女子前景逐一回复手机；男子后景吃东西 | 同一画面有主次行动；她表演关心与身后人的冷漠形成反差 |\\n| 33.5–39 秒 | 老人独坐、看手机、转账界面、对手机讲话 | 将套路切到具体承受者，观众看到真实关切 |\\n| 48–50 秒 | 男子看收款消息，前倾、睁大眼、笑容扩大 | 收款触发贪婪，动作和情绪有因果 |\\n| 50.5–58 秒 | 叫醒女子，递泡面，拿手机催拍，手机取景画面 | 困倦被利用为卖惨素材；道具推动事件 |\\n| 63–78 秒 | 购买金饰、美容、购物、聚餐、泳池炫耀 | 场景变化用于交代骗款去向；不能直接照搬为家庭戏的装饰 |\\n| 77.5–85 秒 | 求还钱消息；泳池跳水切到夜间落水；岸边手机显示消息遭拒 | 剪辑把享乐与受害者绝望并置。人物身份及死亡结果不能仅凭这些帧完全确认 |\\n| 85.5–93 秒 | 抓捕、控制嫌疑人、手机取证 | 交代诈骗被查处，推进结局 |\\n| 93.5–103.5 秒 | 老人看新闻皱眉，随后接电话；字幕“吴叔叔在干嘛”“怎么不理我”，老人逐渐微笑 | 同一人的前后反应完成主题：愤怒没有消除对关心的渴望；来电者身份并未明确 |\\n\\n\\n## 二、四课分别带来的启发\\n\\n下列是基于转写与抽帧的简要归纳，时间用于回看定位，不是逐字引文。\\n\\n1. [0基础，带你做出你人生第一个AI视频](https://www.bilibili.com/video/BV1Z28P6HEGa/)：约3:00–6:10和7:35–9:05，展示剧本先转调度，再转模型提示与角色引用。对本项目的启发是把“镜头观察谁、人物做什么、空间如何呈现”与接口提示编译分层。作者关于一致性的强保证只是演示者判断，不能替代本项目实测。\\n2. [用“抄袭”思维做出AI视频](https://www.bilibili.com/video/BV1sPhE63ERj/)：约5:30–10:10分析构图、色光、参考图与公开工程；约15:45–18:55将已选资产回传给Agent，再校正调度。应学表达机制、记录自己的可复现试验。其首尾帧批评针对示例跳帧，不能据此取消用户当前接续门槛。\\n3. [AI视频究竟怎么学](https://www.bilibili.com/video/BV19fYf6kEnU/)：约8:30–13:10的咖啡店重做显示语音、杯子比例、相似景别切换和情绪出错，随后人工重写调度、局部返修、剪辑。可复用流程必须容纳明确的创作判断和失败处理，不能承诺一键首发全对。\\n4. [如何做出“电影级”AI视频](https://www.bilibili.com/video/BV1uGYE6XEB4/)：约1:00–3:40对比角色参考，约7:30–11:10讨论场景资产。可迁移的是减少身份参考里的杂乱背景、强阴影及不合适表情，同时让场景图服务真实动线。具体模型、4K和版式属于其示例设置，不作为普遍成功保证。\\n\\n教程展示过不同模型／平台及人工选片，不能把其效果直接归因于某段万能提示，也不能推定其接口与项目Mini端能力一致。样片的实际制作模型、提示词、废片率和后期投入未知。\\n\\n## 三、目标样片好在哪里\\n\\n| 观察窗口 | 实际画面与叙事作用 | 可迁移机制 |\\n| --- | --- | --- |\\n| 0–6秒 | 街头女子看手机、同伴交流，随后进入多手机的工作环境 | 开头给具体反差和疑问 |\\n| 20–30秒 | 女子前景回复手机，男子后景吃东西 | 同镜有主次行动，前后景共同传递信息 |\\n| 33–48秒 | 老人、转账界面、男子收款反应交替 | 道具证明信息，近景呈现信息对人的影响 |\\n| 63–78秒 | 消费、购物、聚餐、泳池环境变化 | 用场景变化交代后果与生活反差 |\\n| 93–104秒 | 老人看新闻皱眉，接电话后逐渐放松微笑 | 用刺激后的可见变化完成主题、留下余味 |\\n\\n关键不是表情数量或单张画面的精细度，而是观众的信息、人物的选择和摄影观察对象一起变化。末尾来电者身份不能只凭这些帧确定。目标样片和项目最新片同为720×1280；提高输出分辨率不能单独解决目前的内容差距。\\n\\n\\n### 每镜以观众收到什么为核心\\n\\n明确注意对象、新信息、刺激、反应前后差别、切镜理由、必须可见的证据。每段只传当前相关人物和状态。让对白方式、反应窗口、资产引用和状态由同一权威中间表示编译到最终请求，避免多层重复改写。\"}], \"reference_expression_rule\": \"reference_pack来自已获取的同类视频和教学表达分析。学习信息递进、刺激与反应、具体行动、观察主体及结尾余味；选与当前需求相关的机制，不照搬参考人物、对白、剧情、时长或画风。创作简报优先，不把参考偏好当硬禁令；未观察本次媒体不得宣称表演成功。\"}}"
+      }
+    ],
+    "structured_schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "context_sha256",
+        "duration_policy",
+        "emotional_arc",
+        "causal_chain",
+        "ending_intent",
+        "initial_state",
+        "spatial_contract",
+        "beats"
+      ],
+      "properties": {
+        "schema": {
+          "const": "whole_film_direction_offline_v1"
+        },
+        "context_sha256": {
+          "const": "835bde7c3ee0f6b460ede6e002074019908137706c0e4eba66f6d649b475f044"
+        },
+        "duration_policy": {
+          "const": "floating_local_allocation"
+        },
+        "emotional_arc": {
+          "type": "string",
+          "minLength": 1
+        },
+        "causal_chain": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "ending_intent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "initial_state": {
+          "type": "object",
+          "properties": {
+            "C01": {
+              "type": "object",
+              "properties": {
+                "posture": {
+                  "type": "string",
+                  "enum": [
+                    "standing",
+                    "sitting",
+                    "kneeling",
+                    "lying",
+                    "other"
+                  ]
+                },
+                "position": {
+                  "type": "string"
+                },
+                "gaze": {
+                  "type": "string"
+                },
+                "affect": {
+                  "type": "string"
+                },
+                "facing": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "posture",
+                "position",
+                "gaze",
+                "affect",
+                "facing"
+              ],
+              "additionalProperties": false
+            },
+            "C02": {
+              "type": "object",
+              "properties": {
+                "posture": {
+                  "type": "string",
+                  "enum": [
+                    "standing",
+                    "sitting",
+                    "kneeling",
+                    "lying",
+                    "other"
+                  ]
+                },
+                "position": {
+                  "type": "string"
+                },
+                "gaze": {
+                  "type": "string"
+                },
+                "affect": {
+                  "type": "string"
+                },
+                "facing": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "posture",
+                "position",
+                "gaze",
+                "affect",
+                "facing"
+              ],
+              "additionalProperties": false
+            },
+            "P01": {
+              "type": "object",
+              "properties": {
+                "holder": {
+                  "type": "string",
+                  "enum": [
+                    "C01",
+                    "C02",
+                    "none"
+                  ]
+                },
+                "location": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "holder",
+                "location"
+              ],
+              "additionalProperties": false
+            },
+            "P02": {
+              "type": "object",
+              "properties": {
+                "holder": {
+                  "type": "string",
+                  "enum": [
+                    "C01",
+                    "C02",
+                    "none"
+                  ]
+                },
+                "location": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "holder",
+                "location"
+              ],
+              "additionalProperties": false
+            },
+            "P03": {
+              "type": "object",
+              "properties": {
+                "holder": {
+                  "type": "string",
+                  "enum": [
+                    "C01",
+                    "C02",
+                    "none"
+                  ]
+                },
+                "location": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "holder",
+                "location"
+              ],
+              "additionalProperties": false
+            },
+            "P04": {
+              "type": "object",
+              "properties": {
+                "holder": {
+                  "type": "string",
+                  "enum": [
+                    "C01",
+                    "C02",
+                    "none"
+                  ]
+                },
+                "location": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "holder",
+                "location"
+              ],
+              "additionalProperties": false
+            },
+            "P05": {
+              "type": "object",
+              "properties": {
+                "holder": {
+                  "type": "string",
+                  "enum": [
+                    "C01",
+                    "C02",
+                    "none"
+                  ]
+                },
+                "location": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "holder",
+                "location"
+              ],
+              "additionalProperties": false
+            },
+            "P06": {
+              "type": "object",
+              "properties": {
+                "holder": {
+                  "type": "string",
+                  "enum": [
+                    "C01",
+                    "C02",
+                    "none"
+                  ]
+                },
+                "location": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "holder",
+                "location"
+              ],
+              "additionalProperties": false
+            },
+            "P07": {
+              "type": "object",
+              "properties": {
+                "holder": {
+                  "type": "string",
+                  "enum": [
+                    "C01",
+                    "C02",
+                    "none"
+                  ]
+                },
+                "location": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "holder",
+                "location"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "C01",
+            "C02",
+            "P01",
+            "P02",
+            "P03",
+            "P04",
+            "P05",
+            "P06",
+            "P07"
+          ],
+          "additionalProperties": false
+        },
+        "spatial_contract": {
+          "type": "object",
+          "properties": {
+            "seats": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "seat_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "access_positions": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "uniqueItems": true
+                  },
+                  "required_facing": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "seat_id",
+                  "access_positions",
+                  "required_facing"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "seats"
+          ],
+          "additionalProperties": false
+        },
+        "beats": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "beat_id",
+              "purpose",
+              "composition",
+              "camera",
+              "dialogue_mode",
+              "cut_reason",
+              "new_information",
+              "observation_object",
+              "stimulus",
+              "audience_feeling",
+              "performance_requirements"
+            ],
+            "properties": {
+              "beat_id": {
+                "type": "string",
+                "enum": [
+                  "B1",
+                  "B2",
+                  "B3",
+                  "B4",
+                  "B5"
+                ]
+              },
+              "purpose": {
+                "type": "string"
+              },
+              "composition": {
+                "type": "string"
+              },
+              "camera": {
+                "type": "string"
+              },
+              "dialogue_mode": {
+                "type": "string",
+                "enum": [
+                  "画内对白",
+                  "画外对白",
+                  "混合对白",
+                  "无对白"
+                ]
+              },
+              "cut_reason": {
+                "type": "string"
+              },
+              "new_information": {
+                "type": "string",
+                "minLength": 1
+              },
+              "observation_object": {
+                "type": "string",
+                "minLength": 1
+              },
+              "stimulus": {
+                "type": "string",
+                "minLength": 1
+              },
+              "audience_feeling": {
+                "type": "string",
+                "minLength": 1
+              },
+              "performance_requirements": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "id",
+                    "subject",
+                    "stimulus_source",
+                    "relation",
+                    "minimum_seconds"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "subject": {
+                      "type": "string",
+                      "enum": [
+                        "C01",
+                        "C02"
+                      ]
+                    },
+                    "stimulus_source": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "relation": {
+                      "enum": [
+                        "before",
+                        "during",
+                        "after"
+                      ]
+                    },
+                    "minimum_seconds": {
+                      "type": "number",
+                      "exclusiveMinimum": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "max_completion_tokens": 8000,
+      "temperature": 0.4,
+      "thinking": "disabled",
+      "model": "MiniMax-M3",
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "submit_creative_json"
+        }
+      }
+    }
+  },
+  "request_sha256": "f3242f4beaee46cff096b537466dfd0959865241b81d47eeea661866217bdd31",
+  "token_reservation": 23833,
+  "automatic_retry": false,
+  "response_metadata": {
+    "role": "writer",
+    "provider": "minimax",
+    "requested_model": "MiniMax-M3",
+    "response_model": "MiniMax-M3",
+    "response_id": "070f310213740f3812d880f0e4733df9",
+    "finish_reason": "tool_calls",
+    "thinking_mode": "disabled",
+    "output_mode": "tool_call",
+    "prompt_tokens": 7143,
+    "completion_tokens": 4377,
+    "total_tokens": 11520
+  },
+  "response_text": "{\"schema\":\"whole_film_direction_offline_v1\",\"context_sha256\":\"835bde7c3ee0f6b460ede6e002074019908137706c0e4eba66f6d649b475f044\",\"duration_policy\":\"floating_local_allocation\",\"emotional_arc\":\"先让观众进入一个熟悉的傍晚办公室，看见一个总在替同事收尾的人和她今晚自己的小计划；然后在她被开口的瞬间替她紧张，怕她又像往常一样答应；接着在她轻声但清楚地说出拒绝的那一刻，观众和她一起松一口气；最后看到林屿没有辩解也没有崩掉，而是安静地把过去留下的痕迹揭下来放进抽屉，拿出自己那份结算单重新开始——关系没有靠一句道歉修复，而是被一个具体动作悄悄挪动了位置。\",\"causal_chain\":[\"傍晚办公室里方澄路过林屿桌边顺手端回咖啡杯，林屿随口一句\\\\\\\"上次也是你帮我对完的\\\\\\\"让观众知道她已经不止一次替林屿善后。\",\"方澄回到自己工位，挎包敞口露出今晚院线票根和三张写着\\\\\\\"对账/改明细/收尾\\\\\\\"的旧便利贴，可见后果让观众同时看见她今晚有安排和过去替人收尾的累积。\",\"林屿抬头继续以\\\\\\\"今晚又得麻烦你\\\\\\\"的方式提出请求，方澄手指捏住包带、目光在林屿脸与桌角票根之间来回，犹豫被具体动作承担。\",\"方澄把挎包带放下、合上包口，说出\\\\\\\"这次我先走，你自己对吧\\\\\\\"，林屿手部近景里笔尖停住、字尾划出短斜线，拒绝与停顿在同一拍内被看见。\",\"方澄背起挎包走到门口，林屿低声说\\\\\\\"我以为你会帮我的\\\\\\\"，方澄在门口停一下不回头，推门离开，余白被两人各自承住。\",\"林屿独坐，把桌角三张日期便利贴揭下叠齐收进抽屉，再抽出自己的结算单落笔对账，用具体行动而非台词收束关系的变化。\"],\"ending_intent\":\"不靠台词和解，也不喊主题。关系的变化由林屿亲手揭下旧便利贴、收起过去、再拿出自己的结算单重新对账这个具体行为承担——她把属于自己的时间放到了前面，他则开始为自己的事负责，桌面上少了几张别人留下的便签，多了一份正在被自己填写的结算单。\",\"initial_state\":{\"C01\":{\"posture\":\"standing\",\"position\":\"方澄工位桌(E01)旁，靠窗一侧，手里刚把林屿桌上的咖啡杯(P04)端回中央，正准备转身走回自己桌边\",\"gaze\":\"视线从咖啡杯落到林屿桌面，再准备抬向自己工位方向\",\"affect\":\"平静、带着一种已经习惯帮忙的松弛感，尚未进入犹豫\",\"facing\":\"侧身朝林屿工位(E02)，身体朝向自己工位一侧\"},\"C02\":{\"posture\":\"sitting\",\"position\":\"林屿工位桌(E02)前，办公椅(E10)上，低头面对客户明细单(P05)\",\"gaze\":\"视线落在客户明细单(P05)上，手指握签字笔(P07)\",\"affect\":\"埋头专注、对同事顺手帮忙习以为常、略带随口致谢的随意\",\"facing\":\"面朝桌面，低头略微前倾\"},\"P01\":{\"holder\":\"C01\",\"location\":\"方澄工位椅背(E09)一侧，敞口搁置，尚未上肩\"},\"P02\":{\"holder\":\"C01\",\"location\":\"方澄工位桌角(E01)，紧挨三张善后便利贴(P03)露出，可读到今晚院线开场信息\"},\"P03\":{\"holder\":\"C01\",\"location\":\"方澄工位桌角(E01)，与院线票根(P02)并排，分别为浅黄、浅粉、浅蓝底，手写\\\\\\\"对账/改明细/收尾\\\\\\\"\"},\"P04\":{\"holder\":\"C02\",\"location\":\"林屿工位桌(E02)中央，刚被方澄端回原位\"},\"P05\":{\"holder\":\"C02\",\"location\":\"林屿工位桌(E02)上，摊开在签字笔(P07)下，已有红笔批注\"},\"P06\":{\"holder\":\"C02\",\"location\":\"林屿工位桌(E02)侧边，目前被明细单(P05)半压，未被使用\"},\"P07\":{\"holder\":\"C02\",\"location\":\"林屿右手指间，正在客户明细单(P05)上划动\"}},\"spatial_contract\":{\"seats\":[{\"seat_id\":\"E01\",\"access_positions\":[\"窗侧\",\"林屿工位桌(E02)左侧\"],\"required_facing\":\"办公室门(E04)方向或侧身面向E02\"},{\"seat_id\":\"E02\",\"access_positions\":[\"方澄工位桌(E01)右侧\",\"抽屉柜(E03)一侧\"],\"required_facing\":\"桌面，方向朝E01与E03之间\"},{\"seat_id\":\"E04_门口区\",\"access_positions\":[\"办公室门(E04)正前方半米至一米处\"],\"required_facing\":\"E04门板，可背对E01与E02\"}]},\"beats\":[{\"beat_id\":\"B1\",\"purpose\":\"建立傍晚办公室的日常节奏，让观众从一句随口感谢和三张善后便利贴里，看到方澄已经不止一次替林屿收尾，并知道她今晚另有安排。\",\"composition\":\"先中景建立方澄在林屿桌边端杯的日常动作，再切回她自己的工位，让挎包敞口、票根和三张便利贴在同一画面里被看见。\",\"camera\":\"中景起，接方澄工位中近景，镜头轻随她的移动，傍晚侧光从窗侧斜入，留出桌角细节的可读空间。\",\"dialogue_mode\":\"画内对白\",\"cut_reason\":\"当方澄回到自己工位、挎包敞口与桌角三张便利贴首次同框被看见时，需要一次切镜把观众视线从林屿桌面带到方澄桌面，让\\\\\\\"过去替人善后\\\\\\\"和\\\\\\\"今晚自己的安排\\\\\\\"在同一镜头里同时成立。\",\"new_information\":\"方澄不止一次替林屿对账(由林屿口中\\\\\\\"上次那批\\\\\\\"以及桌角三张不同日期的善后便利贴共同兑现)；方澄今晚有自己要去看的院线开场(由桌角竖版票根兑现)。\",\"observation_object\":\"方澄挎包里外露出的票根与三张善后便利贴；林屿对同事帮忙的随意致谢语气。\",\"stimulus\":\"林屿头也不抬的一句\\\\\\\"上次那批也是你帮我对完的，谢谢啊\\\\\\\"，让观众第一次明确知道方澄的付出不是偶然。\",\"audience_feeling\":\"熟悉、轻微心疼——观众认出了那种总在替同事收尾的人，同时第一次看见她今晚其实有自己想要的时间。\",\"performance_requirements\":[{\"id\":\"PR-B1-1\",\"subject\":\"C01\",\"stimulus_source\":\"林屿头也不抬的随口致谢\",\"relation\":\"during\",\"minimum_seconds\":3},{\"id\":\"PR-B1-2\",\"subject\":\"C02\",\"stimulus_source\":\"方澄端回咖啡杯并准备离开\",\"relation\":\"during\",\"minimum_seconds\":3}]},{\"beat_id\":\"B2\",\"purpose\":\"把请求与犹豫放进同一画面，让观众替方澄紧张，怕她又像过去一样答应。\",\"composition\":\"林屿抬脸的中近景，与方澄手部捏住包带的近景交替，最后让方澄的视线在林屿脸和桌角票根之间来回，被一只收紧的手承担。\",\"camera\":\"从方澄工位切到林屿抬脸的中近景，再用近景锁住方澄手部与包带，配合轻微的视线交换。\",\"dialogue_mode\":\"画内对白\",\"cut_reason\":\"当林屿从埋头转为抬头开口，话语性质从致谢变成又一次请求，需要切镜把这种\\\\\\\"抬头就提要求\\\\\\\"的习惯放大；同时当方澄视线开始从林屿脸移到桌角票根，需要切到近景让犹豫变得可读。\",\"new_information\":\"林屿把让方澄帮忙对账视为理所当然(由\\\\\\\"今晚又得麻烦你\\\\\\\"的语气与措辞兑现)；方澄正在犹豫——她想走，但也担心直接拒绝会伤关系(由手部收紧包带与视线在脸和票根之间来回共同承担)。\",\"observation_object\":\"林屿抬脸提出请求时的随意神情；方澄捏紧包带的手指和她在票根与林屿脸之间来回的目光。\",\"stimulus\":\"林屿抬头说\\\\\\\"今晚又得麻烦你帮我对一下\\\\\\\"——一句在她这里早已默认会被答应的请求。\",\"audience_feeling\":\"替她紧张——观众会下意识捏一把汗，怕她又一次像过去那样把票根塞回包里坐下来。\",\"performance_requirements\":[{\"id\":\"PR-B2-1\",\"subject\":\"C02\",\"stimulus_source\":\"自己已经在请对方帮忙的默认预期\",\"relation\":\"during\",\"minimum_seconds\":3},{\"id\":\"PR-B2-2\",\"subject\":\"C01\",\"stimulus_source\":\"林屿抬头提出帮忙请求，以及桌角今晚院线票根\",\"relation\":\"during\",\"minimum_seconds\":4}]},{\"beat_id\":\"B3\",\"purpose\":\"让拒绝被清楚、轻声但明确地说出口，同时让林屿手上的停顿在同一拍里被看见，把转折落到事实而不是争吵。\",\"composition\":\"方澄的中近景里，包带被重新放下、双手合上包口，说出拒绝；随后切到林屿手部近景，笔尖停住、字尾划出一道短斜线，让\\\\\\\"她拒绝\\\\\\\"和\\\\\\\"他停住\\\\\\\"在同一拍里被观众同时收到。\",\"camera\":\"方澄中近景稳住拒绝的清晰度，再切入林屿手部特写近景，让签字笔尖的停顿与纸面斜线成为转折的可见证据。\",\"dialogue_mode\":\"画内对白\",\"cut_reason\":\"当方澄把包带重新放下、双手合上包口这个决定性动作发生，必须用切镜把它单独交给观众看清；当拒绝的话音落下，必须立刻切到林屿手部近景，让笔尖的停顿作为转折的物理证据同步出现。\",\"new_information\":\"方澄第一次明确拒绝替林屿对账(由她放回包带、合上包口并说出\\\\\\\"这次我先走，你自己对吧\\\\\\\"共同兑现)；林屿被打断的不是关系，而是他手中已经默认会被帮忙的那支笔(由笔尖停住、字尾划出短斜线兑现)。\",\"observation_object\":\"方澄放回包带、合上包口的双手；林屿停在纸面上的签字笔尖和那一道短斜线。\",\"stimulus\":\"方澄自己做出的选择——把挎包带从肩上放下、双手合上包口，然后轻声但清楚地说出拒绝。\",\"audience_feeling\":\"替她松了一口气——观众和她一起在那一秒里把包带放下。\",\"performance_requirements\":[{\"id\":\"PR-B3-1\",\"subject\":\"C01\",\"stimulus_source\":\"自己拉起又放下的包带与合上的包口\",\"relation\":\"during\",\"minimum_seconds\":4},{\"id\":\"PR-B3-2\",\"subject\":\"C02\",\"stimulus_source\":\"方澄说出\\\\\\\"这次我先走，你自己对吧\\\\\\\"\",\"relation\":\"during\",\"minimum_seconds\":3}]},{\"beat_id\":\"B4\",\"purpose\":\"让拒绝和离开各自被双方承住，不靠回头也不靠道歉，留出关系变化的余白。\",\"composition\":\"方澄背起挎包走向办公室门的背影中景，林屿留在工位的中近景低声说出一句依赖式回应；最后锁在方澄手搭上门把、停一下、不回头、推门离开的近景与门缝闭合上。\",\"camera\":\"先用中景跟住方澄走向门口的背影，再切回林屿留在工位的中近景，最后用门口近景收住方澄手搭门把、停顿、不回头、推门离开的过程。\",\"dialogue_mode\":\"画内对白\",\"cut_reason\":\"当方澄背起挎包走向门口，必须切镜让她在空间里移动起来；当林屿低声说出\\\\\\\"我以为你会帮我的\\\\\\\"，需要切回他的中近景让那句依赖式回应被他自己的表情承担；当方澄在门口停下、决定不回头、推门离开，这一串连续动作需要切到门口近景把犹豫与离开同时交给观众。\",\"new_information\":\"林屿用\\\\\\\"我以为你会帮我的\\\\\\\"回应拒绝——他第一次把对她的依赖说出口(由他的台词和仍留在工位的身体状态共同兑现)；方澄没有回头，选择让拒绝和离开一起完成(由门口停顿、不回头、推门离开的连续动作兑现)。\",\"observation_object\":\"方澄走向门口的背影和她停在门把上的手；林屿仍坐在工位里、抬着脸、声音变低的样子。\",\"stimulus\":\"林屿低声说出的\\\\\\\"我以为你会帮我的\\\\\\\"，让拒绝第一次在两人之间被说破。\",\"audience_feeling\":\"心疼但不刺——观众知道这对她对他都很难，但她选择了不回头。\",\"performance_requirements\":[{\"id\":\"PR-B4-1\",\"subject\":\"C01\",\"stimulus_source\":\"林屿低声说出的依赖式回应\",\"relation\":\"during\",\"minimum_seconds\":4},{\"id\":\"PR-B4-2\",\"subject\":\"C02\",\"stimulus_source\":\"方澄背起挎包走向门口并离开\",\"relation\":\"during\",\"minimum_seconds\":3}]},{\"beat_id\":\"B5\",\"purpose\":\"让关系的变化由林屿的具体行动承担——揭下旧便利贴、收起过去、拿出自己的结算单重新对账，不靠台词和解，也不喊主题。\",\"composition\":\"林屿独坐工位的中近景，把桌角三张不同日期的便利贴一张一张揭下、叠齐、放进抽屉；再从桌边抽出自己那份结算单，落下笔尖开始对账。最后停在桌面的近景：旧便利贴已不在，结算单上多了正在被自己填写的笔迹。\",\"camera\":\"林屿独坐的中近景稳住空间，镜头轻微下移到桌面近景，让揭便利贴、收进抽屉、抽出结算单、落笔这一连串动作在观众眼前完成。\",\"dialogue_mode\":\"无对白\",\"cut_reason\":\"方澄离开后必须切到只剩林屿一人的工位中近景，让空间关系立刻变成独处；当林屿开始揭下便利贴，需要切到桌面近景让旧痕迹被一张张揭走的动作被看清；当结算单被抽出、笔尖落下，最后停在桌面近景让\\\\\\\"重新开始\\\\\\\"由笔迹承担。\",\"new_information\":\"林屿没有辩解、没有崩溃，而是用行动回应拒绝：揭下并收好方澄过去留下的三张善后便利贴，再拿出自己的结算单落笔对账(由揭便利贴、叠齐收进抽屉、抽出结算单、落笔的连续动作共同兑现)。\",\"observation_object\":\"林屿揭下旧便利贴的手指、抽屉被拉开又合上的动作、以及结算单上由他亲笔落下的第一笔。\",\"stimulus\":\"方澄已经离开、办公室只剩他一人的空桌面，以及桌角那几张来自过去的便利贴。\",\"audience_feeling\":\"关系没有靠和解修复，但被悄悄挪动了——观众会在结算单的第一笔里感到一种新的、安静的成立感。\",\"performance_requirements\":[{\"id\":\"PR-B5-1\",\"subject\":\"C02\",\"stimulus_source\":\"方澄已经离开的空办公室和桌角旧便利贴\",\"relation\":\"during\",\"minimum_seconds\":5}]}]}",
+  "completed_at": "2026-10-02T18:55:56.412333+00:00",
+  "failure": {
+    "schema": "creative_failure/v1",
+    "code": "MODULE_REQUIREMENT_SOURCE",
+    "category": "validation",
+    "next_action": "existing_bounded_contract_repair",
+    "response_received": true,
+    "automatic_retry": false,
+    "blocks_handoff": true
+  },
+  "validation_error": {
+    "type": "CreativeContractError",
+    "message": "MODULE_REQUIREMENT_SOURCE: 要求ID重复或刺激引用不属于本拍",
+    "detail": {
+      "code": "MODULE_REQUIREMENT_SOURCE",
+      "path": "beats.0",
+      "blocks_handoff": true,
+      "automatic_retry": false,
+      "semantic_approval": false
+    }
+  }
+}

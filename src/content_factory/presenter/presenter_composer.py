@@ -2,7 +2,11 @@ import subprocess
 from pathlib import Path
 
 from src.content_factory.presenter.models import CharacterAsset, PresenterSegment
+from src.content_factory.video_enhancer import VideoEnhancer
+from src.content_factory.video_quality import VideoQualityProfile, resolve_quality_profile
+from src.content_factory.video_quality_gate import VideoQualityGate
 from src.content_factory.video_composer import get_duration
+from src.shared.logger import logger
 
 
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".bmp"}
@@ -10,11 +14,26 @@ VIDEO_EXTENSIONS = {".mp4", ".mov", ".mkv", ".webm", ".avi"}
 
 
 class PresenterComposer:
-    def __init__(self, width: int = 1080, height: int = 1920, fps: int = 30, crf: int = 23):
-        self.width = width
-        self.height = height
-        self.fps = fps
-        self.crf = crf
+    def __init__(
+        self,
+        quality_profile: str | VideoQualityProfile = "publish",
+        *,
+        width: int | None = None,
+        height: int | None = None,
+        fps: int | None = None,
+        crf: int | None = None,
+    ):
+        self.profile = resolve_quality_profile(quality_profile).with_overrides(
+            width=width,
+            height=height,
+            fps=fps,
+            crf=crf,
+        )
+        self.width = self.profile.width
+        self.height = self.profile.height
+        self.fps = self.profile.fps
+        self.enhancer = VideoEnhancer(self.profile)
+        self.quality_gate = VideoQualityGate()
 
     def compose_segment(
         self,
@@ -29,6 +48,7 @@ class PresenterComposer:
         duration = segment.duration or get_duration(segment.audio_path)
         if duration <= 0:
             raise RuntimeError(f"无法读取段落音频时长: {segment.audio_path}")
+        self._verify_character_asset(character, output_path)
 
         cmd = ["ffmpeg", "-y"]
         self._append_background_input(cmd, background_path)
@@ -38,19 +58,19 @@ class PresenterComposer:
 
         role_width = self._role_width(character_size)
         role_x, role_y = self._role_position(character_position)
-        role_filter = f"[1:v]scale={role_width}:-1,format=rgba[role];"
+        content_panel_top = round(self.height * 1340 / 1920)
+        role_filter = f"[1:v]scale={role_width}:-1:flags=lanczos,format=rgba[role];"
         if character.kind == "video_chroma":
             role_filter = (
-                f"[1:v]scale={role_width}:-1,format=rgba,"
+                f"[1:v]scale={role_width}:-1:flags=lanczos,format=rgba,"
                 f"colorkey=0xf4f6ec:0.10:0.04[role];"
             )
 
         filter_complex = (
-            f"[0:v]scale={self.width}:{self.height}:force_original_aspect_ratio=increase,"
-            f"crop={self.width}:{self.height},setsar=1,"
-            f"drawbox=x=0:y=1340:w={self.width}:h={self.height - 1340}:color=0xE9F1F6@0.96:t=fill[bg];"
+            f"[0:v]{self.enhancer.cover_filter()},"
+            f"drawbox=x=0:y={content_panel_top}:w={self.width}:h={self.height - content_panel_top}:color=0xE9F1F6@0.96:t=fill[bg];"
             f"{role_filter}"
-            f"[2:v]scale={self.width}:{self.height},format=rgba[text];"
+            f"[2:v]scale={self.width}:{self.height}:flags=lanczos,format=rgba[text];"
             f"[bg][role]overlay=x={role_x}:y={role_y}:format=auto[tmp];"
             f"[tmp][text]overlay=0:0:format=auto[outv]"
         )
@@ -66,25 +86,15 @@ class PresenterComposer:
                 "-t",
                 f"{duration:.3f}",
                 "-shortest",
-                "-r",
-                str(self.fps),
-                "-c:v",
-                "libx264",
-                "-preset",
-                "fast",
-                "-crf",
-                str(self.crf),
-                "-pix_fmt",
-                "yuv420p",
-                "-c:a",
-                "aac",
-                "-b:a",
-                "192k",
+                *self.profile.video_encoding_args(),
+                *self.profile.audio_encoding_args(),
+                *self.profile.muxing_args(),
                 str(output_path),
             ]
         )
 
         self._run(cmd, timeout=600)
+        self._verify_final_video(output_path, expected_duration=duration)
         return str(output_path)
 
     def concatenate(self, segments: list[PresenterSegment], output_path: Path, bgm_path: str = "") -> str:
@@ -110,6 +120,7 @@ class PresenterComposer:
             str(concat_file),
             "-c",
             "copy",
+            *self.profile.muxing_args(),
             str(stitched),
         ]
         self._run(concat_cmd, timeout=600)
@@ -136,10 +147,12 @@ class PresenterComposer:
                 "aac",
                 "-b:a",
                 "192k",
+                *self.profile.muxing_args(),
                 str(output_path),
             ]
             self._run(mix_cmd, timeout=600)
 
+        self._verify_final_video(output_path)
         return str(output_path)
 
     def _append_background_input(self, cmd: list[str], path: str) -> None:
@@ -165,13 +178,18 @@ class PresenterComposer:
             "medium": 440,
             "large": 540,
         }
-        return sizes.get((size or "medium").strip().lower(), sizes["medium"])
+        base_width = sizes.get((size or "medium").strip().lower(), sizes["medium"])
+        return round(base_width * self.width / 1080)
 
     def _role_position(self, position: str) -> tuple[str, str]:
+        scale = self.width / 1080
+        horizontal_margin = round(42 * scale)
+        bottom_margin = round(86 * scale)
+        center_bottom_margin = round(70 * scale)
         positions = {
-            "right_bottom": ("W-w-42", "H-h-86"),
-            "left_bottom": ("42", "H-h-86"),
-            "center_bottom": ("(W-w)/2", "H-h-70"),
+            "right_bottom": (f"W-w-{horizontal_margin}", f"H-h-{bottom_margin}"),
+            "left_bottom": (str(horizontal_margin), f"H-h-{bottom_margin}"),
+            "center_bottom": ("(W-w)/2", f"H-h-{center_bottom_margin}"),
         }
         return positions.get((position or "right_bottom").strip().lower(), positions["right_bottom"])
 
@@ -179,3 +197,25 @@ class PresenterComposer:
         result = subprocess.run(cmd, capture_output=True, encoding="utf-8", errors="replace", timeout=timeout)
         if result.returncode != 0:
             raise RuntimeError(f"FFmpeg 失败:\n{result.stderr[-1600:]}")
+
+    def _verify_final_video(self, output_path: Path, expected_duration: float | None = None) -> None:
+        report = self.quality_gate.inspect(
+            output_path,
+            self.profile,
+            expected_duration=expected_duration,
+        )
+        report.write_json(output_path.with_suffix(".quality.json"))
+        for warning in report.warnings:
+            logger.warning(f"[VideoQualityGate] {warning.code}: {warning.message}")
+        if not report.passed:
+            details = "; ".join(f"{issue.code}: {issue.message}" for issue in report.issues)
+            raise RuntimeError(f"最终视频未通过质量门禁: {details}")
+
+    def _verify_character_asset(self, character: CharacterAsset, output_path: Path) -> None:
+        report = self.quality_gate.inspect_character_asset(character.path, character.kind)
+        report.write_json(output_path.with_suffix(".character.quality.json"))
+        for warning in report.warnings:
+            logger.warning(f"[CharacterQualityGate] {warning.code}: {warning.message}")
+        if not report.passed:
+            details = "; ".join(f"{issue.code}: {issue.message}" for issue in report.issues)
+            raise RuntimeError(f"角色素材未通过质量门禁: {details}")

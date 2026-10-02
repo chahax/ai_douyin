@@ -1,0 +1,92 @@
+{
+  "schema": "creative_authorized_continuation_result/v1",
+  "created_at": "2026-10-01T13:58:29.704822+00:00",
+  "status": "needs_attention",
+  "text_production_complete": false,
+  "content_passed": false,
+  "video_generated": false,
+  "calls_before": 17,
+  "calls_after": 21,
+  "authorized_max_calls": 24,
+  "remaining_calls": 3,
+  "additional_paid_calls": 4,
+  "reported_tokens_before": 245469,
+  "reported_tokens_after": 354328,
+  "additional_reported_tokens": 108859,
+  "reported_tokens_are_not_verified_money": true,
+  "calls": [
+    {
+      "call_number": 18,
+      "receipt": "director_state_plan__00__incomplete_attempt_01.json",
+      "receipt_sha256": "e3d59899e6ec1c195b3ba177c2f0e61cdec8253a7c8c2a2f3c07d517c69e7f06",
+      "provider": "minimax",
+      "response_id": "070d94b8e72714a40236897e9defd3fe",
+      "finish_reason": "length",
+      "output_mode": "content_after_missing_tool_call",
+      "prompt_tokens": 16366,
+      "completion_tokens": 20000,
+      "total_tokens": 36366
+    },
+    {
+      "call_number": 19,
+      "receipt": "history/call19_20_invalid_plan/director_state_plan__00.json",
+      "receipt_sha256": "c0767971aec84c22e61d1f4b490ab8278653faeea110b1d91d33236bb55b95a4",
+      "provider": "minimax",
+      "response_id": "070d960c9620f5cfba290dc5db67b099",
+      "finish_reason": "tool_calls",
+      "output_mode": "tool_call",
+      "prompt_tokens": 11691,
+      "completion_tokens": 5758,
+      "total_tokens": 17449
+    },
+    {
+      "call_number": 20,
+      "receipt": "history/call19_20_invalid_plan/director_state_plan__00__contract_repair.json",
+      "receipt_sha256": "e24b8b854f219c4fa61ce20508a09bfb6ffc042a8055b5c6b89944a617d237fe",
+      "provider": "minimax",
+      "response_id": "070d964de5a8b4dc2a1d779b83d58c86",
+      "finish_reason": "tool_calls",
+      "output_mode": "tool_call",
+      "prompt_tokens": 22776,
+      "completion_tokens": 331,
+      "total_tokens": 23107
+    },
+    {
+      "call_number": 21,
+      "receipt": "director_state_plan__00.json",
+      "receipt_sha256": "c07a0d071b0c4d40ba5fe80184bbdf9e86f4ca4a87e52972803fc6def238a20d",
+      "provider": "minimax",
+      "response_id": "070d9716c4dd2e7064054b7eee0770ea",
+      "finish_reason": "length",
+      "output_mode": "content_after_missing_tool_call",
+      "prompt_tokens": 11937,
+      "completion_tokens": 20000,
+      "total_tokens": 31937
+    }
+  ],
+  "plan_review_reached": false,
+  "deepseek_calls_this_continuation": 0,
+  "revision_rounds": 4,
+  "max_revisions": 5,
+  "contract_repairs_used": 7,
+  "max_contract_repairs": 8,
+  "minimum_remaining_calls_for_complete_text_delivery": 4,
+  "root_cause_classification": {
+    "call18_and21": "output_protocol: request thinking disabled and function selection, returned long analysis/no tool call, finish_reason length; server adherence not independently verified",
+    "call19": "state_contract: confusing ownership with current holding; coffee place without obtaining it",
+    "call20": "patch_protocol: boxed scalar strings and ancestor/descendant overlaps"
+  },
+  "formal_artifacts_exist": {
+    "SCREENPLAY.md": false,
+    "SCREENPLAY.json": false,
+    "STORYBOARD.json": false,
+    "STATE_PLAN.json": false,
+    "PRODUCTION_DESIGN.json": false,
+    "EXECUTION_DRAFT.json": false,
+    "MEDIA_HANDOFF.json": false
+  },
+  "diagnostic": "MODEL_OUTPUT_PROTOCOL_DIAGNOSTIC.json",
+  "automatic_content_approval": false,
+  "automatic_retry": false,
+  "recommended_next_work": "先隔离验证MiniMax输出协议与供应商参数执行，再将director生成任务与结构编译责任拆开；不继续为同一请求堆规则、扩输出窗口或把无效计划放行。未进行切接口/换模型/扩大预算。"
+}

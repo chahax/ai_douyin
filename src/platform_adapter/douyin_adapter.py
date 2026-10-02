@@ -77,6 +77,12 @@ class DouyinAdapter:
         )
 
     def publish_video(self, request: PublishRequest, interactive: bool = False) -> PublishResult:
+        from src.services.artifact_account import artifact_account
+        from pathlib import Path
+        owner = artifact_account({'production_manifest': str(Path(request.video_path).parent / 'production.json')})
+        requested_owners = {value for value in (request.extra_metadata.get('account_uuid'), owner['account_uuid']) if value}
+        if owner.get('account_conflict') or (self.runtime_context and any(value != self.runtime_context.account_uuid for value in requested_owners)):
+            return PublishResult(success=False, status='account_mismatch', message='成片或发布请求属于其他运营账号，已阻止发布。')
         check = self._require_runtime_identity(force=True)
         if check is not None:
             return PublishResult(
@@ -85,6 +91,9 @@ class DouyinAdapter:
                 message=check[1],
             )
         request.extra_metadata["account_key"] = self.runtime_context.account_key
+        request.extra_metadata["account_uuid"] = self.runtime_context.account_uuid
+        request.extra_metadata["platform_identity_key"] = self.runtime_context.binding.platform_identity_key
+        request.extra_metadata["binding_verified_at"] = self.runtime_context.binding.verified_at
         request.extra_metadata["douyin_identity"] = (
             self.runtime_context.identity_label
         )
@@ -94,6 +103,17 @@ class DouyinAdapter:
             self.runtime_context.account_key,
         )
         return self.publish_workflow.publish(request, interactive=interactive)
+
+    def verify_published_video(self, request, post_id, publish_url):
+        """Inspect an existing exact work through the bound browser; never upload."""
+        from src.platform_adapter.publish_verification import video_id
+        check = self._require_runtime_identity(force=True)
+        if check is not None:
+            raise RuntimeError(check[1])
+        if video_id(publish_url) != post_id:
+            raise ValueError('verification requires an exact published video URL')
+        page = self.session.open_page(publish_url)
+        return self.publish_workflow._verify_published_work(page, post_id, publish_url, request)
 
     def reply_to_comment(
         self,
@@ -166,6 +186,9 @@ class DouyinAdapter:
             v.account_key = self.runtime_context.account_key
             if save_video(v):
                 new_count += 1
+            if v.creator_metrics is not None:
+                from src.services.content_performance import record_snapshot
+                record_snapshot(v)
             if trend_repository is not None and v.video_id and v.stats:
                 try:
                     from src.services.video_service import get_video_by_id
@@ -189,25 +212,22 @@ class DouyinAdapter:
                 except Exception as exc:
                     logger.warning(f"保存视频指标快照失败，视频同步继续: {exc}")
 
-        # 标记在平台上已删除的视频为 failed
-        # API成功但返回0个视频 → 平台上已无视频，应将所有 published 标记为 failed
-        existing_ids = [v.video_id for v in videos if v.video_id]
-        deleted_count = mark_videos_deleted(
-            existing_ids,
-            allow_empty=(api_success and len(videos) == 0),
-            account_uuid=self.runtime_context.account_uuid,
-        )
+        # A bounded/partial list cannot prove deletion. Background refresh only
+        # upserts observed works; reconciliation requires a complete snapshot.
+        deleted_count = 0
 
         finished_at = datetime.now().isoformat()
-        status = "success" if videos else "failed"
+        status = "success" if api_success else "failed"
         record_sync("videos", len(videos), new_count, started_at, finished_at, status)
 
         msg = f"共同步到 {len(videos)} 个视频，新增 {new_count} 个"
+        if not api_success:
+            msg = '作品接口未成功，不能认定账号没有作品；请核对创作者中心登录并查看同步日志。'
         if deleted_count > 0:
             msg += f"，标记 {deleted_count} 个已删除"
 
         return SyncResult(
-            success=bool(videos) or deleted_count > 0,
+            success=api_success,
             status=status,
             videos=videos,
             message=msg,

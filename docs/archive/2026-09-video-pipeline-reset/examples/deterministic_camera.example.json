@@ -1,0 +1,27 @@
+{
+  "template": "deterministic_camera/v1",
+  "source_image": "../../data/qa/deterministic_camera_v1/source.png",
+  "output_path": "../../data/qa/deterministic_camera_v1/push_in.mp4",
+  "width": 704,
+  "height": 1248,
+  "fps": 25,
+  "duration_seconds": 3.88,
+  "motion": {
+    "start_zoom": 1.0,
+    "end_zoom": 1.05,
+    "start_center": [0.5, 0.5],
+    "end_center": [0.51, 0.49],
+    "easing": "smooth"
+  },
+  "safety": {
+    "maximum_zoom": 1.08,
+    "maximum_zoom_delta": 0.08,
+    "maximum_pan_distance": 0.04,
+    "minimum_activity_ratio": 0.03,
+    "maximum_luma_range": 6
+  },
+  "encoding": {
+    "crf": 18,
+    "preset": "slow"
+  }
+}

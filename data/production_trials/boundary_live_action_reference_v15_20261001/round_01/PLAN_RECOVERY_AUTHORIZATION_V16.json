@@ -1,0 +1,52 @@
+{
+  "schema": "failed_plan_recovery/v1",
+  "created_at": "2026-10-01T12:56:48.557669+00:00",
+  "authorization": "用户2026-10-01明确要求继续执行本流程；保留原14次调用及所有旧稿，用剩余额度重建未审核的导演工件。",
+  "budget_before": {
+    "calls_started": 14,
+    "reported_tokens": 195507,
+    "revision_rounds": 1,
+    "contract_repairs_used": 5,
+    "max_calls": 20,
+    "max_total_tokens": 500000,
+    "max_revisions": 5,
+    "max_contract_repairs": 8
+  },
+  "previous_rule_binding": {
+    "schema_version": "creative_rule_registry_binding/v1",
+    "registry_dir": "data/creative_governance/20261001_v15_reference_expression",
+    "artifact_manifest_sha256": "6c4202d1c4ff16732ecc96d36b7d37ed9d0be88f31b4bc9d70197c4f6cbf4ef7",
+    "rules_sha256": "29e620cec1d6f212ab307317e8378d6c366ac9fed791793d814df31d0ad73299",
+    "repository_wide_complete": false,
+    "automatic_rule_activation": false
+  },
+  "new_rule_binding": {
+    "schema_version": "creative_rule_registry_binding/v1",
+    "registry_dir": "data/creative_governance/20261001_v16_failed_plan_recovery",
+    "artifact_manifest_sha256": "28d1814435dad2a765924c11c11e86445bd9a6598055653886f011065b8eb115",
+    "rules_sha256": "29e620cec1d6f212ab307317e8378d6c366ac9fed791793d814df31d0ad73299",
+    "repository_wide_complete": false,
+    "automatic_rule_activation": false
+  },
+  "archive": {
+    "director_brief__rule_activation.json": "0a5790bdb4dc70d1d46543d512aec4102615144151279a02cdfc9a1f70ce177b",
+    "director_state_plan__00.json": "2b0439cc7c45e22452500aad2e1c8a4d19775f1b5400917c26669b08332c7931",
+    "director_state_plan__00__contract_repair.json": "818ea861f91d3fa9479eacf401719d9f7b2099d98f51e49417cf832deb515035",
+    "director_state_plan__00__contract_repair_214605635ccd.json": "45edcdcd03bf709e3d5d74f5600616d5bb263e926cb4220641b48d295f8c59c9",
+    "director_state_plan__00__contract_repair_42d200746c9b.json": "e7a8e48d77f4012928fa2a11d825fb667b9aeadc113488e5fe4a6aeb95f82e1c",
+    "director_state_plan__00__contract_repair_42d200746c9b__action_patch_merge.json": "79707fca5134dddd49500e17523203a470fa5aaa825ab89d50959ae4f4c9fc33",
+    "director_state_plan__00__contract_repair_b79373e4fad5.json": "c928185cd4530d4f149fee071d6415076c70bb8aab2b45e9aa7fd95dbbdb2520",
+    "director_state_plan__00__contract_repair_b79373e4fad5__action_patch_merge.json": "042ed95b2ac05cac81ffc73154bbb917fd6e3308b07b4cde15bc71697ecfc94f",
+    "director_state_plan__00__contract_repair__action_patch_merge.json": "370ce0bdf8521fe35d7e848af293cba4876b0e7bafd82bfc11517580cf19af01",
+    "director_state_plan__00__rule_activation.json": "065b5ed330a2f1f235bf62437ca42ffd11513aa037d96c4beac3c9629a978b88",
+    "script_review__story_00_00__rule_activation.json": "0a5790bdb4dc70d1d46543d512aec4102615144151279a02cdfc9a1f70ce177b",
+    "script_review__story_00_01__rule_activation.json": "0a5790bdb4dc70d1d46543d512aec4102615144151279a02cdfc9a1f70ce177b",
+    "static_visual_manifest.json": "49903f4d8d9d6e4db4efc1aff38d89d16488da717aceab2b6adfb07fdd6ece2a",
+    "static_visual_manifest__rule_activation.json": "0a5790bdb4dc70d1d46543d512aec4102615144151279a02cdfc9a1f70ce177b",
+    "writer_analysis__rule_activation.json": "0a5790bdb4dc70d1d46543d512aec4102615144151279a02cdfc9a1f70ce177b",
+    "writer_director_feedback__rule_activation.json": "0a5790bdb4dc70d1d46543d512aec4102615144151279a02cdfc9a1f70ce177b",
+    "writer_revise__preflight_story_00_01__rule_activation.json": "0a5790bdb4dc70d1d46543d512aec4102615144151279a02cdfc9a1f70ce177b",
+    "writer_script__rule_activation.json": "0a5790bdb4dc70d1d46543d512aec4102615144151279a02cdfc9a1f70ce177b"
+  },
+  "automatic_approval": false
+}

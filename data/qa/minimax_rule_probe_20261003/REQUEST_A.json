@@ -1,0 +1,88 @@
+{
+  "case_id": "A",
+  "title": "基本工具格式",
+  "compare_to": null,
+  "input_context_sha256": "42c3763ae6b77b009c4bd983c1a4c77a59a55947154e09fabd67f634d4e75ae3",
+  "request_sha256": "3ecac48ad11cabeca054118c7d4574e81c307dcdf111ec9243af7282b6d20801",
+  "request": {
+    "model": "MiniMax-M3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "用指定工具提交本任务的完整结果。不要写分析或其他正文。"
+      },
+      {
+        "role": "user",
+        "content": "{\"characters\":[{\"id\":\"C01\",\"name\":\"甲\"},{\"id\":\"C02\",\"name\":\"乙\"}],\"fixture_only\":true,\"schema\":\"synthetic_rule_probe_context/v1\",\"script\":{\"beats\":[{\"dialogue\":[{\"speaker\":\"C02\",\"text\":\"今晚我自己弄，你先走。\"}],\"event\":\"甲把杯子放到桌面。\",\"id\":\"B1\"}]},\"task\":\"只提交两项表演要求：第一项，放杯事件结束后观察甲两秒；第二项，乙说这句对白期间观察甲两秒。来源填写对应剧本字段路径。\"}"
+      }
+    ],
+    "temperature": 0.4,
+    "max_completion_tokens": 1024,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "submit_creative_json",
+          "description": "提交本阶段完整结构化创作结果",
+          "parameters": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "performance_requirements"
+            ],
+            "properties": {
+              "performance_requirements": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "id",
+                    "subject",
+                    "stimulus_source",
+                    "relation",
+                    "minimum_seconds"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "subject": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "stimulus_source": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "relation": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "minimum_seconds": {
+                      "type": "number",
+                      "exclusiveMinimum": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "tool_choice": {
+      "type": "function",
+      "function": {
+        "name": "submit_creative_json"
+      }
+    }
+  },
+  "conservative_token_reservation": 2314
+}

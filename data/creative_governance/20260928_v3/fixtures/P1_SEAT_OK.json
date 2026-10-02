@@ -1,0 +1,30 @@
+{
+  "schema_version": "creative_eval_case/v1",
+  "source_hash": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+  "created_at": "2026-09-28T13:55:55.609742+00:00",
+  "implementation_status": "candidate_label_not_gold",
+  "case": {
+    "case_id": "P1_SEAT_OK",
+    "category": "space",
+    "case_kind": "correct",
+    "scenario": "Executable existing checker test: test_separate_approach_and_face_then_sit_is_valid_and_compiled",
+    "expected_disposition": "passed",
+    "label_status": "candidate",
+    "adjudication": {
+      "approved_by": null,
+      "approved_at": null,
+      "candidate_author": "Codex assistant; requires independent human adjudication"
+    },
+    "source_family": "P1_SHARED_SAMPLE",
+    "independence_group": "P1_SHARED_SAMPLE",
+    "split": "development",
+    "used_for_prompt_tuning": true,
+    "expected_issues": [],
+    "evidence": [],
+    "source_paths": [
+      "tests/test_creative_action_plan_v2.py:test_separate_approach_and_face_then_sit_is_valid_and_compiled"
+    ],
+    "production_validated": false,
+    "test_source_sha256": "f2c1fb13963b1c40477f07e7c600e8027154fbb9691df40903c5b7b1d19e0171"
+  }
+}

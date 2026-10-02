@@ -1,0 +1,194 @@
+{
+  "schema": "creative_stage/v1",
+  "status": "validated",
+  "stage": "static_visual_manifest",
+  "role": "director",
+  "input_sha256": "45732b85973da8ebcb96c54c89a2409de8555063fe142aba6a1712d0ae0401e5",
+  "prompt_sha256": "d8fd8aa1048677566ca069fba6c6afeafe165a40ed4ea79c032e8bc9951b55f4",
+  "context_budget": {
+    "schema": "creative_context_budget/v1",
+    "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+    "serialized_input_characters": 4604,
+    "estimated_input_tokens": 4604,
+    "requested_max_output_tokens": 20000,
+    "estimated_total_tokens": 24604,
+    "provider": "minimax",
+    "model": "MiniMax-M3",
+    "planning_context_window_tokens": 512000,
+    "advertised_context_window_tokens": 1000000,
+    "source_url": "https://www.minimax.io/models/text/m3",
+    "verified_on": "2026-09-24"
+  },
+  "request": {
+    "messages": [
+      {
+        "role": "system",
+        "content": "为完整剧本创建一次可跨镜复用的静态视觉清单，返回JSON，不写剧本或分镜。这里只锁定人物身份外观、物体形状和固定场景几何，绝不写站坐、手持、视线、表情、肩部紧松、动作、对白、某拍限定。道具owner_id是归属而不是当前拿在手里。clothing只写服装款式材质颜色，包作为prop；当前佩戴方式、位置由分镜首态决定。scene.relations仅描述固定场景元素关系，不能包含人物/移动道具。不要继承旧style中混入的姿态。所有外观是可复用制作选择，符合creative_brief和剧本，人物必须覆盖全体具名角色。render.style_option_id引用已选风格。所有自由文本仅写字段对应的静态属性，未知可作一致的制作选择。\n契约：{\"schema\":\"static_visual_manifest_v2\",\"render\":{\"style_option_id\":\"S01\",\"visual_medium\":\"...\",\"palette\":\"...\",\"light_source\":\"...\"},\"characters\":[{\"id\":\"C01\",\"name\":\"...\",\"age_group\":\"成年\",\"hair\":\"发型颜色\",\"clothing\":\"款式材质颜色\",\"body_shape\":\"体型比例\"}],\"props\":[{\"id\":\"P01\",\"name\":\"...\",\"appearance\":\"形状材质颜色\",\"owner_id\":\"C01或shared\"}],\"scene\":{\"name\":\"...\",\"elements\":[{\"id\":\"E01\",\"name\":\"...\",\"appearance\":\"形状材质颜色\"}],\"relations\":[{\"subject\":\"E01\",\"relation\":\"left_of|right_of|behind|in_front_of|next_to|above|below|inside|on\",\"reference\":\"E02\"}]}}\n不输出其他键。\n资产分类遵守creative_brief：明确为固定场景资产的桌椅、灯具等必须放scene.elements，不能因物理上能移动就放props；需要承接人物坐下的固定椅子须在scene.relations中绑定到对应桌边。props仅放剧情中的移动/随身物品。on表示接触并位于参照物表面，above仅指空间高于、不表示接触；关系值只能使用契约枚举，不能自行改为on_top_of。空间使用场景坐标，不把画面左右作为跨机位恒定关系。"
+      },
+      {
+        "role": "user",
+        "content": "{\"script\": {\"title\": \"这次先回去\", \"premise\": \"晚间办公室，林遥背起包走到陈禾桌边准备离开，陈禾拿起一只文件夹开口请求帮忙顺路带一下；林遥第一次平静拒绝，陈禾先听完再把文件夹平放回自己桌面并口头接受，林遥听见后才放松，自然道别走向门口，陈禾坐回接手自己工作，关系保持正常。\", \"selected_candidate_id\": \"C01\", \"duration_seconds\": 40, \"beats\": [{\"id\": \"B1\", \"duration_seconds\": 10, \"event\": \"晚间办公室，林遥背起包走到陈禾桌边准备道别；陈禾从桌面拿起一只文件夹，抬眼叫住她。\", \"trigger\": \"陈禾持文件夹叫住林遥，请求信号显形\", \"before\": \"林遥背起包走到陈禾桌边，脚步放缓准备道别。\\n陈禾从桌面拿起一只文件夹，抬眼看向林遥。\", \"during\": \"（无新增动作）\", \"after\": \"（无新增动作）\", \"dialogue\": [{\"speaker\": \"陈禾\", \"text\": \"这份今天能顺路帮我带一下吗？\"}]}, {\"id\": \"B2\", \"duration_seconds\": 10, \"event\": \"林遥停下看着文件夹，短暂停顿后口头拒绝。\", \"trigger\": \"林遥明确拒绝，拒绝由本人清晰对白完成\", \"before\": \"林遥停下脚步，目光落在陈禾手中文件夹上。\", \"during\": \"陈禾的手仍持文件夹，没递出，停在半空。\", \"after\": \"（无新增动作）\", \"dialogue\": [{\"speaker\": \"林遥\", \"text\": \"今天不行，我赶时间。\"}]}, {\"id\": \"B3\", \"duration_seconds\": 10, \"event\": \"两人完成至少两秒可读沉默后，陈禾把文件夹平放回自己桌面，并口头接受。\", \"trigger\": \"陈禾先听完再表态，等待可读后再开口接受\", \"before\": \"林遥从陈禾手中的文件夹抬眼看向陈禾。\\n两人保持沉默对视至少2秒，肩线不动，呼吸可见。\\n陈禾面部先软化，把文件夹平放回自己桌面。\", \"during\": \"（无新增动作）\", \"after\": \"（无新增动作）\", \"dialogue\": [{\"speaker\": \"陈禾\", \"text\": \"那我明早自己跑一趟。\"}]}, {\"id\": \"B4\", \"duration_seconds\": 10, \"event\": \"林遥听见接受后肩膀微松、点头道别，朝门口走出两步；陈禾转身面向桌面，坐下接手工作。\", \"trigger\": \"林遥放松发生在听到接受之后，结尾只兑现离开与各自承担\", \"before\": \"林遥肩膀微松，点了点头。\", \"during\": \"林遥转身朝室内门口走出两步，自然道别离开。\", \"after\": \"陈禾转身面向自己的桌面，坐下接手工作。\", \"dialogue\": [{\"speaker\": \"林遥\", \"text\": \"麻烦你了，明天见。\"}]}], \"screenplay_markdown\": \"# 这次先回去\\n\\n## B1 晚间办公室，林遥背起包走到陈禾桌边准备道别；陈禾从桌面拿起一只文件夹，抬眼叫住她。\\n\\n林遥背起包走到陈禾桌边，脚步放缓准备道别。\\n陈禾从桌面拿起一只文件夹，抬眼看向林遥。\\n\\n**陈禾**：这份今天能顺路帮我带一下吗？\\n\\n（无新增动作）\\n\\n（无新增动作）\\n\\n## B2 林遥停下看着文件夹，短暂停顿后口头拒绝。\\n\\n林遥停下脚步，目光落在陈禾手中文件夹上。\\n\\n**林遥**：今天不行，我赶时间。\\n\\n陈禾的手仍持文件夹，没递出，停在半空。\\n\\n（无新增动作）\\n\\n## B3 两人完成至少两秒可读沉默后，陈禾把文件夹平放回自己桌面，并口头接受。\\n\\n林遥从陈禾手中的文件夹抬眼看向陈禾。\\n两人保持沉默对视至少2秒，肩线不动，呼吸可见。\\n陈禾面部先软化，把文件夹平放回自己桌面。\\n\\n**陈禾**：那我明早自己跑一趟。\\n\\n（无新增动作）\\n\\n（无新增动作）\\n\\n## B4 林遥听见接受后肩膀微松、点头道别，朝门口走出两步；陈禾转身面向桌面，坐下接手工作。\\n\\n林遥肩膀微松，点了点头。\\n\\n**林遥**：麻烦你了，明天见。\\n\\n林遥转身朝室内门口走出两步，自然道别离开。\\n\\n陈禾转身面向自己的桌面，坐下接手工作。\"}, \"creative_brief\": {\"schema\": \"creative_brief/v1\", \"theme\": \"一个习惯答应同事额外请求的人，第一次平静拒绝，发现关系并没有因此破裂。\", \"duration_seconds\": [36, 44], \"delegated_fields\": [], \"audience\": \"在工作中不敢说不的成年人\", \"relationships\": \"林遥和陈禾是平级成年女同事，互相尊重；陈禾提出临时帮忙请求，林遥决定拒绝。没有上司施压、恋爱或亲属关系。\", \"audience_emotion\": \"从怕让人失望的小紧张，到说出界限后的等待，最后释然；自然温暖，不讲道理。\", \"visual_style\": \"竖屏9:16，电影感二维手绘动画，低饱和办公空间、柔和晚间灯光，稳定成年人物比例。\", \"turn\": \"林遥明确拒绝后，陈禾实际听完并接受，自己收回待办；林遥看到对方态度才放松，不把拒绝改成勉强答应。\", \"ending\": \"林遥自然道别、松开紧绷的姿势，朝房间门口走出两步；陈禾留在桌边接手自己的工作，双方关系保持正常。\", \"constraints\": [\"仅林遥、陈禾两名成年人，场景固定同一间办公室桌边到室内门口的短距离，不切外景。\", \"唯一关键可移动道具是一只文件夹，始终由提出请求的陈禾持有或放在她自己桌面，不能交给林遥。桌椅为固定场景资产。\", \"关键拒绝和接受由本人清晰对白表达，不靠手机、屏幕、小字、旁白或闪回承担因果。\", \"重要拒绝后有至少2秒可读等待反应，再由陈禾自然接受；林遥在听见接受后才明显放松。\", \"每拍最多两句对白。结尾不超过10秒，只兑现离开与各自承担，不增加解释或新任务。\"], \"avoid\": [\"把平级同事写成刻薄上司\", \"道歉独白、励志说教、突然冲突反转\", \"用反复握手、搬椅子和文件交接填时长\"]}, \"director_brief\": {\"selected_style_id\": \"S01\"}, \"static_manifest_version\": \"static_visual_manifest_v2\", \"material_ref\": {\"source_driver\": \"original\", \"approved_script_sha256\": \"11c5da841077f29462704d8f60e3b3e5c0d2902c02e99c4109453925a9ac9134\", \"continuation_inputs_sha256\": \"d716c03d5af7471d61732b9e7fef8c5c5d16f5598cdd996caa97f95ff58b4ce4\"}}"
+      }
+    ],
+    "message_sha256": "f580b266378ca026234c96f23843befe773b81e46f210244bcf7ea0c153ccb93",
+    "tool_schema_sha256": null,
+    "parameters": {
+      "max_completion_tokens": 20000,
+      "temperature": 0.4,
+      "thinking": "disabled"
+    }
+  },
+  "started_at": "2026-09-28T14:37:47.453349+00:00",
+  "response_text": "{\"schema\":\"static_visual_manifest_v2\",\"render\":{\"style_option_id\":\"S01\",\"visual_medium\":\"电影感二维手绘动画\",\"palette\":\"低饱和暖灰与米白为主，桌面木质与文件纸面为中性偏暖白，灯光呈柔和琥珀色\",\"light_source\":\"室内顶灯为主的暖色主光，桌面台灯作为次级柔和补光，窗光极弱暗示晚间\"},\"characters\":[{\"id\":\"C01\",\"name\":\"林遥\",\"age_group\":\"成年\",\"hair\":\"齐肩直发，深棕色\",\"clothing\":\"米白色薄针织开衫，内搭浅灰色圆领上衣，下着深藏青色直筒长裤\",\"body_shape\":\"中等身高，肩线柔和，比例稳定写实\"},{\"id\":\"C02\",\"name\":\"陈禾\",\"age_group\":\"成年\",\"hair\":\"低马尾，黑色\",\"clothing\":\"雾蓝色宽松衬衫式上衣，下着深灰色西裤\",\"body_shape\":\"中等身高，肩部较平直，比例稳定写实\"}],\"props\":[{\"id\":\"P01\",\"name\":\"文件夹\",\"appearance\":\"A4尺寸硬质浅米色封面文件夹，正面有一道浅灰横条\",\"owner_id\":\"C02\"},{\"id\":\"P02\",\"name\":\"林遥的包\",\"appearance\":\"中号软皮单肩包，焦糖棕色，金属暗扣\",\"owner_id\":\"C01\"}],\"scene\":{\"name\":\"晚间办公室（陈禾工位至室内门口）\",\"elements\":[{\"id\":\"E01\",\"name\":\"陈禾办公桌\",\"appearance\":\"浅橡木色矩形办公桌，桌面有台灯、笔筒和少量纸件\"},{\"id\":\"E02\",\"name\":\"陈禾办公椅\",\"appearance\":\"深灰色布面靠背办公椅，五爪滚轮底座\"},{\"id\":\"E03\",\"name\":\"桌面台灯\",\"appearance\":\"细金属臂暖光台灯，米白色圆锥灯罩\"},{\"id\":\"E04\",\"name\":\"笔筒\",\"appearance\":\"哑光黑色圆柱笔筒，内有数支深色笔\"},{\"id\":\"E05\",\"name\":\"室内门口\",\"appearance\":\"木色门框配半透明磨砂玻璃门片，位于陈禾工位斜对角\"},{\"id\":\"E06\",\"name\":\"背景墙体与隔断\",\"appearance\":\"低饱和暖灰色墙体，浅木色矮隔断\"},{\"id\":\"E07\",\"name\":\"顶部主灯\",\"appearance\":\"嵌入式暖白圆盘顶灯，位于工位上方\"},{\"id\":\"E08\",\"name\":\"地面\",\"appearance\":\"浅灰色哑光地砖，质感均匀\"}],\"relations\":[{\"subject\":\"E01\",\"relation\":\"next_to\",\"reference\":\"E02\"},{\"subject\":\"E03\",\"relation\":\"on\",\"reference\":\"E01\"},{\"subject\":\"E04\",\"relation\":\"on\",\"reference\":\"E01\"},{\"subject\":\"E05\",\"relation\":\"right_of\",\"reference\":\"E01\"},{\"subject\":\"E06\",\"relation\":\"behind\",\"reference\":\"E01\"},{\"subject\":\"E07\",\"relation\":\"above\",\"reference\":\"E01\"},{\"subject\":\"E01\",\"relation\":\"on\",\"reference\":\"E08\"},{\"subject\":\"E02\",\"relation\":\"on\",\"reference\":\"E08\"},{\"subject\":\"E05\",\"relation\":\"on\",\"reference\":\"E08\"}]}}",
+  "response_metadata": {
+    "role": "writer",
+    "provider": "minimax",
+    "requested_model": "MiniMax-M3",
+    "response_model": "MiniMax-M3",
+    "response_id": "0709aebebb43f639ca92264057989fa3",
+    "finish_reason": "stop",
+    "thinking_mode": "disabled",
+    "output_mode": "content",
+    "prompt_tokens": 2182,
+    "completion_tokens": 662,
+    "total_tokens": 2844,
+    "logical_role": "director",
+    "workflow_stage": "static_visual_manifest",
+    "model_profile": "minimax_create_deepseek_review",
+    "transport_config_role": "writer"
+  },
+  "output": {
+    "schema": "static_visual_manifest_v2",
+    "render": {
+      "style_option_id": "S01",
+      "visual_medium": "电影感二维手绘动画",
+      "palette": "低饱和暖灰与米白为主，桌面木质与文件纸面为中性偏暖白，灯光呈柔和琥珀色",
+      "light_source": "室内顶灯为主的暖色主光，桌面台灯作为次级柔和补光，窗光极弱暗示晚间"
+    },
+    "characters": [
+      {
+        "id": "C01",
+        "name": "林遥",
+        "age_group": "成年",
+        "hair": "齐肩直发，深棕色",
+        "clothing": "米白色薄针织开衫，内搭浅灰色圆领上衣，下着深藏青色直筒长裤",
+        "body_shape": "中等身高，肩线柔和，比例稳定写实"
+      },
+      {
+        "id": "C02",
+        "name": "陈禾",
+        "age_group": "成年",
+        "hair": "低马尾，黑色",
+        "clothing": "雾蓝色宽松衬衫式上衣，下着深灰色西裤",
+        "body_shape": "中等身高，肩部较平直，比例稳定写实"
+      }
+    ],
+    "props": [
+      {
+        "id": "P01",
+        "name": "文件夹",
+        "appearance": "A4尺寸硬质浅米色封面文件夹，正面有一道浅灰横条",
+        "owner_id": "C02"
+      },
+      {
+        "id": "P02",
+        "name": "林遥的包",
+        "appearance": "中号软皮单肩包，焦糖棕色，金属暗扣",
+        "owner_id": "C01"
+      }
+    ],
+    "scene": {
+      "name": "晚间办公室（陈禾工位至室内门口）",
+      "elements": [
+        {
+          "id": "E01",
+          "name": "陈禾办公桌",
+          "appearance": "浅橡木色矩形办公桌，桌面有台灯、笔筒和少量纸件"
+        },
+        {
+          "id": "E02",
+          "name": "陈禾办公椅",
+          "appearance": "深灰色布面靠背办公椅，五爪滚轮底座"
+        },
+        {
+          "id": "E03",
+          "name": "桌面台灯",
+          "appearance": "细金属臂暖光台灯，米白色圆锥灯罩"
+        },
+        {
+          "id": "E04",
+          "name": "笔筒",
+          "appearance": "哑光黑色圆柱笔筒，内有数支深色笔"
+        },
+        {
+          "id": "E05",
+          "name": "室内门口",
+          "appearance": "木色门框配半透明磨砂玻璃门片，位于陈禾工位斜对角"
+        },
+        {
+          "id": "E06",
+          "name": "背景墙体与隔断",
+          "appearance": "低饱和暖灰色墙体，浅木色矮隔断"
+        },
+        {
+          "id": "E07",
+          "name": "顶部主灯",
+          "appearance": "嵌入式暖白圆盘顶灯，位于工位上方"
+        },
+        {
+          "id": "E08",
+          "name": "地面",
+          "appearance": "浅灰色哑光地砖，质感均匀"
+        }
+      ],
+      "relations": [
+        {
+          "subject": "E01",
+          "relation": "next_to",
+          "reference": "E02"
+        },
+        {
+          "subject": "E03",
+          "relation": "on",
+          "reference": "E01"
+        },
+        {
+          "subject": "E04",
+          "relation": "on",
+          "reference": "E01"
+        },
+        {
+          "subject": "E05",
+          "relation": "right_of",
+          "reference": "E01"
+        },
+        {
+          "subject": "E06",
+          "relation": "behind",
+          "reference": "E01"
+        },
+        {
+          "subject": "E07",
+          "relation": "above",
+          "reference": "E01"
+        },
+        {
+          "subject": "E01",
+          "relation": "on",
+          "reference": "E08"
+        },
+        {
+          "subject": "E02",
+          "relation": "on",
+          "reference": "E08"
+        },
+        {
+          "subject": "E05",
+          "relation": "on",
+          "reference": "E08"
+        }
+      ]
+    }
+  },
+  "output_sha256": "d6ddd2dc6974d7bf976b7966bf36172e88583af908df320bc9b05d1567985107"
+}

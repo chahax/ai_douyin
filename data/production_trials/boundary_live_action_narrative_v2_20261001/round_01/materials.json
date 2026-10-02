@@ -1,0 +1,53 @@
+{
+  "schema": "creative_material_manifest/v1",
+  "source_driver": "original",
+  "title": "这次我先走",
+  "files": {
+    "creative_brief": {
+      "path": "D:\\IT\\ai_douyin\\config\\creative_brief.live_action.example.json",
+      "sha256": "b0cde4790ed8626646eae5ffe2a3af4a929ef0fdb1620f044f876413b717ae23",
+      "bytes": 1685
+    },
+    "asset_library": {
+      "path": "D:\\IT\\ai_douyin\\data\\visual_asset_library\\reusable_assets.json",
+      "sha256": "41cc2a9e6819621aa851712f58d6aab43c77e823aee82d63422e0bdc5e70b43b",
+      "bytes": 10634
+    }
+  },
+  "scope": {
+    "claim": "按用户创作简报创作原创故事；空白项由编剧导演提出",
+    "characters": 696,
+    "creative_brief": {
+      "schema": "creative_brief/v1",
+      "theme": "总替同事收尾的人，第一次把自己的时间放在前面",
+      "duration_seconds": [
+        45,
+        60
+      ],
+      "delegated_fields": [],
+      "audience": "喜欢生活情绪短片的成年观众",
+      "relationships": "方澄与同事林屿；林屿已习惯她会答应，方澄担心拒绝会伤及两人的关系。",
+      "audience_emotion": "先看懂她为什么难拒绝，再替她的选择紧张，最后感到关系发生了真实变化。",
+      "visual_style": "写实真人实拍质感的AI短片，成年普通人外貌，真实皮肤纹理、自然光与生活化服装，克制自然表演，关键反应使用可读近景。",
+      "turn": "对方原本把她的帮忙视为理所当然；她明确拒绝后，对方必须面对这一点，再通过具体行动回应。",
+      "ending": "以新的行动兑现边界及关系变化；不预先规定两人必须和解，不用主题口号收尾。",
+      "constraints": [
+        "观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。",
+        "她想离开和担心拒绝的原因要在实际事件中成立。",
+        "关键反应的构图和窗口必须写入最终视频提示词。",
+        "剧情先按完整故事创作，再拆成生成段；不能为固定八秒切段编造操作。"
+      ],
+      "avoid": [
+        "用一次开本子或摸包代替习惯性的付出历史",
+        "靠陪家人看病等新事故替代原本的关系矛盾",
+        "强行争吵、突然完美理解、鸡汤总结",
+        "为了沿用动画尾帧而改回手绘风格"
+      ]
+    }
+  },
+  "reference_count": 0,
+  "reference_adaptation": [],
+  "unread_or_unverified": [
+    "简报仅确定创作意图，实际生成效果待检查"
+  ]
+}

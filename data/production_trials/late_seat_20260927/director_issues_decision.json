@@ -1,0 +1,20 @@
+{
+  "schema": "creative_evidence_review_decision/v1",
+  "packet_sha256": "eb5972434848aa25f9927bda8b45a3c9606cc6dc8772aaa99b48919798d5aa2e",
+  "reviewed_by": "assistant",
+  "reviewed_full_text": true,
+  "summary": "主审与独立审查已阅读全文及导演原意见。两项无直接违约证据：正常熟客点单与放杯已成立；12秒能先保留2秒反应再饮杯与短句。保留原稿进入导演具体排时，不能复活旧候选中的进门、支付、壶具。杯把构型、反应窗口及仅周临新落座仍须联合审查。",
+  "decisions": [
+    {
+      "id": "ISSUE-001",
+      "decision": "dismiss",
+      "reason": "老样子本身表达熟客点单，无需另演进店；B1.during明确周临把杯放桌面，after无新增不等于未放杯；B2对白提供怕烫和提前晾过事实，不需要闪回或重演。原意见要求补完整服务流程无必要。"
+    },
+    {
+      "id": "ISSUE-002",
+      "decision": "dismiss",
+      "reason": "B3有12秒，可按0–2秒听后可读反应、2–6秒端起小抿放回、6–9秒七字台词、余下自然收束排时，保留所有事件及次序。只列动作数量和可能挤压不足以证明无法执行，具体时间由导演落实。"
+    }
+  ],
+  "additional_issues": []
+}

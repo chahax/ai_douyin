@@ -1,0 +1,346 @@
+{
+  "schema_version": "creative_labels/v1",
+  "source_hash": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+  "created_at": "2026-09-28T13:55:55.609742+00:00",
+  "implementation_status": "candidate_labels_require_adjudication",
+  "labels": [
+    {
+      "case_id": "R01_BAD",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "failed",
+      "expected_issues": [
+        {
+          "issue_id": "R01",
+          "severity": "major"
+        }
+      ]
+    },
+    {
+      "case_id": "R01_OK_CANDIDATE",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "passed",
+      "expected_issues": []
+    },
+    {
+      "case_id": "R02_BAD",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "failed",
+      "expected_issues": [
+        {
+          "issue_id": "R02",
+          "severity": "major"
+        }
+      ]
+    },
+    {
+      "case_id": "R02_OK_CANDIDATE",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "passed",
+      "expected_issues": []
+    },
+    {
+      "case_id": "R03_BAD",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "failed",
+      "expected_issues": [
+        {
+          "issue_id": "R03",
+          "severity": "major"
+        }
+      ]
+    },
+    {
+      "case_id": "R03_OK_CANDIDATE",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "passed",
+      "expected_issues": []
+    },
+    {
+      "case_id": "STATE_OK",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "passed",
+      "expected_issues": []
+    },
+    {
+      "case_id": "STATE_BAD",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "failed",
+      "expected_issues": [
+        {
+          "issue_id": "STATE_BAD",
+          "severity": "major"
+        }
+      ]
+    },
+    {
+      "case_id": "HOLD_OK",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "passed",
+      "expected_issues": []
+    },
+    {
+      "case_id": "HOLD_BAD",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "failed",
+      "expected_issues": [
+        {
+          "issue_id": "HOLD_BAD",
+          "severity": "major"
+        }
+      ]
+    },
+    {
+      "case_id": "SOURCE_OK",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "passed",
+      "expected_issues": []
+    },
+    {
+      "case_id": "SOURCE_BAD",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "failed",
+      "expected_issues": [
+        {
+          "issue_id": "SOURCE_BAD",
+          "severity": "major"
+        }
+      ]
+    },
+    {
+      "case_id": "BOUNDARY_CONFLICT_1",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "blocked",
+      "expected_issues": []
+    },
+    {
+      "case_id": "BOUNDARY_CONFLICT_2",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "blocked",
+      "expected_issues": []
+    },
+    {
+      "case_id": "BOUNDARY_EXPRESSION_1",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "expression_unsupported",
+      "expected_issues": []
+    },
+    {
+      "case_id": "BOUNDARY_EXPRESSION_2",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "expression_unsupported",
+      "expected_issues": []
+    },
+    {
+      "case_id": "BOUNDARY_SIMULTANEOUS_1",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "passed_or_expression_unsupported",
+      "expected_issues": []
+    },
+    {
+      "case_id": "BOUNDARY_SIMULTANEOUS_2",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "passed_or_expression_unsupported",
+      "expected_issues": []
+    },
+    {
+      "case_id": "BOUNDARY_AMBIGUOUS_1",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "review_required",
+      "expected_issues": []
+    },
+    {
+      "case_id": "BOUNDARY_AMBIGUOUS_2",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "review_required",
+      "expected_issues": []
+    },
+    {
+      "case_id": "BOUNDARY_CORRECT_1",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "passed",
+      "expected_issues": []
+    },
+    {
+      "case_id": "BOUNDARY_CORRECT_2",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "passed",
+      "expected_issues": []
+    },
+    {
+      "case_id": "P1_CUT_OK",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "passed",
+      "expected_issues": []
+    },
+    {
+      "case_id": "P1_CUT_BAD",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "blocked",
+      "expected_issues": []
+    },
+    {
+      "case_id": "P1_SEAT_OK",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "passed",
+      "expected_issues": []
+    },
+    {
+      "case_id": "P1_SEAT_BAD",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "blocked",
+      "expected_issues": []
+    },
+    {
+      "case_id": "P1_BOUNDARY_OK",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "passed",
+      "expected_issues": []
+    },
+    {
+      "case_id": "P1_BOUNDARY_BAD",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "expected_disposition": "blocked",
+      "expected_issues": []
+    }
+  ]
+}

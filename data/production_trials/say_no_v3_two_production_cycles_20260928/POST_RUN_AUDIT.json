@@ -1,0 +1,16 @@
+{
+  "schema": "post_run_audit/v1",
+  "captured_at": "2026-09-28T12:11:58.832527+00:00",
+  "note": "Post-run supplemental code hashes; not a reconstruction of request-time snapshots. No model calls.",
+  "historical_receipts_checked": 127,
+  "historical_changed": [],
+  "source_hashes": {
+    "src/content_factory/creative_review_evidence_catalog.py": "c1bede6df21c72a5042765280a54786bc3f03b7bba8edad6e926b782685e3aed",
+    "src/content_factory/creative_review_v6.py": "e857ad612f00776fee8a413b2e3f0d3237b0b1cebde5a136709c36c282b6d5bb",
+    "src/content_factory/creative_state_plan_guidance.py": "3c0f983532dea8fb94ec65024b80ecce96a5cdb7f2e48c4a97f6bdbcc7a28fbd"
+  },
+  "round_directories": [
+    "round_01",
+    "round_02"
+  ]
+}

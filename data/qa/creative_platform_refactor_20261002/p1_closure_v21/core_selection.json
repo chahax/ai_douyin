@@ -1,0 +1,8 @@
+[
+  "tests/test_creative_workflow.py",
+  "tests/test_creative_stage_debug.py",
+  "tests/test_media_review_policy.py",
+  "tests/test_media_user_review.py",
+  "tests/test_task_queue_claim.py",
+  "tests/test_llm_provider_contracts.py"
+]

@@ -1,0 +1,379 @@
+{
+  "type": "object",
+  "properties": {
+    "schema": {
+      "type": "string",
+      "enum": [
+        "whole_film_action_plan_v2"
+      ]
+    },
+    "initial_state": {
+      "type": "object",
+      "properties": {
+        "C01": {
+          "type": "object",
+          "properties": {
+            "posture": {
+              "type": "string",
+              "enum": [
+                "standing",
+                "sitting",
+                "kneeling",
+                "lying",
+                "other"
+              ]
+            },
+            "position": {
+              "type": "string"
+            },
+            "gaze": {
+              "type": "string"
+            },
+            "affect": {
+              "type": "string"
+            },
+            "facing": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          },
+          "required": [
+            "posture",
+            "position",
+            "gaze",
+            "affect",
+            "facing"
+          ],
+          "additionalProperties": false
+        },
+        "C02": {
+          "type": "object",
+          "properties": {
+            "posture": {
+              "type": "string",
+              "enum": [
+                "standing",
+                "sitting",
+                "kneeling",
+                "lying",
+                "other"
+              ]
+            },
+            "position": {
+              "type": "string"
+            },
+            "gaze": {
+              "type": "string"
+            },
+            "affect": {
+              "type": "string"
+            },
+            "facing": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          },
+          "required": [
+            "posture",
+            "position",
+            "gaze",
+            "affect",
+            "facing"
+          ],
+          "additionalProperties": false
+        },
+        "P01": {
+          "type": "object",
+          "properties": {
+            "holder": {
+              "type": "string",
+              "enum": [
+                "C01",
+                "C02",
+                "none"
+              ]
+            },
+            "location": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "holder",
+            "location"
+          ],
+          "additionalProperties": false
+        },
+        "P02": {
+          "type": "object",
+          "properties": {
+            "holder": {
+              "type": "string",
+              "enum": [
+                "C01",
+                "C02",
+                "none"
+              ]
+            },
+            "location": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "holder",
+            "location"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "C01",
+        "C02",
+        "P01",
+        "P02"
+      ],
+      "additionalProperties": false
+    },
+    "beats": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "beat_id": {
+            "type": "string",
+            "enum": [
+              "B1",
+              "B2",
+              "B3",
+              "B4"
+            ]
+          },
+          "purpose": {
+            "type": "string"
+          },
+          "composition": {
+            "type": "string"
+          },
+          "camera": {
+            "type": "string"
+          },
+          "dialogue_mode": {
+            "type": "string",
+            "enum": [
+              "画内对白",
+              "画外对白",
+              "混合对白",
+              "无对白"
+            ]
+          },
+          "cut_reason": {
+            "type": "string"
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "script_slot": {
+                  "type": "string",
+                  "enum": [
+                    "before",
+                    "during",
+                    "after"
+                  ]
+                },
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "action",
+                    "hold"
+                  ]
+                },
+                "duration_seconds": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "hold_subject": {
+                  "type": "string",
+                  "enum": [
+                    "",
+                    "C01",
+                    "C02"
+                  ]
+                },
+                "performance": {
+                  "type": "string"
+                },
+                "operations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "enum": [
+                          "move",
+                          "gaze",
+                          "affect",
+                          "sit",
+                          "stand",
+                          "take",
+                          "place",
+                          "pass",
+                          "face"
+                        ]
+                      },
+                      "actor": {
+                        "type": "string",
+                        "enum": [
+                          "C01",
+                          "C02"
+                        ]
+                      },
+                      "target": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "actor",
+                      "target",
+                      "value"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "id",
+                "script_slot",
+                "kind",
+                "duration_seconds",
+                "hold_subject",
+                "performance",
+                "operations"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "dialogue_performance": {
+            "type": "string"
+          },
+          "reaction": {
+            "type": "object",
+            "properties": {
+              "anchor": {
+                "type": "string"
+              },
+              "subject": {
+                "type": "string",
+                "enum": [
+                  "C01",
+                  "C02"
+                ]
+              },
+              "meaning": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "anchor",
+              "subject",
+              "meaning"
+            ],
+            "additionalProperties": false
+          },
+          "cut_after_event_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "completion_condition": {
+            "const": "all_required_events_complete"
+          }
+        },
+        "required": [
+          "beat_id",
+          "purpose",
+          "composition",
+          "camera",
+          "dialogue_mode",
+          "cut_reason",
+          "groups",
+          "dialogue_performance",
+          "reaction",
+          "cut_after_event_id",
+          "completion_condition"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "spatial_contract": {
+      "type": "object",
+      "properties": {
+        "seats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "seat_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "access_positions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "required_facing": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1
+              }
+            },
+            "required": [
+              "seat_id",
+              "access_positions",
+              "required_facing"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "seats"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema",
+    "initial_state",
+    "beats",
+    "spatial_contract"
+  ],
+  "additionalProperties": false,
+  "x-artifact-metadata": {
+    "schema_version": "creative_plan_schema_artifact/v1",
+    "source_hash": "efef00040687c3cdc82f2715df2d3911a3b14f7114e5da4f2efd2c5fd05042a8",
+    "created_at": "2026-09-28T13:49:21.882337+00:00",
+    "implementation_status": "offline_implemented_not_production_validated",
+    "source_module": "src/content_factory/creative_action_plan_v2.py",
+    "source_module_sha256": "f844350dcd866eed9224905fae8d5af2d3d0338793c5831a3ad24781a6e89f02"
+  }
+}

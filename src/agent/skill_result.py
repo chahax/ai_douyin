@@ -22,6 +22,7 @@ SKILL_ERROR_CODES = (
     "paywall",                # 付费墙/内容受限（不可重试）
     "cancelled",              # 用户取消（不可重试）
     "timeout",                # 执行超时（可重试）
+    "outcome_unknown",        # 超时后后台工作仍可能完成（禁止自动重试）
     "rate_limited",           # 频率限制（可重试）
     "skill_error",            # 内部异常（默认不可重试）
     "max_retries_exceeded",   # 重试耗尽（不可重试）
@@ -37,6 +38,7 @@ DEFAULT_RETRYABLE = {
     "paywall": False,
     "cancelled": False,
     "timeout": True,
+    "outcome_unknown": False,
     "rate_limited": True,
     "skill_error": False,
     "max_retries_exceeded": False,

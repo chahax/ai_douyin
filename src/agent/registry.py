@@ -22,6 +22,10 @@ from src.agent.skill_decorator import (
 from src.shared.logger import logger
 
 
+class SkillOutcomeUnknownError(TimeoutError):
+    """The caller timed out while the worker may still finish a side effect."""
+
+
 # 旧的 Skill dataclass 已被 src/agent/skill_decorator.py:Skill 取代。
 # 这里 re-export，保持外部 import 兼容。
 __all__ = [
@@ -31,6 +35,7 @@ __all__ = [
     "SKILLS",
     "SkillRegistry",
     "validate_params",
+    "SkillOutcomeUnknownError",
 ]
 
 
@@ -77,7 +82,18 @@ def _generate_presenter_video(
     output_dir: str = "data/videos",
     **kwargs,
 ) -> dict:
-    """生成动漫数字人主讲视频（PresenterPipeline）"""
+    """Retained compatibility stub for the retired Presenter pipeline."""
+    return {
+        "success": False,
+        "video_path": None,
+        "work_dir": "",
+        "message": (
+            "旧 Presenter 视频路线已于 2026-09-04 因质量未达标停用；"
+            "新视频流程通过验收前不再生成。"
+        ),
+    }
+
+    # Historical implementation is intentionally kept below for code archaeology.
     from src.content_factory.presenter.models import PresenterRequest, INPUT_MODE_KEYWORDS
     from src.content_factory.presenter_pipeline import PresenterPipeline
 
@@ -152,6 +168,7 @@ def _generate_audio(
 def _publish_douyin_video(
     video_path: str,
     title: str,
+    account_key: str = "",
     description: str = "",
     tags: str = "",
     **kwargs,
@@ -160,7 +177,7 @@ def _publish_douyin_video(
     from src.platform_adapter import DouyinAdapter
     from src.platform_adapter.models import PublishRequest
 
-    adapter = DouyinAdapter()
+    adapter = DouyinAdapter.for_account(account_key)
     hashtags = [t.strip() for t in tags.split(",") if t.strip()] if tags else []
 
     request = PublishRequest(
@@ -172,17 +189,19 @@ def _publish_douyin_video(
     result = adapter.publish_video(request)
     return {
         "success": result.success,
+        "status": result.status,
+        "finalized": result.status == "published",
         "post_id": result.post_id,
         "publish_url": result.publish_url,
         "message": result.message,
     }
 
 
-def _sync_douyin_videos(page_limit: int = 5, **kwargs) -> dict:
+def _sync_douyin_videos(account_key: str = "", page_limit: int = 5, **kwargs) -> dict:
     """同步抖音创作者后台视频列表"""
     from src.platform_adapter import DouyinAdapter
 
-    adapter = DouyinAdapter()
+    adapter = DouyinAdapter.for_account(account_key)
     result = adapter.sync_videos(page_limit=page_limit)
     return {
         "success": True,
@@ -194,15 +213,19 @@ def _sync_douyin_videos(page_limit: int = 5, **kwargs) -> dict:
     }
 
 
-def _fetch_comments(video_id: str = "", all_videos: bool = False, **kwargs) -> dict:
+def _fetch_comments(account_key: str = "", video_id: str = "", all_videos: bool = False, **kwargs) -> dict:
     """抓取视频评论"""
     from src.platform_adapter import DouyinAdapter
     from src.platform_adapter.models import CommentQuery
 
-    adapter = DouyinAdapter()
+    adapter = DouyinAdapter.for_account(account_key)
     if all_videos:
         from src.services.video_service import get_videos
-        videos = get_videos(status="published", limit=100)
+        videos = get_videos(
+            status="published",
+            limit=100,
+            account_uuid=adapter.runtime_context.account_uuid,
+        )
         total = 0
         for v in videos:
             result = adapter.fetch_comments(CommentQuery(post_id=v["video_id"]))
@@ -221,33 +244,12 @@ def _fetch_comments(video_id: str = "", all_videos: bool = False, **kwargs) -> d
 
 
 def _auto_reply_comments(video_id: str = "", all_videos: bool = False, **kwargs) -> dict:
-    """自动回复评论"""
-    from src.platform_adapter.auto_reply_service import AutoReplyService
-    from src.services.video_service import get_videos
-
-    service = AutoReplyService(session=None)
-    if all_videos:
-        videos = get_videos(status="published", limit=100)
-        total_replied = total_skipped = total_failed = 0
-        for v in videos:
-            result = service.process_video(v["video_id"])
-            total_replied += result.replied
-            total_skipped += result.skipped
-            total_failed += result.failed
-        return {
-            "success": True,
-            "replied": total_replied,
-            "skipped": total_skipped,
-            "failed": total_failed,
-        }
-    else:
-        result = service.process_video(video_id)
-        return {
-            "success": True,
-            "replied": result.replied,
-            "skipped": result.skipped,
-            "failed": result.failed,
-        }
+    """Unattended external interactions are disabled."""
+    return {
+        "success": False,
+        "status": "human_confirmation_required",
+        "message": "自动回复已停用；请在管理页生成建议并逐条人工确认。",
+    }
 
 
 def _get_user_preferences(**kwargs) -> dict:
@@ -380,23 +382,14 @@ def _fanqie_generate_video(
     assets_only: bool = False,
     **kwargs,
 ) -> dict:
-    """生成番茄小说推广视频"""
-    from src.platform_adapter.fanqie_promotion import FanqiePromotionService
-    fanqie = FanqiePromotionService()
-    try:
-        task = fanqie.generate_promo_video(
-            task_file="",
-            book_name=book_name,
-            chapters=chapters,
-            alias=alias,
-            output_dir="data/videos",
-            max_segments=max_segments,
-            no_comfy_background=no_comfy_background,
-            assets_only=assets_only,
-        )
-        return {"success": True, "task": asdict(task)}
-    except Exception as exc:
-        return {"success": False, "error": str(exc)}
+    """Retained compatibility stub for the retired Fanqie video route."""
+    return {
+        "success": False,
+        "error": (
+            "旧番茄推广视频路线已于 2026-09-04 因质量未达标停用；"
+            "Video Pipeline V2 通过验收前不再生成。"
+        ),
+    }
 
 
 def _fanqie_list_promotions(
@@ -473,7 +466,7 @@ def _fanqie_list_books(**kwargs) -> dict:
 
 def _fanqie_batch_add(
     book_names: list[str] | None = None,
-    chapters: int = 5,
+    chapters: int = 40,
     interval_s: int = 30,
     note: str = "",
     **kwargs,
@@ -545,16 +538,22 @@ def _fanqie_batch_list(
 
 
 def _fanqie_batch_run(
+    row_id: int = 0,
     interval_s: float = 30.0,
     max_count: int = 10,
     **kwargs,
 ) -> dict:
-    """跑批量抓取（**不接受 book_names**）：从 DB 读 pending 状态的书。
+    """跑受控清单抓取；row_id>0 时只处理队列绑定的那一本。
 
     Harness Engineering L5: 批量跑必须用 DB 清单，不能任意传书。
     """
     from src.agent.skill_result import SkillResult
-    from src.platform_adapter.fanqie_batch import batch_fetch_sync, _summarize_report
+    from src.platform_adapter.fanqie_batch import (
+        BatchFetchReport,
+        _fetch_one,
+        _summarize_report,
+        batch_fetch_sync,
+    )
 
     # 显式拒绝 book_names
     if "book_names" in kwargs and kwargs["book_names"]:
@@ -565,8 +564,35 @@ def _fanqie_batch_run(
         ).to_dict()
 
     try:
-        report = batch_fetch_sync(interval_s=interval_s, max_count=max_count)
+        if row_id:
+            if row_id < 1:
+                raise ValueError("row_id 必须是正整数")
+            book_result = _fetch_one(row_id, headless=True)
+            skipped = int(book_result.error_code == "skipped")
+            report = BatchFetchReport(
+                total=1,
+                succeeded=int(book_result.success and not skipped),
+                failed=int(not book_result.success),
+                skipped=skipped,
+                interval_s=interval_s,
+                total_duration_ms=book_result.duration_ms,
+                results=[book_result],
+            )
+        else:
+            report = batch_fetch_sync(interval_s=interval_s, max_count=max_count)
         summary = _summarize_report(report)
+        if report.failed:
+            failed_result = next(item for item in report.results if not item.success)
+            return SkillResult.err(
+                failed_result.error_code or "skill_error",
+                failed_result.error_message or "番茄抓取失败",
+                error={
+                    "type": "FanqieBookFetchError",
+                    "message": failed_result.error_message,
+                    "retryable": True,
+                    "details": summary,
+                },
+            ).to_dict()
         return SkillResult.ok(
             data=summary,
             message=f"批量完成: {report.succeeded}/{report.total} 成功, {report.failed} 失败, 耗时 {report.total_duration_ms}ms",
@@ -619,50 +645,254 @@ def _fanqie_batch_seed(**kwargs) -> dict:
         ).to_dict()
 
 
+def _fanqie_batch_fetch_filtered(
+    ranking: str = "爆款榜",
+    target_count: int = 40,
+    status: str = "all",
+    gender: str = "all",
+    copyright: str = "all",
+    category: str = "",
+    days: str = "all",
+    word_count: str = "all",
+    chapters: int = 40,
+    headful: bool = False,
+    auto_run: bool = False,
+    **kwargs,
+) -> dict:
+    """按 KolFilterArgs 拉 N 本 unique（ranking + 6 类 filter 单选），可选 auto_run 一次完成扫榜+抓章节。
+
+    每类最多选一个值，**多选会返回 validation_error**。
+
+    Args:
+        ranking: 必填，4 选 1：爆款榜/阅读榜/潜力榜/全部内容
+        target_count: 必填 > 0，要抓几本
+        status: 全部(serial/done)
+        gender: 全部(male/female/general)
+        copyright: 全部(exclusive/non_exclusive)
+        category: JSON 字符串，e.g. '{"mapping_id":7220798290399330363,"category_ids":"23"}'（不传=全部）
+        days: 全部(1d/5d/10d/30d/30d+)
+        word_count: 全部(<100/100-150/150-200/200-300/300-500/>500)
+        chapters: 每本抓几章
+    """
+    from src.agent.skill_result import SkillResult
+    from src.platform_adapter.fanqie_kol_filter import KolFilterArgs, FilterValidationError
+    from src.platform_adapter.fanqie_batch import add_books_from_kol_filtered
+
+    # category: 字符串 → dict
+    category_dict = None
+    if category:
+        try:
+            category_dict = json.loads(category) if isinstance(category, str) else category
+        except json.JSONDecodeError as exc:
+            return SkillResult.err(
+                "validation_error",
+                f"category 必须是 JSON 字符串, got: {category!r}",
+                error={"field": "category", "expected": "JSON 字符串", "retryable": False},
+            ).to_dict()
+
+    try:
+        args = KolFilterArgs(
+            ranking=ranking,
+            target_count=target_count,
+            status=status,
+            gender=gender,
+            copyright=copyright,
+            category=category_dict,
+            days=days,
+            word_count=word_count,
+        )
+        args.validate()
+    except FilterValidationError as exc:
+        return SkillResult.err(
+            "validation_error",
+            str(exc),
+            error={"type": "FilterValidationError", "retryable": False, "expected": "每类单选"},
+        ).to_dict()
+
+    try:
+        scan_result = add_books_from_kol_filtered(
+            args, chapters=chapters, interval_s=30, headful=headful,
+        )
+        run_result = None
+        if auto_run:
+            # 一次完成：扫榜 → 入库 → 直接抓章节写文件（不需二次"开始抓书"）
+            from src.platform_adapter.fanqie_batch import batch_fetch_sync, _summarize_report
+            report = batch_fetch_sync(
+                interval_s=5,
+                max_count=max(target_count * 2, 10),
+                headless=not headful,
+            )
+            run_result = _summarize_report(report)
+        msg = (
+            f"扫榜: scanned={scan_result['scanned']}, "
+            f"unique={scan_result['unique']}, "
+            f"added={scan_result['added']}, skipped={scan_result['skipped']}"
+            + (
+                f" | 抓取: {run_result.get('succeeded', 0)}/{run_result.get('total', 0)} "
+                f"成功, {run_result.get('failed', 0)} 失败, "
+                f"耗时 {run_result.get('total_duration_ms', 0)}ms"
+                if run_result else ""
+            )
+        )
+        return SkillResult.ok(
+            data={"scan": scan_result, "run": run_result, "headful": headful, "auto_run": auto_run},
+            message=msg,
+        ).to_dict()
+    except Exception as exc:
+        return SkillResult.err(
+            "skill_error",
+            f"{type(exc).__name__}: {exc}"[:300],
+            error={"type": type(exc).__name__, "message": str(exc), "retryable": False},
+        ).to_dict()
+
+
+def _fanqie_batch_enqueue_filtered(
+    ranking: str = "爆款榜",
+    target_count: int = 40,
+    status: str = "all",
+    gender: str = "all",
+    copyright: str = "all",
+    category: str = "",
+    days: str = "all",
+    word_count: str = "all",
+    chapters: int = 40,
+    **kwargs,
+) -> dict:
+    """按 KolFilterArgs 扫榜 + 入库 + 入队 TaskQueue（Worker 后台异步跑）。
+
+    与 fanqie_batch_fetch_filtered 的区别：
+      - 本 skill 把书入 DB 后立即入队 TaskQueue，Worker 后台异步跑
+      - AI 助手点确认后立即返回（不阻塞 5-10 分钟）
+      - 执行进度在「任务调度 → 执行记录」里看
+
+    Returns:
+        {
+            scan: {scanned, unique, added, skipped},
+            enqueue: {total, queued, skipped, execution_uuids, task_ids},
+        }
+    """
+    from src.agent.skill_result import SkillResult
+    from src.platform_adapter.fanqie_kol_filter import KolFilterArgs, FilterValidationError
+    from src.platform_adapter.fanqie_batch import add_books_from_kol_filtered, batch_enqueue_pending
+
+    # category: 字符串 → dict
+    category_dict = None
+    if category:
+        try:
+            category_dict = json.loads(category) if isinstance(category, str) else category
+        except json.JSONDecodeError as exc:
+            return SkillResult.err(
+                "validation_error",
+                f"category 必须是 JSON 字符串, got: {category!r}",
+                error={"field": "category", "expected": "JSON 字符串", "retryable": False},
+            ).to_dict()
+
+    try:
+        args = KolFilterArgs(
+            ranking=ranking,
+            target_count=target_count,
+            status=status,
+            gender=gender,
+            copyright=copyright,
+            category=category_dict,
+            days=days,
+            word_count=word_count,
+        )
+        args.validate()
+    except FilterValidationError as exc:
+        return SkillResult.err(
+            "validation_error",
+            str(exc),
+            error={"type": "FilterValidationError", "retryable": False, "expected": "每类单选"},
+        ).to_dict()
+
+    try:
+        # 1) 扫榜 + 入库
+        scan_result = add_books_from_kol_filtered(
+            args, chapters=chapters, interval_s=30, headful=False,
+        )
+        # 2) 把 DB 里 status='pending' 的全部入队 TaskQueue
+        enqueue_result = batch_enqueue_pending()
+        msg = (
+            f"扫榜: scanned={scan_result['scanned']}, "
+            f"unique={scan_result['unique']}, "
+            f"added={scan_result['added']}, skipped={scan_result['skipped']}"
+            f" | 入队: {enqueue_result['queued']}/{enqueue_result['total']} 任务已派发，"
+            f"Worker 后台异步跑（5-10 分钟）。"
+        )
+        return SkillResult.ok(
+            data={"scan": scan_result, "enqueue": enqueue_result},
+            message=msg,
+        ).to_dict()
+    except Exception as exc:
+        return SkillResult.err(
+            "skill_error",
+            f"{type(exc).__name__}: {exc}"[:300],
+            error={"type": type(exc).__name__, "message": str(exc), "retryable": False},
+        ).to_dict()
+
+
 def _douyin_warmup(
     account_id: str = "",
     mode: str = "daily",
     keyword: str = "",
-    max_videos: int = 12,
+    max_videos: int = 20,
     min_watch: int = 8,
-    max_watch: int = 45,
+    max_watch: int = 90,
     comment_probability: float = 0.0,
     like_probability: float = 0.0,
     headless: bool = False,
     **kwargs,
 ) -> dict:
-    """运行抖音养号任务"""
-    from src.platform_adapter.douyin_warmup import DouyinWarmupService
-    warmup = DouyinWarmupService()
+    """运行账号健康、研究、相关播放或自有数据同步。"""
+    from src.operations_accounts.maintenance import AccountMaintenanceService
+    from src.platform_adapter.douyin_playback import PlaybackOptions
     try:
-        result = warmup.run_warmup(
-            account_id=account_id,
-            mode=mode,
-            keyword=keyword,
-            min_watch=min_watch,
-            max_watch=max_watch,
-            max_videos=max_videos,
-            duration_minutes=0,
-            comment_probability=comment_probability,
+        playback_options = None
+        if mode == "playback":
+            auto_like = bool(kwargs.get("auto_like", like_probability > 0))
+            auto_comment = bool(kwargs.get("auto_comment", comment_probability > 0))
+            playback_options = PlaybackOptions(
+                max_videos=max_videos,
+                per_video_seconds=max_watch,
+                total_minutes=int(kwargs.get("total_minutes") or 20),
+                min_relevance_score=float(
+                    kwargs.get("min_relevance_score") or 60
+                ),
+                auto_like=auto_like,
+                auto_comment=auto_comment,
+                base_like_ratio=(
+                    float(kwargs.get("base_like_ratio", like_probability or 0.25))
+                    if auto_like
+                    else 0
+                ),
+                base_comment_ratio=(
+                    float(kwargs.get("base_comment_ratio", comment_probability or 0.05))
+                    if auto_comment
+                    else 0
+                ),
+                max_likes=int(kwargs.get("max_likes") or 0),
+                max_comments=int(kwargs.get("max_comments") or 0),
+            )
+        result = AccountMaintenanceService().run(
+            account_id,
+            mode,
+            authorization_reference=str(
+                kwargs.get("authorization_reference") or ""
+            ),
             headless=headless,
-            keep_open_on_blocked=True,
-            start_url="",
-            use_search=False,
-            keep_open_after_run=False,
-            no_comment_max_watch=10,
-            duration_ratio_min=0.1,
-            duration_ratio_max=2.0,
-            like_probability=like_probability,
-            max_likes=0,
-            min_comment_opens=1,
-            comment_scrolls=3,
-            comment_like_probability=0.0,
-            max_comment_likes=0,
+            playback_options=playback_options,
         )
         return {
             "success": result.status == "completed",
             "status": result.status,
-            "videos_seen": result.videos_seen,
+            "unique_relevant_videos": result.unique_relevant_videos,
+            "playback_verified_videos": result.playback_verified_videos,
+            "actual_watch_seconds": result.actual_watch_seconds,
+            "likes_performed": result.likes_performed,
+            "comments_sent": result.comments_sent,
+            "synced_videos": result.synced_videos,
+            "interaction_actions": result.interaction_actions,
             "log_path": result.log_path,
             "message": result.message,
         }
@@ -671,39 +901,62 @@ def _douyin_warmup(
 
 
 def _douyin_warmup_login(account_id: str = "", display_name: str = "", **kwargs) -> dict:
-    """为养号账号打开登录窗口"""
-    from src.platform_adapter.douyin_warmup import DouyinWarmupService
-    warmup = DouyinWarmupService()
-    try:
-        account = warmup.open_login_window(
-            account_id=account_id,
-            display_name=display_name,
-            url="https://www.douyin.com/",
-            pause_seconds=900,
-            wait_for_enter=True,
-        )
-        return {"success": True, "account": asdict(account)}
-    except Exception as exc:
-        return {"success": False, "error": str(exc)}
+    """Binding requires an administrator to review the public identity in the UI."""
+    return {
+        "success": False,
+        "status": "admin_confirmation_required",
+        "message": "请到“热门选题 → 账号策略 → 登录并绑定抖音账号”扫码并确认昵称、头像和 UID。",
+    }
 
 
 def _douyin_warmup_account_list(**kwargs) -> dict:
-    """列出所有养号账号"""
-    from src.platform_adapter.douyin_warmup import DouyinWarmupService
-    warmup = DouyinWarmupService()
+    """列出运营账号及其真实身份绑定状态。"""
+    from src.operations_accounts import AccountBindingRepository, AccountProfileRepository
     try:
-        accounts = warmup.list_accounts()
-        return {"success": True, "accounts": [asdict(a) for a in accounts]}
+        profiles = AccountProfileRepository()
+        bindings = {
+            item.account_key: item
+            for item in AccountBindingRepository(profiles.db_path).list_all()
+        }
+        return {
+            "success": True,
+            "accounts": [
+                {
+                    "account_key": profile.account_key,
+                    "display_name": profile.display_name,
+                    "domain_strategy_id": profile.domain_strategy_id,
+                    "bound_identity": (
+                        bindings[profile.account_key].display_identity
+                        if profile.account_key in bindings
+                        else ""
+                    ),
+                    "login_health": (
+                        bindings[profile.account_key].status
+                        if profile.account_key in bindings
+                        else "unbound"
+                    ),
+                }
+                for profile in profiles.list_active(status=None)
+            ],
+        }
     except Exception as exc:
         return {"success": False, "error": str(exc)}
 
 
 def _douyin_warmup_report(account_id: str = "", days: int = 7, **kwargs) -> dict:
-    """查看养号报告"""
-    from src.platform_adapter.douyin_warmup import DouyinWarmupService
-    warmup = DouyinWarmupService()
+    """查看账号健康与运营维护日志。"""
+    import json
+    from pathlib import Path
+
     try:
-        rows = warmup.report(account_id=account_id, days=days)
+        log_dir = Path("data/account_maintenance") / account_id
+        rows = []
+        for path in sorted(
+            log_dir.glob("maintenance_*.json"),
+            key=lambda item: item.stat().st_mtime,
+            reverse=True,
+        )[: max(1, int(days) * 8)]:
+            rows.append(json.loads(path.read_text(encoding="utf-8")))
         return {"success": True, "rows": rows}
     except Exception as exc:
         return {"success": False, "error": str(exc)}
@@ -720,23 +973,36 @@ def _import_knowledge(books_dir: str = "data/books", **kwargs) -> dict:
         return {"success": False, "error": str(exc)}
 
 
-def _reply_single_comment(video_id: str = "", comment_id: str = "", content: str = "", headless: bool = False, **kwargs) -> dict:
+def _reply_single_comment(account_key: str = "", video_id: str = "", comment_id: str = "", content: str = "", headless: bool = False, human_confirmed: bool = False, **kwargs) -> dict:
     """回复单条评论"""
     from src.platform_adapter import DouyinAdapter
-    adapter = DouyinAdapter()
+    if not human_confirmed:
+        return {"success": False, "error": "该条评论尚未人工确认。"}
+    adapter = DouyinAdapter.for_account(account_key, headless=headless)
     try:
-        ok = adapter.reply_to_comment(video_id, comment_id, content)
+        ok = adapter.reply_to_comment(
+            video_id,
+            comment_id,
+            content,
+            human_confirmed=True,
+        )
         return {"success": ok, "message": "回复成功" if ok else "回复失败"}
     except Exception as exc:
         return {"success": False, "error": str(exc)}
 
 
-def _open_upload_page(**kwargs) -> dict:
+def _open_upload_page(account_key: str = "", **kwargs) -> dict:
     """打开抖音上传页面"""
     from src.platform_adapter import DouyinAdapter
-    adapter = DouyinAdapter()
+    adapter = DouyinAdapter.for_account(account_key, headless=False)
     try:
-        state = adapter.open_upload_page(url="", pause_seconds=600, wait_for_enter=True)
+        from src.shared.config import settings
+
+        state = adapter.open_upload_page(
+            url=settings.DOUYIN_CREATOR_BASE_URL,
+            pause_seconds=600,
+            wait_for_enter=True,
+        )
         return {"success": True, "state": asdict(state) if state else {}}
     except Exception as exc:
         return {"success": False, "error": str(exc)}
@@ -836,12 +1102,6 @@ SKILLS: list[Skill] = [
         requires_confirmation=False,
     ),
     Skill(
-        name="generate_presenter_video",
-        description="生成动漫数字人主讲视频，参数: keywords/text/text_file, input_mode, title, tts_provider, character, background_style, max_segments, no_comfy_background",
-        func=_generate_presenter_video,
-        requires_confirmation=True,
-    ),
-    Skill(
         name="generate_audio",
         description="纯音频/TTS 生成（不生成视频），参数: text/keywords, tts_provider, voice, bgm, bgm_volume",
         func=_generate_audio,
@@ -849,25 +1109,25 @@ SKILLS: list[Skill] = [
     ),
     Skill(
         name="publish_douyin",
-        description="发布视频到抖音，参数: video_path, title, description, tags",
+        description="通过已绑定账号发布视频，参数: account_key, video_path, title, description, tags",
         func=_publish_douyin_video,
         requires_confirmation=True,
     ),
     Skill(
         name="sync_douyin_videos",
-        description="同步抖音创作者后台视频列表，参数: page_limit(int 默认5)",
+        description="同步已绑定抖音账号的作品，参数: account_key, page_limit(int 默认5)",
         func=_sync_douyin_videos,
         requires_confirmation=False,
     ),
     Skill(
         name="fetch_comments",
-        description="抓取视频评论，参数: video_id(str) 或 all_videos(bool)",
+        description="只读抓取已绑定账号作品评论，参数: account_key, video_id(str) 或 all_videos(bool)",
         func=_fetch_comments,
         requires_confirmation=False,
     ),
     Skill(
         name="auto_reply_comments",
-        description="自动回复视频评论，参数: video_id(str) 或 all_videos(bool)",
+        description="已停用：评论等外部互动必须逐条人工确认",
         func=_auto_reply_comments,
         requires_confirmation=True,
     ),
@@ -901,12 +1161,6 @@ SKILLS: list[Skill] = [
         description="获取番茄小说章节内容，参数: book_name, chapters(int 默认10), headless",
         func=_fanqie_fetch_book,
         requires_confirmation=False,
-    ),
-    Skill(
-        name="fanqie_generate_video",
-        description="生成番茄小说推广视频，参数: book_name, alias, chapters, max_segments, no_comfy_background, assets_only",
-        func=_fanqie_generate_video,
-        requires_confirmation=True,
     ),
     Skill(
         name="fanqie_list_promotions",
@@ -959,28 +1213,48 @@ SKILLS: list[Skill] = [
         func=_fanqie_batch_seed,
         requires_confirmation=False,
     ),
-    # ── 抖音养号 ─────────────────────────────────────────────────
+    Skill(
+        name="fanqie_batch_fetch_filtered",
+        description="按筛选条件拉 N 本（ranking + 6 类 filter 单选），同步阻塞抓章节。参数: ranking(必填, 爆款榜/阅读榜/潜力榜/全部内容), target_count(必填, >0), status/gender/copyright/days/word_count(全部=all 或单选值), category(JSON 字符串, 不传=全部), chapters(每本抓几章), headful(默认False), auto_run(默认False)。每类多选返回 validation_error。**注意**：默认走同步阻塞模式（5-10 分钟卡 streamlit）。要异步请用 fanqie_batch_enqueue_filtered",
+        func=_fanqie_batch_fetch_filtered,
+        requires_confirmation=True,
+        timeout_s=600.0,
+    ),
+    Skill(
+        name="fanqie_batch_enqueue_filtered",
+        description="按筛选条件扫榜 + 入库 + 入队 TaskQueue（Worker 后台异步抓章节，AI 助手不阻塞）。参数同 fanqie_batch_fetch_filtered。AI 助手推荐用这个。返回 {scan, enqueue}，enqueue.execution_uuids 可在「任务调度 → 执行记录」追踪进度。",
+        func=_fanqie_batch_enqueue_filtered,
+        requires_confirmation=True,
+        timeout_s=60.0,
+    ),
+    # ── 抖音账号健康与运营维护 ───────────────────────────────────
+    Skill(
+        name="douyin_maintenance",
+        description="运行账号健康与运营维护，参数: account_id, mode(daily/pre-publish/smart-operations/playback/post-publish), authorization_reference, headless；smart-operations 会结合已发布主题研究相关视频并同步自有后台数据；playback 支持 max_videos/max_watch/total_minutes/min_relevance_score，以及显式启用的 auto_like/auto_comment、base_like_ratio/base_comment_ratio 动态比例",
+        func=_douyin_warmup,
+        requires_confirmation=True,
+    ),
     Skill(
         name="douyin_warmup",
-        description="运行抖音养号任务，参数: account_id, mode(daily/pre-publish/post-publish), keyword, max_videos, min_watch, max_watch, comment_probability, like_probability, headless",
+        description="已弃用别名；等同 douyin_maintenance",
         func=_douyin_warmup,
         requires_confirmation=True,
     ),
     Skill(
         name="douyin_warmup_login",
-        description="为养号账号打开抖音登录窗口，参数: account_id, display_name",
+        description="返回管理员账号绑定入口说明，不绕过昵称/头像/UID 人工确认",
         func=_douyin_warmup_login,
         requires_confirmation=False,
     ),
     Skill(
         name="douyin_warmup_account_list",
-        description="列出所有养号账号，返回账号列表",
+        description="列出运营账号、真实抖音身份绑定和登录健康状态",
         func=_douyin_warmup_account_list,
         requires_confirmation=False,
     ),
     Skill(
         name="douyin_warmup_report",
-        description="查看养号报告，参数: account_id, days(int 默认7)",
+        description="查看账号健康与运营维护报告，参数: account_id, days(int 默认7)",
         func=_douyin_warmup_report,
         requires_confirmation=False,
     ),
@@ -1057,6 +1331,71 @@ class SkillRegistry:
     def list_all(self) -> list[Skill]:
         return list(self._skills.values())
 
+    def to_openai_tools_schema(self) -> list[dict]:
+        """把 SKILLS 转成 OpenAI 风格 tools schema（native tool calling 用）。
+
+        每个 Skill 输出：
+          {"type": "function", "function": {"name", "description", "parameters"}}
+
+        Parameters 用 JSON Schema（object + properties + required）。
+        type 映射：
+          STRING → string
+          INT/FLOAT → integer/number
+          BOOL → boolean
+          LIST → array
+          DICT → object
+          CHOICE → string + enum
+          ANY → string (free-form, 跳过 required)
+
+        **kwargs absorber 不进 schema（保留让 LLM 调用宽容）。
+        """
+        def _prop(p) -> dict:
+            t = p.type.value
+            schema: dict = {"type": "string"}   # 默认
+            if t == "string":
+                schema = {"type": "string"}
+            elif t == "int":
+                schema = {"type": "integer"}
+            elif t == "float":
+                schema = {"type": "number"}
+            elif t == "bool":
+                schema = {"type": "boolean"}
+            elif t == "list":
+                schema = {"type": "array", "items": {"type": "string"}}
+            elif t == "dict":
+                schema = {"type": "object", "additionalProperties": True}
+            elif t == "choice":
+                schema = {"type": "string", "enum": list(p.choices or [])}
+            # ANY 不输出，交给 **kwargs absorber
+            if p.description:
+                schema["description"] = p.description
+            return schema
+
+        out: list[dict] = []
+        for s in self._skills.values():
+            properties: dict = {}
+            required: list = []
+            for p in s.params:
+                if p.is_absorber():
+                    continue  # **kwargs 不进 schema
+                properties[p.name] = _prop(p)
+                if p.required:
+                    required.append(p.name)
+            if not properties:
+                # Skill 一个参数都没有，parameters 用空 object（OpenAI 兼容）
+                parameters = {"type": "object", "properties": {}}
+            else:
+                parameters = {"type": "object", "properties": properties, "required": required}
+            out.append({
+                "type": "function",
+                "function": {
+                    "name": s.name,
+                    "description": s.description,
+                    "parameters": parameters,
+                },
+            })
+        return out
+
     def get_skill_descriptions(self) -> str:
         """生成所有 Skill 的描述，按 category 分组，markdown 友好。"""
         from collections import defaultdict
@@ -1104,7 +1443,7 @@ class SkillRegistry:
         Harness Engineering Layer 3: 编排 + Layer 4: 反馈 + Layer 6: 持续改进。
           - 参数 schema 校验（Layer 5: 关 1）
           - 幂等性检查（Layer 5: 关 2）
-          - 重试循环（exponential backoff，retry_on 决定哪些 code 触发）
+          - 重试循环（exponential backoff，retry_on 决定哪些 code 触发，**P2 加：仅重试瞬时错误**）
           - 超时熔断（threading.Thread.join(timeout=)）
           - 失败自动落盘 ProblemMemory（Layer 4: 反馈）
           - 触发 fire-and-forget LLM 错误诊断（Layer 6: 持续改进）
@@ -1116,15 +1455,23 @@ class SkillRegistry:
 
         skill = self.get(name)
         if not skill:
+            logger.warning(f"[registry.call] 未知 Skill: {name!r} kwargs_keys={list(kwargs.keys())}")
             return SkillResult.err(
                 "not_found", f"未知 Skill: {name}",
                 error={"retryable": False, "type": "UnknownSkill"},
             ).to_dict()
 
+        logger.info(
+            f"[registry.call] start skill={name} "
+            f"requires_confirmation={skill.requires_confirmation} "
+            f"timeout_s={skill.timeout_s}s retries={skill.retries}"
+        )
+        logger.debug(f"[registry.call] kwargs={kwargs}")
+
         # 关 1: 参数 schema 校验
         is_valid, err, code = validate_params(skill, kwargs)
         if not is_valid:
-            logger.warning("Skill %s 参数校验失败: %s", name, err)
+            logger.warning(f"[registry.call] {name} 参数校验失败: {err}")
             return SkillResult.err(
                 "validation_error", err,
                 error={"code": code, "retryable": False},
@@ -1148,6 +1495,18 @@ class SkillRegistry:
             start = time.time()
             try:
                 raw = self._invoke_with_timeout(skill, kwargs)
+            except SkillOutcomeUnknownError as exc:
+                last_result = SkillResult.err(
+                    "outcome_unknown",
+                    f"Skill {name} 超时，后台结果尚未确认",
+                    error={
+                        "type": "SkillOutcomeUnknownError",
+                        "message": str(exc),
+                        "retryable": False,
+                        "next_action": "query_original_request_or_reconcile_before_retry",
+                    },
+                    skill=name,
+                )
             except TimeoutError as exc:
                 last_result = SkillResult.err(
                     "timeout",
@@ -1173,6 +1532,10 @@ class SkillRegistry:
                 result.skill = name
                 result.duration_ms = duration
                 result.attempts = attempt + 1
+                logger.info(
+                    f"[registry.call] OK skill={name} attempt={attempt+1} "
+                    f"duration_ms={duration}"
+                )
                 # 幂等缓存：成功后写入，下次同样 kwargs 命中
                 if skill.idempotent:
                     self._save_idempotent(name, kwargs, result.to_dict())
@@ -1182,12 +1545,13 @@ class SkillRegistry:
             if (
                 attempt < attempts - 1
                 and last_result is not None
-                and last_result.code in skill.retry_on
+                and self._should_retry(last_result, skill)
             ):
                 backoff = self._backoff_seconds(attempt, skill.retry_backoff)
                 logger.info(
-                    "Skill %s 失败 (%s)，%ss 后重试 (%d/%d)",
-                    name, last_result.code, backoff, attempt + 1, attempts,
+                    "Skill %s 失败 code=%s msg=%r，%.1fs 后重试 (%d/%d)",
+                    name, last_result.code, (last_result.message or "")[:100],
+                    backoff, attempt + 1, attempts,
                 )
                 time.sleep(backoff)
                 continue
@@ -1196,9 +1560,10 @@ class SkillRegistry:
         # 失败终态
         if last_result is not None:
             # 标记是否耗尽重试
-            if skill.retries > 0 and last_result.code in skill.retry_on:
+            if (skill.retries > 0 and last_result.code != "outcome_unknown"
+                    and last_result.code in skill.retry_on):
                 last_result.code = "max_retries_exceeded"
-            last_result.attempts = attempts
+            last_result.attempts = attempt + 1
             last_result.duration_ms = int((time.time() - start) * 1000) if 'start' in dir() else 0
             # 自动落盘 ProblemMemory + 触发错误诊断
             self._save_to_problem_memory(name, kwargs, last_result)
@@ -1229,7 +1594,9 @@ class SkillRegistry:
         t.join(timeout=skill.timeout_s)
         if t.is_alive():
             # 超时（线程继续在后台跑；daemon 进程结束会强制终止）
-            raise TimeoutError(f"Skill timed out after {skill.timeout_s}s")
+            raise SkillOutcomeUnknownError(
+                f"Skill timed out after {skill.timeout_s}s; worker thread is still alive"
+            )
         if "e" in exc_box:
             raise exc_box["e"]
         return result_box.get("v")
@@ -1240,6 +1607,52 @@ class SkillRegistry:
             return 2.0
         # exponential
         return float(2 ** attempt)
+
+    def _should_retry(self, last_result, skill) -> bool:
+        """P2：仅当错误是瞬时错误（timeout / 5xx / connection_reset）才重试。
+
+        三层判定（任一命中就重试）：
+          1. error_code 在 skill.retry_on 白名单里（默认 timeout / rate_limited）
+          2. error_message 含瞬时错误关键词（连接重置 / 503 / too many requests）
+          3. 都不命中 → 不重试（永久错：not_found / validation_error / value_error）
+        """
+        if last_result is None:
+            return False
+
+        if last_result.code == "outcome_unknown":
+            return False
+
+        # 1) code 在白名单
+        if last_result.code in (skill.retry_on or ()):
+            return True
+
+        # 2) message 含瞬时错误关键词
+        msg = (last_result.message or "").lower()
+        TRANSIENT_PATTERNS = (
+            "connection reset",
+            "connection refused",
+            "timed out",
+            "timeout",
+            "temporarily unavailable",
+            "service unavailable",
+            "503",
+            "502",
+            "504",
+            "429",
+            "too many requests",
+            "rate limit",
+            "try again",
+            "connection aborted",
+        )
+        if any(p in msg for p in TRANSIENT_PATTERNS):
+            return True
+
+        # 3) 永久错 → 不重试
+        PERMANENT_CODES = {"not_found", "validation_error", "value_error", "permission_denied"}
+        if last_result.code in PERMANENT_CODES:
+            return False
+
+        return False  # 默认不重试（保守）
 
     def _check_idempotent(self, name: str, kwargs: dict) -> dict | None:
         """幂等性检查：返回之前的执行结果（如果有），否则 None。

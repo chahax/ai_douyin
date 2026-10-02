@@ -1,0 +1,112 @@
+........................................................................ [ 22%]
+........................................................................ [ 44%]
+........................................................................ [ 66%]
+........................................................................ [ 88%]
+..............................F........                                  [100%]
+================================== FAILURES ===================================
+_________________ test_page_displays_detached_launch_failure __________________
+
+tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/independent_confirmation/refactor_tmp/test_page_displays_detached_la0')
+
+    def test_page_displays_detached_launch_failure(tmp_path):
+        run_dir = tmp_path / "failed"
+        run_dir.mkdir()
+        (run_dir / "LAUNCH_ERROR.json").write_text(json.dumps({
+            "schema": "creative_launch_error/v1", "status": "needs_attention",
+            "error": "��ͬ��Դ�봴�����������߼�����",
+        }, ensure_ascii=False), encoding="utf-8")
+>       app = _app()
+              ^^^^^^
+
+tests\test_creative_workflow_ui.py:69: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_creative_workflow_ui.py:11: in _app
+    ).run()
+      ^^^^^
+.venv\Lib\site-packages\streamlit\testing\v1\app_test.py:428: in run
+    return self._tree.run(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\streamlit\testing\v1\element_tree.py:2426: in run
+    return self._runner._run(widget_states, timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\streamlit\testing\v1\app_test.py:372: in _run
+    self._tree = script_runner.run(
+.venv\Lib\site-packages\streamlit\testing\v1\local_script_runner.py:147: in run
+    require_widgets_deltas(self, timeout)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+runner = LocalScriptRunner(forward_msg_queue=<streamlit.runtime.forward_msg_queue.ForwardMsgQueue object at 0x0000024886B417F0>...rsor"
+  installed_agents: "opencode"
+}
+}, {}, {'client_state': page_script_hash: "beb1f51a12b08d214fc42a22d866cb6c"
+}])
+timeout = 3
+
+    def require_widgets_deltas(runner: LocalScriptRunner, timeout: float = 3) -> None:
+        """Wait for the given ScriptRunner to emit a completion event. If the timeout
+        is reached, the runner will be shutdown and an error will be thrown.
+        """
+    
+        t0 = time.time()
+        while time.time() - t0 < timeout:
+            time.sleep(0.001)
+            if runner.script_stopped():
+                return
+    
+        # If we get here, the runner hasn't yet completed before our
+        # timeout. Create an error string for debugging.
+        err_string = f"AppTest script run timed out after {timeout}(s)"
+    
+        # Shutdown the runner before throwing an error, so that the script
+        # doesn't hang forever.
+        runner.request_stop()
+        runner.join()
+    
+>       raise RuntimeError(err_string)
+E       RuntimeError: AppTest script run timed out after 3(s)
+
+.venv\Lib\site-packages\streamlit\testing\v1\local_script_runner.py:195: RuntimeError
+---------------------------- Captured stderr call -----------------------------
+2026-10-02 02:22:17.103 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+------------------------------ Captured log call ------------------------------
+WARNING  streamlit.runtime.scriptrunner_utils.script_run_context:script_run_context.py:258 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+============================== warnings summary ===============================
+src\shared\database.py:7
+  D:\IT\ai_douyin\src\shared\database.py:7: MovedIn20Warning: The ``declarative_base()`` function is now available as sqlalchemy.orm.declarative_base(). (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    Base = declarative_base()
+
+tests/test_task_queue_claim.py::test_sqlite_conditional_claim_has_exactly_one_winner
+tests/test_task_queue_claim.py::test_sqlite_conditional_claim_has_exactly_one_winner
+tests/test_task_queue_claim.py::test_sqlite_conditional_claim_has_exactly_one_winner
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+tests/test_publish_status_propagation.py::test_worker_keeps_pending_publish_out_of_completed_state
+tests/test_publish_status_propagation.py::test_worker_keeps_pending_publish_out_of_completed_state
+tests/test_publish_status_propagation.py::test_worker_keeps_pending_publish_out_of_completed_state
+  D:\IT\ai_douyin\.venv\Lib\site-packages\sqlalchemy\sql\schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+
+tests/test_task_queue_claim.py::test_sqlite_conditional_claim_has_exactly_one_winner
+tests/test_task_queue_claim.py::test_sqlite_conditional_claim_has_exactly_one_winner
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+tests/test_publish_status_propagation.py::test_worker_keeps_pending_publish_out_of_completed_state
+  D:\IT\ai_douyin\src\scheduler\queue.py:140: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+  D:\IT\ai_douyin\src\scheduler\queue.py:224: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+  D:\IT\ai_douyin\tests\test_task_queue_claim.py:74: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    TaskExecution.lease_expires_at: datetime.utcnow() - timedelta(seconds=1),
+
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+  D:\IT\ai_douyin\src\scheduler\queue.py:255: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = now or datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_creative_workflow_ui.py::test_page_displays_detached_launch_failure
+1 failed, 326 passed, 17 warnings in 145.04s (0:02:25)

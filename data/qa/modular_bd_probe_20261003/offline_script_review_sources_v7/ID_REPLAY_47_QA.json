@@ -1,0 +1,39 @@
+{
+  "schema": "offline_evidence_id_transport_qa/v1",
+  "mode": "mechanical_replay_only",
+  "network_calls": 0,
+  "real_model_id_test": false,
+  "source_receipt": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\call_047_linear_script_review_v4.json",
+  "source_receipt_sha256": "c84580ea8cbf82ee4e9ee77ffe0ec6961d9840a328eedc04c9eec9693ba755fa",
+  "source_status": "contract_valid",
+  "source_story_preserved": false,
+  "issues_unchanged": [
+    "I01",
+    "I02",
+    "I03",
+    "I04"
+  ],
+  "mapped_reference_count": 68,
+  "coverage_rows": 14,
+  "coverage_checks": 84,
+  "original_v6_validation": "passed",
+  "all_non_evidence_conclusions_preserved": true,
+  "context49_rejects_old_ids": true,
+  "candidate_v7_against_unchanged_original_review": {
+    "result": "candidate_rejected",
+    "error": "v7剧本连续性缺少前后拍正文证据: coverage.1.checks.continuity.evidence_refs 缺少script.beats.0.",
+    "original_frozen_status_unchanged": "contract_valid"
+  },
+  "automatic_approval": false,
+  "metrics": {
+    "source_compact_utf8_bytes": 24785,
+    "id_compact_utf8_bytes": 19882,
+    "source_compact_chars": 16093,
+    "id_compact_chars": 13810,
+    "expanded_compact_utf8_bytes": 31883,
+    "catalog_entries": 198,
+    "added_prompt_chars": 12553,
+    "added_prompt_utf8_bytes": 19105,
+    "bytes_are_not_provider_token_measurements": true
+  }
+}

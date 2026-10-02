@@ -1,0 +1,65 @@
+{
+  "schema": "creative_usage_archive_reconciliation/v1",
+  "created_at": "2026-10-01T13:24:59.350972+00:00",
+  "change": "Count original paid response receipts in current task history; deduplicate provider response IDs. No model output or approval altered.",
+  "previous_reported_tokens": 128401,
+  "correct_reported_tokens": 245469,
+  "calls_started": 17,
+  "max_calls": 20,
+  "budget_changes": false,
+  "previous_rule_binding": {
+    "schema_version": "creative_rule_registry_binding/v1",
+    "registry_dir": "data/creative_governance/20261001_v16_failed_plan_recovery",
+    "artifact_manifest_sha256": "28d1814435dad2a765924c11c11e86445bd9a6598055653886f011065b8eb115",
+    "rules_sha256": "29e620cec1d6f212ab307317e8378d6c366ac9fed791793d814df31d0ad73299",
+    "repository_wide_complete": false,
+    "automatic_rule_activation": false
+  },
+  "new_rule_binding": {
+    "schema_version": "creative_rule_registry_binding/v1",
+    "registry_dir": "data/creative_governance/20261001_v17_history_usage",
+    "artifact_manifest_sha256": "ec3a57f09578dbf4efb3768d087601be0236f659f7bf6b53e50096eed5a0fd2e",
+    "rules_sha256": "5b4af265c0dd49f80f67a0195398cbd574bc6edde127e726a1a953fb9143fa9f",
+    "repository_wide_complete": false,
+    "automatic_rule_activation": false
+  },
+  "archived_activation_receipts": [
+    {
+      "path": "director_brief__rule_activation.json",
+      "sha256": "1cf248fa8aa451b640d9f915f2a3b4c3260374260e79d60c6d2981316d8cd907"
+    },
+    {
+      "path": "director_state_plan__00__rule_activation.json",
+      "sha256": "4a2f16cbd411f9d45db3ff6e452718e3f2383a2c86c94ec8998127d5d1046e76"
+    },
+    {
+      "path": "script_review__story_00_00__rule_activation.json",
+      "sha256": "1cf248fa8aa451b640d9f915f2a3b4c3260374260e79d60c6d2981316d8cd907"
+    },
+    {
+      "path": "script_review__story_00_01__rule_activation.json",
+      "sha256": "1cf248fa8aa451b640d9f915f2a3b4c3260374260e79d60c6d2981316d8cd907"
+    },
+    {
+      "path": "static_visual_manifest__rule_activation.json",
+      "sha256": "1cf248fa8aa451b640d9f915f2a3b4c3260374260e79d60c6d2981316d8cd907"
+    },
+    {
+      "path": "writer_analysis__rule_activation.json",
+      "sha256": "1cf248fa8aa451b640d9f915f2a3b4c3260374260e79d60c6d2981316d8cd907"
+    },
+    {
+      "path": "writer_director_feedback__rule_activation.json",
+      "sha256": "1cf248fa8aa451b640d9f915f2a3b4c3260374260e79d60c6d2981316d8cd907"
+    },
+    {
+      "path": "writer_revise__preflight_story_00_01__rule_activation.json",
+      "sha256": "1cf248fa8aa451b640d9f915f2a3b4c3260374260e79d60c6d2981316d8cd907"
+    },
+    {
+      "path": "writer_script__rule_activation.json",
+      "sha256": "1cf248fa8aa451b640d9f915f2a3b4c3260374260e79d60c6d2981316d8cd907"
+    }
+  ],
+  "automatic_approval": false
+}

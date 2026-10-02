@@ -1,0 +1,41 @@
+{
+  "schema": "trial_actual_asset_observations/v1",
+  "method": "assistant_viewed_original_images",
+  "assets": [
+    {
+      "reuse_key": "CHENMO_THREE_VIEW",
+      "image": {
+        "path": "D:\\IT\\ai_douyin\\data\\video_generation\\blank_cost_20260925\\performance_revision_20260926\\photoreal_reference_v3\\assets\\CHENMO_THREE_VIEW\\original.jpeg",
+        "sha256": "79433cbfd569ca39b7d07f6cdeaf54be5c06de436b8b326c6ca717cd9fda5928"
+      },
+      "observed": "同一成年男性正侧背三视图，短黑发、深灰夹克、蓝灰内衫、黑裤，无围裙；中性背景柔光，面部和全身可读。",
+      "reference_usable": true,
+      "initial_story_compatible": false,
+      "reason": "初稿要求工作围裙，原图没有。"
+    },
+    {
+      "reuse_key": "LINYU_THREE_VIEW_V3",
+      "image": {
+        "path": "D:\\IT\\ai_douyin\\data\\video_generation\\blank_cost_20260925\\performance_revision_20260926\\photoreal_reference_v3\\linyu_v3\\LINYU_THREE_VIEW_V3\\original.jpeg",
+        "sha256": "f0be124bfab23569154a34963ceacd5228c0da2b63a4e12fa7a7ffb168c8169b"
+      },
+      "observed": "成年女性正侧背三视图，齐肩黑发，米白针织开衫、橄榄色内衫、深色裤、黑色平底鞋；面部与服装连续可读。",
+      "reference_usable": true,
+      "initial_story_compatible": true,
+      "reason": "浅色外套与中长发方向兼容，额外必需检索标签导致路由拒绝。"
+    },
+    {
+      "reuse_key": "STUDIO_DAY_PHOTOREAL",
+      "image": {
+        "path": "D:\\IT\\ai_douyin\\data\\video_generation\\blank_cost_20260925\\performance_revision_20260926\\photoreal_reference_v3\\assets\\STUDIO_REFERENCE\\original.jpeg",
+        "sha256": "88254ea87b5578fbdaa081621728280fed8aab7e139ac4a62b63f53d7c652060"
+      },
+      "observed": "左上窗提供柔和日光，右后门，前景大桌与椅子遮挡后方地面；后方有多架画架和小木凳。",
+      "reference_usable": true,
+      "initial_story_compatible": false,
+      "reason": "不能证明初稿左后门、右后窗台以及画架两侧畅通，须调整分镜或另做适配场景。"
+    }
+  ],
+  "is_style_gate_pass": false,
+  "video_or_audio_review_performed": false
+}

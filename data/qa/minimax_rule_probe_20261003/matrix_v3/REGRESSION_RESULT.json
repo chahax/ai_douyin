@@ -1,0 +1,30 @@
+{
+  "exit_code": 0,
+  "test_files": [
+    "tests/test_creative_plan_repair_boundaries.py",
+    "tests/test_creative_action_plan_v1.py",
+    "tests/test_creative_action_plan_v2.py",
+    "tests/test_creative_state_plan_v2.py",
+    "tests/test_creative_state_plan_v3.py",
+    "tests/test_creative_state_plan_v6.py",
+    "tests/test_creative_plan_patch.py",
+    "tests/test_creative_plan_patch_integration.py",
+    "tests/test_creative_state_plan_binding.py",
+    "tests/test_creative_segmented_director.py",
+    "tests/test_creative_full_script_revision.py",
+    "tests/test_creative_governed_protocol.py",
+    "tests/test_creative_governance.py",
+    "tests/test_creative_workflow.py",
+    "tests/test_creative_failed_usage.py",
+    "tests/test_creative_response_contract.py",
+    "tests/test_creative_modular_contract.py",
+    "tests/test_creative_diagnostic_spend.py",
+    "tests/test_creative_interface_diagnostic.py",
+    "tests/test_creative_direction_source_schema.py",
+    "tests/test_creative_real_interface_receipts.py",
+    "tests/test_minimax_small_context_rule_probe.py",
+    "tests/test_minimax_rule_probe_runner.py"
+  ],
+  "network_calls": 0,
+  "log": "D:\\IT\\ai_douyin\\data\\qa\\minimax_rule_probe_20261003\\matrix_v3\\REGRESSION.txt"
+}

@@ -1,0 +1,48 @@
+{
+  "schema": "three_production_cycles_authorization/v1",
+  "authorization": "用户明确授权三轮：完整文本生产、实际审核，失败由Codex子agent修复后再执行下一轮。此前三次请求不计入这三轮。",
+  "created_at": "2026-09-27T15:21:39.887424+00:00",
+  "same_story": true,
+  "inputs_sha256": "7aad3eaba00e7113abcfe28ec1a227500de6d0e5d4e3ac75681b234ae2b62b1c",
+  "parent_run": "D:\\IT\\ai_douyin\\data\\creative_workflows\\say_no_reviewed_segments_20260927",
+  "parent_calls_started": 30,
+  "prior_three_request_extension": "D:\\IT\\ai_douyin\\data\\production_trials\\say_no_v4_paid_three_20260927",
+  "max_rounds": 3,
+  "per_round_max_calls": 24,
+  "per_round_max_total_tokens": 250000,
+  "media_calls": 0,
+  "rounds": {
+    "1": {
+      "run_dir": "D:\\IT\\ai_douyin\\data\\production_trials\\say_no_three_production_cycles_20260927\\round_01",
+      "started_at": "2026-09-27T15:21:39.893487+00:00",
+      "status": "production_exception",
+      "calls_started": 3,
+      "reported_tokens": 7930,
+      "updated_at": "2026-09-27T15:21:56.453680+00:00",
+      "error": "static_visual_manifest: manifest 字段必须为 schema render characters props scene；共享格式与契约修复预算已满",
+      "pending_evidence_review": null
+    },
+    "2": {
+      "run_dir": "D:\\IT\\ai_douyin\\data\\production_trials\\say_no_three_production_cycles_20260927\\round_02",
+      "started_at": "2026-09-27T15:25:24.139978+00:00",
+      "status": "production_exception",
+      "calls_started": 4,
+      "reported_tokens": 19967,
+      "updated_at": "2026-09-27T15:25:40.407199+00:00",
+      "error": "补丁只能替换已有字段",
+      "pending_evidence_review": null
+    },
+    "3": {
+      "run_dir": "D:\\IT\\ai_douyin\\data\\production_trials\\say_no_three_production_cycles_20260927\\round_03",
+      "started_at": "2026-09-27T15:29:49.976215+00:00",
+      "status": "production_exception",
+      "calls_started": 4,
+      "reported_tokens": 31508,
+      "updated_at": "2026-09-27T15:30:36.152421+00:00",
+      "error": "writer_check__segment_scope_v2_beat_01_00 修复未改变无效产物: coverage pass/fail必须引用本行正文",
+      "pending_evidence_review": null
+    }
+  },
+  "new_calls_started": 11,
+  "new_reported_tokens": 59405
+}

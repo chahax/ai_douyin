@@ -1,0 +1,10 @@
+{
+  "objective": "验证更新原创模块能从另一份需求输出完整剧本并进入分镜/资产计划",
+  "brief_role": "助手选择的新主题实际试生产，不冒充用户正式选题",
+  "distinct_from": "late_seat_20260927；新角色、主题、剧情与结尾，旧稿失败记录不变",
+  "max_calls": 16,
+  "max_total_tokens": 150000,
+  "max_revisions": 3,
+  "max_contract_repairs": 4,
+  "media_calls": 0
+}

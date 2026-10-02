@@ -1,0 +1,158 @@
+{
+  "schema": "actual_reference_delivery/v1",
+  "created_at": "2026-10-01T12:20:54.870726+00:00",
+  "reference_pack_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+  "reference_sources": {
+    "path": "D:\\IT\\ai_douyin\\data\\reference_reviews\\reusable_expression_20261001\\EXPRESSION_REFERENCE.md",
+    "sha256": "f007ea01a63dfb6c280b9cb3203774fe9828fe469582a03a060a82eee58f3216",
+    "bytes": 5536
+  },
+  "requests": [
+    {
+      "stage": "director_brief",
+      "reference_locations": [
+        "payload.materials.reference_pack"
+      ],
+      "reference_count": 1,
+      "same_frozen_reference": true,
+      "reference_pack_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+      "request_sha256": "aa56a886f3a837fe3bb5a2e93e560438858af0bed0010860956102df2c1107bc",
+      "response_received": true
+    },
+    {
+      "stage": "director_state_plan__00",
+      "reference_locations": [
+        "payload.reference_pack"
+      ],
+      "reference_count": 1,
+      "same_frozen_reference": true,
+      "reference_pack_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+      "request_sha256": "91b54adf31a880aa355cd690b938d329a730863c4c26a2e07528b341ff64ccb1",
+      "response_received": true
+    },
+    {
+      "stage": "director_state_plan__00__contract_repair",
+      "reference_locations": [
+        "payload.context.reference_pack"
+      ],
+      "reference_count": 1,
+      "same_frozen_reference": true,
+      "reference_pack_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+      "request_sha256": "b4a255a70ecc81cb638a5e34640c0a70a2d3d403dffd35fb0d3d7a8f74480510",
+      "response_received": true
+    },
+    {
+      "stage": "director_state_plan__00__contract_repair_214605635ccd",
+      "reference_locations": [
+        "payload.context.reference_pack"
+      ],
+      "reference_count": 1,
+      "same_frozen_reference": true,
+      "reference_pack_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+      "request_sha256": "898e292d8d2f59e3206c4d339bc1c266cf54e0eebf4e86d508a64e2d4b4d2949",
+      "response_received": true
+    },
+    {
+      "stage": "director_state_plan__00__contract_repair_42d200746c9b",
+      "reference_locations": [
+        "payload.context.reference_pack"
+      ],
+      "reference_count": 1,
+      "same_frozen_reference": true,
+      "reference_pack_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+      "request_sha256": "ecce5a199582a47eb85dc2d785623e0c7818218a0e563506cfc55c02a1110980",
+      "response_received": true
+    },
+    {
+      "stage": "director_state_plan__00__contract_repair_b79373e4fad5",
+      "reference_locations": [
+        "payload.context.reference_pack"
+      ],
+      "reference_count": 1,
+      "same_frozen_reference": true,
+      "reference_pack_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+      "request_sha256": "16ac0cb656fdc8736ac833653d129a4ec448ee3a04b6d929bc4e78e1f0dd05e0",
+      "response_received": true
+    },
+    {
+      "stage": "script_review__story_00_00",
+      "reference_locations": [
+        "payload.reference_pack"
+      ],
+      "reference_count": 1,
+      "same_frozen_reference": true,
+      "reference_pack_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+      "request_sha256": "4f827b9c2b87b8e4eb9dc5648b23604b9ab51af6b66ac4eb10cce0e326f09b88",
+      "response_received": true
+    },
+    {
+      "stage": "script_review__story_00_01",
+      "reference_locations": [
+        "payload.reference_pack"
+      ],
+      "reference_count": 1,
+      "same_frozen_reference": true,
+      "reference_pack_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+      "request_sha256": "77ff155f5307cade132230ef4aacc6480e768f8900f901706818b8c1546186ee",
+      "response_received": true
+    },
+    {
+      "stage": "static_visual_manifest",
+      "reference_locations": [
+        "payload.reference_pack"
+      ],
+      "reference_count": 1,
+      "same_frozen_reference": true,
+      "reference_pack_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+      "request_sha256": "7508ecfa27f25d9da2488f2ddd74d9ae299d155f0d0d83e9edfcc706205fdf17",
+      "response_received": true
+    },
+    {
+      "stage": "writer_analysis",
+      "reference_locations": [
+        "payload.reference_pack"
+      ],
+      "reference_count": 1,
+      "same_frozen_reference": true,
+      "reference_pack_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+      "request_sha256": "74004eaf66529c566ba635644bb110844f889530cdccb08cd057fe46717163a8",
+      "response_received": true
+    },
+    {
+      "stage": "writer_director_feedback",
+      "reference_locations": [
+        "payload.materials.reference_pack"
+      ],
+      "reference_count": 1,
+      "same_frozen_reference": true,
+      "reference_pack_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+      "request_sha256": "5509c0fb6c0c8bd80d395b05e5b7631f74c718e5ddf12226b1c0b6e0a35fe82a",
+      "response_received": true
+    },
+    {
+      "stage": "writer_revise__preflight_story_00_01",
+      "reference_locations": [
+        "payload.reference_pack"
+      ],
+      "reference_count": 1,
+      "same_frozen_reference": true,
+      "reference_pack_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+      "request_sha256": "694bd02c2983c2f28df478fdca18ab742f52bc956d5d934139bab61e93b6e7ff",
+      "response_received": true
+    },
+    {
+      "stage": "writer_script",
+      "reference_locations": [
+        "payload.materials.reference_pack"
+      ],
+      "reference_count": 1,
+      "same_frozen_reference": true,
+      "reference_pack_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+      "request_sha256": "d07bb3dd762c5e686ba2edc57ca2332d0bc84a76424f551d5270f4f4b13438e0",
+      "response_received": true
+    }
+  ],
+  "all_delivered_same_reference": true,
+  "claim": "证明所列实际模型请求包含既有表达分析；不证明成片质量或观众感受",
+  "automatic_media_submit": false
+}

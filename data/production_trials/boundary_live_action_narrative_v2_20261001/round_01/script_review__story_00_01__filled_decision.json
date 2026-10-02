@@ -1,0 +1,39 @@
+{
+  "schema": "creative_evidence_review_decision/v1",
+  "packet_sha256": "1f6737a9af4208a2da95dfbbcde01d9471c47c7d37d639586108ac3719138340",
+  "reviewed_by": "assistant",
+  "reviewed_full_text": true,
+  "summary": "实际修订仅将目光落点改为文件夹→林屿，关于担心伤及关系的新内容仍只存在event概括。已核对所有实际动作和对白，A01的关系代价缺口未解决；DeepSeek将同一缺口放suggestion不能替代简报硬要求。保持其他拍不变，仅进一步修本拍真实演出。",
+  "decisions": [],
+  "additional_issues": [
+    {
+      "id": "A02",
+      "owner": "writer",
+      "location": "beat_3",
+      "severity": "major",
+      "rule": "简报constraints[1]及已确认A01：担心拒绝伤及关系的原因必须进入实际事件，摘要与情绪标签不算演出。",
+      "evidence": "新增的“担心拒绝会伤及两人关系”只写在event；before仅变为看文件夹再看林屿，实际对白未变。",
+      "contradiction": "看文件夹→看林屿能体现注意转移，仍不能让观众知道她担心对方如何理解拒绝；此次修改重新依赖了摘要解释心理。",
+      "impact": "已确认的核心创作缺口仍未关闭，不能据此将文本标为符合本次简报。",
+      "proposal": "保持现有六拍ID、顺序和未授权拍正文不变。只在beat_3实际可听话语或确有信息的互动中建立她担心对方将拒绝理解为不愿帮助或关系疏远，随后仍坚持今晚有事；不要继续以目光转移、停手、event增加情绪标签替代。每拍最多两条dialogue；按必要对白和反应调整本拍秒数，整片仍须45—60秒，不添加新事故或强行争吵。无需固定某句台词。",
+      "evidence_refs": [
+        {
+          "path": "creative_brief.constraints.1",
+          "quote": "她想离开和担心拒绝的原因要在实际事件中成立。"
+        },
+        {
+          "path": "script.beats.2.event",
+          "quote": "方澄手停在包上，目光在文件夹与林屿之间犹豫，担心拒绝会伤及两人关系，随后开口拒绝"
+        },
+        {
+          "path": "script.beats.2.before",
+          "quote": "方澄手停在包上，目光落在搁过来的文件夹上，又抬回林屿脸。"
+        },
+        {
+          "path": "script.beats.2.dialogue.0.text",
+          "quote": "今晚不行，林屿，我有事。"
+        }
+      ]
+    }
+  ]
+}

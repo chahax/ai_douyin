@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="5" time="1.194" timestamp="2026-10-02T14:32:20.026665+08:00" hostname="DESKTOP-DP111LI"><testcase classname="data.qa.creative_platform_refactor_20261002.v20_confirmation.test_extended_recovery" name="test_new_feedback_after_rebuild_binds_current_output" time="0.197"><failure message="AssertionError: feedback bound an obsolete writer_script output&#10;assert 'a808bfb254ee...b44939b56524a' == 'ef860bfec33d...70c5c278786c7'&#10;  &#10;  - ef860bfec33d005c838a644b460d1e3855742c7cefc761073bc70c5c278786c7&#10;  + a808bfb254eebafee4ddbcf09f53beb76d5813bba1835ea5a0cb44939b56524a">tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/v20_confirmation/extended_tmp/test_new_feedback_after_rebuil0')
+
+    def test_new_feedback_after_rebuild_binds_current_output(tmp_path):
+     run,bundle,script=rebuilt(tmp_path)
+     current=read(run/'writer_script.json')
+     feedback=CreativeStageCommandService(run).feedback('writer_script','FIXTURE second feedback',disposition='must_fix')
+&gt;    assert feedback['output_sha256']==current['output_sha256'],'feedback bound an obsolete writer_script output'
+E    AssertionError: feedback bound an obsolete writer_script output
+E    assert 'a808bfb254ee...b44939b56524a' == 'ef860bfec33d...70c5c278786c7'
+E      
+E      - ef860bfec33d005c838a644b460d1e3855742c7cefc761073bc70c5c278786c7
+E      + a808bfb254eebafee4ddbcf09f53beb76d5813bba1835ea5a0cb44939b56524a
+
+data\qa\creative_platform_refactor_20261002\v20_confirmation\test_extended_recovery.py:21: AssertionError</failure></testcase><testcase classname="data.qa.creative_platform_refactor_20261002.v20_confirmation.test_extended_recovery" name="test_second_feedback_reaches_target_after_prior_stage_revision" time="0.195"><failure message="AssertionError: 阶段 writer_script 存在未修复的 must_fix 反馈；已在 director_brief 调用前阻断，需先修订责任阶段&#10;assert 'needs_attention' == 'debug_breakpoint'&#10;  &#10;  - debug_breakpoint&#10;  + needs_attention">tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/v20_confirmation/extended_tmp/test_second_feedback_reaches_t0')
+
+    def test_second_feedback_reaches_target_after_prior_stage_revision(tmp_path):
+     run,bundle,script=rebuilt(tmp_path)
+     CreativeStageCommandService(run).feedback('writer_script','FIXTURE second feedback',disposition='must_fix')
+     revised=deepcopy(script);revised['title']='FIXTURE second writer repair'
+     clients=FakeClients([revised]);state=resume(run,bundle,clients,'writer_script')
+&gt;    assert state['status']=='debug_breakpoint',state.get('last_error')
+E    AssertionError: 阶段 writer_script 存在未修复的 must_fix 反馈；已在 director_brief 调用前阻断，需先修订责任阶段
+E    assert 'needs_attention' == 'debug_breakpoint'
+E      
+E      - debug_breakpoint
+E      + needs_attention
+
+data\qa\creative_platform_refactor_20261002\v20_confirmation\test_extended_recovery.py:29: AssertionError</failure></testcase><testcase classname="data.qa.creative_platform_refactor_20261002.v20_confirmation.test_extended_recovery" name="test_clean_replay_after_rebuild_preserves_budget_without_model_calls" time="0.176" /><testcase classname="data.qa.creative_platform_refactor_20261002.v20_confirmation.test_extended_recovery" name="test_tampered_resolved_feedback_receipt_stops_before_model_call[feedback]" time="0.181" /><testcase classname="data.qa.creative_platform_refactor_20261002.v20_confirmation.test_extended_recovery" name="test_tampered_resolved_feedback_receipt_stops_before_model_call[resolution]" time="0.174" /></testsuite></testsuites>

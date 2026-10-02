@@ -1,0 +1,71 @@
+{
+  "binding": {
+    "schema_version": "creative_rule_registry_binding/v1",
+    "registry_dir": "data/creative_governance/20261001_v10_actual_beat_routing",
+    "artifact_manifest_sha256": "27183a56ad1faa0a06ebc179146ffb3bff0e7e48b7073b24d3d000b32eef981c",
+    "rules_sha256": "5b4af265c0dd49f80f67a0195398cbd574bc6edde127e726a1a953fb9143fa9f",
+    "repository_wide_complete": false,
+    "automatic_rule_activation": false
+  },
+  "validation": {
+    "schema_valid": true,
+    "inventory_complete_within_declared_scope": true,
+    "repository_wide_complete": false,
+    "rule_count": 10,
+    "runtime_sources": {
+      "status": "verified",
+      "source_count": 17,
+      "rule_inventory_coverage_claim": false
+    }
+  },
+  "activation": {
+    "active_rule_ids": [
+      "EVIDENCE.BIND.001"
+    ],
+    "excluded": [
+      {
+        "rule_id": "STATE.PRECONDITION.001",
+        "reason": "different_stage"
+      },
+      {
+        "rule_id": "TIME.HOLD.001",
+        "reason": "different_stage"
+      },
+      {
+        "rule_id": "SOURCE.BIND.001",
+        "reason": "different_stage"
+      },
+      {
+        "rule_id": "ACT.GAZE.001",
+        "reason": "status_proposed"
+      },
+      {
+        "rule_id": "CUT.COMPLETION.001",
+        "reason": "status_proposed"
+      },
+      {
+        "rule_id": "SPACE.SEAT.001",
+        "reason": "status_proposed"
+      },
+      {
+        "rule_id": "CUT.EXECUTION.002",
+        "reason": "different_stage"
+      },
+      {
+        "rule_id": "SPACE.SEAT_TYPED.002",
+        "reason": "different_stage"
+      },
+      {
+        "rule_id": "STATE.BOUNDARY.002",
+        "reason": "different_stage"
+      }
+    ],
+    "semantic_rule_count": 0,
+    "semantic_limit": 12,
+    "requires_split_or_merge": false,
+    "serialized_characters": 877,
+    "token_count": null,
+    "token_count_status": "not_tokenized; characters_are_not_tokens",
+    "silently_truncated": false
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "version": "compact_review_digest_wrapper/v1",
+  "source_path": "D:\\IT\\ai_douyin\\scripts\\run_compact_full_review_bound.py",
+  "source_sha256": "5e6e5005da3d461caa9ab2bdd03dfb87a259e9251ed7d2f3cbc56e2c0aad199c",
+  "parent_manifest_path": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\LINEAR_REVIEW_BINDING_v6.json",
+  "parent_manifest_sha256": "0bd4fab7cb91a3bfdade3b5c9091c90a1eb62acd3ad1ceb93feb8b0f034313a8"
+}

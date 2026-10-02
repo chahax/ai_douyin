@@ -1,0 +1,13 @@
+{
+  "exit_code": 0,
+  "test_files": [
+    "tests/test_modular_bd_probe_runner.py",
+    "tests/test_creative_modular_tool_export.py",
+    "tests/test_creative_modular_contract.py",
+    "tests/test_creative_direction_source_schema.py",
+    "tests/test_creative_response_contract.py",
+    "tests/test_minimax_rule_probe_runner.py"
+  ],
+  "network_calls": 0,
+  "log": "D:\\IT\\ai_douyin\\data\\qa\\modular_bd_probe_20261003\\REGRESSION.txt"
+}

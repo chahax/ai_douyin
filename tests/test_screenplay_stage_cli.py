@@ -11,7 +11,14 @@ from scripts import run_screenplay_stage as stage
 from src.trend_intelligence.script_screenplay import STORY_REVIEW_CHECKS
 from story_review_fixture import enrich_story_review
 from test_script_outline import workflow
-from test_script_screenplay import screenplay, production
+from test_script_screenplay import screenplay, production as legacy_production
+
+
+def production(story, kind='short'):
+    result = legacy_production(story, kind)
+    for shot in result['shots']:
+        shot['emotion_and_performance'] = '触发：合成冲突；情绪：受阻；语速：偏快；语气：坚定；重音：确认；停顿：无刻意停顿；余波：紧绷'
+    return result
 
 
 def write(path, value):
@@ -38,6 +45,9 @@ def case(tmp_path, monkeypatch, workflow):
     feedback.write_text('核对本轮实际动作，不生成视频。', encoding='utf-8')
     def story(kind='short'):
         value = screenplay(kind)
+        if kind == 'short':
+            for shot, seconds in zip(value['version']['shots'], [5, 10, 10, 10, 5, 5]):
+                shot['duration_seconds'] = seconds
         value['version']['reference_usage'][0]['source_id'] = sources[0]['source_id']
         return value
     def related(kind='short', folder_name='related'):

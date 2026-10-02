@@ -1,0 +1,30 @@
+.......F.                                                                [100%]
+================================== FAILURES ===================================
+___ test_repair_breakpoint_then_next_resume_reaches_invalidated_downstream ____
+
+tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/v19_confirmation/boundary_tmp_final/test_repair_breakpoint_then_ne0')
+
+    def test_repair_breakpoint_then_next_resume_reaches_invalidated_downstream(tmp_path):
+     run,bundle,feedback=prepared(tmp_path,stop='writer_script')
+     old=read(run/'director_brief.json');upstream=hashlib.sha256((run/'writer_analysis.json').read_bytes()).hexdigest()
+     revised=deepcopy(_answers()[1]);revised['visual_strategy']='FIXTURE revised visual strategy'
+     clients=FakeClients([revised]);state=resume(run,bundle,clients,'director_brief')
+     assert state['status']=='debug_breakpoint' and len(clients.calls)==1
+     assert state['debug_feedback_status']=='resolved'
+     assert state['debug_stage_validity']['writer_script']=='invalidated'
+     assert hashlib.sha256((run/'writer_analysis.json').read_bytes()).hexdigest()==upstream
+     archive=run/('director_brief__before_feedback_'+feedback['feedback_id']+'.json')
+     assert read(archive)['output_sha256']==old['output_sha256']
+     script=deepcopy(_answers()[2]);script['title']='FIXTURE downstream revised script'
+     next_clients=FakeClients([script]);next_state=resume(run,bundle,next_clients,'writer_script')
+>    assert next_state['status']=='debug_breakpoint',next_state.get('last_error')
+E    AssertionError: director_brief ��ʾ�ʰ汾�Ѹı䣬���ܸ��þɽ׶λ�ִ
+E    assert 'needs_attention' == 'debug_breakpoint'
+E      
+E      - debug_breakpoint
+E      + needs_attention
+
+data\qa\creative_platform_refactor_20261002\v19_confirmation\test_recovery_boundaries.py:61: AssertionError
+=========================== short test summary info ===========================
+FAILED data/qa/creative_platform_refactor_20261002/v19_confirmation/test_recovery_boundaries.py::test_repair_breakpoint_then_next_resume_reaches_invalidated_downstream
+1 failed, 8 passed in 1.29s

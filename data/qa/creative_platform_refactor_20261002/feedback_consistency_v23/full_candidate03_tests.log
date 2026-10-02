@@ -1,0 +1,106 @@
+........................................................................ [  9%]
+........................................................................ [ 19%]
+........................................................................ [ 28%]
+........................................................................ [ 38%]
+........................................................................ [ 47%]
+........................................................................ [ 57%]
+........................................................................ [ 67%]
+........................................................................ [ 76%]
+.................................................................F...... [ 86%]
+..........................................F............................. [ 95%]
+..............................FF                                         [100%]
+================================== FAILURES ===================================
+____ test_assistant_major_review_reopens_task_without_reusing_text_handoff ____
+tests\test_creative_workflow.py:4891: in test_assistant_major_review_reopens_task_without_reusing_text_handoff
+    assert synchronize_review_state(run_dir) == state
+E   AssertionError: assert {'narrative_f...tate/v1', ...} == {'narrative_f...tate/v1', ...}
+E     
+E     Omitting 47 identical items, use -vv to show
+E     Differing items:
+E     {'state_revision': 21} != {'state_revision': 20}
+E     Use -v to get more diff
+_________________ test_page_displays_detached_launch_failure __________________
+tests\test_creative_workflow_ui.py:70: in test_page_displays_detached_launch_failure
+    app = _app()
+          ^^^^^^
+tests\test_creative_workflow_ui.py:12: in _app
+    ).run()
+      ^^^^^
+.venv\Lib\site-packages\streamlit\testing\v1\app_test.py:428: in run
+    return self._tree.run(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\streamlit\testing\v1\element_tree.py:2426: in run
+    return self._runner._run(widget_states, timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\streamlit\testing\v1\app_test.py:372: in _run
+    self._tree = script_runner.run(
+.venv\Lib\site-packages\streamlit\testing\v1\local_script_runner.py:147: in run
+    require_widgets_deltas(self, timeout)
+.venv\Lib\site-packages\streamlit\testing\v1\local_script_runner.py:195: in require_widgets_deltas
+    raise RuntimeError(err_string)
+E   RuntimeError: AppTest script run timed out after 15(s)
+---------------------------- Captured stderr call -----------------------------
+2026-10-02 21:25:29.798 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+------------------------------ Captured log call ------------------------------
+WARNING  streamlit.runtime.scriptrunner_utils.script_run_context:script_run_context.py:258 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+__ test_tampered_resolved_feedback_receipt_stops_before_model_call[feedback] __
+data\qa\creative_platform_refactor_20261002\v20_confirmation\test_extended_recovery.py:50: in test_tampered_resolved_feedback_receipt_stops_before_model_call
+    assert result['status']=='needs_attention'
+E   AssertionError: assert 'debug_breakpoint' == 'needs_attention'
+E     
+E     - needs_attention
+E     + debug_breakpoint
+_ test_tampered_resolved_feedback_receipt_stops_before_model_call[resolution] _
+data\qa\creative_platform_refactor_20261002\v20_confirmation\test_extended_recovery.py:51: in test_tampered_resolved_feedback_receipt_stops_before_model_call
+    assert 'resolved feedback replay binding changed' in result.get('last_error','')
+E   AssertionError: assert 'resolved feedback replay binding changed' in 'feedback command integrity check failed'
+E    +  where 'feedback command integrity check failed' = <built-in method get of dict object at 0x000001D60C2818C0>('last_error', '')
+E    +    where <built-in method get of dict object at 0x000001D60C2818C0> = {'narrative_focus_binding': None, 'reference_expression_version': None, 'script_revision_binding': None, 'schema': 'creative_workflow_state/v1', ...}.get
+============================== warnings summary ===============================
+src\shared\database.py:7
+  D:\IT\ai_douyin\src\shared\database.py:7: MovedIn20Warning: The ``declarative_base()`` function is now available as sqlalchemy.orm.declarative_base(). (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    Base = declarative_base()
+
+tests/test_publish_status_propagation.py::test_worker_keeps_pending_publish_out_of_completed_state
+tests/test_publish_status_propagation.py::test_worker_keeps_pending_publish_out_of_completed_state
+tests/test_publish_status_propagation.py::test_worker_keeps_pending_publish_out_of_completed_state
+tests/test_task_queue_claim.py::test_sqlite_conditional_claim_has_exactly_one_winner
+tests/test_task_queue_claim.py::test_sqlite_conditional_claim_has_exactly_one_winner
+tests/test_task_queue_claim.py::test_sqlite_conditional_claim_has_exactly_one_winner
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+  D:\IT\ai_douyin\.venv\Lib\site-packages\sqlalchemy\sql\schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+
+tests/test_publish_status_propagation.py::test_worker_keeps_pending_publish_out_of_completed_state
+tests/test_task_queue_claim.py::test_sqlite_conditional_claim_has_exactly_one_winner
+tests/test_task_queue_claim.py::test_sqlite_conditional_claim_has_exactly_one_winner
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+  D:\IT\ai_douyin\src\scheduler\queue.py:141: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_publish_status_propagation.py::test_worker_keeps_pending_publish_out_of_completed_state
+  D:\IT\ai_douyin\src\scheduler\queue.py:269: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+  D:\IT\ai_douyin\src\scheduler\queue.py:237: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+  D:\IT\ai_douyin\tests\test_task_queue_claim.py:74: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    TaskExecution.lease_expires_at: datetime.utcnow() - timedelta(seconds=1),
+
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+  D:\IT\ai_douyin\src\scheduler\queue.py:346: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = now or datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_creative_workflow.py::test_assistant_major_review_reopens_task_without_reusing_text_handoff
+FAILED tests/test_creative_workflow_ui.py::test_page_displays_detached_launch_failure
+FAILED data/qa/creative_platform_refactor_20261002/v20_confirmation/test_extended_recovery.py::test_tampered_resolved_feedback_receipt_stops_before_model_call[feedback]
+FAILED data/qa/creative_platform_refactor_20261002/v20_confirmation/test_extended_recovery.py::test_tampered_resolved_feedback_receipt_stops_before_model_call[resolution]
+4 failed, 748 passed, 18 warnings in 287.17s (0:04:47)
+ACCEPTANCE_EXIT_CODE=1

@@ -1,0 +1,45 @@
+{
+  "v18_runtime_and_artifacts_valid": true,
+  "runtime_verification": {
+    "status": "verified",
+    "source_count": 31,
+    "rule_inventory_coverage_claim": false
+  },
+  "v18_dataset": {
+    "case_count": 28,
+    "approved_case_count": 0,
+    "candidate_case_count": 28,
+    "approved_independent_count": 0,
+    "holdout_count": 0,
+    "source_family_count": 15,
+    "failures": [
+      "APPROVED_INDEPENDENT_SAMPLE_SHORTFALL",
+      "FROZEN_HOLDOUT_SHORTFALL",
+      "CATEGORY_SHORTFALL:action:error",
+      "CATEGORY_SHORTFALL:action:correct",
+      "HOLDOUT_CATEGORY_SHORTFALL:action:error",
+      "HOLDOUT_CATEGORY_SHORTFALL:action:correct",
+      "CATEGORY_SHORTFALL:interaction:error",
+      "CATEGORY_SHORTFALL:interaction:correct",
+      "HOLDOUT_CATEGORY_SHORTFALL:interaction:error",
+      "HOLDOUT_CATEGORY_SHORTFALL:interaction:correct",
+      "CATEGORY_SHORTFALL:space:error",
+      "CATEGORY_SHORTFALL:space:correct",
+      "HOLDOUT_CATEGORY_SHORTFALL:space:error",
+      "HOLDOUT_CATEGORY_SHORTFALL:space:correct",
+      "CATEGORY_SHORTFALL:camera:error",
+      "CATEGORY_SHORTFALL:camera:correct",
+      "HOLDOUT_CATEGORY_SHORTFALL:camera:error",
+      "HOLDOUT_CATEGORY_SHORTFALL:camera:correct"
+    ],
+    "qualified": false,
+    "gold_labels_missing": 28,
+    "source_family_leaks": []
+  },
+  "v17_frozen_artifact_failures": [],
+  "v17_manifest_matches_upgrade_base": true,
+  "alembic_heads": [
+    "0008_task_execution_leases"
+  ],
+  "configured_governance_directory": "data/creative_governance/20261002_v18_platform_refactor"
+}

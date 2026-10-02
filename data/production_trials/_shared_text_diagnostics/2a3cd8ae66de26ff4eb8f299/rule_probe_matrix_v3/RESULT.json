@@ -1,0 +1,906 @@
+{
+  "schema": "minimax_rule_probe_result/v1",
+  "generated_at": "2026-10-02T19:45:17.168392+00:00",
+  "groups": {
+    "A": {
+      "attempts": 3,
+      "valid": 0,
+      "statuses": [
+        "rule_rejected",
+        "rule_rejected",
+        "rule_rejected"
+      ],
+      "completion_tokens": [
+        227,
+        202,
+        193
+      ],
+      "total_tokens": 2809
+    },
+    "B": {
+      "attempts": 3,
+      "valid": 3,
+      "statuses": [
+        "probe_contract_valid",
+        "probe_contract_valid",
+        "probe_contract_valid"
+      ],
+      "completion_tokens": [
+        199,
+        193,
+        191
+      ],
+      "total_tokens": 3154
+    },
+    "C": {
+      "attempts": 3,
+      "valid": 3,
+      "statuses": [
+        "probe_contract_valid",
+        "probe_contract_valid",
+        "probe_contract_valid"
+      ],
+      "completion_tokens": [
+        196,
+        201,
+        205
+      ],
+      "total_tokens": 3527
+    },
+    "D": {
+      "attempts": 3,
+      "valid": 3,
+      "statuses": [
+        "probe_contract_valid",
+        "probe_contract_valid",
+        "probe_contract_valid"
+      ],
+      "completion_tokens": [
+        193,
+        193,
+        199
+      ],
+      "total_tokens": 3207
+    },
+    "E": {
+      "attempts": 3,
+      "valid": 3,
+      "statuses": [
+        "probe_contract_valid",
+        "probe_contract_valid",
+        "probe_contract_valid"
+      ],
+      "completion_tokens": [
+        193,
+        199,
+        193
+      ],
+      "total_tokens": 3228
+    },
+    "F": {
+      "attempts": 3,
+      "valid": 3,
+      "statuses": [
+        "probe_contract_valid",
+        "probe_contract_valid",
+        "probe_contract_valid"
+      ],
+      "completion_tokens": [
+        193,
+        195,
+        193
+      ],
+      "total_tokens": 3392
+    }
+  },
+  "new_calls": 18,
+  "effective_calls_started": 42,
+  "max_calls": 42,
+  "new_reported_tokens": 19317,
+  "effective_reported_tokens": 398343,
+  "unknown_token_reservations": 0,
+  "max_total_tokens": 500000,
+  "remaining_calls": 0,
+  "remaining_tokens_after_reservations": 101657,
+  "frozen_parent_unchanged": true,
+  "old_budget_reset": false,
+  "semantic_approval": false,
+  "no_complete_creative_work_or_media_generated": true,
+  "raw_success_envelopes_saved": true,
+  "plan": "D:\\IT\\ai_douyin\\data\\qa\\minimax_rule_probe_20261003\\matrix_v3\\TEST_PLAN.json",
+  "ledger": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\rule_probe_matrix_v3\\CALL_LEDGER.json",
+  "calls": [
+    {
+      "ordinal": 25,
+      "round": 1,
+      "case_id": "A",
+      "status": "rule_rejected",
+      "response_metadata": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f3bee7ac4029d433e9e634bd7b3c4",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 729,
+        "completion_tokens": 227,
+        "total_tokens": 956
+      },
+      "evaluation": {
+        "status": "rule_rejected",
+        "checks": {
+          "base_shape": {
+            "passed": true,
+            "errors": []
+          },
+          "sources": {
+            "passed": false
+          },
+          "source_relation": {
+            "passed": false
+          },
+          "task_values": {
+            "passed": false
+          }
+        },
+        "automatic_retry": false,
+        "semantic_approval": false,
+        "case_schema": {
+          "passed": true,
+          "errors": []
+        }
+      },
+      "failure": null
+    },
+    {
+      "ordinal": 26,
+      "round": 1,
+      "case_id": "B",
+      "status": "probe_contract_valid",
+      "response_metadata": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f3bf1cdb5768a13f80731d5c141ce",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 857,
+        "completion_tokens": 199,
+        "total_tokens": 1056
+      },
+      "evaluation": {
+        "status": "probe_contract_valid",
+        "checks": {
+          "base_shape": {
+            "passed": true,
+            "errors": []
+          },
+          "sources": {
+            "passed": true
+          },
+          "source_relation": {
+            "passed": true
+          },
+          "task_values": {
+            "passed": true
+          }
+        },
+        "automatic_retry": false,
+        "semantic_approval": false,
+        "case_schema": {
+          "passed": true,
+          "errors": []
+        }
+      },
+      "failure": null
+    },
+    {
+      "ordinal": 27,
+      "round": 1,
+      "case_id": "C",
+      "status": "probe_contract_valid",
+      "response_metadata": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f3bf3e3ee33a7a549ad80de6dfdb6",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 975,
+        "completion_tokens": 196,
+        "total_tokens": 1171
+      },
+      "evaluation": {
+        "status": "probe_contract_valid",
+        "checks": {
+          "base_shape": {
+            "passed": true,
+            "errors": []
+          },
+          "sources": {
+            "passed": true
+          },
+          "source_relation": {
+            "passed": true
+          },
+          "task_values": {
+            "passed": true
+          }
+        },
+        "automatic_retry": false,
+        "semantic_approval": false,
+        "case_schema": {
+          "passed": true,
+          "errors": []
+        }
+      },
+      "failure": null
+    },
+    {
+      "ordinal": 28,
+      "round": 1,
+      "case_id": "D",
+      "status": "probe_contract_valid",
+      "response_metadata": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f3bf59bb54e6a23c9d92534ab4581",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 874,
+        "completion_tokens": 193,
+        "total_tokens": 1067
+      },
+      "evaluation": {
+        "status": "probe_contract_valid",
+        "checks": {
+          "base_shape": {
+            "passed": true,
+            "errors": []
+          },
+          "sources": {
+            "passed": true
+          },
+          "source_relation": {
+            "passed": true
+          },
+          "task_values": {
+            "passed": true
+          }
+        },
+        "automatic_retry": false,
+        "semantic_approval": false,
+        "case_schema": {
+          "passed": true,
+          "errors": []
+        }
+      },
+      "failure": null
+    },
+    {
+      "ordinal": 29,
+      "round": 1,
+      "case_id": "E",
+      "status": "probe_contract_valid",
+      "response_metadata": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f3bf8c104ff4fc3bcb6c08c42ba52",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 881,
+        "completion_tokens": 193,
+        "total_tokens": 1074
+      },
+      "evaluation": {
+        "status": "probe_contract_valid",
+        "checks": {
+          "base_shape": {
+            "passed": true,
+            "errors": []
+          },
+          "sources": {
+            "passed": true
+          },
+          "source_relation": {
+            "passed": true
+          },
+          "task_values": {
+            "passed": true
+          }
+        },
+        "automatic_retry": false,
+        "semantic_approval": false,
+        "case_schema": {
+          "passed": true,
+          "errors": []
+        }
+      },
+      "failure": null
+    },
+    {
+      "ordinal": 30,
+      "round": 1,
+      "case_id": "F",
+      "status": "probe_contract_valid",
+      "response_metadata": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f3bfa5e191489ed9330e029c9fe11",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 937,
+        "completion_tokens": 193,
+        "total_tokens": 1130
+      },
+      "evaluation": {
+        "status": "probe_contract_valid",
+        "checks": {
+          "base_shape": {
+            "passed": true,
+            "errors": []
+          },
+          "sources": {
+            "passed": true
+          },
+          "source_relation": {
+            "passed": true
+          },
+          "task_values": {
+            "passed": true
+          }
+        },
+        "automatic_retry": false,
+        "semantic_approval": false,
+        "case_schema": {
+          "passed": true,
+          "errors": []
+        }
+      },
+      "failure": null
+    },
+    {
+      "ordinal": 31,
+      "round": 2,
+      "case_id": "F",
+      "status": "probe_contract_valid",
+      "response_metadata": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f3c709a87dffba9d58378829a56a8",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 937,
+        "completion_tokens": 195,
+        "total_tokens": 1132
+      },
+      "evaluation": {
+        "status": "probe_contract_valid",
+        "checks": {
+          "base_shape": {
+            "passed": true,
+            "errors": []
+          },
+          "sources": {
+            "passed": true
+          },
+          "source_relation": {
+            "passed": true
+          },
+          "task_values": {
+            "passed": true
+          }
+        },
+        "automatic_retry": false,
+        "semantic_approval": false,
+        "case_schema": {
+          "passed": true,
+          "errors": []
+        }
+      },
+      "failure": null
+    },
+    {
+      "ordinal": 32,
+      "round": 2,
+      "case_id": "E",
+      "status": "probe_contract_valid",
+      "response_metadata": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f3c728db99d82156da864b7c86a70",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 881,
+        "completion_tokens": 199,
+        "total_tokens": 1080
+      },
+      "evaluation": {
+        "status": "probe_contract_valid",
+        "checks": {
+          "base_shape": {
+            "passed": true,
+            "errors": []
+          },
+          "sources": {
+            "passed": true
+          },
+          "source_relation": {
+            "passed": true
+          },
+          "task_values": {
+            "passed": true
+          }
+        },
+        "automatic_retry": false,
+        "semantic_approval": false,
+        "case_schema": {
+          "passed": true,
+          "errors": []
+        }
+      },
+      "failure": null
+    },
+    {
+      "ordinal": 33,
+      "round": 2,
+      "case_id": "D",
+      "status": "probe_contract_valid",
+      "response_metadata": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f3c751780fde7600c97c9570b6b84",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 874,
+        "completion_tokens": 193,
+        "total_tokens": 1067
+      },
+      "evaluation": {
+        "status": "probe_contract_valid",
+        "checks": {
+          "base_shape": {
+            "passed": true,
+            "errors": []
+          },
+          "sources": {
+            "passed": true
+          },
+          "source_relation": {
+            "passed": true
+          },
+          "task_values": {
+            "passed": true
+          }
+        },
+        "automatic_retry": false,
+        "semantic_approval": false,
+        "case_schema": {
+          "passed": true,
+          "errors": []
+        }
+      },
+      "failure": null
+    },
+    {
+      "ordinal": 34,
+      "round": 2,
+      "case_id": "C",
+      "status": "probe_contract_valid",
+      "response_metadata": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f3c771289e3f88eb1fee9370c02d7",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 975,
+        "completion_tokens": 201,
+        "total_tokens": 1176
+      },
+      "evaluation": {
+        "status": "probe_contract_valid",
+        "checks": {
+          "base_shape": {
+            "passed": true,
+            "errors": []
+          },
+          "sources": {
+            "passed": true
+          },
+          "source_relation": {
+            "passed": true
+          },
+          "task_values": {
+            "passed": true
+          }
+        },
+        "automatic_retry": false,
+        "semantic_approval": false,
+        "case_schema": {
+          "passed": true,
+          "errors": []
+        }
+      },
+      "failure": null
+    },
+    {
+      "ordinal": 35,
+      "round": 2,
+      "case_id": "B",
+      "status": "probe_contract_valid",
+      "response_metadata": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f3c7a1822e1b706a3e89e76e1bc01",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 857,
+        "completion_tokens": 193,
+        "total_tokens": 1050
+      },
+      "evaluation": {
+        "status": "probe_contract_valid",
+        "checks": {
+          "base_shape": {
+            "passed": true,
+            "errors": []
+          },
+          "sources": {
+            "passed": true
+          },
+          "source_relation": {
+            "passed": true
+          },
+          "task_values": {
+            "passed": true
+          }
+        },
+        "automatic_retry": false,
+        "semantic_approval": false,
+        "case_schema": {
+          "passed": true,
+          "errors": []
+        }
+      },
+      "failure": null
+    },
+    {
+      "ordinal": 36,
+      "round": 2,
+      "case_id": "A",
+      "status": "rule_rejected",
+      "response_metadata": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f3c7cb8b1ae626a0b7322ccc365ff",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 729,
+        "completion_tokens": 202,
+        "total_tokens": 931
+      },
+      "evaluation": {
+        "status": "rule_rejected",
+        "checks": {
+          "base_shape": {
+            "passed": true,
+            "errors": []
+          },
+          "sources": {
+            "passed": false
+          },
+          "source_relation": {
+            "passed": false
+          },
+          "task_values": {
+            "passed": false
+          }
+        },
+        "automatic_retry": false,
+        "semantic_approval": false,
+        "case_schema": {
+          "passed": true,
+          "errors": []
+        }
+      },
+      "failure": null
+    },
+    {
+      "ordinal": 37,
+      "round": 3,
+      "case_id": "C",
+      "status": "probe_contract_valid",
+      "response_metadata": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f3cc1960a51dfa0332523826bd9d5",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 975,
+        "completion_tokens": 205,
+        "total_tokens": 1180
+      },
+      "evaluation": {
+        "status": "probe_contract_valid",
+        "checks": {
+          "base_shape": {
+            "passed": true,
+            "errors": []
+          },
+          "sources": {
+            "passed": true
+          },
+          "source_relation": {
+            "passed": true
+          },
+          "task_values": {
+            "passed": true
+          }
+        },
+        "automatic_retry": false,
+        "semantic_approval": false,
+        "case_schema": {
+          "passed": true,
+          "errors": []
+        }
+      },
+      "failure": null
+    },
+    {
+      "ordinal": 38,
+      "round": 3,
+      "case_id": "D",
+      "status": "probe_contract_valid",
+      "response_metadata": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f3cc408ceba154fc7bbb59d03a1de",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 874,
+        "completion_tokens": 199,
+        "total_tokens": 1073
+      },
+      "evaluation": {
+        "status": "probe_contract_valid",
+        "checks": {
+          "base_shape": {
+            "passed": true,
+            "errors": []
+          },
+          "sources": {
+            "passed": true
+          },
+          "source_relation": {
+            "passed": true
+          },
+          "task_values": {
+            "passed": true
+          }
+        },
+        "automatic_retry": false,
+        "semantic_approval": false,
+        "case_schema": {
+          "passed": true,
+          "errors": []
+        }
+      },
+      "failure": null
+    },
+    {
+      "ordinal": 39,
+      "round": 3,
+      "case_id": "A",
+      "status": "rule_rejected",
+      "response_metadata": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f3cc6daa459419dd662b3ad66274a",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 729,
+        "completion_tokens": 193,
+        "total_tokens": 922
+      },
+      "evaluation": {
+        "status": "rule_rejected",
+        "checks": {
+          "base_shape": {
+            "passed": true,
+            "errors": []
+          },
+          "sources": {
+            "passed": false
+          },
+          "source_relation": {
+            "passed": false
+          },
+          "task_values": {
+            "passed": false
+          }
+        },
+        "automatic_retry": false,
+        "semantic_approval": false,
+        "case_schema": {
+          "passed": true,
+          "errors": []
+        }
+      },
+      "failure": null
+    },
+    {
+      "ordinal": 40,
+      "round": 3,
+      "case_id": "F",
+      "status": "probe_contract_valid",
+      "response_metadata": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f3cc80fd88a95e0e0515010f67d62",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 937,
+        "completion_tokens": 193,
+        "total_tokens": 1130
+      },
+      "evaluation": {
+        "status": "probe_contract_valid",
+        "checks": {
+          "base_shape": {
+            "passed": true,
+            "errors": []
+          },
+          "sources": {
+            "passed": true
+          },
+          "source_relation": {
+            "passed": true
+          },
+          "task_values": {
+            "passed": true
+          }
+        },
+        "automatic_retry": false,
+        "semantic_approval": false,
+        "case_schema": {
+          "passed": true,
+          "errors": []
+        }
+      },
+      "failure": null
+    },
+    {
+      "ordinal": 41,
+      "round": 3,
+      "case_id": "E",
+      "status": "probe_contract_valid",
+      "response_metadata": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f3ccb9651269b6497822da5cb8ccc",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 881,
+        "completion_tokens": 193,
+        "total_tokens": 1074
+      },
+      "evaluation": {
+        "status": "probe_contract_valid",
+        "checks": {
+          "base_shape": {
+            "passed": true,
+            "errors": []
+          },
+          "sources": {
+            "passed": true
+          },
+          "source_relation": {
+            "passed": true
+          },
+          "task_values": {
+            "passed": true
+          }
+        },
+        "automatic_retry": false,
+        "semantic_approval": false,
+        "case_schema": {
+          "passed": true,
+          "errors": []
+        }
+      },
+      "failure": null
+    },
+    {
+      "ordinal": 42,
+      "round": 3,
+      "case_id": "B",
+      "status": "probe_contract_valid",
+      "response_metadata": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f3cceafa611c7194e93d35706aa78",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 857,
+        "completion_tokens": 191,
+        "total_tokens": 1048
+      },
+      "evaluation": {
+        "status": "probe_contract_valid",
+        "checks": {
+          "base_shape": {
+            "passed": true,
+            "errors": []
+          },
+          "sources": {
+            "passed": true
+          },
+          "source_relation": {
+            "passed": true
+          },
+          "task_values": {
+            "passed": true
+          }
+        },
+        "automatic_retry": false,
+        "semantic_approval": false,
+        "case_schema": {
+          "passed": true,
+          "errors": []
+        }
+      },
+      "failure": null
+    }
+  ]
+}

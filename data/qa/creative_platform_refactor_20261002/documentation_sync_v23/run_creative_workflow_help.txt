@@ -1,0 +1,56 @@
+usage: run_creative_workflow.py [-h]
+                                --source-driver {novel,reference_video,original}
+                                [--model-profile {legacy_writer_minimax_director_deepseek,minimax_create_deepseek_review}]
+                                [--writer-prompt-version {legacy,original_events_v3}]
+                                [--production-protocol {legacy,governed_production_v1}]
+                                [--review-policy-version {legacy,evidence_review_v1,evidence_review_v2,evidence_review_v3,evidence_review_v4,evidence_review_v5,evidence_review_v6}]
+                                --title TITLE --run-dir RUN_DIR
+                                [--novel NOVEL] [--metadata METADATA]
+                                [--video VIDEO] [--analysis ANALYSIS]
+                                [--analysis-end-heading ANALYSIS_END_HEADING]
+                                [--reference REFERENCE] [--brief BRIEF]
+                                [--asset-library ASSET_LIBRARY]
+                                [--focus FOCUS] [--max-calls MAX_CALLS]
+                                [--max-total-tokens MAX_TOTAL_TOKENS]
+                                [--max-revisions MAX_REVISIONS]
+                                [--max-contract-repairs MAX_CONTRACT_REPAIRS]
+                                [--budget-policy-version {v1_20260922,v2_20260922,v3_20260922,v4_20260923,v5_20261001}]
+                                [--retry-unconfirmed-transport]
+                                [--stop-after-stage STOP_AFTER_STAGE |
+                                --next-stage]
+
+新版双角色剧本工作流；不会自动生成视频
+
+options:
+  -h, --help            show this help message and exit
+  --source-driver {novel,reference_video,original}
+  --model-profile {legacy_writer_minimax_director_deepseek,minimax_create_deepseek_review}
+                        新任务默认MiniMax创作、DeepSeek审查；旧任务沿用绑定配置
+  --writer-prompt-version {legacy,original_events_v3}
+                        新原创任务默认事件版编剧并强制助手复核；恢复时沿用原版本
+  --production-protocol {legacy,governed_production_v1}
+                        显式启用新规则治理/动作v2/精简审核；需配合evidence_review_v6，旧任务保持绑定
+  --review-policy-version {legacy,evidence_review_v1,evidence_review_v2,evidence_review_v3,evidence_review_v4,evidence_review_v5,evidence_review_v6}
+                        新原创任务默认矛盾对照审核v5和逐节拍分镜；旧任务沿用原版本
+  --title TITLE
+  --run-dir RUN_DIR
+  --novel NOVEL
+  --metadata METADATA
+  --video VIDEO
+  --analysis ANALYSIS
+  --analysis-end-heading ANALYSIS_END_HEADING
+                        视频分析范围终点标题；只取该标题之前内容，并记录排除范围
+  --reference REFERENCE
+  --brief BRIEF         每次创作要求；原创模式必需
+  --asset-library ASSET_LIBRARY
+  --focus FOCUS         本次对照焦点，例如第10章停车场争执
+  --max-calls MAX_CALLS
+  --max-total-tokens MAX_TOTAL_TOKENS
+  --max-revisions MAX_REVISIONS
+  --max-contract-repairs MAX_CONTRACT_REPAIRS
+  --budget-policy-version {v1_20260922,v2_20260922,v3_20260922,v4_20260923,v5_20261001}
+  --retry-unconfirmed-transport
+                        仅对无 request ID 的连接失败显式记录一次重试
+  --stop-after-stage STOP_AFTER_STAGE
+                        调试模式：指定阶段产物完成并保存不可变快照后暂停
+  --next-stage          调试模式：跳过已缓存阶段，只运行下一个尚未完成的阶段后暂停

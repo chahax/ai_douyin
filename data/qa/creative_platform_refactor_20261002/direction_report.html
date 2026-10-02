@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI 剧本与视频制作平台重构方向报告</title>
+<style>
+:root{--bg:#f4f6fa;--ink:#182839;--muted:#566575;--line:#d7e0e9;--blue:#1757a8;--light:#eaf2ff;--green:#1d7454;--amber:#9e5c05}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.8 "Microsoft YaHei",system-ui,sans-serif}main{max-width:1160px;margin:36px auto;padding:0 26px 60px}header,section{background:#fff;border:1px solid var(--line);border-radius:14px;padding:28px 32px;margin-bottom:22px}h1{font-size:30px;line-height:1.45;margin:7px 0 16px}h2{font-size:23px;line-height:1.5;margin:0 0 18px}h3{font-size:18px;margin:21px 0 8px}p{margin:10px 0}.meta,.note{color:var(--muted);font-size:14px}.lead{font-size:18px}.callout{border-left:4px solid var(--blue);padding:12px 17px;background:var(--light);border-radius:5px;margin:18px 0}a{color:var(--blue);text-decoration:underline;text-underline-offset:3px}nav{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:20px}nav a{font-size:14px}table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}th{background:#eff3f8;color:#2c4054}td:first-child{min-width:120px}ul,ol{padding-left:23px}li{margin:7px 0}code{font:13px/1.6 Consolas,monospace;background:#f0f3f8;border-radius:4px;padding:2px 5px;overflow-wrap:anywhere}pre{padding:18px;background:#172638;color:#e8edf6;border-radius:8px;white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.65 Consolas,monospace}.tag{display:inline-block;color:var(--blue);background:var(--light);padding:3px 10px;border-radius:20px;font-size:13px;margin-right:6px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{padding:16px 19px;background:#f7f9fc;border:1px solid var(--line);border-radius:9px}.card strong{display:block;margin-bottom:5px}.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0}.node{padding:14px;border:1px solid #bdcde1;border-radius:9px;background:#f6f9ff;font-size:14px}.node strong{display:block;color:var(--blue);font-size:16px}.node small{display:block;margin-top:6px;color:var(--muted)}.node:nth-child(7),.node:nth-child(8){background:#fff7e8;border-color:#e8c28c}.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 0}button,select{font:14px "Microsoft YaHei",sans-serif;border:1px solid #aebed0;border-radius:7px;background:white;color:var(--ink);padding:9px 12px}button{cursor:pointer}button.active{background:var(--blue);color:white;border-color:var(--blue)}.impact-row{display:grid;grid-template-columns:180px 1fr;border:1px solid var(--line);border-radius:7px;padding:11px 14px;margin:8px 0;font-size:14px;gap:14px}.retained{background:#eef8f3}.invalidated{background:#fff4e8}.changed{background:#eef2ff}.result{padding:14px 17px;background:#f3f6fa;border:1px solid var(--line);border-radius:8px;margin:12px 0}.source-list{font-size:14px}.source-list li{overflow-wrap:anywhere}.table-wrap{overflow-x:auto}.warning{color:var(--amber)}footer{font-size:13px;color:var(--muted);padding:0 8px}@media(max-width:760px){main{padding:0 12px;margin:15px auto}header,section{padding:21px 18px}h1{font-size:25px}.grid{grid-template-columns:1fr}.flow{grid-template-columns:repeat(2,minmax(0,1fr))}.impact-row{grid-template-columns:1fr;gap:2px}}@media print{body{background:white;font-size:12px}main{max-width:none;margin:0;padding:0}header,section{border-radius:0;break-inside:auto;margin-bottom:10px;padding:16px}h1{font-size:24px}h2{font-size:18px}nav,.controls{display:none}a{color:inherit}table{font-size:11px}.card,.node{break-inside:avoid}}
+</style></head><body><main>
+<header>
+<div class="meta">2026 年 10 月 2 日 · D:\IT\ai_douyin · 重构方向提案</div>
+<h1>AI 剧本与视频制作平台重构方向报告</h1>
+<span class="tag">产品方向已由用户确认</span><span class="tag">文本与视频均需分段调试</span><span class="tag">本轮未实施业务重构</span>
+<p class="lead"><strong>建议首先建设可独立运行、查看、修订和恢复的创作阶段，把反馈尽早送回产生问题的阶段，再逐步扩大自动化范围。</strong></p>
+<p>项目已有分阶段调用、逐节拍导演、全文复审、任务预算及版本记录。当前主要缺口是这些能力没有形成统一的调试工作台：用户难以选择断点、比较版本、确认问题最早出现的位置，以及判断修订后哪些下游产物仍有效。增加提示词、审核轮次或模型角色，不能直接补齐这个闭环。</p>
+<div class="callout">本报告以剧本、导演和视频制作为产品中心。账号研究可以提供创作输入，浏览器发布与运营复盘作为下游能力。目标是自动推进具备证据的步骤；实际视频仍由用户人工审核，技术成功只表示任务与文件正常。</div>
+<nav><a href="#diagnosis">问题与证据</a><a href="#flow">目标流程</a><a href="#debug">调试交互</a><a href="#impact">修订影响</a><a href="#architecture">模块边界</a><a href="#quality">质量与调试方法</a><a href="#roadmap">实施顺序</a><a href="#docs">文档与标准</a><a href="#evidence">核验范围</a></nav>
+</header>
+<section id="diagnosis"><h2>1 当前问题如何形成</h2>
+<p>用户反馈是“模型生产效果需要分段调试，整次输出后再调试效果不好”。代码核对支持把问题优先定位为<strong>反馈路径、责任定位和版本控制问题</strong>。模型自身的创作与媒体能力也是变量，但本轮没有进行新模型对照或播放媒体，不能给各因素分配贡献比例。</p>
+<div class="table-wrap"><table><thead><tr><th>现有事实</th><th>对调试的影响</th><th>重构方向</th></tr></thead><tbody>
+<tr><td>流程已经分阶段；<a href="../../../src/content_factory/creative_workflow.py">CreativeWorkflow._stage</a> 在第 5813 行，run 在第 6551 行</td><td>内部有阶段，不等于用户能独立执行每个阶段。恢复、校验、内容返修和交接仍集中于一个大型流程对象</td><td>抽出统一阶段接口和执行记录，再把断点、单步和重跑接到同一个入口</td></tr>
+<tr><td><a href="../../../src/web/creative_workflow_dashboard.py">创作页面</a>主要提供启动、刷新、继续已核实任务及恢复同一任务；<a href="../../../scripts/run_creative_workflow.py">CLI</a> 没有通用单阶段或断点参数</td><td>已有特定审核暂停点，仍缺少对任意阶段的统一调试控制</td><td>调试模式增加“运行到此”“运行下一阶段”“比较版本”“从责任阶段恢复”</td></tr>
+<tr><td><a href="../../../src/content_factory/creative_segmented_director.py">导演已有逐节拍生成与审核</a>，generate_reviewed_beats 在第 163 行</td><td>不能把现状描述为完全没有分段。切小输出仍可能丢失全片目的或重复动作</td><td>保留全片上下文、当前节拍、前段终态与后续约束，让已有分段可独立查看和恢复</td></tr>
+<tr><td><a href="../../../src/content_factory/creative_full_script_revision.py">新原创整稿返修</a>采用完整新版，再全文复审</td><td>只修局部字句可能损坏人物动机、前因后果和结尾，拼接旧新节拍也会产生版本混用</td><td>剧本阶段保持整稿采用；分段用于定位和阶段控制，问题范围由证据决定</td></tr>
+<tr><td><a href="../../../src/content_factory/creative_seedance_segments.py">视频请求由分镜编译</a>；已有叙事交接对照</td><td>需要同时查看导演原意和实际发送请求，才能发现编译或投影过程中信息丢失</td><td>每段展示剧本依据、导演安排、首尾状态、最终请求与用户反馈的同一条版本链</td></tr>
+<tr><td>普通视频入口只写 succeeded；专项手动入口写 awaiting_human_review；旧查询路径仍自动生成抽帧材料</td><td>不同入口对技术完成和内容待审的表达、操作政策不一致</td><td>先统一人工审核政策，再接自动续段；不主动抽帧、听看、ASR 或调用媒体审核模型</td></tr>
+<tr><td>当前 v17 数据集 28 个案例均为 candidate，没有人工批准的 gold 或 holdout</td><td>目前不能仅凭测试通过、模型自评或一次成功，证明创作效果变好</td><td>沉淀真实问题案例与人工标签，用固定样本比较新旧版本</td></tr>
+</tbody></table></div>
+<p class="note">8244 行的流程文件是拆分职责的线索，行数本身不构成国际标准不符合项。上述入口和文件均与上一轮 graphifyy 审计的相应源码快照一致。</p>
+<h3>为什么末端调试的反馈容易失效</h3>
+<p>“成片情绪不足”可能始于简报没有明确关键关系，也可能是剧本缺少可见刺激、分镜切走关键反应、编译请求丢了表演窗口，或视频服务没有表现出来。若只在最后重写提示词，多个变量同时变化，很难确认改善来自哪里。重构应让每项问题绑定具体内容和版本，并记录“最早有证据的问题阶段”；暂时无法定位时记录未知，先做文本对照，不自动重生成。</p>
+</section>
+<section id="flow"><h2>2 目标流程与自动化边界</h2>
+<p>分段有三种粒度：<strong>业务阶段、导演节拍或镜头、媒体生成片段</strong>。三者分别管理，不能用视频服务的时长上限反过来机械拆散故事。剧本先有完整因果和情绪结构，导演再安排可执行的镜头，媒体适配器最后映射服务请求。</p>
+<div class="flow" aria-label="建议的创作阶段">
+<div class="node"><strong>1 创作简报与来源</strong>冻结主题、关系、表达要求和原文范围<small>输出：可引用的输入快照</small></div>
+<div class="node"><strong>2 故事与人物设计</strong>确定刺激、选择、转折及结尾的兑现<small>输出：全片故事依据</small></div>
+<div class="node"><strong>3 完整剧本与复审</strong>生成整稿；有问题时整稿修订并全文复审<small>输出：有效剧本版本</small></div>
+<div class="node"><strong>4 全片计划与分镜</strong>锁定全片表达，再逐节拍安排动作和镜头<small>输出：状态计划与分镜</small></div>
+<div class="node"><strong>5 资产与请求预览</strong>对照角色、场景、首帧及真实编译请求<small>输出：待执行的版本化计划</small></div>
+<div class="node"><strong>6 单段生成与保存</strong>独占提交、查询原任务、完整保存文件和原始尾帧<small>输出：awaiting_human_review</small></div>
+<div class="node"><strong>7 用户审核与反馈</strong>你播放候选，记录通过或问题；通过才普通续段<small>输出：绑定原片的用户决定</small></div>
+<div class="node"><strong>8 合成与交付</strong>使用有效版本及批准链合成完整审片版<small>输出：整片待你确认</small></div>
+</div>
+<p>图中每个框是可调试的责任边界，并不表示必须新增一次模型调用。优先复用 MiniMax 编剧、DeepSeek 导演与现有审查路径；更细的执行单元也不必增加角色。新增调用只有在对照验证显示价值时，才作为后续预算方案评估。</p>
+<div class="grid"><div class="card"><strong>文本推进</strong>已有明确契约和有效审查结果的步骤可以自动继续。用户可以在调试模式设置断点；有主要问题时返回责任阶段，保留问题证据和全片约束。</div><div class="card"><strong>媒体推进</strong>后台自动提交和查询只发生在该任务已有执行授权、预算和合格前置材料的范围内。成功保存后等待用户；批准本段后才使用服务原始尾帧继续紧邻下一段。</div></div>
+<p>针对具体任务明确授权的完整审片版例外，继续单独绑定授权范围，不能变成所有新任务默认策略。合成审片版、接口成功或文本审核通过，都不写视频内容 passed。</p>
+</section>
+<section id="debug"><h2>3 调试工作台应怎样使用</h2>
+<p>用户进入同一个作品工作台，左侧看到阶段、当前版本和停止原因，右侧看到可读内容、前后版本差异及反馈。技术详情按需展开；默认先展示剧本、分镜和视频文件，不要求用户阅读 JSON 或判断模型接口状态。</p>
+<div class="controls" aria-label="建议模式预览"><button class="mode active" data-mode="debug">调试模式</button><button class="mode" data-mode="auto">自动推进模式</button></div>
+<div class="result" id="mode-result" aria-live="polite"></div>
+<p class="note">此处为方案交互示意，只切换报告说明，不执行项目任务。</p>
+<div class="table-wrap"><table><thead><tr><th>操作</th><th>应有行为</th></tr></thead><tbody>
+<tr><td>运行到指定阶段</td><td>从有效父产物继续，只执行到选定断点。已经存在且输入一致的有效产物直接读回</td></tr>
+<tr><td>查看与比较</td><td>同时查看上一版、本版、实际输入与请求；标出新增、删除、顺序和角色归属变化</td></tr>
+<tr><td>记录反馈</td><td>文本绑定段落或镜头；视频由用户记录片段、可选秒数和问题。保存原话，建议与必须修复的问题分开</td></tr>
+<tr><td>从责任阶段修订</td><td>反馈定位到最早有证据的阶段；生成新版本，展示下游影响。完整剧本修订仍整稿采用、全文复审</td></tr>
+<tr><td>重跑当前阶段</td><td>复用冻结输入与原任务预算。明确显示这次是否调用外部服务，不通过换目录领取新额度</td></tr>
+<tr><td>继续与停止</td><td>停止未来派发；已有外部任务按原 ID 查询。无法确认提交结果时显示“结果待确认”，不盲目重发</td></tr>
+</tbody></table></div>
+<div class="callout"><strong>“可见进度”不等于“可调试”。</strong>Token 流式输出能改善等待体验，但未完整返回的文本不能作为有效剧本推进。第一优先级是完整阶段产物的断点与恢复；不在本轮优先实现逐 Token 语义修改。</div>
+<h3>一个具体反馈例子</h3>
+<p>你指出“B03 的拒绝没有让人看出犹豫”。工作台先对照 B03 剧本、对应分镜及最终请求：剧本没有反应时，回编剧阶段；剧本已有反应而分镜删掉时，回导演阶段；分镜已有近景而编译请求变成固定远景时，修编译器；三层文本都保留而实际视频没呈现时，记录为用户指出的媒体执行问题。修完后再核对前后节拍和结尾，不把新增的局部动作当作全片效果已改善。</p>
+</section>
+<section id="impact"><h2>4 修订范围与下游失效</h2>
+<p><strong>默认以依赖关系决定重跑范围，并保留历史产物。</strong>上游变更后，受影响的下游先标记为失效；没有证明兼容之前，旧审核不能用于新产物。导演局部修订可以复用未变化且依赖完整的部分，但故事、对白或节拍顺序改变时，新导演计划必须重新核对全片。</p>
+<label for="change-select">选择一种变更，查看建议影响：</label>
+<div class="controls"><select id="change-select"><option value="script">完整剧本发生变化</option><option value="compiler">某镜头的请求编译发生变化</option><option value="segment">续段链中的 S02 重新生成</option></select></div>
+<div id="impact-list" aria-live="polite"></div><p id="impact-note" class="note"></p>
+<p class="note">这是保守的默认影响规则。将来缩小范围必须依据记录的字段依赖与兼容核验，不能仅凭“看起来无关”。原审批作为历史保留，其对当前版本的有效性单独计算。</p>
+<pre>创作任务（来源与意图固定，预算连续）
+  └─ 执行分支 / 版本（保留父版本，不创建新的免费额度）
+      └─ 阶段执行（输入、提示词、模型与规则版本）
+          └─ 不可变产物（内容与文件 hash）
+              ├─ 文本审查与问题证据
+              └─ 视频服务任务 / 原片 / 原始尾帧 / 用户审核</pre>
+<p>新的独立故事仍通过项目新稿登记入口创建。相同故事的调试、重试和修订留在同一任务账本；原脚本失败计数、调用记录和本轮计数都保留。</p>
+</section>
+<section id="architecture"><h2>5 建议模块边界与执行合同</h2>
+<p>采用渐进式拆分。首先在现有 content_factory 内加入阶段运行器和统一记录，包装已有能力；行为等价后再迁移目录。调度、存储和 provider 复用现有基础，优先解决状态与责任边界，暂不为此引入微服务或替换整套技术栈。</p>
+<div class="table-wrap"><table><thead><tr><th>模块职责</th><th>应管理什么</th><th>现有能力如何处理</th></tr></thead><tbody>
+<tr><td>创作领域</td><td>作品、来源、意图、剧本与分镜版本、问题归属、用户审核</td><td>保留已有契约、来源锁和叙事表达要求，统一字段所有者</td></tr>
+<tr><td>阶段编排</td><td>依赖图、断点、自动推进、停止和失效传播</td><td>从 CreativeWorkflow.run 中逐步抽出；旧入口委托新入口</td></tr>
+<tr><td>阶段执行</td><td>一个阶段的调用、校验、记录、缓存和恢复</td><td>先包装 _stage / _stage_impl；再分离格式恢复、内容返修和外部调用</td></tr>
+<tr><td>产物与反馈</td><td>不可变内容、当前有效版本指针、前后对比、原始反馈及绑定证据</td><td>复用材料哈希、交接清单和审核回执；统一索引，避免多个主状态互相覆盖</td></tr>
+<tr><td>LLM 与媒体适配</td><td>模型能力、真实请求、异步任务查询、文件保存、未知结果</td><td>保留 MiniMax、DeepSeek、Seedance 客户端；编译器不自行创作缺失剧情</td></tr>
+<tr><td>创作工作台</td><td>阶段列表、可读内容、版本对比、问题输入、审核与恢复</td><td>将现有剧本页和视频页按同一作品关联；技术细节按需展开</td></tr>
+<tr><td>发布与运营适配</td><td>接收明确批准的交付产物，返回独立的发布和运营状态</td><td>保留现有账号与浏览器发布规则，不让创作运行依赖账号研究完成</td></tr>
+</tbody></table></div>
+<h3>一个阶段的最小合同</h3>
+<pre>StageInput
+  task_id, run_id, stage_id, parent_artifact_ids / hashes
+  prompt_version, model_profile, rule_binding, review_policy, budget_scope
+StageResult
+  technical_status, artifact_id / hash, call_receipt_ids
+  validation_result, text_review_status, issues, next_action
+MediaReview
+  segment_id, original_video_hash, raw_tail_hash
+  content_status, user_decision_source, reviewed_at</pre>
+<p>合同统一追踪字段，不要求所有阶段返回同样的业务内容。某步骤不适用文本审核或媒体审核时明确记录不适用，不能填成通过。</p>
+<div class="table-wrap"><table><thead><tr><th>状态维度</th><th>示例</th><th>推进含义</th></tr></thead><tbody>
+<tr><td>技术执行</td><td>not_started / running / succeeded / failed / outcome_unknown</td><td>succeeded 只证明调用与保存完成；未知结果先查询或核对</td></tr>
+<tr><td>文本检查</td><td>pending / accepted / needs_revision / needs_attention</td><td>保留程序校验、模型意见与核实记录；只对绑定产物有效</td></tr>
+<tr><td>媒体内容审核</td><td>awaiting_human_review / approved / rejected</td><td>批准来源必须是用户，绑定原片；批准后才允许普通续段</td></tr>
+<tr><td>版本有效性</td><td>current / invalidated / historical</td><td>历史通过仍保留；依赖变化后不能继续放行当前版本</td></tr>
+</tbody></table></div>
+<p>外部付费步骤需要持久请求键与原子领取。停止只是停止继续派发，超时不等于已取消；任务提交结果不明确时，保持 outcome_unknown 并优先读回原 ID。上一轮 SQLite 双领取和线程超时复现，应在扩大自动执行前完成修复。</p>
+</section>
+<section id="quality"><h2>6 怎样证明调试有效</h2>
+<p>将“操作流程可用”和“创作效果改善”分开验收。前者可用离线回放、假服务和故障注入核对；后者需要固定创作材料、真实输出和用户判断。一次输出改善无法确定单一原因，模型或服务也不保证相同输入产生相同结果。</p>
+<ol><li><strong>冻结案例。</strong>从既有用户指出的问题中建立开发集：动机不足、刺激反应错序、表演窗口不足、对白超载、空间与持物不连续、编译丢失镜头意图。保留源文件和原反馈；未经人工批准的案例继续标为候选。</li><li><strong>回放定位。</strong>先用已有响应测试解析、契约、编译与失效传播，不调用付费模型。回放通过只证明技术行为，不证明新提示词效果。</li><li><strong>控制变量。</strong>每次比较一个主要变量，例如导演上下文、某条编译映射或审核证据格式。保存完整版本与真实用量；修多个问题时列出变量，避免伪称单一因果。</li><li><strong>保留完整审查。</strong>局部问题修复后，文本复核该段及全片依赖；整稿修订仍全文复审。视频由用户查看实际候选，不用文本分数替代实际效果。</li><li><strong>冻结独立样本。</strong>开发集用于调提示词；未用于调试的保留集用于验证。现有评估配置的样本量和门槛保留，少量试跑只用于早期反馈，不替代其正式验收。</li></ol>
+<div class="table-wrap"><table><thead><tr><th>指标</th><th>怎样记录</th><th>改善时应同时注意</th></tr></thead><tbody>
+<tr><td>阶段首稿接受率</td><td>分阶段统计，无实质返修被接受的数量 / 已完成审查数量</td><td>不能把格式归位、未审或停止任务计入合格首稿</td></tr>
+<tr><td>用户视频批准率</td><td>批准候选 / 用户已作决定的候选；另列待审数量</td><td>不能将接口成功或缺反馈算通过</td></tr>
+<tr><td>问题发现位置</td><td>第一次有证据的问题阶段、最终确认责任阶段、返修次数</td><td>避免审核误报带来无意义返修；未知原因如实记录</td></tr>
+<tr><td>修订影响范围</td><td>实际重跑阶段与片段，复用产物及其依赖证明</td><td>减少重跑不能牺牲全片一致性或沿用失效审核</td></tr>
+<tr><td>成本与交付时间</td><td>每个用户批准作品的实际调用、可得费用、耗时及人工操作时间</td><td>缺失费用字段保留未知，不用预估价格冒充账单</td></tr>
+</tbody></table></div>
+<p>建议首批以少量、相互独立的创作简报做受控调试，先覆盖两人互动、单场景和多场景的代表性问题；这些是试跑范围，不成为所有作品的创作限制。时长按简报的 flexible 或 strict_range 策略处理，不为了测试强行改剧情。</p>
+</section>
+<section id="roadmap"><h2>7 实施顺序与验收</h2>
+<p>先做一条“创作简报 → 完整剧本 → 分镜与请求预览 → 单段视频 → 用户反馈 → 原阶段恢复”的可操作路径，再扩展自动化。原视频驱动与小说路径继续保留原行为，待原创新路径验证后接入统一控制。这里给出实施顺序，不承诺未估算的工期或效果提升比例。</p>
+<div class="table-wrap"><table><thead><tr><th>阶段</th><th>主要改造</th><th>完成标准</th></tr></thead><tbody>
+<tr><td>P0 统一安全推进</td><td>统一视频人工审核状态与政策；补齐 Mock/Ollama 合同；修原子领取、持久提交锁和未知结果恢复；冻结现状版本</td><td>任意普通视频入口成功保存后均待用户审核；未批准不能续段；超时和重启不盲目重复提交；离线接口可实例化</td></tr>
+<tr><td>P1 文本阶段调试</td><td>先包装现有阶段，加断点、单步、冻结输入预览、不可变版本、对比与反馈；CLI 和 UI 共用命令层</td><td>能够停在剧本或指定导演节拍，读取产物、修订并恢复；原有效父产物和任务计数保留</td></tr>
+<tr><td>P2 依赖与媒体反馈</td><td>建立字段/产物依赖、下游失效、文本与最终请求对照；视频反馈绑定原片、原尾与责任阶段</td><td>改剧本会使相关分镜/媒体计划失效；换原尾不能复用旧续段；未变化产物只有核对兼容后才复用</td></tr>
+<tr><td>P3 自动推进与质量验证</td><td>把已验证阶段接入自动模式；完善固定案例、用户标签和保留集；用实际成本及效果比较新旧版本</td><td>断点与自动模式共享同一合同；自动流程遇到问题和用户待审正确停下；只有完成规定样本和人工判断才宣称质量改善</td></tr>
+<tr><td>P4 发布与运营回接</td><td>经用户批准的交付产物进入现有浏览器发布流程；完整透传待核验和最终完成状态</td><td>继续遵循账号核验、主动 AI 声明、虚构说明、提交锁和作品核验；发布反馈独立回传</td></tr>
+</tbody></table></div>
+<h3>首轮最值得验证的操作</h3>
+<p>一份新原创简报先运行到完整剧本，用户在工作台查看并给出具体意见；同任务生成整稿新版本、全文复审，然后运行到导演节拍，比较其反应和构图；预览真实视频请求，生成一段候选并待用户审核。用户拒绝时回到有证据的责任阶段；通过时使用该段服务原始尾帧继续。中途重启后应准确恢复，不能换目录清零预算。</p>
+<p class="note">本报告没有启动这一试跑。现有新任务文本预算 v5 为 20 次调用、50 万 reported tokens、8 次结构修复、5 轮共享内容返修；实际可执行轮数受总预算限制。视频新稿默认失败上限与历史保留要求继续执行。调试功能不能悄悄增大预算。</p>
+</section>
+<section id="docs"><h2>8 文档与标准如何对应</h2>
+<p>当前顶层介绍与系统架构仍以账号运营为中心，近期制作流程又密集记录创作版本演进。重构时需要统一产品定义，并把可用能力、试验能力和历史方案分开标注。建议 README 保留简洁定位；系统架构按下列视图维护，历史制作与审核记录原样保留。</p>
+<div class="table-wrap"><table><thead><tr><th>文档</th><th>应说明什么</th><th>与实现的对应</th></tr></thead><tbody>
+<tr><td>产品与能力说明</td><td>剧本与视频制作为核心；当前可用、试验及退役边界</td><td>入口和实际启用配置，不用仓库中存在某代码证明可用</td></tr>
+<tr><td>业务流程与状态</td><td>自动推进、调试断点、用户审核、结果未知、版本失效</td><td>同一状态枚举、转移条件和 UI 文案</td></tr>
+<tr><td>阶段合同</td><td>输入输出、字段所有者、提示词绑定、前置与停止条件</td><td>阶段注册表生成简表；人工维护职责说明和取舍理由</td></tr>
+<tr><td>调试与恢复指南</td><td>如何定位问题、比较版本、重跑、查询原任务</td><td>同一命令层；配典型真实反馈案例，不复制过期执行命令</td></tr>
+<tr><td>质量验证与决定记录</td><td>人工标签、试跑证据、未验证项及架构取舍</td><td>版本化案例、实际回执、可追溯验证报告</td></tr>
+</tbody></table></div>
+<p>参考 <a href="https://www.iso.org/standard/74393.html">ISO/IEC/IEEE 42010:2022 官方摘要</a>组织架构描述与观点关系。该标准关注架构的描述，不指定本项目必须使用的框架或流程；本报告是方向对照，未取得标准全文逐条审查，也不作认证结论。</p>
+<p>分阶段调用与中间检查可以参考 <a href="https://www.anthropic.com/engineering/building-effective-agents">Anthropic 的工作流工程实践</a>：该资料讨论固定步骤的 prompt chaining、门控和有明确评估条件的迭代改进。这里将其作为技术实践参考，采用本地阶段运行器是结合当前项目的建议，不是国际标准要求。</p>
+<p>质量基线与无法测量项的记录参考 <a href="https://airc.nist.gov/airmf-resources/playbook/measure/">NIST AI RMF Playbook 的 Measure</a>。这是风险与评估实践资料，不规定艺术效果分数；本项目实际视频是否可用仍由用户决定。</p>
+</section>
+<section id="evidence"><h2>9 本报告的证据与范围</h2>
+<p>本轮复用 <a href="../architecture_audit_20261001/audit_report.html">2026 年 10 月 1 日审计报告</a> 与 <a href="../architecture_audit_20261001/focus/graph.html">graphifyy 架构关系图</a>，并重新读取创作入口、阶段调用、分段导演、整稿返修、媒体回执和前端控制。15 个复核的源码与文档文件哈希均匹配此前快照；预算配置另外核对当前内容。完整清单见 <a href="evidence_manifest.json">本轮证据清单</a>。</p>
+<p>graphifyy 关系图用于寻找依赖和职责聚集点，不能证明故事因果、情感表现、媒体质量或标准符合性。源码和文档核对也不能替代真实业务验收。前轮定向离线检查 127 项中 125 项通过、2 项失败，本轮未重复运行；这些结果只支持对应技术路径的审计。</p>
+<p>本轮创建方向报告与证据文件，未修改业务源码、现有文档或任务记录，未发起付费调用、生成视频、发布作品或检查视频画面与声音。交互图是建议行为示意。方向报告交付后，可以按 P0、P1 顺序开始实施；是否改善创作质量须由后续受控试跑与用户反馈验证。</p>
+<ul class="source-list">
+<li><a href="../../../AGENTS.md">AGENTS.md</a>：第 2 行，最新视频人工审核政策。</li>
+<li><a href="../../../src/content_factory/creative_workflow.py">creative_workflow.py</a>：第 5813 行阶段入口、第 6453 行核实审核、第 6496 行导演前全文审查、第 6551 行总编排。</li>
+<li><a href="../../../src/content_factory/creative_segmented_director.py">creative_segmented_director.py</a>：第 163 行逐节拍生成、第 301 行状态计划路径。</li>
+<li><a href="../../../src/content_factory/creative_full_script_revision.py">creative_full_script_revision.py</a>：完整新稿采用合同。</li>
+<li><a href="../../../scripts/run_creative_seedance_segment.py">run_creative_seedance_segment.py</a> 与 <a href="../../../scripts/run_manual_review_deferred_segment.py">run_manual_review_deferred_segment.py</a>：成功回执与人工待审状态。</li>
+<li><a href="../../../src/web/creative_workflow_dashboard.py">creative_workflow_dashboard.py</a>：第 157 行起，状态与恢复控件。</li>
+<li><a href="../../../src/content_factory/creative_evaluation.py">creative_evaluation.py</a> 与 <a href="../../../data/creative_governance/20261001_v17_history_usage/dataset_manifest.json">v17 数据集</a>：评估基础与当前候选状态。</li>
+<li><a href="../../../docs/REUSABLE_VIDEO_WORKFLOW.md">REUSABLE_VIDEO_WORKFLOW.md</a>、<a href="../../../docs/SCRIPT_VIDEO_RUN.md">SCRIPT_VIDEO_RUN.md</a> 与 <a href="../../../config/creative_workflow_budget_v5.json">v5 预算</a>：已冻结的流程、审核和额度规则。</li>
+</ul>
+</section>
+<footer>此报告给出产品与工程重构方向。页面中的交互不连接项目服务，不修改状态，也不执行生成或发布。</footer>
+</main><script>
+const modeText={debug:'调试模式：在选定阶段完成后暂停，查看可读产物与版本差异，记录反馈，再运行下一阶段。视频成功保存后等待用户审核。',auto:'自动推进模式：文本前置条件与审查结果有效时继续运行；主要问题、结果未知、预算不足或指定断点会停止。每段视频仍等待用户审核，批准后才按原尾链续段。'};
+function setMode(key){document.getElementById('mode-result').textContent=modeText[key];document.querySelectorAll('.mode').forEach(b=>b.classList.toggle('active',b.dataset.mode===key));}
+document.querySelectorAll('.mode').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));setMode('debug');
+const impacts={script:{rows:[['创作简报与来源','retained','保留：原始材料与任务意图仍是本次创作的父依据。'],['完整剧本','changed','新版本：完整采用新版并进行全文复审，保留旧稿与计数。'],['导演计划与分镜','invalidated','失效：重新规划或重建，并检查全片故事与表达是否保留。'],['请求、视频与合成','invalidated','受影响版本失效：重建请求；旧媒体与审核保留为历史，不能直接沿用。']],note:'默认按剧本整体变化处理；未来缩小重跑范围需有依赖与兼容证据。'},compiler:{rows:[['已审剧本与分镜','retained','保留：在其内容与依赖未变化的前提下保持有效。'],['该镜头最终请求','changed','新版本：修复映射并核对导演意图、对白与首尾状态。'],['该段及依赖它的续段','invalidated','失效：如果需要重生成且原始尾帧变化，后续原尾链也失效。'],['其他独立镜头','retained','条件保留：确认没有共享资产、全片风格或其他依赖变化。']],note:'只改编译器不需要无证据地重写剧本；全局编译规则变化时扩大到所有受影响请求。'},segment:{rows:[['有效文本与请求','retained','条件保留：当前计划与用户问题不要求修改文本时复用。'],['S02 原片与原始尾帧','changed','新版本：文件成功保存后 awaiting_human_review，由用户重新决定。'],['依赖 S02 尾帧的后续段','invalidated','失效：不能沿用旧尾链或旧用户批准来推进新原片。'],['独立切镜及整片合成','invalidated','核对独立镜头可否保留；整体合成版本待重建和用户确认。']],note:'旧 S02、失败与审批记录原样保留。连续依赖链需要重新核验，不能将新旧片段随意拼接。'}};
+function showImpact(key){const value=impacts[key];const root=document.getElementById('impact-list');root.replaceChildren();value.rows.forEach(row=>{const div=document.createElement('div');div.className='impact-row '+row[1];const title=document.createElement('strong');title.textContent=row[0];const text=document.createElement('span');text.textContent=row[2];div.append(title,text);root.append(div);});document.getElementById('impact-note').textContent=value.note;}
+document.getElementById('change-select').addEventListener('change',e=>showImpact(e.target.value));showImpact('script');
+</script></body></html>

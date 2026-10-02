@@ -1,0 +1,247 @@
+{
+  "schema_version": "creative_checker_context/v1",
+  "source_hash": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+  "created_at": "2026-09-28T13:58:18.903886+00:00",
+  "implementation_status": "offline_implemented_not_production_validated",
+  "context": {
+    "plan": {
+      "schema": "whole_film_action_plan_v2",
+      "initial_state": {
+        "C01": {
+          "posture": "standing",
+          "position": "桌前两步",
+          "gaze": "C02",
+          "affect": "平静",
+          "facing": "桌面"
+        },
+        "C02": {
+          "posture": "standing",
+          "position": "桌旁",
+          "gaze": "C01",
+          "affect": "平静",
+          "facing": "桌面"
+        },
+        "P01": {
+          "holder": "none",
+          "location": "桌面"
+        }
+      },
+      "beats": [
+        {
+          "beat_id": "B1",
+          "purpose": "关系有新的变化",
+          "composition": "固定双人中景留出行动空间",
+          "camera": "固定单机位",
+          "dialogue_mode": "画内对白",
+          "cut_reason": "反应已可见",
+          "groups": [
+            {
+              "id": "A1",
+              "script_slot": "before",
+              "kind": "action",
+              "duration_seconds": 1,
+              "hold_subject": "",
+              "performance": "自然完成既定动作",
+              "operations": [
+                {
+                  "kind": "take",
+                  "actor": "C02",
+                  "target": "P01",
+                  "value": "右手"
+                }
+              ]
+            }
+          ],
+          "dialogue_performance": "原说话人自然说出原对白，面部可读",
+          "reaction": {
+            "anchor": "A1",
+            "subject": "C01",
+            "meaning": "可见反应"
+          },
+          "cut_after_event_id": "dialogue_0",
+          "completion_condition": "all_required_events_complete"
+        },
+        {
+          "beat_id": "B2",
+          "purpose": "关系有新的变化",
+          "composition": "固定双人中景留出行动空间",
+          "camera": "固定单机位",
+          "dialogue_mode": "无对白",
+          "cut_reason": "反应已可见",
+          "groups": [
+            {
+              "id": "A2",
+              "script_slot": "after",
+              "kind": "action",
+              "duration_seconds": 1,
+              "hold_subject": "",
+              "performance": "自然完成既定动作",
+              "operations": [
+                {
+                  "kind": "sit",
+                  "actor": "C02",
+                  "target": "E02",
+                  "value": "椅上"
+                }
+              ]
+            }
+          ],
+          "dialogue_performance": "原说话人自然说出原对白，面部可读",
+          "reaction": {
+            "anchor": "A2",
+            "subject": "C01",
+            "meaning": "可见反应"
+          },
+          "cut_after_event_id": "A2",
+          "completion_condition": "all_required_events_complete"
+        }
+      ],
+      "spatial_contract": {
+        "seats": [
+          {
+            "seat_id": "E02",
+            "access_positions": [
+              "桌旁"
+            ],
+            "required_facing": "桌面"
+          }
+        ]
+      }
+    },
+    "script": {
+      "beats": [
+        {
+          "id": "B1",
+          "duration_seconds": 10,
+          "event": "拿起文件夹",
+          "dialogue": [
+            {
+              "speaker": "陈禾",
+              "text": "明天见。"
+            }
+          ]
+        },
+        {
+          "id": "B2",
+          "duration_seconds": 10,
+          "event": "坐下",
+          "dialogue": []
+        }
+      ]
+    },
+    "manifest": {
+      "schema": "static_visual_manifest_v1",
+      "render": {
+        "style_option_id": "S01",
+        "visual_medium": "二维手绘动画",
+        "palette": "低饱和灰蓝米白",
+        "light_source": "右上暖灯光与左侧冷色余光"
+      },
+      "characters": [
+        {
+          "id": "C01",
+          "name": "林遥",
+          "age_group": "成年",
+          "hair": "中长发",
+          "clothing": "深灰长款通勤外套",
+          "body_shape": "成年体型"
+        },
+        {
+          "id": "C02",
+          "name": "陈禾",
+          "age_group": "成年",
+          "hair": "短发",
+          "clothing": "浅灰针织开衫",
+          "body_shape": "成年体型"
+        }
+      ],
+      "props": [
+        {
+          "id": "P01",
+          "name": "文件夹",
+          "appearance": "墨蓝色A4平整封面",
+          "owner_id": "C02"
+        }
+      ],
+      "scene": {
+        "name": "办公室",
+        "elements": [
+          {
+            "id": "E01",
+            "name": "办公桌",
+            "appearance": "米白桌面"
+          },
+          {
+            "id": "E02",
+            "name": "椅子",
+            "appearance": "深灰靠背椅"
+          }
+        ],
+        "relations": [
+          {
+            "subject": "E02",
+            "relation": "behind",
+            "reference": "E01"
+          }
+        ]
+      }
+    },
+    "shots": {
+      "style": {
+        "style_option_id": "S01",
+        "visual_medium": "二维手绘动画",
+        "palette": "低饱和灰蓝米白",
+        "light_source": "右上暖灯光与左侧冷色余光",
+        "character_lock": "确定2名人物的静态身份外观：[{\"age_group\": \"成年\", \"body_shape\": \"成年体型\", \"clothing\": \"深灰长款通勤外套\", \"hair\": \"中长发\", \"id\": \"C01\", \"name\": \"林遥\"}, {\"age_group\": \"成年\", \"body_shape\": \"成年体型\", \"clothing\": \"浅灰针织开衫\", \"hair\": \"短发\", \"id\": \"C02\", \"name\": \"陈禾\"}]",
+        "spatial_layout": "{\"elements\": [{\"appearance\": \"米白桌面\", \"id\": \"E01\", \"name\": \"办公桌\"}, {\"appearance\": \"深灰靠背椅\", \"id\": \"E02\", \"name\": \"椅子\"}], \"name\": \"办公室\", \"relations\": [{\"reference\": \"E01\", \"relation\": \"behind\", \"subject\": \"E02\"}]}"
+      },
+      "shots": [
+        {
+          "id": "SH01",
+          "beat_id": "B1",
+          "duration_seconds": 10,
+          "purpose": "关系有新的变化",
+          "composition": "固定双人中景留出行动空间",
+          "camera": "固定单机位",
+          "cut_reason": "程序切点：10秒，dialogue_0完成且全部必需事件已完成。叙事目的（非执行指令）：反应已可见",
+          "visible_performance": "0–1秒：C02拿起P01至右手；表演补充：自然完成既定动作；该段结束状态变化：[{\"entity\": \"P01\", \"field\": \"holder\", \"from\": \"none\", \"to\": \"C02\"}, {\"entity\": \"P01\", \"field\": \"location\", \"from\": \"桌面\", \"to\": \"右手\"}]\n1–2.15714秒：；表演补充：原说话人自然说出原对白，面部可读；该段结束状态变化：[]\n2.15714–10秒：；表演补充：保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长；该段结束状态变化：[]\n对白1–2.15714秒：陈禾：明天见。\n情绪反应窗口0–1秒，林遥：可见反应\n唯一执行切点：10秒；dialogue_0及全部必需事件已完成。",
+          "start_state": "{\"C01(林遥)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前两步\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌旁\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"none\", \"location\": \"桌面\"}}",
+          "end_state": "{\"C01(林遥)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前两步\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌旁\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"右手\"}}",
+          "event_lock": "拿起文件夹",
+          "dialogue_lock": [
+            {
+              "speaker": "陈禾",
+              "text": "明天见。"
+            }
+          ],
+          "dialogue_mode": "画内对白",
+          "continuity_mode": "planned_cut_requires_adapter",
+          "production_choices": [],
+          "prompt": "制作风格与资产锁：{\"characters\": [{\"age_group\": \"成年\", \"body_shape\": \"成年体型\", \"clothing\": \"深灰长款通勤外套\", \"hair\": \"中长发\", \"id\": \"C01\", \"name\": \"林遥\"}, {\"age_group\": \"成年\", \"body_shape\": \"成年体型\", \"clothing\": \"浅灰针织开衫\", \"hair\": \"短发\", \"id\": \"C02\", \"name\": \"陈禾\"}], \"props\": [{\"appearance\": \"墨蓝色A4平整封面\", \"id\": \"P01\", \"name\": \"文件夹\", \"owner_id\": \"C02\"}], \"render\": {\"light_source\": \"右上暖灯光与左侧冷色余光\", \"palette\": \"低饱和灰蓝米白\", \"style_option_id\": \"S01\", \"visual_medium\": \"二维手绘动画\"}, \"scene\": {\"elements\": [{\"appearance\": \"米白桌面\", \"id\": \"E01\", \"name\": \"办公桌\"}, {\"appearance\": \"深灰靠背椅\", \"id\": \"E02\", \"name\": \"椅子\"}], \"name\": \"办公室\", \"relations\": [{\"reference\": \"E01\", \"relation\": \"behind\", \"subject\": \"E02\"}]}, \"schema\": \"static_visual_manifest_v1\"}\n固定构图：固定双人中景留出行动空间\n连续机位：固定单机位\n时长：10秒\n第一帧静态状态：{\"C01(林遥)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前两步\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌旁\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"none\", \"location\": \"桌面\"}}\n唯一动作时间轴：0–1秒：C02拿起P01至右手；表演补充：自然完成既定动作；该段结束状态变化：[{\"entity\": \"P01\", \"field\": \"holder\", \"from\": \"none\", \"to\": \"C02\"}, {\"entity\": \"P01\", \"field\": \"location\", \"from\": \"桌面\", \"to\": \"右手\"}]\n1–2.15714秒：；表演补充：原说话人自然说出原对白，面部可读；该段结束状态变化：[]\n2.15714–10秒：；表演补充：保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长；该段结束状态变化：[]\n对白1–2.15714秒：陈禾：明天见。\n情绪反应窗口0–1秒，林遥：可见反应\n唯一执行切点：10秒；dialogue_0及全部必需事件已完成。\n对白锁：[{\"speaker\": \"陈禾\", \"text\": \"明天见。\"}]\n最后一帧状态：{\"C01(林遥)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前两步\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌旁\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"右手\"}}"
+        },
+        {
+          "id": "SH02",
+          "beat_id": "B2",
+          "duration_seconds": 10,
+          "purpose": "关系有新的变化",
+          "composition": "固定双人中景留出行动空间",
+          "camera": "固定单机位",
+          "cut_reason": "程序切点：10秒，A2完成且全部必需事件已完成。叙事目的（非执行指令）：反应已可见",
+          "visible_performance": "0–1秒：C02在E02坐下至椅上；表演补充：自然完成既定动作；该段结束状态变化：[{\"entity\": \"C02\", \"field\": \"posture\", \"from\": \"standing\", \"to\": \"sitting\"}, {\"entity\": \"C02\", \"field\": \"position\", \"from\": \"桌旁\", \"to\": \"椅上\"}]\n1–10秒：；表演补充：保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长；该段结束状态变化：[]\n情绪反应窗口0–1秒，林遥：可见反应\n唯一执行切点：10秒；A2及全部必需事件已完成。",
+          "start_state": "{\"C01(林遥)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前两步\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌旁\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"右手\"}}",
+          "end_state": "{\"C01(林遥)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前两步\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"椅上\", \"posture\": \"sitting\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"右手\"}}",
+          "event_lock": "坐下",
+          "dialogue_lock": [],
+          "dialogue_mode": "无对白",
+          "continuity_mode": "planned_cut_requires_adapter",
+          "production_choices": [],
+          "prompt": "制作风格与资产锁：{\"characters\": [{\"age_group\": \"成年\", \"body_shape\": \"成年体型\", \"clothing\": \"深灰长款通勤外套\", \"hair\": \"中长发\", \"id\": \"C01\", \"name\": \"林遥\"}, {\"age_group\": \"成年\", \"body_shape\": \"成年体型\", \"clothing\": \"浅灰针织开衫\", \"hair\": \"短发\", \"id\": \"C02\", \"name\": \"陈禾\"}], \"props\": [{\"appearance\": \"墨蓝色A4平整封面\", \"id\": \"P01\", \"name\": \"文件夹\", \"owner_id\": \"C02\"}], \"render\": {\"light_source\": \"右上暖灯光与左侧冷色余光\", \"palette\": \"低饱和灰蓝米白\", \"style_option_id\": \"S01\", \"visual_medium\": \"二维手绘动画\"}, \"scene\": {\"elements\": [{\"appearance\": \"米白桌面\", \"id\": \"E01\", \"name\": \"办公桌\"}, {\"appearance\": \"深灰靠背椅\", \"id\": \"E02\", \"name\": \"椅子\"}], \"name\": \"办公室\", \"relations\": [{\"reference\": \"E01\", \"relation\": \"behind\", \"subject\": \"E02\"}]}, \"schema\": \"static_visual_manifest_v1\"}\n固定构图：固定双人中景留出行动空间\n连续机位：固定单机位\n时长：10秒\n第一帧静态状态：{\"C01(林遥)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前两步\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌旁\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"右手\"}}\n唯一动作时间轴：0–1秒：C02在E02坐下至椅上；表演补充：自然完成既定动作；该段结束状态变化：[{\"entity\": \"C02\", \"field\": \"posture\", \"from\": \"standing\", \"to\": \"sitting\"}, {\"entity\": \"C02\", \"field\": \"position\", \"from\": \"桌旁\", \"to\": \"椅上\"}]\n1–10秒：；表演补充：保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长；该段结束状态变化：[]\n情绪反应窗口0–1秒，林遥：可见反应\n唯一执行切点：10秒；A2及全部必需事件已完成。\n对白锁：[]\n最后一帧状态：{\"C01(林遥)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前两步\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"椅上\", \"posture\": \"sitting\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"右手\"}}"
+        }
+      ],
+      "media_assumptions": []
+    }
+  },
+  "source": "tests/test_creative_action_plan_v2.py:sample",
+  "source_sha256": "f2c1fb13963b1c40477f07e7c600e8027154fbb9691df40903c5b7b1d19e0171",
+  "independent_gold": false
+}

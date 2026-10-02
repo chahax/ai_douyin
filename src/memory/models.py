@@ -30,10 +30,10 @@ class UserProfile(Base):
     user_id = Column(String(64), unique=True, index=True, default="default")
 
     # --- 创作偏好 ---
-    default_video_mode = Column(String(64), default="presenter_anime")
+    default_video_mode = Column(String(64), default="disabled_pending_redesign")
     default_tts_provider = Column(String(32), default="edge")
     default_voice = Column(String(255), default="")
-    default_character = Column(String(128), default="sonic_fox")
+    default_character = Column(String(128), default="")
     default_character_position = Column(String(32), default="right_bottom")
     default_character_size = Column(String(16), default="medium")
     default_bgm_volume = Column(String(8), default="0.2")

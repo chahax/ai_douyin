@@ -1,0 +1,96 @@
+{
+  "schema": "p1_independent_recheck/v1",
+  "created_at_bjt": "2026-10-02T03:21:00.200549+08:00",
+  "verdict": "two_remaining_blockers",
+  "core_tests": {
+    "tests": 290,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 290
+  },
+  "worker_boundary_tests": {
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 2
+  },
+  "diff_check": {
+    "command": "git diff --check",
+    "exit_code": 2
+  },
+  "p1_scoped_diff_check": {
+    "command": "git diff --check -- P1 files",
+    "exit_code": 0
+  },
+  "source_checks": [
+    {
+      "path": "src/content_factory/creative_workflow.py",
+      "sha256": "468e0b2744c04b6e70c0405c100eed1c0e4cc6878520efe0f88aa701ec85e1ee",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/creative_stage_debug.py",
+      "sha256": "c11b2f13d70eb9ccdcdc4dec52d79018ee8d061acbf1bc80e6a345e6b88ee28c",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/content_factory/media_review_policy.py",
+      "sha256": "774420e3fe06b1a8e5ea12ddb3a0b29cd6b27853ec923fff97e2323a60f086d0",
+      "syntax_valid": true
+    },
+    {
+      "path": "src/scheduler/queue.py",
+      "sha256": "d8a0572079513cff53a08849972bd5533515aec8a4a1332c04930955e1b936d2",
+      "syntax_valid": true
+    }
+  ],
+  "verified_improvements": {
+    "must_fix_prevents_downstream_model_call": true,
+    "changed_candidate_invalidates_approval": true,
+    "late_result_cannot_overwrite_recovered_task": true,
+    "actual_worker_heartbeat_renews_active_lease": true
+  },
+  "remaining_findings": [
+    {
+      "id": "R01",
+      "priority": "P1",
+      "title": "普通恢复无法到达非首阶段的返修目标",
+      "file": "src/content_factory/creative_workflow.py",
+      "line": 5885,
+      "evidence": {
+        "normal_resume_reached_target": false,
+        "new_model_calls": 0,
+        "workflow_status": "needs_attention",
+        "last_error": "阶段 director_brief 存在未修复的 must_fix 反馈；已在 writer_analysis 调用前阻断，需先修订责任阶段",
+        "pending_feedback": "revision_required"
+      },
+      "fix_direction": "允许读取仍有效且输入一致的缓存上游，或增加显式责任阶段返修入口；到达目标后才调用模型，目标修订及复核完成前阻止下游。"
+    },
+    {
+      "id": "R02",
+      "priority": "P1",
+      "title": "当前治理包仍绑定修复前的运行时源码",
+      "file": "src/content_factory/creative_governed_runtime.py",
+      "line": 7,
+      "evidence": {
+        "directory": "data/creative_governance/20261002_v18_platform_refactor",
+        "runtime_mismatches": [
+          "src/content_factory/creative_workflow.py",
+          "src/content_factory/creative_stage_debug.py"
+        ],
+        "governed_stage_gate_passed": false,
+        "exception": "RUNTIME_SOURCE_CHANGED: src/content_factory/creative_workflow.py"
+      },
+      "fix_direction": "发布绑定修复后源码的新冻结治理包，保留旧包并明确现有任务的版本迁移策略；复核完整性与真实治理入口。"
+    }
+  ],
+  "limitations": [
+    "This recheck excludes the known Streamlit UI startup-timeout cases",
+    "No paid calls, real media review or publishing",
+    "New Worker tests are saved under QA artifacts and are not yet part of the default tests directory"
+  ],
+  "business_code_modified": false,
+  "historical_receipts_overwritten": false
+}

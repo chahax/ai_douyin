@@ -1,0 +1,19 @@
+{
+  "schema": "creative_model_wire_diagnostic/v1",
+  "network_calls": 0,
+  "fixture_only": true,
+  "checks": {
+    "thinking_disabled_serialized": true,
+    "required_tool_name_serialized": true,
+    "structured_schema_serialized": true,
+    "output_budget_serialized": true
+  },
+  "production_server_application_verified": false,
+  "conclusion": "本地SDK序列化保留了thinking disabled和工具选择；不能证明生产服务端执行了参数。两次实际生产回执输出长分析且length，模型/服务行为与请求意图不符，具体归因待真实接口隔离验证。",
+  "primary_sources": [
+    "https://platform.minimax.io/docs/api-reference/text-openai-api",
+    "https://platform.minimax.io/docs/api-reference/text-anthropic-api",
+    "https://huggingface.co/MiniMaxAI/MiniMax-M3"
+  ],
+  "paid_production_test_performed": false
+}

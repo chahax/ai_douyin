@@ -1,0 +1,58 @@
+{
+  "schema_version": "creative_rule_activation/v1",
+  "source_hash": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+  "created_at": "2026-09-28T13:58:18.903886+00:00",
+  "implementation_status": "offline_implemented_not_production_validated",
+  "selection": {
+    "active_rule_ids": [],
+    "excluded": [
+      {
+        "rule_id": "STATE.PRECONDITION.001",
+        "reason": "different_stage"
+      },
+      {
+        "rule_id": "TIME.HOLD.001",
+        "reason": "different_stage"
+      },
+      {
+        "rule_id": "SOURCE.BIND.001",
+        "reason": "different_stage"
+      },
+      {
+        "rule_id": "EVIDENCE.BIND.001",
+        "reason": "different_stage"
+      },
+      {
+        "rule_id": "ACT.GAZE.001",
+        "reason": "status_proposed"
+      },
+      {
+        "rule_id": "CUT.COMPLETION.001",
+        "reason": "status_proposed"
+      },
+      {
+        "rule_id": "SPACE.SEAT.001",
+        "reason": "status_proposed"
+      },
+      {
+        "rule_id": "CUT.EXECUTION.002",
+        "reason": "different_stage"
+      },
+      {
+        "rule_id": "SPACE.SEAT_TYPED.002",
+        "reason": "different_stage"
+      },
+      {
+        "rule_id": "STATE.BOUNDARY.002",
+        "reason": "different_stage"
+      }
+    ],
+    "semantic_rule_count": 0,
+    "semantic_limit": 12,
+    "requires_split_or_merge": false,
+    "serialized_characters": 2,
+    "token_count": null,
+    "token_count_status": "not_tokenized; characters_are_not_tokens",
+    "silently_truncated": false
+  }
+}

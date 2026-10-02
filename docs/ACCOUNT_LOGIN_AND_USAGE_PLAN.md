@@ -155,7 +155,7 @@ CREATE TABLE IF NOT EXISTS usage_events (
 - `video_generate`
 - `video_publish`
 - `comment_reply`
-- `framepack_import`
+- `video_asset_import`（为未来 V2 保留，当前未启用）
 
 ## 用量扣减规则
 
@@ -166,7 +166,7 @@ CREATE TABLE IF NOT EXISTS usage_events (
 | 生成视频 | 点击生成前 | 视频文件成功输出后 |
 | 发布视频 | 调用发布前 | 抖音上传进入待审核或发布成功后 |
 | 自动回复 | 每条回复前 | 回复成功后 |
-| FramePack 导入 | 导入前 | 文件导入并完成检查后 |
+| 视频素材导入 | 导入前 | 文件导入并完成检查后；当前 V2 尚未启用 |
 
 如果后续生成任务变长，可以升级成“先预占、失败释放”的模式。
 
@@ -246,4 +246,4 @@ src/shared/config.py
 
 ## 当前结论
 
-先用 163 SMTP 邮箱验证码作为登录入口，后台由超级管理员创建账号和设置额度。额度不要散落在各个页面里判断，而是统一通过 `usage_quota_service` 检查和记录，这样后续无论是单人口播、双角色视频、FramePack 半自动导入，还是自动回复，都能统一计量。
+先用 163 SMTP 邮箱验证码作为登录入口，后台由超级管理员创建账号和设置额度。额度不要散落在各个页面里判断，而是统一通过 `usage_quota_service` 检查和记录；未来 V2 视频任务和现有自动回复都使用同一套计量入口。

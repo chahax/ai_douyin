@@ -1,0 +1,35 @@
+{
+  "template": "video_lighting_gate/v1",
+  "id": "shot_01_lighting",
+  "reference": {
+    "id": "approved_light",
+    "path": "approved.png",
+    "region": [0.45, 0, 0.55, 1]
+  },
+  "candidates": [
+    {
+      "id": "shot_01",
+      "path": "shot_01.mp4",
+      "control_report": "shot_01.control.report.json",
+      "region": [0.45, 0, 0.55, 1]
+    }
+  ],
+  "sampling": {
+    "sample_count": 7,
+    "fingerprint_size": 128
+  },
+  "acceptance": {
+    "maximum_exposure_ev_delta": 0.35,
+    "maximum_temperature_delta": 0.08,
+    "maximum_tint_delta": 0.06,
+    "maximum_contrast_delta": 0.15,
+    "maximum_highlight_ratio_delta": 0.12,
+    "maximum_shadow_ratio_delta": 0.12,
+    "maximum_direction_angle_degrees": 45,
+    "maximum_direction_strength_delta": 0.06,
+    "minimum_reference_direction_strength": 0.015,
+    "maximum_temporal_exposure_range_ev": 0.25,
+    "maximum_temporal_color_range": 0.06,
+    "maximum_temporal_direction_range_degrees": 45
+  }
+}

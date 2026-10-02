@@ -9,6 +9,8 @@ import json
 import hashlib
 import ipaddress
 import os
+import queue
+import re
 import socket
 import subprocess
 import sys
@@ -25,6 +27,13 @@ from src.shared.logger import logger
 
 class BinaryDownloadError(RuntimeError):
     """A download failed validation; its message contains no signed URL/body."""
+
+
+def _sanitize_browser_error_message(value: object) -> str:
+    """Keep the useful first line while dropping request headers and signed URLs."""
+    first_line = str(value or "Unknown browser error").splitlines()[0].strip()
+    first_line = re.sub(r"https?://\S+", "<url>", first_line)
+    return first_line[:500] or "Unknown browser error"
 
 
 def _download_target(value: str | Path, workspace_root: str | Path | None = None) -> Path:
@@ -195,6 +204,15 @@ def _checkpoint_open_login_pages(context, state_path, origins):
     if not pages:
         return False
     cookies = context.cookies()
+    # Retain other origins from this account's previous checkpoint. Visiting the
+    # main site must not discard the creator-center localStorage snapshot.
+    try:
+        previous = json.loads(Path(state_path).read_text(encoding='utf-8'))
+        for entry in previous.get('origins', []):
+            if isinstance(entry, dict) and entry.get('origin'):
+                origins.setdefault(entry['origin'], entry)
+    except (OSError, ValueError, AttributeError):
+        pass
     for page in pages:
         for frame in page.frames:
             try:
@@ -246,17 +264,16 @@ def main():
     from playwright.sync_api import sync_playwright
 
     pw = sync_playwright().start()
-    kwargs = {
-        "user_data_dir": user_data_dir,
-        "headless": headless,
-        "slow_mo": slow_mo,
-    }
+    kwargs = {"headless": headless, "slow_mo": slow_mo}
     if channel:
         kwargs["channel"] = channel
     if chromium_sandbox:
         kwargs["chromium_sandbox"] = True
 
-    context = pw.chromium.launch_persistent_context(**kwargs)
+    context = pw.chromium.launch_persistent_context(
+        user_data_dir=user_data_dir,
+        **kwargs,
+    )
     context.set_default_timeout(timeout_ms)
 
     # 恢复 storage state（cookies + localStorage）
@@ -289,7 +306,10 @@ def main():
                 _clean = []
                 for _c in _cookies:
                     _clean.append({_k: _v for _k, _v in _c.items() if _k in _allowed})
-                context.add_cookies(_clean)
+                from src.platform_adapter.browser_session import _missing_snapshot_cookies
+                _clean = _missing_snapshot_cookies(_clean, context.cookies())
+                if _clean:
+                    context.add_cookies(_clean)
                 restored_cookies = len(_clean)
                 restored_cookie_domains = sorted(set(_c.get("domain", "") for _c in _clean if _c.get("domain")))
 
@@ -307,7 +327,7 @@ def main():
                         if _entries:
                             _origin_map[_on] = _entries
                 if _origin_map:
-                    _script = "(function(){\nvar _m=" + json.dumps(_origin_map) + ";\nvar _d=_m[window.location.origin];\nif(_d){for(var _k in _d){try{localStorage.setItem(_k,_d[_k]);}catch(_e){}}}\n})()"
+                    _script = "(function(){\nvar _m=" + json.dumps(_origin_map) + ";\nvar _d=_m[window.location.origin];\nif(_d){for(var _k in _d){try{if(localStorage.getItem(_k)===null){localStorage.setItem(_k,_d[_k]);}}catch(_e){}}}\n})()"
                     context.add_init_script(_script)
                     restored_origins = len(_origin_map)
                     restored_origin_names = sorted(_origin_map.keys())
@@ -357,10 +377,26 @@ def main():
 
             elif action == "click":
                 idx = cmd.get("index", 0)
+                options = {
+                    "force": bool(cmd.get("force", False)),
+                    "timeout": cmd.get("timeout", timeout_ms),
+                }
                 if idx >= 0:
-                    page.locator(cmd["selector"]).nth(idx).click()
+                    page.locator(cmd["selector"]).nth(idx).click(**options)
                 else:
-                    page.locator(cmd["selector"]).first.click()
+                    page.locator(cmd["selector"]).first.click(**options)
+                sys.stdout.write(json.dumps({"status": "ok"}) + "\n")
+
+            elif action == "hover":
+                idx = cmd.get("index", 0)
+                options = {
+                    "force": bool(cmd.get("force", False)),
+                    "timeout": cmd.get("timeout", timeout_ms),
+                }
+                if idx >= 0:
+                    page.locator(cmd["selector"]).nth(idx).hover(**options)
+                else:
+                    page.locator(cmd["selector"]).first.hover(**options)
                 sys.stdout.write(json.dumps({"status": "ok"}) + "\n")
 
             elif action == "locator_count":
@@ -471,6 +507,22 @@ def main():
                     page.locator(cmd["selector"]).first.type(cmd["text"])
                 sys.stdout.write(json.dumps({"status": "ok"}) + "\n")
 
+            elif action == "inspect_published_video":
+                from src.platform_adapter.publish_verification import inspect_published_video
+                evidence = inspect_published_video(page, cmd['post_id'], cmd['ai_required'], cmd['fiction_required'])
+                if cmd.get('evidence_path'):
+                    page.screenshot(path=cmd['evidence_path'], full_page=True)
+                    evidence['screenshot'] = cmd['evidence_path']
+                sys.stdout.write(json.dumps({'status': 'ok', 'evidence': evidence}, ensure_ascii=False) + '\n')
+
+            elif action == "ai_content_declaration":
+                from src.platform_adapter.ai_content_declaration import set_ai_declaration, read_ai_declaration
+                evidence = set_ai_declaration(page) if cmd.get("set_selected") else read_ai_declaration(page)
+                if cmd.get("evidence_path"):
+                    page.screenshot(path=cmd["evidence_path"], full_page=True)
+                    evidence["screenshot"] = cmd["evidence_path"]
+                sys.stdout.write(json.dumps({"status": "ok", "evidence": evidence}, ensure_ascii=False) + "\n")
+
             elif action == "evaluate":
                 idx = cmd.get("index", 0)
                 if idx >= 0:
@@ -494,7 +546,7 @@ def main():
                 sys.stdout.write(json.dumps({"status": "ok", "path": out_path}) + "\n")
 
             elif action == "inner_text":
-                txt = page.locator(cmd["selector"]).first.inner_text().strip()
+                txt = page.locator(cmd["selector"]).nth(max(0, cmd.get("index", 0))).inner_text().strip()
                 sys.stdout.write(json.dumps({"status": "ok", "text": txt}) + "\n")
 
             elif action == "get_attribute":
@@ -595,7 +647,7 @@ def main():
                 else:
                     # 连续执行多个键盘操作，中间不重新查 DOM
                     editor.click()
-                    editor.press("End")
+                    editor.press("Control+End")
                     editor.type(" #" + tag)
                     editor.press("Enter")
                     page.wait_for_timeout(500)
@@ -629,6 +681,15 @@ if __name__ == "__main__":
 
 
 # ─── 纯辅助函数（从 _PW_SCRIPT 逻辑中提取，供测试使用）──────────────────
+
+
+def _missing_snapshot_cookies(snapshot: list[dict], current: list[dict]) -> list[dict]:
+    """Persistent profile values win over an older checkpoint of this account."""
+    import time
+    key = lambda item: (item.get('name'), item.get('domain'), item.get('path', '/'))
+    present = {key(item) for item in current}
+    return [item for item in snapshot if key(item) not in present and
+            (item.get('expires', -1) in (-1, None) or item['expires'] > time.time())]
 
 
 def _sanitize_cookies_for_add(cookies: list[dict]) -> list[dict]:
@@ -666,7 +727,7 @@ def _build_storage_state_init_script(origins: list[dict]) -> str | None:
         "(function(){"
         "var _m=" + json.dumps(origin_map) + ";"
         "var _d=_m[window.location.origin];"
-        "if(_d){for(var _k in _d){try{localStorage.setItem(_k,_d[_k]);}catch(_e){}}}"
+        "if(_d){for(var _k in _d){try{if(localStorage.getItem(_k)===null){localStorage.setItem(_k,_d[_k]);}}catch(_e){}}}"
         "})()"
     )
 
@@ -889,7 +950,10 @@ class BrowserSession:
         self._proc.stdin.flush()
 
         # 等待就绪确认
-        resp = self._proc.stdout.readline()
+        resp = self._read_child_line(
+            max(45.0, float(self.config.timeout_ms) / 1000.0 + 15.0),
+            label="start",
+        )
         if not resp:
             stderr = self._proc.stderr.read().decode(errors="replace")
             raise RuntimeError(f"Playwright 子进程启动失败: {stderr}")
@@ -917,13 +981,49 @@ class BrowserSession:
         self._proc.stdin.write(msg + b"\n")
         self._proc.stdin.flush()
 
-        resp = self._proc.stdout.readline()
+        resp = self._read_child_line(
+            self._response_timeout_seconds(cmd),
+            label=str(cmd.get("action") or "unknown"),
+        )
         if not resp:
             raise RuntimeError("Playwright 子进程已终止")
         result = json.loads(resp)
         if result.get("status") == "error":
-            raise RuntimeError(result.get("msg", "Unknown error"))
+            raise RuntimeError(_sanitize_browser_error_message(result.get("msg")))
         return result
+
+    def _read_child_line(self, timeout_seconds: float, *, label: str) -> bytes:
+        if self._proc is None or self._proc.stdout is None:
+            raise RuntimeError("Playwright 子进程未运行")
+        process = self._proc
+        response_queue: queue.Queue[bytes] = queue.Queue(maxsize=1)
+        reader = threading.Thread(
+            target=lambda: response_queue.put(process.stdout.readline()),
+            daemon=True,
+        )
+        reader.start()
+        try:
+            return response_queue.get(timeout=max(1.0, timeout_seconds))
+        except queue.Empty as exc:
+            self._closed = True
+            try:
+                process.kill()
+            except Exception:
+                pass
+            raise TimeoutError(f"浏览器命令 {label} 等待响应超时。") from exc
+
+    def _response_timeout_seconds(self, cmd: dict) -> float:
+        action = str(cmd.get("action") or "")
+        if action == "wait_for_close":
+            return max(15.0, float(cmd.get("timeout") or 0) + 15.0)
+        if action == "wait_for_timeout":
+            return max(15.0, float(cmd.get("ms") or 0) / 1000.0 + 15.0)
+        timeout_ms = cmd.get("timeout", self.config.timeout_ms)
+        try:
+            timeout_seconds = float(timeout_ms) / 1000.0
+        except (TypeError, ValueError):
+            timeout_seconds = float(self.config.timeout_ms) / 1000.0
+        return max(15.0, timeout_seconds + 15.0)
 
     def _ensure_runtime_paths(self) -> None:
         storage_state = Path(self.config.storage_state_path)
@@ -942,6 +1042,7 @@ class BrowserSession:
         if env.get("PYTHONPATH"):
             pythonpath_parts.append(env["PYTHONPATH"])
         env["PYTHONPATH"] = os.pathsep.join(pythonpath_parts)
+        env["PYTHONIOENCODING"] = "utf-8"
         return env
 
     def _detect_browser_channel(self) -> str:
@@ -1010,9 +1111,13 @@ class Page:
         result = self._session.cmd("goto", url=url, timeout=timeout)
         self.url = result.get("url", url)
 
-    def wait_for_load_state(self, state: str) -> None:
+    def wait_for_load_state(self, state: str, timeout: int = 30000) -> None:
         # domcontentloaded 已在 goto 时等待
         pass
+
+    def evaluate(self, js: str) -> Any:
+        result = self._session.cmd("evaluate", selector="", js=js, index=-1)
+        return result.get("value")
 
     def wait_for_selector(self, selector: str, timeout: int = 30000) -> "Page":
         self._session.cmd("wait_for_selector", selector=selector, timeout=timeout)
@@ -1026,6 +1131,15 @@ class Page:
 
     def click_button_by_text(self, texts: list[str]) -> dict:
         return self._session.cmd("click_button_by_text", texts=texts)
+
+    def ai_content_declaration(self, *, set_selected=False, evidence_path=None) -> dict:
+        return self._session.cmd("ai_content_declaration", set_selected=set_selected,
+                                 evidence_path=evidence_path).get("evidence", {})
+
+    def inspect_published_video(self, post_id, *, ai_required, fiction_required, evidence_path=None):
+        return self._session.cmd('inspect_published_video', post_id=post_id,
+                                 ai_required=ai_required, fiction_required=fiction_required,
+                                 evidence_path=evidence_path).get('evidence', {})
 
     def interact_visible_exact_text(
         self,
@@ -1077,8 +1191,17 @@ class _Locator:
     def fill(self, value: str) -> None:
         self._session.cmd("fill", selector=self._selector, value=value, index=self._index)
 
-    def click(self) -> None:
-        self._session.cmd("click", selector=self._selector, index=self._index)
+    def click(self, *, force: bool = False, timeout: int = 30000) -> None:
+        self._session.cmd(
+            "click", selector=self._selector, index=self._index,
+            force=force, timeout=timeout,
+        )
+
+    def hover(self, *, force: bool = False, timeout: int = 30000) -> None:
+        self._session.cmd(
+            "hover", selector=self._selector, index=self._index,
+            force=force, timeout=timeout,
+        )
 
     def inner_text(self) -> str:
         result = self._session.cmd("inner_text", selector=self._selector, index=self._index)
@@ -1176,13 +1299,22 @@ class APIRequestContext:
         self._session = session
 
     def get(self, url: str, headers: dict = None, timeout: int = 30000) -> APIResponse:
-        result = self._session.cmd(
-            "api_request",
-            url=url,
-            method="GET",
-            headers=headers or {},
-            timeout=timeout,
-        )
+        for attempt in range(2):
+            try:
+                result = self._session.cmd(
+                    "api_request",
+                    url=url,
+                    method="GET",
+                    headers=headers or {},
+                    timeout=timeout,
+                )
+                break
+            except RuntimeError as exc:
+                if attempt or not any(term in str(exc).lower() for term in (
+                    "socket disconnected", "connection reset", "timed out", "timeout",
+                )):
+                    raise
+                time.sleep(1)
         return APIResponse(self._session, result.get("response", {}))
 
     def post(self, url: str, headers: dict = None, data: str = None, timeout: int = 30000) -> APIResponse:

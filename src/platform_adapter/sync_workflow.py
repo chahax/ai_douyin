@@ -95,6 +95,20 @@ class SyncWorkflow:
                 if resp != 'y':
                     break
 
+        # Enrich visible works with retention labels verified on the creator page.
+        # API-only works retain unknown retention; no inferred metric keys/units.
+        if all_videos:
+            try:
+                page.wait_for_selector('[class*="video-card-info-"]', timeout=15000)
+                cards = page.locator('body').evaluate('''body => Array.from(body.querySelectorAll('[class*="video-card-info-"]')).map(e => ({
+                    title: e.querySelector('[class*="info-title-text-"]')?.textContent || '',
+                    text: e.innerText
+                }))''')
+                from src.services.content_performance import attach_manage_cards
+                matched = attach_manage_cards(all_videos, cards)
+                logger.info('创作者页面留存指标已匹配 {} / {} 条作品', matched, len(all_videos))
+            except Exception:
+                logger.warning('本次未读取到作品卡片留存指标，仅保存已获取的作品接口指标')
         logger.info(f"[OK] 共同步到 {len(all_videos)} 个视频")
         return all_videos, True
 
@@ -120,14 +134,17 @@ class SyncWorkflow:
 
         response = page.request.get(url)
         if response.status != 200:
-            logger.warning(f"API 返回状态码 {response.status}")
-            return [], False, max_cursor
+            raise RuntimeError(f'作品接口 HTTP {response.status}，不能认定为空作品列表')
 
         try:
             data = response.json()
         except Exception as exc:
-            logger.warning(f"API 响应解析失败: {exc}")
-            return [], False, max_cursor
+            raise RuntimeError('作品接口未返回有效 JSON') from None
+
+        if not isinstance(data, dict) or data.get('status_code') not in (0, '0'):
+            raise RuntimeError('作品接口未确认业务成功，需核对创作者中心登录状态')
+        if not isinstance(data.get('aweme_list'), list):
+            raise RuntimeError('作品接口缺少明确的 aweme_list，不能认定为零作品')
 
         aweme_list = data.get("aweme_list") or []
         has_more = bool(data.get("has_more"))
@@ -166,6 +183,10 @@ class SyncWorkflow:
 
             # 统计数据
             stats_raw = raw.get("statistics") or {}
+            from src.services.content_performance import normalize_metrics
+            creator_metrics = normalize_metrics(stats_raw)
+            # Preserve newly introduced backend statistic fields without guessing units.
+            creator_metrics['_raw_metrics'] = stats_raw
             stats = VideoStats(
                 play_count=stats_raw.get("play_count", 0) or 0,
                 like_count=stats_raw.get("like_count", 0) or 0,
@@ -191,6 +212,7 @@ class SyncWorkflow:
                 publish_time=publish_time or None,
                 cover_url=cover_url or None,
                 stats=stats,
+                creator_metrics=creator_metrics,
             )
         except Exception as exc:
             logger.warning(f"解析 aweme 失败: {exc}")

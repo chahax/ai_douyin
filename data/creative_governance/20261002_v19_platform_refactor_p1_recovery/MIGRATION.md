@@ -1,0 +1,3 @@
+# v18 → v19 task migration
+
+v18 is immutable history and is not silently rebound. Completed v18 tasks remain historical records. For an in-progress task, preserve its v18 run directory read-only, create a new run using the same source materials under v19, and revalidate each carried stage artifact against its current inputs and validators. Re-register unresolved `must_fix` feedback in the new run; do not copy a resolution status. Existing media approval may be carried only if the full candidate identity and raw tail still validate, otherwise obtain human reapproval. Keep a provenance note linking the new run to the archived v18 run.

@@ -1,0 +1,217 @@
+{
+  "schema": "minimax_rule_probe_call/v1",
+  "ordinal": 32,
+  "round": 2,
+  "case_id": "E",
+  "status": "probe_contract_valid",
+  "started_at": "2026-10-02T19:43:43.252690+00:00",
+  "request": {
+    "model": "MiniMax-M3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "用指定工具提交本任务的完整结果。不要写分析或其他正文。"
+      },
+      {
+        "role": "user",
+        "content": "{\"characters\":[{\"id\":\"C01\",\"name\":\"甲\"},{\"id\":\"C02\",\"name\":\"乙\"}],\"fixture_only\":true,\"schema\":\"synthetic_rule_probe_context/v1\",\"script\":{\"beats\":[{\"dialogue\":[{\"speaker\":\"C02\",\"text\":\"今晚我自己弄，你先走。\"}],\"event\":\"甲把杯子放到桌面。\",\"id\":\"B1\"}]},\"task\":\"只提交两项表演要求：第一项，放杯事件结束后观察甲两秒；第二项，乙说这句对白期间观察甲两秒。来源填写对应剧本字段路径。\"}"
+      }
+    ],
+    "temperature": 0.4,
+    "max_completion_tokens": 1024,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "submit_creative_json",
+          "description": "提交本阶段完整结构化创作结果",
+          "parameters": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "beats"
+            ],
+            "properties": {
+              "beats": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 1,
+                "items": false,
+                "prefixItems": [
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "beat_id",
+                      "performance_requirements"
+                    ],
+                    "properties": {
+                      "beat_id": {
+                        "enum": [
+                          "B1"
+                        ]
+                      },
+                      "performance_requirements": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "required": [
+                            "id",
+                            "subject",
+                            "stimulus_source",
+                            "relation",
+                            "minimum_seconds"
+                          ],
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "subject": {
+                              "type": "string",
+                              "enum": [
+                                "C01",
+                                "C02"
+                              ]
+                            },
+                            "stimulus_source": {
+                              "type": "string",
+                              "enum": [
+                                "script.beats.0.event",
+                                "script.beats.0.dialogue.0.text"
+                              ]
+                            },
+                            "relation": {
+                              "enum": [
+                                "before",
+                                "during",
+                                "after"
+                              ]
+                            },
+                            "minimum_seconds": {
+                              "type": "number",
+                              "exclusiveMinimum": 0
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "description": "beats必须是仅含本拍B1的数组。performance_requirements必须直接是数组，不能用item或items对象包裹。每项是一个对象，包含id、subject、stimulus_source、relation、minimum_seconds。id互不重复；subject是被观察的人物编号。stimulus_source只能是script.beats.0.event或script.beats.0.dialogue.0.text。relation说明观察窗口相对刺激的时间：before在刺激之前，during在刺激期间，after在刺激结束之后。本协议事件来源只能选before/after；对白来源允许before/during/after。minimum_seconds是数值。"
+          }
+        }
+      }
+    ],
+    "tool_choice": {
+      "type": "function",
+      "function": {
+        "name": "submit_creative_json"
+      }
+    }
+  },
+  "request_sha256": "391d38f11a7ae9f9bf15e46923753d31fd2b337faac9aeaa6e2fc13762b99c4c",
+  "messages_sha256": "fb8f88e7c63763237bfa61f17699cfb2673107cfb882ea6713ade0a1cae86feb",
+  "source_binding_sha256": "d26097c475b10d163eeeccb3d27c4965b1934f999da7e97926e63fd07b30040c",
+  "token_reservation": 2945,
+  "automatic_retry": false,
+  "semantic_approval": false,
+  "response_text": "{\"beats\":[{\"beat_id\":\"B1\",\"performance_requirements\":[{\"id\":\"REQ_B1_01\",\"subject\":\"C01\",\"stimulus_source\":\"script.beats.0.event\",\"relation\":\"after\",\"minimum_seconds\":2},{\"id\":\"REQ_B1_02\",\"subject\":\"C01\",\"stimulus_source\":\"script.beats.0.dialogue.0.text\",\"relation\":\"during\",\"minimum_seconds\":2}]}]}",
+  "response_metadata": {
+    "role": "writer",
+    "provider": "minimax",
+    "requested_model": "MiniMax-M3",
+    "response_model": "MiniMax-M3",
+    "response_id": "070f3c728db99d82156da864b7c86a70",
+    "finish_reason": "tool_calls",
+    "thinking_mode": "disabled",
+    "output_mode": "tool_call",
+    "prompt_tokens": 881,
+    "completion_tokens": 199,
+    "total_tokens": 1080
+  },
+  "response_payload": {
+    "id": "070f3c728db99d82156da864b7c86a70",
+    "model": "MiniMax-M3",
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "message": {
+          "content": null,
+          "reasoning_content": null,
+          "tool_calls": [
+            {
+              "id": "call_01a0fe24eecc77d59c839b63",
+              "type": "function",
+              "function": {
+                "name": "submit_creative_json",
+                "arguments": "{\"beats\":[{\"beat_id\":\"B1\",\"performance_requirements\":[{\"id\":\"REQ_B1_01\",\"subject\":\"C01\",\"stimulus_source\":\"script.beats.0.event\",\"relation\":\"after\",\"minimum_seconds\":2},{\"id\":\"REQ_B1_02\",\"subject\":\"C01\",\"stimulus_source\":\"script.beats.0.dialogue.0.text\",\"relation\":\"during\",\"minimum_seconds\":2}]}]}"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 881,
+      "completion_tokens": 199,
+      "total_tokens": 1080
+    }
+  },
+  "completed_at": "2026-10-02T19:43:45.776424+00:00",
+  "output": {
+    "beats": [
+      {
+        "beat_id": "B1",
+        "performance_requirements": [
+          {
+            "id": "REQ_B1_01",
+            "subject": "C01",
+            "stimulus_source": "script.beats.0.event",
+            "relation": "after",
+            "minimum_seconds": 2
+          },
+          {
+            "id": "REQ_B1_02",
+            "subject": "C01",
+            "stimulus_source": "script.beats.0.dialogue.0.text",
+            "relation": "during",
+            "minimum_seconds": 2
+          }
+        ]
+      }
+    ]
+  },
+  "evaluation": {
+    "status": "probe_contract_valid",
+    "checks": {
+      "base_shape": {
+        "passed": true,
+        "errors": []
+      },
+      "sources": {
+        "passed": true
+      },
+      "source_relation": {
+        "passed": true
+      },
+      "task_values": {
+        "passed": true
+      }
+    },
+    "automatic_retry": false,
+    "semantic_approval": false,
+    "case_schema": {
+      "passed": true,
+      "errors": []
+    }
+  }
+}

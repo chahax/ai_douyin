@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="11" time="4.654" timestamp="2026-10-02T02:24:58.075340+08:00" hostname="DESKTOP-DP111LI"><testcase classname="tests.test_creative_workflow_ui" name="test_page_novel_route_launches_explicit_new_workflow" time="0.212" /><testcase classname="tests.test_creative_workflow_ui" name="test_page_switches_to_independent_video_driver" time="0.037" /><testcase classname="tests.test_creative_workflow_ui" name="test_page_displays_detached_launch_failure" time="0.299" /><testcase classname="tests.test_creative_workflow_ui" name="test_page_can_reopen_saved_run_after_fresh_session" time="3.195"><failure message="RuntimeError: AppTest script run timed out after 3(s)">tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/independent_confirmation/ui_tmp/test_page_can_reopen_saved_run0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001C8BCBE60F0&gt;
+
+    def test_page_can_reopen_saved_run_after_fresh_session(tmp_path, monkeypatch):
+        run_dir = tmp_path / "saved_run"
+        run_dir.mkdir()
+        (run_dir / "state.json").write_text(json.dumps({
+            "status": "needs_attention", "source_driver": "novel",
+            "last_error": "对白时长不足",
+        }, ensure_ascii=False), encoding="utf-8")
+        monkeypatch.setattr(page, "RUNS", tmp_path)
+        app = _app()
+        assert not app.exception
+        choices = app.selectbox[1].options
+        assert run_dir.name in choices
+&gt;       app.selectbox[1].set_value(run_dir.name).run()
+
+tests\test_creative_workflow_ui.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\streamlit\testing\v1\element_tree.py:158: in run
+    return self.root.run(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\streamlit\testing\v1\element_tree.py:2426: in run
+    return self._runner._run(widget_states, timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\streamlit\testing\v1\app_test.py:372: in _run
+    self._tree = script_runner.run(
+.venv\Lib\site-packages\streamlit\testing\v1\local_script_runner.py:147: in run
+    require_widgets_deltas(self, timeout)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+runner = LocalScriptRunner(forward_msg_queue=&lt;streamlit.runtime.forward_msg_queue.ForwardMsgQueue object at 0x000001C8BCEDE750&gt;...rsor"
+  installed_agents: "opencode"
+}
+}, {}, {'client_state': page_script_hash: "c332c3b34d5dd87cbfcea33bb729a7a5"
+}])
+timeout = 3
+
+    def require_widgets_deltas(runner: LocalScriptRunner, timeout: float = 3) -&gt; None:
+        """Wait for the given ScriptRunner to emit a completion event. If the timeout
+        is reached, the runner will be shutdown and an error will be thrown.
+        """
+    
+        t0 = time.time()
+        while time.time() - t0 &lt; timeout:
+            time.sleep(0.001)
+            if runner.script_stopped():
+                return
+    
+        # If we get here, the runner hasn't yet completed before our
+        # timeout. Create an error string for debugging.
+        err_string = f"AppTest script run timed out after {timeout}(s)"
+    
+        # Shutdown the runner before throwing an error, so that the script
+        # doesn't hang forever.
+        runner.request_stop()
+        runner.join()
+    
+&gt;       raise RuntimeError(err_string)
+E       RuntimeError: AppTest script run timed out after 3(s)
+
+.venv\Lib\site-packages\streamlit\testing\v1\local_script_runner.py:195: RuntimeError</failure></testcase><testcase classname="tests.test_creative_workflow_ui" name="test_page_resumes_needs_attention_task_with_bound_materials_and_budget" time="0.050" /><testcase classname="tests.test_creative_workflow_ui" name="test_page_does_not_offer_resume_after_bound_budget_is_exhausted" time="0.018" /><testcase classname="tests.test_creative_workflow_ui" name="test_page_explains_temporary_assistant_review_without_third_model" time="0.007" /><testcase classname="tests.test_creative_workflow_ui" name="test_page_explains_review_can_stop_after_calibration" time="0.006" /><testcase classname="tests.test_creative_workflow_ui" name="test_page_explains_old_profile_passes_do_not_count" time="0.006" /><testcase classname="tests.test_creative_workflow_ui" name="test_page_shows_bound_assistant_failure_without_claiming_video_pass" time="0.022" /><testcase classname="tests.test_creative_workflow_ui" name="test_page_original_route_uses_brief_without_novel_or_video" time="0.050" /></testsuite></testsuites>

@@ -1,0 +1,798 @@
+{
+  "schema": "evidence_ids_v1",
+  "context_sha256": "c825d4205be357a026e7c1fd67ec77620f0da846a2a71690745382a220688dfa",
+  "entries": {
+    "Ec825d4205be3-0001": {
+      "path": "creative_brief.audience",
+      "quote": "喜欢生活情绪短片的成年观众"
+    },
+    "Ec825d4205be3-0002": {
+      "path": "creative_brief.audience_emotion",
+      "quote": "先看懂她为什么难拒绝，再替她的选择紧张，最后感到关系发生了真实变化。"
+    },
+    "Ec825d4205be3-0003": {
+      "path": "creative_brief.avoid.0",
+      "quote": "用一次开本子或摸包代替习惯性的付出历史"
+    },
+    "Ec825d4205be3-0004": {
+      "path": "creative_brief.avoid.1",
+      "quote": "靠陪家人看病等新事故替代原本的关系矛盾"
+    },
+    "Ec825d4205be3-0005": {
+      "path": "creative_brief.avoid.2",
+      "quote": "强行争吵、突然完美理解、鸡汤总结"
+    },
+    "Ec825d4205be3-0006": {
+      "path": "creative_brief.avoid.3",
+      "quote": "为了沿用动画尾帧而改回手绘风格"
+    },
+    "Ec825d4205be3-0007": {
+      "path": "creative_brief.constraints.0",
+      "quote": "观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。"
+    },
+    "Ec825d4205be3-0008": {
+      "path": "creative_brief.constraints.1",
+      "quote": "她想离开和担心拒绝的原因要在实际事件中成立。"
+    },
+    "Ec825d4205be3-0009": {
+      "path": "creative_brief.constraints.2",
+      "quote": "关键反应的构图和窗口必须写入最终视频提示词。"
+    },
+    "Ec825d4205be3-0010": {
+      "path": "creative_brief.constraints.3",
+      "quote": "剧情先按完整故事创作，再拆成生成段；不能为固定八秒切段编造操作。"
+    },
+    "Ec825d4205be3-0011": {
+      "path": "creative_brief.duration_policy",
+      "quote": "flexible"
+    },
+    "Ec825d4205be3-0012": {
+      "path": "creative_brief.duration_seconds.0",
+      "quote": "45"
+    },
+    "Ec825d4205be3-0013": {
+      "path": "creative_brief.duration_seconds.1",
+      "quote": "60"
+    },
+    "Ec825d4205be3-0014": {
+      "path": "creative_brief.ending",
+      "quote": "以新的行动兑现边界及关系变化；不预先规定两人必须和解，不用主题口号收尾。"
+    },
+    "Ec825d4205be3-0015": {
+      "path": "creative_brief.relationships",
+      "quote": "方澄与同事林屿；林屿已习惯她会答应，方澄担心拒绝会伤及两人的关系。"
+    },
+    "Ec825d4205be3-0016": {
+      "path": "creative_brief.theme",
+      "quote": "总替同事收尾的人，第一次把自己的时间放在前面"
+    },
+    "Ec825d4205be3-0017": {
+      "path": "creative_brief.turn",
+      "quote": "对方原本把她的帮忙视为理所当然；她明确拒绝后，对方必须面对这一点，再通过具体行动回应。"
+    },
+    "Ec825d4205be3-0018": {
+      "path": "creative_brief.visual_style",
+      "quote": "写实真人实拍质感的AI短片，成年普通人外貌，真实皮肤纹理、自然光与生活化服装，克制自然表演，关键反应使用可读近景。"
+    },
+    "Ec825d4205be3-0019": {
+      "path": "script.beats.0.after",
+      "quote": "林屿说完没抬头，签字笔笔尖重新落到A4横版客户明细单上对数字。"
+    },
+    "Ec825d4205be3-0020": {
+      "path": "script.beats.0.before",
+      "quote": "傍晚办公室里，方澄走到林屿桌边，弯腰伸手把滑到桌沿的白色陶瓷马克杯端回林屿桌中央。"
+    },
+    "Ec825d4205be3-0021": {
+      "path": "script.beats.0.dialogue.0.speaker",
+      "quote": "林屿"
+    },
+    "Ec825d4205be3-0022": {
+      "path": "script.beats.0.dialogue.0.text",
+      "quote": "上次那批也是你帮我对完的，谢谢啊。"
+    },
+    "Ec825d4205be3-0023": {
+      "path": "script.beats.0.duration_seconds",
+      "quote": "10"
+    },
+    "Ec825d4205be3-0024": {
+      "path": "script.beats.0.during",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0025": {
+      "path": "script.beats.0.event",
+      "quote": "傍晚办公室，方澄走到林屿桌边把滑到桌沿的咖啡杯端回桌中央，林屿抬头随口提起上次帮忙，又低头回到客户明细单。"
+    },
+    "Ec825d4205be3-0026": {
+      "path": "script.beats.0.trigger",
+      "quote": "观众从林屿自然对白里看到上一次帮忙，让习惯性的依赖先在语言里露出来。"
+    },
+    "Ec825d4205be3-0027": {
+      "path": "script.beats.1.after",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0028": {
+      "path": "script.beats.1.before",
+      "quote": "方澄从林屿桌边转身，沿两张并排的浅木色办公桌之间走回自己的工位。\n她在自己的黑色网面靠背转椅椅背前站定，目光落到桌面上。"
+    },
+    "Ec825d4205be3-0029": {
+      "path": "script.beats.1.duration_seconds",
+      "quote": "9"
+    },
+    "Ec825d4205be3-0030": {
+      "path": "script.beats.1.during",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0031": {
+      "path": "script.beats.1.event",
+      "quote": "方澄从林屿桌边转身走回自己并排的工位，在椅背前站定，目光落在自己桌面。"
+    },
+    "Ec825d4205be3-0032": {
+      "path": "script.beats.1.trigger",
+      "quote": "观众跟随方澄回到她自己的桌面，准备看见她今晚和过去留下的痕迹。"
+    },
+    "Ec825d4205be3-0033": {
+      "path": "script.beats.2.after",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0034": {
+      "path": "script.beats.2.before",
+      "quote": "方澄工位桌面近景：米灰色金属扣的软皮小号斜挎包敞口搁在椅背上，桌角靠抽屉柜一侧并排摆着三张正方形便利贴，浅黄写\\\"对账\\\"、浅粉写\\\"改明细\\\"、浅蓝写\\\"收尾\\\"。\n紧挨着这三张便利贴摆着一张竖版院线票根，米白底深红字，今晚开场时间与座位号清晰可读。"
+    },
+    "Ec825d4205be3-0035": {
+      "path": "script.beats.2.duration_seconds",
+      "quote": "9"
+    },
+    "Ec825d4205be3-0036": {
+      "path": "script.beats.2.during",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0037": {
+      "path": "script.beats.2.event",
+      "quote": "方澄工位桌面近景：挎包敞口搁在椅背上，桌角靠抽屉柜一侧并排摆着三张不同日期的善后便利贴，紧挨着的是一张竖版院线票根。"
+    },
+    "Ec825d4205be3-0038": {
+      "path": "script.beats.2.trigger",
+      "quote": "观众从桌面近景同时看到三张善后便签与今晚院线票根，明确她过去不止一次替林屿善后，也清楚她今晚另有安排。"
+    },
+    "Ec825d4205be3-0039": {
+      "path": "script.beats.3.after",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0040": {
+      "path": "script.beats.3.before",
+      "quote": "方澄伸手从椅背上拿起那只敞口挎包。\n她把包带搭上右肩，抬起右手手指捏住米灰色金属带扣。"
+    },
+    "Ec825d4205be3-0041": {
+      "path": "script.beats.3.duration_seconds",
+      "quote": "8"
+    },
+    "Ec825d4205be3-0042": {
+      "path": "script.beats.3.during",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0043": {
+      "path": "script.beats.3.event",
+      "quote": "方澄伸手从椅背上拿起挎包，把包带搭上右肩，手指捏住带扣。"
+    },
+    "Ec825d4205be3-0044": {
+      "path": "script.beats.3.trigger",
+      "quote": "方澄准备离开的肢体动作已经起来，离开的意图先落到手上。"
+    },
+    "Ec825d4205be3-0045": {
+      "path": "script.beats.4.after",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0046": {
+      "path": "script.beats.4.before",
+      "quote": "方澄中近景：她抬眼看了林屿一眼，又低头看向桌角那排便签和票根，挎包带在她指尖收紧。"
+    },
+    "Ec825d4205be3-0047": {
+      "path": "script.beats.4.dialogue.0.speaker",
+      "quote": "林屿"
+    },
+    "Ec825d4205be3-0048": {
+      "path": "script.beats.4.dialogue.0.text",
+      "quote": "今晚又得麻烦你帮我对一下。"
+    },
+    "Ec825d4205be3-0049": {
+      "path": "script.beats.4.duration_seconds",
+      "quote": "9"
+    },
+    "Ec825d4205be3-0050": {
+      "path": "script.beats.4.during",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0051": {
+      "path": "script.beats.4.event",
+      "quote": "方澄中近景：她抬眼看向林屿，又低头看向桌角那排便签和票根，包带在指尖收紧；林屿抬头随口请求。"
+    },
+    "Ec825d4205be3-0052": {
+      "path": "script.beats.4.trigger",
+      "quote": "方澄在自己已有时间与林屿的请求之间犹豫，让观众替她的选择紧张。"
+    },
+    "Ec825d4205be3-0053": {
+      "path": "script.beats.5.after",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0054": {
+      "path": "script.beats.5.before",
+      "quote": "方澄松开捏着带扣的手指，把挎包带从右肩上放下。\n她把挎包放回椅背上，双手抬到翻盖处，把包口合上，米灰色金属扣扣紧。"
+    },
+    "Ec825d4205be3-0055": {
+      "path": "script.beats.5.duration_seconds",
+      "quote": "9"
+    },
+    "Ec825d4205be3-0056": {
+      "path": "script.beats.5.during",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0057": {
+      "path": "script.beats.5.event",
+      "quote": "方澄把挎包带从肩上放下，挎包放回椅背，双手合上包口。"
+    },
+    "Ec825d4205be3-0058": {
+      "path": "script.beats.5.trigger",
+      "quote": "把包放下、合上包口的动作把拒绝的决定先落到手上，台词之前身体先表态。"
+    },
+    "Ec825d4205be3-0059": {
+      "path": "script.beats.6.after",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0060": {
+      "path": "script.beats.6.before",
+      "quote": "方澄抬起头，目光从挎包上移开，对上林屿的脸。"
+    },
+    "Ec825d4205be3-0061": {
+      "path": "script.beats.6.dialogue.0.speaker",
+      "quote": "方澄"
+    },
+    "Ec825d4205be3-0062": {
+      "path": "script.beats.6.dialogue.0.text",
+      "quote": "这次我先走，你自己对吧。"
+    },
+    "Ec825d4205be3-0063": {
+      "path": "script.beats.6.duration_seconds",
+      "quote": "8"
+    },
+    "Ec825d4205be3-0064": {
+      "path": "script.beats.6.during",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0065": {
+      "path": "script.beats.6.event",
+      "quote": "方澄中近景抬头看着林屿，清楚地说出拒绝。"
+    },
+    "Ec825d4205be3-0066": {
+      "path": "script.beats.6.trigger",
+      "quote": "拒绝由方澄自己看着对方说出来，被看见也承担。"
+    },
+    "Ec825d4205be3-0067": {
+      "path": "script.beats.7.after",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0068": {
+      "path": "script.beats.7.before",
+      "quote": "机位切到林屿手部近景：黑色细头签字笔的金属笔夹反着夕光。\n笔尖在A4横版客户明细单上突然停住，没签完的字划出一道短斜线，红笔批注旁多出一道歪斜的墨痕。"
+    },
+    "Ec825d4205be3-0069": {
+      "path": "script.beats.7.duration_seconds",
+      "quote": "8"
+    },
+    "Ec825d4205be3-0070": {
+      "path": "script.beats.7.during",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0071": {
+      "path": "script.beats.7.event",
+      "quote": "林屿手部近景：签字笔笔尖停住，没签完的字在客户明细单上划出一道短斜线。"
+    },
+    "Ec825d4205be3-0072": {
+      "path": "script.beats.7.trigger",
+      "quote": "把拒绝落到对方手上，让转折由具体动作承担，不靠表情解释。"
+    },
+    "Ec825d4205be3-0073": {
+      "path": "script.beats.8.after",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0074": {
+      "path": "script.beats.8.before",
+      "quote": "方澄低头重新拿起椅背上那只合好口的挎包，单肩背起，转身离开自己的工位。\n她穿过两排并排的浅木色办公桌之间，走到房间远端侧墙那扇米灰色木纹平板门，手搭上金属横拉把手。"
+    },
+    "Ec825d4205be3-0075": {
+      "path": "script.beats.8.duration_seconds",
+      "quote": "9"
+    },
+    "Ec825d4205be3-0076": {
+      "path": "script.beats.8.during",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0077": {
+      "path": "script.beats.8.event",
+      "quote": "方澄背起挎包，穿过办公室走到门口，手搭上门把。"
+    },
+    "Ec825d4205be3-0078": {
+      "path": "script.beats.8.trigger",
+      "quote": "方澄以行动兑现拒绝，离开从语言落到脚步。"
+    },
+    "Ec825d4205be3-0079": {
+      "path": "script.beats.9.after",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0080": {
+      "path": "script.beats.9.before",
+      "quote": "林屿坐在自己桌前没有抬头，目光仍落在被划出短斜线的客户明细单上。"
+    },
+    "Ec825d4205be3-0081": {
+      "path": "script.beats.9.dialogue.0.speaker",
+      "quote": "林屿"
+    },
+    "Ec825d4205be3-0082": {
+      "path": "script.beats.9.dialogue.0.text",
+      "quote": "我以为你会帮我的。"
+    },
+    "Ec825d4205be3-0083": {
+      "path": "script.beats.9.duration_seconds",
+      "quote": "8"
+    },
+    "Ec825d4205be3-0084": {
+      "path": "script.beats.9.during",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0085": {
+      "path": "script.beats.9.event",
+      "quote": "林屿坐在自己桌前没有抬头，低声说出一句依赖式回应。"
+    },
+    "Ec825d4205be3-0086": {
+      "path": "script.beats.9.trigger",
+      "quote": "把依赖的反应留进独立镜头，由说话本身承担，不让方澄的离开被任何解释冲淡。"
+    },
+    "Ec825d4205be3-0087": {
+      "path": "script.beats.10.after",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0088": {
+      "path": "script.beats.10.before",
+      "quote": "机位给到方澄在门口的侧背影：她手搭着金属横拉把手停一下，没有回头。\n她推门走出去，米灰色木纹平板门在她身后缓缓关上，室内只剩夕光和顶灯。"
+    },
+    "Ec825d4205be3-0089": {
+      "path": "script.beats.10.duration_seconds",
+      "quote": "9"
+    },
+    "Ec825d4205be3-0090": {
+      "path": "script.beats.10.during",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0091": {
+      "path": "script.beats.10.event",
+      "quote": "方澄在门口的侧背影：她停一下，没有回头，推门走出去，门在她身后缓缓合上。"
+    },
+    "Ec825d4205be3-0092": {
+      "path": "script.beats.10.trigger",
+      "quote": "门口的停顿与不回头，把离开和拒绝同时承住，留下余白。"
+    },
+    "Ec825d4205be3-0093": {
+      "path": "script.beats.11.after",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0094": {
+      "path": "script.beats.11.before",
+      "quote": "机位给到林屿独坐桌前的过肩近景。\n林屿慢慢抬起头，越过自己桌沿看向并排相邻、已经空掉的方澄工位，视线落在桌角那三张并排的便利贴和紧挨着的那张竖版院线票根上。"
+    },
+    "Ec825d4205be3-0095": {
+      "path": "script.beats.11.duration_seconds",
+      "quote": "8"
+    },
+    "Ec825d4205be3-0096": {
+      "path": "script.beats.11.during",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0097": {
+      "path": "script.beats.11.event",
+      "quote": "林屿过肩近景：他抬头看向空掉的方澄工位，视线落在桌角那三张便利贴和紧挨着的院线票根上。"
+    },
+    "Ec825d4205be3-0098": {
+      "path": "script.beats.11.trigger",
+      "quote": "让林屿的目光去触及过去留下的善后痕迹和方澄今晚原本属于自己的时间。"
+    },
+    "Ec825d4205be3-0099": {
+      "path": "script.beats.12.after",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0100": {
+      "path": "script.beats.12.before",
+      "quote": "林屿从黑色网面靠背转椅里站起，走到相邻、空掉的方澄桌边。\n他伸手依次揭下桌角那三张并排的便利贴——浅黄\\\"对账\\\"、浅粉\\\"改明细\\\"、浅蓝\\\"收尾\\\"，叠齐后转身走到自己身后贴墙的浅木色三斗抽屉柜前，拉开抽屉，把叠好的三张便利贴收进去。"
+    },
+    "Ec825d4205be3-0101": {
+      "path": "script.beats.12.duration_seconds",
+      "quote": "10"
+    },
+    "Ec825d4205be3-0102": {
+      "path": "script.beats.12.during",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0103": {
+      "path": "script.beats.12.event",
+      "quote": "林屿从椅子里站起，走到相邻的方澄桌边，依次把桌角那三张便利贴揭下，叠齐收进自己身后贴墙的浅木色三斗抽屉柜里。"
+    },
+    "Ec825d4205be3-0104": {
+      "path": "script.beats.12.trigger",
+      "quote": "善后痕迹由林屿亲手收走，关系变化由具体动作承担，不靠台词收束。"
+    },
+    "Ec825d4205be3-0105": {
+      "path": "script.beats.13.after",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0106": {
+      "path": "script.beats.13.before",
+      "quote": "林屿关上抽屉，走回自己的浅木色办公桌前坐下。\n他从桌边抽出自己那份A4纵版结算单，右上角彩色公司logo条和浅蓝色表头可见，翻到空白页，黑色细头签字笔落下笔尖，开始对账。"
+    },
+    "Ec825d4205be3-0107": {
+      "path": "script.beats.13.duration_seconds",
+      "quote": "8"
+    },
+    "Ec825d4205be3-0108": {
+      "path": "script.beats.13.during",
+      "quote": "（无新增动作）"
+    },
+    "Ec825d4205be3-0109": {
+      "path": "script.beats.13.event",
+      "quote": "林屿回到自己桌前坐下，从桌边抽出自己那份A4纵版结算单，翻到空白页，落下笔尖开始对账。"
+    },
+    "Ec825d4205be3-0110": {
+      "path": "script.beats.13.trigger",
+      "quote": "用林屿自己动手对账这一具体行动收尾，边界和关系变化都由新行为承担。"
+    },
+    "Ec825d4205be3-0111": {
+      "path": "script.duration_seconds",
+      "quote": "122"
+    },
+    "Ec825d4205be3-0112": {
+      "path": "script.premise",
+      "quote": "傍晚办公室里，方澄把林屿桌沿滑落的咖啡杯端回去后，回到自己并排的工位准备离开。林屿又一次理所当然地开口让她帮忙对账，并顺口提起上次也是她对完的。方澄在看到桌面残留的多张善后便利贴与今晚院线票根并排摆着后，第一次放下刚搭上的包带、合上包口，明确说出拒绝，独自推门离开。林屿面对空掉的方澄工位，把桌角那些替人善后留下的便利贴揭下收进自己抽屉，拿出自己那份结算单重新开始。"
+    },
+    "Ec825d4205be3-0113": {
+      "path": "script.title",
+      "quote": "这次我先走"
+    },
+    "Ec825d4205be3-0114": {
+      "path": "static_visual_manifest.characters.0.age_group",
+      "quote": "成年"
+    },
+    "Ec825d4205be3-0115": {
+      "path": "static_visual_manifest.characters.0.body_shape",
+      "quote": "中等偏瘦，肩线柔和"
+    },
+    "Ec825d4205be3-0116": {
+      "path": "static_visual_manifest.characters.0.clothing",
+      "quote": "灰蓝色薄针织开衫，内搭白色圆领T恤，下着深灰色直筒长裤"
+    },
+    "Ec825d4205be3-0117": {
+      "path": "static_visual_manifest.characters.0.hair",
+      "quote": "黑色齐肩直发，自然中分"
+    },
+    "Ec825d4205be3-0118": {
+      "path": "static_visual_manifest.characters.0.name",
+      "quote": "方澄"
+    },
+    "Ec825d4205be3-0119": {
+      "path": "static_visual_manifest.characters.1.age_group",
+      "quote": "成年"
+    },
+    "Ec825d4205be3-0120": {
+      "path": "static_visual_manifest.characters.1.body_shape",
+      "quote": "中等身高，肩宽略宽于方澄"
+    },
+    "Ec825d4205be3-0121": {
+      "path": "static_visual_manifest.characters.1.clothing",
+      "quote": "米驼色棉质衬衫，袖口挽至前臂，下着深藏蓝休闲长裤"
+    },
+    "Ec825d4205be3-0122": {
+      "path": "static_visual_manifest.characters.1.hair",
+      "quote": "深栗色短碎发，稍长刘海"
+    },
+    "Ec825d4205be3-0123": {
+      "path": "static_visual_manifest.characters.1.name",
+      "quote": "林屿"
+    },
+    "Ec825d4205be3-0124": {
+      "path": "static_visual_manifest.props.0.appearance",
+      "quote": "软皮小号斜挎包，米灰色金属扣，单层翻盖"
+    },
+    "Ec825d4205be3-0125": {
+      "path": "static_visual_manifest.props.0.name",
+      "quote": "挎包"
+    },
+    "Ec825d4205be3-0126": {
+      "path": "static_visual_manifest.props.0.owner_id",
+      "quote": "C01"
+    },
+    "Ec825d4205be3-0127": {
+      "path": "static_visual_manifest.props.1.appearance",
+      "quote": "竖版窄长纸片，米白底深红字，右侧带撕齿虚线，今晚院线开场时间与座位号可读"
+    },
+    "Ec825d4205be3-0128": {
+      "path": "static_visual_manifest.props.1.name",
+      "quote": "院线电影票根"
+    },
+    "Ec825d4205be3-0129": {
+      "path": "static_visual_manifest.props.1.owner_id",
+      "quote": "C01"
+    },
+    "Ec825d4205be3-0130": {
+      "path": "static_visual_manifest.props.2.appearance",
+      "quote": "正方形小纸片，分别为浅黄、浅粉、浅蓝底，深灰手写短词（对账/改明细/收尾）"
+    },
+    "Ec825d4205be3-0131": {
+      "path": "static_visual_manifest.props.2.name",
+      "quote": "善后便利贴三张"
+    },
+    "Ec825d4205be3-0132": {
+      "path": "static_visual_manifest.props.2.owner_id",
+      "quote": "C01"
+    },
+    "Ec825d4205be3-0133": {
+      "path": "static_visual_manifest.props.3.appearance",
+      "quote": "白色陶瓷马克杯，杯身外侧无图案，杯口微宽"
+    },
+    "Ec825d4205be3-0134": {
+      "path": "static_visual_manifest.props.3.name",
+      "quote": "咖啡杯"
+    },
+    "Ec825d4205be3-0135": {
+      "path": "static_visual_manifest.props.3.owner_id",
+      "quote": "C02"
+    },
+    "Ec825d4205be3-0136": {
+      "path": "static_visual_manifest.props.4.appearance",
+      "quote": "A4横版打印表格纸，浅灰线条格，黑字数字，红笔批注"
+    },
+    "Ec825d4205be3-0137": {
+      "path": "static_visual_manifest.props.4.name",
+      "quote": "客户明细单"
+    },
+    "Ec825d4205be3-0138": {
+      "path": "static_visual_manifest.props.4.owner_id",
+      "quote": "C02"
+    },
+    "Ec825d4205be3-0139": {
+      "path": "static_visual_manifest.props.5.appearance",
+      "quote": "A4纵版表格纸，右上角有彩色公司logo条，浅蓝表头"
+    },
+    "Ec825d4205be3-0140": {
+      "path": "static_visual_manifest.props.5.name",
+      "quote": "结算单"
+    },
+    "Ec825d4205be3-0141": {
+      "path": "static_visual_manifest.props.5.owner_id",
+      "quote": "C02"
+    },
+    "Ec825d4205be3-0142": {
+      "path": "static_visual_manifest.props.6.appearance",
+      "quote": "黑色细头签字笔，金属笔夹"
+    },
+    "Ec825d4205be3-0143": {
+      "path": "static_visual_manifest.props.6.name",
+      "quote": "签字笔"
+    },
+    "Ec825d4205be3-0144": {
+      "path": "static_visual_manifest.props.6.owner_id",
+      "quote": "C02"
+    },
+    "Ec825d4205be3-0145": {
+      "path": "static_visual_manifest.render.light_source",
+      "quote": "临窗自然夕光为主，从办公桌侧面斜入，室内顶灯为辅补光，形成柔和侧光与轻微暖色阴影"
+    },
+    "Ec825d4205be3-0146": {
+      "path": "static_visual_manifest.render.palette",
+      "quote": "傍晚办公室暖调，浅木色桌面、米白墙、暖灰窗帘透橙黄夕光、人物服装为低饱和的灰蓝与米驼"
+    },
+    "Ec825d4205be3-0147": {
+      "path": "static_visual_manifest.render.visual_medium",
+      "quote": "写实真人实拍质感的AI短片，自然皮肤纹理与生活化布光"
+    },
+    "Ec825d4205be3-0148": {
+      "path": "static_visual_manifest.scene.elements.0.appearance",
+      "quote": "浅木色长方形办公桌，金属细腿，桌面靠近窗户一侧"
+    },
+    "Ec825d4205be3-0149": {
+      "path": "static_visual_manifest.scene.elements.0.name",
+      "quote": "方澄工位桌"
+    },
+    "Ec825d4205be3-0150": {
+      "path": "static_visual_manifest.scene.elements.1.appearance",
+      "quote": "浅木色长方形办公桌，与方澄桌同款，平行摆放，靠近室内一侧"
+    },
+    "Ec825d4205be3-0151": {
+      "path": "static_visual_manifest.scene.elements.1.name",
+      "quote": "林屿工位桌"
+    },
+    "Ec825d4205be3-0152": {
+      "path": "static_visual_manifest.scene.elements.2.appearance",
+      "quote": "浅木色三斗文件柜，贴墙放置，黑色拉手"
+    },
+    "Ec825d4205be3-0153": {
+      "path": "static_visual_manifest.scene.elements.2.name",
+      "quote": "抽屉柜"
+    },
+    "Ec825d4205be3-0154": {
+      "path": "static_visual_manifest.scene.elements.3.appearance",
+      "quote": "木纹平板门，米灰色，下半部带金属横拉把手，位于房间远端侧墙"
+    },
+    "Ec825d4205be3-0155": {
+      "path": "static_visual_manifest.scene.elements.3.name",
+      "quote": "办公室门"
+    },
+    "Ec825d4205be3-0156": {
+      "path": "static_visual_manifest.scene.elements.4.appearance",
+      "quote": "宽幅铝合金推拉窗，米灰色半透明卷帘半垂，窗框占据外侧整面墙"
+    },
+    "Ec825d4205be3-0157": {
+      "path": "static_visual_manifest.scene.elements.4.name",
+      "quote": "窗户"
+    },
+    "Ec825d4205be3-0158": {
+      "path": "static_visual_manifest.scene.elements.5.appearance",
+      "quote": "白色圆形吸顶灯，暖白光，位于房间正中天花板"
+    },
+    "Ec825d4205be3-0159": {
+      "path": "static_visual_manifest.scene.elements.5.name",
+      "quote": "顶灯"
+    },
+    "Ec825d4205be3-0160": {
+      "path": "static_visual_manifest.scene.elements.6.appearance",
+      "quote": "浅灰色PVC地板，哑光"
+    },
+    "Ec825d4205be3-0161": {
+      "path": "static_visual_manifest.scene.elements.6.name",
+      "quote": "地面"
+    },
+    "Ec825d4205be3-0162": {
+      "path": "static_visual_manifest.scene.elements.7.appearance",
+      "quote": "米白色乳胶漆墙面，干净无装饰"
+    },
+    "Ec825d4205be3-0163": {
+      "path": "static_visual_manifest.scene.elements.7.name",
+      "quote": "墙面"
+    },
+    "Ec825d4205be3-0164": {
+      "path": "static_visual_manifest.scene.elements.8.appearance",
+      "quote": "黑色网面靠背转椅，灰色塑料五星脚"
+    },
+    "Ec825d4205be3-0165": {
+      "path": "static_visual_manifest.scene.elements.8.name",
+      "quote": "办公椅（方澄）"
+    },
+    "Ec825d4205be3-0166": {
+      "path": "static_visual_manifest.scene.elements.9.appearance",
+      "quote": "黑色网面靠背转椅，灰色塑料五星脚，与方澄椅同款"
+    },
+    "Ec825d4205be3-0167": {
+      "path": "static_visual_manifest.scene.elements.9.name",
+      "quote": "办公椅（林屿）"
+    },
+    "Ec825d4205be3-0168": {
+      "path": "static_visual_manifest.scene.name",
+      "quote": "傍晚办公室"
+    },
+    "Ec825d4205be3-0169": {
+      "path": "static_visual_manifest.scene.relations.0.reference",
+      "quote": "E01"
+    },
+    "Ec825d4205be3-0170": {
+      "path": "static_visual_manifest.scene.relations.0.relation",
+      "quote": "right_of"
+    },
+    "Ec825d4205be3-0171": {
+      "path": "static_visual_manifest.scene.relations.0.subject",
+      "quote": "E02"
+    },
+    "Ec825d4205be3-0172": {
+      "path": "static_visual_manifest.scene.relations.1.reference",
+      "quote": "E05"
+    },
+    "Ec825d4205be3-0173": {
+      "path": "static_visual_manifest.scene.relations.1.relation",
+      "quote": "next_to"
+    },
+    "Ec825d4205be3-0174": {
+      "path": "static_visual_manifest.scene.relations.1.subject",
+      "quote": "E01"
+    },
+    "Ec825d4205be3-0175": {
+      "path": "static_visual_manifest.scene.relations.2.reference",
+      "quote": "E01"
+    },
+    "Ec825d4205be3-0176": {
+      "path": "static_visual_manifest.scene.relations.2.relation",
+      "quote": "next_to"
+    },
+    "Ec825d4205be3-0177": {
+      "path": "static_visual_manifest.scene.relations.2.subject",
+      "quote": "E02"
+    },
+    "Ec825d4205be3-0178": {
+      "path": "static_visual_manifest.scene.relations.3.reference",
+      "quote": "E02"
+    },
+    "Ec825d4205be3-0179": {
+      "path": "static_visual_manifest.scene.relations.3.relation",
+      "quote": "behind"
+    },
+    "Ec825d4205be3-0180": {
+      "path": "static_visual_manifest.scene.relations.3.subject",
+      "quote": "E03"
+    },
+    "Ec825d4205be3-0181": {
+      "path": "static_visual_manifest.scene.relations.4.reference",
+      "quote": "E01"
+    },
+    "Ec825d4205be3-0182": {
+      "path": "static_visual_manifest.scene.relations.4.relation",
+      "quote": "behind"
+    },
+    "Ec825d4205be3-0183": {
+      "path": "static_visual_manifest.scene.relations.4.subject",
+      "quote": "E04"
+    },
+    "Ec825d4205be3-0184": {
+      "path": "static_visual_manifest.scene.relations.5.reference",
+      "quote": "E01"
+    },
+    "Ec825d4205be3-0185": {
+      "path": "static_visual_manifest.scene.relations.5.relation",
+      "quote": "above"
+    },
+    "Ec825d4205be3-0186": {
+      "path": "static_visual_manifest.scene.relations.5.subject",
+      "quote": "E06"
+    },
+    "Ec825d4205be3-0187": {
+      "path": "static_visual_manifest.scene.relations.6.reference",
+      "quote": "E01"
+    },
+    "Ec825d4205be3-0188": {
+      "path": "static_visual_manifest.scene.relations.6.relation",
+      "quote": "below"
+    },
+    "Ec825d4205be3-0189": {
+      "path": "static_visual_manifest.scene.relations.6.subject",
+      "quote": "E07"
+    },
+    "Ec825d4205be3-0190": {
+      "path": "static_visual_manifest.scene.relations.7.reference",
+      "quote": "E05"
+    },
+    "Ec825d4205be3-0191": {
+      "path": "static_visual_manifest.scene.relations.7.relation",
+      "quote": "behind"
+    },
+    "Ec825d4205be3-0192": {
+      "path": "static_visual_manifest.scene.relations.7.subject",
+      "quote": "E08"
+    },
+    "Ec825d4205be3-0193": {
+      "path": "static_visual_manifest.scene.relations.8.reference",
+      "quote": "E01"
+    },
+    "Ec825d4205be3-0194": {
+      "path": "static_visual_manifest.scene.relations.8.relation",
+      "quote": "next_to"
+    },
+    "Ec825d4205be3-0195": {
+      "path": "static_visual_manifest.scene.relations.8.subject",
+      "quote": "E09"
+    },
+    "Ec825d4205be3-0196": {
+      "path": "static_visual_manifest.scene.relations.9.reference",
+      "quote": "E02"
+    },
+    "Ec825d4205be3-0197": {
+      "path": "static_visual_manifest.scene.relations.9.relation",
+      "quote": "next_to"
+    },
+    "Ec825d4205be3-0198": {
+      "path": "static_visual_manifest.scene.relations.9.subject",
+      "quote": "E10"
+    }
+  }
+}

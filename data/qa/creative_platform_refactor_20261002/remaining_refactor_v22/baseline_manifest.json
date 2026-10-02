@@ -1,0 +1,37 @@
+{
+  "sources": [
+    {
+      "path": "src/content_factory/creative_workflow.py",
+      "sha256": "c95d7e37bbd89df62960b03344d9cc3f6926cfc3b0b55a2f354dc65c5199d673"
+    },
+    {
+      "path": "src/content_factory/creative_stage_debug.py",
+      "sha256": "8506dbbfdf44ab03cb716c6b0549a380fb2f7a75e10d6f9fde1072db10ae3330"
+    },
+    {
+      "path": "src/content_factory/creative_governed_runtime.py",
+      "sha256": "65cbaad82567f56ae3eaffa1dc2004e7073fd7ca99c5b800327e0225c348631d"
+    },
+    {
+      "path": "src/web/creative_workflow_dashboard.py",
+      "sha256": "8b6a84c726e6d9a8bb710ffb6efa99331b087cf7bf135e5cf5d2faacda5efdf0"
+    },
+    {
+      "path": "scripts/debug_creative_workflow.py",
+      "sha256": "c1f2d13ac69ce298abf599313baca1921afea62297fd62ca313ccc64d266b4f2"
+    },
+    {
+      "path": "scripts/run_creative_workflow.py",
+      "sha256": "482ba5f8178c70ca295f72a0fb7a707bc3c61cf680ad80dd5e15922eefe15a70"
+    },
+    {
+      "path": "scripts/version_creative_governance_runtime.py",
+      "sha256": "139e221ac013aabedf7319e8d037560f23487f7d040d4c1f0f2d35e97b613411"
+    },
+    {
+      "path": "src/content_factory/media_review_policy.py",
+      "sha256": "774420e3fe06b1a8e5ea12ddb3a0b29cd6b27853ec923fff97e2323a60f086d0"
+    }
+  ],
+  "direction_report_sha256": "22a095eebea4269624a5cc779b33cd11353cd59a596370b6b786274c52b69d9d"
+}

@@ -45,12 +45,12 @@ class PlaybackOptions:
     max_comments: int = 0
 
     def validate(self) -> None:
-        if not 1 <= int(self.max_videos) <= 20:
-            raise ValueError("播放视频数必须在 1 到 20 之间。")
-        if not 5 <= int(self.per_video_seconds) <= 300:
-            raise ValueError("单条播放上限必须在 5 到 300 秒之间。")
-        if not 1 <= int(self.total_minutes) <= 60:
-            raise ValueError("总播放时长必须在 1 到 60 分钟之间。")
+        if int(self.max_videos) <= 0:
+            raise ValueError("播放视频数必须为正整数。")
+        if int(self.per_video_seconds) <= 0:
+            raise ValueError("单条播放上限必须为正整数秒。")
+        if int(self.total_minutes) <= 0:
+            raise ValueError("总播放时长必须为正整数分钟。")
         if not 0 <= float(self.min_relevance_score) <= 100:
             raise ValueError("相关度阈值必须在 0 到 100 之间。")
         if not 0 <= float(self.base_like_ratio) <= 1:

@@ -1,0 +1,20 @@
+............F........                                                    [100%]
+================================== FAILURES ===================================
+_______ test_real_receipts_resume_offline_without_reset_or_invalidation _______
+tests\test_creative_real_receipt_replay.py:54: in test_real_receipts_resume_offline_without_reset_or_invalidation
+    state = workflow.run(bundle)
+            ^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:7265: in run
+    script = self._review_script_before_directing(script,
+src\content_factory\creative_workflow.py:6734: in _review_script_before_directing
+    revised = self._stage(stage, "writer", {
+src\content_factory\creative_workflow.py:6009: in _stage
+    raw = self._stage_impl(name, role, payload, validator)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6285: in _stage_impl
+    raise RuntimeError(f"{name} 提示词版本已改变，不能复用旧阶段回执")
+E   RuntimeError: writer_revise__preflight_story_00_01 提示词版本已改变，不能复用旧阶段回执
+=========================== short test summary info ===========================
+FAILED tests/test_creative_real_receipt_replay.py::test_real_receipts_resume_offline_without_reset_or_invalidation
+1 failed, 20 passed in 4.97s
+ACCEPTANCE_EXIT_CODE=1

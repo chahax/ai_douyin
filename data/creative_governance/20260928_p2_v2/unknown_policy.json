@@ -1,0 +1,23 @@
+{
+  "schema_version": "review_unknown_policy/v1",
+  "source_hash": "0381767d1f4f890c29db9361b7112fb51766932f45449d5e8d104123897ac0ed",
+  "created_at": "2026-09-28T13:52:44.356411+00:00",
+  "implementation_status": "implemented_offline_verified_not_production_verified",
+  "default": "review_required",
+  "blocked_reason_codes": [
+    "CHECKER_NOT_EXECUTED",
+    "EXPRESSION_UNSUPPORTED",
+    "REQUIRED_EVIDENCE_MISSING",
+    "REQUIREMENT_CONFLICT",
+    "SOURCE_MISSING"
+  ],
+  "advisory_reason_codes": [
+    "ACTUAL_MEDIA_AUDIO_PENDING",
+    "ACTUAL_MEDIA_LIPSYNC_PENDING",
+    "ACTUAL_MEDIA_VISUAL_PENDING",
+    "OPTIONAL_AESTHETIC"
+  ],
+  "required_check_may_be_advisory": false,
+  "unknown_counts_as_pass": false,
+  "blocked_requires_source_repair": true
+}

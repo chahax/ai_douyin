@@ -11,6 +11,8 @@ Usage in app startup:
 """
 
 import os
+import re
+from pathlib import Path
 
 from sqlalchemy import inspect, text
 
@@ -30,31 +32,47 @@ def _is_migration_up_to_date() -> bool:
     migration (i.e. nothing pending).
     """
     with engine.connect() as conn:
-        row = conn.execute(text("SELECT version_num FROM alembic_version")).first()
-    if row is None:
+        current = {
+            row[0] for row in conn.execute(
+                text("SELECT version_num FROM alembic_version")
+            ).all()
+        }
+    if not current:
         return False
-    current = row[0]
-    # Read the head revision from migration files' `revision` variable.
-    # This matches what's actually stored in alembic_version.
     try:
-        import re
-        from pathlib import Path
         versions_dir = Path(__file__).resolve().parent.parent.parent / "alembic" / "versions"
-        revs = []
-        rev_re = re.compile(r'^\s*revision:\s*str\s*=\s*["\']([^"\']+)["\']', re.MULTILINE)
-        for p in versions_dir.glob("*.py"):
-            if p.name.startswith("_"):
-                continue
-            m = rev_re.search(p.read_text(encoding="utf-8"))
-            if m:
-                revs.append(m.group(1))
-        if not revs:
+        heads = _migration_heads(versions_dir)
+        if not heads:
             return True  # no migrations — nothing pending
-        head = max(revs)
-        return current == head
+        return current == heads
     except Exception:
         # Conservative: if we can't tell, assume pending
         return False
+
+
+def _migration_heads(versions_dir: Path) -> set[str]:
+    """Resolve graph heads from revision/down_revision declarations."""
+    revision_pattern = re.compile(
+        r'^\s*revision(?:\s*:\s*[^=]+)?\s*=\s*["\']([^"\']+)["\']',
+        re.MULTILINE,
+    )
+    down_pattern = re.compile(
+        r'^\s*down_revision(?:\s*:\s*[^=]+)?\s*=\s*["\']([^"\']+)["\']',
+        re.MULTILINE,
+    )
+    revisions: set[str] = set()
+    parents: set[str] = set()
+    for path in Path(versions_dir).glob("*.py"):
+        if path.name.startswith("_"):
+            continue
+        source = path.read_text(encoding="utf-8")
+        revision = revision_pattern.search(source)
+        if revision:
+            revisions.add(revision.group(1))
+        parent = down_pattern.search(source)
+        if parent:
+            parents.add(parent.group(1))
+    return revisions - parents
 
 
 def ensure_migrated(*, strict: bool = True) -> bool:
@@ -64,11 +82,20 @@ def ensure_migrated(*, strict: bool = True) -> bool:
     In `strict=True` (default), logs a clear error and returns False.
     In `strict=False`, only logs a warning.
 
-    Set the env var `INIT_DB_FALLBACK=1` to bypass the check and let
-    `Base.metadata.create_all` create tables (dev convenience only).
+    Development fallback requires both ``strict=False`` and the explicit
+    ``ALLOW_DEV_MIGRATION_FALLBACK=1`` flag. Production/strict startup never
+    bypasses Alembic validation.
     """
-    if os.environ.get("INIT_DB_FALLBACK") == "1":
-        logger.warning("INIT_DB_FALLBACK=1 — skipping migration check.")
+    fallback = os.environ.get("ALLOW_DEV_MIGRATION_FALLBACK") == "1"
+    if fallback:
+        if strict:
+            logger.error(
+                "ALLOW_DEV_MIGRATION_FALLBACK is forbidden in strict startup."
+            )
+            return False
+        logger.warning(
+            "ALLOW_DEV_MIGRATION_FALLBACK=1 — development-only migration bypass."
+        )
         return True
 
     if not _alembic_version_table_exists():
@@ -76,7 +103,8 @@ def ensure_migrated(*, strict: bool = True) -> bool:
             "Database is not Alembic-managed. Run:\n"
             "  alembic upgrade head        # 全新环境\n"
             "  alembic stamp head          # 已有 DB，先标记基线再升级\n"
-            "Or set INIT_DB_FALLBACK=1 to skip (dev only)."
+            "Development-only bypass requires ALLOW_DEV_MIGRATION_FALLBACK=1 "
+            "and ensure_migrated(strict=False)."
         )
         if strict:
             logger.error(msg)

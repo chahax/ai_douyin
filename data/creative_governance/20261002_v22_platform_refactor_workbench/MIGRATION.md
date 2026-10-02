@@ -1,0 +1,5 @@
+# 20261002_v21_platform_refactor_multi_feedback → 20261002_v22_platform_refactor_workbench task migration
+
+20261002_v21_platform_refactor_multi_feedback is immutable history and is not silently rebound. Completed runs remain historical records. An archived 20261002_v21_platform_refactor_multi_feedback run retains its original task identity, budget and receipts. The current CLI binds the same intent to its original run directory. There is no automatic same-intent cross-version migration command. Restore the old frozen runtime environment to continue that run, or keep it read-only. Source/hash mismatch must stop before dispatch. Do not delete claims, change focus for the same story or create a directory to reset quota. New independent stories use the existing registration entry and bind the new governance pack.
+
+A future explicit migration must preserve cumulative calls/tokens/revision/video failure budgets, link every historical receipt and unresolved feedback, revalidate carried artifacts and obtain human reapproval wherever candidate identity changes. This release does not perform such a migration or modify historical user tasks.

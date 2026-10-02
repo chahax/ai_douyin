@@ -1,0 +1,21 @@
+{
+  "schema": "offline_script_review_sources_v7_manifest/v1",
+  "candidate_version": "evidence_script_sources_v7",
+  "network_calls": 0,
+  "production_integrated": false,
+  "old_run_migrated": false,
+  "real_model_validation": false,
+  "source_receipts_sha256": {
+    "call_047_linear_script_review_v4.json": "c84580ea8cbf82ee4e9ee77ffe0ec6961d9840a328eedc04c9eec9693ba755fa",
+    "call_048_linear_draft_v5.json": "70e350f76d4f6f19ea6f591e9006d989d1a9c7ffdc88e12453eb8ec9eb7a3ead",
+    "call_049_linear_script_review_v6.json": "7b48039ab0af310827cb1d38f85148eef17f802df7816893fee467c602672b1f"
+  },
+  "candidate_files_sha256": {
+    "scripts/creative_script_review_sources_v7.py": "38e12d97b5e7f533208ed94756b5c1bfa76c429c89aa0ae18a0f34399a363d1f",
+    "tests/test_creative_script_review_sources_v7.py": "13a810ff9f0957e3dae4552a661748eb4e42ad007c4e7998f593cccce6d4db51"
+  },
+  "gate_tests": {
+    "passed": 7,
+    "command": ".\\.venv\\Scripts\\python.exe -m pytest tests/test_creative_script_review_sources_v7.py -q -p no:cacheprovider"
+  }
+}

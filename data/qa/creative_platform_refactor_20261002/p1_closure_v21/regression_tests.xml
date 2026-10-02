@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="10" skipped="0" tests="15" time="3.457" timestamp="2026-10-02T14:53:48.584911+08:00" hostname="DESKTOP-DP111LI"><testcase classname="tests.test_creative_stage_debug" name="test_breakpoint_and_next_stage_reuse_saved_budget_and_artifacts" time="0.072" /><testcase classname="tests.test_creative_stage_debug" name="test_feedback_binds_current_hash_and_invalidates_only_downstream_debug_view" time="0.057" /><testcase classname="tests.test_creative_stage_debug" name="test_immutable_versions_have_deterministic_diff" time="0.010" /><testcase classname="tests.test_creative_stage_debug" name="test_noninitial_must_fix_resume_replays_valid_upstream_and_reaches_target" time="0.093" /><testcase classname="tests.test_creative_stage_debug" name="test_resolved_repair_context_replays_then_rebuilds_invalidated_downstream" time="0.159" /><testcase classname="tests.test_creative_stage_debug" name="test_two_successive_script_repairs_select_current_keep_history_and_budget" time="0.083"><failure message="RuntimeError: 恢复任务不能改变创作预算版本">tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/p1_closure_v21/regression_tmp/test_two_successive_script_rep0')
+
+    def test_two_successive_script_repairs_select_current_keep_history_and_budget(tmp_path):
+&gt;       run, bundle, script, _ = _rebuilt_run(tmp_path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_creative_stage_debug.py:227: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_creative_stage_debug.py:217: in _rebuilt_run
+    repaired, _ = _resume(run, bundle, [brief], "director_brief")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_creative_stage_debug.py:200: in _resume
+    result = runner.run(bundle)
+             ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;src.content_factory.creative_workflow.CreativeWorkflow object at 0x000001B8F24856D0&gt;
+bundle = MaterialBundle(source_driver='novel', title='测试', source_text='起因句。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁...ter_marker_count': 0}, 'reference_count': 0, 'reference_adaptation': [], 'unread_or_unverified': ['未提供的后续章节不在本次理解范围']})
+
+    def run(self, bundle: MaterialBundle) -&gt; dict[str, Any]:
+        self._reusable_generation = bool(bundle.metadata.get("creative_brief"))
+        if self.writer_prompt_version == EVENT_WRITER_VERSION and (
+                bundle.source_driver != "original" or not bundle.metadata.get("creative_brief")
+                or self.model_profile != CREATE_REVIEW_PROFILE):
+            raise ValueError("事件编剧模块仅用于有简报的MiniMax创作/DeepSeek审查原创任务")
+        self.run_dir.mkdir(parents=True, exist_ok=True)
+        if self.state_path.exists():
+            self.state = _read(self.state_path)
+            if self.state.get("model_profile", LEGACY_MODEL_PROFILE) != self.model_profile:
+                raise RuntimeError("恢复任务不能更换已绑定的模型分工")
+            existing_policy = self.state.get("budget_policy_version", "v1_20260922")
+            if existing_policy != self.budget_policy_version:
+&gt;               raise RuntimeError("恢复任务不能改变创作预算版本")
+E               RuntimeError: 恢复任务不能改变创作预算版本
+
+src\content_factory\creative_workflow.py:6757: RuntimeError</failure></testcase><testcase classname="tests.test_creative_stage_debug" name="test_multiple_pending_stages_follow_dependencies_not_feedback_order[False]" time="0.081"><failure message="RuntimeError: 恢复任务不能改变创作预算版本">tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/p1_closure_v21/regression_tmp/test_multiple_pending_stages_f0')
+reverse_feedback_order = False
+
+    @pytest.mark.parametrize("reverse_feedback_order", [False, True])
+    def test_multiple_pending_stages_follow_dependencies_not_feedback_order(tmp_path, reverse_feedback_order):
+&gt;       run, bundle, script, _ = _rebuilt_run(tmp_path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_creative_stage_debug.py:267: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_creative_stage_debug.py:217: in _rebuilt_run
+    repaired, _ = _resume(run, bundle, [brief], "director_brief")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_creative_stage_debug.py:200: in _resume
+    result = runner.run(bundle)
+             ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;src.content_factory.creative_workflow.CreativeWorkflow object at 0x000001B8F2486450&gt;
+bundle = MaterialBundle(source_driver='novel', title='测试', source_text='起因句。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁...ter_marker_count': 0}, 'reference_count': 0, 'reference_adaptation': [], 'unread_or_unverified': ['未提供的后续章节不在本次理解范围']})
+
+    def run(self, bundle: MaterialBundle) -&gt; dict[str, Any]:
+        self._reusable_generation = bool(bundle.metadata.get("creative_brief"))
+        if self.writer_prompt_version == EVENT_WRITER_VERSION and (
+                bundle.source_driver != "original" or not bundle.metadata.get("creative_brief")
+                or self.model_profile != CREATE_REVIEW_PROFILE):
+            raise ValueError("事件编剧模块仅用于有简报的MiniMax创作/DeepSeek审查原创任务")
+        self.run_dir.mkdir(parents=True, exist_ok=True)
+        if self.state_path.exists():
+            self.state = _read(self.state_path)
+            if self.state.get("model_profile", LEGACY_MODEL_PROFILE) != self.model_profile:
+                raise RuntimeError("恢复任务不能更换已绑定的模型分工")
+            existing_policy = self.state.get("budget_policy_version", "v1_20260922")
+            if existing_policy != self.budget_policy_version:
+&gt;               raise RuntimeError("恢复任务不能改变创作预算版本")
+E               RuntimeError: 恢复任务不能改变创作预算版本
+
+src\content_factory\creative_workflow.py:6757: RuntimeError</failure></testcase><testcase classname="tests.test_creative_stage_debug" name="test_multiple_pending_stages_follow_dependencies_not_feedback_order[True]" time="0.113"><failure message="RuntimeError: 恢复任务不能改变创作预算版本">tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/p1_closure_v21/regression_tmp/test_multiple_pending_stages_f1')
+reverse_feedback_order = True
+
+    @pytest.mark.parametrize("reverse_feedback_order", [False, True])
+    def test_multiple_pending_stages_follow_dependencies_not_feedback_order(tmp_path, reverse_feedback_order):
+&gt;       run, bundle, script, _ = _rebuilt_run(tmp_path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_creative_stage_debug.py:267: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_creative_stage_debug.py:217: in _rebuilt_run
+    repaired, _ = _resume(run, bundle, [brief], "director_brief")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_creative_stage_debug.py:200: in _resume
+    result = runner.run(bundle)
+             ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;src.content_factory.creative_workflow.CreativeWorkflow object at 0x000001B8F2486F90&gt;
+bundle = MaterialBundle(source_driver='novel', title='测试', source_text='起因句。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁...ter_marker_count': 0}, 'reference_count': 0, 'reference_adaptation': [], 'unread_or_unverified': ['未提供的后续章节不在本次理解范围']})
+
+    def run(self, bundle: MaterialBundle) -&gt; dict[str, Any]:
+        self._reusable_generation = bool(bundle.metadata.get("creative_brief"))
+        if self.writer_prompt_version == EVENT_WRITER_VERSION and (
+                bundle.source_driver != "original" or not bundle.metadata.get("creative_brief")
+                or self.model_profile != CREATE_REVIEW_PROFILE):
+            raise ValueError("事件编剧模块仅用于有简报的MiniMax创作/DeepSeek审查原创任务")
+        self.run_dir.mkdir(parents=True, exist_ok=True)
+        if self.state_path.exists():
+            self.state = _read(self.state_path)
+            if self.state.get("model_profile", LEGACY_MODEL_PROFILE) != self.model_profile:
+                raise RuntimeError("恢复任务不能更换已绑定的模型分工")
+            existing_policy = self.state.get("budget_policy_version", "v1_20260922")
+            if existing_policy != self.budget_policy_version:
+&gt;               raise RuntimeError("恢复任务不能改变创作预算版本")
+E               RuntimeError: 恢复任务不能改变创作预算版本
+
+src\content_factory\creative_workflow.py:6757: RuntimeError</failure></testcase><testcase classname="tests.test_creative_stage_debug" name="test_second_round_budget_exhaustion_keeps_pending_feedback_and_counters" time="0.095"><failure message="RuntimeError: 恢复任务不能改变创作预算版本">tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/p1_closure_v21/regression_tmp/test_second_round_budget_exhau0')
+
+    def test_second_round_budget_exhaustion_keeps_pending_feedback_and_counters(tmp_path):
+&gt;       run, bundle, script, _ = _rebuilt_run(tmp_path, max_calls=5)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_creative_stage_debug.py:294: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_creative_stage_debug.py:217: in _rebuilt_run
+    repaired, _ = _resume(run, bundle, [brief], "director_brief")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_creative_stage_debug.py:200: in _resume
+    result = runner.run(bundle)
+             ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;src.content_factory.creative_workflow.CreativeWorkflow object at 0x000001B8F24879B0&gt;
+bundle = MaterialBundle(source_driver='novel', title='测试', source_text='起因句。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁...ter_marker_count': 0}, 'reference_count': 0, 'reference_adaptation': [], 'unread_or_unverified': ['未提供的后续章节不在本次理解范围']})
+
+    def run(self, bundle: MaterialBundle) -&gt; dict[str, Any]:
+        self._reusable_generation = bool(bundle.metadata.get("creative_brief"))
+        if self.writer_prompt_version == EVENT_WRITER_VERSION and (
+                bundle.source_driver != "original" or not bundle.metadata.get("creative_brief")
+                or self.model_profile != CREATE_REVIEW_PROFILE):
+            raise ValueError("事件编剧模块仅用于有简报的MiniMax创作/DeepSeek审查原创任务")
+        self.run_dir.mkdir(parents=True, exist_ok=True)
+        if self.state_path.exists():
+            self.state = _read(self.state_path)
+            if self.state.get("model_profile", LEGACY_MODEL_PROFILE) != self.model_profile:
+                raise RuntimeError("恢复任务不能更换已绑定的模型分工")
+            existing_policy = self.state.get("budget_policy_version", "v1_20260922")
+            if existing_policy != self.budget_policy_version:
+&gt;               raise RuntimeError("恢复任务不能改变创作预算版本")
+E               RuntimeError: 恢复任务不能改变创作预算版本
+
+src\content_factory\creative_workflow.py:6757: RuntimeError</failure></testcase><testcase classname="tests.test_creative_stage_debug" name="test_resolved_upstream_tampering_with_pending_downstream_stops_before_call[prompt_sha256]" time="0.083"><failure message="RuntimeError: 恢复任务不能改变创作预算版本">tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/p1_closure_v21/regression_tmp/test_resolved_upstream_tamperi0')
+damage = 'prompt_sha256'
+
+    @pytest.mark.parametrize("damage", ["prompt_sha256", "input_sha256", "output_sha256", "resolution"])
+    def test_resolved_upstream_tampering_with_pending_downstream_stops_before_call(tmp_path, damage):
+&gt;       run, bundle, script, old_feedback = _rebuilt_run(tmp_path)
+                                            ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_creative_stage_debug.py:307: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_creative_stage_debug.py:217: in _rebuilt_run
+    repaired, _ = _resume(run, bundle, [brief], "director_brief")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_creative_stage_debug.py:200: in _resume
+    result = runner.run(bundle)
+             ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;src.content_factory.creative_workflow.CreativeWorkflow object at 0x000001B8F24BC3B0&gt;
+bundle = MaterialBundle(source_driver='novel', title='测试', source_text='起因句。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁...ter_marker_count': 0}, 'reference_count': 0, 'reference_adaptation': [], 'unread_or_unverified': ['未提供的后续章节不在本次理解范围']})
+
+    def run(self, bundle: MaterialBundle) -&gt; dict[str, Any]:
+        self._reusable_generation = bool(bundle.metadata.get("creative_brief"))
+        if self.writer_prompt_version == EVENT_WRITER_VERSION and (
+                bundle.source_driver != "original" or not bundle.metadata.get("creative_brief")
+                or self.model_profile != CREATE_REVIEW_PROFILE):
+            raise ValueError("事件编剧模块仅用于有简报的MiniMax创作/DeepSeek审查原创任务")
+        self.run_dir.mkdir(parents=True, exist_ok=True)
+        if self.state_path.exists():
+            self.state = _read(self.state_path)
+            if self.state.get("model_profile", LEGACY_MODEL_PROFILE) != self.model_profile:
+                raise RuntimeError("恢复任务不能更换已绑定的模型分工")
+            existing_policy = self.state.get("budget_policy_version", "v1_20260922")
+            if existing_policy != self.budget_policy_version:
+&gt;               raise RuntimeError("恢复任务不能改变创作预算版本")
+E               RuntimeError: 恢复任务不能改变创作预算版本
+
+src\content_factory\creative_workflow.py:6757: RuntimeError</failure></testcase><testcase classname="tests.test_creative_stage_debug" name="test_resolved_upstream_tampering_with_pending_downstream_stops_before_call[input_sha256]" time="0.084"><failure message="RuntimeError: 恢复任务不能改变创作预算版本">tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/p1_closure_v21/regression_tmp/test_resolved_upstream_tamperi1')
+damage = 'input_sha256'
+
+    @pytest.mark.parametrize("damage", ["prompt_sha256", "input_sha256", "output_sha256", "resolution"])
+    def test_resolved_upstream_tampering_with_pending_downstream_stops_before_call(tmp_path, damage):
+&gt;       run, bundle, script, old_feedback = _rebuilt_run(tmp_path)
+                                            ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_creative_stage_debug.py:307: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_creative_stage_debug.py:217: in _rebuilt_run
+    repaired, _ = _resume(run, bundle, [brief], "director_brief")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_creative_stage_debug.py:200: in _resume
+    result = runner.run(bundle)
+             ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;src.content_factory.creative_workflow.CreativeWorkflow object at 0x000001B8F24BCCB0&gt;
+bundle = MaterialBundle(source_driver='novel', title='测试', source_text='起因句。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁...ter_marker_count': 0}, 'reference_count': 0, 'reference_adaptation': [], 'unread_or_unverified': ['未提供的后续章节不在本次理解范围']})
+
+    def run(self, bundle: MaterialBundle) -&gt; dict[str, Any]:
+        self._reusable_generation = bool(bundle.metadata.get("creative_brief"))
+        if self.writer_prompt_version == EVENT_WRITER_VERSION and (
+                bundle.source_driver != "original" or not bundle.metadata.get("creative_brief")
+                or self.model_profile != CREATE_REVIEW_PROFILE):
+            raise ValueError("事件编剧模块仅用于有简报的MiniMax创作/DeepSeek审查原创任务")
+        self.run_dir.mkdir(parents=True, exist_ok=True)
+        if self.state_path.exists():
+            self.state = _read(self.state_path)
+            if self.state.get("model_profile", LEGACY_MODEL_PROFILE) != self.model_profile:
+                raise RuntimeError("恢复任务不能更换已绑定的模型分工")
+            existing_policy = self.state.get("budget_policy_version", "v1_20260922")
+            if existing_policy != self.budget_policy_version:
+&gt;               raise RuntimeError("恢复任务不能改变创作预算版本")
+E               RuntimeError: 恢复任务不能改变创作预算版本
+
+src\content_factory\creative_workflow.py:6757: RuntimeError</failure></testcase><testcase classname="tests.test_creative_stage_debug" name="test_resolved_upstream_tampering_with_pending_downstream_stops_before_call[output_sha256]" time="0.087"><failure message="RuntimeError: 恢复任务不能改变创作预算版本">tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/p1_closure_v21/regression_tmp/test_resolved_upstream_tamperi2')
+damage = 'output_sha256'
+
+    @pytest.mark.parametrize("damage", ["prompt_sha256", "input_sha256", "output_sha256", "resolution"])
+    def test_resolved_upstream_tampering_with_pending_downstream_stops_before_call(tmp_path, damage):
+&gt;       run, bundle, script, old_feedback = _rebuilt_run(tmp_path)
+                                            ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_creative_stage_debug.py:307: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_creative_stage_debug.py:217: in _rebuilt_run
+    repaired, _ = _resume(run, bundle, [brief], "director_brief")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_creative_stage_debug.py:200: in _resume
+    result = runner.run(bundle)
+             ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;src.content_factory.creative_workflow.CreativeWorkflow object at 0x000001B8F24BD910&gt;
+bundle = MaterialBundle(source_driver='novel', title='测试', source_text='起因句。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁...ter_marker_count': 0}, 'reference_count': 0, 'reference_adaptation': [], 'unread_or_unverified': ['未提供的后续章节不在本次理解范围']})
+
+    def run(self, bundle: MaterialBundle) -&gt; dict[str, Any]:
+        self._reusable_generation = bool(bundle.metadata.get("creative_brief"))
+        if self.writer_prompt_version == EVENT_WRITER_VERSION and (
+                bundle.source_driver != "original" or not bundle.metadata.get("creative_brief")
+                or self.model_profile != CREATE_REVIEW_PROFILE):
+            raise ValueError("事件编剧模块仅用于有简报的MiniMax创作/DeepSeek审查原创任务")
+        self.run_dir.mkdir(parents=True, exist_ok=True)
+        if self.state_path.exists():
+            self.state = _read(self.state_path)
+            if self.state.get("model_profile", LEGACY_MODEL_PROFILE) != self.model_profile:
+                raise RuntimeError("恢复任务不能更换已绑定的模型分工")
+            existing_policy = self.state.get("budget_policy_version", "v1_20260922")
+            if existing_policy != self.budget_policy_version:
+&gt;               raise RuntimeError("恢复任务不能改变创作预算版本")
+E               RuntimeError: 恢复任务不能改变创作预算版本
+
+src\content_factory\creative_workflow.py:6757: RuntimeError</failure></testcase><testcase classname="tests.test_creative_stage_debug" name="test_resolved_upstream_tampering_with_pending_downstream_stops_before_call[resolution]" time="0.085"><failure message="RuntimeError: 恢复任务不能改变创作预算版本">tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/p1_closure_v21/regression_tmp/test_resolved_upstream_tamperi3')
+damage = 'resolution'
+
+    @pytest.mark.parametrize("damage", ["prompt_sha256", "input_sha256", "output_sha256", "resolution"])
+    def test_resolved_upstream_tampering_with_pending_downstream_stops_before_call(tmp_path, damage):
+&gt;       run, bundle, script, old_feedback = _rebuilt_run(tmp_path)
+                                            ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_creative_stage_debug.py:307: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_creative_stage_debug.py:217: in _rebuilt_run
+    repaired, _ = _resume(run, bundle, [brief], "director_brief")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_creative_stage_debug.py:200: in _resume
+    result = runner.run(bundle)
+             ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;src.content_factory.creative_workflow.CreativeWorkflow object at 0x000001B8F24BE210&gt;
+bundle = MaterialBundle(source_driver='novel', title='测试', source_text='起因句。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁...ter_marker_count': 0}, 'reference_count': 0, 'reference_adaptation': [], 'unread_or_unverified': ['未提供的后续章节不在本次理解范围']})
+
+    def run(self, bundle: MaterialBundle) -&gt; dict[str, Any]:
+        self._reusable_generation = bool(bundle.metadata.get("creative_brief"))
+        if self.writer_prompt_version == EVENT_WRITER_VERSION and (
+                bundle.source_driver != "original" or not bundle.metadata.get("creative_brief")
+                or self.model_profile != CREATE_REVIEW_PROFILE):
+            raise ValueError("事件编剧模块仅用于有简报的MiniMax创作/DeepSeek审查原创任务")
+        self.run_dir.mkdir(parents=True, exist_ok=True)
+        if self.state_path.exists():
+            self.state = _read(self.state_path)
+            if self.state.get("model_profile", LEGACY_MODEL_PROFILE) != self.model_profile:
+                raise RuntimeError("恢复任务不能更换已绑定的模型分工")
+            existing_policy = self.state.get("budget_policy_version", "v1_20260922")
+            if existing_policy != self.budget_policy_version:
+&gt;               raise RuntimeError("恢复任务不能改变创作预算版本")
+E               RuntimeError: 恢复任务不能改变创作预算版本
+
+src\content_factory\creative_workflow.py:6757: RuntimeError</failure></testcase><testcase classname="tests.test_creative_stage_debug" name="test_feedback_rejects_mismatched_current_receipt" time="0.080"><failure message="RuntimeError: 恢复任务不能改变创作预算版本">tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/p1_closure_v21/regression_tmp/test_feedback_rejects_mismatch0')
+
+    def test_feedback_rejects_mismatched_current_receipt(tmp_path):
+&gt;       run, bundle, script, _ = _rebuilt_run(tmp_path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_creative_stage_debug.py:325: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_creative_stage_debug.py:217: in _rebuilt_run
+    repaired, _ = _resume(run, bundle, [brief], "director_brief")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_creative_stage_debug.py:200: in _resume
+    result = runner.run(bundle)
+             ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;src.content_factory.creative_workflow.CreativeWorkflow object at 0x000001B8F24BEB10&gt;
+bundle = MaterialBundle(source_driver='novel', title='测试', source_text='起因句。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁...ter_marker_count': 0}, 'reference_count': 0, 'reference_adaptation': [], 'unread_or_unverified': ['未提供的后续章节不在本次理解范围']})
+
+    def run(self, bundle: MaterialBundle) -&gt; dict[str, Any]:
+        self._reusable_generation = bool(bundle.metadata.get("creative_brief"))
+        if self.writer_prompt_version == EVENT_WRITER_VERSION and (
+                bundle.source_driver != "original" or not bundle.metadata.get("creative_brief")
+                or self.model_profile != CREATE_REVIEW_PROFILE):
+            raise ValueError("事件编剧模块仅用于有简报的MiniMax创作/DeepSeek审查原创任务")
+        self.run_dir.mkdir(parents=True, exist_ok=True)
+        if self.state_path.exists():
+            self.state = _read(self.state_path)
+            if self.state.get("model_profile", LEGACY_MODEL_PROFILE) != self.model_profile:
+                raise RuntimeError("恢复任务不能更换已绑定的模型分工")
+            existing_policy = self.state.get("budget_policy_version", "v1_20260922")
+            if existing_policy != self.budget_policy_version:
+&gt;               raise RuntimeError("恢复任务不能改变创作预算版本")
+E               RuntimeError: 恢复任务不能改变创作预算版本
+
+src\content_factory\creative_workflow.py:6757: RuntimeError</failure></testcase><testcase classname="tests.test_creative_stage_debug" name="test_single_step_counts_repaired_version_and_pauses_at_target" time="0.081"><failure message="RuntimeError: 恢复任务不能改变创作预算版本">tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/p1_closure_v21/regression_tmp/test_single_step_counts_repair0')
+
+    def test_single_step_counts_repaired_version_and_pauses_at_target(tmp_path):
+&gt;       run, bundle, script, _ = _rebuilt_run(tmp_path)
+                                 ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_creative_stage_debug.py:337: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_creative_stage_debug.py:217: in _rebuilt_run
+    repaired, _ = _resume(run, bundle, [brief], "director_brief")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_creative_stage_debug.py:200: in _resume
+    result = runner.run(bundle)
+             ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;src.content_factory.creative_workflow.CreativeWorkflow object at 0x000001B8F24BF410&gt;
+bundle = MaterialBundle(source_driver='novel', title='测试', source_text='起因句。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁...ter_marker_count': 0}, 'reference_count': 0, 'reference_adaptation': [], 'unread_or_unverified': ['未提供的后续章节不在本次理解范围']})
+
+    def run(self, bundle: MaterialBundle) -&gt; dict[str, Any]:
+        self._reusable_generation = bool(bundle.metadata.get("creative_brief"))
+        if self.writer_prompt_version == EVENT_WRITER_VERSION and (
+                bundle.source_driver != "original" or not bundle.metadata.get("creative_brief")
+                or self.model_profile != CREATE_REVIEW_PROFILE):
+            raise ValueError("事件编剧模块仅用于有简报的MiniMax创作/DeepSeek审查原创任务")
+        self.run_dir.mkdir(parents=True, exist_ok=True)
+        if self.state_path.exists():
+            self.state = _read(self.state_path)
+            if self.state.get("model_profile", LEGACY_MODEL_PROFILE) != self.model_profile:
+                raise RuntimeError("恢复任务不能更换已绑定的模型分工")
+            existing_policy = self.state.get("budget_policy_version", "v1_20260922")
+            if existing_policy != self.budget_policy_version:
+&gt;               raise RuntimeError("恢复任务不能改变创作预算版本")
+E               RuntimeError: 恢复任务不能改变创作预算版本
+
+src\content_factory\creative_workflow.py:6757: RuntimeError</failure></testcase></testsuite></testsuites>

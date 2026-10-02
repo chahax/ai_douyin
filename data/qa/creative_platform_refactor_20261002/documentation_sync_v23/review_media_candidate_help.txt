@@ -1,0 +1,10 @@
+usage: review_media_candidate.py [-h] --user-statement USER_STATEMENT
+                                 receipt {approved,rejected}
+
+positional arguments:
+  receipt
+  {approved,rejected}
+
+options:
+  -h, --help            show this help message and exit
+  --user-statement USER_STATEMENT

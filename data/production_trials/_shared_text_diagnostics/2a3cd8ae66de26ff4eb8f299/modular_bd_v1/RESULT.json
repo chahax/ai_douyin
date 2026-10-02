@@ -1,0 +1,190 @@
+{
+  "schema": "modular_bd_summary/v1",
+  "generated_at": "2026-10-02T20:55:10.981722+00:00",
+  "new_calls": 7,
+  "effective_calls_started": 49,
+  "new_reported_tokens": 92570,
+  "effective_reported_tokens": 490913,
+  "unknown_token_reservations": 0,
+  "max_total_tokens": 500000,
+  "remaining_tokens": 9087,
+  "assistant_batch_call_ceiling": 16,
+  "old_budget_reset": false,
+  "old_governance_migrated": false,
+  "frozen_parent_unchanged": true,
+  "media_calls": 0,
+  "semantic_approval": false,
+  "calls": [
+    {
+      "ordinal": 43,
+      "label": "draft_v1",
+      "status": "contract_valid",
+      "usage": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f441bbc2daeca8e477807d88f46c6",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 7846,
+        "completion_tokens": 1599,
+        "total_tokens": 9445
+      },
+      "failure": null,
+      "validation_error": null
+    },
+    {
+      "ordinal": 44,
+      "label": "script_review_v1",
+      "status": "contract_rejected",
+      "usage": {
+        "role": "director",
+        "provider": "deepseek",
+        "requested_model": "deepseek-flash",
+        "response_model": "deepseek-flash",
+        "response_id": "7b557db4-f7ee-43d4-af4b-d2826822f050",
+        "finish_reason": "stop",
+        "thinking_mode": "disabled",
+        "output_mode": "content",
+        "prompt_tokens": 7385,
+        "completion_tokens": 5499,
+        "total_tokens": 12884
+      },
+      "failure": {
+        "schema": "creative_failure/v1",
+        "code": "v6缺少对照证据",
+        "category": "validation",
+        "next_action": "existing_bounded_contract_repair",
+        "response_received": true,
+        "automatic_retry": false,
+        "blocks_handoff": true
+      },
+      "validation_error": {
+        "message": "v6缺少对照证据: [{\"check_path\": \"coverage.0.checks.assets.evidence_refs\", \"missing_source_prefixes\": [\"script.beats.0.\"]}, {\"check_path\": \"coverage.1.checks.assets.evidence_refs\", \"missing_source_prefixes\": [\"script.beats.1.\"]}, {\"check_path\": \"coverage.2.checks.assets.evidence_refs\", \"missing_source_prefixes\": [\"script.beats.2.\"]}, {\"check_path\": \"coverage.3.checks.assets.evidence_refs\", \"missing_source_prefixes\": [\"script.beats.3.\"]}, {\"check_path\": \"coverage.4.checks.assets.evidence_refs\", \"missing_source_prefixes\": [\"script.beats.4.\"]}]",
+        "detail": {}
+      }
+    },
+    {
+      "ordinal": 45,
+      "label": "draft_v2",
+      "status": "contract_rejected",
+      "usage": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f4585906f7d2c415aa9653c034f70",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 7819,
+        "completion_tokens": 2597,
+        "total_tokens": 10416
+      },
+      "failure": {
+        "schema": "creative_failure/v1",
+        "code": "剧本节拍时长与总时长不符",
+        "category": "validation",
+        "next_action": "existing_bounded_contract_repair",
+        "response_received": true,
+        "automatic_retry": false,
+        "blocks_handoff": true
+      },
+      "validation_error": {
+        "message": "剧本节拍时长与总时长不符",
+        "detail": {}
+      }
+    },
+    {
+      "ordinal": 46,
+      "label": "linear_draft_v3",
+      "status": "contract_valid",
+      "usage": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f482bf8e593513e11c6becd8b4ff4",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 8583,
+        "completion_tokens": 3319,
+        "total_tokens": 11902
+      },
+      "failure": null,
+      "validation_error": null
+    },
+    {
+      "ordinal": 47,
+      "label": "linear_script_review_v4",
+      "status": "contract_valid",
+      "usage": {
+        "role": "director",
+        "provider": "deepseek",
+        "requested_model": "deepseek-flash",
+        "response_model": "deepseek-flash",
+        "response_id": "a47abb41-7045-464d-a3e9-be708f511183",
+        "finish_reason": "stop",
+        "thinking_mode": "disabled",
+        "output_mode": "content",
+        "prompt_tokens": 9290,
+        "completion_tokens": 9134,
+        "total_tokens": 18424
+      },
+      "failure": null,
+      "validation_error": null
+    },
+    {
+      "ordinal": 48,
+      "label": "linear_draft_v5",
+      "status": "contract_valid",
+      "usage": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070f49c3769dfbedd32d8af087e7634b",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 8087,
+        "completion_tokens": 3471,
+        "total_tokens": 11558
+      },
+      "failure": null,
+      "validation_error": null
+    },
+    {
+      "ordinal": 49,
+      "label": "linear_script_review_v6",
+      "status": "interface_rejected",
+      "usage": {
+        "role": "director",
+        "provider": "deepseek",
+        "requested_model": "deepseek-flash",
+        "response_model": "deepseek-flash",
+        "response_id": "bc62f262-33d2-48bc-81ba-d842a7e797a6",
+        "finish_reason": "length",
+        "thinking_mode": "disabled",
+        "output_mode": "content",
+        "prompt_tokens": 6940,
+        "completion_tokens": 11001,
+        "total_tokens": 17941,
+        "response_fault_code": "RESPONSE_TRUNCATED"
+      },
+      "failure": {
+        "schema": "creative_failure/v1",
+        "code": "RESPONSE_TRUNCATED",
+        "category": "interface",
+        "next_action": "diagnose_output_protocol",
+        "response_received": true,
+        "automatic_retry": false,
+        "blocks_handoff": true
+      },
+      "validation_error": null
+    }
+  ]
+}

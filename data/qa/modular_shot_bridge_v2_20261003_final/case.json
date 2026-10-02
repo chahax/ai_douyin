@@ -1,0 +1,380 @@
+{
+  "context": {
+    "fixture_only": true,
+    "script": {
+      "title": "离线多镜桥接样例",
+      "duration_seconds": 12,
+      "beats": [
+        {
+          "id": "B1",
+          "duration_seconds": 6,
+          "event": "乙拿起桌上的文件夹",
+          "dialogue": [
+            {
+              "speaker": "乙",
+              "text": "明天见。"
+            }
+          ]
+        },
+        {
+          "id": "B2",
+          "duration_seconds": 6,
+          "event": "乙坐下",
+          "dialogue": []
+        }
+      ]
+    },
+    "static_visual_manifest": {
+      "schema": "static_visual_manifest_v1",
+      "render": {
+        "style_option_id": "S01",
+        "visual_medium": "二维手绘动画",
+        "palette": "灰蓝米白",
+        "light_source": "右上暖灯"
+      },
+      "characters": [
+        {
+          "id": "C01",
+          "name": "甲",
+          "age_group": "成年",
+          "hair": "短发",
+          "clothing": "通勤衬衣",
+          "body_shape": "成年体型"
+        },
+        {
+          "id": "C02",
+          "name": "乙",
+          "age_group": "成年",
+          "hair": "短发",
+          "clothing": "通勤衬衣",
+          "body_shape": "成年体型"
+        }
+      ],
+      "props": [
+        {
+          "id": "P01",
+          "name": "文件夹",
+          "appearance": "墨蓝A4封面",
+          "owner_id": "C02"
+        }
+      ],
+      "scene": {
+        "name": "办公室",
+        "elements": [
+          {
+            "id": "E01",
+            "name": "桌子",
+            "appearance": "米白桌面"
+          },
+          {
+            "id": "E02",
+            "name": "椅子",
+            "appearance": "深灰靠背椅"
+          }
+        ],
+        "relations": [
+          {
+            "subject": "E02",
+            "relation": "behind",
+            "reference": "E01"
+          }
+        ]
+      }
+    },
+    "references": [
+      {
+        "id": "R01",
+        "text": "离线表达机制：刺激完成后切到承受者可读反应。"
+      }
+    ],
+    "selected_assets": [],
+    "fixture_action_dialogue_order": [
+      [
+        "action",
+        "take"
+      ],
+      [
+        "dialogue",
+        "明天见。"
+      ],
+      [
+        "action",
+        "sit"
+      ]
+    ]
+  },
+  "direction": {
+    "schema": "narrative_multishot_direction_offline_v2",
+    "context_sha256": "419024f262d676b10474e75703d3a75c87043dd7fae5c437a20debe06c5c0916",
+    "emotional_arc": "离开意图到暂缓",
+    "causal_chain": [
+      "拿起文件夹使离开意图可见",
+      "坐下使暂缓成为具体行动"
+    ],
+    "ending_intent": "停留在对方反应上",
+    "initial_state": {
+      "C01": {
+        "posture": "standing",
+        "position": "桌前",
+        "gaze": "C02",
+        "affect": "平静",
+        "facing": "桌面"
+      },
+      "C02": {
+        "posture": "standing",
+        "position": "桌旁",
+        "gaze": "C01",
+        "affect": "平静",
+        "facing": "桌面"
+      },
+      "P01": {
+        "holder": "none",
+        "location": "桌面"
+      }
+    },
+    "spatial_contract": {
+      "seats": [
+        {
+          "seat_id": "E02",
+          "access_positions": [
+            "桌旁"
+          ],
+          "required_facing": "桌面"
+        }
+      ]
+    },
+    "beats": [
+      {
+        "beat_id": "B1",
+        "shots": [
+          {
+            "shot_id": "B1_S1",
+            "purpose": "原事件",
+            "composition": "行动中景",
+            "camera": "稳定单机位",
+            "dialogue_mode": "画内对白",
+            "cut_reason": "新增事实后观察影响",
+            "new_information": "既定行动已完成",
+            "observation_object": "乙",
+            "source_refs": [
+              "script.beats.0.event",
+              "script.beats.0.dialogue.0.text"
+            ],
+            "event_owner": true,
+            "dialogue_indices": [
+              0
+            ],
+            "performance_requirements": []
+          },
+          {
+            "shot_id": "B1_S2",
+            "purpose": "让反应可读",
+            "composition": "甲的反应近景",
+            "camera": "稳定单机位",
+            "dialogue_mode": "无对白",
+            "cut_reason": "新增事实后观察影响",
+            "new_information": "甲承受行动后的态度",
+            "observation_object": "甲",
+            "source_refs": [
+              "script.beats.0.event"
+            ],
+            "event_owner": false,
+            "dialogue_indices": [],
+            "performance_requirements": [
+              {
+                "id": "R1",
+                "subject": "C01",
+                "stimulus_source": "script.beats.0.dialogue.0.text",
+                "relation": "after",
+                "minimum_seconds": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "beat_id": "B2",
+        "shots": [
+          {
+            "shot_id": "B2_S1",
+            "purpose": "原事件",
+            "composition": "行动中景",
+            "camera": "稳定单机位",
+            "dialogue_mode": "无对白",
+            "cut_reason": "新增事实后观察影响",
+            "new_information": "既定行动已完成",
+            "observation_object": "乙",
+            "source_refs": [
+              "script.beats.1.event"
+            ],
+            "event_owner": true,
+            "dialogue_indices": [],
+            "performance_requirements": []
+          },
+          {
+            "shot_id": "B2_S2",
+            "purpose": "让反应可读",
+            "composition": "甲的反应近景",
+            "camera": "稳定单机位",
+            "dialogue_mode": "无对白",
+            "cut_reason": "新增事实后观察影响",
+            "new_information": "甲承受行动后的态度",
+            "observation_object": "甲",
+            "source_refs": [
+              "script.beats.1.event"
+            ],
+            "event_owner": false,
+            "dialogue_indices": [],
+            "performance_requirements": [
+              {
+                "id": "R2",
+                "subject": "C01",
+                "stimulus_source": "script.beats.1.event",
+                "relation": "after",
+                "minimum_seconds": 2
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "locals": [
+    {
+      "schema": "narrative_multishot_local_offline_v2",
+      "direction_sha256": "4d5883b3eb925a76d9ae05b4b986b6943424ab1d44111c32ba0355c87747e246",
+      "shot_id": "B1_S1",
+      "duration_seconds": 3,
+      "groups": [
+        {
+          "id": "G1_1",
+          "script_slot": "before",
+          "kind": "action",
+          "duration_seconds": 1,
+          "hold_subject": "",
+          "performance": "完成原事件",
+          "operations": [
+            {
+              "kind": "take",
+              "actor": "C02",
+              "target": "P01",
+              "value": "右手"
+            }
+          ]
+        }
+      ],
+      "dialogue_performance": "原说话人自然完整说出原台词",
+      "reaction": {
+        "anchor": "G1_1",
+        "subject": "C01",
+        "meaning": "观察影响"
+      },
+      "cut_after_event_id": "dialogue_0",
+      "completion_condition": "all_required_events_complete",
+      "source_event_anchor": "G1_1",
+      "performance_windows": [],
+      "input_sha256": "44aca050b6cfdc01e2b55156d5405f55c4b6f11d7ba3fea9c092cb26f34ca6ea"
+    },
+    {
+      "schema": "narrative_multishot_local_offline_v2",
+      "direction_sha256": "4d5883b3eb925a76d9ae05b4b986b6943424ab1d44111c32ba0355c87747e246",
+      "shot_id": "B1_S2",
+      "duration_seconds": 3,
+      "groups": [
+        {
+          "id": "G1_2",
+          "script_slot": "before",
+          "kind": "hold",
+          "duration_seconds": 2,
+          "hold_subject": "C01",
+          "performance": "保持甲可读的反应",
+          "operations": []
+        }
+      ],
+      "dialogue_performance": "原说话人自然完整说出原台词",
+      "reaction": {
+        "anchor": "G1_2",
+        "subject": "C01",
+        "meaning": "观察影响"
+      },
+      "cut_after_event_id": "G1_2",
+      "completion_condition": "all_required_events_complete",
+      "source_event_anchor": "G1_2",
+      "performance_windows": [
+        {
+          "requirement_id": "R1",
+          "anchor": "G1_2"
+        }
+      ],
+      "input_sha256": "dd23d23e2611fb7e7f7d1fb5d845e8a22e43d58db7ea6793b729debc0c64db54"
+    },
+    {
+      "schema": "narrative_multishot_local_offline_v2",
+      "direction_sha256": "4d5883b3eb925a76d9ae05b4b986b6943424ab1d44111c32ba0355c87747e246",
+      "shot_id": "B2_S1",
+      "duration_seconds": 3,
+      "groups": [
+        {
+          "id": "G2_1",
+          "script_slot": "before",
+          "kind": "action",
+          "duration_seconds": 1,
+          "hold_subject": "",
+          "performance": "完成原事件",
+          "operations": [
+            {
+              "kind": "sit",
+              "actor": "C02",
+              "target": "E02",
+              "value": "椅上"
+            }
+          ]
+        }
+      ],
+      "dialogue_performance": "原说话人自然完整说出原台词",
+      "reaction": {
+        "anchor": "G2_1",
+        "subject": "C01",
+        "meaning": "观察影响"
+      },
+      "cut_after_event_id": "G2_1",
+      "completion_condition": "all_required_events_complete",
+      "source_event_anchor": "G2_1",
+      "performance_windows": [],
+      "input_sha256": "88dd31f8e6968e47ba38dc53faba88d4aa425b639303f1547f4af83267bd644f"
+    },
+    {
+      "schema": "narrative_multishot_local_offline_v2",
+      "direction_sha256": "4d5883b3eb925a76d9ae05b4b986b6943424ab1d44111c32ba0355c87747e246",
+      "shot_id": "B2_S2",
+      "duration_seconds": 3,
+      "groups": [
+        {
+          "id": "G2_2",
+          "script_slot": "before",
+          "kind": "hold",
+          "duration_seconds": 2,
+          "hold_subject": "C01",
+          "performance": "保持甲可读的反应",
+          "operations": []
+        }
+      ],
+      "dialogue_performance": "原说话人自然完整说出原台词",
+      "reaction": {
+        "anchor": "G2_2",
+        "subject": "C01",
+        "meaning": "观察影响"
+      },
+      "cut_after_event_id": "G2_2",
+      "completion_condition": "all_required_events_complete",
+      "source_event_anchor": "G2_2",
+      "performance_windows": [
+        {
+          "requirement_id": "R2",
+          "anchor": "G2_2"
+        }
+      ],
+      "input_sha256": "421fbf3224f525412561e48c778bf23efa7964df5a20e3e575cc767d2e9b4cf2"
+    }
+  ]
+}

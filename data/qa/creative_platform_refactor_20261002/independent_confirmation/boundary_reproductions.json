@@ -1,0 +1,29 @@
+{
+  "must_fix_feedback": {
+    "before_calls": 2,
+    "after_calls": 3,
+    "after_status": "debug_breakpoint",
+    "next_stage": "writer_script",
+    "feedback_status": "revision_required",
+    "validity": {
+      "writer_analysis": "needs_revision",
+      "director_brief": "invalidated",
+      "writer_script": "current"
+    },
+    "must_fix_prevented_progression": false
+  },
+  "media_receipt_integrity": {
+    "mutated_source_receipt_rejected": false,
+    "tail_binding_returned": {
+      "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\independent_confirmation\\media_npfimf2v\\receipt.last.png",
+      "sha256": "29add8e99e6217024a2dfdd347425b7df4653665791f6f4feedb22cc6e90095c"
+    },
+    "review_approved_video_is_current_receipt_video": false
+  },
+  "expired_lease_late_result": {
+    "recovered_count": 1,
+    "status_after_recovery": "outcome_unknown",
+    "status_after_old_worker_returned": "completed",
+    "old_worker_blocked_after_lease_lost": false
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "schema_version": "creative_eval_configuration/v1",
+  "source_hash": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+  "created_at": "2026-09-28T13:54:12.499432+00:00",
+  "implementation_status": "offline_implemented_not_production_validated",
+  "config": {
+    "schema_version": "creative_eval_config/v1",
+    "automatic_paid_execution": false,
+    "dataset": {
+      "approved_independent_cases": 80,
+      "holdout_cases": 40,
+      "categories": [
+        "action",
+        "interaction",
+        "space",
+        "camera"
+      ],
+      "per_category_error": 10,
+      "per_category_correct": 10,
+      "holdout_per_category_error": 5,
+      "holdout_per_category_correct": 5,
+      "repetitions": 3,
+      "screening_development_cases": 12
+    },
+    "quality": {
+      "major_recall": 1.0,
+      "all_recall": 0.95,
+      "per_category_recall": 0.9,
+      "correct_false_positive_max": 0.05,
+      "decidable_unknown_max": 0.05,
+      "references_valid": 1.0,
+      "required_evidence_present": 1.0
+    },
+    "repair": {
+      "cases": 12,
+      "min_success": 11,
+      "new_major_max": 0,
+      "per_category": 3
+    },
+    "production": {
+      "independent_briefs": 6,
+      "min_qualified": 5,
+      "max_content_repairs": 1,
+      "boundary_cases": 10,
+      "boundary_correct": 10
+    },
+    "optimization": {
+      "input_token_reduction": 0.3,
+      "comparable_model_cost_reduction": 0.2,
+      "median_latency_reduction": 0.2,
+      "p95_latency_increase_max": 0.1,
+      "human_active_minutes_increase_max": 0.0
+    }
+  }
+}

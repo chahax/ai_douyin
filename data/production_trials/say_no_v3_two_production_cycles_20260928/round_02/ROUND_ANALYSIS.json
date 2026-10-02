@@ -1,0 +1,31 @@
+{
+  "schema": "production_round_analysis/v1",
+  "analysis_complete": true,
+  "round": 2,
+  "passed": false,
+  "calls_started": 4,
+  "reported_tokens": 36249,
+  "reached": "director_state_plan__00__contract_repair",
+  "status": "production_exception",
+  "deepseek_review_reached": false,
+  "qualified_handoff": false,
+  "media_calls": 0,
+  "root_causes": [
+    "初计划对白之后保持被标成dialogue_performance，超对白窗口。",
+    "修复disabled仍返回12000 completion tokens英文分析、finish_reason=length，没有完整JSON。"
+  ],
+  "actual_content_failures": [
+    "P02初态已由陈禾持有，B1再次take，首态提前完成拿取。",
+    "林遥初态已桌前，随后又走到同位置；陈禾初态看人，表演却称从桌面抬眼。",
+    "B2自由文视线在夹与脸之间，操作只保留看夹；B4移动方向与未更新gaze存在执行不一致。"
+  ],
+  "confirmed_improvements": [
+    "B3明确0–1抬眼、1–3稳定对视、3后软化放夹；持续保持窗规则在原候选实际体现。",
+    "四句对白均低于5单位/秒。"
+  ],
+  "unverified": [
+    "leaf_catalog_v1本轮未到DeepSeek，不能宣称引用修复已生产通过。",
+    "资产设计、首帧计划、联合审核及完整handoff未完成。"
+  ],
+  "evidence_report": "INDEPENDENT_CONTENT_REVIEW.md"
+}

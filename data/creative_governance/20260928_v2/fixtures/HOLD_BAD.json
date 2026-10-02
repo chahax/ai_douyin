@@ -1,0 +1,33 @@
+{
+  "schema_version": "creative_eval_case/v1",
+  "source_hash": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+  "created_at": "2026-09-28T13:54:12.499432+00:00",
+  "implementation_status": "candidate_label_not_gold",
+  "case": {
+    "case_id": "HOLD_BAD",
+    "category": "action",
+    "case_kind": "error",
+    "scenario": "turn 0..1; declared hold 0..2; stimulus 2",
+    "expected_disposition": "failed",
+    "label_status": "candidate",
+    "adjudication": {
+      "approved_by": null,
+      "approved_at": null,
+      "candidate_author": "Codex assistant; requires independent human adjudication"
+    },
+    "source_family": "HOLD_checker",
+    "independence_group": "HOLD_checker",
+    "split": "development",
+    "used_for_prompt_tuning": true,
+    "expected_issues": [
+      {
+        "issue_id": "HOLD_BAD",
+        "severity": "major"
+      }
+    ],
+    "evidence": [],
+    "source_paths": [],
+    "production_validated": false,
+    "scope": "Deterministic checker fixture; not an independent story or approved quality label"
+  }
+}

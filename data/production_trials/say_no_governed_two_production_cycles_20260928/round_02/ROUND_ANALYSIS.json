@@ -1,0 +1,58 @@
+{
+  "schema": "production_round_analysis/v1",
+  "round": 2,
+  "analysis_complete": true,
+  "passed": false,
+  "status": "production_exception",
+  "calls_started": 3,
+  "reported_tokens": 29749,
+  "media_calls": 0,
+  "deepseek_review_reached": false,
+  "qualified_handoff": false,
+  "interface_failures": [
+    {
+      "code": "PLAN_SCHEMA_INVALID",
+      "evidence": "Multiple hold.operations fields are empty strings; B4_G5 group.kind is sit rather than action/hold."
+    },
+    {
+      "code": "PLAN_PATCH_VALUE_SCHEMA",
+      "evidence": "Repair arrays invent operation.kind=hold, which is unsupported. Deterministic typed patch validation stopped before merge."
+    }
+  ],
+  "content_failures": [
+    {
+      "id": "STATE_PRECONDITION",
+      "category": "action",
+      "evidence": "Initial C02 is sitting and P01 held by C02; B1 repeats take, B4 repeats sit without stand/move to the required access position."
+    },
+    {
+      "id": "R01",
+      "category": "interaction",
+      "evidence": "B2 gaze rises to face; B3 instead looks down at folder. B3_G2 claims mutual gaze while specifying gaze remains on folder."
+    },
+    {
+      "id": "TIMING_CAPACITY",
+      "category": "timing",
+      "evidence": "Each beat allocates 10 seconds of groups before adding its locked spoken line; all four exceed their 10-second beat budget."
+    },
+    {
+      "id": "POST_DIALOGUE_PROSE",
+      "category": "interaction_timing",
+      "evidence": "Several during groups describe speech although protocol places the first and only line before during."
+    }
+  ],
+  "improvements": [
+    "place now targets the folder with desk as destination",
+    "face and sit are separate groups",
+    "typed patch invalid operation blocked before merge"
+  ],
+  "remaining_workflow_causes": [
+    "Repair scope selector only handles PLAN_HOLD_HAS_ACTION; this PLAN_SCHEMA_INVALID used allowed_paths=null and full typed patch schema. Repair consumed 16307 tokens.",
+    "Tool schema is not a guarantee of provider response compliance; local validation is required.",
+    "New strict structure does not solve initial-state, gaze or time-budget reasoning.",
+    "DeepSeek was never reached, so these rounds do not measure its recall or approve its prompts."
+  ],
+  "actual_cost": null,
+  "cost_note": "No provider billed currency receipt available; token counts are not currency cost.",
+  "next_paid_run_authorized": false
+}

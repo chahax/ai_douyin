@@ -1,0 +1,25 @@
+{
+  "template": "video_smoothness/v1",
+  "input_video": "../../data/qa/smoothness_v1/input.mp4",
+  "input_control_manifest": "../../data/qa/smoothness_v1/input.control.manifest.json",
+  "input_control_report": "../../data/qa/smoothness_v1/input.control.report.json",
+  "output_video": "../../data/qa/smoothness_v1/output_smooth30.mp4",
+  "smoothing": {
+    "algorithm": "minterpolate",
+    "target_fps": 30,
+    "analysis_width": 160
+  },
+  "acceptance": {
+    "minimum_score_gain": 5,
+    "maximum_duplicate_ratio": 0.12,
+    "minimum_motion_retention": 0.7,
+    "maximum_motion_retention": 1.4,
+    "maximum_duration_delta": 0.08,
+    "minimum_motion_distance": 0.12,
+    "duplicate_threshold": 0.12
+  },
+  "encoding": {
+    "crf": 18,
+    "preset": "slow"
+  }
+}

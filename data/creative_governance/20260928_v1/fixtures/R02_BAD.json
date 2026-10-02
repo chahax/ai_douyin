@@ -1,0 +1,70 @@
+{
+  "schema_version": "creative_eval_case/v1",
+  "source_hash": "efef00040687c3cdc82f2715df2d3911a3b14f7114e5da4f2efd2c5fd05042a8",
+  "created_at": "2026-09-28T13:49:21.882337+00:00",
+  "implementation_status": "candidate_label_not_gold",
+  "case": {
+    "case_id": "R02_BAD",
+    "category": "camera",
+    "case_kind": "error",
+    "scenario": "camera要求cut on the moment the folder touches the desk surface；程序排时放夹于6.5秒完成，接受对白6.5–9.371秒，cut_reason却要求说完接受再切。",
+    "expected_disposition": "failed",
+    "label_status": "candidate",
+    "adjudication": {
+      "approved_by": null,
+      "approved_at": null,
+      "candidate_author": "Codex assistant; requires independent human adjudication"
+    },
+    "source_family": "say_no_20260928",
+    "independence_group": "say_no_20260928",
+    "split": "development",
+    "used_for_prompt_tuning": true,
+    "expected_issues": [
+      {
+        "issue_id": "R02",
+        "severity": "major"
+      }
+    ],
+    "evidence": [
+      {
+        "path": "state_plan.beats.2.camera",
+        "value": "Static two-shot, eye level; slow, almost imperceptible settling of framing on their held gaze; cut on the moment the folder touches the desk surface."
+      },
+      {
+        "path": "state_plan.beats.2.cut_reason",
+        "value": "Chen He places the folder down on her own desk and quietly accepts out loud — the held silence resolves into acceptance, refusal honored, relationship intact."
+      },
+      {
+        "path": "state_plan.beats.2.groups.2",
+        "value": {
+          "id": "B3_G3",
+          "script_slot": "before",
+          "kind": "action",
+          "duration_seconds": 3,
+          "hold_subject": "",
+          "performance": "Chen He's expression softens — brow and jaw ease; she brings her hand down and lays the kraft-brown folder flat on her own desk surface next to her other papers, releasing it without ceremony; no further gesture toward Lin Yao.",
+          "operations": [
+            {
+              "kind": "affect",
+              "actor": "C02",
+              "target": "",
+              "value": "quiet acceptance, softened face"
+            },
+            {
+              "kind": "place",
+              "actor": "C02",
+              "target": "P01",
+              "value": "on Chen He's desk (E01)"
+            }
+          ]
+        }
+      }
+    ],
+    "source_paths": [
+      "state_plan.beats.2.camera",
+      "state_plan.beats.2.cut_reason",
+      "state_plan.beats.2.groups.2"
+    ],
+    "production_validated": false
+  }
+}

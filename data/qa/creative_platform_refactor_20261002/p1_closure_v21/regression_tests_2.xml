@@ -1,0 +1,1561 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="5" skipped="0" tests="15" time="4.845" timestamp="2026-10-02T14:54:55.490674+08:00" hostname="DESKTOP-DP111LI"><testcase classname="tests.test_creative_stage_debug" name="test_breakpoint_and_next_stage_reuse_saved_budget_and_artifacts" time="0.094" /><testcase classname="tests.test_creative_stage_debug" name="test_feedback_binds_current_hash_and_invalidates_only_downstream_debug_view" time="0.068" /><testcase classname="tests.test_creative_stage_debug" name="test_immutable_versions_have_deterministic_diff" time="0.016" /><testcase classname="tests.test_creative_stage_debug" name="test_noninitial_must_fix_resume_replays_valid_upstream_and_reaches_target" time="0.122" /><testcase classname="tests.test_creative_stage_debug" name="test_resolved_repair_context_replays_then_rebuilds_invalidated_downstream" time="0.177" /><testcase classname="tests.test_creative_stage_debug" name="test_two_successive_script_repairs_select_current_keep_history_and_budget" time="0.390" /><testcase classname="tests.test_creative_stage_debug" name="test_multiple_pending_stages_follow_dependencies_not_feedback_order[False]" time="0.391" /><testcase classname="tests.test_creative_stage_debug" name="test_multiple_pending_stages_follow_dependencies_not_feedback_order[True]" time="0.295" /><testcase classname="tests.test_creative_stage_debug" name="test_second_round_budget_exhaustion_keeps_pending_feedback_and_counters" time="0.190"><failure message="RuntimeError: 模型调用预算已满；保存进度，未跳过检查">tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/p1_closure_v21/regression_tmp_2/test_second_round_budget_exhau0')
+
+    def test_second_round_budget_exhaustion_keeps_pending_feedback_and_counters(tmp_path):
+        run, bundle, script, _ = _rebuilt_run(tmp_path, max_calls=5)
+        service = CreativeStageCommandService(run)
+        feedback = service.feedback("writer_script", "FIXTURE repair after budget exhaustion")
+&gt;       state, clients = _resume(run, bundle, [{**script, "title": "unreachable"}])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_creative_stage_debug.py:299: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_creative_stage_debug.py:205: in _resume
+    result = runner.run(bundle)
+             ^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:7245: in run
+    beat_plan = self._stage(
+src\content_factory\creative_workflow.py:6009: in _stage
+    raw = self._stage_impl(name, role, payload, validator)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;src.content_factory.creative_workflow.CreativeWorkflow object at 0x00000226D2E35B50&gt;
+name = 'writer_script', role = 'writer'
+payload = {'materials': {'source_driver': 'novel', 'title': '测试', 'story_source': '起因句。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁...ial_strategy': '同一空间', ...}, 'candidate_lock': {'id': 'C01', 'title': '误会', 'setup': '相遇', 'conflict': '误会', ...}, ...}
+validator = &lt;function CreativeWorkflow.run.&lt;locals&gt;.&lt;lambda&gt; at 0x00000226D2EAA400&gt;
+
+    def _stage_impl(
+        self,
+        name: str,
+        role: str,
+        payload: dict[str, Any],
+        validator: Any,
+    ) -&gt; dict[str, Any]:
+        self._active_stage_name = name
+        recovery = self.state.get("stage_recovery_bindings", {}).get(name)
+        if recovery:
+            if recovery.get("version") != "failed_plan_full_rebuild_v1":
+                raise RuntimeError("不支持的失败计划恢复绑定")
+            payload = {**payload, "stage_recovery_requirements": recovery["requirements"],
+                       "previous_invalid_output": recovery["previous_invalid_output"]}
+        if name.startswith("writer_revise") and self._script_revision_mode() == "full_script":
+            payload = {**payload, "revision_mode": "full_script"}
+        if name.startswith("director_state_plan") and payload.get("state_plan_version") in ("whole_film_action_plan_v1", "whole_film_action_plan_v2") and payload.get("plan_patch_base"):
+            payload = {**payload, "source_sha256": _hash(payload["plan_patch_base"])}
+            if payload.get("previous_draft") == payload["plan_patch_base"]:
+                payload.pop("previous_draft", None)
+        if name.startswith(("writer_check", "script_review")) and self.review_policy_version == REVIEW_V6:
+            evidence_interface = self.state.get("review_evidence_interface_version")
+            if evidence_interface:
+                if evidence_interface not in ("leaf_catalog_v1", "evidence_ids_v1"):
+                    raise CreativeContractError("不支持的审核证据接口版本")
+                payload = {**payload, "review_evidence_interface_version": evidence_interface}
+                hints_version = self.state.get("evidence_id_repair_hints_version")
+                if hints_version:
+                    if evidence_interface != "evidence_ids_v1" or hints_version != "missing_source_candidates_v1":
+                        raise CreativeContractError("不支持的审核证据候选导航版本")
+                    payload["evidence_id_repair_hints_version"] = hints_version
+        path = self.run_dir / f"{name}.json"
+        if name.startswith(("director_shots", "director_revise")):
+            limits = None
+            if path.exists():
+                messages = _read(path).get("request", {}).get("messages", [])
+                if messages:
+                    limits = json.loads(messages[-1]["content"]).get("executor_constraints")
+            elif getattr(self, "_reusable_generation", False):
+                audit = audit_creative_executor({"shots": []})
+                limits = {k: audit[k] for k in ("provider", "model", "duration_min", "duration_max", "evidence")}
+                limits["rule"] = "每镜时长须在范围内；长节拍拆成有叙事目的的镜头。切镜仍需实际衔接适配，不得伪称原始尾帧连续。"
+            if limits:
+                payload = {**payload, "executor_constraints": limits}
+                original_validator = validator
+                def validate_executable(value):
+                    original_validator(value)
+                    resolved = value
+                    if "replace_beats" in value:
+                        resolved = _apply_director_revision_patch(
+                            payload["previous_shots"], value, payload["affected_beat_ids"])
+                    invalid = [f"{row['id']}={row['duration_seconds']}秒"
+                               for row in resolved.get("shots", [])
+                               if type(row.get("duration_seconds")) is not int
+                               or not limits["duration_min"] &lt;= row["duration_seconds"] &lt;= limits["duration_max"]]
+                    if invalid:
+                        raise CreativeContractError(
+                            f"视频执行时长超限 {limits['duration_min']}—{limits['duration_max']}秒: {invalid}；拆镜时保留对白顺序与情绪窗口")
+                validator = validate_executable
+        if name.startswith("director_production_design") and not path.exists():
+            payload = deepcopy(payload)
+            payload["planning_rules"] = {
+                "reuse": "required_tags保留真实兼容要求，不为命中素材而删掉服装、光线等约束。指定复用必须与目录一致；未证实或需要改造时列issues或明确新建。未知布局需实际看图，不得猜测。",
+                "opening": "逐镜依据storyboard.start_state写t=0单张静态首帧；不复制整段视频prompt，不写随后、说完、转向、递出等镜内事件；不得把镜内事件提前完成。",
+                "assets": "asset_ids必须包含本镜所有可见人物（含手、背影、局部）及场景对应ID；纯画外发声不等于入画。固定左右、服装和道具首态与分镜一致。",
+                "dialogue": "逐句核对说话人是否入画，画内/画外/混合模式须与构图及生成提示一致。",
+                "review": "issues和previous_design为实际返修依据，逐项处理，不以自评分替代审核。",
+            }
+            if hasattr(self, "_production_revision_context"):
+                payload.update(self._production_revision_context)
+        elif name.startswith("director_production_design") and path.exists():
+            messages = _read(path).get("request", {}).get("messages", [])
+            if messages:
+                recorded = json.loads(messages[-1]["content"])
+                for key in ("planning_rules", "issues", "previous_design"):
+                    if key in recorded:
+                        payload = {**payload, key: recorded[key]}
+        event_binding = self.state.get("writer_prompt_binding")
+        original_director_binding = self.state.get("original_director_binding")
+        original_directing = bool(event_binding and original_director_binding and name.startswith("director_shots"))
+        revision_binding = None
+        if event_binding and original_director_binding and name.startswith("director_revise"):
+            revision_binding = self.state.get("original_director_revision_bindings", {}).get(name)
+            if revision_binding is None and not path.exists():
+                revision_binding = bind_original_director_revision(original_director_binding["prompt"])
+                self.state.setdefault("original_director_revision_bindings", {})[name] = revision_binding
+                self._save()
+        if original_directing or revision_binding:
+            payload = {**payload, "creative_brief": event_binding["creative_brief"]}
+        event_authoring = bool(event_binding and name.startswith(("writer_script", "writer_revise")))
+        if event_binding and name.startswith(("writer_script", "writer_revise", "writer_check")):
+            payload = {**payload, "creative_brief": event_binding["creative_brief"]}
+        priority_binding = self.state.get("original_brief_priority_binding")
+        if event_binding and priority_binding and name.startswith(("writer_analysis", "director_brief", "writer_director_feedback")):
+            payload = {**payload, "creative_brief": event_binding["creative_brief"]}
+        if event_authoring:
+            upstream_validator = validator
+            def validate_original_event_result(value):
+                upstream_validator(value)
+                resolved = value
+                if name.startswith("writer_revise") and payload.get("affected_beat_ids"):
+                    resolved = _writer_revision_result(payload["previous_script"], value, payload["affected_beat_ids"], allow_summary_update=payload.get("allow_summary_update", False), revision_mode=self._script_revision_mode())
+                validate_brief_script(resolved, event_binding["creative_brief"])
+            validator = validate_original_event_result
+        if self.review_policy_version in REVIEW_POLICY_VERSIONS:
+            if name.startswith("writer_check"):
+                legacy_validator = validator
+                def checked_review(value):
+                    legacy_validator(value)
+                    validate_review(value, payload)
+                validator = checked_review
+            elif name.startswith("director_shots"):
+                shot_validator = validator
+                def checked_story(value):
+                    shot_validator(value)
+                    if value.get("story_issues"):
+                        validate_review({"story_preserved": False, "issues": value["story_issues"],
+                                         "suggestions": [], "calibration_focus": []}, payload)
+                validator = checked_story
+        if self.review_policy_version in (REVIEW_V3, REVIEW_V4, REVIEW_V5, REVIEW_V6) and name.startswith(("script_review", "writer_check")):
+            base_review_validator = validator
+            def check_coverage(value):
+                if self.review_policy_version == REVIEW_V6 and payload.get("review_evidence_interface_version") == "evidence_ids_v1":
+                    from .creative_review_evidence_ids import expand_review_ids
+                    effective, _ = expand_review_ids(value, payload)
+                    validate_review_v6(effective, payload)
+                    base_review_validator(effective)
+                    return
+                if self.review_policy_version == REVIEW_V6 and payload.get("review_evidence_interface_version") == "leaf_catalog_v1":
+                    # Aggregate reference errors before a base validator stops at its first bad ref.
+                    validate_review_v6(value, payload)
+                    base_review_validator(value)
+                    return
+                base_review_validator(value)
+                if self.review_policy_version == REVIEW_V6:
+                    validate_review_v6(value, payload)
+                elif self.review_policy_version == REVIEW_V5:
+                    validate_review_v5(value, payload)
+                elif self.review_policy_version == REVIEW_V4:
+                    validate_review_v4(value, payload)
+                else:
+                    validate_v3_review(value, payload)
+            validator = check_coverage
+        input_hash = _hash(payload)
+        structured_schema = (
+            WRITER_TOOL_SCHEMAS.get(name.split("__", 1)[0]) if role == "writer" else None
+        )
+        if name.startswith("writer_revise") and self._script_revision_mode() != "full_script" and structured_schema and payload.get("affected_beat_ids"):
+            structured_schema = _writer_revision_schema(payload["affected_beat_ids"])
+        if name.startswith("director_state_plan"):
+            from .creative_state_plan_v6 import build_state_plan_prompt
+            prompt = build_state_plan_prompt(payload)
+        else:
+            prompt = (build_static_manifest_prompt(payload) if name == "static_visual_manifest"
+                      else PROMPTS[name.split("__", 1)[0]])
+        if name.startswith("script_review"):
+            prompt = review_prompt(self.review_policy_version)
+        if original_directing:
+            prompt = original_director_binding["prompt"]
+        elif revision_binding:
+            prompt = revision_binding["prompt"]
+        if self.model_profile == CREATE_REVIEW_PROFILE:
+            if name.startswith("writer_check"):
+                prompt = prompt.replace(
+                    "你是 MiniMax 编剧，核对 DeepSeek 导演稿",
+                    "你是 DeepSeek 独立审查员，核对 MiniMax 创作稿",
+                ).replace("你是现有编剧角色的交叉回核，不是独立第三审核模型。",
+                          "你只审查和提出可定位问题，不代写或改写创作正文。")
+                prompt += ("\n同时审查production_design（如提供）：首帧是否仅为start_state静态投影、"
+                           "资产复用是否匹配目录、对白模式与构图是否一致、道具及动作时序是否连续。"
+                           "资产与首帧问题归director并定位到镜号；不可凭自评分宣称媒体通过。"
+                           "同一说话人的一句对白按标点跨镜且逐字衔接是合法表达，不能仅因跨镜判major。"
+                           "画外角色发声或动作说明提及该角色，不等于角色必须入画；须有明确相反构图才判冲突。"
+                           "首帧可以定格正在持续的动作，不能仅因正在作画就强改为尚未落笔；"
+                           "只检查首态已完成的动作是否被镜内重新执行。没有实际媒体不能断言口型失败。")
+            elif not name.startswith("script_review"):
+                prompt = prompt.replace("DeepSeek", "MiniMax")
+        if event_authoring:
+            prompt = event_binding["prompt"]
+            prompt += "\ncreative_brief为用户创作要求，优先于导演brief。只返回events事件版完整稿，不返回before/during/after或补丁。"
+            if name.startswith("writer_revise"):
+                if self._script_revision_mode() != "full_script":
+                    prompt += "\n按issues修复affected_beat_ids，其他拍逐字保留原稿；previous_script是旧接口格式，按其真实播放顺序转换成events。"
+            structured_schema = deepcopy(EVENT_SCHEMA)
+        priority_binding = self.state.get("original_brief_priority_binding")
+        if event_binding and priority_binding and name.startswith(("writer_analysis", "director_brief", "writer_director_feedback", "writer_script", "writer_revise")):
+            prompt += "\n" + priority_binding["prompt"]
+        if event_binding and priority_binding and not original_directing and name.startswith("director_shots") and priority_binding.get("director_execution_prompt"):
+            prompt += "\n" + priority_binding["director_execution_prompt"]
+        if event_authoring and name.startswith("writer_revise") and self._script_revision_mode() != "full_script":
+            previous_beats = payload.get("previous_script", {}).get("beats", [])
+            locked_ids = [b["id"] for b in previous_beats]
+            prompt += "\n事件返修必须保持现有节拍ID、顺序和总拍数；不得重排编号、合并或拆拍。仅修改affected_beat_ids中的完整事件，其余实际动作/对白及各拍秒数与previous_script一致。每拍dialogue最多两条，不为旧样例凑第三条；如果完整稿概括与正文冲突，以实际正文为准。返回完整事件JSON。"
+            structured_schema = deepcopy(structured_schema)
+            structured_schema["properties"]["beats"].update(minItems=len(locked_ids), maxItems=len(locked_ids))
+            beat_schema = structured_schema["properties"]["beats"]["items"]
+            beat_schema["properties"]["id"]["enum"] = locked_ids
+            beat_schema["properties"]["events"].update(minItems=1,
+                contains={"type":"object","properties":{"kind":{"const":"dialogue"}},"required":["kind"]},
+                minContains=0,maxContains=2)
+        if event_authoring and name.startswith("writer_revise") and self._script_revision_mode() == "full_script":
+            prompt += "\n" + self.state["script_revision_binding"]["prompt"]
+            structured_schema["properties"]["beats"]["items"]["properties"]["events"]["minItems"] = 1
+        if event_authoring and payload.get("allow_summary_update") is True and self._script_revision_mode() != "full_script":
+            prompt += "\n本次授权同步修订根字段 premise，使其准确概括合并后的完整剧本；不得保留已删除动作或道具。title 和 selected_candidate_id 不变，未授权节拍正文逐字保留。"
+        if event_binding and name.startswith("writer_check"):
+            prompt += "\n必须逐条核对creative_brief的转折、结尾行动主体、禁用物和线索出现时间。只有实际动作/对白算演出，event和trigger是摘要。不要将优点、无矛盾内容或正常省略走路列为问题；每个问题引用原字段实词。"
+        if self.review_policy_version in REVIEW_POLICY_VERSIONS:
+            if name.startswith("writer_check"):
+                prompt += review_rules(self.review_policy_version)
+            elif name.startswith("director_shots"):
+                prompt += "\n若返回story_issues，每项同样必须符合以下issues证据要求；正常分镜返回格式不变。" + review_rules(self.review_policy_version)
+        if self.review_policy_version in (REVIEW_V3, REVIEW_V4, REVIEW_V5, REVIEW_V6) and name.startswith(("script_review", "writer_check")):
+            # Replace, never append to the conflicting legacy six-field/scoring contract.
+            prompt = (build_review_prompt_v6(payload) if self.review_policy_version == REVIEW_V6
+                      else build_review_prompt_v5(payload) if self.review_policy_version == REVIEW_V5
+                      else build_review_prompt_v4(payload) if self.review_policy_version == REVIEW_V4
+                      else build_review_prompt(payload))
+            structured_schema = None
+        if name.startswith("director_shots") and payload.get("segment_instructions"):
+            prompt += "\n" + payload["segment_instructions"]
+        if recovery:
+            prompt += "\n本阶段完整重新生成；previous_invalid_output仅用于定位旧错误，不是可继续合并的合格稿。" + recovery["requirements"]
+        stage_thinking = "disabled"
+        if name.startswith("director_state_plan") and payload.get("state_plan_version") in ("whole_film_state_plan_v2", "whole_film_state_plan_v3", "whole_film_action_plan_v1", "whole_film_action_plan_v2"):
+            from .creative_state_plan_v6 import build_state_plan_schema
+            structured_schema = build_state_plan_schema(payload)
+            stage_thinking = payload.get("plan_thinking_mode", "adaptive")
+        if name.startswith("director_state_plan") and payload.get("state_plan_version") in ("whole_film_action_plan_v1", "whole_film_action_plan_v2") and payload.get("plan_patch_base"):
+            from .creative_plan_patch import build_patch_request, build_patch_schema
+            prompt, _ = build_patch_request(structured_schema, payload, payload.get("issues", []), payload["plan_patch_base"])
+            prompt += "\n本阶段原计划在plan_patch_base，source_sha256在请求根层；按issues修复。"
+            structured_schema = build_patch_schema(payload["plan_patch_base"], target_schema=structured_schema)
+        from .creative_narrative_focus import prompt_for_stage
+        prompt += prompt_for_stage(self.state.get("narrative_focus_binding"), name)
+        if structured_schema is not None:
+            prompt += "\n请调用 submit_creative_json 工具提交上述完整 JSON，不要另写正文。"
+        prompt_hash = _hash(prompt)
+        if payload.get("debug_must_fix_feedback"):
+            prompt += (
+                "\n本次调用是用户明确登记的必修反馈返修。逐条处理 debug_must_fix_feedback，"
+                "修订当前责任阶段产物；不得沿用旧产物，不得把反馈当作建议忽略。"
+                "反馈修复通过本阶段原有 validator 后才可继续下游。"
+            )
+            prompt_hash = _hash(prompt)
+        max_tokens = 20000 if role == "director" else 12000
+        temperature = 0.2 if event_authoring else (0.1 if name in ("writer_script", "writer_screenplay") else 0.4)
+        if self.review_policy_version in REVIEW_POLICY_VERSIONS and name.startswith(("script_review", "writer_check")):
+            temperature = 0.2
+        if path.exists():
+            record = _read(path)
+            if record.get("prompt_sha256") not in (None, prompt_hash):
+                raise RuntimeError(f"{name} 提示词版本已改变，不能复用旧阶段回执")
+            if (
+                record.get("status") in ("call_failed_or_uncertain", "incomplete_response")
+                and (
+                    "API 正文未正常结束" in str(record.get("error", ""))
+                    or record.get("response_metadata", {}).get("finish_reason") == "length"
+                )
+            ):
+                archive = self.run_dir / f"{name}__incomplete_attempt_01.json"
+                if archive.exists() or path.resolve().parent != self.run_dir.resolve():
+                    raise RuntimeError(f"{name} 不完整回执归档路径冲突")
+                record["reconciliation"] = "finish_reason_length; one bounded stage retry"
+                _write(path, record)
+                path.replace(archive)
+                record = None
+            elif (
+                record.get("status") == "call_failed_or_uncertain"
+                and "API 未返回唯一的结构化工具调用" in str(record.get("error", ""))
+            ):
+                archive = self.run_dir / f"{name}__protocol_attempt_01.json"
+                if archive.exists() or path.resolve().parent != self.run_dir.resolve():
+                    raise RuntimeError(f"{name} 工具协议故障已重试一次，停止继续调用")
+                record["reconciliation"] = "complete_response_missing_required_tool_call; one_bounded_retry"
+                _write(path, record)
+                path.replace(archive)
+                stale_format = self.run_dir / f"{name}__format_repair.json"
+                if stale_format.exists():
+                    archived_format = self.run_dir / f"{name}__protocol_format_attempt_01.json"
+                    if archived_format.exists():
+                        raise RuntimeError(f"{name} 工具协议格式回执归档路径冲突")
+                    stale_format.replace(archived_format)
+                repaired = self.state.setdefault("local_format_reconciliations", [])
+                if name not in repaired:
+                    repaired.append(name)
+                    self._save()
+                record = None
+            elif (
+                record.get("status") == "call_failed_or_uncertain"
+                and "API 返回空正文" in str(record.get("error", ""))
+            ):
+                archive = self.run_dir / f"{name}__empty_attempt_01.json"
+                if archive.exists() or path.resolve().parent != self.run_dir.resolve():
+                    raise RuntimeError(f"{name} 空正文已重试一次，停止继续调用")
+                record["reconciliation"] = "complete_empty_response; one_bounded_stage_retry"
+                _write(path, record)
+                path.replace(archive)
+                record = None
+            elif (
+                record.get("status") == "call_failed_or_uncertain"
+                and self.retry_unconfirmed_transport
+                and _is_unconfirmed_transport(record.get("error", ""))
+            ):
+                archive = self.run_dir / f"{name}__transport_attempt_01.json"
+                if archive.exists() or path.resolve().parent != self.run_dir.resolve():
+                    raise RuntimeError(f"{name} 连接故障归档路径冲突")
+                record["reconciliation"] = "new bounded request after no-id connection failure"
+                _write(path, record)
+                path.replace(archive)
+                record = None
+            if record is not None:
+                if record.get("input_sha256") != input_hash or record.get("role") != role:
+                    if name.startswith((
+                        "director_shots", "director_revise", "writer_check", "writer_revise",
+                    )):
+                        archive = self.run_dir / f"{name}__stale_parent_01.json"
+                        if archive.exists() or path.resolve().parent != self.run_dir.resolve():
+                            raise RuntimeError(f"{name} 旧父稿归档路径冲突")
+                        record["invalidated_by_input_sha256"] = input_hash
+                        _write(path, record)
+                        path.replace(archive)
+                        record = None
+                    else:
+                        raise RuntimeError(f"{name} 已有记录与当前父稿不一致，拒绝复用")
+            if record is not None:
+                if record.get("status") == "response_received":
+                    if (
+                        structured_schema is not None
+                        and record.get("response_metadata", {}).get("output_mode")
+                        == "content_after_missing_tool_call"
+                        and "{" not in str(record.get("response_text", ""))
+                    ):
+                        record["status"] = "call_failed_or_uncertain"
+                        record["error"] = (
+                            f"{role} API 未返回唯一的结构化工具调用；"
+                            "完整正文也不含 JSON 对象"
+                        )
+                        _write(path, record)
+                        return self._stage(name, role, payload, validator)
+                    output = self._decode(name, role, record["response_text"])
+                    output = self._unwrap_director_envelope(name, output)
+                    output = self._unwrap_writer_revise_envelope(name, output)
+                    if name.startswith("director_state_plan") and payload.get("state_plan_version") in ("whole_film_action_plan_v1", "whole_film_action_plan_v2") and payload.get("plan_patch_base"):
+                        output = self._merge_action_plan_patch(name, payload["plan_patch_base"], output)
+                    if event_authoring:
+                        record["event_output"] = deepcopy(output)
+                        try:
+                            output = compile_event_script(output)
+                        except CreativeContractError as event_error:
+                            record["event_compilation_error"] = str(event_error)
+                            from .creative_event_recovery import repair_event_contract
+                            output = repair_event_contract(self, name, role, payload, output, event_error, validator)
+                        if name.startswith("writer_revise"):
+                            output["screenplay_markdown"] = compile_beat_screenplay(output)
+                    output = self._validate_or_repair(name, role, payload, output, validator)
+                    record["output"] = output
+                    record["output_sha256"] = _hash(output)
+                    record["status"] = "validated"
+                    _write(path, record)
+                    if not any(row["name"] == name for row in self.state["stages"]):
+                        self.state["stages"].append({
+                            "name": name, "role": role,
+                            "input_sha256": input_hash,
+                            "output_sha256": record["output_sha256"],
+                            "context_budget": record.get("context_budget"),
+                            "usage": record["response_metadata"],
+                        })
+                        self._save()
+                    return output
+                if record.get("status") != "validated":
+                    raise RuntimeError(f"{name} 上次调用状态未确认，请核对回执后再恢复")
+                output = record["output"]
+                if _hash(output) != record.get("output_sha256"):
+                    raise RuntimeError(f"{name} 已存产物被改动")
+                corrected = self._validate_or_repair(name, role, payload, output, validator)
+                if _hash(corrected) != record["output_sha256"]:
+                    record.setdefault("superseded_outputs", []).append({
+                        "output_sha256": record["output_sha256"],
+                        "output": output,
+                        "reason": "revalidated_against_current_contract",
+                    })
+                    record["output"] = corrected
+                    record["output_sha256"] = _hash(corrected)
+                    _write(path, record)
+                    for stage in self.state["stages"]:
+                        if stage["name"] == name:
+                            stage["output_sha256"] = record["output_sha256"]
+                            stage["contract_repaired"] = True
+                    self._save()
+                return corrected
+        if self.state["calls_started"] &gt;= self.max_calls:
+&gt;           raise RuntimeError("模型调用预算已满；保存进度，未跳过检查")
+E           RuntimeError: 模型调用预算已满；保存进度，未跳过检查
+
+src\content_factory\creative_workflow.py:6425: RuntimeError</failure></testcase><testcase classname="tests.test_creative_stage_debug" name="test_resolved_upstream_tampering_with_pending_downstream_stops_before_call[prompt_sha256]" time="0.206"><failure message="RuntimeError: director_brief 提示词版本已改变，不能复用旧阶段回执">tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/p1_closure_v21/regression_tmp_2/test_resolved_upstream_tamperi0')
+damage = 'prompt_sha256'
+
+    @pytest.mark.parametrize("damage", ["prompt_sha256", "input_sha256", "output_sha256", "resolution"])
+    def test_resolved_upstream_tampering_with_pending_downstream_stops_before_call(tmp_path, damage):
+        run, bundle, script, old_feedback = _rebuilt_run(tmp_path)
+        CreativeStageCommandService(run).feedback("writer_script", "FIXTURE pending downstream")
+        path = run / "director_brief.json"
+        if damage == "resolution":
+            row = next(row for row in _read_json(run / "state.json")["debug_feedback"]
+                       if row["feedback_id"] == old_feedback["feedback_id"])
+            path = run / row["resolution_receipt"]
+            damage = "resolved_by_output_sha256"
+        value = _read_json(path)
+        value[damage] = "0" * 64
+        path.write_text(json.dumps(value), encoding="utf-8")
+&gt;       state, clients = _resume(run, bundle, [script])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_creative_stage_debug.py:320: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_creative_stage_debug.py:205: in _resume
+    result = runner.run(bundle)
+             ^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6999: in run
+    brief = self._stage(
+src\content_factory\creative_workflow.py:6009: in _stage
+    raw = self._stage_impl(name, role, payload, validator)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;src.content_factory.creative_workflow.CreativeWorkflow object at 0x00000226D2E36210&gt;
+name = 'director_brief', role = 'director'
+payload = {'materials': {'source_driver': 'novel', 'title': '测试', 'story_source': '起因句。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁...ector', 'evidence': [], 'previous_output_sha256': 'f6d3fd0ed92ddcee4024f85dd9cdab1eb49269dc0149068028c8658d3c00ffdb'}]}
+validator = &lt;function CreativeWorkflow.run.&lt;locals&gt;.&lt;lambda&gt; at 0x00000226D3033C10&gt;
+
+    def _stage_impl(
+        self,
+        name: str,
+        role: str,
+        payload: dict[str, Any],
+        validator: Any,
+    ) -&gt; dict[str, Any]:
+        self._active_stage_name = name
+        recovery = self.state.get("stage_recovery_bindings", {}).get(name)
+        if recovery:
+            if recovery.get("version") != "failed_plan_full_rebuild_v1":
+                raise RuntimeError("不支持的失败计划恢复绑定")
+            payload = {**payload, "stage_recovery_requirements": recovery["requirements"],
+                       "previous_invalid_output": recovery["previous_invalid_output"]}
+        if name.startswith("writer_revise") and self._script_revision_mode() == "full_script":
+            payload = {**payload, "revision_mode": "full_script"}
+        if name.startswith("director_state_plan") and payload.get("state_plan_version") in ("whole_film_action_plan_v1", "whole_film_action_plan_v2") and payload.get("plan_patch_base"):
+            payload = {**payload, "source_sha256": _hash(payload["plan_patch_base"])}
+            if payload.get("previous_draft") == payload["plan_patch_base"]:
+                payload.pop("previous_draft", None)
+        if name.startswith(("writer_check", "script_review")) and self.review_policy_version == REVIEW_V6:
+            evidence_interface = self.state.get("review_evidence_interface_version")
+            if evidence_interface:
+                if evidence_interface not in ("leaf_catalog_v1", "evidence_ids_v1"):
+                    raise CreativeContractError("不支持的审核证据接口版本")
+                payload = {**payload, "review_evidence_interface_version": evidence_interface}
+                hints_version = self.state.get("evidence_id_repair_hints_version")
+                if hints_version:
+                    if evidence_interface != "evidence_ids_v1" or hints_version != "missing_source_candidates_v1":
+                        raise CreativeContractError("不支持的审核证据候选导航版本")
+                    payload["evidence_id_repair_hints_version"] = hints_version
+        path = self.run_dir / f"{name}.json"
+        if name.startswith(("director_shots", "director_revise")):
+            limits = None
+            if path.exists():
+                messages = _read(path).get("request", {}).get("messages", [])
+                if messages:
+                    limits = json.loads(messages[-1]["content"]).get("executor_constraints")
+            elif getattr(self, "_reusable_generation", False):
+                audit = audit_creative_executor({"shots": []})
+                limits = {k: audit[k] for k in ("provider", "model", "duration_min", "duration_max", "evidence")}
+                limits["rule"] = "每镜时长须在范围内；长节拍拆成有叙事目的的镜头。切镜仍需实际衔接适配，不得伪称原始尾帧连续。"
+            if limits:
+                payload = {**payload, "executor_constraints": limits}
+                original_validator = validator
+                def validate_executable(value):
+                    original_validator(value)
+                    resolved = value
+                    if "replace_beats" in value:
+                        resolved = _apply_director_revision_patch(
+                            payload["previous_shots"], value, payload["affected_beat_ids"])
+                    invalid = [f"{row['id']}={row['duration_seconds']}秒"
+                               for row in resolved.get("shots", [])
+                               if type(row.get("duration_seconds")) is not int
+                               or not limits["duration_min"] &lt;= row["duration_seconds"] &lt;= limits["duration_max"]]
+                    if invalid:
+                        raise CreativeContractError(
+                            f"视频执行时长超限 {limits['duration_min']}—{limits['duration_max']}秒: {invalid}；拆镜时保留对白顺序与情绪窗口")
+                validator = validate_executable
+        if name.startswith("director_production_design") and not path.exists():
+            payload = deepcopy(payload)
+            payload["planning_rules"] = {
+                "reuse": "required_tags保留真实兼容要求，不为命中素材而删掉服装、光线等约束。指定复用必须与目录一致；未证实或需要改造时列issues或明确新建。未知布局需实际看图，不得猜测。",
+                "opening": "逐镜依据storyboard.start_state写t=0单张静态首帧；不复制整段视频prompt，不写随后、说完、转向、递出等镜内事件；不得把镜内事件提前完成。",
+                "assets": "asset_ids必须包含本镜所有可见人物（含手、背影、局部）及场景对应ID；纯画外发声不等于入画。固定左右、服装和道具首态与分镜一致。",
+                "dialogue": "逐句核对说话人是否入画，画内/画外/混合模式须与构图及生成提示一致。",
+                "review": "issues和previous_design为实际返修依据，逐项处理，不以自评分替代审核。",
+            }
+            if hasattr(self, "_production_revision_context"):
+                payload.update(self._production_revision_context)
+        elif name.startswith("director_production_design") and path.exists():
+            messages = _read(path).get("request", {}).get("messages", [])
+            if messages:
+                recorded = json.loads(messages[-1]["content"])
+                for key in ("planning_rules", "issues", "previous_design"):
+                    if key in recorded:
+                        payload = {**payload, key: recorded[key]}
+        event_binding = self.state.get("writer_prompt_binding")
+        original_director_binding = self.state.get("original_director_binding")
+        original_directing = bool(event_binding and original_director_binding and name.startswith("director_shots"))
+        revision_binding = None
+        if event_binding and original_director_binding and name.startswith("director_revise"):
+            revision_binding = self.state.get("original_director_revision_bindings", {}).get(name)
+            if revision_binding is None and not path.exists():
+                revision_binding = bind_original_director_revision(original_director_binding["prompt"])
+                self.state.setdefault("original_director_revision_bindings", {})[name] = revision_binding
+                self._save()
+        if original_directing or revision_binding:
+            payload = {**payload, "creative_brief": event_binding["creative_brief"]}
+        event_authoring = bool(event_binding and name.startswith(("writer_script", "writer_revise")))
+        if event_binding and name.startswith(("writer_script", "writer_revise", "writer_check")):
+            payload = {**payload, "creative_brief": event_binding["creative_brief"]}
+        priority_binding = self.state.get("original_brief_priority_binding")
+        if event_binding and priority_binding and name.startswith(("writer_analysis", "director_brief", "writer_director_feedback")):
+            payload = {**payload, "creative_brief": event_binding["creative_brief"]}
+        if event_authoring:
+            upstream_validator = validator
+            def validate_original_event_result(value):
+                upstream_validator(value)
+                resolved = value
+                if name.startswith("writer_revise") and payload.get("affected_beat_ids"):
+                    resolved = _writer_revision_result(payload["previous_script"], value, payload["affected_beat_ids"], allow_summary_update=payload.get("allow_summary_update", False), revision_mode=self._script_revision_mode())
+                validate_brief_script(resolved, event_binding["creative_brief"])
+            validator = validate_original_event_result
+        if self.review_policy_version in REVIEW_POLICY_VERSIONS:
+            if name.startswith("writer_check"):
+                legacy_validator = validator
+                def checked_review(value):
+                    legacy_validator(value)
+                    validate_review(value, payload)
+                validator = checked_review
+            elif name.startswith("director_shots"):
+                shot_validator = validator
+                def checked_story(value):
+                    shot_validator(value)
+                    if value.get("story_issues"):
+                        validate_review({"story_preserved": False, "issues": value["story_issues"],
+                                         "suggestions": [], "calibration_focus": []}, payload)
+                validator = checked_story
+        if self.review_policy_version in (REVIEW_V3, REVIEW_V4, REVIEW_V5, REVIEW_V6) and name.startswith(("script_review", "writer_check")):
+            base_review_validator = validator
+            def check_coverage(value):
+                if self.review_policy_version == REVIEW_V6 and payload.get("review_evidence_interface_version") == "evidence_ids_v1":
+                    from .creative_review_evidence_ids import expand_review_ids
+                    effective, _ = expand_review_ids(value, payload)
+                    validate_review_v6(effective, payload)
+                    base_review_validator(effective)
+                    return
+                if self.review_policy_version == REVIEW_V6 and payload.get("review_evidence_interface_version") == "leaf_catalog_v1":
+                    # Aggregate reference errors before a base validator stops at its first bad ref.
+                    validate_review_v6(value, payload)
+                    base_review_validator(value)
+                    return
+                base_review_validator(value)
+                if self.review_policy_version == REVIEW_V6:
+                    validate_review_v6(value, payload)
+                elif self.review_policy_version == REVIEW_V5:
+                    validate_review_v5(value, payload)
+                elif self.review_policy_version == REVIEW_V4:
+                    validate_review_v4(value, payload)
+                else:
+                    validate_v3_review(value, payload)
+            validator = check_coverage
+        input_hash = _hash(payload)
+        structured_schema = (
+            WRITER_TOOL_SCHEMAS.get(name.split("__", 1)[0]) if role == "writer" else None
+        )
+        if name.startswith("writer_revise") and self._script_revision_mode() != "full_script" and structured_schema and payload.get("affected_beat_ids"):
+            structured_schema = _writer_revision_schema(payload["affected_beat_ids"])
+        if name.startswith("director_state_plan"):
+            from .creative_state_plan_v6 import build_state_plan_prompt
+            prompt = build_state_plan_prompt(payload)
+        else:
+            prompt = (build_static_manifest_prompt(payload) if name == "static_visual_manifest"
+                      else PROMPTS[name.split("__", 1)[0]])
+        if name.startswith("script_review"):
+            prompt = review_prompt(self.review_policy_version)
+        if original_directing:
+            prompt = original_director_binding["prompt"]
+        elif revision_binding:
+            prompt = revision_binding["prompt"]
+        if self.model_profile == CREATE_REVIEW_PROFILE:
+            if name.startswith("writer_check"):
+                prompt = prompt.replace(
+                    "你是 MiniMax 编剧，核对 DeepSeek 导演稿",
+                    "你是 DeepSeek 独立审查员，核对 MiniMax 创作稿",
+                ).replace("你是现有编剧角色的交叉回核，不是独立第三审核模型。",
+                          "你只审查和提出可定位问题，不代写或改写创作正文。")
+                prompt += ("\n同时审查production_design（如提供）：首帧是否仅为start_state静态投影、"
+                           "资产复用是否匹配目录、对白模式与构图是否一致、道具及动作时序是否连续。"
+                           "资产与首帧问题归director并定位到镜号；不可凭自评分宣称媒体通过。"
+                           "同一说话人的一句对白按标点跨镜且逐字衔接是合法表达，不能仅因跨镜判major。"
+                           "画外角色发声或动作说明提及该角色，不等于角色必须入画；须有明确相反构图才判冲突。"
+                           "首帧可以定格正在持续的动作，不能仅因正在作画就强改为尚未落笔；"
+                           "只检查首态已完成的动作是否被镜内重新执行。没有实际媒体不能断言口型失败。")
+            elif not name.startswith("script_review"):
+                prompt = prompt.replace("DeepSeek", "MiniMax")
+        if event_authoring:
+            prompt = event_binding["prompt"]
+            prompt += "\ncreative_brief为用户创作要求，优先于导演brief。只返回events事件版完整稿，不返回before/during/after或补丁。"
+            if name.startswith("writer_revise"):
+                if self._script_revision_mode() != "full_script":
+                    prompt += "\n按issues修复affected_beat_ids，其他拍逐字保留原稿；previous_script是旧接口格式，按其真实播放顺序转换成events。"
+            structured_schema = deepcopy(EVENT_SCHEMA)
+        priority_binding = self.state.get("original_brief_priority_binding")
+        if event_binding and priority_binding and name.startswith(("writer_analysis", "director_brief", "writer_director_feedback", "writer_script", "writer_revise")):
+            prompt += "\n" + priority_binding["prompt"]
+        if event_binding and priority_binding and not original_directing and name.startswith("director_shots") and priority_binding.get("director_execution_prompt"):
+            prompt += "\n" + priority_binding["director_execution_prompt"]
+        if event_authoring and name.startswith("writer_revise") and self._script_revision_mode() != "full_script":
+            previous_beats = payload.get("previous_script", {}).get("beats", [])
+            locked_ids = [b["id"] for b in previous_beats]
+            prompt += "\n事件返修必须保持现有节拍ID、顺序和总拍数；不得重排编号、合并或拆拍。仅修改affected_beat_ids中的完整事件，其余实际动作/对白及各拍秒数与previous_script一致。每拍dialogue最多两条，不为旧样例凑第三条；如果完整稿概括与正文冲突，以实际正文为准。返回完整事件JSON。"
+            structured_schema = deepcopy(structured_schema)
+            structured_schema["properties"]["beats"].update(minItems=len(locked_ids), maxItems=len(locked_ids))
+            beat_schema = structured_schema["properties"]["beats"]["items"]
+            beat_schema["properties"]["id"]["enum"] = locked_ids
+            beat_schema["properties"]["events"].update(minItems=1,
+                contains={"type":"object","properties":{"kind":{"const":"dialogue"}},"required":["kind"]},
+                minContains=0,maxContains=2)
+        if event_authoring and name.startswith("writer_revise") and self._script_revision_mode() == "full_script":
+            prompt += "\n" + self.state["script_revision_binding"]["prompt"]
+            structured_schema["properties"]["beats"]["items"]["properties"]["events"]["minItems"] = 1
+        if event_authoring and payload.get("allow_summary_update") is True and self._script_revision_mode() != "full_script":
+            prompt += "\n本次授权同步修订根字段 premise，使其准确概括合并后的完整剧本；不得保留已删除动作或道具。title 和 selected_candidate_id 不变，未授权节拍正文逐字保留。"
+        if event_binding and name.startswith("writer_check"):
+            prompt += "\n必须逐条核对creative_brief的转折、结尾行动主体、禁用物和线索出现时间。只有实际动作/对白算演出，event和trigger是摘要。不要将优点、无矛盾内容或正常省略走路列为问题；每个问题引用原字段实词。"
+        if self.review_policy_version in REVIEW_POLICY_VERSIONS:
+            if name.startswith("writer_check"):
+                prompt += review_rules(self.review_policy_version)
+            elif name.startswith("director_shots"):
+                prompt += "\n若返回story_issues，每项同样必须符合以下issues证据要求；正常分镜返回格式不变。" + review_rules(self.review_policy_version)
+        if self.review_policy_version in (REVIEW_V3, REVIEW_V4, REVIEW_V5, REVIEW_V6) and name.startswith(("script_review", "writer_check")):
+            # Replace, never append to the conflicting legacy six-field/scoring contract.
+            prompt = (build_review_prompt_v6(payload) if self.review_policy_version == REVIEW_V6
+                      else build_review_prompt_v5(payload) if self.review_policy_version == REVIEW_V5
+                      else build_review_prompt_v4(payload) if self.review_policy_version == REVIEW_V4
+                      else build_review_prompt(payload))
+            structured_schema = None
+        if name.startswith("director_shots") and payload.get("segment_instructions"):
+            prompt += "\n" + payload["segment_instructions"]
+        if recovery:
+            prompt += "\n本阶段完整重新生成；previous_invalid_output仅用于定位旧错误，不是可继续合并的合格稿。" + recovery["requirements"]
+        stage_thinking = "disabled"
+        if name.startswith("director_state_plan") and payload.get("state_plan_version") in ("whole_film_state_plan_v2", "whole_film_state_plan_v3", "whole_film_action_plan_v1", "whole_film_action_plan_v2"):
+            from .creative_state_plan_v6 import build_state_plan_schema
+            structured_schema = build_state_plan_schema(payload)
+            stage_thinking = payload.get("plan_thinking_mode", "adaptive")
+        if name.startswith("director_state_plan") and payload.get("state_plan_version") in ("whole_film_action_plan_v1", "whole_film_action_plan_v2") and payload.get("plan_patch_base"):
+            from .creative_plan_patch import build_patch_request, build_patch_schema
+            prompt, _ = build_patch_request(structured_schema, payload, payload.get("issues", []), payload["plan_patch_base"])
+            prompt += "\n本阶段原计划在plan_patch_base，source_sha256在请求根层；按issues修复。"
+            structured_schema = build_patch_schema(payload["plan_patch_base"], target_schema=structured_schema)
+        from .creative_narrative_focus import prompt_for_stage
+        prompt += prompt_for_stage(self.state.get("narrative_focus_binding"), name)
+        if structured_schema is not None:
+            prompt += "\n请调用 submit_creative_json 工具提交上述完整 JSON，不要另写正文。"
+        prompt_hash = _hash(prompt)
+        if payload.get("debug_must_fix_feedback"):
+            prompt += (
+                "\n本次调用是用户明确登记的必修反馈返修。逐条处理 debug_must_fix_feedback，"
+                "修订当前责任阶段产物；不得沿用旧产物，不得把反馈当作建议忽略。"
+                "反馈修复通过本阶段原有 validator 后才可继续下游。"
+            )
+            prompt_hash = _hash(prompt)
+        max_tokens = 20000 if role == "director" else 12000
+        temperature = 0.2 if event_authoring else (0.1 if name in ("writer_script", "writer_screenplay") else 0.4)
+        if self.review_policy_version in REVIEW_POLICY_VERSIONS and name.startswith(("script_review", "writer_check")):
+            temperature = 0.2
+        if path.exists():
+            record = _read(path)
+            if record.get("prompt_sha256") not in (None, prompt_hash):
+&gt;               raise RuntimeError(f"{name} 提示词版本已改变，不能复用旧阶段回执")
+E               RuntimeError: director_brief 提示词版本已改变，不能复用旧阶段回执
+
+src\content_factory\creative_workflow.py:6285: RuntimeError</failure></testcase><testcase classname="tests.test_creative_stage_debug" name="test_resolved_upstream_tampering_with_pending_downstream_stops_before_call[input_sha256]" time="0.220"><failure message="RuntimeError: director_brief 已有记录与当前父稿不一致，拒绝复用">tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/p1_closure_v21/regression_tmp_2/test_resolved_upstream_tamperi1')
+damage = 'input_sha256'
+
+    @pytest.mark.parametrize("damage", ["prompt_sha256", "input_sha256", "output_sha256", "resolution"])
+    def test_resolved_upstream_tampering_with_pending_downstream_stops_before_call(tmp_path, damage):
+        run, bundle, script, old_feedback = _rebuilt_run(tmp_path)
+        CreativeStageCommandService(run).feedback("writer_script", "FIXTURE pending downstream")
+        path = run / "director_brief.json"
+        if damage == "resolution":
+            row = next(row for row in _read_json(run / "state.json")["debug_feedback"]
+                       if row["feedback_id"] == old_feedback["feedback_id"])
+            path = run / row["resolution_receipt"]
+            damage = "resolved_by_output_sha256"
+        value = _read_json(path)
+        value[damage] = "0" * 64
+        path.write_text(json.dumps(value), encoding="utf-8")
+&gt;       state, clients = _resume(run, bundle, [script])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_creative_stage_debug.py:320: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_creative_stage_debug.py:205: in _resume
+    result = runner.run(bundle)
+             ^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6999: in run
+    brief = self._stage(
+src\content_factory\creative_workflow.py:6009: in _stage
+    raw = self._stage_impl(name, role, payload, validator)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;src.content_factory.creative_workflow.CreativeWorkflow object at 0x00000226D2E36D50&gt;
+name = 'director_brief', role = 'director'
+payload = {'materials': {'source_driver': 'novel', 'title': '测试', 'story_source': '起因句。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁...ector', 'evidence': [], 'previous_output_sha256': 'f6d3fd0ed92ddcee4024f85dd9cdab1eb49269dc0149068028c8658d3c00ffdb'}]}
+validator = &lt;function CreativeWorkflow.run.&lt;locals&gt;.&lt;lambda&gt; at 0x00000226D2EA0930&gt;
+
+    def _stage_impl(
+        self,
+        name: str,
+        role: str,
+        payload: dict[str, Any],
+        validator: Any,
+    ) -&gt; dict[str, Any]:
+        self._active_stage_name = name
+        recovery = self.state.get("stage_recovery_bindings", {}).get(name)
+        if recovery:
+            if recovery.get("version") != "failed_plan_full_rebuild_v1":
+                raise RuntimeError("不支持的失败计划恢复绑定")
+            payload = {**payload, "stage_recovery_requirements": recovery["requirements"],
+                       "previous_invalid_output": recovery["previous_invalid_output"]}
+        if name.startswith("writer_revise") and self._script_revision_mode() == "full_script":
+            payload = {**payload, "revision_mode": "full_script"}
+        if name.startswith("director_state_plan") and payload.get("state_plan_version") in ("whole_film_action_plan_v1", "whole_film_action_plan_v2") and payload.get("plan_patch_base"):
+            payload = {**payload, "source_sha256": _hash(payload["plan_patch_base"])}
+            if payload.get("previous_draft") == payload["plan_patch_base"]:
+                payload.pop("previous_draft", None)
+        if name.startswith(("writer_check", "script_review")) and self.review_policy_version == REVIEW_V6:
+            evidence_interface = self.state.get("review_evidence_interface_version")
+            if evidence_interface:
+                if evidence_interface not in ("leaf_catalog_v1", "evidence_ids_v1"):
+                    raise CreativeContractError("不支持的审核证据接口版本")
+                payload = {**payload, "review_evidence_interface_version": evidence_interface}
+                hints_version = self.state.get("evidence_id_repair_hints_version")
+                if hints_version:
+                    if evidence_interface != "evidence_ids_v1" or hints_version != "missing_source_candidates_v1":
+                        raise CreativeContractError("不支持的审核证据候选导航版本")
+                    payload["evidence_id_repair_hints_version"] = hints_version
+        path = self.run_dir / f"{name}.json"
+        if name.startswith(("director_shots", "director_revise")):
+            limits = None
+            if path.exists():
+                messages = _read(path).get("request", {}).get("messages", [])
+                if messages:
+                    limits = json.loads(messages[-1]["content"]).get("executor_constraints")
+            elif getattr(self, "_reusable_generation", False):
+                audit = audit_creative_executor({"shots": []})
+                limits = {k: audit[k] for k in ("provider", "model", "duration_min", "duration_max", "evidence")}
+                limits["rule"] = "每镜时长须在范围内；长节拍拆成有叙事目的的镜头。切镜仍需实际衔接适配，不得伪称原始尾帧连续。"
+            if limits:
+                payload = {**payload, "executor_constraints": limits}
+                original_validator = validator
+                def validate_executable(value):
+                    original_validator(value)
+                    resolved = value
+                    if "replace_beats" in value:
+                        resolved = _apply_director_revision_patch(
+                            payload["previous_shots"], value, payload["affected_beat_ids"])
+                    invalid = [f"{row['id']}={row['duration_seconds']}秒"
+                               for row in resolved.get("shots", [])
+                               if type(row.get("duration_seconds")) is not int
+                               or not limits["duration_min"] &lt;= row["duration_seconds"] &lt;= limits["duration_max"]]
+                    if invalid:
+                        raise CreativeContractError(
+                            f"视频执行时长超限 {limits['duration_min']}—{limits['duration_max']}秒: {invalid}；拆镜时保留对白顺序与情绪窗口")
+                validator = validate_executable
+        if name.startswith("director_production_design") and not path.exists():
+            payload = deepcopy(payload)
+            payload["planning_rules"] = {
+                "reuse": "required_tags保留真实兼容要求，不为命中素材而删掉服装、光线等约束。指定复用必须与目录一致；未证实或需要改造时列issues或明确新建。未知布局需实际看图，不得猜测。",
+                "opening": "逐镜依据storyboard.start_state写t=0单张静态首帧；不复制整段视频prompt，不写随后、说完、转向、递出等镜内事件；不得把镜内事件提前完成。",
+                "assets": "asset_ids必须包含本镜所有可见人物（含手、背影、局部）及场景对应ID；纯画外发声不等于入画。固定左右、服装和道具首态与分镜一致。",
+                "dialogue": "逐句核对说话人是否入画，画内/画外/混合模式须与构图及生成提示一致。",
+                "review": "issues和previous_design为实际返修依据，逐项处理，不以自评分替代审核。",
+            }
+            if hasattr(self, "_production_revision_context"):
+                payload.update(self._production_revision_context)
+        elif name.startswith("director_production_design") and path.exists():
+            messages = _read(path).get("request", {}).get("messages", [])
+            if messages:
+                recorded = json.loads(messages[-1]["content"])
+                for key in ("planning_rules", "issues", "previous_design"):
+                    if key in recorded:
+                        payload = {**payload, key: recorded[key]}
+        event_binding = self.state.get("writer_prompt_binding")
+        original_director_binding = self.state.get("original_director_binding")
+        original_directing = bool(event_binding and original_director_binding and name.startswith("director_shots"))
+        revision_binding = None
+        if event_binding and original_director_binding and name.startswith("director_revise"):
+            revision_binding = self.state.get("original_director_revision_bindings", {}).get(name)
+            if revision_binding is None and not path.exists():
+                revision_binding = bind_original_director_revision(original_director_binding["prompt"])
+                self.state.setdefault("original_director_revision_bindings", {})[name] = revision_binding
+                self._save()
+        if original_directing or revision_binding:
+            payload = {**payload, "creative_brief": event_binding["creative_brief"]}
+        event_authoring = bool(event_binding and name.startswith(("writer_script", "writer_revise")))
+        if event_binding and name.startswith(("writer_script", "writer_revise", "writer_check")):
+            payload = {**payload, "creative_brief": event_binding["creative_brief"]}
+        priority_binding = self.state.get("original_brief_priority_binding")
+        if event_binding and priority_binding and name.startswith(("writer_analysis", "director_brief", "writer_director_feedback")):
+            payload = {**payload, "creative_brief": event_binding["creative_brief"]}
+        if event_authoring:
+            upstream_validator = validator
+            def validate_original_event_result(value):
+                upstream_validator(value)
+                resolved = value
+                if name.startswith("writer_revise") and payload.get("affected_beat_ids"):
+                    resolved = _writer_revision_result(payload["previous_script"], value, payload["affected_beat_ids"], allow_summary_update=payload.get("allow_summary_update", False), revision_mode=self._script_revision_mode())
+                validate_brief_script(resolved, event_binding["creative_brief"])
+            validator = validate_original_event_result
+        if self.review_policy_version in REVIEW_POLICY_VERSIONS:
+            if name.startswith("writer_check"):
+                legacy_validator = validator
+                def checked_review(value):
+                    legacy_validator(value)
+                    validate_review(value, payload)
+                validator = checked_review
+            elif name.startswith("director_shots"):
+                shot_validator = validator
+                def checked_story(value):
+                    shot_validator(value)
+                    if value.get("story_issues"):
+                        validate_review({"story_preserved": False, "issues": value["story_issues"],
+                                         "suggestions": [], "calibration_focus": []}, payload)
+                validator = checked_story
+        if self.review_policy_version in (REVIEW_V3, REVIEW_V4, REVIEW_V5, REVIEW_V6) and name.startswith(("script_review", "writer_check")):
+            base_review_validator = validator
+            def check_coverage(value):
+                if self.review_policy_version == REVIEW_V6 and payload.get("review_evidence_interface_version") == "evidence_ids_v1":
+                    from .creative_review_evidence_ids import expand_review_ids
+                    effective, _ = expand_review_ids(value, payload)
+                    validate_review_v6(effective, payload)
+                    base_review_validator(effective)
+                    return
+                if self.review_policy_version == REVIEW_V6 and payload.get("review_evidence_interface_version") == "leaf_catalog_v1":
+                    # Aggregate reference errors before a base validator stops at its first bad ref.
+                    validate_review_v6(value, payload)
+                    base_review_validator(value)
+                    return
+                base_review_validator(value)
+                if self.review_policy_version == REVIEW_V6:
+                    validate_review_v6(value, payload)
+                elif self.review_policy_version == REVIEW_V5:
+                    validate_review_v5(value, payload)
+                elif self.review_policy_version == REVIEW_V4:
+                    validate_review_v4(value, payload)
+                else:
+                    validate_v3_review(value, payload)
+            validator = check_coverage
+        input_hash = _hash(payload)
+        structured_schema = (
+            WRITER_TOOL_SCHEMAS.get(name.split("__", 1)[0]) if role == "writer" else None
+        )
+        if name.startswith("writer_revise") and self._script_revision_mode() != "full_script" and structured_schema and payload.get("affected_beat_ids"):
+            structured_schema = _writer_revision_schema(payload["affected_beat_ids"])
+        if name.startswith("director_state_plan"):
+            from .creative_state_plan_v6 import build_state_plan_prompt
+            prompt = build_state_plan_prompt(payload)
+        else:
+            prompt = (build_static_manifest_prompt(payload) if name == "static_visual_manifest"
+                      else PROMPTS[name.split("__", 1)[0]])
+        if name.startswith("script_review"):
+            prompt = review_prompt(self.review_policy_version)
+        if original_directing:
+            prompt = original_director_binding["prompt"]
+        elif revision_binding:
+            prompt = revision_binding["prompt"]
+        if self.model_profile == CREATE_REVIEW_PROFILE:
+            if name.startswith("writer_check"):
+                prompt = prompt.replace(
+                    "你是 MiniMax 编剧，核对 DeepSeek 导演稿",
+                    "你是 DeepSeek 独立审查员，核对 MiniMax 创作稿",
+                ).replace("你是现有编剧角色的交叉回核，不是独立第三审核模型。",
+                          "你只审查和提出可定位问题，不代写或改写创作正文。")
+                prompt += ("\n同时审查production_design（如提供）：首帧是否仅为start_state静态投影、"
+                           "资产复用是否匹配目录、对白模式与构图是否一致、道具及动作时序是否连续。"
+                           "资产与首帧问题归director并定位到镜号；不可凭自评分宣称媒体通过。"
+                           "同一说话人的一句对白按标点跨镜且逐字衔接是合法表达，不能仅因跨镜判major。"
+                           "画外角色发声或动作说明提及该角色，不等于角色必须入画；须有明确相反构图才判冲突。"
+                           "首帧可以定格正在持续的动作，不能仅因正在作画就强改为尚未落笔；"
+                           "只检查首态已完成的动作是否被镜内重新执行。没有实际媒体不能断言口型失败。")
+            elif not name.startswith("script_review"):
+                prompt = prompt.replace("DeepSeek", "MiniMax")
+        if event_authoring:
+            prompt = event_binding["prompt"]
+            prompt += "\ncreative_brief为用户创作要求，优先于导演brief。只返回events事件版完整稿，不返回before/during/after或补丁。"
+            if name.startswith("writer_revise"):
+                if self._script_revision_mode() != "full_script":
+                    prompt += "\n按issues修复affected_beat_ids，其他拍逐字保留原稿；previous_script是旧接口格式，按其真实播放顺序转换成events。"
+            structured_schema = deepcopy(EVENT_SCHEMA)
+        priority_binding = self.state.get("original_brief_priority_binding")
+        if event_binding and priority_binding and name.startswith(("writer_analysis", "director_brief", "writer_director_feedback", "writer_script", "writer_revise")):
+            prompt += "\n" + priority_binding["prompt"]
+        if event_binding and priority_binding and not original_directing and name.startswith("director_shots") and priority_binding.get("director_execution_prompt"):
+            prompt += "\n" + priority_binding["director_execution_prompt"]
+        if event_authoring and name.startswith("writer_revise") and self._script_revision_mode() != "full_script":
+            previous_beats = payload.get("previous_script", {}).get("beats", [])
+            locked_ids = [b["id"] for b in previous_beats]
+            prompt += "\n事件返修必须保持现有节拍ID、顺序和总拍数；不得重排编号、合并或拆拍。仅修改affected_beat_ids中的完整事件，其余实际动作/对白及各拍秒数与previous_script一致。每拍dialogue最多两条，不为旧样例凑第三条；如果完整稿概括与正文冲突，以实际正文为准。返回完整事件JSON。"
+            structured_schema = deepcopy(structured_schema)
+            structured_schema["properties"]["beats"].update(minItems=len(locked_ids), maxItems=len(locked_ids))
+            beat_schema = structured_schema["properties"]["beats"]["items"]
+            beat_schema["properties"]["id"]["enum"] = locked_ids
+            beat_schema["properties"]["events"].update(minItems=1,
+                contains={"type":"object","properties":{"kind":{"const":"dialogue"}},"required":["kind"]},
+                minContains=0,maxContains=2)
+        if event_authoring and name.startswith("writer_revise") and self._script_revision_mode() == "full_script":
+            prompt += "\n" + self.state["script_revision_binding"]["prompt"]
+            structured_schema["properties"]["beats"]["items"]["properties"]["events"]["minItems"] = 1
+        if event_authoring and payload.get("allow_summary_update") is True and self._script_revision_mode() != "full_script":
+            prompt += "\n本次授权同步修订根字段 premise，使其准确概括合并后的完整剧本；不得保留已删除动作或道具。title 和 selected_candidate_id 不变，未授权节拍正文逐字保留。"
+        if event_binding and name.startswith("writer_check"):
+            prompt += "\n必须逐条核对creative_brief的转折、结尾行动主体、禁用物和线索出现时间。只有实际动作/对白算演出，event和trigger是摘要。不要将优点、无矛盾内容或正常省略走路列为问题；每个问题引用原字段实词。"
+        if self.review_policy_version in REVIEW_POLICY_VERSIONS:
+            if name.startswith("writer_check"):
+                prompt += review_rules(self.review_policy_version)
+            elif name.startswith("director_shots"):
+                prompt += "\n若返回story_issues，每项同样必须符合以下issues证据要求；正常分镜返回格式不变。" + review_rules(self.review_policy_version)
+        if self.review_policy_version in (REVIEW_V3, REVIEW_V4, REVIEW_V5, REVIEW_V6) and name.startswith(("script_review", "writer_check")):
+            # Replace, never append to the conflicting legacy six-field/scoring contract.
+            prompt = (build_review_prompt_v6(payload) if self.review_policy_version == REVIEW_V6
+                      else build_review_prompt_v5(payload) if self.review_policy_version == REVIEW_V5
+                      else build_review_prompt_v4(payload) if self.review_policy_version == REVIEW_V4
+                      else build_review_prompt(payload))
+            structured_schema = None
+        if name.startswith("director_shots") and payload.get("segment_instructions"):
+            prompt += "\n" + payload["segment_instructions"]
+        if recovery:
+            prompt += "\n本阶段完整重新生成；previous_invalid_output仅用于定位旧错误，不是可继续合并的合格稿。" + recovery["requirements"]
+        stage_thinking = "disabled"
+        if name.startswith("director_state_plan") and payload.get("state_plan_version") in ("whole_film_state_plan_v2", "whole_film_state_plan_v3", "whole_film_action_plan_v1", "whole_film_action_plan_v2"):
+            from .creative_state_plan_v6 import build_state_plan_schema
+            structured_schema = build_state_plan_schema(payload)
+            stage_thinking = payload.get("plan_thinking_mode", "adaptive")
+        if name.startswith("director_state_plan") and payload.get("state_plan_version") in ("whole_film_action_plan_v1", "whole_film_action_plan_v2") and payload.get("plan_patch_base"):
+            from .creative_plan_patch import build_patch_request, build_patch_schema
+            prompt, _ = build_patch_request(structured_schema, payload, payload.get("issues", []), payload["plan_patch_base"])
+            prompt += "\n本阶段原计划在plan_patch_base，source_sha256在请求根层；按issues修复。"
+            structured_schema = build_patch_schema(payload["plan_patch_base"], target_schema=structured_schema)
+        from .creative_narrative_focus import prompt_for_stage
+        prompt += prompt_for_stage(self.state.get("narrative_focus_binding"), name)
+        if structured_schema is not None:
+            prompt += "\n请调用 submit_creative_json 工具提交上述完整 JSON，不要另写正文。"
+        prompt_hash = _hash(prompt)
+        if payload.get("debug_must_fix_feedback"):
+            prompt += (
+                "\n本次调用是用户明确登记的必修反馈返修。逐条处理 debug_must_fix_feedback，"
+                "修订当前责任阶段产物；不得沿用旧产物，不得把反馈当作建议忽略。"
+                "反馈修复通过本阶段原有 validator 后才可继续下游。"
+            )
+            prompt_hash = _hash(prompt)
+        max_tokens = 20000 if role == "director" else 12000
+        temperature = 0.2 if event_authoring else (0.1 if name in ("writer_script", "writer_screenplay") else 0.4)
+        if self.review_policy_version in REVIEW_POLICY_VERSIONS and name.startswith(("script_review", "writer_check")):
+            temperature = 0.2
+        if path.exists():
+            record = _read(path)
+            if record.get("prompt_sha256") not in (None, prompt_hash):
+                raise RuntimeError(f"{name} 提示词版本已改变，不能复用旧阶段回执")
+            if (
+                record.get("status") in ("call_failed_or_uncertain", "incomplete_response")
+                and (
+                    "API 正文未正常结束" in str(record.get("error", ""))
+                    or record.get("response_metadata", {}).get("finish_reason") == "length"
+                )
+            ):
+                archive = self.run_dir / f"{name}__incomplete_attempt_01.json"
+                if archive.exists() or path.resolve().parent != self.run_dir.resolve():
+                    raise RuntimeError(f"{name} 不完整回执归档路径冲突")
+                record["reconciliation"] = "finish_reason_length; one bounded stage retry"
+                _write(path, record)
+                path.replace(archive)
+                record = None
+            elif (
+                record.get("status") == "call_failed_or_uncertain"
+                and "API 未返回唯一的结构化工具调用" in str(record.get("error", ""))
+            ):
+                archive = self.run_dir / f"{name}__protocol_attempt_01.json"
+                if archive.exists() or path.resolve().parent != self.run_dir.resolve():
+                    raise RuntimeError(f"{name} 工具协议故障已重试一次，停止继续调用")
+                record["reconciliation"] = "complete_response_missing_required_tool_call; one_bounded_retry"
+                _write(path, record)
+                path.replace(archive)
+                stale_format = self.run_dir / f"{name}__format_repair.json"
+                if stale_format.exists():
+                    archived_format = self.run_dir / f"{name}__protocol_format_attempt_01.json"
+                    if archived_format.exists():
+                        raise RuntimeError(f"{name} 工具协议格式回执归档路径冲突")
+                    stale_format.replace(archived_format)
+                repaired = self.state.setdefault("local_format_reconciliations", [])
+                if name not in repaired:
+                    repaired.append(name)
+                    self._save()
+                record = None
+            elif (
+                record.get("status") == "call_failed_or_uncertain"
+                and "API 返回空正文" in str(record.get("error", ""))
+            ):
+                archive = self.run_dir / f"{name}__empty_attempt_01.json"
+                if archive.exists() or path.resolve().parent != self.run_dir.resolve():
+                    raise RuntimeError(f"{name} 空正文已重试一次，停止继续调用")
+                record["reconciliation"] = "complete_empty_response; one_bounded_stage_retry"
+                _write(path, record)
+                path.replace(archive)
+                record = None
+            elif (
+                record.get("status") == "call_failed_or_uncertain"
+                and self.retry_unconfirmed_transport
+                and _is_unconfirmed_transport(record.get("error", ""))
+            ):
+                archive = self.run_dir / f"{name}__transport_attempt_01.json"
+                if archive.exists() or path.resolve().parent != self.run_dir.resolve():
+                    raise RuntimeError(f"{name} 连接故障归档路径冲突")
+                record["reconciliation"] = "new bounded request after no-id connection failure"
+                _write(path, record)
+                path.replace(archive)
+                record = None
+            if record is not None:
+                if record.get("input_sha256") != input_hash or record.get("role") != role:
+                    if name.startswith((
+                        "director_shots", "director_revise", "writer_check", "writer_revise",
+                    )):
+                        archive = self.run_dir / f"{name}__stale_parent_01.json"
+                        if archive.exists() or path.resolve().parent != self.run_dir.resolve():
+                            raise RuntimeError(f"{name} 旧父稿归档路径冲突")
+                        record["invalidated_by_input_sha256"] = input_hash
+                        _write(path, record)
+                        path.replace(archive)
+                        record = None
+                    else:
+&gt;                       raise RuntimeError(f"{name} 已有记录与当前父稿不一致，拒绝复用")
+E                       RuntimeError: director_brief 已有记录与当前父稿不一致，拒绝复用
+
+src\content_factory\creative_workflow.py:6357: RuntimeError</failure></testcase><testcase classname="tests.test_creative_stage_debug" name="test_resolved_upstream_tampering_with_pending_downstream_stops_before_call[output_sha256]" time="0.236"><failure message="RuntimeError: director_brief 已存产物被改动">tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/p1_closure_v21/regression_tmp_2/test_resolved_upstream_tamperi2')
+damage = 'output_sha256'
+
+    @pytest.mark.parametrize("damage", ["prompt_sha256", "input_sha256", "output_sha256", "resolution"])
+    def test_resolved_upstream_tampering_with_pending_downstream_stops_before_call(tmp_path, damage):
+        run, bundle, script, old_feedback = _rebuilt_run(tmp_path)
+        CreativeStageCommandService(run).feedback("writer_script", "FIXTURE pending downstream")
+        path = run / "director_brief.json"
+        if damage == "resolution":
+            row = next(row for row in _read_json(run / "state.json")["debug_feedback"]
+                       if row["feedback_id"] == old_feedback["feedback_id"])
+            path = run / row["resolution_receipt"]
+            damage = "resolved_by_output_sha256"
+        value = _read_json(path)
+        value[damage] = "0" * 64
+        path.write_text(json.dumps(value), encoding="utf-8")
+&gt;       state, clients = _resume(run, bundle, [script])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_creative_stage_debug.py:320: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_creative_stage_debug.py:205: in _resume
+    result = runner.run(bundle)
+             ^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6999: in run
+    brief = self._stage(
+src\content_factory\creative_workflow.py:6009: in _stage
+    raw = self._stage_impl(name, role, payload, validator)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;src.content_factory.creative_workflow.CreativeWorkflow object at 0x00000226D2E37770&gt;
+name = 'director_brief', role = 'director'
+payload = {'materials': {'source_driver': 'novel', 'title': '测试', 'story_source': '起因句。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁白描写与事件背景。旁...ector', 'evidence': [], 'previous_output_sha256': 'f6d3fd0ed92ddcee4024f85dd9cdab1eb49269dc0149068028c8658d3c00ffdb'}]}
+validator = &lt;function CreativeWorkflow.run.&lt;locals&gt;.&lt;lambda&gt; at 0x00000226D3033690&gt;
+
+    def _stage_impl(
+        self,
+        name: str,
+        role: str,
+        payload: dict[str, Any],
+        validator: Any,
+    ) -&gt; dict[str, Any]:
+        self._active_stage_name = name
+        recovery = self.state.get("stage_recovery_bindings", {}).get(name)
+        if recovery:
+            if recovery.get("version") != "failed_plan_full_rebuild_v1":
+                raise RuntimeError("不支持的失败计划恢复绑定")
+            payload = {**payload, "stage_recovery_requirements": recovery["requirements"],
+                       "previous_invalid_output": recovery["previous_invalid_output"]}
+        if name.startswith("writer_revise") and self._script_revision_mode() == "full_script":
+            payload = {**payload, "revision_mode": "full_script"}
+        if name.startswith("director_state_plan") and payload.get("state_plan_version") in ("whole_film_action_plan_v1", "whole_film_action_plan_v2") and payload.get("plan_patch_base"):
+            payload = {**payload, "source_sha256": _hash(payload["plan_patch_base"])}
+            if payload.get("previous_draft") == payload["plan_patch_base"]:
+                payload.pop("previous_draft", None)
+        if name.startswith(("writer_check", "script_review")) and self.review_policy_version == REVIEW_V6:
+            evidence_interface = self.state.get("review_evidence_interface_version")
+            if evidence_interface:
+                if evidence_interface not in ("leaf_catalog_v1", "evidence_ids_v1"):
+                    raise CreativeContractError("不支持的审核证据接口版本")
+                payload = {**payload, "review_evidence_interface_version": evidence_interface}
+                hints_version = self.state.get("evidence_id_repair_hints_version")
+                if hints_version:
+                    if evidence_interface != "evidence_ids_v1" or hints_version != "missing_source_candidates_v1":
+                        raise CreativeContractError("不支持的审核证据候选导航版本")
+                    payload["evidence_id_repair_hints_version"] = hints_version
+        path = self.run_dir / f"{name}.json"
+        if name.startswith(("director_shots", "director_revise")):
+            limits = None
+            if path.exists():
+                messages = _read(path).get("request", {}).get("messages", [])
+                if messages:
+                    limits = json.loads(messages[-1]["content"]).get("executor_constraints")
+            elif getattr(self, "_reusable_generation", False):
+                audit = audit_creative_executor({"shots": []})
+                limits = {k: audit[k] for k in ("provider", "model", "duration_min", "duration_max", "evidence")}
+                limits["rule"] = "每镜时长须在范围内；长节拍拆成有叙事目的的镜头。切镜仍需实际衔接适配，不得伪称原始尾帧连续。"
+            if limits:
+                payload = {**payload, "executor_constraints": limits}
+                original_validator = validator
+                def validate_executable(value):
+                    original_validator(value)
+                    resolved = value
+                    if "replace_beats" in value:
+                        resolved = _apply_director_revision_patch(
+                            payload["previous_shots"], value, payload["affected_beat_ids"])
+                    invalid = [f"{row['id']}={row['duration_seconds']}秒"
+                               for row in resolved.get("shots", [])
+                               if type(row.get("duration_seconds")) is not int
+                               or not limits["duration_min"] &lt;= row["duration_seconds"] &lt;= limits["duration_max"]]
+                    if invalid:
+                        raise CreativeContractError(
+                            f"视频执行时长超限 {limits['duration_min']}—{limits['duration_max']}秒: {invalid}；拆镜时保留对白顺序与情绪窗口")
+                validator = validate_executable
+        if name.startswith("director_production_design") and not path.exists():
+            payload = deepcopy(payload)
+            payload["planning_rules"] = {
+                "reuse": "required_tags保留真实兼容要求，不为命中素材而删掉服装、光线等约束。指定复用必须与目录一致；未证实或需要改造时列issues或明确新建。未知布局需实际看图，不得猜测。",
+                "opening": "逐镜依据storyboard.start_state写t=0单张静态首帧；不复制整段视频prompt，不写随后、说完、转向、递出等镜内事件；不得把镜内事件提前完成。",
+                "assets": "asset_ids必须包含本镜所有可见人物（含手、背影、局部）及场景对应ID；纯画外发声不等于入画。固定左右、服装和道具首态与分镜一致。",
+                "dialogue": "逐句核对说话人是否入画，画内/画外/混合模式须与构图及生成提示一致。",
+                "review": "issues和previous_design为实际返修依据，逐项处理，不以自评分替代审核。",
+            }
+            if hasattr(self, "_production_revision_context"):
+                payload.update(self._production_revision_context)
+        elif name.startswith("director_production_design") and path.exists():
+            messages = _read(path).get("request", {}).get("messages", [])
+            if messages:
+                recorded = json.loads(messages[-1]["content"])
+                for key in ("planning_rules", "issues", "previous_design"):
+                    if key in recorded:
+                        payload = {**payload, key: recorded[key]}
+        event_binding = self.state.get("writer_prompt_binding")
+        original_director_binding = self.state.get("original_director_binding")
+        original_directing = bool(event_binding and original_director_binding and name.startswith("director_shots"))
+        revision_binding = None
+        if event_binding and original_director_binding and name.startswith("director_revise"):
+            revision_binding = self.state.get("original_director_revision_bindings", {}).get(name)
+            if revision_binding is None and not path.exists():
+                revision_binding = bind_original_director_revision(original_director_binding["prompt"])
+                self.state.setdefault("original_director_revision_bindings", {})[name] = revision_binding
+                self._save()
+        if original_directing or revision_binding:
+            payload = {**payload, "creative_brief": event_binding["creative_brief"]}
+        event_authoring = bool(event_binding and name.startswith(("writer_script", "writer_revise")))
+        if event_binding and name.startswith(("writer_script", "writer_revise", "writer_check")):
+            payload = {**payload, "creative_brief": event_binding["creative_brief"]}
+        priority_binding = self.state.get("original_brief_priority_binding")
+        if event_binding and priority_binding and name.startswith(("writer_analysis", "director_brief", "writer_director_feedback")):
+            payload = {**payload, "creative_brief": event_binding["creative_brief"]}
+        if event_authoring:
+            upstream_validator = validator
+            def validate_original_event_result(value):
+                upstream_validator(value)
+                resolved = value
+                if name.startswith("writer_revise") and payload.get("affected_beat_ids"):
+                    resolved = _writer_revision_result(payload["previous_script"], value, payload["affected_beat_ids"], allow_summary_update=payload.get("allow_summary_update", False), revision_mode=self._script_revision_mode())
+                validate_brief_script(resolved, event_binding["creative_brief"])
+            validator = validate_original_event_result
+        if self.review_policy_version in REVIEW_POLICY_VERSIONS:
+            if name.startswith("writer_check"):
+                legacy_validator = validator
+                def checked_review(value):
+                    legacy_validator(value)
+                    validate_review(value, payload)
+                validator = checked_review
+            elif name.startswith("director_shots"):
+                shot_validator = validator
+                def checked_story(value):
+                    shot_validator(value)
+                    if value.get("story_issues"):
+                        validate_review({"story_preserved": False, "issues": value["story_issues"],
+                                         "suggestions": [], "calibration_focus": []}, payload)
+                validator = checked_story
+        if self.review_policy_version in (REVIEW_V3, REVIEW_V4, REVIEW_V5, REVIEW_V6) and name.startswith(("script_review", "writer_check")):
+            base_review_validator = validator
+            def check_coverage(value):
+                if self.review_policy_version == REVIEW_V6 and payload.get("review_evidence_interface_version") == "evidence_ids_v1":
+                    from .creative_review_evidence_ids import expand_review_ids
+                    effective, _ = expand_review_ids(value, payload)
+                    validate_review_v6(effective, payload)
+                    base_review_validator(effective)
+                    return
+                if self.review_policy_version == REVIEW_V6 and payload.get("review_evidence_interface_version") == "leaf_catalog_v1":
+                    # Aggregate reference errors before a base validator stops at its first bad ref.
+                    validate_review_v6(value, payload)
+                    base_review_validator(value)
+                    return
+                base_review_validator(value)
+                if self.review_policy_version == REVIEW_V6:
+                    validate_review_v6(value, payload)
+                elif self.review_policy_version == REVIEW_V5:
+                    validate_review_v5(value, payload)
+                elif self.review_policy_version == REVIEW_V4:
+                    validate_review_v4(value, payload)
+                else:
+                    validate_v3_review(value, payload)
+            validator = check_coverage
+        input_hash = _hash(payload)
+        structured_schema = (
+            WRITER_TOOL_SCHEMAS.get(name.split("__", 1)[0]) if role == "writer" else None
+        )
+        if name.startswith("writer_revise") and self._script_revision_mode() != "full_script" and structured_schema and payload.get("affected_beat_ids"):
+            structured_schema = _writer_revision_schema(payload["affected_beat_ids"])
+        if name.startswith("director_state_plan"):
+            from .creative_state_plan_v6 import build_state_plan_prompt
+            prompt = build_state_plan_prompt(payload)
+        else:
+            prompt = (build_static_manifest_prompt(payload) if name == "static_visual_manifest"
+                      else PROMPTS[name.split("__", 1)[0]])
+        if name.startswith("script_review"):
+            prompt = review_prompt(self.review_policy_version)
+        if original_directing:
+            prompt = original_director_binding["prompt"]
+        elif revision_binding:
+            prompt = revision_binding["prompt"]
+        if self.model_profile == CREATE_REVIEW_PROFILE:
+            if name.startswith("writer_check"):
+                prompt = prompt.replace(
+                    "你是 MiniMax 编剧，核对 DeepSeek 导演稿",
+                    "你是 DeepSeek 独立审查员，核对 MiniMax 创作稿",
+                ).replace("你是现有编剧角色的交叉回核，不是独立第三审核模型。",
+                          "你只审查和提出可定位问题，不代写或改写创作正文。")
+                prompt += ("\n同时审查production_design（如提供）：首帧是否仅为start_state静态投影、"
+                           "资产复用是否匹配目录、对白模式与构图是否一致、道具及动作时序是否连续。"
+                           "资产与首帧问题归director并定位到镜号；不可凭自评分宣称媒体通过。"
+                           "同一说话人的一句对白按标点跨镜且逐字衔接是合法表达，不能仅因跨镜判major。"
+                           "画外角色发声或动作说明提及该角色，不等于角色必须入画；须有明确相反构图才判冲突。"
+                           "首帧可以定格正在持续的动作，不能仅因正在作画就强改为尚未落笔；"
+                           "只检查首态已完成的动作是否被镜内重新执行。没有实际媒体不能断言口型失败。")
+            elif not name.startswith("script_review"):
+                prompt = prompt.replace("DeepSeek", "MiniMax")
+        if event_authoring:
+            prompt = event_binding["prompt"]
+            prompt += "\ncreative_brief为用户创作要求，优先于导演brief。只返回events事件版完整稿，不返回before/during/after或补丁。"
+            if name.startswith("writer_revise"):
+                if self._script_revision_mode() != "full_script":
+                    prompt += "\n按issues修复affected_beat_ids，其他拍逐字保留原稿；previous_script是旧接口格式，按其真实播放顺序转换成events。"
+            structured_schema = deepcopy(EVENT_SCHEMA)
+        priority_binding = self.state.get("original_brief_priority_binding")
+        if event_binding and priority_binding and name.startswith(("writer_analysis", "director_brief", "writer_director_feedback", "writer_script", "writer_revise")):
+            prompt += "\n" + priority_binding["prompt"]
+        if event_binding and priority_binding and not original_directing and name.startswith("director_shots") and priority_binding.get("director_execution_prompt"):
+            prompt += "\n" + priority_binding["director_execution_prompt"]
+        if event_authoring and name.startswith("writer_revise") and self._script_revision_mode() != "full_script":
+            previous_beats = payload.get("previous_script", {}).get("beats", [])
+            locked_ids = [b["id"] for b in previous_beats]
+            prompt += "\n事件返修必须保持现有节拍ID、顺序和总拍数；不得重排编号、合并或拆拍。仅修改affected_beat_ids中的完整事件，其余实际动作/对白及各拍秒数与previous_script一致。每拍dialogue最多两条，不为旧样例凑第三条；如果完整稿概括与正文冲突，以实际正文为准。返回完整事件JSON。"
+            structured_schema = deepcopy(structured_schema)
+            structured_schema["properties"]["beats"].update(minItems=len(locked_ids), maxItems=len(locked_ids))
+            beat_schema = structured_schema["properties"]["beats"]["items"]
+            beat_schema["properties"]["id"]["enum"] = locked_ids
+            beat_schema["properties"]["events"].update(minItems=1,
+                contains={"type":"object","properties":{"kind":{"const":"dialogue"}},"required":["kind"]},
+                minContains=0,maxContains=2)
+        if event_authoring and name.startswith("writer_revise") and self._script_revision_mode() == "full_script":
+            prompt += "\n" + self.state["script_revision_binding"]["prompt"]
+            structured_schema["properties"]["beats"]["items"]["properties"]["events"]["minItems"] = 1
+        if event_authoring and payload.get("allow_summary_update") is True and self._script_revision_mode() != "full_script":
+            prompt += "\n本次授权同步修订根字段 premise，使其准确概括合并后的完整剧本；不得保留已删除动作或道具。title 和 selected_candidate_id 不变，未授权节拍正文逐字保留。"
+        if event_binding and name.startswith("writer_check"):
+            prompt += "\n必须逐条核对creative_brief的转折、结尾行动主体、禁用物和线索出现时间。只有实际动作/对白算演出，event和trigger是摘要。不要将优点、无矛盾内容或正常省略走路列为问题；每个问题引用原字段实词。"
+        if self.review_policy_version in REVIEW_POLICY_VERSIONS:
+            if name.startswith("writer_check"):
+                prompt += review_rules(self.review_policy_version)
+            elif name.startswith("director_shots"):
+                prompt += "\n若返回story_issues，每项同样必须符合以下issues证据要求；正常分镜返回格式不变。" + review_rules(self.review_policy_version)
+        if self.review_policy_version in (REVIEW_V3, REVIEW_V4, REVIEW_V5, REVIEW_V6) and name.startswith(("script_review", "writer_check")):
+            # Replace, never append to the conflicting legacy six-field/scoring contract.
+            prompt = (build_review_prompt_v6(payload) if self.review_policy_version == REVIEW_V6
+                      else build_review_prompt_v5(payload) if self.review_policy_version == REVIEW_V5
+                      else build_review_prompt_v4(payload) if self.review_policy_version == REVIEW_V4
+                      else build_review_prompt(payload))
+            structured_schema = None
+        if name.startswith("director_shots") and payload.get("segment_instructions"):
+            prompt += "\n" + payload["segment_instructions"]
+        if recovery:
+            prompt += "\n本阶段完整重新生成；previous_invalid_output仅用于定位旧错误，不是可继续合并的合格稿。" + recovery["requirements"]
+        stage_thinking = "disabled"
+        if name.startswith("director_state_plan") and payload.get("state_plan_version") in ("whole_film_state_plan_v2", "whole_film_state_plan_v3", "whole_film_action_plan_v1", "whole_film_action_plan_v2"):
+            from .creative_state_plan_v6 import build_state_plan_schema
+            structured_schema = build_state_plan_schema(payload)
+            stage_thinking = payload.get("plan_thinking_mode", "adaptive")
+        if name.startswith("director_state_plan") and payload.get("state_plan_version") in ("whole_film_action_plan_v1", "whole_film_action_plan_v2") and payload.get("plan_patch_base"):
+            from .creative_plan_patch import build_patch_request, build_patch_schema
+            prompt, _ = build_patch_request(structured_schema, payload, payload.get("issues", []), payload["plan_patch_base"])
+            prompt += "\n本阶段原计划在plan_patch_base，source_sha256在请求根层；按issues修复。"
+            structured_schema = build_patch_schema(payload["plan_patch_base"], target_schema=structured_schema)
+        from .creative_narrative_focus import prompt_for_stage
+        prompt += prompt_for_stage(self.state.get("narrative_focus_binding"), name)
+        if structured_schema is not None:
+            prompt += "\n请调用 submit_creative_json 工具提交上述完整 JSON，不要另写正文。"
+        prompt_hash = _hash(prompt)
+        if payload.get("debug_must_fix_feedback"):
+            prompt += (
+                "\n本次调用是用户明确登记的必修反馈返修。逐条处理 debug_must_fix_feedback，"
+                "修订当前责任阶段产物；不得沿用旧产物，不得把反馈当作建议忽略。"
+                "反馈修复通过本阶段原有 validator 后才可继续下游。"
+            )
+            prompt_hash = _hash(prompt)
+        max_tokens = 20000 if role == "director" else 12000
+        temperature = 0.2 if event_authoring else (0.1 if name in ("writer_script", "writer_screenplay") else 0.4)
+        if self.review_policy_version in REVIEW_POLICY_VERSIONS and name.startswith(("script_review", "writer_check")):
+            temperature = 0.2
+        if path.exists():
+            record = _read(path)
+            if record.get("prompt_sha256") not in (None, prompt_hash):
+                raise RuntimeError(f"{name} 提示词版本已改变，不能复用旧阶段回执")
+            if (
+                record.get("status") in ("call_failed_or_uncertain", "incomplete_response")
+                and (
+                    "API 正文未正常结束" in str(record.get("error", ""))
+                    or record.get("response_metadata", {}).get("finish_reason") == "length"
+                )
+            ):
+                archive = self.run_dir / f"{name}__incomplete_attempt_01.json"
+                if archive.exists() or path.resolve().parent != self.run_dir.resolve():
+                    raise RuntimeError(f"{name} 不完整回执归档路径冲突")
+                record["reconciliation"] = "finish_reason_length; one bounded stage retry"
+                _write(path, record)
+                path.replace(archive)
+                record = None
+            elif (
+                record.get("status") == "call_failed_or_uncertain"
+                and "API 未返回唯一的结构化工具调用" in str(record.get("error", ""))
+            ):
+                archive = self.run_dir / f"{name}__protocol_attempt_01.json"
+                if archive.exists() or path.resolve().parent != self.run_dir.resolve():
+                    raise RuntimeError(f"{name} 工具协议故障已重试一次，停止继续调用")
+                record["reconciliation"] = "complete_response_missing_required_tool_call; one_bounded_retry"
+                _write(path, record)
+                path.replace(archive)
+                stale_format = self.run_dir / f"{name}__format_repair.json"
+                if stale_format.exists():
+                    archived_format = self.run_dir / f"{name}__protocol_format_attempt_01.json"
+                    if archived_format.exists():
+                        raise RuntimeError(f"{name} 工具协议格式回执归档路径冲突")
+                    stale_format.replace(archived_format)
+                repaired = self.state.setdefault("local_format_reconciliations", [])
+                if name not in repaired:
+                    repaired.append(name)
+                    self._save()
+                record = None
+            elif (
+                record.get("status") == "call_failed_or_uncertain"
+                and "API 返回空正文" in str(record.get("error", ""))
+            ):
+                archive = self.run_dir / f"{name}__empty_attempt_01.json"
+                if archive.exists() or path.resolve().parent != self.run_dir.resolve():
+                    raise RuntimeError(f"{name} 空正文已重试一次，停止继续调用")
+                record["reconciliation"] = "complete_empty_response; one_bounded_stage_retry"
+                _write(path, record)
+                path.replace(archive)
+                record = None
+            elif (
+                record.get("status") == "call_failed_or_uncertain"
+                and self.retry_unconfirmed_transport
+                and _is_unconfirmed_transport(record.get("error", ""))
+            ):
+                archive = self.run_dir / f"{name}__transport_attempt_01.json"
+                if archive.exists() or path.resolve().parent != self.run_dir.resolve():
+                    raise RuntimeError(f"{name} 连接故障归档路径冲突")
+                record["reconciliation"] = "new bounded request after no-id connection failure"
+                _write(path, record)
+                path.replace(archive)
+                record = None
+            if record is not None:
+                if record.get("input_sha256") != input_hash or record.get("role") != role:
+                    if name.startswith((
+                        "director_shots", "director_revise", "writer_check", "writer_revise",
+                    )):
+                        archive = self.run_dir / f"{name}__stale_parent_01.json"
+                        if archive.exists() or path.resolve().parent != self.run_dir.resolve():
+                            raise RuntimeError(f"{name} 旧父稿归档路径冲突")
+                        record["invalidated_by_input_sha256"] = input_hash
+                        _write(path, record)
+                        path.replace(archive)
+                        record = None
+                    else:
+                        raise RuntimeError(f"{name} 已有记录与当前父稿不一致，拒绝复用")
+            if record is not None:
+                if record.get("status") == "response_received":
+                    if (
+                        structured_schema is not None
+                        and record.get("response_metadata", {}).get("output_mode")
+                        == "content_after_missing_tool_call"
+                        and "{" not in str(record.get("response_text", ""))
+                    ):
+                        record["status"] = "call_failed_or_uncertain"
+                        record["error"] = (
+                            f"{role} API 未返回唯一的结构化工具调用；"
+                            "完整正文也不含 JSON 对象"
+                        )
+                        _write(path, record)
+                        return self._stage(name, role, payload, validator)
+                    output = self._decode(name, role, record["response_text"])
+                    output = self._unwrap_director_envelope(name, output)
+                    output = self._unwrap_writer_revise_envelope(name, output)
+                    if name.startswith("director_state_plan") and payload.get("state_plan_version") in ("whole_film_action_plan_v1", "whole_film_action_plan_v2") and payload.get("plan_patch_base"):
+                        output = self._merge_action_plan_patch(name, payload["plan_patch_base"], output)
+                    if event_authoring:
+                        record["event_output"] = deepcopy(output)
+                        try:
+                            output = compile_event_script(output)
+                        except CreativeContractError as event_error:
+                            record["event_compilation_error"] = str(event_error)
+                            from .creative_event_recovery import repair_event_contract
+                            output = repair_event_contract(self, name, role, payload, output, event_error, validator)
+                        if name.startswith("writer_revise"):
+                            output["screenplay_markdown"] = compile_beat_screenplay(output)
+                    output = self._validate_or_repair(name, role, payload, output, validator)
+                    record["output"] = output
+                    record["output_sha256"] = _hash(output)
+                    record["status"] = "validated"
+                    _write(path, record)
+                    if not any(row["name"] == name for row in self.state["stages"]):
+                        self.state["stages"].append({
+                            "name": name, "role": role,
+                            "input_sha256": input_hash,
+                            "output_sha256": record["output_sha256"],
+                            "context_budget": record.get("context_budget"),
+                            "usage": record["response_metadata"],
+                        })
+                        self._save()
+                    return output
+                if record.get("status") != "validated":
+                    raise RuntimeError(f"{name} 上次调用状态未确认，请核对回执后再恢复")
+                output = record["output"]
+                if _hash(output) != record.get("output_sha256"):
+&gt;                   raise RuntimeError(f"{name} 已存产物被改动")
+E                   RuntimeError: director_brief 已存产物被改动
+
+src\content_factory\creative_workflow.py:6407: RuntimeError</failure></testcase><testcase classname="tests.test_creative_stage_debug" name="test_resolved_upstream_tampering_with_pending_downstream_stops_before_call[resolution]" time="0.197"><failure message="ValueError: resolved feedback replay binding changed">tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/p1_closure_v21/regression_tmp_2/test_resolved_upstream_tamperi3')
+damage = 'resolved_by_output_sha256'
+
+    @pytest.mark.parametrize("damage", ["prompt_sha256", "input_sha256", "output_sha256", "resolution"])
+    def test_resolved_upstream_tampering_with_pending_downstream_stops_before_call(tmp_path, damage):
+        run, bundle, script, old_feedback = _rebuilt_run(tmp_path)
+        CreativeStageCommandService(run).feedback("writer_script", "FIXTURE pending downstream")
+        path = run / "director_brief.json"
+        if damage == "resolution":
+            row = next(row for row in _read_json(run / "state.json")["debug_feedback"]
+                       if row["feedback_id"] == old_feedback["feedback_id"])
+            path = run / row["resolution_receipt"]
+            damage = "resolved_by_output_sha256"
+        value = _read_json(path)
+        value[damage] = "0" * 64
+        path.write_text(json.dumps(value), encoding="utf-8")
+&gt;       state, clients = _resume(run, bundle, [script])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_creative_stage_debug.py:320: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_creative_stage_debug.py:205: in _resume
+    result = runner.run(bundle)
+             ^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6999: in run
+    brief = self._stage(
+src\content_factory\creative_workflow.py:5915: in _stage
+    replayed_feedback = replayable_resolved_stage_feedback(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+run_dir = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/p1_closure_v21/regression_tmp_2/test_resolved_upstream_tamperi3/run')
+state = {'narrative_focus_binding': None, 'reference_expression_version': None, 'script_revision_binding': None, 'schema': 'creative_workflow_state/v1', ...}
+stage_name = 'director_brief'
+
+    def replayable_resolved_stage_feedback(
+        run_dir: Path,
+        state: dict[str, Any],
+        stage_name: str,
+    ) -&gt; list[dict[str, Any]]:
+        """Rebuild the exact repair context only while its validated output is current."""
+        current = next((
+            row for row in reversed(state.get("stages", []))
+            if row.get("name") == stage_name
+        ), None)
+        if current is None:
+            return []
+        run_root = Path(run_dir).resolve()
+        replay = []
+        for row in state.get("debug_feedback", []):
+            if (row.get("stage_id") != stage_name
+                    or row.get("disposition") != "must_fix"
+                    or row.get("resolved_by_output_sha256") != current.get("output_sha256")):
+                continue
+            feedback_path = (run_root / row["receipt"]).resolve()
+            resolution_path = (run_root / row.get("resolution_receipt", "")).resolve()
+            if (not feedback_path.is_relative_to(run_root)
+                    or not resolution_path.is_relative_to(run_root)):
+                raise ValueError("feedback replay receipt escaped the run directory")
+            feedback = _read(feedback_path)
+            resolution = _read(resolution_path)
+            if (feedback.get("feedback_id") != row.get("feedback_id")
+                    or feedback.get("stage_id") != stage_name
+                    or feedback.get("output_sha256") != row.get("output_sha256")
+                    or resolution.get("schema") != "creative_stage_feedback_resolution/v1"
+                    or resolution.get("feedback_id") != row.get("feedback_id")
+                    or resolution.get("stage_id") != stage_name
+                    or resolution.get("feedback_sha256") != _hash(feedback)
+                    or resolution.get("previous_output_sha256") != row.get("output_sha256")
+                    or resolution.get("resolved_by_output_sha256") != current.get("output_sha256")):
+&gt;               raise ValueError("resolved feedback replay binding changed")
+E               ValueError: resolved feedback replay binding changed
+
+src\content_factory\creative_stage_debug.py:133: ValueError</failure></testcase><testcase classname="tests.test_creative_stage_debug" name="test_feedback_rejects_mismatched_current_receipt" time="0.207" /><testcase classname="tests.test_creative_stage_debug" name="test_single_step_counts_repaired_version_and_pauses_at_target" time="0.289" /></testsuite></testsuites>

@@ -1,0 +1,11 @@
+{
+  "schema_version": "creative_governance_runtime_upgrade/v1",
+  "created_at": "2026-10-01T17:44:55.755032+00:00",
+  "base_directory": "data/creative_governance/20261001_v17_history_usage",
+  "base_artifact_manifest_sha256": "ec3a57f09578dbf4efb3768d087601be0236f659f7bf6b53e50096eed5a0fd2e",
+  "base_runtime_sources_sha256": "f31e74effe275f5b444105003a1e108d762e39076e47db92aedda9e3f1a00842",
+  "runtime_sources_sha256": "527f57493ac58c9611a6c51df3be0a1dff1e2119c05d8b6c0a2026a5e0af4c4c",
+  "semantic_rules_changed": false,
+  "quality_claim_added": false,
+  "media_review_performed": false
+}

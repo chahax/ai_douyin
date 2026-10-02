@@ -253,7 +253,7 @@ class ContentOpportunityScorer:
             recommended_presentation=presentation,
             recommended_hook_type=hook,
             recommended_pacing=pacing,
-            recommended_duration_seconds=15.0,
+            recommended_duration_seconds=_recommended_duration(profile),
             recommended_publish_window=(
                 profile.publishing_windows[0] if profile.publishing_windows else "待测试"
             ),
@@ -287,3 +287,14 @@ def _unique(values: list[str]) -> list[str]:
         if normalized and normalized not in output:
             output.append(normalized)
     return output[:30]
+
+
+def _recommended_duration(profile: AccountProfile) -> float:
+    """Use the domain default until a source highlight selects its exact runtime."""
+    if profile.domain_strategy_id != "novel_promotion":
+        return 15.0
+    config = profile.domain_config or {}
+    minimum = float(config.get("min_video_seconds") or 45)
+    default = float(config.get("default_video_seconds") or 60)
+    maximum = float(config.get("max_video_seconds") or 180)
+    return max(minimum, min(maximum, default))

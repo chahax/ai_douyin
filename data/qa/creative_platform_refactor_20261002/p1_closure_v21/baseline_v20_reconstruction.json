@@ -1,0 +1,6 @@
+{
+  "schema": "v20_reconstruction_binding/v1",
+  "expected_sha256": "66fc4ea8824ffa18d31ecfd581928cb04d1c039807b03bae96e3cd791548335c",
+  "actual_sha256": "66fc4ea8824ffa18d31ecfd581928cb04d1c039807b03bae96e3cd791548335c",
+  "matches_frozen_v20": true
+}

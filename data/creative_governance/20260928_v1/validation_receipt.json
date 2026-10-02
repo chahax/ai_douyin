@@ -1,0 +1,52 @@
+{
+  "schema_version": "creative_governance_validation/v1",
+  "source_hash": "efef00040687c3cdc82f2715df2d3911a3b14f7114e5da4f2efd2c5fd05042a8",
+  "created_at": "2026-09-28T13:49:21.882337+00:00",
+  "implementation_status": "offline_implemented_not_production_validated",
+  "checks": {
+    "registry": {
+      "schema_valid": true,
+      "inventory_complete_within_declared_scope": true,
+      "repository_wide_complete": false,
+      "rule_count": 7
+    },
+    "ownership": {
+      "unique_fields": 9,
+      "conflicting_fields": 0
+    },
+    "dataset": {
+      "case_count": 22,
+      "approved_case_count": 0,
+      "candidate_case_count": 22,
+      "approved_independent_count": 0,
+      "holdout_count": 0,
+      "source_family_count": 14,
+      "failures": [
+        "APPROVED_INDEPENDENT_SAMPLE_SHORTFALL",
+        "FROZEN_HOLDOUT_SHORTFALL",
+        "CATEGORY_SHORTFALL:action:error",
+        "CATEGORY_SHORTFALL:action:correct",
+        "HOLDOUT_CATEGORY_SHORTFALL:action:error",
+        "HOLDOUT_CATEGORY_SHORTFALL:action:correct",
+        "CATEGORY_SHORTFALL:interaction:error",
+        "CATEGORY_SHORTFALL:interaction:correct",
+        "HOLDOUT_CATEGORY_SHORTFALL:interaction:error",
+        "HOLDOUT_CATEGORY_SHORTFALL:interaction:correct",
+        "CATEGORY_SHORTFALL:space:error",
+        "CATEGORY_SHORTFALL:space:correct",
+        "HOLDOUT_CATEGORY_SHORTFALL:space:error",
+        "HOLDOUT_CATEGORY_SHORTFALL:space:correct",
+        "CATEGORY_SHORTFALL:camera:error",
+        "CATEGORY_SHORTFALL:camera:correct",
+        "HOLDOUT_CATEGORY_SHORTFALL:camera:error",
+        "HOLDOUT_CATEGORY_SHORTFALL:camera:correct"
+      ],
+      "qualified": false,
+      "gold_labels_missing": 22,
+      "source_family_leaks": []
+    }
+  },
+  "command": "python scripts/manage_creative_governance.py build --output data\\creative_governance\\20260928_v1",
+  "exit_code": 0,
+  "acceptance": "Registry infrastructure passes; dataset/quality/cost acceptance blocked by missing approved labels, samples, runs and invoices."
+}

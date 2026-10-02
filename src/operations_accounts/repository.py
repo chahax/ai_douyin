@@ -451,6 +451,15 @@ class AccountBindingRepository:
                     f"该浏览器环境已绑定运营账号 {environment_owner['account_key']}。"
                 )
 
+            # Keep immutable identity snapshots when rebinding; never erase history.
+            conn.execute('''CREATE TABLE IF NOT EXISTS account_binding_history (
+                id INTEGER PRIMARY KEY AUTOINCREMENT, account_uuid TEXT NOT NULL,
+                changed_at TEXT NOT NULL, confirmed_by TEXT NOT NULL, snapshot_json TEXT NOT NULL
+            )''')
+            if existing is not None and existing['platform_identity_key'] != identity.platform_identity_key:
+                conn.execute('INSERT INTO account_binding_history(account_uuid, changed_at, confirmed_by, snapshot_json) VALUES(?,?,?,?)',
+                             (profile.account_uuid, now, confirmed_by, json.dumps(dict(existing), ensure_ascii=False)))
+
             created_at = existing["created_at"] if existing is not None else now
             conn.execute(
                 """

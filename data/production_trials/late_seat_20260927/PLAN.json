@@ -1,0 +1,12 @@
+{
+  "objective": "从完整创作简报到可读剧本、分镜、资产/首帧方案；实际审查并修复流程，不以审核器统计代替成果",
+  "brief_role": "助手选定的实际制作试验需求，不冒充用户已确认的正式选题",
+  "max_calls": 20,
+  "max_total_tokens": 180000,
+  "max_revisions": 2,
+  "max_contract_repairs": 4,
+  "media_calls": 0,
+  "run_dir": "data/creative_workflows/late_seat_20260927",
+  "assets": "使用现有资产目录审查兼容性；二维新人物若无匹配素材必须新建，不强行复用",
+  "reviews": "主agent阅读全文并登记证据核实；独立子agent审查是否满足用户核心目标；不得凭空标通过"
+}

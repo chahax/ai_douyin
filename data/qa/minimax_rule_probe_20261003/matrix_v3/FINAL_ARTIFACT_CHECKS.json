@@ -1,0 +1,22 @@
+{
+  "schema": "minimax_rule_probe_final_artifact_checks/v1",
+  "source_and_parent_binding": "unchanged",
+  "scoped_git_diff_check": "passed",
+  "checked_files": [
+    "scripts/prepare_minimax_rule_probe.py",
+    "scripts/run_minimax_rule_probe.py",
+    "src/content_factory/creative_workflow_roles.py",
+    "tests/test_minimax_small_context_rule_probe.py",
+    "tests/test_minimax_rule_probe_runner.py",
+    "tests/test_creative_response_contract.py",
+    "docs/AI_PROJECT_GUIDE.md",
+    "docs/CREATIVE_WORKFLOW_IMPLEMENTATION.md",
+    "docs/CREATIVE_STAGE_DEBUGGING.md",
+    "docs/MINIMAX_SMALL_CONTEXT_RULE_TEST_20261003.md"
+  ],
+  "report_links_checked": 9,
+  "missing_report_links": [],
+  "trailing_whitespace": [],
+  "further_network_calls": 0,
+  "report": "D:\\IT\\ai_douyin\\docs\\MINIMAX_SMALL_CONTEXT_RULE_TEST_20261003.md"
+}

@@ -1,0 +1,72 @@
+........................................................................ [  9%]
+............................................F........................... [ 19%]
+........................................................................ [ 28%]
+........................................................................ [ 38%]
+........................................................................ [ 47%]
+........................................................................ [ 57%]
+........................................................................ [ 66%]
+........................................................................ [ 76%]
+........................................................................ [ 85%]
+........................................................................ [ 95%]
+...................................                                      [100%]
+================================== FAILURES ===================================
+________ test_assistant_review_sync_cannot_clear_pending_user_feedback ________
+tests\test_creative_feedback_consistency.py:456: in test_assistant_review_sync_cannot_clear_pending_user_feedback
+    current = synchronize_review_state(root)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_calibration.py:498: in synchronize_review_state
+    return _synchronize_review_state_locked(run_dir)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_calibration.py:190: in _synchronize_review_state_locked
+    review = validated_assistant_review(run_dir, state)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_calibration.py:172: in validated_assistant_review
+    _valid_handoff(Path(run_dir), state)
+src\content_factory\creative_calibration.py:143: in _valid_handoff
+    raise ValueError("运行尚未完成文本交接")
+E   ValueError: 运行尚未完成文本交接
+============================== warnings summary ===============================
+src\shared\database.py:7
+  D:\IT\ai_douyin\src\shared\database.py:7: MovedIn20Warning: The ``declarative_base()`` function is now available as sqlalchemy.orm.declarative_base(). (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    Base = declarative_base()
+
+tests/test_publish_status_propagation.py::test_worker_keeps_pending_publish_out_of_completed_state
+tests/test_publish_status_propagation.py::test_worker_keeps_pending_publish_out_of_completed_state
+tests/test_publish_status_propagation.py::test_worker_keeps_pending_publish_out_of_completed_state
+tests/test_task_queue_claim.py::test_sqlite_conditional_claim_has_exactly_one_winner
+tests/test_task_queue_claim.py::test_sqlite_conditional_claim_has_exactly_one_winner
+tests/test_task_queue_claim.py::test_sqlite_conditional_claim_has_exactly_one_winner
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+  D:\IT\ai_douyin\.venv\Lib\site-packages\sqlalchemy\sql\schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+
+tests/test_publish_status_propagation.py::test_worker_keeps_pending_publish_out_of_completed_state
+tests/test_task_queue_claim.py::test_sqlite_conditional_claim_has_exactly_one_winner
+tests/test_task_queue_claim.py::test_sqlite_conditional_claim_has_exactly_one_winner
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+  D:\IT\ai_douyin\src\scheduler\queue.py:141: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_publish_status_propagation.py::test_worker_keeps_pending_publish_out_of_completed_state
+  D:\IT\ai_douyin\src\scheduler\queue.py:269: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+  D:\IT\ai_douyin\src\scheduler\queue.py:237: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+  D:\IT\ai_douyin\tests\test_task_queue_claim.py:74: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    TaskExecution.lease_expires_at: datetime.utcnow() - timedelta(seconds=1),
+
+tests/test_task_queue_claim.py::test_heartbeat_requires_owner_and_expired_lease_becomes_unknown
+  D:\IT\ai_douyin\src\scheduler\queue.py:346: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = now or datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_creative_feedback_consistency.py::test_assistant_review_sync_cannot_clear_pending_user_feedback
+1 failed, 754 passed, 18 warnings in 245.64s (0:04:05)
+ACCEPTANCE_EXIT_CODE=1

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="30" time="19.655" timestamp="2026-10-02T14:57:30.725613+08:00" hostname="DESKTOP-DP111LI"><testcase classname="tests.test_creative_stage_debug" name="test_breakpoint_and_next_stage_reuse_saved_budget_and_artifacts" time="0.065" /><testcase classname="tests.test_creative_stage_debug" name="test_feedback_binds_current_hash_and_invalidates_only_downstream_debug_view" time="0.057" /><testcase classname="tests.test_creative_stage_debug" name="test_immutable_versions_have_deterministic_diff" time="0.011" /><testcase classname="tests.test_creative_stage_debug" name="test_noninitial_must_fix_resume_replays_valid_upstream_and_reaches_target" time="0.091" /><testcase classname="tests.test_creative_stage_debug" name="test_resolved_repair_context_replays_then_rebuilds_invalidated_downstream" time="0.175" /><testcase classname="tests.test_creative_stage_debug" name="test_two_successive_script_repairs_select_current_keep_history_and_budget" time="0.347" /><testcase classname="tests.test_creative_stage_debug" name="test_multiple_pending_stages_follow_dependencies_not_feedback_order[False]" time="0.310" /><testcase classname="tests.test_creative_stage_debug" name="test_multiple_pending_stages_follow_dependencies_not_feedback_order[True]" time="0.341" /><testcase classname="tests.test_creative_stage_debug" name="test_second_round_budget_exhaustion_keeps_pending_feedback_and_counters" time="0.200" /><testcase classname="tests.test_creative_stage_debug" name="test_resolved_upstream_tampering_with_pending_downstream_stops_before_call[prompt_sha256]" time="0.198" /><testcase classname="tests.test_creative_stage_debug" name="test_resolved_upstream_tampering_with_pending_downstream_stops_before_call[input_sha256]" time="0.205" /><testcase classname="tests.test_creative_stage_debug" name="test_resolved_upstream_tampering_with_pending_downstream_stops_before_call[output_sha256]" time="0.215" /><testcase classname="tests.test_creative_stage_debug" name="test_resolved_upstream_tampering_with_pending_downstream_stops_before_call[resolution]" time="0.220" /><testcase classname="tests.test_creative_stage_debug" name="test_feedback_rejects_mismatched_current_receipt" time="0.166" /><testcase classname="tests.test_creative_stage_debug" name="test_single_step_counts_repaired_version_and_pauses_at_target" time="0.223" /><testcase classname="tests.test_creative_stage_debug" name="test_pending_late_stage_rebuilds_invalidated_intermediates_after_upstream_repair" time="0.334" /><testcase classname="tests.test_creative_stage_debug" name="test_legacy_graph_bootstrap_uses_first_traversal_after_revision_history" time="0.209" /><testcase classname="tests.test_creative_stage_debug" name="test_explicit_dependency_graph_does_not_invalidate_independent_stage" time="0.167" /><testcase classname="tests.test_creative_workflow_ui" name="test_page_novel_route_launches_explicit_new_workflow" time="0.384" /><testcase classname="tests.test_creative_workflow_ui" name="test_page_switches_to_independent_video_driver" time="0.019" /><testcase classname="tests.test_creative_workflow_ui" name="test_page_displays_detached_launch_failure" time="9.942"><failure message="RuntimeError: AppTest script run timed out after 3(s)">tests\test_creative_workflow_ui.py:69: in test_page_displays_detached_launch_failure
+    app = _app()
+          ^^^^^^
+tests\test_creative_workflow_ui.py:11: in _app
+    ).run()
+      ^^^^^
+.venv\Lib\site-packages\streamlit\testing\v1\app_test.py:428: in run
+    return self._tree.run(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\streamlit\testing\v1\element_tree.py:2426: in run
+    return self._runner._run(widget_states, timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\streamlit\testing\v1\app_test.py:372: in _run
+    self._tree = script_runner.run(
+.venv\Lib\site-packages\streamlit\testing\v1\local_script_runner.py:147: in run
+    require_widgets_deltas(self, timeout)
+.venv\Lib\site-packages\streamlit\testing\v1\local_script_runner.py:195: in require_widgets_deltas
+    raise RuntimeError(err_string)
+E   RuntimeError: AppTest script run timed out after 3(s)</failure></testcase><testcase classname="tests.test_creative_workflow_ui" name="test_page_can_reopen_saved_run_after_fresh_session" time="3.710"><failure message="RuntimeError: AppTest script run timed out after 3(s)">tests\test_creative_workflow_ui.py:87: in test_page_can_reopen_saved_run_after_fresh_session
+    app.selectbox[1].set_value(run_dir.name).run()
+.venv\Lib\site-packages\streamlit\testing\v1\element_tree.py:158: in run
+    return self.root.run(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\streamlit\testing\v1\element_tree.py:2426: in run
+    return self._runner._run(widget_states, timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\streamlit\testing\v1\app_test.py:372: in _run
+    self._tree = script_runner.run(
+.venv\Lib\site-packages\streamlit\testing\v1\local_script_runner.py:147: in run
+    require_widgets_deltas(self, timeout)
+.venv\Lib\site-packages\streamlit\testing\v1\local_script_runner.py:195: in require_widgets_deltas
+    raise RuntimeError(err_string)
+E   RuntimeError: AppTest script run timed out after 3(s)</failure></testcase><testcase classname="tests.test_creative_workflow_ui" name="test_page_resumes_needs_attention_task_with_bound_materials_and_budget" time="0.029" /><testcase classname="tests.test_creative_workflow_ui" name="test_page_does_not_offer_resume_after_bound_budget_is_exhausted" time="0.015" /><testcase classname="tests.test_creative_workflow_ui" name="test_page_explains_temporary_assistant_review_without_third_model" time="0.006" /><testcase classname="tests.test_creative_workflow_ui" name="test_page_explains_review_can_stop_after_calibration" time="0.004" /><testcase classname="tests.test_creative_workflow_ui" name="test_page_explains_old_profile_passes_do_not_count" time="0.005" /><testcase classname="tests.test_creative_workflow_ui" name="test_page_shows_bound_assistant_failure_without_claiming_video_pass" time="0.022" /><testcase classname="tests.test_creative_workflow_ui" name="test_page_original_route_uses_brief_without_novel_or_video" time="0.284" /><testcase classname="tests.test_creative_workflow_ui" name="test_page_feedback_uses_latest_stage_and_separates_history" time="0.472" /></testsuite></testsuites>

@@ -1,0 +1,13 @@
+{
+  "authorization": "用户明确回复：允许新增最多18次，完成三轮对比。承接已使用24次，调用上限24提高至42；原500000总token上限不变，不重置旧账本。",
+  "starting_budget": {
+    "calls_started": 24,
+    "reported_tokens": 379026,
+    "max_calls_before_authorization": 24,
+    "max_calls": 42,
+    "max_total_tokens": 500000
+  },
+  "new_call_limit": 18,
+  "plan_sha256": "7f7a6705f460785f073e9ecab47ac5c9653881f89a78783925553fef904afc93",
+  "created_at": "2026-10-02T19:41:20.791612+00:00"
+}

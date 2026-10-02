@@ -10,7 +10,6 @@ from src.web.components.ui import (
     node_card_header,
     page_header,
     section_header,
-    workflow_overview,
 )
 from src.workflow.contracts import ActivationMode, NodeImplementationSpec
 from src.workflow.runtime import get_node_registry, get_selection_store
@@ -22,6 +21,10 @@ from src.workflow.selection_store import (
 
 
 STAGE_LABELS = {
+    "trend_collection": "热门样本采集",
+    "media_acquisition": "视频获取",
+    "content_analysis": "内容分析",
+    "opportunity_ranking": "机会排行",
     "llm": "大模型",
     "tts": "配音",
     "background": "背景生成",
@@ -34,6 +37,15 @@ STAGE_LABELS = {
 }
 
 WORKFLOW_PHASES = (
+    (
+        "运营研究",
+        (
+            "trend_collection",
+            "media_acquisition",
+            "content_analysis",
+            "opportunity_ranking",
+        ),
+    ),
     ("内容准备", ("llm", "tts", "background")),
     ("视觉生成", ("video_pipeline", "portrait_animation", "video_generation")),
     ("交付发布", ("frame_interpolation", "composition", "publishing")),
@@ -53,11 +65,13 @@ ACTIVATION_SHORT = {
     ActivationMode.RESTART_REQUIRED: ("需重启", "external"),
 }
 
+DISABLED_IMPLEMENTATION = "disabled_pending_redesign"
+
 
 def page_workflow_nodes() -> None:
     page_header(
-        "工作流节点",
-        "像选择创作模型一样管理每个功能节点的实现，并通过配置方案控制新任务。",
+        "工作流编排",
+        "先看内容如何在各项能力间衔接，再为节点选择实现与配置方案。",
         icon="⌘",
         eyebrow="WORKFLOW STUDIO",
     )
@@ -78,15 +92,15 @@ def page_workflow_nodes() -> None:
         sum(
             registry.get(stage, implementation_id).activation_mode
             == ActivationMode.HOT_SWITCH
+            and implementation_id != DISABLED_IMPLEMENTATION
             for stage, implementation_id in snapshot.active.selections.items()
         ),
     )
     pending_col.metric(
-        "待适配节点",
+        "已停用节点",
         sum(
-            registry.get(stage, implementation_id).activation_mode
-            == ActivationMode.PROFILE_ONLY
-            for stage, implementation_id in snapshot.active.selections.items()
+            implementation_id == DISABLED_IMPLEMENTATION
+            for implementation_id in snapshot.active.selections.values()
         ),
     )
 
@@ -108,18 +122,15 @@ def page_workflow_nodes() -> None:
             key=f"workflow_profile_summary_{selected_profile_name}",
         )
 
-    implementation_labels = {
-        (item.stage, item.implementation_id): item.label for item in registry.all()
-    }
-    workflow_overview(
-        WORKFLOW_PHASES,
-        profile.selections,
-        STAGE_LABELS,
-        implementation_labels,
-    )
+    from src.web.components.flow_graph import flow_graph
+    from src.web.workflow_visuals import build_workflow_graph
+    nodes, edges = build_workflow_graph(registry, profile, STAGE_LABELS)
+    flow_graph(nodes, edges, key=f"workflow_map_{profile.name}_{snapshot.revision}",
+               title="从选题到交付 · 能力衔接图",
+               description="点开节点了解用途与当前实现，点开连线查看上下游输入输出。此图展示业务关系，配置状态不代表节点正在运行。")
 
     editor_tab, catalog_tab, profiles_tab = st.tabs(
-        ["工作流编排", "实现目录", "配置管理"]
+        ["节点设置", "实现目录", "方案管理"]
     )
     with editor_tab:
         _render_editor(
@@ -161,7 +172,10 @@ def _render_editor(*, registry, store, snapshot, profile: WorkflowProfile) -> No
                         widget_key = f"workflow_node_{profile.name}_{stage}"
                         displayed_id = st.session_state.get(widget_key, current_id)
                         displayed_spec = registry.get(stage, displayed_id)
-                        badge, tone = ACTIVATION_SHORT[displayed_spec.activation_mode]
+                        if displayed_spec.implementation_id == DISABLED_IMPLEMENTATION:
+                            badge, tone = "已停用", "external"
+                        else:
+                            badge, tone = ACTIVATION_SHORT[displayed_spec.activation_mode]
                         node_card_header(
                             STAGE_LABELS.get(stage, stage),
                             badge,
@@ -264,7 +278,11 @@ def _render_catalog(registry, snapshot: WorkflowSelectionSnapshot) -> None:
                     if active[implementation.stage] == implementation.implementation_id
                     else ""
                 ),
-                "接线状态": ACTIVATION_LABELS[implementation.activation_mode],
+                "接线状态": (
+                    "已停用，等待 V2 验收"
+                    if implementation.implementation_id == DISABLED_IMPLEMENTATION
+                    else ACTIVATION_LABELS[implementation.activation_mode]
+                ),
                 "输入 → 输出": (
                     f"{implementation.inputs[0].artifact_type} → "
                     f"{implementation.outputs[0].artifact_type}"
@@ -336,6 +354,8 @@ def _render_profile_management(store, snapshot: WorkflowSelectionSnapshot) -> No
 
 
 def _implementation_label(implementation: NodeImplementationSpec) -> str:
+    if implementation.implementation_id == DISABLED_IMPLEMENTATION:
+        return f"{implementation.label} · 已停用"
     status, _tone = ACTIVATION_SHORT[implementation.activation_mode]
     return f"{implementation.label} · {status}"
 

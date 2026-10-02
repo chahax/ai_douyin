@@ -92,6 +92,7 @@ def _public_media_evidence(value):
 
 def _full_source_evidence(cohort):
     """Keep the original, verified source records for local audit and validation."""
+    from .emotion_evidence import source_emotion
     def independent_review(analysis):
         # This is a read-only snapshot of a separately bound review, never an
         # upgrade of the model artifact's own candidate/unreviewed status.
@@ -188,6 +189,8 @@ def _full_source_evidence(cohort):
         'expression_analysis': copy.deepcopy(c.analysis.expression_analysis),
         'media_evidence': _public_media_evidence(c.analysis.media_evidence),
         'independent_review': independent_review(c.analysis),
+        'emotion_analysis': source_emotion(c.observation.item_id,
+            (c.analysis.media_evidence or {}).get('source_video_sha256')),
     } for c in cohort]
 
 
@@ -229,7 +232,7 @@ def _source_overview(sources):
     """A comparison index, explicitly distinct from raw cited source evidence."""
     return [{**{key: copy.deepcopy(source.get(key)) for key in (
                  'source_id', 'analysis_id', 'title', 'metric_kind', 'metric_value',
-                 'published_at', 'collected_at', 'independent_review')},
+                 'published_at', 'collected_at', 'independent_review', 'emotion_analysis')},
              'core_message': copy.deepcopy(source.get('expression_analysis', {}).get('core_message')),
              'expression_modes': copy.deepcopy(source.get('expression_analysis', {}).get('expression_modes', []))}
             for source in sources]
@@ -1427,7 +1430,24 @@ class ScriptReviewRetryState:
             self.messages = copy.deepcopy(self.full_messages)
         else:
             planned = plan_review_evidence_patch(effective, self.payload) if effective is not None else None
-            if planned:
+            patch_exhausted = self.mode_attempts['evidence_patch'] >= SCRIPT_REVIEW_MAX_EVIDENCE_PATCH_ATTEMPTS
+            full_available = (self.mode_attempts['full_report'] < SCRIPT_REVIEW_MAX_FORMAT_ATTEMPTS
+                              and sum(self.mode_attempts.values()) < SCRIPT_REVIEW_MAX_TOTAL_ATTEMPTS)
+            if (patch_exhausted and full_available
+                    and (planned or (mode == 'evidence_patch' and effective is None))):
+                # A quote-only defect does not consume a nonexistent patch slot.
+                # Preserve the same history and counters, using a remaining full
+                # review slot instead. Saved replay takes this identical branch.
+                if mode == 'evidence_patch':
+                    diagnostics = (_review_evidence_diagnostics(effective, self.payload)
+                                   if effective is not None else None)
+                    self.full_messages.append({'role': 'user', 'content':
+                        '引文补丁额度已耗尽，须使用剩余完整审稿额度重新审核同一原稿；不得修改剧本。'
+                        + _review_format_feedback(self.error, response,
+                            evidence_diagnostics=diagnostics)})
+                self.mode, self.parent, self.parent_attempt, self.targets = 'full_report', None, None, []
+                self.messages = copy.deepcopy(self.full_messages)
+            elif planned:
                 self.mode, self.parent, self.parent_attempt, self.targets = 'evidence_patch', effective, attempt, planned
                 self.messages = build_evidence_patch_messages(effective, self.payload, planned)
             elif mode == 'evidence_patch' and effective is None:

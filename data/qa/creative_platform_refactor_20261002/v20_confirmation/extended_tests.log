@@ -1,0 +1,39 @@
+FF...                                                                    [100%]
+================================== FAILURES ===================================
+____________ test_new_feedback_after_rebuild_binds_current_output _____________
+
+tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/v20_confirmation/extended_tmp/test_new_feedback_after_rebuil0')
+
+    def test_new_feedback_after_rebuild_binds_current_output(tmp_path):
+     run,bundle,script=rebuilt(tmp_path)
+     current=read(run/'writer_script.json')
+     feedback=CreativeStageCommandService(run).feedback('writer_script','FIXTURE second feedback',disposition='must_fix')
+>    assert feedback['output_sha256']==current['output_sha256'],'feedback bound an obsolete writer_script output'
+E    AssertionError: feedback bound an obsolete writer_script output
+E    assert 'a808bfb254ee...b44939b56524a' == 'ef860bfec33d...70c5c278786c7'
+E      
+E      - ef860bfec33d005c838a644b460d1e3855742c7cefc761073bc70c5c278786c7
+E      + a808bfb254eebafee4ddbcf09f53beb76d5813bba1835ea5a0cb44939b56524a
+
+data\qa\creative_platform_refactor_20261002\v20_confirmation\test_extended_recovery.py:21: AssertionError
+_______ test_second_feedback_reaches_target_after_prior_stage_revision ________
+
+tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/v20_confirmation/extended_tmp/test_second_feedback_reaches_t0')
+
+    def test_second_feedback_reaches_target_after_prior_stage_revision(tmp_path):
+     run,bundle,script=rebuilt(tmp_path)
+     CreativeStageCommandService(run).feedback('writer_script','FIXTURE second feedback',disposition='must_fix')
+     revised=deepcopy(script);revised['title']='FIXTURE second writer repair'
+     clients=FakeClients([revised]);state=resume(run,bundle,clients,'writer_script')
+>    assert state['status']=='debug_breakpoint',state.get('last_error')
+E    AssertionError: �׶� writer_script ����δ�޸��� must_fix ���������� director_brief ����ǰ��ϣ������޶����ν׶�
+E    assert 'needs_attention' == 'debug_breakpoint'
+E      
+E      - debug_breakpoint
+E      + needs_attention
+
+data\qa\creative_platform_refactor_20261002\v20_confirmation\test_extended_recovery.py:29: AssertionError
+=========================== short test summary info ===========================
+FAILED data/qa/creative_platform_refactor_20261002/v20_confirmation/test_extended_recovery.py::test_new_feedback_after_rebuild_binds_current_output
+FAILED data/qa/creative_platform_refactor_20261002/v20_confirmation/test_extended_recovery.py::test_second_feedback_reaches_target_after_prior_stage_revision
+2 failed, 3 passed in 1.22s

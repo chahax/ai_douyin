@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="0.869" timestamp="2026-10-02T20:01:46.252624+08:00" hostname="DESKTOP-DP111LI"><testcase classname="tests.test_creative_workflow_ui" name="test_page_displays_detached_launch_failure" time="0.446" /></testsuite></testsuites>

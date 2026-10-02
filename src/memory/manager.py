@@ -25,10 +25,10 @@ from src.shared.database import SessionLocal
 @dataclass
 class UserPreferences:
     """用户创作偏好（从 UserProfile 映射）"""
-    default_video_mode: str = "presenter_anime"
+    default_video_mode: str = "disabled_pending_redesign"
     default_tts_provider: str = "edge"
     default_voice: str = ""
-    default_character: str = "sonic_fox"
+    default_character: str = ""
     default_character_position: str = "right_bottom"
     default_character_size: str = "medium"
     default_bgm_volume: float = 0.2
@@ -107,10 +107,10 @@ class MemoryManager:
         """以 dataclass 形式返回用户偏好。"""
         p = self.get_user_profile(user_id)
         return UserPreferences(
-            default_video_mode=p.default_video_mode or "presenter_anime",
+            default_video_mode=p.default_video_mode or "disabled_pending_redesign",
             default_tts_provider=p.default_tts_provider or "edge",
             default_voice=p.default_voice or "",
-            default_character=p.default_character or "sonic_fox",
+            default_character=p.default_character or "",
             default_character_position=p.default_character_position or "right_bottom",
             default_character_size=p.default_character_size or "medium",
             default_bgm_volume=float(p.default_bgm_volume or "0.2"),
@@ -283,6 +283,22 @@ class MemoryManager:
         """将会话标记为归档。"""
         self.session.query(ConversationSession).filter_by(id=session_id).update(
             {"status": "archived", "archived_at": datetime.utcnow()}
+        )
+        self.session.commit()
+
+    def delete_session(self, session_id: int) -> None:
+        """硬删除会话（级联删 messages）。"""
+        from src.memory.models import ConversationMessage
+        self.session.query(ConversationMessage).filter_by(session_id=session_id).delete()
+        self.session.query(ConversationSession).filter_by(id=session_id).delete()
+        self.session.commit()
+
+    def rename_session(self, session_id: int, new_title: str) -> None:
+        """改会话标题。"""
+        if not new_title.strip():
+            return
+        self.session.query(ConversationSession).filter_by(id=session_id).update(
+            {"title": new_title.strip(), "updated_at": datetime.utcnow()}
         )
         self.session.commit()
 

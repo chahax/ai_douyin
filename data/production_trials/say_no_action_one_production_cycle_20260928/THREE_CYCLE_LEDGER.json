@@ -1,0 +1,72 @@
+{
+  "schema": "bounded_production_cycles_authorization/v1",
+  "authorization": "用户明确授权按优化方向修改流程后再进行一次真实文本生产。采用程序排时、局部修复和证据编号；原同稿与所有历史保留。仅使用既定MiniMax/DeepSeek文本模型，无图片视频调用，无自动助手批准。",
+  "created_at": "2026-09-28T12:42:34.022381+00:00",
+  "same_story": true,
+  "series": "20260928_action_one",
+  "prior_series_ledger": "D:\\IT\\ai_douyin\\data\\production_trials\\say_no_v3_two_production_cycles_20260928\\THREE_CYCLE_LEDGER.json",
+  "prior_series_ledger_sha256": "9aefef8435bee12cb19b9650607669045000f1dad47d37fa3c0d54c8e659b41f",
+  "inputs_sha256": "4642cfbe7f313b67451ceb66a344ac954fa235993ee4f91866fd19b8288a3b80",
+  "parent_run": "D:\\IT\\ai_douyin\\data\\creative_workflows\\say_no_reviewed_segments_20260927",
+  "parent_calls_started": 30,
+  "prior_three_request_extension": "D:\\IT\\ai_douyin\\data\\production_trials\\say_no_v4_paid_three_20260927",
+  "max_rounds": 1,
+  "per_round_max_calls": 24,
+  "per_round_max_total_tokens": 250000,
+  "media_calls": 0,
+  "rounds": {
+    "1": {
+      "run_dir": "D:\\IT\\ai_douyin\\data\\production_trials\\say_no_action_one_production_cycle_20260928\\round_01",
+      "started_at": "2026-09-28T12:42:34.636665+00:00",
+      "source_at_start": {
+        "scripts/run_three_cycle_text_production.py": "ddc7ea716c56d38c71948818690dc15f6d0ea7cafa422764ee11e6a926f37ae1",
+        "src/content_factory/creative_workflow.py": "293cfa75438bd60831cd3ace5c4317263984e064358080db1353cc6b5c161f2c",
+        "src/content_factory/creative_segmented_director.py": "13e2465226cc599944eae16c5a035dbb822c24cc94235056bfc6a5769c35018a",
+        "src/content_factory/creative_review_v6.py": "371d0dd43216aadf0ec920a95daaa6461d5c4465450d7b10368102b7ac803a3d",
+        "src/content_factory/creative_state_plan_v6.py": "492a983d14e2cc57c9b84d2754f4791d823a5cbfbceb6acabaf34615555745e2",
+        "src/content_factory/creative_state_plan_v2.py": "98e089b56744a04521e4fff6d197f0a479326c0b874761014eb5c166873d62e9",
+        "src/content_factory/creative_state_plan_v3.py": "e4ed6e33084f3ba5be49190ec9f170a391126ba5341ecd0988dbfdc904c0044d",
+        "src/content_factory/creative_workflow_roles.py": "c33b1d3745a5ebd4f04031102fd645f1d276e48cdc126ee6589277e18d489a68",
+        "src/content_factory/creative_state_plan_binding.py": "b860de1eaa63ea62ae2bde28bc10aba348f4e5a90f90628ecbc5ca0fcd30a3c3",
+        "src/content_factory/creative_state_plan_guidance.py": "4d9e8431dab633e9e4604009e76e9420a9b9945039264bd2a712913fcd1c5b93",
+        "src/content_factory/creative_action_plan_v1.py": "cfc455b9f2da0deb39791baf808547fc9f904613a58396fe52114962489bfda1",
+        "src/content_factory/creative_plan_patch.py": "9d568be745b5dcd4540248e948714ef3cf3b6846538f28890c20188f31ed1243",
+        "src/content_factory/creative_review_evidence_catalog.py": "c1bede6df21c72a5042765280a54786bc3f03b7bba8edad6e926b782685e3aed",
+        "src/content_factory/creative_review_evidence_ids.py": "10f9d5eac1e8eda56249063ef96e6ed7c0d3feb0f7be6bbf2ff0329ef7df5943"
+      },
+      "review_policy_version": "evidence_review_v6",
+      "segmented_director_binding": {
+        "version": "reviewed_beat_storyboard_v6",
+        "prompt": "为完整已审script生成动作计划。根层schema=whole_film_action_plan_v1、initial_state、beats。模型不生成任何start/end/dialogue_windows；程序插入原对白并排时，不改说话人或文字。\ninitial_state覆盖manifest人物和移动道具，人物posture/position/gaze/affect，道具holder/location。初态在首动作之前，归属不等于当前持有：后续take要求none，后续sit要求standing。不要先完成动作又重复执行。\n每拍保留beat_id,purpose,composition,camera,dialogue_mode,cut_reason；新增groups数组、dialogue_performance字符串及reaction对象。每组严格id/script_slot/kind/duration_seconds/hold_subject/performance/operations。id全片唯一稳定。script_slot仅before/during/after，严格原文来源顺序；before组全部执行后插第一句对白，原during组在第一句之后其余对白之前，after组在所有对白之后；无对白按原文顺序。不要把“说话时的表演”误放during组，其由dialogue_performance统一描述。\nkind=action或hold。action组给完整操作所需duration_seconds>0，hold_subject=\"\"；同组可合并不同人物并行操作，关键状态按组结束生效。hold组必须operations=[]、hold_subject=人物ID，给原文明确要求稳定保持的完整时长，说明保持的状态。比如抬眼完成后至少2秒对视：抬眼action结束后另排2秒hold，再软化/放下，不能把抬眼过程充数。不为没有停顿要求的每个动作机械加hold。\noperations沿用类型化kind/actor/target/value：move/gaze/affect的target=\"\"；sit引用固定椅ID且当前standing；stand要求已坐/跪/卧；take引用道具且未持有；place要求当前actor持有；pass的value为另一人物ID。operations始终数组，单项也放数组。performance补可见表演，不藏关键状态变化。不新增无叙事作用的操作来凑时长。\nreaction={anchor,subject,meaning}：anchor必须是本拍实际group.id或dialogue_0等实际对白索引，subject为人物ID，meaning说明实际刺激与反应，程序派生窗口。不另写反应时间。dialogue_performance仅嘴部、呼吸、情绪的表演，不藏移动或拿放动作。\n程序优先每秒3.5计时单位并留0.3秒句间余量，必要时只缩对白至不超过5单位/秒，不压缩action/hold；仍放不进原拍时长会返回明确缺多少秒与每组预算。不要写无效多余动作把预算挤爆。完整覆盖全部beats，首尾顺序一致；根层不得散落item、groups的字段。返回唯一完整目标对象。",
+        "static_manifest_version": "static_visual_manifest_v2",
+        "state_plan_version": "whole_film_action_plan_v1",
+        "plan_thinking_mode": "disabled"
+      },
+      "status": "production_exception",
+      "calls_started": 4,
+      "reported_tokens": 101586,
+      "updated_at": "2026-09-28T12:45:05.771250+00:00",
+      "source_at_latest_run": {
+        "scripts/run_three_cycle_text_production.py": "ddc7ea716c56d38c71948818690dc15f6d0ea7cafa422764ee11e6a926f37ae1",
+        "src/content_factory/creative_workflow.py": "293cfa75438bd60831cd3ace5c4317263984e064358080db1353cc6b5c161f2c",
+        "src/content_factory/creative_segmented_director.py": "13e2465226cc599944eae16c5a035dbb822c24cc94235056bfc6a5769c35018a",
+        "src/content_factory/creative_review_v6.py": "371d0dd43216aadf0ec920a95daaa6461d5c4465450d7b10368102b7ac803a3d",
+        "src/content_factory/creative_state_plan_v6.py": "492a983d14e2cc57c9b84d2754f4791d823a5cbfbceb6acabaf34615555745e2",
+        "src/content_factory/creative_state_plan_v2.py": "98e089b56744a04521e4fff6d197f0a479326c0b874761014eb5c166873d62e9",
+        "src/content_factory/creative_state_plan_v3.py": "e4ed6e33084f3ba5be49190ec9f170a391126ba5341ecd0988dbfdc904c0044d",
+        "src/content_factory/creative_workflow_roles.py": "c33b1d3745a5ebd4f04031102fd645f1d276e48cdc126ee6589277e18d489a68",
+        "src/content_factory/creative_state_plan_binding.py": "b860de1eaa63ea62ae2bde28bc10aba348f4e5a90f90628ecbc5ca0fcd30a3c3",
+        "src/content_factory/creative_state_plan_guidance.py": "4d9e8431dab633e9e4604009e76e9420a9b9945039264bd2a712913fcd1c5b93",
+        "src/content_factory/creative_action_plan_v1.py": "cfc455b9f2da0deb39791baf808547fc9f904613a58396fe52114962489bfda1",
+        "src/content_factory/creative_plan_patch.py": "9d568be745b5dcd4540248e948714ef3cf3b6846538f28890c20188f31ed1243",
+        "src/content_factory/creative_review_evidence_catalog.py": "c1bede6df21c72a5042765280a54786bc3f03b7bba8edad6e926b782685e3aed",
+        "src/content_factory/creative_review_evidence_ids.py": "ee503b0a6aa2ad9bfbc6d4421b1c14f57f362a67e6d41bd7bd02e245a45547fe"
+      },
+      "error": "writer_check__state_plan_00 修复未改变无效产物: v6缺少对照证据: [{\"check_path\": \"coverage.0.checks.timing.evidence_refs\", \"missing_source_prefixes\": [\"shots.shots.0.\"]}, {\"check_path\": \"coverage.0.checks.dialogue_timing.evidence_refs\", \"missing_source_prefixes\": [\"shots.shots.0.\"]}, {\"check_path\": \"coverage.0.checks.first_frame.evidence_refs\", \"missing_source_prefixes\": [\"shots.shots.0.visible_performance\"]}, {\"check_path\": \"coverage.0.checks.assets.evidence_refs\", \"missing_source_prefixes\": [\"shots.shots.0.\"]}, {\"check_path\": \"coverage.1.checks.timing.evidence_refs\", \"missing_source_prefixes\": [\"shots.shots.1.\"]}, {\"check_path\": \"coverage.1.checks.continuity.evidence_refs\", \"missing_source_prefixes\": [\"state_plan.\"]}, {\"check_path\": \"coverage.1.checks.dialogue_timing.evidence_refs\", \"missing_source_prefixes\": [\"shots.shots.1.\"]}, {\"check_path\": \"coverage.1.checks.first_frame.evidence_refs\", \"missing_source_prefixes\": [\"shots.shots.1.visible_performance\"]}, {\"check_path\": \"coverage.2.checks.timing.evidence_refs\", \"missing_source_prefixes\": [\"shots.shots.2.\"]}, {\"check_path\": \"coverage.2.checks.continuity.evidence_refs\", \"missing_source_prefixes\": [\"state_plan.\"]}, {\"check_path\": \"coverage.2.checks.dialogue_timing.evidence_refs\", \"missing_source_prefixes\": [\"shots.shots.2.\"]}, {\"check_path\": \"coverage.2.checks.first_frame.evidence_refs\", \"missing_source_prefixes\": [\"shots.shots.2.visible_performance\"]}, {\"check_path\": \"coverage.2.checks.assets.evidence_refs\", \"missing_source_prefixes\": [\"shots.shots.2.\"]}, {\"check_path\": \"coverage.3.checks.timing.evidence_refs\", \"missing_source_prefixes\": [\"shots.shots.3.\"]}, {\"check_path\": \"coverage.3.checks.continuity.evidence_refs\", \"missing_source_prefixes\": [\"state_plan.\"]}, {\"check_path\": \"coverage.3.checks.dialogue_timing.evidence_refs\", \"missing_source_prefixes\": [\"shots.shots.3.\"]}, {\"check_path\": \"coverage.3.checks.first_frame.evidence_refs\", \"missing_source_prefixes\": [\"shots.shots.3.visible_performance\"]}]",
+      "pending_evidence_review": null
+    }
+  },
+  "historical_receipt_hashes_sha256": "aff13c3fd428d1106ab9849011dcd3e245fe6cd993fe76fb4d1c98e3652b5da5",
+  "new_calls_started": 4,
+  "new_reported_tokens": 101586
+}

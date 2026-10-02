@@ -1,0 +1,66 @@
+{
+  "schema": "production_round_analysis/v1",
+  "analysis_complete": true,
+  "round": 1,
+  "passed": false,
+  "status": "production_exception",
+  "calls_started": 4,
+  "reported_tokens": 101586,
+  "reached": "writer_check__state_plan_00__contract_repair",
+  "deepseek_review_reached": true,
+  "review_contract_valid": false,
+  "assistant_gate_reached": false,
+  "qualified_handoff": false,
+  "media_calls": 0,
+  "actual_content_failures": [
+    {
+      "id": "G01",
+      "category": "interaction",
+      "severity": "major",
+      "location": "SH02/SH03",
+      "paths": [
+        "state_plan.beats.1.dialogue_performance",
+        "state_plan.beats.2.groups.0",
+        "shots.shots.1.visible_performance"
+      ],
+      "evidence": "B2对白表演写her gaze lifts from the folder back up toward Chen He as she finishes；B3又从文件夹抬眼，typed末态仍看文件夹。",
+      "target": "B2对白表演保持文件夹视线，不暗藏上抬；把唯一抬眼留在B3明确gaze操作，保持后续2秒对视。"
+    },
+    {
+      "id": "G02",
+      "category": "camera",
+      "severity": "major",
+      "location": "SH03",
+      "paths": [
+        "state_plan.beats.2.camera",
+        "state_plan.beats.2.cut_reason",
+        "state_plan.beats.2.groups.2"
+      ],
+      "evidence": "camera要求cut on the moment the folder touches the desk surface；程序排时放夹于6.5秒完成，接受对白6.5–9.371秒，cut_reason却要求说完接受再切。",
+      "target": "删除落夹立即切走指令，保持同镜拍完接受对白与尾部收束，再按cut_reason结束；不改变锁定对白。"
+    },
+    {
+      "id": "G03",
+      "category": "action_space",
+      "severity": "major",
+      "location": "SH04",
+      "paths": [
+        "state_plan.beats.3.groups.2.performance",
+        "state_plan.beats.3.groups.2.operations"
+      ],
+      "evidence": "performance要求steps behind her chair, and sits down，operations只有gaze/affect/sit，没有到可坐侧的位移。",
+      "target": "明确陈禾在座椅前侧/座面可达侧转向桌面后坐下，去掉椅背后直接落座；必要位移用操作表达，不新增搬椅填时。"
+    }
+  ],
+  "confirmed_improvements": [
+    "计划结构首次通过",
+    "初始持物链正确",
+    "程序派生对白时窗全部合规且不压缩动作hold",
+    "B3抬眼结束后完整2秒对视"
+  ],
+  "interface_failure": "v6逐项对照证据覆盖不足，补证仍无效；ID有效性待专门核查。",
+  "plan_patch_production_triggered": false,
+  "plan_patch_verification": "仅离线集成测试",
+  "local_revision_targets": "LOCAL_REVISION_TARGETS.json",
+  "evidence_report": "INDEPENDENT_CONTENT_REVIEW.md"
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.608" timestamp="2026-10-02T20:31:25.519107+08:00" hostname="DESKTOP-DP111LI"><testcase classname="data.qa.creative_platform_refactor_20261002.implementation_review_v22.test_inflight_feedback_contract" name="test_must_fix_during_model_call_survives_runner_save" time="0.405"><failure message="AssertionError: runner save discarded accepted user must_fix feedback&#10;assert False">def test_must_fix_during_model_call_survives_runner_save():
+        # Exercise the real command service and runner during a fake provider call.
+        # The command uses both version hashes, as the Streamlit page does.
+        runpy.run_path(str(OUT / 'inventory_and_probe.py'), run_name='__review_probe__')
+        proof = json.loads((OUT / 'inflight_feedback_probe.json').read_text(encoding='utf-8'))
+        assert proof['expected_version_hashes_supplied']
+        assert proof['feedback_present_during_call']
+        assert proof['feedback_receipt_retained']
+&gt;       assert proof['feedback_present_after_call'], 'runner save discarded accepted user must_fix feedback'
+E       AssertionError: runner save discarded accepted user must_fix feedback
+E       assert False
+
+data\qa\creative_platform_refactor_20261002\implementation_review_v22\test_inflight_feedback_contract.py:15: AssertionError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,41 @@
+{
+  "schema": "production_cycle_assistant_analysis/v1",
+  "round": 1,
+  "passed": false,
+  "reached": "static_visual_manifest",
+  "calls_started": 3,
+  "reported_tokens": 7930,
+  "findings": [
+    {
+      "cause": "空间关系契约未包含合法且自然的on（台灯放在桌面）",
+      "evidence": "初次response: E02 relation=on reference=E01；validator仅允许above等枚举"
+    },
+    {
+      "cause": "通用契约修复只给笼统错误，未提供该stage契约及允许枚举，且original与来源元数据混在同一输入",
+      "evidence": "repair将on改为on_top_of并附加source_sha256/source_evidence；后续格式修复保留多余键，耗尽预算"
+    },
+    {
+      "cause": "固定桌椅分类说明不足",
+      "evidence": "初稿将办公椅列入props而非scene.elements，固定椅桌关系丢失"
+    }
+  ],
+  "requested_fix": "支持表面接触关系、精确错误及完整修复契约；明确固定资产分类。保留原回执后运行第二轮。",
+  "receipts": [
+    {
+      "file": "static_visual_manifest.json",
+      "tokens": 4259,
+      "status": "response_received"
+    },
+    {
+      "file": "static_visual_manifest__contract_repair.json",
+      "tokens": 1851,
+      "status": "response_received"
+    },
+    {
+      "file": "static_visual_manifest__contract_repair__response__format_repair.json",
+      "tokens": 1820,
+      "status": "response_received"
+    }
+  ],
+  "media_calls": 0
+}

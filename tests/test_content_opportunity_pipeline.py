@@ -21,6 +21,7 @@ from src.trend_intelligence.models import (
 from src.trend_intelligence.opportunity import (
     ContentOpportunityService,
     DomainScriptStrategyRegistry,
+    NovelOpportunityScriptStrategy,
 )
 from src.trend_intelligence.repository import TREND_SCHEMA_VERSION, TrendRepository
 
@@ -73,7 +74,7 @@ def _observation(
         metric_kind="views",
         collected_at=captured,
         published_at="2026-08-31T00:00:00+00:00",
-        root_keywords=["婚姻", "债务"],
+        root_keywords=["婚姻" if int(item) % 2 else "债务"],
         hashtags=["婚姻", "债务"],
     )
 
@@ -112,6 +113,16 @@ def _seed_legal_opportunity(repository: TrendRepository):
         domain_strategy_id=profile.domain_strategy_id,
         strategy_version=profile.strategy_version,
     )
+    rows = repository.list_observations(limit=1000)
+    latest_run = rows[0].run_id
+    recent = [r for r in rows if r.run_id == latest_run]
+    older = [r for r in rows if r.run_id != latest_run]
+    for seed_rows in (older, recent):
+        expanded = [replace(seed_rows[i % len(seed_rows)], item_id=f"douyin:{i+1}",
+                            video_id=str(i+1), metric_value=seed_rows[i % len(seed_rows)].metric_value * 100,
+                            root_keywords=["婚姻" if i % 2 else "债务"]) for i in range(20)]
+        repository.save_collection(expanded, provider="fixture", keywords=["婚姻", "债务"],
+                                   account_uuid=profile.account_uuid)
     observations = repository.list_observations(limit=1000)
     clusters, briefs = TrendAnalyzer().analyze(
         observations, account_profile=profile
@@ -218,6 +229,17 @@ def test_novel_strategy_generates_authorized_source_placeholders_not_fake_facts(
 
     assert all(script.domain_strategy_id == "novel_promotion" for script in scripts)
     assert all("授权章节" in " ".join(script.source_requirements) for script in scripts)
+    assert all(script.target_duration_seconds == 60 for script in scripts)
+    assert all(len(script.beats) == 5 for script in scripts)
+    assert all(script.beats[-1].end_seconds == 60 for script in scripts)
+    assert all(
+        script.workflow_snapshot["script_driver"] == "novel_highlight"
+        for script in scripts
+    )
+    assert all(
+        "novel_highlight_analysis/v1" in " ".join(script.source_requirements)
+        for script in scripts
+    )
     assert all(
         "【主角】" in " ".join(beat.voiceover for beat in script.beats)
         for script in scripts
@@ -237,6 +259,46 @@ def test_opportunity_and_script_status_transitions_are_persisted(tmp_path) -> No
     with pytest.raises(ValueError, match="invalid"):
         repository.update_opportunity_status(opportunity.opportunity_id, "bad")
     assert profile.account_uuid == opportunity.account_uuid
+
+
+def test_novel_opportunity_can_switch_to_reference_video_driver() -> None:
+    profile = _profile("novel_promotion")
+    profile = replace(
+        profile,
+        domain_config={**profile.domain_config, "script_driver": "reference_video"},
+    )
+    opportunity = ContentOpportunity(
+        opportunity_id="opportunity:reference-driven-novel",
+        account_uuid=profile.account_uuid,
+        account_key=profile.account_key,
+        profile_version=profile.profile_version,
+        domain_strategy_id=profile.domain_strategy_id,
+        strategy_version=profile.strategy_version,
+        cluster_id="cluster:novel",
+        brief_id="brief:novel",
+        title="测试小说",
+        status="candidate",
+        opportunity_score=80,
+        score_breakdown={},
+        selected_item_ids=["douyin:reference"],
+        recommended_presentation="story_drama",
+        recommended_hook_type="conflict",
+        recommended_pacing="fast",
+        recommended_duration_seconds=60,
+        recommended_publish_window="20:00-22:00",
+        recommended_workflow_profile="novel_drama",
+        valid_until="2026-09-03T00:00:00+00:00",
+    )
+
+    script = NovelOpportunityScriptStrategy().build(
+        profile,
+        opportunity,
+        variant_id="A",
+    )
+
+    assert script.workflow_snapshot["script_driver"] == "reference_video"
+    assert "参考视频结构驱动" in script.title
+    assert "带时间证据" in " ".join(script.source_requirements)
 
 
 def test_feedback_learning_adjusts_the_next_opportunity_score(tmp_path) -> None:

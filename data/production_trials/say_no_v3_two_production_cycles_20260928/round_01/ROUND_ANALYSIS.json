@@ -1,0 +1,42 @@
+{
+  "schema": "production_round_analysis/v1",
+  "analysis_complete": true,
+  "round": 1,
+  "passed": false,
+  "calls_started": 5,
+  "reported_tokens": 83460,
+  "reached": "writer_check__state_plan_00",
+  "deepseek_review_reached": true,
+  "deepseek_review_contract_valid": false,
+  "qualified_handoff": false,
+  "media_calls": 0,
+  "resolved_generation_error": "首次tool输出仅B1及顶层item等错位，完整修复后四拍计划通过结构验证。",
+  "current_interface_failure": "DeepSeek把首尾字符串当对象生成不存在的子路径，补证后仍无效，共享契约修复上限已满。",
+  "actual_content_failures": [
+    {
+      "id": "HOLD_WINDOW_B3",
+      "category": "interaction",
+      "severity": "major",
+      "location": "SH03",
+      "source": "script.beats.2.before",
+      "plan_fields": [
+        "state_plan.beats.2.events.0",
+        "state_plan.beats.2.events.1"
+      ],
+      "evidence": "0–2秒抬眼并在event末成立视线；2–4秒立即软化肩线并放夹，没有抬眼完成后2秒稳定对视。",
+      "review_miss": "DeepSeek SH03 requirements/timing将抬眼过程算入保持窗并给pass。",
+      "repair_goal": "从目标状态进入完成时刻起核算要求的持续时长，到破坏该状态动作开始止；保留剧情/对白/拍长。"
+    }
+  ],
+  "nonblocking_observations": [
+    "B3轻微松肩到B4明显松肩可解释为接受后的渐变，不强判重复动作。",
+    "B1停下与B2完全停稳需媒体观感核实，不凭同词自动失败。",
+    "各对白真实字数在上限内，审核多计标点不改变通过结论。"
+  ],
+  "repair_before_next_round": [
+    "提供真实叶子引用索引/稳定ref_id并一次列全部无效路径，不自动补语义通过。",
+    "对明确保持时长，从进入状态完成后计时，不以reaction_window摘要替代时间轴。"
+  ],
+  "next_round": 2,
+  "evidence_report": "INDEPENDENT_CONTENT_REVIEW.md"
+}

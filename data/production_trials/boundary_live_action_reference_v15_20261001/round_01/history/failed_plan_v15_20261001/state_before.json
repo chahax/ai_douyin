@@ -1,0 +1,458 @@
+{
+  "narrative_focus_binding": {
+    "version": "narrative_expression_v3",
+    "common": "叙事表达优先：先兑现本次简报的人物处境、关系、选择及转折，再处理动作/道具/结构细节。仅从实际播放的动作和对白判断观众能够获得什么信息，premise/event/trigger、目的说明及情绪标签不算额外演出。“总是/习惯/第一次/终于”等前史或变化不能仅靠一次开本子、握包或伸手推知；可用自然且具体的对白、可见后果或对照建立，不强制闪回、旁白、字幕。建立关键事实应早于依赖该事实的情绪转折。观众感受是创作目标，不是已经测得的效果。创作及文本审查以情感表达、事件表达、画面表达为主要顺序。情感：人物被什么具体刺激触动、怎样犹豫/选择、对方如何回应、结尾情绪是否由行动收束；看刺激前、中、后的表演是否可读。事件：前因、信息变化、选择与后果能否仅从实际动作/对白理解。画面：关键事实与反应有没有在分镜及最终提示词中可见的主体、景别、构图和窗口，是否保留题材与画风。三者可以由自然动作、对照、沉默或对白成立，不强迫角色口头解释感情，不把多写情绪标签当改进。duration_policy=flexible时总长是参考，依据内容安排，可长可短；不能仅因偏离参考或候选估计时长判必修，也不按相等时长切拍或增删剧情迁就接口。语速、刺激反应顺序与真实操作需要的时间仍须成立。与明确需求相冲突的表达缺失用证据报issue；情绪强弱、自然程度、美感等判断给出具体依据与建议，不伪称观众感受通过。媒体内容仍由用户人工审查。",
+    "writer": "编剧：只顺读实际事件，判断人物此刻想得到什么、什么阻碍、选择会改变什么、什么新事实使关系变化；依据题材表达，不强加吵架、煽情事故或统一反转。不给每拍机械分配相等时长，不用走路/拿放/停顿凑够总长。若只能依赖摘要解释核心前提，先修正文；若只是可选审美，保留为建议。",
+    "director": "导演：将已写出的关键信息和反应落实到最终生成prompt中的可见构图、具体刺激及时间窗口。purpose不能独自承载叙事。微表情须有可读的脸部景别；连续尾帧限制不能静默删除重要近景或换机位，应明确所需适配。资产与首帧使用简报指定媒介；真人质感需新建或选择兼容的写实人物/场景/首帧，动画尾帧不作为真人版首帧。不得自行改对白、补前史；表达无法落实时指出上游具体缺口。全片动作计划也承担叙事摄影：为核心信息选择可读构图和明确反应窗口。不能为了原始尾帧全片固定一个中景，也不能为状态契约删掉剧本的重要表达。无法兼容的机位或切点应明确反馈，不自行改剧情。",
+    "review": "文本审查：在既有requirements项先对照简报检查核心信息是否真正进入实际动作/对白，再比较分镜和最终prompt是否保留它。摘要与演出脱节、必要铺垫缺失、重要反应被构图/提示词删掉且违反明确要求时，用原字段证据报告给writer或director；不得用“动作规范/无矛盾”代替需求兑现。冲突不够刺激、是否感动等主观改善进suggestions，不臆测成片表演或口型失败，不给观众感受写passed。沿用现有输出合同，不新增评分、审核轮次或字段。联合审查同时核对final_video_prompts中的实际编译文本与剧本、shots.prompt和结构字段；编译文本才是视频请求将发送的表演内容。解释性目的、事件摘要不能弥补实际表演缺失。引用来源差异而非猜测生成效果；缺少信息归编剧，镜头与最终提示词丢失表达归导演。",
+    "stage_roles": {
+      "writer_analysis": "writer",
+      "writer_script": "writer",
+      "writer_revise": "writer",
+      "writer_director_feedback": "writer",
+      "director_brief": "director",
+      "director_shots": "director",
+      "director_revise": "director",
+      "director_state_plan": "director",
+      "director_production_design": "director",
+      "script_review": "review",
+      "writer_check": "review"
+    },
+    "review_final_prompts": true,
+    "review_priorities": [
+      "emotion_expression",
+      "event_expression",
+      "visual_expression"
+    ]
+  },
+  "reference_expression_version": "reference_expression_v1",
+  "script_revision_binding": {
+    "version": "full_script_revision_v1",
+    "mode": "full_script",
+    "prompt": "本次为完整剧本返修。将previous_script作为上一版，将issues作为修改需求，重新提交完整events剧本；不返回replace_beats或补丁，不要求未涉及的节拍逐字不变。保留创作简报中的主题、人物关系和核心要求；可调整整篇对白、动作、节拍数量、编号、顺序和时长，以保证情感、事件与画面表达衔接。审核问题的location仅为证据定位，不是只允许修改该拍的边界。premise必须准确概括新版实际演出。完整新版将直接全文审核，程序不会抽取某拍与旧稿拼接；不要增删剧情迁就字段数量。每拍至多两条dialogue，可合理拆拍并保留对白/动作因果。"
+  },
+  "schema": "creative_workflow_state/v1",
+  "model_profile": "minimax_create_deepseek_review",
+  "writer_prompt_version": "original_events_v3",
+  "review_policy_version": "evidence_review_v6",
+  "production_protocol": "governed_production_v1",
+  "review_packet_version": "focused_review_packet_v1",
+  "review_evidence_interface_version": "evidence_ids_v1",
+  "evidence_id_repair_hints_version": "missing_source_candidates_v1",
+  "segmented_director_binding": {
+    "version": "reviewed_beat_storyboard_v6",
+    "prompt": "为完整已审script生成动作计划。根层schema=whole_film_action_plan_v2、initial_state、beats。模型不生成任何start/end/dialogue_windows；程序插入原对白并排时，不改说话人或文字。\ninitial_state覆盖manifest人物和移动道具，人物posture/position/gaze/affect，道具holder/location。初态在首动作之前，归属不等于当前持有：后续take要求none，后续sit要求standing。不要先完成动作又重复执行。\n每拍保留beat_id,purpose,composition,camera,dialogue_mode,cut_reason；新增groups数组、dialogue_performance字符串及reaction对象。每组严格id/script_slot/kind/duration_seconds/hold_subject/performance/operations。id全片唯一稳定。script_slot仅before/during/after，严格原文来源顺序；before组全部执行后插第一句对白，原during组在第一句之后其余对白之前，after组在所有对白之后；无对白按原文顺序。不要把“说话时的表演”误放during组，其由dialogue_performance统一描述。\nkind=action或hold。action组给完整操作所需duration_seconds>0，hold_subject=\"\"；同组可合并不同人物并行操作，关键状态按组结束生效。hold组必须operations=[]、hold_subject=人物ID，给原文明确要求稳定保持的完整时长，说明保持的状态。比如抬眼完成后至少2秒对视：抬眼action结束后另排2秒hold，再软化/放下，不能把抬眼过程充数。不为没有停顿要求的每个动作机械加hold。\noperations沿用类型化kind/actor/target/value：move/gaze/affect的target=\"\"；sit引用固定椅ID且当前standing；stand要求已坐/跪/卧；take引用道具且未持有；place要求当前actor持有；pass的value为另一人物ID。operations始终数组，单项也放数组。performance补可见表演，不藏关键状态变化。不新增无叙事作用的操作来凑时长。\nreaction={anchor,subject,meaning}：anchor必须是本拍实际group.id或dialogue_0等实际对白索引，subject为人物ID，meaning说明实际刺激与反应，程序派生窗口。不另写反应时间。dialogue_performance仅嘴部、呼吸、情绪的表演，不藏移动或拿放动作。\n程序优先每秒3.5计时单位并留0.3秒句间余量，必要时只缩对白至不超过5单位/秒，不压缩action/hold；仍放不进原拍时长会返回明确缺多少秒与每组预算。不要写无效多余动作把预算挤爆。完整覆盖全部beats，首尾顺序一致；根层不得散落item、groups的字段。返回唯一完整目标对象。\n本版事实归属：initial_state和operations是物理状态唯一来源，performance/dialogue_performance仅补表演；camera仅描述连续拍摄方式，cut_reason仅解释叙事目的，二者不能设置另一个切点。所有自由文字仍须独立语义审核，格式通过不是内容通过。\n每拍新增cut_after_event_id，取本拍最后完成的group.id或dialogue_N；completion_condition固定all_required_events_complete。所有计划动作、保持及锁定对白均须完成，程序在原拍时长末切走；不得绑定尚有后续任务的较早事件。\n人物initial_state新增facing（身体朝向，不等于gaze；未知用null）。face操作target为空、value为新身体朝向。空间配置spatial_contract={seats:[{seat_id:固定可坐物ID,access_positions:[可坐侧具体位置],required_facing:坐前身体朝向或null}]}。位置与move.value必须使用一致的位置名，不能把椅背后列作可坐侧来迁就操作。坐下开始时，人物position已属于access_positions且facing已等于required_facing。移动、转身与坐下必须分组，前组结束才满足后组前提；缺少空间证据返回unknown，不自动补移动、不猜朝向。配置内容是否忠实剧本和实际布局仍由语义及图片审核。\n操作参数必须按kind理解：take/place/pass的target永远是移动道具ID；place.value是落点描述或固定元素ID，不能把道具ID与桌子ID颠倒（如target=P02,value=E01表示把P02放到E01）。take.value是动作后的手持/佩戴位置；pass.value是接收者人物ID。sit.target是固定可坐物ID，sit.value是坐下后的明确位置，不能为空；move/stand.value同样是动作后位置。face.target为空、value为身体朝向（不是视线）。同一组操作在组结束生效，因此先转身再坐下必须拆成前后两组；不能用同组face补sit开始时的朝向。hold表示整个组保持已成立状态，operations严格为空；action的hold_subject严格为空。若保持某人时另一个人发生动作，该组是action，需要的动作后保持另建hold，不允许通过删除剧本必要动作修结构。\n本协议不支持关键动作与对白同时发生；若已审剧本明确要求这种并行，必须返回EXPRESSION_UNSUPPORTED交上游，不能改剧情。细微嘴部/呼吸表演仍可伴随对白。\n\n表达不兼容/硬需求冲突使用合法替代输出，优先于前面“只返回计划”的要求：{\"status\":\"unsupported\",\"code\":\"EXPRESSION_UNSUPPORTED或REQUIREMENT_CONFLICT\",\"source_paths\":[\"真实script或creative_brief叶子路径\"],\"reason\":\"具体不可兼容的要求及原因\"}。不得输出残缺计划、修改源剧情或编造来源。该响应停止本轮，不能作为已通过。引用路径从工具schema枚举中选择。当前有效来源数量：0",
+    "static_manifest_version": "static_visual_manifest_v2",
+    "state_plan_version": "whole_film_action_plan_v2",
+    "plan_thinking_mode": "disabled"
+  },
+  "original_director_binding": {
+    "version": "original_director_v1",
+    "prompt": "你是原创短片导演，为已审核的剧本设计可执行分镜，只返回合法JSON。\n创作依据：creative_brief 的显式要求约束所有制作选择；script 是当前已审核演出锁。candidate_lock 是历史候选，不得把其中已被剧本删除或替换的动作、道具、结尾实现恢复。不要重新创作对白和剧情，也不把候选摘要当来源事实。director_brief 只提供已选画风和导演目标。\n播放顺序：每拍 before → 第一条dialogue → during → 后续dialogue → after。严格保持节拍和动作顺序、因果、对白文字和说话人。event/trigger/premise 是摘要，不额外演出；screenplay_markdown 只是同稿可读版本。逐拍至少一镜，beat_id 使用输入原ID，镜头ID唯一；逐拍所有镜头时长之和必须等于该拍duration_seconds。\n镜头设计：每镜明确新增的信息、看谁的反应和为何切走；机位服务于剧情，不以运镜数量代替叙事。省略进店、点单、普通走路等无因果必要的过程是合法省略，不得强加步骤。已有对白可以说明当前成立的状态，无需复演每一段前史。\n情绪时序：为刺激、反应、关键对白前中后表演及收束分配明确秒数，面部须在情绪重心时可读；反应不得抢在刺激之前。可在原动作对白顺序内安排的窗口由导演排时，不退回编剧。不能仅按动作数量断言超时。中文每字计1单位、拉丁文本每词计2单位，每镜对白最多每秒5单位，动作、停顿和反应另留时间；不能借其他无对白镜的秒数抵扣。\n声音归属：dialogue_lock 逐字分配本拍原对白，合并后与本拍dialogue的说话人和文字顺序完全一致，不新增、重复、删减或转移给别人。dialogue_mode 仅为“画内”“画外”“画内/画外”“无对白”；说话人的入画情况、构图、表演和prompt必须一致。\n连续性：start_state 只写首帧已经成立的状态，本镜才发生的拿取、移动、接触等写入visible_performance，不得首帧先完成再重演。end_state 明确末帧结果。选择raw_tail_continuation时本镜start_state必须逐字等于上镜end_state；新机位、构图变化用planned_cut_requires_adapter，不能宣称原尾帧自然换机位。\n人物与资产：人数确定，人物名、外观、服装、站位、视线和道具归属保持一致；画风采用director_brief.selected_style_id。可复用资产仅依据输入目录和已证实特征，不编造可用素材；目录缺失时记录待制作/待核实，不把复用写成已完成。\n道具与构型：建立唯一数量、持有人、所在位置、开合状态、部件和可操作方式；同一对象的构型必须在style、composition、visible_performance、首尾状态、prompt和production_choices间一致。动作若需要取下部件、打开容器或重新握持，必须有合规时序；不能一处有盖另一处无盖，也不能把抓握部位或材质悄悄换掉。未被剧本确定的非叙事外观可以作为明确制作选择，但不能增加操作链、改变因果或突破简报。未来首帧与资产设计必须继承这些状态，不提前完成镜内动作。\n执行边界：服从executor_constraints中的能力和每镜时长范围。必要时拆镜并合理分配时长，保持每拍总长；不能省掉必要反应或加速台词凑时。未看到实际素材时，构图和首帧只是计划，不能声称声音、口型、表演或媒体审核已通过。\n输出分流：正常情况提交下列完整style/shots/media_assumptions对象，不输出空story_issues。只有无法通过构图、排时或已有演出顺序解决的具体blocking/major剧情矛盾，才返回非空story_issues；保留原稿并引用实际正文证据，遵循附加审核字段合同。已被助手驳回的问题不换措辞重提，不以个人审美建议冒充必须返修。缺少分镜不是故事问题。\n字段合同：每镜包含示例的全部字段；无对白dialogue_lock=[]，production_choices与media_assumptions均为数组。每个文本字段具体且简洁，状态与动作不得相互矛盾。\n{\"style\": {\"style_option_id\": \"director_brief.selected_style_id\", \"visual_medium\": \"画面媒介\", \"palette\": \"统一色彩\", \"spatial_layout\": \"明确空间和朝向\", \"character_lock\": \"确定人数、人物名和稳定外观\", \"light_source\": \"光源位置和方向\"}, \"shots\": [{\"id\": \"SH01\", \"beat_id\": \"原剧本节拍ID\", \"duration_seconds\": 8, \"purpose\": \"本镜新增信息和观众关注点\", \"composition\": \"景别、入画人物、视线及布局\", \"camera\": \"机位与必要运镜\", \"visible_performance\": \"按时间顺序写可见动作、台词刺激及反应窗口\", \"event_lock\": \"逐字复制对应beat.event\", \"dialogue_lock\": [{\"speaker\": \"原说话人\", \"text\": \"逐字分配原对白\"}], \"start_state\": \"第一帧已成立的静态状态\", \"end_state\": \"动作完成后的末帧状态\", \"cut_reason\": \"本镜在此切走的叙事原因\", \"dialogue_mode\": \"画内\", \"continuity_mode\": \"raw_tail_continuation 或 planned_cut_requires_adapter\", \"prompt\": \"包含构图、动作、人物和道具状态的生成提示词\", \"production_choices\": []}], \"media_assumptions\": []}"
+  },
+  "original_brief_priority_binding": {
+    "version": "original_brief_priority_v1",
+    "prompt": "原创创作优先级：creative_brief 的显式硬约束高于候选 candidate_lock、导演 brief 和历史稿中的具体实现。候选是可修正创作提案，不是小说原文或不可更改的来源事实。保留核心人物关系、因果转折及结尾意图；若道具数量、动作、操作步骤或结尾实现与用户简报冲突，删除或替换冲突实现，不得以忠实候选为由继承违规内容。不得自创简报没有的禁令。\n候选分析及导演协调时逐项核对允许的道具、数量和操作；导演反馈明确指出冲突并提出符合简报的替代方案。编剧协调按现有 feedback_responses 协议明确接受候选实质调整为 accepted_candidate_change；不是靠静默修改候选绕过锁。正式剧本及返修再次核对实际动作链，premise/event/trigger 摘要必须与实际演出一致。该规则仅适用于原创，不改变小说原文锁。",
+    "director_execution_version": "original_director_execution_v1",
+    "director_execution_prompt": "原创分镜职责：省略进店、点单、普通走路等不影响因果理解的过程，不构成剧本缺失，不能强加这些操作。先在已有动作与对白顺序内分配明确的刺激、反应、台词、收束时间；可由分镜排出的反应窗口应自行安排。不得仅按动作数量断言超时。退回剧本前必须指出无法在总时长内执行的具体冲突及计时依据，区分必须修改的剧情错误与可在导演层完成的构图、表演、道具位置说明。"
+  },
+  "writer_prompt_binding": {
+    "version": "original_events_v3",
+    "modules": [
+      "emotion"
+    ],
+    "creative_brief": {
+      "schema": "creative_brief/v1",
+      "theme": "总替同事收尾的人，第一次把自己的时间放在前面",
+      "duration_seconds": [
+        45,
+        60
+      ],
+      "delegated_fields": [],
+      "duration_policy": "flexible",
+      "audience": "喜欢生活情绪短片的成年观众",
+      "relationships": "方澄与同事林屿；林屿已习惯她会答应，方澄担心拒绝会伤及两人的关系。",
+      "audience_emotion": "先看懂她为什么难拒绝，再替她的选择紧张，最后感到关系发生了真实变化。",
+      "visual_style": "写实真人实拍质感的AI短片，成年普通人外貌，真实皮肤纹理、自然光与生活化服装，克制自然表演，关键反应使用可读近景。",
+      "turn": "对方原本把她的帮忙视为理所当然；她明确拒绝后，对方必须面对这一点，再通过具体行动回应。",
+      "ending": "以新的行动兑现边界及关系变化；不预先规定两人必须和解，不用主题口号收尾。",
+      "constraints": [
+        "观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。",
+        "她想离开和担心拒绝的原因要在实际事件中成立。",
+        "关键反应的构图和窗口必须写入最终视频提示词。",
+        "剧情先按完整故事创作，再拆成生成段；不能为固定八秒切段编造操作。"
+      ],
+      "avoid": [
+        "用一次开本子或摸包代替习惯性的付出历史",
+        "靠陪家人看病等新事故替代原本的关系矛盾",
+        "强行争吵、突然完美理解、鸡汤总结",
+        "为了沿用动画尾帧而改回手绘风格"
+      ]
+    },
+    "prompt": "【identity】\n你是原创短片编剧。只按本次creative_brief/brief与候选锁创作。保持人物具体、对白自然、转折可见。优先选择简单但成立的故事，不为电影感增加无用物件和反复微动作。不要借用其他项目的人物和桥段。\n\n【contract】\n只输出给定schema的完整JSON。selected_candidate_id取candidate_lock.id。拍ID严格按required_beat_ids（若提供）；否则连续编号。总时长等于各拍时长和。每拍events就是实际播放的唯一顺序，动作只写一次，台词只写在dialogue事件。事件格式kind/speaker/text，action的speaker为空字符串，dialogue的speaker为人物姓名。必须采用下面三种模式之一：无对白[action,action,action]；一句对白[action,dialogue,action,action]；两句对白[action,dialogue,action,dialogue,action]。每条动作尽量一个短句（约20—60字），只写实际可见动作，不再写“说、问、解释、道歉、承认”等发言概述。\n\n【requirements】\n先在内部把简报逐项转为验收条件：人物身份和关系、允许道具、禁止桥段、谁作出转折选择、结尾由谁对谁完成什么动作、时长。特别保留语义角色：被帮助者和帮助者不能交换结尾的主动权。每项须有实际动作或对白证据，不能只写进premise/event/trigger。禁止的桥段不要换同类物件变相重复。结尾先确定一个准确兑现要求的动作，再倒推前因；不用多余道具或第二次解释表达同一意思。\n\n【timeline】\n先在脑中按实际秒数播放，再逐条写events。动作和对白只有这一个顺序来源：说话者先看见刺激才能开口，听者只在实际听到相应台词之后反应，手先取物才能交付，通信先接通再发言。两句台词间如必须有多个复杂动作，简化为一个明确变化。event/trigger只是摘要，不承担独有的可见证据；不要用它们补救events遗漏。\n\n【continuity】\n写作时内部维护逐拍状态：人物所在区域和面向；每个关键物唯一持有人/支撑面、开闭/完好状态；每个人已经知道什么。下一拍从上拍末状态开始，拿放/开合/交接只发生一次，不允许靠泛称“他”换人。发生误会时，事实状态和人物认知分开：揭示必须提供此前没有被看到的证据，不能让同一人先否认自己做过的关键行动却无理由认领。场景方向统一用固定地标（窗侧/墙侧等），不混人物左右与镜头左右。结尾不临时变出礼物，解决办法符合普通物理常识。\n\n【dramaturgy】\n先让观众明白一件具体的困难及人物不同选择，再用可见事实改变判断，最后通过行动兑现关系变化。每拍只推进一个主要变化，动作句简洁可执行。重要对白前后留表演时间，总对白按每秒约3个汉字预算，另留动作和至少2秒反应；不能用多个微动作填满空白。最后一拍通常只完成一个选择或交接，不堆起身、绕桌、取物、返回、再道歉。\n\n【self_read】\n只按events从头读到尾，逐项核对brief。谁给谁什么、为什么改变判断、谁完成结尾选择，都必须从真实事件可见。转折必须有事实依据；微表情不代替前因。禁止桥段不要替换名字后重复。核对每个关键物的持有人和支撑面，确认时长可容纳对白与动作；不成立则先简化。不要输出自评分。\n\n【emotion】\n关系修复必须由具体行为承担代价，不能靠说教、突然认错或煽情事故替代动机。明确谁受哪句或哪个动作触动、态度如何改变；既不抢在刺激前反应，也不把所有表演塞到最后。"
+  },
+  "created_at": "2026-10-01T12:01:08.951378+00:00",
+  "status": "needs_attention",
+  "source_driver": "original",
+  "creative_focus": "参考时长（可浮动）45—60秒。创作简报：{\"audience\": \"喜欢生活情绪短片的成年观众\", \"audience_emotion\": \"先看懂她为什么难拒绝，再替她的选择紧张，最后感到关系发生了真实变化。\", \"avoid\": [\"用一次开本子或摸包代替习惯性的付出历史\", \"靠陪家人看病等新事故替代原本的关系矛盾\", \"强行争吵、突然完美理解、鸡汤总结\", \"为了沿用动画尾帧而改回手绘风格\"], \"constraints\": [\"观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。\", \"她想离开和担心拒绝的原因要在实际事件中成立。\", \"关键反应的构图和窗口必须写入最终视频提示词。\", \"剧情先按完整故事创作，再拆成生成段；不能为固定八秒切段编造操作。\"], \"delegated_fields\": [], \"duration_policy\": \"flexible\", \"duration_seconds\": [45, 60], \"ending\": \"以新的行动兑现边界及关系变化；不预先规定两人必须和解，不用主题口号收尾。\", \"relationships\": \"方澄与同事林屿；林屿已习惯她会答应，方澄担心拒绝会伤及两人的关系。\", \"schema\": \"creative_brief/v1\", \"theme\": \"总替同事收尾的人，第一次把自己的时间放在前面\", \"turn\": \"对方原本把她的帮忙视为理所当然；她明确拒绝后，对方必须面对这一点，再通过具体行动回应。\", \"visual_style\": \"写实真人实拍质感的AI短片，成年普通人外貌，真实皮肤纹理、自然光与生活化服装，克制自然表演，关键反应使用可读近景。\"}。优先完整表达情绪、事件和画面；按实际对白、刺激与反应安排秒数，总长可随内容浮动，不为靠近参考范围删掉必要表演或增加填充动作。画风仍按简报；明确的局部时序要求仍生效。",
+  "logical_task_id": "8448e355a58e00a3a12ef8fdcb804ebc4b59f0c81bfb8b319424887e1afe37f0",
+  "material_sha256": "b0f5dfe7dce0f300af26a517b56edae479868626faad80b595921812262d8575",
+  "calls_started": 14,
+  "max_calls": 20,
+  "max_total_tokens": 500000,
+  "max_revisions": 5,
+  "budget_policy_version": "v5_20261001",
+  "max_contract_repairs": 8,
+  "contract_repairs_used": 5,
+  "format_repairs_used": 0,
+  "revision_rounds": 1,
+  "revision_committed": [
+    "script_review__story_00_00_revision"
+  ],
+  "stages": [
+    {
+      "name": "writer_analysis",
+      "role": "writer",
+      "input_sha256": "b4c7795b527655184aa4eccbd874b1a6c17984a2273ce0628c481cb4c6c2d517",
+      "output_sha256": "498eb860682dfad3bdebb7ad68fab5542185632a25913cb0893a7b635ab5866c",
+      "context_budget": {
+        "schema": "creative_context_budget/v1",
+        "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+        "serialized_input_characters": 14162,
+        "estimated_input_tokens": 14162,
+        "requested_max_output_tokens": 12000,
+        "estimated_total_tokens": 26162,
+        "provider": "minimax",
+        "model": "MiniMax-M3",
+        "planning_context_window_tokens": 512000,
+        "advertised_context_window_tokens": 1000000,
+        "source_url": "https://www.minimax.io/models/text/m3",
+        "verified_on": "2026-09-24"
+      },
+      "usage": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070d7e8aa27d7a5cd432ebb4af24872e",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 6954,
+        "completion_tokens": 1158,
+        "total_tokens": 8112,
+        "logical_role": "writer",
+        "workflow_stage": "writer_analysis",
+        "model_profile": "minimax_create_deepseek_review",
+        "transport_config_role": "writer"
+      }
+    },
+    {
+      "name": "director_brief",
+      "role": "director",
+      "input_sha256": "2647fb54e9f2b75689e7101f4716e875f9ebe46a949e463d104ffd19c2367d02",
+      "output_sha256": "27752d3cc36ede0f66930d565e900bd84b308812bafff3d7da92df4266e34589",
+      "context_budget": {
+        "schema": "creative_context_budget/v1",
+        "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+        "serialized_input_characters": 16327,
+        "estimated_input_tokens": 16327,
+        "requested_max_output_tokens": 20000,
+        "estimated_total_tokens": 36327,
+        "provider": "minimax",
+        "model": "MiniMax-M3",
+        "planning_context_window_tokens": 512000,
+        "advertised_context_window_tokens": 1000000,
+        "source_url": "https://www.minimax.io/models/text/m3",
+        "verified_on": "2026-09-24"
+      },
+      "usage": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070d7eaf8dfe27484a5478478b346441",
+        "finish_reason": "stop",
+        "thinking_mode": "disabled",
+        "output_mode": "content",
+        "prompt_tokens": 7358,
+        "completion_tokens": 1681,
+        "total_tokens": 9039,
+        "logical_role": "director",
+        "workflow_stage": "director_brief",
+        "model_profile": "minimax_create_deepseek_review",
+        "transport_config_role": "writer"
+      }
+    },
+    {
+      "name": "writer_director_feedback",
+      "role": "writer",
+      "input_sha256": "fbd96cbf9af0441060a7d2cc162dc80cec142f21ed75ba7504f7ef9ac2f2d6de",
+      "output_sha256": "7c3256647f5352f95570f29f1c7363fafc8dc8fabd6608eeaffa9bf9722a5510",
+      "context_budget": {
+        "schema": "creative_context_budget/v1",
+        "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+        "serialized_input_characters": 16569,
+        "estimated_input_tokens": 16569,
+        "requested_max_output_tokens": 12000,
+        "estimated_total_tokens": 28569,
+        "provider": "minimax",
+        "model": "MiniMax-M3",
+        "planning_context_window_tokens": 512000,
+        "advertised_context_window_tokens": 1000000,
+        "source_url": "https://www.minimax.io/models/text/m3",
+        "verified_on": "2026-09-24"
+      },
+      "usage": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070d7f3d8bfc45115a6380369caa6434",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 7871,
+        "completion_tokens": 895,
+        "total_tokens": 8766,
+        "logical_role": "writer",
+        "workflow_stage": "writer_director_feedback",
+        "model_profile": "minimax_create_deepseek_review",
+        "transport_config_role": "writer"
+      }
+    },
+    {
+      "name": "writer_script",
+      "role": "writer",
+      "input_sha256": "e3df9c6b3edff12b9586722dd046a753e8fb186fe813ae0a03ba23682983037f",
+      "output_sha256": "48b0640120735dbb7633ad01a32dcf0967a048ed81f62c56b68f032053ff3a07",
+      "context_budget": {
+        "schema": "creative_context_budget/v1",
+        "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+        "serialized_input_characters": 19155,
+        "estimated_input_tokens": 19155,
+        "requested_max_output_tokens": 12000,
+        "estimated_total_tokens": 31155,
+        "provider": "minimax",
+        "model": "MiniMax-M3",
+        "planning_context_window_tokens": 512000,
+        "advertised_context_window_tokens": 1000000,
+        "source_url": "https://www.minimax.io/models/text/m3",
+        "verified_on": "2026-09-24"
+      },
+      "usage": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070d7f5565f2a84ffe494ec2003732f0",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 9529,
+        "completion_tokens": 1399,
+        "total_tokens": 10928,
+        "logical_role": "writer",
+        "workflow_stage": "writer_script",
+        "model_profile": "minimax_create_deepseek_review",
+        "transport_config_role": "writer"
+      }
+    },
+    {
+      "name": "script_review__story_00_00",
+      "role": "director",
+      "input_sha256": "b654aa445e7db2448f64723e643fe8a1379e10bc087f60cc42012411924c71c4",
+      "output_sha256": "b6cb5c17a350f6c6bda53a3e96581303c33724ee36573cf86d5bd733437ffad4",
+      "context_budget": {
+        "schema": "creative_context_budget/v1",
+        "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+        "serialized_input_characters": 14924,
+        "estimated_input_tokens": 14924,
+        "requested_max_output_tokens": 20000,
+        "estimated_total_tokens": 34924,
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "planning_context_window_tokens": 1000000,
+        "advertised_context_window_tokens": 1000000,
+        "source_url": "https://api-docs.deepseek.com/quick_start/pricing/",
+        "verified_on": "2026-09-24"
+      },
+      "usage": {
+        "role": "director",
+        "provider": "deepseek",
+        "requested_model": "deepseek-flash",
+        "response_model": "deepseek-flash",
+        "response_id": "52103c3f-32d4-45cd-a000-25a57cc8c258",
+        "finish_reason": "stop",
+        "thinking_mode": "disabled",
+        "output_mode": "content",
+        "prompt_tokens": 7947,
+        "completion_tokens": 5085,
+        "total_tokens": 13032,
+        "logical_role": "director",
+        "workflow_stage": "script_review__story_00_00",
+        "model_profile": "minimax_create_deepseek_review",
+        "transport_config_role": "director"
+      }
+    },
+    {
+      "name": "writer_revise__preflight_story_00_01",
+      "role": "writer",
+      "input_sha256": "8f63c13a91d035634905399034f54acb5061e8225120e49767f5fd9f05b506ad",
+      "output_sha256": "c3a9551c6c7b2237d655d0c039641e413b1fc0e4d735f3ae7cffaa080550a70b",
+      "context_budget": {
+        "schema": "creative_context_budget/v1",
+        "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+        "serialized_input_characters": 18287,
+        "estimated_input_tokens": 18287,
+        "requested_max_output_tokens": 12000,
+        "estimated_total_tokens": 30287,
+        "provider": "minimax",
+        "model": "MiniMax-M3",
+        "planning_context_window_tokens": 512000,
+        "advertised_context_window_tokens": 1000000,
+        "source_url": "https://www.minimax.io/models/text/m3",
+        "verified_on": "2026-09-24"
+      },
+      "usage": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070d8037cb048d97da1d79fd86c83f6e",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 10120,
+        "completion_tokens": 1478,
+        "total_tokens": 11598,
+        "logical_role": "writer",
+        "workflow_stage": "writer_revise__preflight_story_00_01",
+        "model_profile": "minimax_create_deepseek_review",
+        "transport_config_role": "writer"
+      }
+    },
+    {
+      "name": "script_review__story_00_01",
+      "role": "director",
+      "input_sha256": "43ce9255976510de74863c68f417497e21538e4572fa1031e04c6ce605a0a275",
+      "output_sha256": "5ded01d4435e67c5bace20cc3d1a5484bc3eef5cb8ed62cc2e8d9bde39a36c55",
+      "context_budget": {
+        "schema": "creative_context_budget/v1",
+        "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+        "serialized_input_characters": 15319,
+        "estimated_input_tokens": 15319,
+        "requested_max_output_tokens": 20000,
+        "estimated_total_tokens": 35319,
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "planning_context_window_tokens": 1000000,
+        "advertised_context_window_tokens": 1000000,
+        "source_url": "https://api-docs.deepseek.com/quick_start/pricing/",
+        "verified_on": "2026-09-24"
+      },
+      "usage": {
+        "role": "director",
+        "provider": "deepseek",
+        "requested_model": "deepseek-flash",
+        "response_model": "deepseek-flash",
+        "response_id": "17c41c51-2357-45c7-96e7-fe72f12d56a7",
+        "finish_reason": "stop",
+        "thinking_mode": "disabled",
+        "output_mode": "content",
+        "prompt_tokens": 8082,
+        "completion_tokens": 4037,
+        "total_tokens": 12119,
+        "logical_role": "director",
+        "workflow_stage": "script_review__story_00_01",
+        "model_profile": "minimax_create_deepseek_review",
+        "transport_config_role": "director"
+      }
+    },
+    {
+      "name": "static_visual_manifest",
+      "role": "director",
+      "input_sha256": "4d8ef9f1f75227883e6eacf27daee42bc2c7a3a5c8067ccc7ff2abb7e47a923d",
+      "output_sha256": "315999e76476e3dd81520b3163a94c4eb0afcb49eb495032e3df5d39f999065a",
+      "context_budget": {
+        "schema": "creative_context_budget/v1",
+        "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+        "serialized_input_characters": 9149,
+        "estimated_input_tokens": 9149,
+        "requested_max_output_tokens": 20000,
+        "estimated_total_tokens": 29149,
+        "provider": "minimax",
+        "model": "MiniMax-M3",
+        "planning_context_window_tokens": 512000,
+        "advertised_context_window_tokens": 1000000,
+        "source_url": "https://www.minimax.io/models/text/m3",
+        "verified_on": "2026-09-24"
+      },
+      "usage": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070d81099f8ea8a365cebdcaa1d93fc2",
+        "finish_reason": "stop",
+        "thinking_mode": "disabled",
+        "output_mode": "content",
+        "prompt_tokens": 4630,
+        "completion_tokens": 1289,
+        "total_tokens": 5919,
+        "logical_role": "director",
+        "workflow_stage": "static_visual_manifest",
+        "model_profile": "minimax_create_deepseek_review",
+        "transport_config_role": "writer"
+      }
+    }
+  ],
+  "assistant_review_required": true,
+  "calibration_milestone_at_start": null,
+  "workflow_profile_sha256": "6664a3d91ef18211edbcdc45ce735f81b845307d7e8994eae146c69a0f5b2d81",
+  "input_profile_sha256": "3baaae5fb04d25656a598750d5503ea3c7e053971ce130907f80820b5b3388e3",
+  "calibrated_style_classes_at_start": [],
+  "review_reopen_reasons": [],
+  "text_pass_sequence": 0,
+  "video_pass_sequence": 0,
+  "rule_registry_binding": {
+    "schema_version": "creative_rule_registry_binding/v1",
+    "registry_dir": "data/creative_governance/20261001_v15_reference_expression",
+    "artifact_manifest_sha256": "6c4202d1c4ff16732ecc96d36b7d37ed9d0be88f31b4bc9d70197c4f6cbf4ef7",
+    "rules_sha256": "29e620cec1d6f212ab307317e8378d6c366ac9fed791793d814df31d0ad73299",
+    "repository_wide_complete": false,
+    "automatic_rule_activation": false
+  },
+  "reported_tokens": 195507,
+  "context_strategy": {
+    "mode": "full",
+    "direct_context_limit_characters": 42000,
+    "initial_payload_serialized_characters": 7987,
+    "source_sha256": "e0f61a360a00f25759eec6f521f6b83af9775100fd886066a3b85bf59d16aa82",
+    "reference_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+    "sent_payload_sha256": "b545b290800cf7ded944f69a573f4aaa43dbf19f4c456fa52c88d7d2f78c42ab"
+  },
+  "reference_expression_binding": {
+    "version": "reference_expression_v1",
+    "reference_pack": [
+      {
+        "id": "R01",
+        "path": "D:\\IT\\ai_douyin\\data\\reference_reviews\\reusable_expression_20261001\\EXPRESSION_REFERENCE.md",
+        "text": "# 已有参考片与教学分析：可复用表达参考\n\n用途：借鉴叙事、情绪和摄影表达机制；不是本次剧情来源或硬验收模板。用户当前主题、人物、真人画风、浮动时长和人工视频审核要求优先。不要照搬诈骗、老人、玄关或旧项目专用动作，也不要把所有参考技巧机械塞进短片。\n\n## 核心判断\n\n参考片用“虚假的关心—真实的付出—伤害—再次渴望关心”组织情绪。最有效的是末尾老人从愤怒到接电话后微笑的变化。画面中每个人在做有目的的事情，表情随具体刺激改变；不靠人物站定后用台词解释全部心理。\n\n## 时间轴证据\n\n| 时间 | 实际可见内容 | 导演作用 |\n| --- | --- | --- |\n| 0–5 秒 | 女生在霓虹街头看手机、展示转账、互相说笑 | 立即交代欺骗关系，让观众比受骗者知道得多 |\n| 8–18 秒 | 多部手机；男子催促；女子开门进屋、靠近桌子 | 道具解释工作方式，进门动作建立人物和场景联系 |\n| 20–31 秒 | 女子前景逐一回复手机；男子后景吃东西 | 同一画面有主次行动；她表演关心与身后人的冷漠形成反差 |\n| 33.5–39 秒 | 老人独坐、看手机、转账界面、对手机讲话 | 将套路切到具体承受者，观众看到真实关切 |\n| 48–50 秒 | 男子看收款消息，前倾、睁大眼、笑容扩大 | 收款触发贪婪，动作和情绪有因果 |\n| 50.5–58 秒 | 叫醒女子，递泡面，拿手机催拍，手机取景画面 | 困倦被利用为卖惨素材；道具推动事件 |\n| 63–78 秒 | 购买金饰、美容、购物、聚餐、泳池炫耀 | 场景变化用于交代骗款去向；不能直接照搬为家庭戏的装饰 |\n| 77.5–85 秒 | 求还钱消息；泳池跳水切到夜间落水；岸边手机显示消息遭拒 | 剪辑把享乐与受害者绝望并置。人物身份及死亡结果不能仅凭这些帧完全确认 |\n| 85.5–93 秒 | 抓捕、控制嫌疑人、手机取证 | 交代诈骗被查处，推进结局 |\n| 93.5–103.5 秒 | 老人看新闻皱眉，随后接电话；字幕“吴叔叔在干嘛”“怎么不理我”，老人逐渐微笑 | 同一人的前后反应完成主题：愤怒没有消除对关心的渴望；来电者身份并未明确 |\n\n\n## 二、四课分别带来的启发\n\n下列是基于转写与抽帧的简要归纳，时间用于回看定位，不是逐字引文。\n\n1. [0基础，带你做出你人生第一个AI视频](https://www.bilibili.com/video/BV1Z28P6HEGa/)：约3:00–6:10和7:35–9:05，展示剧本先转调度，再转模型提示与角色引用。对本项目的启发是把“镜头观察谁、人物做什么、空间如何呈现”与接口提示编译分层。作者关于一致性的强保证只是演示者判断，不能替代本项目实测。\n2. [用“抄袭”思维做出AI视频](https://www.bilibili.com/video/BV1sPhE63ERj/)：约5:30–10:10分析构图、色光、参考图与公开工程；约15:45–18:55将已选资产回传给Agent，再校正调度。应学表达机制、记录自己的可复现试验。其首尾帧批评针对示例跳帧，不能据此取消用户当前接续门槛。\n3. [AI视频究竟怎么学](https://www.bilibili.com/video/BV19fYf6kEnU/)：约8:30–13:10的咖啡店重做显示语音、杯子比例、相似景别切换和情绪出错，随后人工重写调度、局部返修、剪辑。可复用流程必须容纳明确的创作判断和失败处理，不能承诺一键首发全对。\n4. [如何做出“电影级”AI视频](https://www.bilibili.com/video/BV1uGYE6XEB4/)：约1:00–3:40对比角色参考，约7:30–11:10讨论场景资产。可迁移的是减少身份参考里的杂乱背景、强阴影及不合适表情，同时让场景图服务真实动线。具体模型、4K和版式属于其示例设置，不作为普遍成功保证。\n\n教程展示过不同模型／平台及人工选片，不能把其效果直接归因于某段万能提示，也不能推定其接口与项目Mini端能力一致。样片的实际制作模型、提示词、废片率和后期投入未知。\n\n## 三、目标样片好在哪里\n\n| 观察窗口 | 实际画面与叙事作用 | 可迁移机制 |\n| --- | --- | --- |\n| 0–6秒 | 街头女子看手机、同伴交流，随后进入多手机的工作环境 | 开头给具体反差和疑问 |\n| 20–30秒 | 女子前景回复手机，男子后景吃东西 | 同镜有主次行动，前后景共同传递信息 |\n| 33–48秒 | 老人、转账界面、男子收款反应交替 | 道具证明信息，近景呈现信息对人的影响 |\n| 63–78秒 | 消费、购物、聚餐、泳池环境变化 | 用场景变化交代后果与生活反差 |\n| 93–104秒 | 老人看新闻皱眉，接电话后逐渐放松微笑 | 用刺激后的可见变化完成主题、留下余味 |\n\n关键不是表情数量或单张画面的精细度，而是观众的信息、人物的选择和摄影观察对象一起变化。末尾来电者身份不能只凭这些帧确定。目标样片和项目最新片同为720×1280；提高输出分辨率不能单独解决目前的内容差距。\n\n\n### 每镜以观众收到什么为核心\n\n明确注意对象、新信息、刺激、反应前后差别、切镜理由、必须可见的证据。每段只传当前相关人物和状态。让对白方式、反应窗口、资产引用和状态由同一权威中间表示编译到最终请求，避免多层重复改写。"
+      }
+    ],
+    "rule": "reference_pack来自已获取的同类视频和教学表达分析。学习信息递进、刺激与反应、具体行动、观察主体及结尾余味；选与当前需求相关的机制，不照搬参考人物、对白、剧情、时长或画风。创作简报优先，不把参考偏好当硬禁令；未观察本次媒体不得宣称表演成功。"
+  },
+  "style_class": "live_action",
+  "evidence_review_decisions": {
+    "script_review__story_00_00": {
+      "packet_sha256": "1d604e1b251f07b6f41accfb614e22037ba778b2cd473c00db30ceec780f029b",
+      "decision_sha256": "15246df8352ef3b4a4e9b95fa35657ce00fe14a020a2f0bdbe01d2bdd84a550a"
+    },
+    "script_review__story_00_01": {
+      "packet_sha256": "c11f4b0de7ef76d7cc58df7c3262ccbda82a70606561e63e5468570eb24c6e2a",
+      "decision_sha256": "ebe327a7504e043ee1c323ceb7364cdc8cd54a2843750ccddf56ca610458b08b"
+    }
+  },
+  "last_error": "plan_patch: PLAN_PATCH_VALUE_SCHEMA: beats.1.groups.0.duration_seconds: ['4'] is not of type 'number'"
+}

@@ -1,0 +1,383 @@
+{
+  "schema": "action_plan_patch_merge/v1",
+  "source_sha256": "50255664a8933f2497f8b65342bec104d44ff34a7771b4e697d19aa742fcf3e1",
+  "patch_sha256": "708af8ff66fbce169278049ab10cd9067afe84e8c7eace4a178cedd4c8bda1b3",
+  "output_sha256": "30a20454e821528f9f81cea389f49a44510021b734b0d174071c661052f033b3",
+  "model_patch": {
+    "source_sha256": "50255664a8933f2497f8b65342bec104d44ff34a7771b4e697d19aa742fcf3e1",
+    "patches": [
+      {
+        "path": "beats.0.groups.1.operations",
+        "value": "[]"
+      },
+      {
+        "path": "beats.2.groups.1.operations",
+        "value": "[]"
+      }
+    ]
+  },
+  "output": {
+    "schema": "whole_film_action_plan_v2",
+    "initial_state": {
+      "C01": {
+        "posture": "standing",
+        "position": "office_floor",
+        "gaze": "chenhe_desk",
+        "affect": "composed",
+        "facing": "chenhe_desk"
+      },
+      "C02": {
+        "posture": "standing",
+        "position": "chenhe_chair_front",
+        "gaze": "desk",
+        "affect": "neutral_working",
+        "facing": "desk"
+      },
+      "P01": {
+        "holder": "C01",
+        "location": "on_C01_shoulder"
+      },
+      "P02": {
+        "holder": "none",
+        "location": "E01"
+      }
+    },
+    "beats": [
+      {
+        "beat_id": "B1",
+        "purpose": "建立晚间办公室场景：陈禾拿起文件夹叫住准备离开的林遥，提出顺路帮忙带文件的请求",
+        "composition": "中景偏中近景，陈禾桌边一侧入画，林遥从画面一侧走入停在桌边，陈禾侧身面对林遥，手持文件夹抬在胸前水平；桌面台灯与远处顶灯形成柔和晚间暖光",
+        "camera": "固定中景单机位连续拍摄，无镜头运动，靠演员调度推进叙事",
+        "dialogue_mode": "画内对白",
+        "cut_reason": "本拍建立空间与请求关系，需要在中景内看清双方表情与文件夹状态，为后续拒绝与接受留出反应空间",
+        "groups": [
+          {
+            "id": "g_b1_1",
+            "script_slot": "before",
+            "kind": "action",
+            "duration_seconds": 3.5,
+            "hold_subject": "",
+            "performance": "林遥背着单肩包从画面一侧走入，脚步放缓停在陈禾桌边，包自然挂在肩上；陈禾从桌面拿起一只浅米色A4文件夹，身体转向林遥方向，目光抬起落在她脸上，带着一点试探的犹豫",
+            "operations": [
+              {
+                "kind": "move",
+                "actor": "C01",
+                "target": "",
+                "value": "chenhe_desk_side"
+              },
+              {
+                "kind": "affect",
+                "actor": "C01",
+                "target": "",
+                "value": "calm_ready_to_leave"
+              },
+              {
+                "kind": "take",
+                "actor": "C02",
+                "target": "P02",
+                "value": ""
+              },
+              {
+                "kind": "face",
+                "actor": "C02",
+                "target": "",
+                "value": "lin_yao"
+              },
+              {
+                "kind": "gaze",
+                "actor": "C02",
+                "target": "",
+                "value": "C01"
+              },
+              {
+                "kind": "affect",
+                "actor": "C02",
+                "target": "",
+                "value": "tentatively_asking"
+              }
+            ]
+          },
+          {
+            "id": "g_b1_2",
+            "script_slot": "during",
+            "kind": "hold",
+            "duration_seconds": 3.5,
+            "hold_subject": "C02",
+            "performance": "陈禾手持文件夹停在胸前水平位置，没有递出，保持向林遥询问的姿态；林遥站在桌边，视线从陈禾脸上落到她手中的文件夹上，肩线微微收紧，嘴部轻抿呈现接收请求的小紧张",
+            "operations": "[]"
+          }
+        ],
+        "dialogue_performance": "陈禾说话时嘴部自然张合，气息平稳，语速适中偏礼貌，尾音轻微上扬以示询问",
+        "reaction": {
+          "anchor": "dialogue_0",
+          "subject": "C01",
+          "meaning": "陈禾提出顺路带文件的请求，林遥听到后视线落到对方手中文件夹上，肩线微紧，进入接收请求的小紧张状态"
+        },
+        "cut_after_event_id": "g_b1_2",
+        "completion_condition": "all_required_events_complete"
+      },
+      {
+        "beat_id": "B2",
+        "purpose": "呈现林遥第一次平静拒绝：目光落在文件夹上后，明确说出今天不行、陈禾听到后手不递出",
+        "composition": "延续B1的中景机位，林遥立于桌边、陈禾侧身面向林遥手持文件夹；焦点保持在双方面部与文件夹三角关系上",
+        "camera": "延续同机位连续拍摄，无切点，靠台词与微小表情推进",
+        "dialogue_mode": "画内对白",
+        "cut_reason": "本拍承担关键拒绝台词，需要在同一镜头中让观众看清林遥的拒绝与陈禾的手部静止反应，不切走打断情绪",
+        "groups": [
+          {
+            "id": "g_b2_1",
+            "script_slot": "before",
+            "kind": "action",
+            "duration_seconds": 3,
+            "hold_subject": "",
+            "performance": "林遥视线从文件夹上收回，嘴唇轻抿后微松，面部从接收请求的小紧张过渡到平静决定的状态，胸口起伏一次后稳住，准备开口",
+            "operations": [
+              {
+                "kind": "gaze",
+                "actor": "C01",
+                "target": "",
+                "value": "C02"
+              },
+              {
+                "kind": "affect",
+                "actor": "C01",
+                "target": "",
+                "value": "calm_decided"
+              }
+            ]
+          },
+          {
+            "id": "g_b2_2",
+            "script_slot": "during",
+            "kind": "hold",
+            "duration_seconds": 4.5,
+            "hold_subject": "C02",
+            "performance": "陈禾手持文件夹停在胸前水平位置，没有向林遥方向递出，手指轻握文件夹边缘，呼吸平稳地听林遥说完；林遥立于桌边，肩线稳定，呼吸可见地完成一句话",
+            "operations": []
+          }
+        ],
+        "dialogue_performance": "林遥说话时嘴部清晰张合，语速平稳不急不慢，气息稍浅以传达赶时间的实际状态，尾音平稳落下不道歉不解释",
+        "reaction": {
+          "anchor": "dialogue_0",
+          "subject": "C02",
+          "meaning": "林遥明确口头拒绝并给出理由，陈禾听到后手部停在半空没有递出文件夹，维持听完后才反应的状态"
+        },
+        "cut_after_event_id": "g_b2_2",
+        "completion_condition": "all_required_events_complete"
+      },
+      {
+        "beat_id": "B3",
+        "purpose": "完成至少两秒可读沉默对视后，陈禾面部软化并把文件夹平放回桌面，再用对白接受请求",
+        "composition": "延续同中景，林遥与陈禾形成稳定对视构图，文件夹从被举起到被平放回桌面的动作在镜头内完成；台灯暖光烘托沉默质感",
+        "camera": "延续同机位连续拍摄，无切点，长镜头承担至少2秒可读沉默",
+        "dialogue_mode": "画内对白",
+        "cut_reason": "本拍核心是拒绝后至少2秒可读等待反应，必须在同一镜头内让观众看到沉默的时长与陈禾面部软化的转变，切走会破坏可读性",
+        "groups": [
+          {
+            "id": "g_b3_1",
+            "script_slot": "before",
+            "kind": "action",
+            "duration_seconds": 1.5,
+            "hold_subject": "",
+            "performance": "林遥从陈禾手中的文件夹抬眼，视线移回陈禾面部，目光平稳地落在她眼睛位置，面部保持平静决定的状态",
+            "operations": [
+              {
+                "kind": "gaze",
+                "actor": "C01",
+                "target": "",
+                "value": "C02"
+              },
+              {
+                "kind": "affect",
+                "actor": "C01",
+                "target": "",
+                "value": "steady_holding_boundary"
+              }
+            ]
+          },
+          {
+            "id": "g_b3_2",
+            "script_slot": "before",
+            "kind": "hold",
+            "duration_seconds": 2.5,
+            "hold_subject": "C01",
+            "performance": "林遥与陈禾保持稳定对视，肩线不动，两人呼吸可见且节奏平稳，嘴部闭合不言语，眼神里没有尴尬只有等待对方反应的自然",
+            "operations": "[]"
+          },
+          {
+            "id": "g_b3_3",
+            "script_slot": "before",
+            "kind": "action",
+            "duration_seconds": 1.5,
+            "hold_subject": "",
+            "performance": "陈禾面部线条先软化，嘴角与眉心放松，然后把手中的文件夹平放回自己桌面，文件夹落桌时发出一声轻响，双手自然收回",
+            "operations": [
+              {
+                "kind": "affect",
+                "actor": "C02",
+                "target": "",
+                "value": "softening_accepting"
+              },
+              {
+                "kind": "place",
+                "actor": "C02",
+                "target": "E01",
+                "value": "P02"
+              }
+            ]
+          },
+          {
+            "id": "g_b3_4",
+            "script_slot": "after",
+            "kind": "hold",
+            "duration_seconds": 2,
+            "hold_subject": "C01",
+            "performance": "林遥维持对视，听到陈禾接受的话语后目光仍然停在陈禾脸上，肩线没有立刻松开，等待确认后再准备回应",
+            "operations": []
+          }
+        ],
+        "dialogue_performance": "陈禾说话时嘴部张合自然，语速平和偏慢，气息平稳，尾音平稳落下不再追加请求，呈现自然接受而非客套",
+        "reaction": {
+          "anchor": "dialogue_0",
+          "subject": "C01",
+          "meaning": "陈禾接受请求并把文件夹平放回自己桌面，林遥听到接受后维持对视尚未立刻放松，等待进一步确认"
+        },
+        "cut_after_event_id": "g_b3_4",
+        "completion_condition": "all_required_events_complete"
+      },
+      {
+        "beat_id": "B4",
+        "purpose": "林遥在听到接受后肩膀微松点头道别，朝门口走出两步；陈禾转身面向桌面坐下接手工作，关系保持正常收束",
+        "composition": "中景稍宽以容纳林遥转身走向门口与陈禾转身坐下的并行调度；门口位于画面一侧，桌面台灯继续承担暖光锚点",
+        "camera": "延续同机位连续拍摄，无切点，靠两人分向调度完成收尾",
+        "dialogue_mode": "画内对白",
+        "cut_reason": "本拍收束两人各自承担——林遥走向门口、陈禾坐回工作，需在同一镜头内完成分向调度，不切外景",
+        "groups": [
+          {
+            "id": "g_b4_1",
+            "script_slot": "before",
+            "kind": "action",
+            "duration_seconds": 2.5,
+            "hold_subject": "",
+            "performance": "林遥肩膀明显微松下沉，颈部放松，下巴轻点一下完成点头，嘴角自然微弯呈现释然，但仍保持对陈禾的注视",
+            "operations": [
+              {
+                "kind": "affect",
+                "actor": "C01",
+                "target": "",
+                "value": "relieved_grateful"
+              }
+            ]
+          },
+          {
+            "id": "g_b4_2",
+            "script_slot": "during",
+            "kind": "action",
+            "duration_seconds": 2.5,
+            "hold_subject": "",
+            "performance": "林遥身体转向办公室门口方向，包在肩上自然随转身，脚步轻快走出两步，目光朝门口延伸，嘴部自然道别",
+            "operations": [
+              {
+                "kind": "face",
+                "actor": "C01",
+                "target": "",
+                "value": "door"
+              },
+              {
+                "kind": "gaze",
+                "actor": "C01",
+                "target": "",
+                "value": "door"
+              },
+              {
+                "kind": "move",
+                "actor": "C01",
+                "target": "",
+                "value": "near_office_door"
+              },
+              {
+                "kind": "affect",
+                "actor": "C01",
+                "target": "",
+                "value": "calm_farewell"
+              }
+            ]
+          },
+          {
+            "id": "g_b4_3",
+            "script_slot": "after",
+            "kind": "action",
+            "duration_seconds": 2.5,
+            "hold_subject": "",
+            "performance": "陈禾身体转回面向自己的桌面，目光落到桌面的文件夹与纸件上，双手自然落在身侧准备坐下接手工作，坐姿稳定后肩膀放松投入工作状态",
+            "operations": [
+              {
+                "kind": "face",
+                "actor": "C02",
+                "target": "",
+                "value": "desk"
+              },
+              {
+                "kind": "gaze",
+                "actor": "C02",
+                "target": "",
+                "value": "desk"
+              },
+              {
+                "kind": "sit",
+                "actor": "C02",
+                "target": "E02",
+                "value": ""
+              },
+              {
+                "kind": "affect",
+                "actor": "C02",
+                "target": "",
+                "value": "resuming_work_normally"
+              }
+            ]
+          }
+        ],
+        "dialogue_performance": "林遥说话时嘴部轻松张合，语速自然，气息松弛，尾音柔和带笑意，呈现自然道别而非刻意客套",
+        "reaction": {
+          "anchor": "dialogue_0",
+          "subject": "C02",
+          "meaning": "林遥道别并朝门口走出两步，陈禾听到后身体转回面向自己的桌面，坐下接手工作，关系保持正常"
+        },
+        "cut_after_event_id": "g_b4_3",
+        "completion_condition": "all_required_events_complete"
+      }
+    ],
+    "spatial_contract": {
+      "seats": [
+        {
+          "seat_id": "E02",
+          "access_positions": [
+            "chenhe_chair_front"
+          ],
+          "required_facing": "desk"
+        }
+      ]
+    }
+  },
+  "semantic_approval": false,
+  "dependency_recheck": {
+    "schema": "plan_dependency_recheck/v1",
+    "source_sha256": "50255664a8933f2497f8b65342bec104d44ff34a7771b4e697d19aa742fcf3e1",
+    "patch_sha256": "708af8ff66fbce169278049ab10cd9067afe84e8c7eace4a178cedd4c8bda1b3",
+    "changed_paths": [
+      "beats.0.groups.1.operations",
+      "beats.2.groups.1.operations"
+    ],
+    "affected_beat_ids": [
+      "B1",
+      "B2",
+      "B3",
+      "B4"
+    ],
+    "requires_full_compile": true,
+    "requires_semantic_review": true,
+    "requires_asset_recheck": false,
+    "semantic_approval": false
+  }
+}

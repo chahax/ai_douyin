@@ -15,6 +15,13 @@ from test_script_pair import parse
 from test_script_review_gate import review_case
 
 
+@pytest.fixture(autouse=True)
+def review_patch_uses_isolated_output_root(monkeypatch):
+    from src.trend_intelligence.pre_video_script import PreVideoScriptService
+    monkeypatch.setattr(PreVideoScriptService, '_resolve_output_dir',
+                        staticmethod(lambda request: Path(request.output_dir).resolve()))
+
+
 def leaf(document, pointer):
     parts = pointer.lstrip('/').split('/')
     current = document
@@ -241,13 +248,16 @@ def test_two_bad_quote_attempts_still_use_only_three_total_calls(tmp_path):
 
 
 @pytest.mark.parametrize('mode', ['duplicate', 'extra_key', 'invented'])
-def test_invalid_patch_cannot_pass_or_create_more_than_three_model_calls(tmp_path, mode):
+def test_invalid_patch_exhaustion_requires_real_full_review_without_third_patch(tmp_path, mode):
     client = PatchReviewer((mode,))
-    with pytest.raises(RuntimeError):
-        review_with_trace(client, tmp_path)
-    assert len(client.calls) == gate.SCRIPT_REVIEW_MAX_FORMAT_ATTEMPTS == 3
+    report = review_with_trace(client, tmp_path)
+    assert report['passed'] and report['format_attempts'] == 4
+    assert len(client.calls) == 4 and client.full_count == 2 and client.patch_count == 2
     assert (tmp_path / 'review_1_response_2.txt').is_file()
     assert (tmp_path / 'review_1_response_3.txt').is_file()
+    fourth = json.loads((tmp_path / 'review_1_request_4.json').read_bytes())
+    assert json.loads(fourth[1]['content'])['review_contract_schema'] == gate.CURRENT_SCRIPT_REVIEW_SCHEMA
+    assert not (tmp_path / 'review_1_request_5.json').exists()
     if mode == 'duplicate':
         raw = (tmp_path / 'review_1_response_2.txt').read_text(encoding='utf-8')
         assert 'earlier conflicting quote' in raw

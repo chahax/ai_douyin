@@ -1,0 +1,9 @@
+{
+  "schema": "creative_evidence_review_decision/v1",
+  "packet_sha256": "5929ec62fe5339bc9f325143cc85f53227f1f903a7bc8cb312a84b8d0217b3f2",
+  "reviewed_by": "assistant",
+  "reviewed_full_text": true,
+  "summary": "主agent与独立创作审查agent全文实审：一杯落桌、怕烫关心、停留反应、主动邀坐与周临落座形成完整因果，可进入导演细化。B2至B3有实际持续反应动作且event明确超过两秒，导演须落实镜头窗口。杯把是新出现的制作细节风险，简报没有禁止有柄纸杯，不能伪称硬性违约；后续必须核对资产构型，不能把有柄动作交给无柄资产。摘要先后坐定不得重演许宁落座。此结论只批准下游文本设计，不代表视频/声音合格。",
+  "decisions": [],
+  "additional_issues": []
+}

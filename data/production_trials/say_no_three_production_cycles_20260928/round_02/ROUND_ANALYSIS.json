@@ -1,0 +1,18 @@
+{
+  "analysis_complete": true,
+  "reviewed_at": "2026-09-28T11:29:16.497023+00:00",
+  "status": "production_exception",
+  "calls_started": 2,
+  "reported_tokens": 27293,
+  "findings": [
+    "静态清单成功，state_plan v2启用adaptive与结构化工具后输出达到length，tool_count=0，未取得可审核计划。",
+    "失败响应已知24569 tokens曾未计入；原始回执保留，新增source SHA绑定usage sidecar并汇总修正。"
+  ],
+  "repair_before_next_round": [
+    "保留v2 schema与显式状态操作；最后一轮绑定plan_thinking_mode=disabled，防止思考占满输出预算。",
+    "新失败usage独立保存并按response_id去重。"
+  ],
+  "limitations": "本轮未到模型审核、资产设计或媒体生产；不可认定质量通过。",
+  "next_round": 3,
+  "no_fourth_round_authorized": true
+}

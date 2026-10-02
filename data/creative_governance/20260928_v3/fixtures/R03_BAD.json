@@ -1,0 +1,63 @@
+{
+  "schema_version": "creative_eval_case/v1",
+  "source_hash": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+  "created_at": "2026-09-28T13:55:55.609742+00:00",
+  "implementation_status": "candidate_label_not_gold",
+  "case": {
+    "case_id": "R03_BAD",
+    "category": "space",
+    "case_kind": "error",
+    "scenario": "performance要求steps behind her chair, and sits down，operations只有gaze/affect/sit，没有到可坐侧的位移。",
+    "expected_disposition": "failed",
+    "label_status": "candidate",
+    "adjudication": {
+      "approved_by": null,
+      "approved_at": null,
+      "candidate_author": "Codex assistant; requires independent human adjudication"
+    },
+    "source_family": "say_no_20260928",
+    "independence_group": "say_no_20260928",
+    "split": "development",
+    "used_for_prompt_tuning": true,
+    "expected_issues": [
+      {
+        "issue_id": "R03",
+        "severity": "major"
+      }
+    ],
+    "evidence": [
+      {
+        "path": "state_plan.beats.3.groups.2.performance",
+        "value": "Chen He turns her torso back to face her own desk, steps behind her chair, and sits down with a small settling motion; her hands come to rest near the papers on the desk surface, ready to resume working."
+      },
+      {
+        "path": "state_plan.beats.3.groups.2.operations",
+        "value": [
+          {
+            "kind": "gaze",
+            "actor": "C02",
+            "target": "",
+            "value": "her own desk surface"
+          },
+          {
+            "kind": "affect",
+            "actor": "C02",
+            "target": "",
+            "value": "calm focus, returning to work"
+          },
+          {
+            "kind": "sit",
+            "actor": "C02",
+            "target": "E02",
+            "value": "E02"
+          }
+        ]
+      }
+    ],
+    "source_paths": [
+      "state_plan.beats.3.groups.2.performance",
+      "state_plan.beats.3.groups.2.operations"
+    ],
+    "production_validated": false
+  }
+}

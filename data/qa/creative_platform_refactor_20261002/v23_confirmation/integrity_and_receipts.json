@@ -1,0 +1,60 @@
+{
+  "author_junit": [
+    {
+      "file": "core_final_tests.xml",
+      "tests": 743,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "ui_final_tests.xml",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "author_distinct_cases": 756,
+  "author_duplicate_cases": 0,
+  "sources": {
+    "count": 53,
+    "mismatches": []
+  },
+  "artifacts": {
+    "count": 55,
+    "mismatches": []
+  },
+  "old_artifacts": [
+    {
+      "pack": "20261002_v18_platform_refactor",
+      "count": 48,
+      "mismatches": []
+    },
+    {
+      "pack": "20261002_v19_platform_refactor_p1_recovery",
+      "count": 49,
+      "mismatches": []
+    },
+    {
+      "pack": "20261002_v19_platform_refactor_p1_recovery_draft_pre_replay_fix",
+      "count": 49,
+      "mismatches": []
+    },
+    {
+      "pack": "20261002_v20_platform_refactor_repair_resume",
+      "count": 49,
+      "mismatches": []
+    },
+    {
+      "pack": "20261002_v21_platform_refactor_multi_feedback",
+      "count": 49,
+      "mismatches": []
+    },
+    {
+      "pack": "20261002_v22_platform_refactor_workbench",
+      "count": 55,
+      "mismatches": []
+    }
+  ]
+}

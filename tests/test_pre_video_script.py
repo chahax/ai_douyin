@@ -19,9 +19,24 @@ from src.trend_intelligence.pre_video_script import (
     PreVideoScriptService,
     render_script_markdown,
 )
+from src.trend_intelligence import pre_video_script as pre_video_module
 
 
 NOW = datetime(2026, 9, 4, tzinfo=timezone.utc)
+
+
+def test_pre_video_output_stays_inside_project_data(tmp_path, monkeypatch):
+    monkeypatch.setattr(pre_video_module, "PROJECT_ROOT", tmp_path)
+    with pytest.raises(ValueError, match="project data directory"):
+        PreVideoScriptService._resolve_output_dir(
+            PreVideoScriptRequest(account_key="account01", recent_video_types=("mixed",),
+                                  output_dir=str(tmp_path / "outside"))
+        )
+    allowed = tmp_path / "data" / "script_pair"
+    assert PreVideoScriptService._resolve_output_dir(
+        PreVideoScriptRequest(account_key="account01", recent_video_types=("mixed",),
+                              output_dir=str(allowed))
+    ) == allowed.resolve()
 
 
 class _Profiles:
@@ -117,7 +132,9 @@ def _row(
 
 def test_recent_video_type_input_produces_detailed_script_only_artifact(
     tmp_path: Path,
+    monkeypatch,
 ) -> None:
+    monkeypatch.setattr(pre_video_module, "PROJECT_ROOT", tmp_path)
     labor = _row(
         "labor",
         "被老板辞退后，公司又按旷工解除合同",
@@ -155,7 +172,7 @@ def test_recent_video_type_input_produces_detailed_script_only_artifact(
         PreVideoScriptRequest(short_seconds=60, window_days=7, 
             account_key="account01",
             recent_video_types=("mixed",),
-            output_dir=str(tmp_path),
+            output_dir=str(tmp_path / "data"),
         ),
         now=NOW,
     )
@@ -179,7 +196,8 @@ def test_recent_video_type_input_produces_detailed_script_only_artifact(
     assert "creative_expansion" in audit
 
 
-def test_media_traits_require_real_media_analysis(tmp_path: Path) -> None:
+def test_media_traits_require_real_media_analysis(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setattr(pre_video_module, "PROJECT_ROOT", tmp_path)
     first = _row(
         "media-1",
         "员工被辞退后怎么办？",
@@ -224,7 +242,7 @@ def test_media_traits_require_real_media_analysis(tmp_path: Path) -> None:
             account_key="account01",
             recent_video_types=("mixed",),
             high_traffic_percentile=0.5,
-            output_dir=str(tmp_path),
+            output_dir=str(tmp_path / "data"),
         ),
         now=NOW,
     )

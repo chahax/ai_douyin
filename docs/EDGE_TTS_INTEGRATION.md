@@ -27,10 +27,11 @@ model_usage: Edge-TTS 集成说明。仅说明双角色音频能力；完整视�
     ↓
 拆分台词 → Edge-TTS 分别生成 role_a.wav + role_b.wav
     ↓
-可选：SadTalker / 微动作 PNG / FramePack 角色序列
-    ↓
-FFmpeg 叠加到背景 → 最终视频
+音频制品 + 音色/语速/文本/文件 hash
 ```
+
+Edge-TTS 当前只提供音频制品，不代表任何旧视频路线可用。音频进入新视频项目的方式
+以 `Video Pipeline V2` 的锁定脚本和镜头合同为准。
 
 ---
 
@@ -102,6 +103,6 @@ TTS_PROVIDER=edge
 | 项目 | 说明 |
 |------|------|
 | 网络要求 | Edge-TTS 每次生成需联网（1-3秒/句） |
-| 视频生成 | Edge-TTS 只负责音频；视频合成由 `video_composer.py` 等模块完成 |
-| 音频格式 | Edge-TTS 输出为 mp3 编码（.wav 扩展名），SadTalker 兼容 |
+| 视频生成 | Edge-TTS 只负责音频；当前不连接任何生产视频生成节点 |
+| 音频格式 | 以实际探测结果登记编码和容器，不根据扩展名推断 |
 | 离线运行 | Edge-TTS 需联网；如果要完全离线，使用 GPT-SoVITS |

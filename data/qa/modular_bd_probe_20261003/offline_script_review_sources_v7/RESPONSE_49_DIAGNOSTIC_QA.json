@@ -1,0 +1,171 @@
+{
+  "schema": "offline_response49_diagnostic_qa/v1",
+  "network_calls": 0,
+  "automatic_approval": false,
+  "source_receipts_sha256": {
+    "call_047_linear_script_review_v4.json": "c84580ea8cbf82ee4e9ee77ffe0ec6961d9840a328eedc04c9eec9693ba755fa",
+    "call_048_linear_draft_v5.json": "70e350f76d4f6f19ea6f591e9006d989d1a9c7ffdc88e12453eb8ec9eb7a3ead",
+    "call_049_linear_script_review_v6.json": "7b48039ab0af310827cb1d38f85148eef17f802df7816893fee467c602672b1f"
+  },
+  "status": "interface_rejected",
+  "failure": {
+    "schema": "creative_failure/v1",
+    "code": "RESPONSE_TRUNCATED",
+    "category": "interface",
+    "next_action": "diagnose_output_protocol",
+    "response_received": true,
+    "automatic_retry": false,
+    "blocks_handoff": true
+  },
+  "response_metadata": {
+    "role": "director",
+    "provider": "deepseek",
+    "requested_model": "deepseek-flash",
+    "response_model": "deepseek-flash",
+    "response_id": "bc62f262-33d2-48bc-81ba-d842a7e797a6",
+    "finish_reason": "length",
+    "thinking_mode": "disabled",
+    "output_mode": "content",
+    "prompt_tokens": 6940,
+    "completion_tokens": 11001,
+    "total_tokens": 17941,
+    "response_fault_code": "RESPONSE_TRUNCATED"
+  },
+  "complete_json_parseable": false,
+  "complete_coverage_prefix_ids": [
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "B7",
+    "B8",
+    "B9",
+    "B10",
+    "B11",
+    "B12"
+  ],
+  "partial_story_preserved_not_adopted": true,
+  "verified_nonleaf_references": [
+    {
+      "path": "script.beats.1.dialogue",
+      "quote": "[]",
+      "actual_target_type": "array",
+      "not_a_leaf": true
+    },
+    {
+      "path": "script.beats.2.dialogue",
+      "quote": "[]",
+      "actual_target_type": "array",
+      "not_a_leaf": true
+    },
+    {
+      "path": "script.beats.3.dialogue",
+      "quote": "[]",
+      "actual_target_type": "array",
+      "not_a_leaf": true
+    },
+    {
+      "path": "script.beats.5.dialogue",
+      "quote": "[]",
+      "actual_target_type": "array",
+      "not_a_leaf": true
+    },
+    {
+      "path": "script.beats.7.dialogue",
+      "quote": "[]",
+      "actual_target_type": "array",
+      "not_a_leaf": true
+    },
+    {
+      "path": "script.beats.8.dialogue",
+      "quote": "[]",
+      "actual_target_type": "array",
+      "not_a_leaf": true
+    },
+    {
+      "path": "script.beats.9.dialogue",
+      "quote": "[]",
+      "actual_target_type": "array",
+      "not_a_leaf": true
+    },
+    {
+      "path": "script.beats.11.dialogue",
+      "quote": "[]",
+      "actual_target_type": "array",
+      "not_a_leaf": true
+    },
+    {
+      "path": "script.beats.12.dialogue",
+      "quote": "[]",
+      "actual_target_type": "array",
+      "not_a_leaf": true
+    }
+  ],
+  "interface_failure_precedes_content_acceptance": true,
+  "verified_script48_findings": [
+    {
+      "id": "LINEAR_ACTION_OVERLAP",
+      "location": "B1",
+      "source_path": "output.beats.0.steps.2.text",
+      "quote": "林屿说着顺手把桌边一叠A4横版客户明细单递到方澄手边，签字笔搁在最上面那张表的红笔批注旁。",
+      "finding": "该动作位于已结束对白之后，却写说着，存在并行与严格串行的表达冲突；不修改模型正文。"
+    },
+    {
+      "id": "PEN_HOLDER_PRECONDITION",
+      "locations": [
+        "B1",
+        "B8"
+      ],
+      "evidence": [
+        {
+          "path": "output.beats.0.steps.2.text",
+          "quote": "签字笔搁在最上面那张表的红笔批注旁"
+        },
+        {
+          "path": "output.beats.7.steps.1.text",
+          "quote": "他手里的黑色细头签字笔"
+        }
+      ],
+      "finding": "已搁下到后续手持缺恢复持有依据；不推定必须放笔、拿笔或抬头的新禁令。"
+    },
+    {
+      "id": "PAPER_LOCATION_NOT_ESTABLISHED",
+      "locations": [
+        "B1",
+        "B2",
+        "B14"
+      ],
+      "evidence": [
+        {
+          "path": "output.beats.0.steps.2.text",
+          "quote": "递到方澄手边"
+        },
+        {
+          "path": "output.beats.1.steps.0.text",
+          "quote": "方澄从林屿桌边转身，沿两张并排的浅木色办公桌之间走回自己的工位。"
+        },
+        {
+          "path": "output.beats.13.steps.1.text",
+          "quote": "他把方澄手边那叠A4横版客户明细单挪回自己桌边"
+        }
+      ],
+      "finding": "未明确接下、放下和转移落点；不能擅自断言纸已到方澄工位或自动补移动。"
+    }
+  ],
+  "original_script_continuity_gate_gap": "v6本地仅在joint模式强制前拍来源，script当前拍引用可被验收；候选v7补此门禁，不回改旧冻结任务。",
+  "next_minimal_work": [
+    "显式新版候选script连续性来源门禁，原v6语义保留",
+    "确定性追踪跨拍持物与落点，正文返修仍提交完整新模型稿",
+    "权衡证据ID目录输入增加与输出减少，不能把离线寻址通过当生产审查通过"
+  ],
+  "reported_budget_snapshot": {
+    "calls": 49,
+    "reported_tokens": 490913,
+    "cap": 500000,
+    "remaining": 9087,
+    "reset": false
+  },
+  "minimax_long_analysis_server_cause": "本次DeepSeek审查输出截断不证明原MiniMax长分析服务端原因已查明。"
+}

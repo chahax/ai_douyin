@@ -34,6 +34,48 @@ def start_scheduler():
         )
         _worker_thread.start()
 
+    _seed_builtin_tasks()
+
+
+def _seed_builtin_tasks() -> None:
+    """Create built-in schedules once without coupling them to UI reruns."""
+    try:
+        from src.scheduler.models import (
+            ScheduledTask,
+            TaskStatus,
+            TaskType,
+            TriggerType,
+        )
+        from src.shared.database import SessionLocal
+
+        with SessionLocal() as session:
+            exists = (
+                session.query(ScheduledTask)
+                .filter_by(name="investigate_problems_daily")
+                .first()
+            )
+            if exists:
+                return
+            session.add(
+                ScheduledTask(
+                    name="investigate_problems_daily",
+                    description="每日扫描未解决问题，调用 LLM 生成调查摘要",
+                    task_type=TaskType.SCHEDULED.value,
+                    skill_name="investigate_problems",
+                    skill_params={"limit": 20},
+                    trigger_type=TriggerType.CRON.value,
+                    trigger_config={"expression": "37 9 * * *"},
+                    status=TaskStatus.PENDING.value,
+                    enabled=True,
+                    max_retries=1,
+                    retry_delay_seconds=300,
+                )
+            )
+            session.commit()
+    except Exception:
+        # Scheduling is auxiliary; startup and page rendering must stay available.
+        return
+
 
 def stop_scheduler():
     """停止调度器"""

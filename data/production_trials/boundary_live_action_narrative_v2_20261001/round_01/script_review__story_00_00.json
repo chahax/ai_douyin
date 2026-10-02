@@ -1,0 +1,522 @@
+{
+  "schema": "creative_stage/v1",
+  "status": "validated",
+  "stage": "script_review__story_00_00",
+  "role": "director",
+  "input_sha256": "dde3997d21202c39789f0b338e6ad9fcd1a7e3fd633d74727489af0391a56f73",
+  "prompt_sha256": "b43a7cf78c66f93081b1cc1fae8bd744ee229389c4563c622a59349664d5b361",
+  "context_budget": {
+    "schema": "creative_context_budget/v1",
+    "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+    "serialized_input_characters": 13331,
+    "estimated_input_tokens": 13331,
+    "requested_max_output_tokens": 20000,
+    "estimated_total_tokens": 33331,
+    "provider": "deepseek",
+    "model": "deepseek-flash",
+    "planning_context_window_tokens": 1000000,
+    "advertised_context_window_tokens": 1000000,
+    "source_url": "https://api-docs.deepseek.com/quick_start/pricing/",
+    "verified_on": "2026-09-24"
+  },
+  "request": {
+    "messages": [
+      {
+        "role": "system",
+        "content": "你是DeepSeek独立文字审核员。只审查完整剧本，不代写、不评分、不宣称实际画面、声音、口型或媒体通过。\n唯一输出JSON顶层字段恰为story_preserved(bool)、issues(array)、suggestions(array)、calibration_focus(array)、coverage(array)。有必修问题story_preserved=false，否则true。\nissues每项字段：id、owner(writer/director)、location(已有B/SH编号)、severity(blocking/major)、rule、evidence、contradiction、impact、proposal、evidence_refs。只报告直接违反简报或真实叙事/制作错误；可选审美进入suggestions，每项location/proposal/reason。不要从猜测发明禁令，不按动作数量猜超时，同根因合并。\nevidence_refs每项仅为{\"ref_id\":\"目录中的完整ID\"}。选择真实支持结论的证据ID，不输出path/quote。每条issue至少一条当前script/shots/production_design正文证据。原创简报优先于候选擅自加入的实现。\ncoverage逐行覆盖编号且各一次：[\"beat_1\", \"beat_2\", \"beat_3\", \"beat_3b\", \"beat_4\", \"beat_5\"]。每行{\"id\":\"当前编号\",\"checks\":{...}}，checks固定六项：requirements, timing, continuity, dialogue_timing, first_frame, assets。每项{\"status\":\"pass/fail/not_applicable\",\"reason\":\"具体核对结果\",\"evidence_refs\":[],\"issue_ids\":[]}。pass/fail必须有本行实际正文叶子证据。fail关联已列issues的id，其他状态issue_ids=[]。not_applicable只用于确实不适用的项目并解释；不能把漏写、缺证据当通过或不适用。明确需要而缺失的信息应fail，引用最近现有正文解释缺口。摘要声称完成不证明正文做到。\n逐项要求：\nrequirements：核对简报硬约束、人物关系、转折、结尾主动者、道具数量；实际正文优先于event/premise自述。必须检查。\ntiming：按刺激→听到→反应→回应。剧本before→首句dialogue→during→次句dialogue→after，event/trigger只是摘要。重要对白规定的反应窗口必须在正文明确，可合法跨拍。空转重复动作若无明确违反仅建议。必须检查。\ncontinuity：对照上一镜末与本镜首的视线、姿态、位置、持物者、道具落点和布局；有上一镜必须引用双方正文。分段首镜若有previous_shot就引用previous_shot，否则引用shots.shots前项。真正将已完成转头/坐下/交物重置到未发生起点才是错误；自然小动作和合理步行省略不自动构成矛盾。首拍描述初始状态，无上一镜也要检查内部连续性。必须检查。\ndialogue_timing：有对白写实际台词字数、可用秒数、必要前后动作与反应所占时间，核算速度是否自然；不要只看总时长或将同时动作全部相加。无对白可not_applicable说明原因。不能声称已听过语速或声线。\nfirst_frame：分镜首帧必须为动作发生前状态。逐项核对是否提前转头、站起、递出、接物、移杯、坐下或情绪反应；与上一镜尾及全局左右/朝向布局对照。分镜必须检查；剧本可not_applicable。文字通过不等于实际图片通过。\nassets：核对所见人物、场景、道具与资产id/定义、画风、服装、左右布局匹配。区分历史合适资产和待生成资产，不假定复用已成功。未提供production_design的单段只检查当前可见需求，完整映射明确待后续联合审查，不把尚未生成的后续文件列缺失。剧本可not_applicable。\ncalibration_focus只列后续媒体验证项，不把已驳回假设变新硬条件。没问题/建议时数组为空。自己核查，不复制示例结论。\n本版本采用简洁对照证据，不要求把所有执行字段逐字重复六遍。每项仍须当前镜正文及相应来源；下方规定的路径前缀只需各一条真实相关叶子，不代表引用了就审查通过。reason说明双方是否相符。\n全片state_plan是被审核的计划，不是正确答案：对照剧本实际先后、初始状态、events动作与changes、对白窗口、反应窗口；检查将来坐下/拿取等动作的前置条件是否在先前成立。不能因程序契约通过就忽略自由文本和状态变化不一致。\n首态是t=0，0秒开始的动作区间并不要求先增加静止等待；已经到达目的地却又重复到达才是矛盾。末态里的“抬眼看向/已坐下”通常记录动作结果，不默认是新动作或再做一次。固定摄影机允许人物移动、走向纵深、自然改变画面占比；只有明确要求全程不变才产生冲突。\n对白按真实字数/已分配对白窗口核算；中文字计1，拉丁词计2。5单位/秒为执行上限，低于上限且有串行反应空间不能仅凭“偏紧、可能、未声明语速”列必修；审美慢读放suggestions，实际语速留媒体审核。不同人物并行动作不重复扣时。明确停顿/情绪要求仍须核查。\n审查production_design时核对其资产映射和opening_prompt与对应镜首态；计划及编译prompt若相冲突必须报告，不能只审其中一个。\n\n每镜每项最少对照来源前缀：{}\n证据传输版本evidence_ids_v1：目录按真实父路径→叶子名:[ref_id,前64字符导航片段]分组。ID选择该完整叶子，程序展开引用该叶子完整原文；导航片段不是审核范围。仅选择ID；可多选以覆盖对照双方，同一ID可复用，不得猜ID。ID已绑定此完整上下文。目录导航片段不改写原文，完整context仍是判断依据；不能因片段未涵盖某句就断言原文缺失。不把目录、程序编译或reaction_window标记当通过证据。\n动作状态在event.end才成立，保持时间从完成到下一破坏条件动作start核算。\n证据目录：{\"creative_brief\":{\"audience\":[\"E60a15468522c-0001\",\"喜欢生活情绪短片的成年观众\"],\"audience_emotion\":[\"E60a15468522c-0002\",\"先看懂她为什么难拒绝，再替她的选择紧张，最后感到关系发生了真实变化。\"],\"ending\":[\"E60a15468522c-0013\",\"以新的行动兑现边界及关系变化；不预先规定两人必须和解，不用主题口号收尾。\"],\"relationships\":[\"E60a15468522c-0014\",\"方澄与同事林屿；林屿已习惯她会答应，方澄担心拒绝会伤及两人的关系。\"],\"theme\":[\"E60a15468522c-0015\",\"总替同事收尾的人，第一次把自己的时间放在前面\"],\"turn\":[\"E60a15468522c-0016\",\"对方原本把她的帮忙视为理所当然；她明确拒绝后，对方必须面对这一点，再通过具体行动回应。\"],\"visual_style\":[\"E60a15468522c-0017\",\"写实真人实拍质感的AI短片，成年普通人外貌，真实皮肤纹理、自然光与生活化服装，克制自然表演，关键反应使用可读近景。\"]},\"creative_brief.avoid\":{\"0\":[\"E60a15468522c-0003\",\"用一次开本子或摸包代替习惯性的付出历史\"],\"1\":[\"E60a15468522c-0004\",\"靠陪家人看病等新事故替代原本的关系矛盾\"],\"2\":[\"E60a15468522c-0005\",\"强行争吵、突然完美理解、鸡汤总结\"],\"3\":[\"E60a15468522c-0006\",\"为了沿用动画尾帧而改回手绘风格\"]},\"creative_brief.constraints\":{\"0\":[\"E60a15468522c-0007\",\"观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。\"],\"1\":[\"E60a15468522c-0008\",\"她想离开和担心拒绝的原因要在实际事件中成立。\"],\"2\":[\"E60a15468522c-0009\",\"关键反应的构图和窗口必须写入最终视频提示词。\"],\"3\":[\"E60a15468522c-0010\",\"剧情先按完整故事创作，再拆成生成段；不能为固定八秒切段编造操作。\"]},\"creative_brief.duration_seconds\":{\"0\":[\"E60a15468522c-0011\",\"45\"],\"1\":[\"E60a15468522c-0012\",\"60\"]},\"script.beats.0\":{\"after\":[\"E60a15468522c-0018\",\"（无新增动作）\"],\"before\":[\"E60a15468522c-0019\",\"傍晚办公区暖白窗光下，方澄把笔插进笔筒，合上自己的笔记本。\\n台历上贴着一张演出票，旁边两份旧报告贴满红色便利贴，一张写着'上次的\"],\"duration_seconds\":[\"E60a15468522c-0022\",\"10\"],\"during\":[\"E60a15468522c-0023\",\"方澄低头笑一下没接话，把演出票小心放进包里。\"],\"event\":[\"E60a15468522c-0024\",\"方澄收拾桌面，台历演出票与两张历史加班便利贴交代习惯性付出，邻座同事随口点破\"],\"trigger\":[\"E60a15468522c-0025\",\"邻座同事一句'又走啦？你不是每次都帮林屿收尾吗'暴露方澄不止一次替林屿加班的事实\"]},\"script.beats.0.dialogue.0\":{\"speaker\":[\"E60a15468522c-0020\",\"邻座同事\"],\"text\":[\"E60a15468522c-0021\",\"又走啦？你不是每次都帮林屿收尾吗。\"]},\"script.beats.1\":{\"after\":[\"E60a15468522c-0026\",\"（无新增动作）\"],\"before\":[\"E60a15468522c-0027\",\"窗光转低色温，林屿抱着文件夹快步走来，边走边翻。\"],\"duration_seconds\":[\"E60a15468522c-0030\",\"9\"],\"during\":[\"E60a15468522c-0031\",\"她边说边把文件夹往方澄桌上一搁，动作熟稳。\"],\"event\":[\"E60a15468522c-0032\",\"林屿抱文件夹快步走来，理所当然地把明早报告往方澄桌上一搁，请她再帮忙对数据\"],\"trigger\":[\"E60a15468522c-0033\",\"林屿搁文件的熟练动作暴露她习惯把方澄的帮忙视为理所当然\"]},\"script.beats.1.dialogue.0\":{\"speaker\":[\"E60a15468522c-0028\",\"林屿\"],\"text\":[\"E60a15468522c-0029\",\"澄姐，这份客户报告明早九点要，你能再帮我对一遍数据吗？\"]},\"script.beats.2\":{\"after\":[\"E60a15468522c-0034\",\"（无新增动作）\"],\"before\":[\"E60a15468522c-0035\",\"方澄手停在包上，没有去接文件夹，抬头看着林屿。\"],\"duration_seconds\":[\"E60a15468522c-0040\",\"10\"],\"during\":[\"E60a15468522c-0041\",\"（无新增动作）\"],\"event\":[\"E60a15468522c-0042\",\"方澄手停在包上拒绝林屿，林屿下意识以习惯性期待回应\"],\"trigger\":[\"E60a15468522c-0043\",\"方澄第一次主动把自己的时间（演出）放在同事请求前面，林屿本能地以'每次都'接话\"]},\"script.beats.2.dialogue.0\":{\"speaker\":[\"E60a15468522c-0036\",\"方澄\"],\"text\":[\"E60a15468522c-0037\",\"今晚不行，林屿，我有事。\"]},\"script.beats.2.dialogue.1\":{\"speaker\":[\"E60a15468522c-0038\",\"林屿\"],\"text\":[\"E60a15468522c-0039\",\"你不是……每次都……\"]},\"script.beats.3\":{\"after\":[\"E60a15468522c-0044\",\"（无新增动作）\"],\"before\":[\"E60a15468522c-0045\",\"方澄站起，把演出票那侧的包带拎起来。\"],\"duration_seconds\":[\"E60a15468522c-0048\",\"6\"],\"during\":[\"E60a15468522c-0049\",\"（无新增动作）\"],\"event\":[\"E60a15468522c-0050\",\"方澄站起拎包带，再次明确拒绝，划清今晚的边界\"],\"trigger\":[\"E60a15468522c-0051\",\"方澄第二次明确拒绝，把自己的演出排在同事请求之前\"]},\"script.beats.3.dialogue.0\":{\"speaker\":[\"E60a15468522c-0046\",\"方澄\"],\"text\":[\"E60a15468522c-0047\",\"这次不行，你自己先对一遍。\"]},\"script.beats.4\":{\"after\":[\"E60a15468522c-0052\",\"（无新增动作）\"],\"before\":[\"E60a15468522c-0053\",\"林屿收回搭在文件夹上的手，把文件夹抱回自己胸前。\"],\"duration_seconds\":[\"E60a15468522c-0056\",\"8\"],\"during\":[\"E60a15468522c-0057\",\"她转身往自己工位走，脚步比来时慢。\"],\"event\":[\"E60a15468522c-0058\",\"林屿面对拒绝，把文件夹抱回自己胸前，转身回工位自己处理\"],\"trigger\":[\"E60a15468522c-0059\",\"林屿用具体行动而非道歉来面对方澄的边界\"]},\"script.beats.4.dialogue.0\":{\"speaker\":[\"E60a15468522c-0054\",\"林屿\"],\"text\":[\"E60a15468522c-0055\",\"好，那我回去看看。\"]},\"script.beats.5\":{\"after\":[\"E60a15468522c-0060\",\"她把手机扣在胸口，深吸一口气，肩线松下来一点点。\"],\"before\":[\"E60a15468522c-0061\",\"方澄拎包走进电梯间，按下按钮，电梯门缓缓合上。\"],\"duration_seconds\":[\"E60a15468522c-0062\",\"12\"],\"during\":[\"E60a15468522c-0063\",\"她掏出手机，锁屏上没有新消息提醒，演出票的时间安静亮着。\"],\"event\":[\"E60a15468522c-0064\",\"方澄在电梯间看手机，锁屏上没有抱怨消息，肩线松下来一点点\"],\"trigger\":[\"E60a15468522c-0065\",\"无人追来的安静以新行动兑现边界与关系变化\"]},\"script\":{\"duration_seconds\":[\"E60a15468522c-0066\",\"55\"],\"premise\":[\"E60a15468522c-0067\",\"周五傍晚，写字楼办公区日光渐暗。方澄收拾桌面，台历上贴着演出票，两份旧报告上贴满她替林屿加班留下的红色便利贴。邻座同事路过随口点\"],\"title\":[\"E60a15468522c-0068\",\"周五傍晚的拒绝\"]}}\n叙事表达优先：先兑现本次简报的人物处境、关系、选择及转折，再处理动作/道具/结构细节。仅从实际播放的动作和对白判断观众能够获得什么信息，premise/event/trigger、目的说明及情绪标签不算额外演出。“总是/习惯/第一次/终于”等前史或变化不能仅靠一次开本子、握包或伸手推知；可用自然且具体的对白、可见后果或对照建立，不强制闪回、旁白、字幕。建立关键事实应早于依赖该事实的情绪转折。观众感受是创作目标，不是已经测得的效果。\n文本审查：在既有requirements项先对照简报检查核心信息是否真正进入实际动作/对白，再比较分镜和最终prompt是否保留它。摘要与演出脱节、必要铺垫缺失、重要反应被构图/提示词删掉且违反明确要求时，用原字段证据报告给writer或director；不得用“动作规范/无矛盾”代替需求兑现。冲突不够刺激、是否感动等主观改善进suggestions，不臆测成片表演或口型失败，不给观众感受写passed。沿用现有输出合同，不新增评分、审核轮次或字段。联合审查同时核对final_video_prompts中的实际编译文本与剧本、shots.prompt和结构字段；编译文本才是视频请求将发送的表演内容。解释性目的、事件摘要不能弥补实际表演缺失。引用来源差异而非猜测生成效果；缺少信息归编剧，镜头与最终提示词丢失表达归导演。"
+      },
+      {
+        "role": "user",
+        "content": "{\"creative_brief\": {\"schema\": \"creative_brief/v1\", \"theme\": \"总替同事收尾的人，第一次把自己的时间放在前面\", \"duration_seconds\": [45, 60], \"delegated_fields\": [], \"audience\": \"喜欢生活情绪短片的成年观众\", \"relationships\": \"方澄与同事林屿；林屿已习惯她会答应，方澄担心拒绝会伤及两人的关系。\", \"audience_emotion\": \"先看懂她为什么难拒绝，再替她的选择紧张，最后感到关系发生了真实变化。\", \"visual_style\": \"写实真人实拍质感的AI短片，成年普通人外貌，真实皮肤纹理、自然光与生活化服装，克制自然表演，关键反应使用可读近景。\", \"turn\": \"对方原本把她的帮忙视为理所当然；她明确拒绝后，对方必须面对这一点，再通过具体行动回应。\", \"ending\": \"以新的行动兑现边界及关系变化；不预先规定两人必须和解，不用主题口号收尾。\", \"constraints\": [\"观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。\", \"她想离开和担心拒绝的原因要在实际事件中成立。\", \"关键反应的构图和窗口必须写入最终视频提示词。\", \"剧情先按完整故事创作，再拆成生成段；不能为固定八秒切段编造操作。\"], \"avoid\": [\"用一次开本子或摸包代替习惯性的付出历史\", \"靠陪家人看病等新事故替代原本的关系矛盾\", \"强行争吵、突然完美理解、鸡汤总结\", \"为了沿用动画尾帧而改回手绘风格\"]}, \"script\": {\"title\": \"周五傍晚的拒绝\", \"premise\": \"周五傍晚，写字楼办公区日光渐暗。方澄收拾桌面，台历上贴着演出票，两份旧报告上贴满她替林屿加班留下的红色便利贴。邻座同事路过随口点破她\\\"每次都帮林屿收尾\\\"，她笑一下没接话。林屿抱着文件夹快步走来，语气轻快地把明早要交的报告往桌上一搁，请她再帮忙对一遍数据——动作已经是过去很多次那样熟稳。方澄手停在包上，明确拒绝：今晚不行，自己有事，自己先对一遍。林屿愣住，把文件夹抱回胸前，转身回工位自己处理。方澄拎包走进电梯间，掏出手机，锁屏上没有抱怨消息，演出票的时间安静亮着。肩线松下来一点点。\", \"selected_candidate_id\": \"C01\", \"duration_seconds\": 55, \"beats\": [{\"id\": \"beat_1\", \"duration_seconds\": 10, \"event\": \"方澄收拾桌面，台历演出票与两张历史加班便利贴交代习惯性付出，邻座同事随口点破\", \"trigger\": \"邻座同事一句'又走啦？你不是每次都帮林屿收尾吗'暴露方澄不止一次替林屿加班的事实\", \"before\": \"傍晚办公区暖白窗光下，方澄把笔插进笔筒，合上自己的笔记本。\\n台历上贴着一张演出票，旁边两份旧报告贴满红色便利贴，一张写着'上次的报价单已校对'，一张写着'周三排版OK'。\", \"during\": \"方澄低头笑一下没接话，把演出票小心放进包里。\", \"after\": \"（无新增动作）\", \"dialogue\": [{\"speaker\": \"邻座同事\", \"text\": \"又走啦？你不是每次都帮林屿收尾吗。\"}]}, {\"id\": \"beat_2\", \"duration_seconds\": 9, \"event\": \"林屿抱文件夹快步走来，理所当然地把明早报告往方澄桌上一搁，请她再帮忙对数据\", \"trigger\": \"林屿搁文件的熟练动作暴露她习惯把方澄的帮忙视为理所当然\", \"before\": \"窗光转低色温，林屿抱着文件夹快步走来，边走边翻。\", \"during\": \"她边说边把文件夹往方澄桌上一搁，动作熟稳。\", \"after\": \"（无新增动作）\", \"dialogue\": [{\"speaker\": \"林屿\", \"text\": \"澄姐，这份客户报告明早九点要，你能再帮我对一遍数据吗？\"}]}, {\"id\": \"beat_3\", \"duration_seconds\": 10, \"event\": \"方澄手停在包上拒绝林屿，林屿下意识以习惯性期待回应\", \"trigger\": \"方澄第一次主动把自己的时间（演出）放在同事请求前面，林屿本能地以'每次都'接话\", \"before\": \"方澄手停在包上，没有去接文件夹，抬头看着林屿。\", \"during\": \"（无新增动作）\", \"after\": \"（无新增动作）\", \"dialogue\": [{\"speaker\": \"方澄\", \"text\": \"今晚不行，林屿，我有事。\"}, {\"speaker\": \"林屿\", \"text\": \"你不是……每次都……\"}]}, {\"id\": \"beat_3b\", \"duration_seconds\": 6, \"event\": \"方澄站起拎包带，再次明确拒绝，划清今晚的边界\", \"trigger\": \"方澄第二次明确拒绝，把自己的演出排在同事请求之前\", \"before\": \"方澄站起，把演出票那侧的包带拎起来。\", \"during\": \"（无新增动作）\", \"after\": \"（无新增动作）\", \"dialogue\": [{\"speaker\": \"方澄\", \"text\": \"这次不行，你自己先对一遍。\"}]}, {\"id\": \"beat_4\", \"duration_seconds\": 8, \"event\": \"林屿面对拒绝，把文件夹抱回自己胸前，转身回工位自己处理\", \"trigger\": \"林屿用具体行动而非道歉来面对方澄的边界\", \"before\": \"林屿收回搭在文件夹上的手，把文件夹抱回自己胸前。\", \"during\": \"她转身往自己工位走，脚步比来时慢。\", \"after\": \"（无新增动作）\", \"dialogue\": [{\"speaker\": \"林屿\", \"text\": \"好，那我回去看看。\"}]}, {\"id\": \"beat_5\", \"duration_seconds\": 12, \"event\": \"方澄在电梯间看手机，锁屏上没有抱怨消息，肩线松下来一点点\", \"trigger\": \"无人追来的安静以新行动兑现边界与关系变化\", \"before\": \"方澄拎包走进电梯间，按下按钮，电梯门缓缓合上。\", \"during\": \"她掏出手机，锁屏上没有新消息提醒，演出票的时间安静亮着。\", \"after\": \"她把手机扣在胸口，深吸一口气，肩线松下来一点点。\", \"dialogue\": []}], \"screenplay_markdown\": \"# 周五傍晚的拒绝\\n\\n## beat_1 方澄收拾桌面，台历演出票与两张历史加班便利贴交代习惯性付出，邻座同事随口点破\\n\\n傍晚办公区暖白窗光下，方澄把笔插进笔筒，合上自己的笔记本。\\n台历上贴着一张演出票，旁边两份旧报告贴满红色便利贴，一张写着'上次的报价单已校对'，一张写着'周三排版OK'。\\n\\n**邻座同事**：又走啦？你不是每次都帮林屿收尾吗。\\n\\n方澄低头笑一下没接话，把演出票小心放进包里。\\n\\n（无新增动作）\\n\\n## beat_2 林屿抱文件夹快步走来，理所当然地把明早报告往方澄桌上一搁，请她再帮忙对数据\\n\\n窗光转低色温，林屿抱着文件夹快步走来，边走边翻。\\n\\n**林屿**：澄姐，这份客户报告明早九点要，你能再帮我对一遍数据吗？\\n\\n她边说边把文件夹往方澄桌上一搁，动作熟稳。\\n\\n（无新增动作）\\n\\n## beat_3 方澄手停在包上拒绝林屿，林屿下意识以习惯性期待回应\\n\\n方澄手停在包上，没有去接文件夹，抬头看着林屿。\\n\\n**方澄**：今晚不行，林屿，我有事。\\n\\n（无新增动作）\\n\\n**林屿**：你不是……每次都……\\n\\n（无新增动作）\\n\\n## beat_3b 方澄站起拎包带，再次明确拒绝，划清今晚的边界\\n\\n方澄站起，把演出票那侧的包带拎起来。\\n\\n**方澄**：这次不行，你自己先对一遍。\\n\\n（无新增动作）\\n\\n（无新增动作）\\n\\n## beat_4 林屿面对拒绝，把文件夹抱回自己胸前，转身回工位自己处理\\n\\n林屿收回搭在文件夹上的手，把文件夹抱回自己胸前。\\n\\n**林屿**：好，那我回去看看。\\n\\n她转身往自己工位走，脚步比来时慢。\\n\\n（无新增动作）\\n\\n## beat_5 方澄在电梯间看手机，锁屏上没有抱怨消息，肩线松下来一点点\\n\\n方澄拎包走进电梯间，按下按钮，电梯门缓缓合上。\\n\\n她掏出手机，锁屏上没有新消息提醒，演出票的时间安静亮着。\\n\\n她把手机扣在胸口，深吸一口气，肩线松下来一点点。\"}, \"candidate_lock\": {\"id\": \"C01\", \"title\": \"周五傍晚的拒绝\", \"setup\": \"周五傍晚，写字楼办公区日光渐暗。方澄（navy_suit, low_ponytail）收拾桌面，台历上贴着一张演出票，旁边摊开两份贴满红色便利贴的旧报告——便利贴上分别写着'上次的报价单已校对'、'周三排版OK'，是之前替林屿加班的痕迹。邻座同事路过随口一句'又走啦？你不是每次都帮林屿收尾吗'，方澄低头笑一下没接话，把演出票小心放进包里。\", \"conflict\": \"林屿（offwhite_cardigan, shoulder_black_hair）抱着文件夹快步走过来，边走边翻，停在方澄工位旁，语气轻快：'澄姐，这份客户报告明早九点要，你能再帮我对一遍数据吗？'边说边把文件夹往方澄桌上一搁，动作已经像过去很多次那样熟稳。\", \"turn\": \"方澄手停在包上，没有去接文件夹。她抬头看着林屿，声音平稳但清楚：'今晚不行，林屿，我有事。'林屿表情顿住，手还搭在文件夹上：'你不是……每次都……'方澄站起，把演出票那侧的包带拎起来：'这次不行，你自己先对一遍。'\", \"peak\": \"短暂沉默。林屿收回搭在文件夹上的手，把文件夹抱回自己胸前，声音低了一档：'……好，那我回去看看。'她转身往自己工位走，脚步比来时慢。办公室日光灯嗡嗡响，方澄站在原位没动。\", \"aftermath\": \"方澄拎着包走进电梯间，按下按钮。电梯门关上前她掏出手机——没有新消息提醒，锁屏上安静躺着演出票的时间。她把手机扣在胸口，深吸一口气，肩线松下来一点点。电梯门合上，她的倒影里嘴角没笑出来，但眼睛里那点紧也跟着退了。\", \"start_quote\": \"\", \"end_quote\": \"\", \"duration_seconds\": 55, \"selection_reason\": \"完整覆盖简报硬约束：1）开场邻座同事随口一句+桌面两张历史加班便利贴+林屿自己开口'你不是每次都'三重视角兑现'不止一次替同事加班'的可听可见后果，不是靠人物背景；2）拒绝原因（演出票）和拒绝场景在同一工位上同时成立；3）林屿面对拒绝的具体行动是'把文件夹抱回自己胸前，转身回工位自己处理'，兑现了'必须面对这一点再通过具体行动回应'；4）结尾以新行动（电梯间看手机确认林屿没发抱怨消息）兑现边界与关系变化，不强行和解，不鸡汤收尾；5）时长55秒在45-60区间，五个阶段各有可拍因果。资产使用方澄、林屿角色卡，场景为通用办公区日光过渡到傍晚，未挪用与主题不符的画室/物业前台/法院窗口。\"}, \"selected_source\": {\"candidate_id\": \"C01\", \"story_source\": \"原创简报驱动\"}, \"review_evidence_interface_version\": \"evidence_ids_v1\", \"evidence_id_repair_hints_version\": \"missing_source_candidates_v1\"}"
+      }
+    ],
+    "message_sha256": "a8a11ff534ad58bf99e2085efd8a3ce91391535ad0b5b23b16d0709d80cfd72f",
+    "tool_schema_sha256": null,
+    "parameters": {
+      "max_tokens": 20000,
+      "temperature": 0.2,
+      "thinking": "disabled"
+    }
+  },
+  "started_at": "2026-09-30T17:55:57.077941+00:00",
+  "response_text": "{\n  \"story_preserved\": true,\n  \"issues\": [],\n  \"suggestions\": [\n    {\n      \"location\": \"beat_3\",\n      \"proposal\": \"可在方澄说出“今晚不行”之前，给一个极短的视线从文件夹移到包上演出票的过渡，让“手停在包上”的犹豫更可读。\",\n      \"reason\": \"当前“手停在包上，没有去接文件夹”已能传达犹豫，但若想强化她担心拒绝伤及关系的内心张力，可增加一个更明确的视线落点。\"\n    },\n    {\n      \"location\": \"beat_5\",\n      \"proposal\": \"可在电梯门合上后保留一个极短的静止画面，让“肩线松下来一点点”的克制变化有更完整的呼吸空间。\",\n      \"reason\": \"结尾以新行动兑现边界，当前动作已成立；增加静止画面属于审美节奏选择，不影响叙事完整性。\"\n    }\n  ],\n  \"calibration_focus\": [\n    \"关键反应近景（方澄手停在包上、林屿表情顿住、肩线松下来）在最终视频提示词中的构图与窗口是否保留。\",\n    \"林屿“把文件夹抱回自己胸前，转身回工位”的具体行动在生成画面中是否可读，而非仅靠对白传达。\",\n    \"方澄与林屿的左右站位、视线方向在相邻镜头间是否连续。\",\n    \"演出票、红色便利贴、文件夹等道具在画面中的可读性是否足以让观众理解前史与拒绝原因。\"\n  ],\n  \"coverage\": [\n    {\n      \"id\": \"beat_1\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"pass\",\n          \"reason\": \"邻座同事台词“你不是每次都帮林屿收尾吗”与两张历史加班便利贴共同在拒绝发生前以自然对白和可见后果交代她过去不止一次替林屿加班，符合简报硬约束。\",\n          \"evidence_refs\": [\n            {\"ref_id\": \"E60a15468522c-0021\"},\n            {\"ref_id\": \"E60a15468522c-0019\"}\n          ],\n          \"issue_ids\": []\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"本拍无刺激→听到→反应→回应的对白反应链要求；邻座同事台词后，方澄“低头笑一下没接话”作为反应，节奏自然。\",\n          \"evidence_refs\": [\n            {\"ref_id\": \"E60a15468522c-0021\"},\n            {\"ref_id\": \"E60a15468522c-0023\"}\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"本拍为首拍，无上一镜；内部动作顺序为收拾桌面→同事说话→方澄反应→放票入包，初始状态与后续动作连贯。\",\n          \"evidence_refs\": [\n            {\"ref_id\": \"E60a15468522c-0019\"},\n            {\"ref_id\": \"E60a15468522c-0023\"}\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"邻座同事台词共14个中文字，10秒窗口内语速约1.4字/秒，远低于5单位/秒上限，且方澄反应有独立空间。\",\n          \"evidence_refs\": [\n            {\"ref_id\": \"E60a15468522c-0021\"},\n            {\"ref_id\": \"E60a15468522c-0022\"}\n          ],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"本拍为剧本beat，非分镜首帧，不适用分镜首帧检查。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"本拍为剧本beat，未提供production_design，不适用资产映射检查。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"beat_2\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"pass\",\n          \"reason\": \"林屿抱文件夹快步走来、把文件夹往方澄桌上一搁、请她再帮忙对数据，动作熟稳，兑现“对方原本把她的帮忙视为理所当然”。\",\n          \"evidence_refs\": [\n            {\"ref_id\": \"E60a15468522c-0027\"},\n            {\"ref_id\": \"E60a15468522c-0031\"},\n            {\"ref_id\": \"E60a15468522c-0029\"}\n          ],\n          \"issue_ids\": []\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"林屿边走边翻、边说边搁文件夹，台词与动作并行，9秒窗口内节奏自然。\",\n          \"evidence_refs\": [\n            {\"ref_id\": \"E60a15468522c-0027\"},\n            {\"ref_id\": \"E60a15468522c-0031\"},\n            {\"ref_id\": \"E60a15468522c-0029\"}\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"上一拍方澄把演出票放进包里，本拍林屿抱文件夹走来，方澄仍在工位，空间与持物状态连贯。\",\n          \"evidence_refs\": [\n            {\"ref_id\": \"E60a15468522c-0023\"},\n            {\"ref_id\": \"E60a15468522c-0027\"}\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"林屿台词共24个中文字，9秒窗口内语速约2.7字/秒，低于5单位/秒上限，且动作与台词并行不额外占时。\",\n          \"evidence_refs\": [\n            {\"ref_id\": \"E60a15468522c-0029\"},\n            {\"ref_id\": \"E60a15468522c-0030\"}\n          ],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"本拍为剧本beat，非分镜首帧，不适用分镜首帧检查。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"本拍为剧本beat，未提供production_design，不适用资产映射检查。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"beat_3\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"pass\",\n          \"reason\": \"方澄手停在包上、没有去接文件夹、抬头看着林屿，明确说出“今晚不行，林屿，我有事”，兑现第一次主动把自己的时间放在同事请求前面；林屿以“你不是……每次都……”回应，兑现习惯性期待。\",\n          \"evidence_refs\": [\n            {\"ref_id\": \"E60a15468522c-0035\"},\n            {\"ref_id\": \"E60a15468522c-0037\"},\n            {\"ref_id\": \"E60a15468522c-0039\"}\n          ],\n          \"issue_ids\": []\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"方澄拒绝后，林屿以“你不是……每次都……”接话，刺激→反应→回应链完整，10秒窗口内节奏成立。\",\n          \"evidence_refs\": [\n            {\"ref_id\": \"E60a15468522c-0037\"},\n            {\"ref_id\": \"E60a15468522c-0039\"},\n            {\"ref_id\": \"E60a15468522c-0040\"}\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"上一拍林屿把文件夹搁在方澄桌上，本拍方澄手停在包上、没有去接文件夹，持物与位置状态连贯。\",\n          \"evidence_refs\": [\n            {\"ref_id\": \"E60a15468522c-0031\"},\n            {\"ref_id\": \"E60a15468522c-0035\"}\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"方澄台词9个中文字，林屿台词7个中文字，合计16字，10秒窗口内语速约1.6字/秒，低于5单位/秒上限，且两句之间有反应空间。\",\n          \"evidence_refs\": [\n            {\"ref_id\": \"E60a15468522c-0037\"},\n            {\"ref_id\": \"E60a15468522c-0039\"},\n            {\"ref_id\": \"E60a15468522c-0040\"}\n          ],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"本拍为剧本beat，非分镜首帧，不适用分镜首帧检查。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"本拍为剧本beat，未提供production_design，不适用资产映射检查。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"beat_3b\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"pass\",\n          \"reason\": \"方澄站起、拎起演出票那侧的包带，再次明确拒绝“这次不行，你自己先对一遍”，兑现第二次拒绝与边界划定。\",\n          \"evidence_refs\": [\n            {\"ref_id\": \"E60a15468522c-0045\"},\n            {\"ref_id\": \"E60a15468522c-0047\"}\n          ],\n          \"issue_ids\": []\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"本拍为方澄主动站起并再次拒绝，无对方对白反应链要求；6秒窗口内动作与台词节奏成立。\",\n          \"evidence_refs\": [\n            {\"ref_id\": \"E60a15468522c-0045\"},\n            {\"ref_id\": \"E60a15468522c-0047\"},\n            {\"ref_id\": \"E60a15468522c-0048\"}\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"上一拍方澄手停在包上、抬头看着林屿，本拍方澄站起并拎起包带，姿态变化自然连贯。\",\n          \"evidence_refs\": [\n            {\"ref_id\": \"E60a15468522c-0035\"},\n            {\"ref_id\": \"E60a15468522c-0045\"}\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"方澄台词11个中文字，6秒窗口内语速约1.8字/秒，低于5单位/秒上限，且站起动作与台词可并行。\",\n          \"evidence_refs\": [\n            {\"ref_id\": \"E60a15468522c-0047\"},\n            {\"ref_id\": \"E60a15468522c-0048\"}\n          ],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"本拍为剧本beat，非分镜首帧，不适用分镜首帧检查。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"本拍为剧本beat，未提供production_design，不适用资产映射检查。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"beat_4\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"pass\",\n          \"reason\": \"林屿收回搭在文件夹上的手、把文件夹抱回自己胸前、转身往自己工位走，并以“好，那我回去看看”回应，兑现面对拒绝后通过具体行动回应。\",\n          \"evidence_refs\": [\n            {\"ref_id\": \"E60a15468522c-0053\"},\n            {\"ref_id\": \"E60a15468522c-0055\"},\n            {\"ref_id\": \"E60a15468522c-0057\"}\n          ],\n          \"issue_ids\": []\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"方澄拒绝后，林屿收回手、抱回文件夹、转身走，并以台词回应，刺激→反应→回应链完整，8秒窗口内节奏成立。\",\n          \"evidence_refs\": [\n            {\"ref_id\": \"E60a15468522c-0053\"},\n            {\"ref_id\": \"E60a15468522c-0055\"},\n            {\"ref_id\": \"E60a15468522c-0057\"}\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"上一拍方澄站起拎包带，本拍林屿收回搭在文件夹上的手并抱回胸前，文件夹位置与人物姿态变化连贯。\",\n          \"evidence_refs\": [\n            {\"ref_id\": \"E60a15468522c-0045\"},\n            {\"ref_id\": \"E60a15468522c-0053\"}\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"林屿台词8个中文字，8秒窗口内语速约1字/秒，低于5单位/秒上限，且动作与台词可并行。\",\n          \"evidence_refs\": [\n            {\"ref_id\": \"E60a15468522c-0055\"},\n            {\"ref_id\": \"E60a15468522c-0056\"}\n          ],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"本拍为剧本beat，非分镜首帧，不适用分镜首帧检查。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"本拍为剧本beat，未提供production_design，不适用资产映射检查。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        }\n      }\n    },\n    {\n      \"id\": \"beat_5\",\n      \"checks\": {\n        \"requirements\": {\n          \"status\": \"pass\",\n          \"reason\": \"方澄拎包走进电梯间、按下按钮、掏出手机、锁屏上没有新消息提醒、演出票时间亮着、肩线松下来，以新行动兑现边界与关系变化，不强行和解、不鸡汤收尾。\",\n          \"evidence_refs\": [\n            {\"ref_id\": \"E60a15468522c-0061\"},\n            {\"ref_id\": \"E60a15468522c-0063\"},\n            {\"ref_id\": \"E60a15468522c-0060\"}\n          ],\n          \"issue_ids\": []\n        },\n        \"timing\": {\n          \"status\": \"pass\",\n          \"reason\": \"本拍无对白，动作链为走进电梯间→按按钮→掏手机→看锁屏→扣手机→深吸气→肩线松，12秒窗口内节奏成立。\",\n          \"evidence_refs\": [\n            {\"ref_id\": \"E60a15468522c-0061\"},\n            {\"ref_id\": \"E60a15468522c-0063\"},\n            {\"ref_id\": \"E60a15468522c-0060\"}\n          ],\n          \"issue_ids\": []\n        },\n        \"continuity\": {\n          \"status\": \"pass\",\n          \"reason\": \"上一拍林屿转身回工位，本拍方澄拎包走进电梯间，空间转换自然，持包状态连贯。\",\n          \"evidence_refs\": [\n            {\"ref_id\": \"E60a15468522c-0057\"},\n            {\"ref_id\": \"E60a15468522c-0061\"}\n          ],\n          \"issue_ids\": []\n        },\n        \"dialogue_timing\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"本拍无对白，不适用对白时间核算。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"first_frame\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"本拍为剧本beat，非分镜首帧，不适用分镜首帧检查。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        },\n        \"assets\": {\n          \"status\": \"not_applicable\",\n          \"reason\": \"本拍为剧本beat，未提供production_design，不适用资产映射检查。\",\n          \"evidence_refs\": [],\n          \"issue_ids\": []\n        }\n      }\n    }\n  ]\n}",
+  "response_metadata": {
+    "role": "director",
+    "provider": "deepseek",
+    "requested_model": "deepseek-flash",
+    "response_model": "deepseek-flash",
+    "response_id": "74e62666-e7e8-4a26-a28d-8bbe031f00f9",
+    "finish_reason": "stop",
+    "thinking_mode": "disabled",
+    "output_mode": "content",
+    "prompt_tokens": 6574,
+    "completion_tokens": 3825,
+    "total_tokens": 10399,
+    "logical_role": "director",
+    "workflow_stage": "script_review__story_00_00",
+    "model_profile": "minimax_create_deepseek_review",
+    "transport_config_role": "director"
+  },
+  "output": {
+    "story_preserved": true,
+    "issues": [],
+    "suggestions": [
+      {
+        "location": "beat_3",
+        "proposal": "可在方澄说出“今晚不行”之前，给一个极短的视线从文件夹移到包上演出票的过渡，让“手停在包上”的犹豫更可读。",
+        "reason": "当前“手停在包上，没有去接文件夹”已能传达犹豫，但若想强化她担心拒绝伤及关系的内心张力，可增加一个更明确的视线落点。"
+      },
+      {
+        "location": "beat_5",
+        "proposal": "可在电梯门合上后保留一个极短的静止画面，让“肩线松下来一点点”的克制变化有更完整的呼吸空间。",
+        "reason": "结尾以新行动兑现边界，当前动作已成立；增加静止画面属于审美节奏选择，不影响叙事完整性。"
+      }
+    ],
+    "calibration_focus": [
+      "关键反应近景（方澄手停在包上、林屿表情顿住、肩线松下来）在最终视频提示词中的构图与窗口是否保留。",
+      "林屿“把文件夹抱回自己胸前，转身回工位”的具体行动在生成画面中是否可读，而非仅靠对白传达。",
+      "方澄与林屿的左右站位、视线方向在相邻镜头间是否连续。",
+      "演出票、红色便利贴、文件夹等道具在画面中的可读性是否足以让观众理解前史与拒绝原因。"
+    ],
+    "coverage": [
+      {
+        "id": "beat_1",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "邻座同事台词“你不是每次都帮林屿收尾吗”与两张历史加班便利贴共同在拒绝发生前以自然对白和可见后果交代她过去不止一次替林屿加班，符合简报硬约束。",
+            "evidence_refs": [
+              {
+                "ref_id": "E60a15468522c-0021"
+              },
+              {
+                "ref_id": "E60a15468522c-0019"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "本拍无刺激→听到→反应→回应的对白反应链要求；邻座同事台词后，方澄“低头笑一下没接话”作为反应，节奏自然。",
+            "evidence_refs": [
+              {
+                "ref_id": "E60a15468522c-0021"
+              },
+              {
+                "ref_id": "E60a15468522c-0023"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "本拍为首拍，无上一镜；内部动作顺序为收拾桌面→同事说话→方澄反应→放票入包，初始状态与后续动作连贯。",
+            "evidence_refs": [
+              {
+                "ref_id": "E60a15468522c-0019"
+              },
+              {
+                "ref_id": "E60a15468522c-0023"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "pass",
+            "reason": "邻座同事台词共14个中文字，10秒窗口内语速约1.4字/秒，远低于5单位/秒上限，且方澄反应有独立空间。",
+            "evidence_refs": [
+              {
+                "ref_id": "E60a15468522c-0021"
+              },
+              {
+                "ref_id": "E60a15468522c-0022"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "本拍为剧本beat，非分镜首帧，不适用分镜首帧检查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "not_applicable",
+            "reason": "本拍为剧本beat，未提供production_design，不适用资产映射检查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "beat_2",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "林屿抱文件夹快步走来、把文件夹往方澄桌上一搁、请她再帮忙对数据，动作熟稳，兑现“对方原本把她的帮忙视为理所当然”。",
+            "evidence_refs": [
+              {
+                "ref_id": "E60a15468522c-0027"
+              },
+              {
+                "ref_id": "E60a15468522c-0031"
+              },
+              {
+                "ref_id": "E60a15468522c-0029"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "林屿边走边翻、边说边搁文件夹，台词与动作并行，9秒窗口内节奏自然。",
+            "evidence_refs": [
+              {
+                "ref_id": "E60a15468522c-0027"
+              },
+              {
+                "ref_id": "E60a15468522c-0031"
+              },
+              {
+                "ref_id": "E60a15468522c-0029"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "上一拍方澄把演出票放进包里，本拍林屿抱文件夹走来，方澄仍在工位，空间与持物状态连贯。",
+            "evidence_refs": [
+              {
+                "ref_id": "E60a15468522c-0023"
+              },
+              {
+                "ref_id": "E60a15468522c-0027"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "pass",
+            "reason": "林屿台词共24个中文字，9秒窗口内语速约2.7字/秒，低于5单位/秒上限，且动作与台词并行不额外占时。",
+            "evidence_refs": [
+              {
+                "ref_id": "E60a15468522c-0029"
+              },
+              {
+                "ref_id": "E60a15468522c-0030"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "本拍为剧本beat，非分镜首帧，不适用分镜首帧检查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "not_applicable",
+            "reason": "本拍为剧本beat，未提供production_design，不适用资产映射检查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "beat_3",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "方澄手停在包上、没有去接文件夹、抬头看着林屿，明确说出“今晚不行，林屿，我有事”，兑现第一次主动把自己的时间放在同事请求前面；林屿以“你不是……每次都……”回应，兑现习惯性期待。",
+            "evidence_refs": [
+              {
+                "ref_id": "E60a15468522c-0035"
+              },
+              {
+                "ref_id": "E60a15468522c-0037"
+              },
+              {
+                "ref_id": "E60a15468522c-0039"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "方澄拒绝后，林屿以“你不是……每次都……”接话，刺激→反应→回应链完整，10秒窗口内节奏成立。",
+            "evidence_refs": [
+              {
+                "ref_id": "E60a15468522c-0037"
+              },
+              {
+                "ref_id": "E60a15468522c-0039"
+              },
+              {
+                "ref_id": "E60a15468522c-0040"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "上一拍林屿把文件夹搁在方澄桌上，本拍方澄手停在包上、没有去接文件夹，持物与位置状态连贯。",
+            "evidence_refs": [
+              {
+                "ref_id": "E60a15468522c-0031"
+              },
+              {
+                "ref_id": "E60a15468522c-0035"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "pass",
+            "reason": "方澄台词9个中文字，林屿台词7个中文字，合计16字，10秒窗口内语速约1.6字/秒，低于5单位/秒上限，且两句之间有反应空间。",
+            "evidence_refs": [
+              {
+                "ref_id": "E60a15468522c-0037"
+              },
+              {
+                "ref_id": "E60a15468522c-0039"
+              },
+              {
+                "ref_id": "E60a15468522c-0040"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "本拍为剧本beat，非分镜首帧，不适用分镜首帧检查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "not_applicable",
+            "reason": "本拍为剧本beat，未提供production_design，不适用资产映射检查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "beat_3b",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "方澄站起、拎起演出票那侧的包带，再次明确拒绝“这次不行，你自己先对一遍”，兑现第二次拒绝与边界划定。",
+            "evidence_refs": [
+              {
+                "ref_id": "E60a15468522c-0045"
+              },
+              {
+                "ref_id": "E60a15468522c-0047"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "本拍为方澄主动站起并再次拒绝，无对方对白反应链要求；6秒窗口内动作与台词节奏成立。",
+            "evidence_refs": [
+              {
+                "ref_id": "E60a15468522c-0045"
+              },
+              {
+                "ref_id": "E60a15468522c-0047"
+              },
+              {
+                "ref_id": "E60a15468522c-0048"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "上一拍方澄手停在包上、抬头看着林屿，本拍方澄站起并拎起包带，姿态变化自然连贯。",
+            "evidence_refs": [
+              {
+                "ref_id": "E60a15468522c-0035"
+              },
+              {
+                "ref_id": "E60a15468522c-0045"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "pass",
+            "reason": "方澄台词11个中文字，6秒窗口内语速约1.8字/秒，低于5单位/秒上限，且站起动作与台词可并行。",
+            "evidence_refs": [
+              {
+                "ref_id": "E60a15468522c-0047"
+              },
+              {
+                "ref_id": "E60a15468522c-0048"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "本拍为剧本beat，非分镜首帧，不适用分镜首帧检查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "not_applicable",
+            "reason": "本拍为剧本beat，未提供production_design，不适用资产映射检查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "beat_4",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "林屿收回搭在文件夹上的手、把文件夹抱回自己胸前、转身往自己工位走，并以“好，那我回去看看”回应，兑现面对拒绝后通过具体行动回应。",
+            "evidence_refs": [
+              {
+                "ref_id": "E60a15468522c-0053"
+              },
+              {
+                "ref_id": "E60a15468522c-0055"
+              },
+              {
+                "ref_id": "E60a15468522c-0057"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "方澄拒绝后，林屿收回手、抱回文件夹、转身走，并以台词回应，刺激→反应→回应链完整，8秒窗口内节奏成立。",
+            "evidence_refs": [
+              {
+                "ref_id": "E60a15468522c-0053"
+              },
+              {
+                "ref_id": "E60a15468522c-0055"
+              },
+              {
+                "ref_id": "E60a15468522c-0057"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "上一拍方澄站起拎包带，本拍林屿收回搭在文件夹上的手并抱回胸前，文件夹位置与人物姿态变化连贯。",
+            "evidence_refs": [
+              {
+                "ref_id": "E60a15468522c-0045"
+              },
+              {
+                "ref_id": "E60a15468522c-0053"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "pass",
+            "reason": "林屿台词8个中文字，8秒窗口内语速约1字/秒，低于5单位/秒上限，且动作与台词可并行。",
+            "evidence_refs": [
+              {
+                "ref_id": "E60a15468522c-0055"
+              },
+              {
+                "ref_id": "E60a15468522c-0056"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "本拍为剧本beat，非分镜首帧，不适用分镜首帧检查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "not_applicable",
+            "reason": "本拍为剧本beat，未提供production_design，不适用资产映射检查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "beat_5",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "方澄拎包走进电梯间、按下按钮、掏出手机、锁屏上没有新消息提醒、演出票时间亮着、肩线松下来，以新行动兑现边界与关系变化，不强行和解、不鸡汤收尾。",
+            "evidence_refs": [
+              {
+                "ref_id": "E60a15468522c-0061"
+              },
+              {
+                "ref_id": "E60a15468522c-0063"
+              },
+              {
+                "ref_id": "E60a15468522c-0060"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "本拍无对白，动作链为走进电梯间→按按钮→掏手机→看锁屏→扣手机→深吸气→肩线松，12秒窗口内节奏成立。",
+            "evidence_refs": [
+              {
+                "ref_id": "E60a15468522c-0061"
+              },
+              {
+                "ref_id": "E60a15468522c-0063"
+              },
+              {
+                "ref_id": "E60a15468522c-0060"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "上一拍林屿转身回工位，本拍方澄拎包走进电梯间，空间转换自然，持包状态连贯。",
+            "evidence_refs": [
+              {
+                "ref_id": "E60a15468522c-0057"
+              },
+              {
+                "ref_id": "E60a15468522c-0061"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "not_applicable",
+            "reason": "本拍无对白，不适用对白时间核算。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "本拍为剧本beat，非分镜首帧，不适用分镜首帧检查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "not_applicable",
+            "reason": "本拍为剧本beat，未提供production_design，不适用资产映射检查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          }
+        }
+      }
+    ]
+  },
+  "output_sha256": "fe261c81f2891dcd2eb66a6ff8a3005c194374cb753c27f59328c1804e2dfe9b"
+}

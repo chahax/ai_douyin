@@ -1,0 +1,27 @@
+{
+  "template": "video_control/v1",
+  "video_path": "candidate.mp4",
+  "reference_image": "reference.png",
+  "mode": "subject_only",
+  "regions": {
+    "foreground": {
+      "rect": [
+        0,
+        0,
+        300,
+        320
+      ],
+      "motion": "static",
+      "reference_lock": true
+    },
+    "subject": {
+      "rect": [
+        300,
+        0,
+        340,
+        320
+      ],
+      "motion": "dynamic"
+    }
+  }
+}

@@ -27,6 +27,8 @@ class FakeLocator:
         self.selector = selector
 
     def evaluate(self, script: str):
+        if "data-douyin-visible-challenge" in script:
+            return self.page.captcha_frame_count > 0 and self.page.captcha_frame_visible
         if "const links = Array.from" in script:
             return [self.page.visible_row()]
         if "sort-selection-signature" in script:
@@ -42,6 +44,8 @@ class FakeLocator:
         return self.page.body_text
 
     def count(self):
+        if self.selector.startswith("iframe"):
+            return self.page.captcha_frame_count
         return self.page.video_link_count
 
 
@@ -107,6 +111,8 @@ class FakePage:
     ):
         self.body_text = "安全验证" if blocked else "搜索结果"
         self.video_link_count = 0 if blocked else 1
+        self.captcha_frame_count = 0
+        self.captcha_frame_visible = False
         self.waits = []
         self.hover_opens = hover_opens
         self.no_op_labels = no_op_labels or set()
@@ -186,6 +192,7 @@ def _policy() -> SourcePolicy:
                 "sort",
                 "rank",
                 "displayed_metrics",
+                "duration_seconds",
                 "published_at",
                 "hashtags",
                 "tag_relationships",
@@ -325,6 +332,23 @@ def test_provider_stops_for_human_verification() -> None:
     assert result.stopped_reason == "human_required"
     assert "安全验证" in result.warnings[0]
     assert session.stopped is True
+
+
+def test_shape_captcha_is_treated_as_human_verification() -> None:
+    page = FakePage(blocked=True)
+    page.body_text = ""
+    page.captcha_frame_count = 1
+    page.captcha_frame_visible = True
+
+    assert DouyinWebTrendProvider._is_blocked(page) is True
+
+
+def test_hidden_captcha_iframe_is_not_treated_as_human_verification() -> None:
+    page = FakePage()
+    page.captcha_frame_count = 1
+    page.captcha_frame_visible = False
+
+    assert DouyinWebTrendProvider._is_blocked(page) is False
 
 
 def test_provider_expands_one_hashtag_level_across_all_sorts() -> None:
@@ -469,3 +493,14 @@ def test_related_tag_selection_prefers_root_topic_over_incidental_slogan() -> No
     assert next(
         item for item in relations if item.target_tag == "超哥金句"
     ).expanded is False
+
+
+def test_collector_only_labels_explicit_likes(monkeypatch):
+    session = FakeSession()
+    rows = {key: dict(row) for key, row in session.page.rows_by_sort.items()}
+    rows['comprehensive']['metricKind'] = 'likes'
+    monkeypatch.setattr(session.page, 'rows_by_sort', rows)
+    result = DouyinWebTrendProvider(session_factory=lambda headless: session).collect(
+        TrendCollectionRequest(keywords=['法律'], limit_per_sort=1, web_crawler_enabled=True), policy=_policy())
+    kinds = {row.sort_key: row.metric_kind for row in result.observations}
+    assert kinds == {'comprehensive': 'likes', 'most_liked': 'displayed_unknown', 'latest': 'displayed_unknown'}

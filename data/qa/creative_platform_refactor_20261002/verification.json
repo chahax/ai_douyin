@@ -1,0 +1,22 @@
+{
+  "schema": "creative_refactor_report_verification/v1",
+  "html_sections": 9,
+  "local_links_checked": 30,
+  "missing_links": [],
+  "source_snapshot_count": 15,
+  "source_files_changed": [],
+  "browser": {
+    "rendered": true,
+    "javascript_errors": [],
+    "mode_checks": 2,
+    "dependency_scenarios_checked": 3,
+    "desktop_horizontal_overflow": false,
+    "mobile_horizontal_overflow": false,
+    "screenshots": [
+      "report_header.png",
+      "report_debug.png",
+      "report_impact.png",
+      "report_mobile.png"
+    ]
+  }
+}

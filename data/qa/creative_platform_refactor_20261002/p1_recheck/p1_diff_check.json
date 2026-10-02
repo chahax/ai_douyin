@@ -1,0 +1,4 @@
+{
+  "command": "git diff --check -- P1 files",
+  "exit_code": 0
+}

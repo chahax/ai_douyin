@@ -1,0 +1,105 @@
+{
+  "schema": "bounded_production_cycles_authorization/v1",
+  "authorization": "用户明确新增授权生产环境测试与修复两轮：每轮真实文本生产、分析与修复，第二轮需第一轮真实分析后启动；此前所有系列完整保留，不计入本次两轮。仅虚构剧本和7条项目素材目录元数据发送至官方MiniMax/DeepSeek，不生成图片或视频，不自动批准助手审核。",
+  "created_at": "2026-09-28T11:59:37.083361+00:00",
+  "same_story": true,
+  "series": "20260928_v3_two",
+  "prior_series_ledger": "D:\\IT\\ai_douyin\\data\\production_trials\\say_no_three_production_cycles_20260928\\THREE_CYCLE_LEDGER.json",
+  "prior_series_ledger_sha256": "f5cf3db9be0e70df61df34124696f0d5bb4b7ecdff53534a6164ed16d6ba2e01",
+  "inputs_sha256": "3bb174839388bae2199bf472180d6f241b35b326ae06971513d037cd1e6d5892",
+  "parent_run": "D:\\IT\\ai_douyin\\data\\creative_workflows\\say_no_reviewed_segments_20260927",
+  "parent_calls_started": 30,
+  "prior_three_request_extension": "D:\\IT\\ai_douyin\\data\\production_trials\\say_no_v4_paid_three_20260927",
+  "max_rounds": 2,
+  "per_round_max_calls": 24,
+  "per_round_max_total_tokens": 250000,
+  "media_calls": 0,
+  "rounds": {
+    "1": {
+      "run_dir": "D:\\IT\\ai_douyin\\data\\production_trials\\say_no_v3_two_production_cycles_20260928\\round_01",
+      "started_at": "2026-09-28T11:59:37.789591+00:00",
+      "source_at_start": {
+        "scripts/run_three_cycle_text_production.py": "28025423aee990de9114070e5c5856381e0bcc0b3f4cb0b47f14ad64c5d67d42",
+        "src/content_factory/creative_workflow.py": "7cd77df608ff6aba92d1d50e9b482883ff763f75fa9ae8699090ac38d484a452",
+        "src/content_factory/creative_segmented_director.py": "13f9d25c245ac5cad1de705c0c14188c9fb40adefa7cab286fa6a0274db91359",
+        "src/content_factory/creative_review_v6.py": "51e79e67209f28d9c0241d60c99d33de815d6e5e7dac0cb6bf9650b8db754e79",
+        "src/content_factory/creative_state_plan_v6.py": "5190c08c5d70b9ed569f1f5b8ca43612db8de0c0e2388ccf9645fdf905f6dadd",
+        "src/content_factory/creative_state_plan_v2.py": "98e089b56744a04521e4fff6d197f0a479326c0b874761014eb5c166873d62e9",
+        "src/content_factory/creative_state_plan_v3.py": "e4ed6e33084f3ba5be49190ec9f170a391126ba5341ecd0988dbfdc904c0044d",
+        "src/content_factory/creative_workflow_roles.py": "c33b1d3745a5ebd4f04031102fd645f1d276e48cdc126ee6589277e18d489a68",
+        "src/content_factory/creative_state_plan_binding.py": "52997976b5801df89585e3ad41c0f7705ec8a1f7b9463db4c34e3d560bf01387"
+      },
+      "review_policy_version": "evidence_review_v6",
+      "segmented_director_binding": {
+        "version": "reviewed_beat_storyboard_v6",
+        "prompt": "为已审核完整剧本生成全片计划，只输出目标JSON。script正文及creative_brief是权威；manifest只给身份、外观、固定场景和道具归属，不给当前姿态/当前手持。先通读全片：如果后拍坐下，初态通常应站着，不得无依据先坐又新增起身。道具归属owner绝不等于holder；桌上无接触的物品holder=none。初态必须在首动作发生前。\n每拍单连续镜头。本版人物/道具初态同v1，但关键物理动作只写operations，程序推导所有首尾及变化；不再复述from，不写changes，不写另一个首尾状态。performance只补可见情绪、节奏、点头/呼吸等细节，不能藏operations没有表达的位移/站坐/拿放/视线变化。\n目标结构：{\"schema\":\"whole_film_state_plan_v3\",\"initial_state\":{\"C01\":{\"posture\":\"standing\",\"position\":\"具体位置\",\"gaze\":\"一个目标\",\"affect\":\"表情/肩部状态\"},\"P01\":{\"holder\":\"none\",\"location\":\"桌面\"}},\"beats\":[{\"beat_id\":\"B1\",\"purpose\":\"新信息或关系变化\",\"composition\":\"取景和面部可读性\",\"camera\":\"单机位连续拍摄\",\"dialogue_mode\":\"画内对白\",\"cut_reason\":\"本拍切点依据\",\"reaction_window\":{\"start\":0,\"end\":2,\"subject\":\"C01\",\"meaning\":\"刺激与反应重点\"},\"events\":[{\"start\":0,\"end\":2,\"phase\":\"before_first_line\",\"script_slot\":\"before\",\"dialogue_index\":-1,\"performance\":\"可见表演补充，没有则写自然完成操作\",\"operations\":[{\"kind\":\"move\",\"actor\":\"C01\",\"target\":\"\",\"value\":\"新位置\"}]}],\"dialogue_windows\":[{\"start\":2,\"end\":5}]}]}\ninitial_state精确覆盖manifest全部characters和props；人物字段posture/position/gaze/affect，道具holder/location。posture枚举standing/sitting/kneeling/lying/other。holder人物ID或none。position/location具体描述固定元素相对位置；affect仅表情/肩部紧松，绝不能写看向、持物、站坐。\noperations每项严格kind/actor/target/value四字段：actor人物ID。\nmove: target=\"\"，value新位置；gaze: target=\"\"，value唯一目标；affect: target=\"\"，value新的可见表情/肩部状态。\nsit: target=manifest固定椅/可坐物ID，value=坐下后具体位置；程序要求原posture=standing，改sitting。stand: target=\"\"，value起身后位置，要求原sitting/kneeling/lying，改standing。\ntake: target=道具ID，value=拿取后的具体手持/佩戴位置，要求原holder=none，holder改actor。place: target=道具ID，value=放置位置，要求原holder=actor，改none。pass: target=道具ID，value=接收者人物ID，要求原holder=actor，改接收者，位置由程序记为接收者持有。\n无变化的move/gaze/affect允许维持，不视为新动作；禁止用take/place/sit假装已完成动作重新发生。其它细微动作只写performance；不要为修自己的初态错误新加剧情无关操作。\nevents按start排序。允许两个不同人物同时动作，不同字段可并行，但同一字段的重叠读写不允许；例如同一道具拿取尚未完成不能同时放下。每个event的operations在event结束时依次成立，开始时前置必须已成立。所有秒数为拍内时间，0<=start<end<=拍时长。\nphase不再使用before/during/after旧缩写。每个event额外写script_slot和dialogue_index：script_slot为before/during/after/dialogue_performance；dialogue_index仅对白表演填实际句索引，其余填-1。\nscript_slot指原script来源，不是时间口语：原before动作phase=before_first_line且第一句开始前完成；原during动作在第一句结束后，若有第二句phase=between_lines且第二句前完成，只有一句则phase=after_last_line；原after动作phase=after_last_line且最后一句结束后开始。\n说话时的呼吸、嘴部表演、可见情绪单独用script_slot=dialogue_performance；第一句phase=first_line_delivery/dialogue_index=0，其余phase=later_line_delivery/dialogue_index=实际句索引，区间必须落在对应对白窗口内。该类operations只能affect，不能用此类提前执行原文离开/拿放/坐下/视线移动。关键动作仍引用原before/during/after来源。无对白统一phase=no_dialogue且dialogue_index=-1，仍保持原来源顺序。\n例：对白2–5秒时，2–5秒嘴部表演是first_line_delivery，不是原script.during；原script.after的离开必须5秒之后。原script.during不是英语“说话期间”的意思。\ndialogue_windows与script每拍dialogue一一对应，只给start/end，不复写对白或speaker。每秒最多5计时单位（汉字1，拉丁词2），重要对白留前中后的可见反应，不机械额外静止。dialogue_mode枚举画内对白/画外对白/混合对白/无对白，由构图中说话人可见性决定；无对白窗口[]且模式无对白。reaction_window标识真实表演，不额外创造剧情。\n完整覆盖所有拍。真实审核还将核对operations是否覆盖正文关键动作以及情绪是否可读；程序通过不是语义通过。",
+        "static_manifest_version": "static_visual_manifest_v2",
+        "state_plan_version": "whole_film_state_plan_v3",
+        "plan_thinking_mode": "disabled"
+      },
+      "status": "production_exception",
+      "calls_started": 5,
+      "reported_tokens": 83460,
+      "updated_at": "2026-09-28T12:01:50.979405+00:00",
+      "source_at_latest_run": {
+        "scripts/run_three_cycle_text_production.py": "28025423aee990de9114070e5c5856381e0bcc0b3f4cb0b47f14ad64c5d67d42",
+        "src/content_factory/creative_workflow.py": "7cd77df608ff6aba92d1d50e9b482883ff763f75fa9ae8699090ac38d484a452",
+        "src/content_factory/creative_segmented_director.py": "13f9d25c245ac5cad1de705c0c14188c9fb40adefa7cab286fa6a0274db91359",
+        "src/content_factory/creative_review_v6.py": "51e79e67209f28d9c0241d60c99d33de815d6e5e7dac0cb6bf9650b8db754e79",
+        "src/content_factory/creative_state_plan_v6.py": "5190c08c5d70b9ed569f1f5b8ca43612db8de0c0e2388ccf9645fdf905f6dadd",
+        "src/content_factory/creative_state_plan_v2.py": "98e089b56744a04521e4fff6d197f0a479326c0b874761014eb5c166873d62e9",
+        "src/content_factory/creative_state_plan_v3.py": "e4ed6e33084f3ba5be49190ec9f170a391126ba5341ecd0988dbfdc904c0044d",
+        "src/content_factory/creative_workflow_roles.py": "c33b1d3745a5ebd4f04031102fd645f1d276e48cdc126ee6589277e18d489a68",
+        "src/content_factory/creative_state_plan_binding.py": "52997976b5801df89585e3ad41c0f7705ec8a1f7b9463db4c34e3d560bf01387"
+      },
+      "error": "writer_check__state_plan_00: coverage引用路径或逐字证据无效: {'path': 'shots.shots.0.end_state.P01(文件夹).holder', 'quote': 'C02'}；共享格式与契约修复预算已满",
+      "pending_evidence_review": null
+    },
+    "2": {
+      "run_dir": "D:\\IT\\ai_douyin\\data\\production_trials\\say_no_v3_two_production_cycles_20260928\\round_02",
+      "started_at": "2026-09-28T12:08:05.428325+00:00",
+      "source_at_start": {
+        "scripts/run_three_cycle_text_production.py": "c9edc0e7e67fec484d8401093afb8349f076f49746e8c404d1061bb4cd6a7ffd",
+        "src/content_factory/creative_workflow.py": "dc93ee851152305018f953ecd3370eb73669685074d8c7ea179c894ca4294941",
+        "src/content_factory/creative_segmented_director.py": "c2b5138ff3b35409236571bbd93c165b538c2458116970c38dbde886e1f184bb",
+        "src/content_factory/creative_review_v6.py": "e857ad612f00776fee8a413b2e3f0d3237b0b1cebde5a136709c36c282b6d5bb",
+        "src/content_factory/creative_state_plan_v6.py": "7cf2edef85fa28acc3520a748e94c207529532f542c34f29d5403466c0168db0",
+        "src/content_factory/creative_state_plan_v2.py": "98e089b56744a04521e4fff6d197f0a479326c0b874761014eb5c166873d62e9",
+        "src/content_factory/creative_state_plan_v3.py": "e4ed6e33084f3ba5be49190ec9f170a391126ba5341ecd0988dbfdc904c0044d",
+        "src/content_factory/creative_workflow_roles.py": "c33b1d3745a5ebd4f04031102fd645f1d276e48cdc126ee6589277e18d489a68",
+        "src/content_factory/creative_state_plan_binding.py": "52997976b5801df89585e3ad41c0f7705ec8a1f7b9463db4c34e3d560bf01387",
+        "src/content_factory/creative_state_plan_guidance.py": "3c0f983532dea8fb94ec65024b80ecce96a5cdb7f2e48c4a97f6bdbcc7a28fbd"
+      },
+      "review_policy_version": "evidence_review_v6",
+      "segmented_director_binding": {
+        "version": "reviewed_beat_storyboard_v6",
+        "prompt": "为已审核完整剧本生成全片计划，只输出目标JSON。script正文及creative_brief是权威；manifest只给身份、外观、固定场景和道具归属，不给当前姿态/当前手持。先通读全片：如果后拍坐下，初态通常应站着，不得无依据先坐又新增起身。道具归属owner绝不等于holder；桌上无接触的物品holder=none。初态必须在首动作发生前。\n每拍单连续镜头。本版人物/道具初态同v1，但关键物理动作只写operations，程序推导所有首尾及变化；不再复述from，不写changes，不写另一个首尾状态。performance只补可见情绪、节奏、点头/呼吸等细节，不能藏operations没有表达的位移/站坐/拿放/视线变化。\n目标结构：{\"schema\":\"whole_film_state_plan_v3\",\"initial_state\":{\"C01\":{\"posture\":\"standing\",\"position\":\"具体位置\",\"gaze\":\"一个目标\",\"affect\":\"表情/肩部状态\"},\"P01\":{\"holder\":\"none\",\"location\":\"桌面\"}},\"beats\":[{\"beat_id\":\"B1\",\"purpose\":\"新信息或关系变化\",\"composition\":\"取景和面部可读性\",\"camera\":\"单机位连续拍摄\",\"dialogue_mode\":\"画内对白\",\"cut_reason\":\"本拍切点依据\",\"reaction_window\":{\"start\":0,\"end\":2,\"subject\":\"C01\",\"meaning\":\"刺激与反应重点\"},\"events\":[{\"start\":0,\"end\":2,\"phase\":\"before_first_line\",\"script_slot\":\"before\",\"dialogue_index\":-1,\"performance\":\"可见表演补充，没有则写自然完成操作\",\"operations\":[{\"kind\":\"move\",\"actor\":\"C01\",\"target\":\"\",\"value\":\"新位置\"}]}],\"dialogue_windows\":[{\"start\":2,\"end\":5}]}]}\ninitial_state精确覆盖manifest全部characters和props；人物字段posture/position/gaze/affect，道具holder/location。posture枚举standing/sitting/kneeling/lying/other。holder人物ID或none。position/location具体描述固定元素相对位置；affect仅表情/肩部紧松，绝不能写看向、持物、站坐。\noperations每项严格kind/actor/target/value四字段：actor人物ID。\nmove: target=\"\"，value新位置；gaze: target=\"\"，value唯一目标；affect: target=\"\"，value新的可见表情/肩部状态。\nsit: target=manifest固定椅/可坐物ID，value=坐下后具体位置；程序要求原posture=standing，改sitting。stand: target=\"\"，value起身后位置，要求原sitting/kneeling/lying，改standing。\ntake: target=道具ID，value=拿取后的具体手持/佩戴位置，要求原holder=none，holder改actor。place: target=道具ID，value=放置位置，要求原holder=actor，改none。pass: target=道具ID，value=接收者人物ID，要求原holder=actor，改接收者，位置由程序记为接收者持有。\n无变化的move/gaze/affect允许维持，不视为新动作；禁止用take/place/sit假装已完成动作重新发生。其它细微动作只写performance；不要为修自己的初态错误新加剧情无关操作。\nevents按start排序。允许两个不同人物同时动作，不同字段可并行，但同一字段的重叠读写不允许；例如同一道具拿取尚未完成不能同时放下。每个event的operations在event结束时依次成立，开始时前置必须已成立。所有秒数为拍内时间，0<=start<end<=拍时长。\nphase不再使用before/during/after旧缩写。每个event额外写script_slot和dialogue_index：script_slot为before/during/after/dialogue_performance；dialogue_index仅对白表演填实际句索引，其余填-1。\nscript_slot指原script来源，不是时间口语：原before动作phase=before_first_line且第一句开始前完成；原during动作在第一句结束后，若有第二句phase=between_lines且第二句前完成，只有一句则phase=after_last_line；原after动作phase=after_last_line且最后一句结束后开始。\n说话时的呼吸、嘴部表演、可见情绪单独用script_slot=dialogue_performance；第一句phase=first_line_delivery/dialogue_index=0，其余phase=later_line_delivery/dialogue_index=实际句索引，区间必须落在对应对白窗口内。该类operations只能affect，不能用此类提前执行原文离开/拿放/坐下/视线移动。关键动作仍引用原before/during/after来源。无对白统一phase=no_dialogue且dialogue_index=-1，仍保持原来源顺序。\n例：对白2–5秒时，2–5秒嘴部表演是first_line_delivery，不是原script.during；原script.after的离开必须5秒之后。原script.during不是英语“说话期间”的意思。\ndialogue_windows与script每拍dialogue一一对应，只给start/end，不复写对白或speaker。每秒最多5计时单位（汉字1，拉丁词2），重要对白留前中后的可见反应，不机械额外静止。dialogue_mode枚举画内对白/画外对白/混合对白/无对白，由构图中说话人可见性决定；无对白窗口[]且模式无对白。reaction_window标识真实表演，不额外创造剧情。\n完整覆盖所有拍。真实审核还将核对operations是否覆盖正文关键动作以及情绪是否可读；程序通过不是语义通过。\n生成前先区分“完成变化”和“保持变化后的状态”。operations在event.end才生效；原文要求“动作完成后保持N秒/对视至少N秒/放下后停顿N秒”时，从相关动作event.end起算稳定保持时长，不能把抬眼、转身、拿放的运动过程算入保持。将该明确要求落实为后续独立event（operations可为空），说明保持什么状态；达到N秒之前不得开始原文要求在保持之后才发生的软化、拿放、开口或离开。reaction_window与purpose写了“至少N秒”不等于时间轴真的留足。\n只履行原script/creative_brief明确要求的停顿，不给每个动作机械添加等待，不改变原剧情及对白。若当前节拍紧张，应在允许范围内缩短过渡动作并保留对白可读时长，不能把重要反应挪到刺激之前或用下一拍动作凑时长；不通过新增起身/拿放掩盖初态错误。\n提交前核对完整结构：根层只能schema、initial_state、beats三个键；beats为数组，必须按输入顺序覆盖全部beat_id，数量、首拍、末拍均一致。每个event及dialogue_windows保留在所属beat内部，数组项不能写成根层item，也不能把末拍的script_slot/dialogue_index等字段散落在根层。先完成末拍并闭合所有数组，再提交一个完整对象；不要增加核对清单字段。",
+        "static_manifest_version": "static_visual_manifest_v2",
+        "state_plan_version": "whole_film_state_plan_v3",
+        "plan_thinking_mode": "disabled",
+        "state_plan_guidance_version": "completed_action_hold_v1"
+      },
+      "status": "production_exception",
+      "calls_started": 4,
+      "reported_tokens": 36249,
+      "updated_at": "2026-09-28T12:09:21.161437+00:00",
+      "source_at_latest_run": {
+        "scripts/run_three_cycle_text_production.py": "c9edc0e7e67fec484d8401093afb8349f076f49746e8c404d1061bb4cd6a7ffd",
+        "src/content_factory/creative_workflow.py": "dc93ee851152305018f953ecd3370eb73669685074d8c7ea179c894ca4294941",
+        "src/content_factory/creative_segmented_director.py": "c2b5138ff3b35409236571bbd93c165b538c2458116970c38dbde886e1f184bb",
+        "src/content_factory/creative_review_v6.py": "e857ad612f00776fee8a413b2e3f0d3237b0b1cebde5a136709c36c282b6d5bb",
+        "src/content_factory/creative_state_plan_v6.py": "7cf2edef85fa28acc3520a748e94c207529532f542c34f29d5403466c0168db0",
+        "src/content_factory/creative_state_plan_v2.py": "98e089b56744a04521e4fff6d197f0a479326c0b874761014eb5c166873d62e9",
+        "src/content_factory/creative_state_plan_v3.py": "e4ed6e33084f3ba5be49190ec9f170a391126ba5341ecd0988dbfdc904c0044d",
+        "src/content_factory/creative_workflow_roles.py": "c33b1d3745a5ebd4f04031102fd645f1d276e48cdc126ee6589277e18d489a68",
+        "src/content_factory/creative_state_plan_binding.py": "52997976b5801df89585e3ad41c0f7705ec8a1f7b9463db4c34e3d560bf01387",
+        "src/content_factory/creative_state_plan_guidance.py": "3c0f983532dea8fb94ec65024b80ecce96a5cdb7f2e48c4a97f6bdbcc7a28fbd"
+      },
+      "error": "director_state_plan__00 修复响应未完整结束，已保存回执",
+      "pending_evidence_review": null
+    }
+  },
+  "historical_receipt_hashes_sha256": "5ba9a8940c5552ecc518e1e774e4694442c39df6d9b8023d8cb31f9c4236cbd3",
+  "new_calls_started": 9,
+  "new_reported_tokens": 119709
+}

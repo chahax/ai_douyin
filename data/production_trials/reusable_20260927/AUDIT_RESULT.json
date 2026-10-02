@@ -1,0 +1,50 @@
+{
+  "schema": "reusable_production_trial_result/v1",
+  "decision": "failed_preproduction_acceptance",
+  "actual_run": "D:\\IT\\ai_douyin\\data\\creative_workflows\\reusable_trial_20260927",
+  "source_brief": "D:\\IT\\ai_douyin\\data\\production_trials\\reusable_20260927\\brief.json",
+  "review_scope": [
+    "actual_provider_text_outputs",
+    "original_character_images",
+    "original_background_image",
+    "asset_routes",
+    "video_template_executability",
+    "revision_cli",
+    "stage_receipt_provenance"
+  ],
+  "calls_started": 15,
+  "reported_tokens": 122874,
+  "revision_rounds": 2,
+  "contract_repairs_used": 4,
+  "configured_max_calls": 20,
+  "configured_max_revisions": 2,
+  "stop_reason": "writer_revise__assistant_02 修复未改变无效产物: 编剧局部返修必须只提交 replace_beats",
+  "actual_new_video_generated": false,
+  "new_image_generation_calls": 0,
+  "new_video_generation_calls": 0,
+  "full_workflow_pass": false,
+  "audio_voice_check": null,
+  "lip_sync_check": null,
+  "checks_fixed_in_code": [
+    "case-insensitive production design receipt/artifact collision",
+    "original brief and asset library reload in revision CLI"
+  ],
+  "fix_regression_tests": {
+    "passed": 29,
+    "failed": 0,
+    "report": "D:\\IT\\ai_douyin\\data\\production_trials\\reusable_20260927\\regression.xml"
+  },
+  "unresolved": [
+    "second revision patch missing required B04 and has extra top-level item, malformed dialogue field; repair repeated invalid output",
+    "first revised SH03B offscreen dialogue still marked on-camera",
+    "palette support missing after both hands lowered",
+    "background geometry contradicts actual asset",
+    "required_tags invented rather than using supplied catalog, causing all assets to be regenerated",
+    "opening image prompts advance actions beyond start_state",
+    "asset-design revision input omits the assistant asset feedback",
+    "generic media execution and campaign adapter remain unconnected"
+  ],
+  "first_draft_design_call_receipt": "overwritten on Windows by artifact filename; source record not reconstructed",
+  "real_media_quality_verified": false,
+  "notes": "15 calls is usage, not price. Five nominal calls remain, but second revision attempt reached deterministic no-op stop and the configured two editorial rounds are consumed. No budget reset or synthetic approval."
+}

@@ -733,7 +733,11 @@ def test_looped_middle_video_passes_nonuniform_motion_sampling(tmp_path: Path):
 
 
 def test_quality_document_matches_implemented_defaults():
-    document = Path("docs/VIDEO_QUALITY_ARCHITECTURE_RECOMMENDATIONS_2026-07-21.md").read_text(encoding="utf-8")
+    document_path = Path(
+        "docs/archive/2026-09-video-pipeline-reset/"
+        "VIDEO_QUALITY_ARCHITECTURE_RECOMMENDATIONS_2026-07-21.md"
+    )
+    document = document_path.read_text(encoding="utf-8")
     publish = resolve_quality_profile("publish")
 
     assert "doc_status: implemented-initial-phase" in document

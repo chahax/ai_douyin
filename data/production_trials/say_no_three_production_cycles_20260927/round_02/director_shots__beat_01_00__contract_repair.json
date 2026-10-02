@@ -1,0 +1,51 @@
+{
+  "status": "response_received",
+  "source_sha256": "03ccd2154c70e3a33e95f10cab3f314b2e8df2ddfcf9c4c9872099f06d2edc76",
+  "payload_sha256": "d0f945d1a8496c9c731d565fd5df2a0567bf5ed7b8550e8e582712705e0c6dce",
+  "error": "分段分镜不得改变已绑定style_lock",
+  "repair_protocol": "generic_full_object/v1",
+  "role": "director",
+  "request_sha256": "a071354e908048a8fb31f2b295a02d94542c187ee470947ea2555122b50c4646",
+  "request": [
+    {
+      "role": "system",
+      "content": "只修复指定导演稿校验错误。返回合法 JSON 对象 {\"patches\":[{\"path\":[\"shots\",序号,\"字段名\"],\"value\":新值}]}。序号从0开始；只改必须修改的最多3个已有字段，不能改人物事件或其他镜头。不要复制完整原稿。"
+    },
+    {
+      "role": "user",
+      "content": "{\"error\": \"分段分镜不得改变已绑定style_lock\", \"original_sha256\": \"03ccd2154c70e3a33e95f10cab3f314b2e8df2ddfcf9c4c9872099f06d2edc76\", \"beat_locks\": {\"B1\": {\"event\": \"晚间办公室，林遥背起包走到陈禾桌边准备道别；陈禾从桌面拿起一只文件夹，抬眼叫住她。\", \"duration_seconds\": 10, \"dialogue\": [{\"speaker\": \"陈禾\", \"text\": \"这份今天能顺路帮我带一下吗？\"}]}}, \"shot_index\": [{\"index\": 0, \"id\": \"SH01\", \"beat_id\": \"B1\", \"duration_seconds\": 10, \"event_lock\": \"晚间办公室，林遥背起包走到陈禾桌边准备道别；陈禾从桌面拿起一只文件夹，抬眼叫住她。\"}], \"invalid_event_locks\": [], \"affected_shots\": [{\"index\": 0, \"shot\": {\"id\": \"SH01\", \"beat_id\": \"B1\", \"duration_seconds\": 10, \"purpose\": \"建立晚间办公室场景锚点与人物空间关系，并以陈禾手持文件夹+开口请求作为本拍唯一新增信息（请求信号显形）\", \"composition\": \"中景，竖屏9:16，画面以办公桌短边为构图中心：办公桌横亘中段偏后，米白台面占据画面中下部，桌面台灯位于桌面左上方（灯罩出框或半入框），室内门框位于画面最前景右下；林遥立于办公桌短边外侧、画面左前方，斜侧身朝向右后方的陈禾，背包已背于身后；陈禾坐在办公桌内侧办公椅上，画面右后方，正面偏侧朝向林遥；两人形成左前—右后的对视斜线，桌面台灯暖光覆盖两人面部上半身，窗外冷调余光勾出陈禾身后的墙与窗框边沿\", \"camera\": \"固定机位，长焦压缩感，浅景深聚焦林遥与陈禾上半身；无运镜，开镜即该机位直至切走\", \"visible_performance\": \"0.0–1.5s：林遥背着双肩通勤包由画面左缘走入，脚步放缓至停在办公桌短边外侧，身体朝陈禾方向微侧，重心落定，背包已稳挂双肩；\\n1.5–4.5s：林遥站定，目光自然落在陈禾方向；陈禾右手从桌面（散落文件旁）拿起文件夹（墨蓝封面、银色长夹），抬眼看向林遥，文件夹由桌面平移到胸前高度，单手持握靠身体一侧，未伸出递出；\\n4.5–6.5s：陈禾看向林遥并开口：「这份今天能顺路帮我带一下吗？」（语速自然平稳，单句约2.0s）；\\n6.5–10.0s：林遥听到请求，视线从陈禾面部短暂下移到陈禾手中文件夹，脚步未动，肩线维持，文件夹保持在陈禾手中胸前位置不动，画面停在两人对视状态\", \"event_lock\": \"晚间办公室，林遥背起包走到陈禾桌边准备道别；陈禾从桌面拿起一只文件夹，抬眼叫住她。\", \"dialogue_lock\": [{\"speaker\": \"陈禾\", \"text\": \"这份今天能顺路帮我带一下吗？\"}], \"start_state\": \"林遥背着雾灰色双肩通勤包立于办公桌短边外侧、画面左前方，斜侧身朝向坐在桌内的陈禾；陈禾坐在办公椅上面向林遥，桌面上散落白纸与签字笔、折叠的笔记本电脑，台灯亮着暖光；陈禾双手均在桌面附近，尚未持有文件夹\", \"end_state\": \"林遥立于办公桌短边外侧不动，背包在身，目光落在陈禾手中的文件夹上；陈禾坐姿不变，右手单手持文件夹于胸前高度，墨蓝封面朝向画面，未递出；两人保持对视\", \"cut_reason\": \"陈禾的请求信号（文件夹从桌面到手+抬眼+开口）已完整呈现，林遥的拒绝反应需要更近的景别承载面部与目光下移的微表情，当前中景双人同框无法再承载下一拍新增信息\", \"dialogue_mode\": \"画内\", \"continuity_mode\": \"planned_cut_requires_adapter\", \"prompt\": \"由执行时间轴自动编译\", \"production_choices\": []}}], \"repair_scope\": \"只按原稿索引提交已有字段补丁；未展示的镜头保持不变\"}"
+    }
+  ],
+  "context_budget": {
+    "schema": "creative_context_budget/v1",
+    "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+    "serialized_input_characters": 2123,
+    "estimated_input_tokens": 2123,
+    "requested_max_output_tokens": 12000,
+    "estimated_total_tokens": 14123,
+    "provider": "minimax",
+    "model": "MiniMax-M3",
+    "planning_context_window_tokens": 512000,
+    "advertised_context_window_tokens": 1000000,
+    "source_url": "https://www.minimax.io/models/text/m3",
+    "verified_on": "2026-09-24"
+  },
+  "response_text": "{\"patches\":[{\"path\":[\"shots\",0,\"composition\"],\"value\":\"中景，竖屏9:16，画面以办公桌短边为构图中心：办公桌横亘中段偏后，米白台面占据画面中下部，桌面台灯位于桌面左上方（灯罩半入框），室内门框位于画面最前景右下；林遥立于办公桌短边外侧、画面左前方，斜侧身朝向右后方的陈禾，背包已背于身后；陈禾坐在办公桌内侧办公椅上，画面右后方，正面偏侧朝向林遥；两人形成左前—右后的对视斜线，桌面台灯暖光覆盖两人面部上半身，窗外冷调余光勾出陈禾身后的墙与窗框边沿\"},{\"path\":[\"shots\",0,\"style_lock\"],\"value\":\"noir办公室夜景 · 桌面台灯暖光主调 · 窗光冷调余光补边 · 长焦压缩浅景深 · 竖屏9:16 · 固定机位\"},{\"path\":[\"shots\",0,\"production_choices\"],\"value\":[\"构图中心锚定办公桌短边，门框作前景层次\", \"长焦浅景深突出双人对话空间层次\", \"台灯暖光与窗光冷调形成主光与轮廓光\", \"陈禾取文件夹动作保持在胸前高度不递出，维持请求初现张力\"]}]}",
+  "response_metadata": {
+    "role": "writer",
+    "provider": "minimax",
+    "requested_model": "MiniMax-M3",
+    "response_model": "MiniMax-M3",
+    "response_id": "07086872b6633e431470602e6ccbe8eb",
+    "finish_reason": "stop",
+    "thinking_mode": "disabled",
+    "output_mode": "content",
+    "prompt_tokens": 1224,
+    "completion_tokens": 289,
+    "total_tokens": 1513,
+    "logical_role": "director",
+    "workflow_stage": "director_shots__beat_01_00",
+    "model_profile": "minimax_create_deepseek_review",
+    "transport_config_role": "writer"
+  }
+}

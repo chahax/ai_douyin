@@ -1,0 +1,9 @@
+{
+  "template": "video_review_packet/v1",
+  "id": "deterministic_motion_v1",
+  "video_path": "../../data/qa/deterministic_motion_v1/controlled_motion.mp4",
+  "output_dir": "../../data/qa/deterministic_motion_v1/review",
+  "sample_count": 5,
+  "control_report": "../../data/qa/deterministic_motion_v1/controlled_motion.control.report.json",
+  "reference_image": "../../data/qa/deterministic_motion_v1/source.png"
+}

@@ -1,0 +1,66 @@
+{
+  "schema": "action_plan_schedule_report/v1",
+  "policy": "preferred_3.5_units_per_second_plus_0.3; maximum_5; no_action_or_hold_compression",
+  "beats": [
+    {
+      "beat_id": "B1",
+      "action_and_hold_seconds": 5,
+      "preferred_dialogue_seconds": [
+        4.014285714285714
+      ],
+      "actual_dialogue_seconds": [
+        4.014285714285714
+      ],
+      "dialogue_units": [
+        13
+      ],
+      "reason": "使用优选语速与余量",
+      "unused_tail_seconds": 0.9857142857142858
+    },
+    {
+      "beat_id": "B2",
+      "action_and_hold_seconds": 6.5,
+      "preferred_dialogue_seconds": [
+        2.5857142857142854
+      ],
+      "actual_dialogue_seconds": [
+        2.5857142857142854
+      ],
+      "dialogue_units": [
+        8
+      ],
+      "reason": "使用优选语速与余量",
+      "unused_tail_seconds": 0.9142857142857146
+    },
+    {
+      "beat_id": "B3",
+      "action_and_hold_seconds": 6.5,
+      "preferred_dialogue_seconds": [
+        2.8714285714285714
+      ],
+      "actual_dialogue_seconds": [
+        2.8714285714285714
+      ],
+      "dialogue_units": [
+        9
+      ],
+      "reason": "使用优选语速与余量",
+      "unused_tail_seconds": 0.6285714285714281
+    },
+    {
+      "beat_id": "B4",
+      "action_and_hold_seconds": 7,
+      "preferred_dialogue_seconds": [
+        2.3
+      ],
+      "actual_dialogue_seconds": [
+        2.3
+      ],
+      "dialogue_units": [
+        7
+      ],
+      "reason": "使用优选语速与余量",
+      "unused_tail_seconds": 0.6999999999999993
+    }
+  ]
+}

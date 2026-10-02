@@ -1,0 +1,16 @@
+{
+  "v20": {
+    "error": "writer_revise__preflight_story_00_01 提示词版本已改变，不能复用旧阶段回执",
+    "model_calls": 0,
+    "calls_started": 30,
+    "status": "needs_attention"
+  },
+  "v21": {
+    "error": "writer_revise__preflight_story_00_01 提示词版本已改变，不能复用旧阶段回执",
+    "model_calls": 0,
+    "calls_started": 30,
+    "status": "needs_attention"
+  },
+  "matches_v20_failure": true,
+  "historical_source_unchanged": true
+}

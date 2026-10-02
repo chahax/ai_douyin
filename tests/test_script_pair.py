@@ -11,6 +11,14 @@ from src.trend_intelligence.pre_video_script import PreVideoScriptService, PreVi
 from src.trend_intelligence.script_pair import parse_pair
 
 
+@pytest.fixture(autouse=True)
+def script_pair_uses_isolated_output_root(monkeypatch):
+    # This module tests story/review contracts. The output containment gate is
+    # tested separately; allow each pytest tmp_path as its isolated artifact root.
+    monkeypatch.setattr(PreVideoScriptService, '_resolve_output_dir',
+                        staticmethod(lambda request: Path(request.output_dir).resolve()))
+
+
 def parse(data):
     return parse_pair(json.dumps(data, ensure_ascii=False), profile=_Profiles().get('account01'),
                       created_at=NOW.isoformat(), short_seconds=60, long_seconds=180, generation={},

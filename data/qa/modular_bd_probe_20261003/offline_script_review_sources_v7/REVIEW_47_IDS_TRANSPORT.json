@@ -1,0 +1,932 @@
+{
+  "story_preserved": false,
+  "issues": [
+    {
+      "id": "I01",
+      "owner": "writer",
+      "location": "B1",
+      "severity": "major",
+      "rule": "创作简报要求观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。",
+      "evidence": "B1 林屿台词为“上次那批也是你帮我对完的，谢谢啊。”，仅提及一次帮忙；B3 三张便利贴虽可见，但事件描述为“三张不同日期的善后便利贴”，正文未明确这些是方澄替林屿善后留下的。",
+      "contradiction": "简报要求“不止一次替同事加班”需通过自然对白或可见后果兑现；当前对白只提供一次，便利贴未与“替林屿善后”建立明确因果。",
+      "impact": "观众在拒绝前无法确知方澄过去已多次替林屿加班，削弱拒绝的合理性与情绪积累。",
+      "proposal": "在 B1 林屿台词中自然加入第二次以上帮忙的指涉，或在 B3 便利贴正文中明确“这三张都是方澄替林屿善后留下的”，使“不止一次”在拒绝前可被观众读到。",
+      "evidence_refs": [
+        {
+          "ref_id": "Ec825d4205be3-0022"
+        },
+        {
+          "ref_id": "Ec825d4205be3-0037"
+        }
+      ]
+    },
+    {
+      "id": "I02",
+      "owner": "writer",
+      "location": "B5",
+      "severity": "major",
+      "rule": "创作简报要求关键反应的构图和窗口必须写入最终视频提示词；关键反应需有可读近景与反应窗口。",
+      "evidence": "B5 事件描述为“方澄中近景：她抬眼看向林屿，又低头看向桌角那排便签和票根，包带在指尖收紧；林屿抬头随口请求。”，但正文 before 仅写方澄动作，林屿的请求对白出现在 dialogue，未写明林屿抬头请求发生在方澄抬眼/低头之前、之中还是之后。",
+      "contradiction": "关键反应窗口（方澄在请求与自身时间之间的犹豫）需要明确刺激—反应顺序，当前正文未把林屿请求与方澄反应窗口绑定。",
+      "impact": "导演和视频提示词无法确定方澄的犹豫反应是对林屿请求的回应，关键反应窗口可能丢失。",
+      "proposal": "在 B5 正文中明确林屿抬头说出请求的时点，并写明方澄抬眼看向林屿、再低头看向便签和票根、包带收紧是对该请求的反应窗口。",
+      "evidence_refs": [
+        {
+          "ref_id": "Ec825d4205be3-0051"
+        },
+        {
+          "ref_id": "Ec825d4205be3-0048"
+        }
+      ]
+    },
+    {
+      "id": "I03",
+      "owner": "writer",
+      "location": "B7",
+      "severity": "major",
+      "rule": "创作简报要求关键反应的构图和窗口必须写入最终视频提示词；拒绝后对方必须面对这一点，再通过具体行动回应。",
+      "evidence": "B7 方澄说出“这次我先走，你自己对吧。”后，B8 只写林屿手部近景笔尖停住，B10 林屿低头说“我以为你会帮我的。”，但 B7 正文未写林屿听到拒绝后的即时反应窗口，B8 也未写该反应与拒绝的因果绑定。",
+      "contradiction": "拒绝是核心转折，简报要求对方面对这一点；当前正文缺少林屿听到拒绝后的反应窗口，B8 手部动作未明确是对拒绝的反应。",
+      "impact": "转折的情绪落点不完整，观众可能看不到林屿“面对拒绝”的即时反应。",
+      "proposal": "在 B7 或 B8 正文中明确林屿听到拒绝后的反应窗口（如笔尖停住发生在方澄话音落下之后），并写明该反应由拒绝触发。",
+      "evidence_refs": [
+        {
+          "ref_id": "Ec825d4205be3-0062"
+        },
+        {
+          "ref_id": "Ec825d4205be3-0071"
+        }
+      ]
+    },
+    {
+      "id": "I04",
+      "owner": "writer",
+      "location": "B13",
+      "severity": "major",
+      "rule": "创作简报要求结尾以新的行动兑现边界及关系变化；林屿必须通过具体行动回应，且行动需与方澄拒绝后的边界变化一致。",
+      "evidence": "B13 林屿把三张便利贴收进“自己身后贴墙的浅木色三斗抽屉柜”，但 static_visual_manifest 中 E03 抽屉柜关系为“behind E02（林屿工位桌）”，B13 正文写林屿从方澄桌边转身走到自己身后抽屉柜，空间关系未与 manifest 的“贴墙放置”明确对应。",
+      "contradiction": "结尾行动的空间落点与资产布局存在未对齐风险，可能影响“关系变化由具体动作承担”的可读性。",
+      "impact": "若抽屉柜位置在画面中与方澄桌边距离或方向不明确，林屿收走便利贴的象征动作可能被空间混乱削弱。",
+      "proposal": "在 B13 正文中明确抽屉柜位于林屿工位后方贴墙处，并写明林屿从方澄桌边转身走到该柜前的空间路径，与 E03 关系一致。",
+      "evidence_refs": [
+        {
+          "ref_id": "Ec825d4205be3-0103"
+        },
+        {
+          "ref_id": "Ec825d4205be3-0179"
+        }
+      ]
+    }
+  ],
+  "suggestions": [
+    {
+      "location": "B3",
+      "proposal": "可在 B3 正文中把三张便利贴的日期或内容与“替林屿善后”建立更直接关联，例如写明每张对应一次林屿的请求。",
+      "reason": "增强观众对“不止一次”的可见证据，但不改变现有叙事。"
+    },
+    {
+      "location": "B10",
+      "proposal": "可考虑在 B10 林屿台词后补一个极短停顿或视线变化，让“我以为你会帮我的”有被拒绝后的余味。",
+      "reason": "强化依赖式回应的情绪落点，属审美优化。"
+    }
+  ],
+  "calibration_focus": [
+    "B5 方澄抬眼/低头/包带收紧与林屿请求的先后窗口是否在最终视频提示词中可读。",
+    "B7 拒绝台词后林屿听到拒绝的即时反应窗口是否在画面中成立。",
+    "B13 抽屉柜位置与林屿从方澄桌边转身走到的空间关系是否与资产布局一致。"
+  ],
+  "coverage": [
+    {
+      "id": "B1",
+      "checks": {
+        "requirements": {
+          "status": "fail",
+          "reason": "林屿台词只提一次帮忙，便利贴未明确是替林屿善后，未兑现“不止一次替同事加班”。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0022"
+            }
+          ],
+          "issue_ids": [
+            "I01"
+          ]
+        },
+        "timing": {
+          "status": "pass",
+          "reason": "B1 先方澄端杯，再林屿对白，再林屿低头落笔，刺激与反应顺序成立。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0020"
+            }
+          ],
+          "issue_ids": []
+        },
+        "continuity": {
+          "status": "pass",
+          "reason": "B1 为分段首镜，无上一镜；内部从端杯到林屿低头落笔连续。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0019"
+            }
+          ],
+          "issue_ids": []
+        },
+        "dialogue_timing": {
+          "status": "pass",
+          "reason": "林屿一句约14字，10秒窗口充足，端杯与对白可串行。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0022"
+            }
+          ],
+          "issue_ids": []
+        },
+        "first_frame": {
+          "status": "not_applicable",
+          "reason": "B1 为剧本拍，非分镜首帧，不适用分镜首帧检查。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "assets": {
+          "status": "pass",
+          "reason": "B1 可见咖啡杯 P04、客户明细单 P05、签字笔 P07，与 manifest 定义一致。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0020"
+            }
+          ],
+          "issue_ids": []
+        }
+      }
+    },
+    {
+      "id": "B2",
+      "checks": {
+        "requirements": {
+          "status": "pass",
+          "reason": "B2 方澄走回自己工位，为后续看到桌面痕迹建立位置。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0028"
+            }
+          ],
+          "issue_ids": []
+        },
+        "timing": {
+          "status": "pass",
+          "reason": "B2 无对白，转身走回并站定，9秒窗口合理。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0028"
+            }
+          ],
+          "issue_ids": []
+        },
+        "continuity": {
+          "status": "pass",
+          "reason": "B2 接 B1 林屿低头后，方澄从林屿桌边转身走回，位置连续。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0028"
+            }
+          ],
+          "issue_ids": []
+        },
+        "dialogue_timing": {
+          "status": "not_applicable",
+          "reason": "B2 无对白。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "first_frame": {
+          "status": "not_applicable",
+          "reason": "B2 为剧本拍，非分镜首帧。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "assets": {
+          "status": "pass",
+          "reason": "B2 可见浅木色办公桌 E01/E02、黑色网面靠背转椅 E09，与 manifest 一致。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0028"
+            }
+          ],
+          "issue_ids": []
+        }
+      }
+    },
+    {
+      "id": "B3",
+      "checks": {
+        "requirements": {
+          "status": "fail",
+          "reason": "三张便利贴可见但未明确是方澄替林屿善后留下，未兑现“不止一次”的可见后果。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0037"
+            }
+          ],
+          "issue_ids": [
+            "I01"
+          ]
+        },
+        "timing": {
+          "status": "pass",
+          "reason": "B3 为桌面近景静态展示，无对白，9秒窗口合理。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0034"
+            }
+          ],
+          "issue_ids": []
+        },
+        "continuity": {
+          "status": "pass",
+          "reason": "B3 接 B2 方澄站定看桌面，桌面物品与 B2 目光落点连续。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0034"
+            }
+          ],
+          "issue_ids": []
+        },
+        "dialogue_timing": {
+          "status": "not_applicable",
+          "reason": "B3 无对白。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "first_frame": {
+          "status": "not_applicable",
+          "reason": "B3 为剧本拍，非分镜首帧。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "assets": {
+          "status": "pass",
+          "reason": "B3 可见挎包 P01、便利贴 P03、院线票根 P02，与 manifest 定义一致。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0034"
+            }
+          ],
+          "issue_ids": []
+        }
+      }
+    },
+    {
+      "id": "B4",
+      "checks": {
+        "requirements": {
+          "status": "pass",
+          "reason": "B4 方澄拿起挎包搭肩，离开意图落到手上，符合“她想离开”的原因成立。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0040"
+            }
+          ],
+          "issue_ids": []
+        },
+        "timing": {
+          "status": "pass",
+          "reason": "B4 无对白，拿包搭肩捏带扣，8秒窗口合理。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0040"
+            }
+          ],
+          "issue_ids": []
+        },
+        "continuity": {
+          "status": "pass",
+          "reason": "B4 接 B3 挎包敞口搁椅背，方澄拿起挎包，持物状态连续。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0040"
+            }
+          ],
+          "issue_ids": []
+        },
+        "dialogue_timing": {
+          "status": "not_applicable",
+          "reason": "B4 无对白。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "first_frame": {
+          "status": "not_applicable",
+          "reason": "B4 为剧本拍，非分镜首帧。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "assets": {
+          "status": "pass",
+          "reason": "B4 可见挎包 P01，米灰色金属带扣与 manifest 一致。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0040"
+            }
+          ],
+          "issue_ids": []
+        }
+      }
+    },
+    {
+      "id": "B5",
+      "checks": {
+        "requirements": {
+          "status": "fail",
+          "reason": "关键反应窗口未明确写入正文，林屿请求与方澄犹豫反应的先后未绑定。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0051"
+            }
+          ],
+          "issue_ids": [
+            "I02"
+          ]
+        },
+        "timing": {
+          "status": "fail",
+          "reason": "林屿对白“今晚又得麻烦你帮我对一下”与方澄抬眼/低头/包带收紧的刺激—反应顺序未在正文明确。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0048"
+            }
+          ],
+          "issue_ids": [
+            "I02"
+          ]
+        },
+        "continuity": {
+          "status": "pass",
+          "reason": "B5 接 B4 方澄已搭包带捏带扣，B5 包带在指尖收紧，持物状态连续。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0046"
+            }
+          ],
+          "issue_ids": []
+        },
+        "dialogue_timing": {
+          "status": "pass",
+          "reason": "林屿一句约12字，9秒窗口充足，方澄反应可串行。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0048"
+            }
+          ],
+          "issue_ids": []
+        },
+        "first_frame": {
+          "status": "not_applicable",
+          "reason": "B5 为剧本拍，非分镜首帧。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "assets": {
+          "status": "pass",
+          "reason": "B5 可见挎包 P01、便利贴 P03、票根 P02，与 manifest 一致。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0046"
+            }
+          ],
+          "issue_ids": []
+        }
+      }
+    },
+    {
+      "id": "B6",
+      "checks": {
+        "requirements": {
+          "status": "pass",
+          "reason": "B6 方澄放下包带、合上包口，身体先表态，符合拒绝决定落到手上。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0054"
+            }
+          ],
+          "issue_ids": []
+        },
+        "timing": {
+          "status": "pass",
+          "reason": "B6 无对白，放包合包口，9秒窗口合理。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0054"
+            }
+          ],
+          "issue_ids": []
+        },
+        "continuity": {
+          "status": "pass",
+          "reason": "B6 接 B5 包带在指尖收紧，B6 松开手指放下包带，持物状态连续。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0054"
+            }
+          ],
+          "issue_ids": []
+        },
+        "dialogue_timing": {
+          "status": "not_applicable",
+          "reason": "B6 无对白。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "first_frame": {
+          "status": "not_applicable",
+          "reason": "B6 为剧本拍，非分镜首帧。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "assets": {
+          "status": "pass",
+          "reason": "B6 可见挎包 P01，米灰色金属扣与 manifest 一致。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0054"
+            }
+          ],
+          "issue_ids": []
+        }
+      }
+    },
+    {
+      "id": "B7",
+      "checks": {
+        "requirements": {
+          "status": "fail",
+          "reason": "拒绝后林屿听到拒绝的即时反应窗口未在 B7 正文明确，转折反应落点不完整。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0062"
+            }
+          ],
+          "issue_ids": [
+            "I03"
+          ]
+        },
+        "timing": {
+          "status": "fail",
+          "reason": "方澄拒绝台词后，B7 正文未写林屿听到后的反应窗口，刺激—反应顺序缺失。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0060"
+            }
+          ],
+          "issue_ids": [
+            "I03"
+          ]
+        },
+        "continuity": {
+          "status": "pass",
+          "reason": "B7 接 B6 方澄合上包口，B7 抬头目光从挎包移开对上林屿，姿态连续。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0060"
+            }
+          ],
+          "issue_ids": []
+        },
+        "dialogue_timing": {
+          "status": "pass",
+          "reason": "方澄一句约10字，8秒窗口充足。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0062"
+            }
+          ],
+          "issue_ids": []
+        },
+        "first_frame": {
+          "status": "not_applicable",
+          "reason": "B7 为剧本拍，非分镜首帧。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "assets": {
+          "status": "pass",
+          "reason": "B7 可见方澄 C01、林屿 C02，与 manifest 一致。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0060"
+            }
+          ],
+          "issue_ids": []
+        }
+      }
+    },
+    {
+      "id": "B8",
+      "checks": {
+        "requirements": {
+          "status": "fail",
+          "reason": "B8 手部动作未明确由方澄拒绝触发，林屿面对拒绝的反应窗口缺失。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0071"
+            }
+          ],
+          "issue_ids": [
+            "I03"
+          ]
+        },
+        "timing": {
+          "status": "fail",
+          "reason": "B8 笔尖停住未写明发生在方澄拒绝台词之后，刺激—反应因果未绑定。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0068"
+            }
+          ],
+          "issue_ids": [
+            "I03"
+          ]
+        },
+        "continuity": {
+          "status": "pass",
+          "reason": "B8 接 B7 方澄拒绝，切林屿手部，签字笔与客户明细单持物状态连续。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0068"
+            }
+          ],
+          "issue_ids": []
+        },
+        "dialogue_timing": {
+          "status": "not_applicable",
+          "reason": "B8 无对白。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "first_frame": {
+          "status": "not_applicable",
+          "reason": "B8 为剧本拍，非分镜首帧。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "assets": {
+          "status": "pass",
+          "reason": "B8 可见签字笔 P07、客户明细单 P05，与 manifest 一致。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0068"
+            }
+          ],
+          "issue_ids": []
+        }
+      }
+    },
+    {
+      "id": "B9",
+      "checks": {
+        "requirements": {
+          "status": "pass",
+          "reason": "B9 方澄背起挎包走到门口，以行动兑现拒绝，符合结尾主动者要求。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0074"
+            }
+          ],
+          "issue_ids": []
+        },
+        "timing": {
+          "status": "pass",
+          "reason": "B9 无对白，背包走到门口手搭门把，9秒窗口合理。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0074"
+            }
+          ],
+          "issue_ids": []
+        },
+        "continuity": {
+          "status": "pass",
+          "reason": "B9 接 B8 后，方澄重新拿起 B6 已合好口的挎包，持物状态连续。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0074"
+            }
+          ],
+          "issue_ids": []
+        },
+        "dialogue_timing": {
+          "status": "not_applicable",
+          "reason": "B9 无对白。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "first_frame": {
+          "status": "not_applicable",
+          "reason": "B9 为剧本拍，非分镜首帧。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "assets": {
+          "status": "pass",
+          "reason": "B9 可见挎包 P01、办公室门 E04，与 manifest 一致。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0074"
+            }
+          ],
+          "issue_ids": []
+        }
+      }
+    },
+    {
+      "id": "B10",
+      "checks": {
+        "requirements": {
+          "status": "pass",
+          "reason": "B10 林屿低头说依赖式回应，把依赖反应留进独立镜头，符合转折后对方面对。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0082"
+            }
+          ],
+          "issue_ids": []
+        },
+        "timing": {
+          "status": "pass",
+          "reason": "B10 林屿一句约8字，8秒窗口充足，低头说出台词自然。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0080"
+            }
+          ],
+          "issue_ids": []
+        },
+        "continuity": {
+          "status": "pass",
+          "reason": "B10 接 B8 客户明细单被划出短斜线，B10 目光仍落在该单上，道具状态连续。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0080"
+            }
+          ],
+          "issue_ids": []
+        },
+        "dialogue_timing": {
+          "status": "pass",
+          "reason": "林屿一句约8字，8秒窗口充足。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0082"
+            }
+          ],
+          "issue_ids": []
+        },
+        "first_frame": {
+          "status": "not_applicable",
+          "reason": "B10 为剧本拍，非分镜首帧。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "assets": {
+          "status": "pass",
+          "reason": "B10 可见林屿 C02、客户明细单 P05，与 manifest 一致。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0080"
+            }
+          ],
+          "issue_ids": []
+        }
+      }
+    },
+    {
+      "id": "B11",
+      "checks": {
+        "requirements": {
+          "status": "pass",
+          "reason": "B11 方澄停一下不回头推门走出，离开和拒绝同时承住，符合结尾主动者。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0088"
+            }
+          ],
+          "issue_ids": []
+        },
+        "timing": {
+          "status": "pass",
+          "reason": "B11 无对白，停一下推门走出，9秒窗口合理。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0088"
+            }
+          ],
+          "issue_ids": []
+        },
+        "continuity": {
+          "status": "pass",
+          "reason": "B11 接 B9 方澄手搭门把，B11 手搭金属横拉把手停一下，位置连续。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0088"
+            }
+          ],
+          "issue_ids": []
+        },
+        "dialogue_timing": {
+          "status": "not_applicable",
+          "reason": "B11 无对白。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "first_frame": {
+          "status": "not_applicable",
+          "reason": "B11 为剧本拍，非分镜首帧。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "assets": {
+          "status": "pass",
+          "reason": "B11 可见办公室门 E04，米灰色木纹平板门与 manifest 一致。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0088"
+            }
+          ],
+          "issue_ids": []
+        }
+      }
+    },
+    {
+      "id": "B12",
+      "checks": {
+        "requirements": {
+          "status": "pass",
+          "reason": "B12 林屿抬头看向空掉的方澄工位，视线落在便利贴和票根上，让林屿触及过去痕迹。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0094"
+            }
+          ],
+          "issue_ids": []
+        },
+        "timing": {
+          "status": "pass",
+          "reason": "B12 无对白，抬头看向空工位，8秒窗口合理。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0094"
+            }
+          ],
+          "issue_ids": []
+        },
+        "continuity": {
+          "status": "pass",
+          "reason": "B12 接 B11 方澄离开，方澄工位已空，便利贴和票根仍在桌角，状态连续。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0094"
+            }
+          ],
+          "issue_ids": []
+        },
+        "dialogue_timing": {
+          "status": "not_applicable",
+          "reason": "B12 无对白。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "first_frame": {
+          "status": "not_applicable",
+          "reason": "B12 为剧本拍，非分镜首帧。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "assets": {
+          "status": "pass",
+          "reason": "B12 可见便利贴 P03、院线票根 P02，与 manifest 一致。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0094"
+            }
+          ],
+          "issue_ids": []
+        }
+      }
+    },
+    {
+      "id": "B13",
+      "checks": {
+        "requirements": {
+          "status": "fail",
+          "reason": "林屿收走便利贴的行动空间落点与 E03 抽屉柜关系未明确对齐，可能削弱关系变化可读性。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0103"
+            }
+          ],
+          "issue_ids": [
+            "I04"
+          ]
+        },
+        "timing": {
+          "status": "pass",
+          "reason": "B13 无对白，站起走到方澄桌边揭便利贴再收进抽屉，10秒窗口合理。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0100"
+            }
+          ],
+          "issue_ids": []
+        },
+        "continuity": {
+          "status": "pass",
+          "reason": "B13 接 B12 林屿看向便利贴，B13 站起揭下三张便利贴，道具状态连续。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0100"
+            }
+          ],
+          "issue_ids": []
+        },
+        "dialogue_timing": {
+          "status": "not_applicable",
+          "reason": "B13 无对白。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "first_frame": {
+          "status": "not_applicable",
+          "reason": "B13 为剧本拍，非分镜首帧。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "assets": {
+          "status": "pass",
+          "reason": "B13 可见便利贴 P03、抽屉柜 E03，与 manifest 定义一致。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0100"
+            }
+          ],
+          "issue_ids": []
+        }
+      }
+    },
+    {
+      "id": "B14",
+      "checks": {
+        "requirements": {
+          "status": "pass",
+          "reason": "B14 林屿回到自己桌前坐下，抽出自己那份结算单开始对账，以新行动兑现边界变化。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0106"
+            }
+          ],
+          "issue_ids": []
+        },
+        "timing": {
+          "status": "pass",
+          "reason": "B14 无对白，关抽屉走回坐下抽单落笔，8秒窗口合理。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0106"
+            }
+          ],
+          "issue_ids": []
+        },
+        "continuity": {
+          "status": "pass",
+          "reason": "B14 接 B13 林屿收好便利贴关抽屉，B14 关抽屉走回坐下，动作连续。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0106"
+            }
+          ],
+          "issue_ids": []
+        },
+        "dialogue_timing": {
+          "status": "not_applicable",
+          "reason": "B14 无对白。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "first_frame": {
+          "status": "not_applicable",
+          "reason": "B14 为剧本拍，非分镜首帧。",
+          "evidence_refs": [],
+          "issue_ids": []
+        },
+        "assets": {
+          "status": "pass",
+          "reason": "B14 可见结算单 P06、签字笔 P07，与 manifest 一致。",
+          "evidence_refs": [
+            {
+              "ref_id": "Ec825d4205be3-0106"
+            }
+          ],
+          "issue_ids": []
+        }
+      }
+    }
+  ]
+}

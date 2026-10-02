@@ -1,0 +1,28 @@
+{
+  "schema_version": "creative_eval_case/v1",
+  "source_hash": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+  "created_at": "2026-09-28T13:55:55.609742+00:00",
+  "implementation_status": "candidate_label_not_gold",
+  "case": {
+    "case_id": "BOUNDARY_EXPRESSION_2",
+    "category": "action",
+    "case_kind": "boundary",
+    "scenario": "源剧本必须在关键递物动作中说完整一句话，而当前串行协议不能表达",
+    "expected_disposition": "expression_unsupported",
+    "label_status": "candidate",
+    "adjudication": {
+      "approved_by": null,
+      "approved_at": null,
+      "candidate_author": "Codex assistant; requires independent human adjudication"
+    },
+    "source_family": "BOUNDARY_EXPRESSION_2",
+    "independence_group": "BOUNDARY_EXPRESSION_2",
+    "split": "development",
+    "used_for_prompt_tuning": true,
+    "expected_issues": [],
+    "evidence": [],
+    "source_paths": [],
+    "production_validated": false,
+    "required_error_code": "EXPRESSION_UNSUPPORTED"
+  }
+}

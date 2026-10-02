@@ -10,6 +10,13 @@ from src.trend_intelligence.review_evidence_patch import PATCH_SCHEMA
 from test_script_review_evidence_revision import PatchReviewer, review_with_trace
 
 
+@pytest.fixture(autouse=True)
+def review_budget_uses_isolated_output_root(monkeypatch):
+    from src.trend_intelligence.pre_video_script import PreVideoScriptService
+    monkeypatch.setattr(PreVideoScriptService, '_resolve_output_dir',
+                        staticmethod(lambda request: Path(request.output_dir).resolve()))
+
+
 class TwoFullTwoPatchReviewer(PatchReviewer):
     def __init__(self):
         super().__init__(('invented', 'valid'), malformed_full=1)
@@ -62,13 +69,14 @@ def test_two_full_reports_plus_two_patches_can_pass_and_restore_saved_gate(tmp_p
 
 def test_two_failed_patches_cannot_consume_a_third_patch(tmp_path):
     client = PatchReviewer(('invented',))
-    with pytest.raises(RuntimeError, match='审稿结果格式无效'):
-        review_with_trace(client, tmp_path)
-    assert client.full_count == 1 and client.patch_count == 2 and len(client.calls) == 3
-    assert not (tmp_path / 'review_1_request_4.json').exists()
+    result = review_with_trace(client, tmp_path)
+    assert result['passed'] and result['format_attempts'] == 4
+    assert client.full_count == 2 and client.patch_count == 2 and len(client.calls) == 4
+    assert not (tmp_path / 'review_1_request_5.json').exists()
     chain = json.loads((tmp_path / 'review_1_attempt_chain.json').read_bytes())
-    assert [row['mode'] for row in chain['attempts']] == ['full_report', 'evidence_patch', 'evidence_patch']
-    assert all(not row['valid'] for row in chain['attempts'])
+    assert [row['mode'] for row in chain['attempts']] == [
+        'full_report', 'evidence_patch', 'evidence_patch', 'full_report']
+    assert all(not row['valid'] for row in chain['attempts'][:-1])
 
 
 def test_saved_replay_rejects_three_patches_even_when_total_is_below_five(tmp_path, monkeypatch):
@@ -77,6 +85,7 @@ def test_saved_replay_rejects_three_patches_even_when_total_is_below_five(tmp_pa
     # This temporary bypass exists only in the fixture, never in production code.
     with monkeypatch.context() as fixture_only:
         fixture_only.setattr(gate.ScriptReviewRetryState, 'assert_can_call', lambda self, attempt: None)
+        fixture_only.setattr(gate, 'SCRIPT_REVIEW_MAX_EVIDENCE_PATCH_ATTEMPTS', 3)
         report = review_with_trace(client, tmp_path)
     assert report['passed'] and report['format_attempts'] == 4
     assert client.full_count == 1 and client.patch_count == 3
@@ -85,3 +94,64 @@ def test_saved_replay_rejects_three_patches_even_when_total_is_below_five(tmp_pa
     with pytest.raises(ValueError):
         saved._verify_review_attempt_chain(report, payload, original_messages[0]['content'],
                                            tmp_path, 1, tmp_path)
+
+
+class LastFullSlotReviewer(PatchReviewer):
+    """Actual failure shape: full, bad patch, refusal, bad full quote, full."""
+    def __init__(self, *, fail_judgment=False, last_quote_invalid=False):
+        super().__init__(('extra_key', 'refusal'), fail_after_refusal=fail_judgment)
+        self.last_quote_invalid = last_quote_invalid
+
+    def chat_completion_tracked(self, messages, **kwargs):
+        raw = super().chat_completion_tracked(messages, **kwargs)
+        payload = json.loads(messages[1]['content'])
+        if payload.get('schema') != PATCH_SCHEMA and (self.full_count == 2
+                or (self.last_quote_invalid and self.full_count == 3)):
+            report = json.loads(raw)
+            quotes = report['character_audit'][0]['performance_quotes']
+            quotes[next(reversed(quotes))] += '误抄了动作字段'
+            return json.dumps(report, ensure_ascii=False)
+        return raw
+
+
+@pytest.mark.parametrize('fail_judgment', [False, True])
+def test_exhausted_patch_budget_uses_fifth_full_call_and_replays_unchanged_prefix(tmp_path, fail_judgment):
+    client = LastFullSlotReviewer(fail_judgment=fail_judgment)
+    result = review_with_trace(client, tmp_path)
+    assert result['passed'] is (not fail_judgment)
+    assert result['format_attempts'] == 5
+    assert client.full_count == 3 and client.patch_count == 2 and len(client.calls) == 5
+    chain = json.loads((tmp_path / 'review_1_attempt_chain.json').read_bytes())
+    assert [entry['mode'] for entry in chain['attempts']] == [
+        'full_report', 'evidence_patch', 'evidence_patch', 'full_report', 'full_report']
+    assert chain['attempts'][2]['full_review_required']
+    original_messages = client.calls[0][0]
+    payload = json.loads(original_messages[1]['content'])
+    retry = gate.ScriptReviewRetryState(payload, original_messages[0]['content'])
+    prefix = {path: path.read_bytes() for number in range(1, 5)
+              for path in (tmp_path / f'review_1_request_{number}.json',
+                           tmp_path / f'review_1_response_{number}.txt')}
+    for number in range(1, 5):
+        assert retry.messages == json.loads(prefix[tmp_path / f'review_1_request_{number}.json'])
+        entry, _ = retry.consume(prefix[tmp_path / f'review_1_response_{number}.txt'].decode(), number)
+        assert all(value == chain['attempts'][number - 1][key] for key, value in entry.items())
+    assert retry.mode == 'full_report'
+    assert retry.mode_attempts == {'full_report': 2, 'evidence_patch': 2}
+    assert retry.messages == client.calls[4][0]
+    assert '误抄了动作字段' in retry.messages[-1]['content']
+    restored = saved._verify_review_attempt_chain(result, payload, original_messages[0]['content'],
+                                                  tmp_path, 1, tmp_path)
+    assert restored['passed'] is (not fail_judgment)
+    assert restored['checks'] == result['checks'] and restored['issues'] == result['issues']
+    assert all(path.read_bytes() == raw for path, raw in prefix.items())
+    assert not (tmp_path / 'review_1_request_6.json').exists()
+
+
+def test_last_full_and_total_budget_still_stop_after_five_invalid_responses(tmp_path):
+    client = LastFullSlotReviewer(last_quote_invalid=True)
+    with pytest.raises(RuntimeError, match='审稿结果格式无效'):
+        review_with_trace(client, tmp_path)
+    assert len(client.calls) == 5 and client.full_count == 3 and client.patch_count == 2
+    assert not (tmp_path / 'review_1_request_6.json').exists()
+    chain = json.loads((tmp_path / 'review_1_attempt_chain.json').read_bytes())
+    assert not any(row['valid'] for row in chain['attempts'])

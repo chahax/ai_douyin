@@ -1,0 +1,6 @@
+[
+  "tests/test_creative_governance.py",
+  "tests/test_creative_governed_protocol.py",
+  "tests/test_creative_governed_rollback.py",
+  "tests/test_migration_readiness.py"
+]

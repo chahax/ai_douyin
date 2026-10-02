@@ -1,0 +1,162 @@
+{
+  "context": {
+    "fixture_only": true,
+    "raw_linear_script": {
+      "title": "单拍多镜顺序夹具",
+      "premise": "拒绝后各自承担",
+      "selected_candidate_id": "FIXTURE",
+      "beats": [
+        {
+          "id": "B1",
+          "duration_seconds": 8,
+          "event": "仅摘要，不用于生成动作",
+          "trigger": "听后反应承接选择",
+          "steps": [
+            {
+              "kind": "action",
+              "speaker": "",
+              "text": "乙把杯子放到桌上。"
+            },
+            {
+              "kind": "dialogue",
+              "speaker": "乙",
+              "text": "这次你自己做。"
+            },
+            {
+              "kind": "action",
+              "speaker": "",
+              "text": "甲听完后停两秒，看着乙。"
+            },
+            {
+              "kind": "action",
+              "speaker": "",
+              "text": "乙拿起笔，开始核对。"
+            }
+          ]
+        }
+      ]
+    },
+    "static_visual_manifest": {
+      "characters": [
+        {
+          "id": "C01",
+          "name": "甲"
+        },
+        {
+          "id": "C02",
+          "name": "乙"
+        }
+      ]
+    },
+    "references": [
+      {
+        "id": "R01",
+        "text": "离线夹具：对白后先观察承受者，再推进下一行动。"
+      }
+    ],
+    "selected_assets": []
+  },
+  "direction": {
+    "schema": "linear_step_shot_direction_offline_v3",
+    "context_sha256": "4c38d2ba466632b1585ece7ccdc1ea9b3ace1af941ea29a0d353c459976df133",
+    "raw_linear_script_sha256": "48864dd2c0ef292fabf604a6592edaf9008117b44d61483d82e23591ef244ae6",
+    "emotional_arc": "明确边界后由双方承受",
+    "causal_chain": [
+      "对白后先见反应",
+      "反应后再见行动"
+    ],
+    "ending_intent": "把变化落在具体行动上",
+    "beats": [
+      {
+        "beat_id": "B1",
+        "shots": [
+          {
+            "shot_id": "S1",
+            "source_step_refs": [
+              "raw_linear_script.beats.0.steps.0",
+              "raw_linear_script.beats.0.steps.1"
+            ],
+            "new_information": "选择被说清",
+            "observation_object": "乙",
+            "camera": "中景",
+            "cut_reason": "对白完成后看承受者"
+          },
+          {
+            "shot_id": "S2",
+            "source_step_refs": [
+              "raw_linear_script.beats.0.steps.2",
+              "raw_linear_script.beats.0.steps.3"
+            ],
+            "new_information": "双方开始承受结果",
+            "observation_object": "甲后转乙",
+            "camera": "连续观察",
+            "cut_reason": "新的实际行动完成"
+          }
+        ]
+      }
+    ]
+  },
+  "locals": [
+    {
+      "schema": "linear_step_shot_local_bindings_offline_v3",
+      "shot_id": "S1",
+      "input_sha256": "966b155f5d07c763ded15754aa11df2283a266cb3e6436798f22e0fa3df73e05",
+      "step_units": [
+        {
+          "source_step_ref": "raw_linear_script.beats.0.steps.0",
+          "groups": [
+            {
+              "id": "G0",
+              "action_ref": "raw_linear_script.beats.0.steps.0",
+              "semantic_role": "action",
+              "kind": "action",
+              "duration_seconds": 1,
+              "hold_subject": ""
+            }
+          ],
+          "dialogue_ref": null
+        },
+        {
+          "source_step_ref": "raw_linear_script.beats.0.steps.1",
+          "groups": [],
+          "dialogue_ref": "raw_linear_script.beats.0.steps.1"
+        }
+      ]
+    },
+    {
+      "schema": "linear_step_shot_local_bindings_offline_v3",
+      "shot_id": "S2",
+      "input_sha256": "a48d2c90839e1bd424c1ea49d96c877b611814a713853424fbe9c65a1cb79f80",
+      "step_units": [
+        {
+          "source_step_ref": "raw_linear_script.beats.0.steps.2",
+          "groups": [
+            {
+              "id": "G2",
+              "action_ref": "raw_linear_script.beats.0.steps.2",
+              "semantic_role": "reaction",
+              "kind": "hold",
+              "duration_seconds": 2,
+              "hold_subject": "C01"
+            }
+          ],
+          "dialogue_ref": null
+        },
+        {
+          "source_step_ref": "raw_linear_script.beats.0.steps.3",
+          "groups": [
+            {
+              "id": "G3",
+              "action_ref": "raw_linear_script.beats.0.steps.3",
+              "semantic_role": "action",
+              "kind": "action",
+              "duration_seconds": 1,
+              "hold_subject": ""
+            }
+          ],
+          "dialogue_ref": null
+        }
+      ]
+    }
+  ]
+}

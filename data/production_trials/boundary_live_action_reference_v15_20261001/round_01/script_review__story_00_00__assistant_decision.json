@@ -1,0 +1,20 @@
+{
+  "schema": "creative_evidence_review_decision/v1",
+  "packet_sha256": "1d604e1b251f07b6f41accfb614e22037ba778b2cd473c00db30ceec780f029b",
+  "reviewed_by": "assistant",
+  "reviewed_full_text": true,
+  "summary": "已阅读全文及两条审核证据。首稿没有让观众在拒绝前知道多次替林屿加班，确认I1；I2将面对被拒绝扩大为必须口头承认态度，当前自行对账已是具体回应，驳回为可选表达加强。便签空间/票根可读性仍应由后续导演明确，文本通过不代表视频通过。",
+  "decisions": [
+    {
+      "id": "I1",
+      "decision": "confirm",
+      "reason": "实际B1只有端杯和不同日期便签，没有帮谁、完成什么或加班后果的信息；B2的“又”仍不能单独证明她此前多次加班。I1违反明确简报，完整新版应让前史通过自然事件/对白成立，而非摘要自称。"
+    },
+    {
+      "id": "I2",
+      "decision": "dismiss",
+      "reason": "B3拒绝之后B4林屿说“我以为你会帮我的”表达旧期待落空，B5她开始自己对账是拒绝后承担工作的具体行动。简报没有强制她认错、说出自我反省或与方澄和解；可增强观感，但现有证据不足以将其列为必须修复的major。"
+    }
+  ],
+  "additional_issues": []
+}

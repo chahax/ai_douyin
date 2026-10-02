@@ -1,0 +1,15 @@
+{
+  "expected_version_hashes_supplied": true,
+  "feedback_id": "51df2e141aaab020637c",
+  "feedback_present_during_call": true,
+  "feedback_status_during_call": "revision_required",
+  "final_status": "debug_breakpoint",
+  "final_feedback_status": null,
+  "feedback_present_after_call": false,
+  "pending_feedback_count": 0,
+  "feedback_receipt_retained": true,
+  "model_calls": 1,
+  "downstream_calls_after_lost_feedback": 1,
+  "continued_status": "debug_breakpoint",
+  "continued_breakpoint": "director_shots"
+}

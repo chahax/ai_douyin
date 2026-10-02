@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="8" skipped="0" tests="43" time="26.810" timestamp="2026-10-02T21:00:44.131649+08:00" hostname="DESKTOP-DP111LI"><testcase classname="data.qa.creative_platform_refactor_20261002.feedback_consistency_v23.fixed.test_inflight_feedback_contract" name="test_must_fix_during_model_call_survives_runner_save" time="0.482"><failure message="StopIteration">data\qa\creative_platform_refactor_20261002\feedback_consistency_v23\fixed\test_inflight_feedback_contract.py:10: in test_must_fix_during_model_call_survives_runner_save
+    runpy.run_path(str(OUT / 'inventory_and_probe.py'), run_name='__review_probe__')
+&lt;frozen runpy&gt;:287: in run_path
+    ???
+&lt;frozen runpy&gt;:98: in _run_module_code
+    ???
+&lt;frozen runpy&gt;:88: in _run_code
+    ???
+data\qa\creative_platform_refactor_20261002\feedback_consistency_v23\fixed\inventory_and_probe.py:41: in &lt;module&gt;
+    continued=CreativeWorkflow(run,clients=continued_clients,stop_after_stage='director_shots').run(bundle)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6593: in run
+    return self._run_unlocked(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6852: in _run_unlocked
+    brief = self._stage(
+src\content_factory\creative_workflow.py:5847: in _stage
+    return execute_stage(self, name, role, payload, validator)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_stage_runtime.py:253: in execute_stage
+    raw = self._stage_impl(name, role, payload, validator)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6333: in _stage_impl
+    output = self._validate_or_repair(name, role, payload, output, validator)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:5412: in _validate_or_repair
+    result = self._call_model(
+src\content_factory\creative_workflow.py:3487: in _call_model
+    result = self.clients.call(transport, messages, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_creative_workflow.py:1023: in call
+    answer = next(self.answers)
+             ^^^^^^^^^^^^^^^^^^
+E   StopIteration</failure></testcase><testcase classname="tests.test_creative_stage_debug" name="test_breakpoint_and_next_stage_reuse_saved_budget_and_artifacts" time="0.125" /><testcase classname="tests.test_creative_stage_debug" name="test_feedback_binds_current_hash_and_invalidates_only_downstream_debug_view" time="0.110" /><testcase classname="tests.test_creative_stage_debug" name="test_immutable_versions_have_deterministic_diff" time="0.015" /><testcase classname="tests.test_creative_stage_debug" name="test_noninitial_must_fix_resume_replays_valid_upstream_and_reaches_target" time="0.201" /><testcase classname="tests.test_creative_stage_debug" name="test_resolved_repair_context_replays_then_rebuilds_invalidated_downstream" time="0.414" /><testcase classname="tests.test_creative_stage_debug" name="test_two_successive_script_repairs_select_current_keep_history_and_budget" time="1.012" /><testcase classname="tests.test_creative_stage_debug" name="test_multiple_pending_stages_follow_dependencies_not_feedback_order[False]" time="0.499"><failure message="RuntimeError: 未修复的 must_fix 反馈阻止模型派发：writer_script">tests\test_creative_stage_debug.py:285: in test_multiple_pending_stages_follow_dependencies_not_feedback_order
+    first, clients = _resume(run, bundle, [brief], "director_brief")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_creative_stage_debug.py:210: in _resume
+    result = runner.run(bundle)
+             ^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6593: in run
+    return self._run_unlocked(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6852: in _run_unlocked
+    brief = self._stage(
+src\content_factory\creative_workflow.py:5847: in _stage
+    return execute_stage(self, name, role, payload, validator)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_stage_runtime.py:253: in execute_stage
+    raw = self._stage_impl(name, role, payload, validator)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6285: in _stage_impl
+    result: RoleResult = self._call_model(
+src\content_factory\creative_workflow.py:3484: in _call_model
+    authorize_dispatch(self, role, messages)
+src\content_factory\creative_state_store.py:260: in authorize_dispatch
+    raise RuntimeError(
+E   RuntimeError: 未修复的 must_fix 反馈阻止模型派发：writer_script</failure></testcase><testcase classname="tests.test_creative_stage_debug" name="test_multiple_pending_stages_follow_dependencies_not_feedback_order[True]" time="0.500"><failure message="RuntimeError: 未修复的 must_fix 反馈阻止模型派发：writer_script">tests\test_creative_stage_debug.py:285: in test_multiple_pending_stages_follow_dependencies_not_feedback_order
+    first, clients = _resume(run, bundle, [brief], "director_brief")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_creative_stage_debug.py:210: in _resume
+    result = runner.run(bundle)
+             ^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6593: in run
+    return self._run_unlocked(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6852: in _run_unlocked
+    brief = self._stage(
+src\content_factory\creative_workflow.py:5847: in _stage
+    return execute_stage(self, name, role, payload, validator)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_stage_runtime.py:253: in execute_stage
+    raw = self._stage_impl(name, role, payload, validator)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6285: in _stage_impl
+    result: RoleResult = self._call_model(
+src\content_factory\creative_workflow.py:3484: in _call_model
+    authorize_dispatch(self, role, messages)
+src\content_factory\creative_state_store.py:260: in authorize_dispatch
+    raise RuntimeError(
+E   RuntimeError: 未修复的 must_fix 反馈阻止模型派发：writer_script</failure></testcase><testcase classname="tests.test_creative_stage_debug" name="test_second_round_budget_exhaustion_keeps_pending_feedback_and_counters" time="0.640" /><testcase classname="tests.test_creative_stage_debug" name="test_resolved_upstream_tampering_with_pending_downstream_stops_before_call[prompt_sha256]" time="0.897" /><testcase classname="tests.test_creative_stage_debug" name="test_resolved_upstream_tampering_with_pending_downstream_stops_before_call[input_sha256]" time="0.643" /><testcase classname="tests.test_creative_stage_debug" name="test_resolved_upstream_tampering_with_pending_downstream_stops_before_call[output_sha256]" time="0.616" /><testcase classname="tests.test_creative_stage_debug" name="test_resolved_upstream_tampering_with_pending_downstream_stops_before_call[resolution]" time="1.517"><failure message="AssertionError: assert ('debug_breakpoint' == 'needs_attention'&#10;  &#10;  - needs_attention&#10;  + debug_breakpoint)">tests\test_creative_stage_debug.py:326: in test_resolved_upstream_tampering_with_pending_downstream_stops_before_call
+    assert state["status"] == "needs_attention" and not clients.calls
+E   AssertionError: assert ('debug_breakpoint' == 'needs_attention'
+E     
+E     - needs_attention
+E     + debug_breakpoint)</failure></testcase><testcase classname="tests.test_creative_stage_debug" name="test_feedback_rejects_mismatched_current_receipt" time="0.367" /><testcase classname="tests.test_creative_stage_debug" name="test_single_step_counts_repaired_version_and_pauses_at_target" time="0.530" /><testcase classname="tests.test_creative_stage_debug" name="test_pending_late_stage_rebuilds_invalidated_intermediates_after_upstream_repair" time="0.359"><failure message="RuntimeError: 未修复的 must_fix 反馈阻止模型派发：writer_check__00">tests\test_creative_stage_debug.py:369: in test_pending_late_stage_rebuilds_invalidated_intermediates_after_upstream_repair
+    repaired, clients = _resume(run, bundle, [brief], "director_brief")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_creative_stage_debug.py:210: in _resume
+    result = runner.run(bundle)
+             ^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6593: in run
+    return self._run_unlocked(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6852: in _run_unlocked
+    brief = self._stage(
+src\content_factory\creative_workflow.py:5847: in _stage
+    return execute_stage(self, name, role, payload, validator)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_stage_runtime.py:253: in execute_stage
+    raw = self._stage_impl(name, role, payload, validator)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6285: in _stage_impl
+    result: RoleResult = self._call_model(
+src\content_factory\creative_workflow.py:3484: in _call_model
+    authorize_dispatch(self, role, messages)
+src\content_factory\creative_state_store.py:260: in authorize_dispatch
+    raise RuntimeError(
+E   RuntimeError: 未修复的 must_fix 反馈阻止模型派发：writer_check__00</failure></testcase><testcase classname="tests.test_creative_stage_debug" name="test_legacy_graph_bootstrap_uses_first_traversal_after_revision_history" time="0.589" /><testcase classname="tests.test_creative_stage_debug" name="test_explicit_dependency_graph_does_not_invalidate_independent_stage" time="0.441" /><testcase classname="tests.test_creative_remaining_refactor" name="test_stop_inflight_saves_result_and_resume_preserves_budget" time="0.202" /><testcase classname="tests.test_creative_remaining_refactor" name="test_actual_field_projection_reuses_unchanged_consumed_request" time="0.441" /><testcase classname="tests.test_creative_remaining_refactor" name="test_response_received_recovery_appends_latest_without_changing_history" time="0.106" /><testcase classname="tests.test_creative_remaining_refactor" name="test_displayed_stage_hash_must_match_before_feedback" time="0.069" /><testcase classname="tests.test_creative_remaining_refactor" name="test_full_preview_segment_human_tail_cut_assembly_delivery_chain" time="2.682" /><testcase classname="tests.test_creative_remaining_refactor" name="test_media_faults_never_resubmit_unknown_or_known_ids[unknown_submit]" time="0.891" /><testcase classname="tests.test_creative_remaining_refactor" name="test_media_faults_never_resubmit_unknown_or_known_ids[known_id_timeout]" time="1.042" /><testcase classname="tests.test_creative_remaining_refactor" name="test_media_faults_never_resubmit_unknown_or_known_ids[stale_source]" time="0.856" /><testcase classname="tests.test_creative_remaining_refactor" name="test_media_faults_never_resubmit_unknown_or_known_ids[execution_lock]" time="0.915" /><testcase classname="tests.test_creative_remaining_refactor" name="test_unknown_responsibility_records_feedback_without_regeneration" time="0.825" /><testcase classname="tests.test_creative_remaining_refactor" name="test_manual_decision_crash_recovery_reconciles_receipt" time="0.022" /><testcase classname="tests.test_creative_remaining_refactor" name="test_delivery_uses_actual_browser_workflow_lock_and_independent_verification[False]" time="0.074" /><testcase classname="tests.test_creative_remaining_refactor" name="test_delivery_uses_actual_browser_workflow_lock_and_independent_verification[True]" time="0.049" /><testcase classname="tests.test_creative_remaining_refactor" name="test_quality_candidates_gold_holdout_and_actual_unknown_costs" time="0.079" /><testcase classname="tests.test_creative_remaining_refactor" name="test_future_context_repair_versions_old_full_body" time="0.004" /><testcase classname="tests.test_creative_remaining_refactor" name="test_feedback_repair_crash_reuses_response_and_keeps_original_target[validated]" time="0.144"><failure message="RuntimeError: 返修恢复的原版本或新请求绑定不一致">tests\test_creative_remaining_refactor.py:625: in test_feedback_repair_crash_reuses_response_and_keeps_original_target
+    ).run(bundle)
+      ^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6593: in run
+    return self._run_unlocked(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6831: in _run_unlocked
+    analysis = self._stage(
+src\content_factory\creative_workflow.py:5847: in _stage
+    return execute_stage(self, name, role, payload, validator)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_stage_runtime.py:195: in execute_stage
+    raise RuntimeError("返修恢复的原版本或新请求绑定不一致")
+E   RuntimeError: 返修恢复的原版本或新请求绑定不一致</failure></testcase><testcase classname="tests.test_creative_remaining_refactor" name="test_feedback_repair_crash_reuses_response_and_keeps_original_target[response_received]" time="0.406"><failure message="RuntimeError: 返修恢复的原版本或新请求绑定不一致">tests\test_creative_remaining_refactor.py:625: in test_feedback_repair_crash_reuses_response_and_keeps_original_target
+    ).run(bundle)
+      ^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6593: in run
+    return self._run_unlocked(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6831: in _run_unlocked
+    analysis = self._stage(
+src\content_factory\creative_workflow.py:5847: in _stage
+    return execute_stage(self, name, role, payload, validator)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_stage_runtime.py:195: in execute_stage
+    raise RuntimeError("返修恢复的原版本或新请求绑定不一致")
+E   RuntimeError: 返修恢复的原版本或新请求绑定不一致</failure></testcase><testcase classname="tests.test_creative_remaining_refactor" name="test_same_task_dispatch_lock_blocks_duplicate_budget_use" time="0.004" /><testcase classname="tests.test_creative_remaining_refactor" name="test_timed_media_feedback_routes_to_exact_current_upstream" time="0.106" /><testcase classname="tests.test_creative_remaining_refactor" name="test_quality_holdout_freeze_refuses_source_family_leakage" time="0.095" /><testcase classname="tests.test_creative_remaining_refactor" name="test_workbench_cli_inspection_and_failure_have_durable_receipts" time="0.838" /><testcase classname="tests.test_creative_remaining_refactor" name="test_focused_feedback_retires_old_review_and_reconstructs_exact_context" time="1.020"><failure message="ValueError: RUNTIME_SOURCE_CHANGED: src/content_factory/creative_workflow.py">tests\test_creative_remaining_refactor.py:758: in test_focused_feedback_retires_old_review_and_reconstructs_exact_context
+    w, clients = workflow(tmp_path, [raw])
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_creative_governed_protocol.py:25: in workflow
+    w.state["rule_registry_binding"] = bind_new_task()
+                                       ^^^^^^^^^^^^^^^
+src\content_factory\creative_governed_runtime.py:12: in bind_new_task
+    return bind_registry(ROOT, REGISTRY_DIRECTORY)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_rule_registry.py:126: in bind_registry
+    validate_registry_binding(binding,root)
+src\content_factory\creative_rule_registry.py:143: in validate_registry_binding
+    validation['runtime_sources']=validate_runtime_sources(directory,root)
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_rule_registry.py:157: in validate_runtime_sources
+    if file_hash(source)!=row['sha256']:raise ValueError('RUNTIME_SOURCE_CHANGED: '+row['path'])
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ValueError: RUNTIME_SOURCE_CHANGED: src/content_factory/creative_workflow.py</failure></testcase><testcase classname="tests.test_creative_remaining_refactor" name="test_changing_output_directory_cannot_resubmit_unknown_or_unreviewed_segment" time="1.739" /><testcase classname="tests.test_creative_remaining_refactor" name="test_same_script_media_failure_budget_is_preserved_before_paid_dispatch" time="0.856" /></testsuite></testsuites>

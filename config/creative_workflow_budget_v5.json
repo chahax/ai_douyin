@@ -1,0 +1,9 @@
+{
+  "policy_version": "v5_20261001",
+  "max_calls": 20,
+  "max_total_tokens": 500000,
+  "max_contract_repairs": 8,
+  "max_revisions": 5,
+  "applies_to": "new_creative_tasks_only",
+  "reason": "用户要求内容返修由生成模型提交完整新版，随后全文审查；最多五轮返修，通过即结束。总调用、tokens、技术修复额度维持原上限，历史任务预算保留。"
+}

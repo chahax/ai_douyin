@@ -1,0 +1,9 @@
+{
+  "schema": "creative_evidence_review_decision/v1",
+  "packet_sha256": "d7b7ee16d6faf4791b874cf9bc8d0c72215f92a9817a20f97bc1204f04f2a42b",
+  "reviewed_by": "assistant",
+  "reviewed_full_text": true,
+  "summary": "全文实际复核通过进入导演文本：B1以既有肩带/注视起场，没有笔类操作；B2缩为请求及明确拒绝两短句，10秒有余量；B3整拍6秒等待后B4陈禾明确接受，林遥只在听见后松肩；B5两步离开及陈禾处理自己的文件夹，归属全程未转移。摘要带回家仅历史概述，不额外演出。媒体仍未生成，导演须落实声画主体、关键反应和静态首帧。",
+  "decisions": [],
+  "additional_issues": []
+}

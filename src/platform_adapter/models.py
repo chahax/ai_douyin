@@ -35,6 +35,8 @@ class PublishRequest:
     scheduled_at: Optional[str] = None
     extra_metadata: Dict[str, str] = field(default_factory=dict)
     visibility: str = "public"  # "public" | "private" | "friends"
+    ai_generated: bool = True  # AI production defaults to an explicit platform declaration.
+    fictional_story: bool = True  # Fiction pipeline; factual works must explicitly opt out.
 
     def normalized_hashtags(self) -> List[str]:
         normalized: List[str] = []
@@ -109,6 +111,9 @@ class VideoItem:
     stats: Optional[VideoStats] = None
     account_uuid: str = ""
     account_key: str = ""
+
+    # Only explicitly returned creator metrics; absent values stay unknown.
+    creator_metrics: Optional[dict] = None
 
 
 @dataclass

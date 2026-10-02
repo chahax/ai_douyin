@@ -1,0 +1,53 @@
+..                                                                       [100%]
+============================== warnings summary ===============================
+src\shared\database.py:7
+  D:\IT\ai_douyin\src\shared\database.py:7: MovedIn20Warning: The ``declarative_base()`` function is now available as sqlalchemy.orm.declarative_base(). (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    Base = declarative_base()
+
+data/qa/creative_platform_refactor_20261002/p1_recheck/test_worker_boundaries.py::test_recovered_execution_discards_late_worker_result
+data/qa/creative_platform_refactor_20261002/p1_recheck/test_worker_boundaries.py::test_recovered_execution_discards_late_worker_result
+data/qa/creative_platform_refactor_20261002/p1_recheck/test_worker_boundaries.py::test_recovered_execution_discards_late_worker_result
+data/qa/creative_platform_refactor_20261002/p1_recheck/test_worker_boundaries.py::test_running_skill_renews_lease_past_initial_expiry
+data/qa/creative_platform_refactor_20261002/p1_recheck/test_worker_boundaries.py::test_running_skill_renews_lease_past_initial_expiry
+data/qa/creative_platform_refactor_20261002/p1_recheck/test_worker_boundaries.py::test_running_skill_renews_lease_past_initial_expiry
+  D:\IT\ai_douyin\.venv\Lib\site-packages\sqlalchemy\sql\schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+
+data/qa/creative_platform_refactor_20261002/p1_recheck/test_worker_boundaries.py::test_recovered_execution_discards_late_worker_result
+data/qa/creative_platform_refactor_20261002/p1_recheck/test_worker_boundaries.py::test_running_skill_renews_lease_past_initial_expiry
+  D:\IT\ai_douyin\src\scheduler\queue.py:141: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+data/qa/creative_platform_refactor_20261002/p1_recheck/test_worker_boundaries.py::test_recovered_execution_discards_late_worker_result
+  D:\IT\ai_douyin\data\qa\creative_platform_refactor_20261002\p1_recheck\test_worker_boundaries.py:21: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    other_session.query(TaskExecution).filter_by(id=execution.id).update({TaskExecution.lease_expires_at:datetime.utcnow()-timedelta(seconds=1)})
+
+data/qa/creative_platform_refactor_20261002/p1_recheck/test_worker_boundaries.py::test_recovered_execution_discards_late_worker_result
+  D:\IT\ai_douyin\src\scheduler\queue.py:346: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = now or datetime.utcnow()
+
+data/qa/creative_platform_refactor_20261002/p1_recheck/test_worker_boundaries.py::test_recovered_execution_discards_late_worker_result
+data/qa/creative_platform_refactor_20261002/p1_recheck/test_worker_boundaries.py::test_running_skill_renews_lease_past_initial_expiry
+  D:\IT\ai_douyin\src\scheduler\queue.py:625: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    completed_at = datetime.utcnow()
+
+data/qa/creative_platform_refactor_20261002/p1_recheck/test_worker_boundaries.py::test_recovered_execution_discards_late_worker_result
+data/qa/creative_platform_refactor_20261002/p1_recheck/test_worker_boundaries.py::test_running_skill_renews_lease_past_initial_expiry
+  D:\IT\ai_douyin\src\scheduler\queue.py:269: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+data/qa/creative_platform_refactor_20261002/p1_recheck/test_worker_boundaries.py: 53 warnings
+  D:\IT\ai_douyin\data\qa\creative_platform_refactor_20261002\p1_recheck\test_worker_boundaries.py:49: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    while datetime.utcnow()<=initial_expiry+timedelta(seconds=0.25):
+
+data/qa/creative_platform_refactor_20261002/p1_recheck/test_worker_boundaries.py::test_running_skill_renews_lease_past_initial_expiry
+data/qa/creative_platform_refactor_20261002/p1_recheck/test_worker_boundaries.py::test_running_skill_renews_lease_past_initial_expiry
+  D:\IT\ai_douyin\src\scheduler\queue.py:237: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+data/qa/creative_platform_refactor_20261002/p1_recheck/test_worker_boundaries.py::test_running_skill_renews_lease_past_initial_expiry
+  D:\IT\ai_douyin\data\qa\creative_platform_refactor_20261002\p1_recheck\test_worker_boundaries.py:57: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    assert saved.lease_expires_at>datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2 passed, 71 warnings in 16.41s

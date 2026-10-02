@@ -1,0 +1,159 @@
+{
+  "schema": "creative_workflow_state/v1",
+  "created_at": "2026-09-28T11:59:37.782368+00:00",
+  "status": "production_exception",
+  "source_driver": "original",
+  "model_profile": "minimax_create_deepseek_review",
+  "writer_prompt_version": "original_events_v3",
+  "review_policy_version": "evidence_review_v6",
+  "segmented_director_binding": {
+    "version": "reviewed_beat_storyboard_v6",
+    "prompt": "为已审核完整剧本生成全片计划，只输出目标JSON。script正文及creative_brief是权威；manifest只给身份、外观、固定场景和道具归属，不给当前姿态/当前手持。先通读全片：如果后拍坐下，初态通常应站着，不得无依据先坐又新增起身。道具归属owner绝不等于holder；桌上无接触的物品holder=none。初态必须在首动作发生前。\n每拍单连续镜头。本版人物/道具初态同v1，但关键物理动作只写operations，程序推导所有首尾及变化；不再复述from，不写changes，不写另一个首尾状态。performance只补可见情绪、节奏、点头/呼吸等细节，不能藏operations没有表达的位移/站坐/拿放/视线变化。\n目标结构：{\"schema\":\"whole_film_state_plan_v3\",\"initial_state\":{\"C01\":{\"posture\":\"standing\",\"position\":\"具体位置\",\"gaze\":\"一个目标\",\"affect\":\"表情/肩部状态\"},\"P01\":{\"holder\":\"none\",\"location\":\"桌面\"}},\"beats\":[{\"beat_id\":\"B1\",\"purpose\":\"新信息或关系变化\",\"composition\":\"取景和面部可读性\",\"camera\":\"单机位连续拍摄\",\"dialogue_mode\":\"画内对白\",\"cut_reason\":\"本拍切点依据\",\"reaction_window\":{\"start\":0,\"end\":2,\"subject\":\"C01\",\"meaning\":\"刺激与反应重点\"},\"events\":[{\"start\":0,\"end\":2,\"phase\":\"before_first_line\",\"script_slot\":\"before\",\"dialogue_index\":-1,\"performance\":\"可见表演补充，没有则写自然完成操作\",\"operations\":[{\"kind\":\"move\",\"actor\":\"C01\",\"target\":\"\",\"value\":\"新位置\"}]}],\"dialogue_windows\":[{\"start\":2,\"end\":5}]}]}\ninitial_state精确覆盖manifest全部characters和props；人物字段posture/position/gaze/affect，道具holder/location。posture枚举standing/sitting/kneeling/lying/other。holder人物ID或none。position/location具体描述固定元素相对位置；affect仅表情/肩部紧松，绝不能写看向、持物、站坐。\noperations每项严格kind/actor/target/value四字段：actor人物ID。\nmove: target=\"\"，value新位置；gaze: target=\"\"，value唯一目标；affect: target=\"\"，value新的可见表情/肩部状态。\nsit: target=manifest固定椅/可坐物ID，value=坐下后具体位置；程序要求原posture=standing，改sitting。stand: target=\"\"，value起身后位置，要求原sitting/kneeling/lying，改standing。\ntake: target=道具ID，value=拿取后的具体手持/佩戴位置，要求原holder=none，holder改actor。place: target=道具ID，value=放置位置，要求原holder=actor，改none。pass: target=道具ID，value=接收者人物ID，要求原holder=actor，改接收者，位置由程序记为接收者持有。\n无变化的move/gaze/affect允许维持，不视为新动作；禁止用take/place/sit假装已完成动作重新发生。其它细微动作只写performance；不要为修自己的初态错误新加剧情无关操作。\nevents按start排序。允许两个不同人物同时动作，不同字段可并行，但同一字段的重叠读写不允许；例如同一道具拿取尚未完成不能同时放下。每个event的operations在event结束时依次成立，开始时前置必须已成立。所有秒数为拍内时间，0<=start<end<=拍时长。\nphase不再使用before/during/after旧缩写。每个event额外写script_slot和dialogue_index：script_slot为before/during/after/dialogue_performance；dialogue_index仅对白表演填实际句索引，其余填-1。\nscript_slot指原script来源，不是时间口语：原before动作phase=before_first_line且第一句开始前完成；原during动作在第一句结束后，若有第二句phase=between_lines且第二句前完成，只有一句则phase=after_last_line；原after动作phase=after_last_line且最后一句结束后开始。\n说话时的呼吸、嘴部表演、可见情绪单独用script_slot=dialogue_performance；第一句phase=first_line_delivery/dialogue_index=0，其余phase=later_line_delivery/dialogue_index=实际句索引，区间必须落在对应对白窗口内。该类operations只能affect，不能用此类提前执行原文离开/拿放/坐下/视线移动。关键动作仍引用原before/during/after来源。无对白统一phase=no_dialogue且dialogue_index=-1，仍保持原来源顺序。\n例：对白2–5秒时，2–5秒嘴部表演是first_line_delivery，不是原script.during；原script.after的离开必须5秒之后。原script.during不是英语“说话期间”的意思。\ndialogue_windows与script每拍dialogue一一对应，只给start/end，不复写对白或speaker。每秒最多5计时单位（汉字1，拉丁词2），重要对白留前中后的可见反应，不机械额外静止。dialogue_mode枚举画内对白/画外对白/混合对白/无对白，由构图中说话人可见性决定；无对白窗口[]且模式无对白。reaction_window标识真实表演，不额外创造剧情。\n完整覆盖所有拍。真实审核还将核对operations是否覆盖正文关键动作以及情绪是否可读；程序通过不是语义通过。",
+    "static_manifest_version": "static_visual_manifest_v2",
+    "state_plan_version": "whole_film_state_plan_v3",
+    "plan_thinking_mode": "disabled"
+  },
+  "original_director_binding": {
+    "version": "original_director_v1",
+    "prompt": "你是原创短片导演，为已审核的剧本设计可执行分镜，只返回合法JSON。\n创作依据：creative_brief 的显式要求约束所有制作选择；script 是当前已审核演出锁。candidate_lock 是历史候选，不得把其中已被剧本删除或替换的动作、道具、结尾实现恢复。不要重新创作对白和剧情，也不把候选摘要当来源事实。director_brief 只提供已选画风和导演目标。\n播放顺序：每拍 before → 第一条dialogue → during → 后续dialogue → after。严格保持节拍和动作顺序、因果、对白文字和说话人。event/trigger/premise 是摘要，不额外演出；screenplay_markdown 只是同稿可读版本。逐拍至少一镜，beat_id 使用输入原ID，镜头ID唯一；逐拍所有镜头时长之和必须等于该拍duration_seconds。\n镜头设计：每镜明确新增的信息、看谁的反应和为何切走；机位服务于剧情，不以运镜数量代替叙事。省略进店、点单、普通走路等无因果必要的过程是合法省略，不得强加步骤。已有对白可以说明当前成立的状态，无需复演每一段前史。\n情绪时序：为刺激、反应、关键对白前中后表演及收束分配明确秒数，面部须在情绪重心时可读；反应不得抢在刺激之前。可在原动作对白顺序内安排的窗口由导演排时，不退回编剧。不能仅按动作数量断言超时。中文每字计1单位、拉丁文本每词计2单位，每镜对白最多每秒5单位，动作、停顿和反应另留时间；不能借其他无对白镜的秒数抵扣。\n声音归属：dialogue_lock 逐字分配本拍原对白，合并后与本拍dialogue的说话人和文字顺序完全一致，不新增、重复、删减或转移给别人。dialogue_mode 仅为“画内”“画外”“画内/画外”“无对白”；说话人的入画情况、构图、表演和prompt必须一致。\n连续性：start_state 只写首帧已经成立的状态，本镜才发生的拿取、移动、接触等写入visible_performance，不得首帧先完成再重演。end_state 明确末帧结果。选择raw_tail_continuation时本镜start_state必须逐字等于上镜end_state；新机位、构图变化用planned_cut_requires_adapter，不能宣称原尾帧自然换机位。\n人物与资产：人数确定，人物名、外观、服装、站位、视线和道具归属保持一致；画风采用director_brief.selected_style_id。可复用资产仅依据输入目录和已证实特征，不编造可用素材；目录缺失时记录待制作/待核实，不把复用写成已完成。\n道具与构型：建立唯一数量、持有人、所在位置、开合状态、部件和可操作方式；同一对象的构型必须在style、composition、visible_performance、首尾状态、prompt和production_choices间一致。动作若需要取下部件、打开容器或重新握持，必须有合规时序；不能一处有盖另一处无盖，也不能把抓握部位或材质悄悄换掉。未被剧本确定的非叙事外观可以作为明确制作选择，但不能增加操作链、改变因果或突破简报。未来首帧与资产设计必须继承这些状态，不提前完成镜内动作。\n执行边界：服从executor_constraints中的能力和每镜时长范围。必要时拆镜并合理分配时长，保持每拍总长；不能省掉必要反应或加速台词凑时。未看到实际素材时，构图和首帧只是计划，不能声称声音、口型、表演或媒体审核已通过。\n输出分流：正常情况提交下列完整style/shots/media_assumptions对象，不输出空story_issues。只有无法通过构图、排时或已有演出顺序解决的具体blocking/major剧情矛盾，才返回非空story_issues；保留原稿并引用实际正文证据，遵循附加审核字段合同。已被助手驳回的问题不换措辞重提，不以个人审美建议冒充必须返修。缺少分镜不是故事问题。\n字段合同：每镜包含示例的全部字段；无对白dialogue_lock=[]，production_choices与media_assumptions均为数组。每个文本字段具体且简洁，状态与动作不得相互矛盾。\n{\"style\": {\"style_option_id\": \"director_brief.selected_style_id\", \"visual_medium\": \"画面媒介\", \"palette\": \"统一色彩\", \"spatial_layout\": \"明确空间和朝向\", \"character_lock\": \"确定人数、人物名和稳定外观\", \"light_source\": \"光源位置和方向\"}, \"shots\": [{\"id\": \"SH01\", \"beat_id\": \"原剧本节拍ID\", \"duration_seconds\": 8, \"purpose\": \"本镜新增信息和观众关注点\", \"composition\": \"景别、入画人物、视线及布局\", \"camera\": \"机位与必要运镜\", \"visible_performance\": \"按时间顺序写可见动作、台词刺激及反应窗口\", \"event_lock\": \"逐字复制对应beat.event\", \"dialogue_lock\": [{\"speaker\": \"原说话人\", \"text\": \"逐字分配原对白\"}], \"start_state\": \"第一帧已成立的静态状态\", \"end_state\": \"动作完成后的末帧状态\", \"cut_reason\": \"本镜在此切走的叙事原因\", \"dialogue_mode\": \"画内\", \"continuity_mode\": \"raw_tail_continuation 或 planned_cut_requires_adapter\", \"prompt\": \"包含构图、动作、人物和道具状态的生成提示词\", \"production_choices\": []}], \"media_assumptions\": []}"
+  },
+  "original_brief_priority_binding": {
+    "version": "original_brief_priority_v1",
+    "prompt": "原创创作优先级：creative_brief 的显式硬约束高于候选 candidate_lock、导演 brief 和历史稿中的具体实现。候选是可修正创作提案，不是小说原文或不可更改的来源事实。保留核心人物关系、因果转折及结尾意图；若道具数量、动作、操作步骤或结尾实现与用户简报冲突，删除或替换冲突实现，不得以忠实候选为由继承违规内容。不得自创简报没有的禁令。\n候选分析及导演协调时逐项核对允许的道具、数量和操作；导演反馈明确指出冲突并提出符合简报的替代方案。编剧协调按现有 feedback_responses 协议明确接受候选实质调整为 accepted_candidate_change；不是靠静默修改候选绕过锁。正式剧本及返修再次核对实际动作链，premise/event/trigger 摘要必须与实际演出一致。该规则仅适用于原创，不改变小说原文锁。",
+    "director_execution_version": "original_director_execution_v1",
+    "director_execution_prompt": "原创分镜职责：省略进店、点单、普通走路等不影响因果理解的过程，不构成剧本缺失，不能强加这些操作。先在已有动作与对白顺序内分配明确的刺激、反应、台词、收束时间；可由分镜排出的反应窗口应自行安排。不得仅按动作数量断言超时。退回剧本前必须指出无法在总时长内执行的具体冲突及计时依据，区分必须修改的剧情错误与可在导演层完成的构图、表演、道具位置说明。"
+  },
+  "writer_prompt_binding": {
+    "version": "original_events_v3",
+    "modules": [
+      "emotion"
+    ],
+    "creative_brief": {
+      "schema": "creative_brief/v1",
+      "theme": "一个习惯答应同事额外请求的人，第一次平静拒绝，发现关系并没有因此破裂。",
+      "duration_seconds": [
+        36,
+        44
+      ],
+      "delegated_fields": [],
+      "audience": "在工作中不敢说不的成年人",
+      "relationships": "林遥和陈禾是平级成年女同事，互相尊重；陈禾提出临时帮忙请求，林遥决定拒绝。没有上司施压、恋爱或亲属关系。",
+      "audience_emotion": "从怕让人失望的小紧张，到说出界限后的等待，最后释然；自然温暖，不讲道理。",
+      "visual_style": "竖屏9:16，电影感二维手绘动画，低饱和办公空间、柔和晚间灯光，稳定成年人物比例。",
+      "turn": "林遥明确拒绝后，陈禾实际听完并接受，自己收回待办；林遥看到对方态度才放松，不把拒绝改成勉强答应。",
+      "ending": "林遥自然道别、松开紧绷的姿势，朝房间门口走出两步；陈禾留在桌边接手自己的工作，双方关系保持正常。",
+      "constraints": [
+        "仅林遥、陈禾两名成年人，场景固定同一间办公室桌边到室内门口的短距离，不切外景。",
+        "唯一关键可移动道具是一只文件夹，始终由提出请求的陈禾持有或放在她自己桌面，不能交给林遥。桌椅为固定场景资产。",
+        "关键拒绝和接受由本人清晰对白表达，不靠手机、屏幕、小字、旁白或闪回承担因果。",
+        "重要拒绝后有至少2秒可读等待反应，再由陈禾自然接受；林遥在听见接受后才明显放松。",
+        "每拍最多两句对白。结尾不超过10秒，只兑现离开与各自承担，不增加解释或新任务。"
+      ],
+      "avoid": [
+        "把平级同事写成刻薄上司",
+        "道歉独白、励志说教、突然冲突反转",
+        "用反复握手、搬椅子和文件交接填时长"
+      ]
+    },
+    "prompt": "【identity】\n你是原创短片编剧。只按本次creative_brief/brief与候选锁创作。保持人物具体、对白自然、转折可见。优先选择简单但成立的故事，不为电影感增加无用物件和反复微动作。不要借用其他项目的人物和桥段。\n\n【contract】\n只输出给定schema的完整JSON。selected_candidate_id取candidate_lock.id。拍ID严格按required_beat_ids（若提供）；否则连续编号。总时长等于各拍时长和。每拍events就是实际播放的唯一顺序，动作只写一次，台词只写在dialogue事件。事件格式kind/speaker/text，action的speaker为空字符串，dialogue的speaker为人物姓名。必须采用下面三种模式之一：无对白[action,action,action]；一句对白[action,dialogue,action,action]；两句对白[action,dialogue,action,dialogue,action]。每条动作尽量一个短句（约20—60字），只写实际可见动作，不再写“说、问、解释、道歉、承认”等发言概述。\n\n【requirements】\n先在内部把简报逐项转为验收条件：人物身份和关系、允许道具、禁止桥段、谁作出转折选择、结尾由谁对谁完成什么动作、时长。特别保留语义角色：被帮助者和帮助者不能交换结尾的主动权。每项须有实际动作或对白证据，不能只写进premise/event/trigger。禁止的桥段不要换同类物件变相重复。结尾先确定一个准确兑现要求的动作，再倒推前因；不用多余道具或第二次解释表达同一意思。\n\n【timeline】\n先在脑中按实际秒数播放，再逐条写events。动作和对白只有这一个顺序来源：说话者先看见刺激才能开口，听者只在实际听到相应台词之后反应，手先取物才能交付，通信先接通再发言。两句台词间如必须有多个复杂动作，简化为一个明确变化。event/trigger只是摘要，不承担独有的可见证据；不要用它们补救events遗漏。\n\n【continuity】\n写作时内部维护逐拍状态：人物所在区域和面向；每个关键物唯一持有人/支撑面、开闭/完好状态；每个人已经知道什么。下一拍从上拍末状态开始，拿放/开合/交接只发生一次，不允许靠泛称“他”换人。发生误会时，事实状态和人物认知分开：揭示必须提供此前没有被看到的证据，不能让同一人先否认自己做过的关键行动却无理由认领。场景方向统一用固定地标（窗侧/墙侧等），不混人物左右与镜头左右。结尾不临时变出礼物，解决办法符合普通物理常识。\n\n【dramaturgy】\n先让观众明白一件具体的困难及人物不同选择，再用可见事实改变判断，最后通过行动兑现关系变化。每拍只推进一个主要变化，动作句简洁可执行。重要对白前后留表演时间，总对白按每秒约3个汉字预算，另留动作和至少2秒反应；不能用多个微动作填满空白。最后一拍通常只完成一个选择或交接，不堆起身、绕桌、取物、返回、再道歉。\n\n【self_read】\n只按events从头读到尾，逐项核对brief。谁给谁什么、为什么改变判断、谁完成结尾选择，都必须从真实事件可见。转折必须有事实依据；微表情不代替前因。禁止桥段不要替换名字后重复。核对每个关键物的持有人和支撑面，确认时长可容纳对白与动作；不成立则先简化。不要输出自评分。\n\n【emotion】\n关系修复必须由具体行为承担代价，不能靠说教、突然认错或煽情事故替代动机。明确谁受哪句或哪个动作触动、态度如何改变；既不抢在刺激前反应，也不把所有表演塞到最后。"
+  },
+  "logical_task_id": "authorized-three-cycle:3bb174839388bae2199bf472180d6f241b35b326ae06971513d037cd1e6d5892:1",
+  "creative_focus": "",
+  "continuation_inputs_sha256": "3bb174839388bae2199bf472180d6f241b35b326ae06971513d037cd1e6d5892",
+  "material_sha256": "3bb174839388bae2199bf472180d6f241b35b326ae06971513d037cd1e6d5892",
+  "same_story": true,
+  "authorized_round": 1,
+  "parent_run": "D:\\IT\\ai_douyin\\data\\creative_workflows\\say_no_reviewed_segments_20260927",
+  "calls_started": 5,
+  "max_calls": 24,
+  "max_total_tokens": 250000,
+  "max_revisions": 2,
+  "budget_policy_version": "v4_20260923",
+  "max_contract_repairs": 2,
+  "contract_repairs_used": 2,
+  "format_repairs_used": 0,
+  "revision_rounds": 0,
+  "revision_committed": [],
+  "stages": [
+    {
+      "name": "static_visual_manifest",
+      "role": "director",
+      "input_sha256": "54afc42cd4dbe1dbdcea5ae85b7cae148aad0983245369033c1e750f994ef62e",
+      "output_sha256": "2ea1a2ee0e7eb3167639176c8b62de714eb1a3b876502855f59cfd32ee9b4f64",
+      "context_budget": {
+        "schema": "creative_context_budget/v1",
+        "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+        "serialized_input_characters": 4604,
+        "estimated_input_tokens": 4604,
+        "requested_max_output_tokens": 20000,
+        "estimated_total_tokens": 24604,
+        "provider": "minimax",
+        "model": "MiniMax-M3",
+        "planning_context_window_tokens": 512000,
+        "advertised_context_window_tokens": 1000000,
+        "source_url": "https://www.minimax.io/models/text/m3",
+        "verified_on": "2026-09-24"
+      },
+      "usage": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070989b01c78b402655ca7fb3b8af6ef",
+        "finish_reason": "stop",
+        "thinking_mode": "disabled",
+        "output_mode": "content",
+        "prompt_tokens": 2175,
+        "completion_tokens": 606,
+        "total_tokens": 2781,
+        "logical_role": "director",
+        "workflow_stage": "static_visual_manifest",
+        "model_profile": "minimax_create_deepseek_review",
+        "transport_config_role": "writer"
+      }
+    },
+    {
+      "name": "director_state_plan__00",
+      "role": "director",
+      "input_sha256": "b442871232eb73f4346d67ff06777118e95d5657b2814a5e282f90060e481302",
+      "output_sha256": "97c0bfaf209034cee2b03f2ea0c4ac541030afe754d6aca48cf50e76c67877c6",
+      "context_budget": {
+        "schema": "creative_context_budget/v1",
+        "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+        "serialized_input_characters": 8562,
+        "estimated_input_tokens": 8562,
+        "requested_max_output_tokens": 20000,
+        "estimated_total_tokens": 28562,
+        "provider": "minimax",
+        "model": "MiniMax-M3",
+        "planning_context_window_tokens": 512000,
+        "advertised_context_window_tokens": 1000000,
+        "source_url": "https://www.minimax.io/models/text/m3",
+        "verified_on": "2026-09-24"
+      },
+      "usage": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "070989b4dd3874249cd7598e2ca810f1",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 4880,
+        "completion_tokens": 3886,
+        "total_tokens": 8766,
+        "logical_role": "director",
+        "workflow_stage": "director_state_plan__00",
+        "model_profile": "minimax_create_deepseek_review",
+        "transport_config_role": "writer"
+      }
+    }
+  ],
+  "assistant_review_required": true,
+  "text_pass_sequence": 0,
+  "video_pass_sequence": 0,
+  "reported_tokens": 83460,
+  "error_type": "CreativeContractError",
+  "error": "writer_check__state_plan_00: coverage引用路径或逐字证据无效: {'path': 'shots.shots.0.end_state.P01(文件夹).holder', 'quote': 'C02'}；共享格式与契约修复预算已满"
+}

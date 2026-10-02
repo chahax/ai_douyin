@@ -1,0 +1,178 @@
+{
+  "schema_version": "creative_baseline_metrics/v1",
+  "source_hash": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+  "created_at": "2026-09-28T13:58:18.903886+00:00",
+  "implementation_status": "historical_usage_partial",
+  "calls": [
+    {
+      "source_path": "data/production_trials/say_no_action_one_production_cycle_20260928/round_01/director_state_plan__00.json",
+      "response_id": "070993c6a9ca3743b75c8a210a472192",
+      "provider": "minimax",
+      "requested_model": "MiniMax-M3",
+      "response_model": "MiniMax-M3",
+      "input_tokens": 4417,
+      "output_tokens": 14970,
+      "total_tokens": 19387,
+      "cache_hit_input_tokens": null,
+      "cache_miss_input_tokens": null,
+      "reasoning_tokens": null,
+      "reasoning_included_in_output": null,
+      "requested_at": "2026-09-28T12:42:43.855601+00:00",
+      "completed_at": null,
+      "latency_seconds": null,
+      "price_version": null,
+      "currency": null,
+      "billed_amount": null,
+      "estimated_amount": null,
+      "amount_status": "unknown",
+      "usage_receipt_available": true,
+      "retry_or_repair_parent": null,
+      "cache_scenario": "natural_unknown"
+    },
+    {
+      "source_path": "data/production_trials/say_no_action_one_production_cycle_20260928/round_01/static_visual_manifest.json",
+      "response_id": "070993c1baad71dff48f2fd8de18ed53",
+      "provider": "minimax",
+      "requested_model": "MiniMax-M3",
+      "response_model": "MiniMax-M3",
+      "input_tokens": 2175,
+      "output_tokens": 1041,
+      "total_tokens": 3216,
+      "cache_hit_input_tokens": null,
+      "cache_miss_input_tokens": null,
+      "reasoning_tokens": null,
+      "reasoning_included_in_output": null,
+      "requested_at": "2026-09-28T12:42:35.189649+00:00",
+      "completed_at": null,
+      "latency_seconds": null,
+      "price_version": null,
+      "currency": null,
+      "billed_amount": null,
+      "estimated_amount": null,
+      "amount_status": "unknown",
+      "usage_receipt_available": true,
+      "retry_or_repair_parent": null,
+      "cache_scenario": "natural_unknown"
+    },
+    {
+      "source_path": "data/production_trials/say_no_action_one_production_cycle_20260928/round_01/writer_check__state_plan_00.json",
+      "response_id": "5c2534c3-321c-4c04-8723-cf4d8bf904d6",
+      "provider": "deepseek",
+      "requested_model": "deepseek-flash",
+      "response_model": "deepseek-flash",
+      "input_tokens": 33463,
+      "output_tokens": 3159,
+      "total_tokens": 36622,
+      "cache_hit_input_tokens": null,
+      "cache_miss_input_tokens": null,
+      "reasoning_tokens": null,
+      "reasoning_included_in_output": null,
+      "requested_at": "2026-09-28T12:44:43.160313+00:00",
+      "completed_at": null,
+      "latency_seconds": null,
+      "price_version": null,
+      "currency": null,
+      "billed_amount": null,
+      "estimated_amount": null,
+      "amount_status": "unknown",
+      "usage_receipt_available": true,
+      "retry_or_repair_parent": null,
+      "cache_scenario": "natural_unknown"
+    },
+    {
+      "source_path": "data/production_trials/say_no_action_one_production_cycle_20260928/round_01/writer_check__state_plan_00__contract_repair.json",
+      "response_id": "a9340802-c794-4c9a-942e-a777f1ada641",
+      "provider": "deepseek",
+      "requested_model": "deepseek-flash",
+      "response_model": "deepseek-flash",
+      "input_tokens": 38623,
+      "output_tokens": 3738,
+      "total_tokens": 42361,
+      "cache_hit_input_tokens": null,
+      "cache_miss_input_tokens": null,
+      "reasoning_tokens": null,
+      "reasoning_included_in_output": null,
+      "requested_at": null,
+      "completed_at": null,
+      "latency_seconds": null,
+      "price_version": null,
+      "currency": null,
+      "billed_amount": null,
+      "estimated_amount": null,
+      "amount_status": "unknown",
+      "usage_receipt_available": true,
+      "retry_or_repair_parent": "519aca60a286b016ddcc33c791e4646532afc8394e7665ad7fccc7c93392b42b",
+      "cache_scenario": "natural_unknown"
+    }
+  ],
+  "human_sessions": [
+    {
+      "role": "assistant_and_user_review",
+      "active_minutes": null,
+      "wait_minutes": null,
+      "hourly_rate": null,
+      "currency": null,
+      "source": "not_measured; no retrospective guess"
+    }
+  ],
+  "cost": {
+    "call_count": 4,
+    "providers": {
+      "deepseek": {
+        "calls": 2,
+        "input_tokens": 72086,
+        "output_tokens": 6897,
+        "reported_total_tokens": 78983,
+        "cost_by_currency": {
+          "unknown": {
+            "amount": null,
+            "actual_only": false,
+            "missing_amount_calls": 2
+          }
+        }
+      },
+      "minimax": {
+        "calls": 2,
+        "input_tokens": 6592,
+        "output_tokens": 16011,
+        "reported_total_tokens": 22603,
+        "cost_by_currency": {
+          "unknown": {
+            "amount": null,
+            "actual_only": false,
+            "missing_amount_calls": 2
+          }
+        }
+      }
+    },
+    "qualified_handoffs": 0,
+    "model_cost": null,
+    "total_cost_including_active_human": null,
+    "currency": null,
+    "human_active_minutes": null,
+    "human_wait_minutes": null,
+    "cost_per_qualified_handoff": null,
+    "missing_fields_are_zero": false,
+    "cross_currency_conversion": "not_performed; explicit dated FX required",
+    "actual_cost_reduction_verified": false
+  },
+  "review_status": "failed; zero qualified handoffs",
+  "raw_sources": [
+    {
+      "path": "data/production_trials/say_no_action_one_production_cycle_20260928/round_01/director_state_plan__00.json",
+      "sha256": "566711778d8a8fafc9786ecab73224e24e7700026fee7f0f24f957a94c46138a"
+    },
+    {
+      "path": "data/production_trials/say_no_action_one_production_cycle_20260928/round_01/static_visual_manifest.json",
+      "sha256": "0d920c1c82b11f1b0f796a5f9397c3ca4331440e6cd2c77fcc48e3ed160adcd4"
+    },
+    {
+      "path": "data/production_trials/say_no_action_one_production_cycle_20260928/round_01/writer_check__state_plan_00.json",
+      "sha256": "a4527625b0012a668d689430807efd493697635e01e237297471cb73bb1390bf"
+    },
+    {
+      "path": "data/production_trials/say_no_action_one_production_cycle_20260928/round_01/writer_check__state_plan_00__contract_repair.json",
+      "sha256": "d5346cd63146ea433f890a90f18e2a94a4b8ab5fa4f1786d3412d6a7133de471"
+    }
+  ]
+}

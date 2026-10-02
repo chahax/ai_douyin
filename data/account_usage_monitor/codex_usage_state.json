@@ -1,0 +1,28 @@
+{
+  "schema": "thread_codex_usage_monitor/v1",
+  "automation_id": "codex",
+  "checked_at_utc": "2026-10-02T21:00:28Z",
+  "source": "get_usage_limits",
+  "scope": "Codex account shared quota; task execution checks",
+  "thresholds_remaining_percent": [
+    20,
+    10
+  ],
+  "ordinary_usage_allowed": true,
+  "rate_limit_reached_type": null,
+  "windows": [
+    {
+      "limit_id": "codex",
+      "window": "primary",
+      "used_percent": 23,
+      "remaining_percent": 77,
+      "window_duration_minutes": 10080,
+      "resets_at_unix": 1791387957,
+      "resets_at_beijing": "2026-10-07 23:45:57 +08:00",
+      "notified_thresholds": []
+    }
+  ],
+  "missing_windows_are_unknown": true,
+  "project_budget_reset": false,
+  "task_authorization_expanded": false
+}

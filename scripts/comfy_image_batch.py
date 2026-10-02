@@ -18,13 +18,13 @@ def _request_json(url: str, payload: dict | None = None) -> dict:
         return json.loads(response.read())
 
 
-def _workflow(*, checkpoint: str, prompt: str, seed: int, width: int, height: int,
+def _workflow(*, checkpoint: str, prompt: str, negative_prompt: str = "", seed: int, width: int, height: int,
               steps: int, cfg: float, sampler: str, scheduler: str,
               filename_prefix: str) -> dict:
     return {
         "1": {"class_type": "CheckpointLoaderSimple", "inputs": {"ckpt_name": checkpoint}},
         "2": {"class_type": "CLIPTextEncode", "inputs": {"text": prompt, "clip": ["1", 1]}},
-        "3": {"class_type": "CLIPTextEncode", "inputs": {"text": "", "clip": ["1", 1]}},
+        "3": {"class_type": "CLIPTextEncode", "inputs": {"text": negative_prompt, "clip": ["1", 1]}},
         "4": {"class_type": "EmptyLatentImage", "inputs": {"width": width, "height": height, "batch_size": 1}},
         "5": {
             "class_type": "KSampler",
@@ -104,6 +104,7 @@ def main() -> None:
         workflow = _workflow(
             checkpoint=settings["checkpoint"],
             prompt=overrides.get(item["id"], {}).get("prompt", item["prompt"]),
+            negative_prompt=overrides.get(item["id"], {}).get("negative_prompt", project.get("negative_prompt", "")),
             seed=item["seed"] + args.seed_offset,
             width=item.get("width", settings["width"]), height=item.get("height", settings["height"]),
             steps=settings["steps"], cfg=settings["cfg"], sampler=settings["sampler"],

@@ -1,0 +1,11 @@
+{
+  "authorization": "用户2026-10-03同意前述合同与分模块推进，并明确：行minmax额度直接使用不用申请。新增MiniMax文本调用不逐次申请；累计账本及原500000总token上限继续承接。原MiniMax创作、DeepSeek全文审查分工按已同意的流程保持。",
+  "starting_spend": {
+    "calls_started": 42,
+    "reported_tokens": 398343,
+    "max_total_tokens": 500000
+  },
+  "assistant_batch_call_ceiling": 16,
+  "ceiling_is_local_execution_guard_not_user_specified_quantity": true,
+  "created_at": "2026-10-02T20:16:05.354503+00:00"
+}

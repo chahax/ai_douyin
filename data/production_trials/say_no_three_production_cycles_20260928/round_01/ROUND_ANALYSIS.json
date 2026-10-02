@@ -1,0 +1,22 @@
+{
+  "schema": "production_round_analysis/v1",
+  "analysis_complete": true,
+  "round": 1,
+  "passed": false,
+  "reached": "director_state_plan__00",
+  "calls_started": 4,
+  "reported_tokens": 23297,
+  "root_causes": [
+    "全片计划生成仍使用自由动作+长字符串from/to，存在坐姿、持有与归属混淆",
+    "无变化记录和重叠事件逐个触发全对象返修，第二次返修JSON损坏",
+    "状态字段和自由表演之间仍有隐含重复权威，B2情绪字段夹带视线变化"
+  ],
+  "actual_content_failures": [
+    "陈禾初始坐姿但B4再次坐下",
+    "文件夹桌面状态却holder=陈禾，放回桌面后未清空holder",
+    "B2自由文字先移视线、B3又抬眼；返修还把B2误写成已听见接受",
+    "B4离开发生在道别对白同时，未按已审剧本顺序"
+  ],
+  "repair_for_next_round": "新typed动作计划v2：坐/站/拿/放/交接前置条件由程序核验；from由程序读取，普通保持不强制付费返修；MiniMax adaptive+结构化工具输出用于计划及repair。旧轮回执不动。",
+  "media_calls": 0
+}

@@ -1,3 +1,5 @@
+from types import SimpleNamespace
+
 from src.platform_adapter.douyin_adapter import DouyinAdapter
 from src.platform_adapter.models import VideoItem, VideoStats, VideoStatus
 
@@ -42,6 +44,11 @@ def test_sync_videos_records_trend_metric_snapshot(monkeypatch) -> None:
     trend_repository = _TrendRepository()
     adapter = object.__new__(DouyinAdapter)
     adapter.sync_workflow = _SyncWorkflow(video)
+    adapter.runtime_context = SimpleNamespace(
+        account_uuid="account:501",
+        account_key="account01",
+    )
+    adapter._identity_verified = True
 
     monkeypatch.setattr("src.services.video_service.save_video", lambda _video: True)
     monkeypatch.setattr(
@@ -50,7 +57,7 @@ def test_sync_videos_records_trend_metric_snapshot(monkeypatch) -> None:
     )
     monkeypatch.setattr(
         "src.services.video_service.mark_videos_deleted",
-        lambda _ids, allow_empty=False: 0,
+        lambda _ids, allow_empty=False, **kwargs: 0,
     )
     monkeypatch.setattr("src.services.sync_history_service.record_sync", lambda *args: None)
     monkeypatch.setattr(

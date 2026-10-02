@@ -1,0 +1,125 @@
+{
+  "schema_version": "creative_rule_source_map/v1",
+  "source_hash": "efef00040687c3cdc82f2715df2d3911a3b14f7114e5da4f2efd2c5fd05042a8",
+  "created_at": "2026-09-28T13:49:21.882337+00:00",
+  "implementation_status": "offline_implemented_not_production_validated",
+  "items": [
+    {
+      "rule_id": "STATE.PRECONDITION.001",
+      "sources": [
+        {
+          "path": "src/content_factory/creative_state_plan_v2.py",
+          "sha256": "98e089b56744a04521e4fff6d197f0a479326c0b874761014eb5c166873d62e9",
+          "anchor": "def _apply_operation("
+        }
+      ],
+      "checker": "src/content_factory/creative_state_plan_v2.py:_apply_operation",
+      "field_paths": [
+        "state_plan.initial_state.*.posture",
+        "state_plan.beats[*].groups[*].operations"
+      ],
+      "status": "active"
+    },
+    {
+      "rule_id": "TIME.HOLD.001",
+      "sources": [
+        {
+          "path": "src/content_factory/creative_action_plan_v1.py",
+          "sha256": "cfc455b9f2da0deb39791baf808547fc9f904613a58396fe52114962489bfda1",
+          "anchor": "def schedule_action_plan("
+        }
+      ],
+      "checker": "src/content_factory/creative_action_plan_v1.py:schedule_action_plan",
+      "field_paths": [
+        "state_plan.beats[*].groups[*].duration_seconds"
+      ],
+      "status": "active"
+    },
+    {
+      "rule_id": "SOURCE.BIND.001",
+      "sources": [
+        {
+          "path": "src/content_factory/creative_state_plan_binding.py",
+          "sha256": "eed0d28169391754df5eabfd62d06b9b53d06f6a4061782118182704f50936a6",
+          "anchor": "def bind_reviewed_state_plan("
+        }
+      ],
+      "checker": "src/content_factory/creative_state_plan_binding.py:bind_reviewed_state_plan",
+      "field_paths": [
+        "state_plan",
+        "script",
+        "shots"
+      ],
+      "status": "active"
+    },
+    {
+      "rule_id": "EVIDENCE.BIND.001",
+      "sources": [
+        {
+          "path": "src/content_factory/creative_review_evidence_ids.py",
+          "sha256": "8ee16a20165ae5e6a9a90adbddc2a1af024fbba8b79c359bb1b8e82cb6e823f9",
+          "anchor": "def expand_review_ids("
+        }
+      ],
+      "checker": "src/content_factory/creative_review_evidence_ids.py:expand_review_ids",
+      "field_paths": [
+        "shots.shots[*].start_state"
+      ],
+      "status": "active"
+    },
+    {
+      "rule_id": "ACT.GAZE.001",
+      "sources": [
+        {
+          "path": "docs/VIDEO_PRODUCTION_ROOT_CAUSE_AND_CHANGE_PLAN_20260928.md",
+          "sha256": "efef00040687c3cdc82f2715df2d3911a3b14f7114e5da4f2efd2c5fd05042a8",
+          "anchor": "ACT"
+        }
+      ],
+      "checker": "proposed:check_gaze_text_consistency",
+      "field_paths": [
+        "state_plan.beats[*].groups[*].operations",
+        "state_plan.beats[*].dialogue_performance"
+      ],
+      "status": "proposed"
+    },
+    {
+      "rule_id": "CUT.COMPLETION.001",
+      "sources": [
+        {
+          "path": "docs/VIDEO_PRODUCTION_ROOT_CAUSE_AND_CHANGE_PLAN_20260928.md",
+          "sha256": "efef00040687c3cdc82f2715df2d3911a3b14f7114e5da4f2efd2c5fd05042a8",
+          "anchor": "CUT"
+        }
+      ],
+      "checker": "proposed:check_camera_cut_consistency",
+      "field_paths": [
+        "state_plan.beats[*].camera",
+        "state_plan.beats[*].cut_reason"
+      ],
+      "status": "proposed"
+    },
+    {
+      "rule_id": "SPACE.SEAT.001",
+      "sources": [
+        {
+          "path": "docs/VIDEO_PRODUCTION_ROOT_CAUSE_AND_CHANGE_PLAN_20260928.md",
+          "sha256": "efef00040687c3cdc82f2715df2d3911a3b14f7114e5da4f2efd2c5fd05042a8",
+          "anchor": "统一事实来源"
+        }
+      ],
+      "checker": "proposed:check_sit_preconditions",
+      "field_paths": [
+        "state_plan.initial_state",
+        "state_plan.beats[*].groups[*].operations"
+      ],
+      "status": "proposed"
+    }
+  ],
+  "exclusions": [
+    {
+      "scope": "Other prompts, legacy protocols, publishing/media/audio rules",
+      "reason": "Not exhaustively inventoried in this P0 pack; existing execution remains authoritative; requires separate inventory."
+    }
+  ]
+}

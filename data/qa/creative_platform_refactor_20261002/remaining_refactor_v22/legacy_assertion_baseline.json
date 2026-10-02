@@ -1,0 +1,39 @@
+{
+  "baseline_matches_frozen_v21": true,
+  "baseline_workflow_sha256": "c95d7e37bbd89df62960b03344d9cc3f6926cfc3b0b55a2f354dc65c5199d673",
+  "preexisting_failures": [
+    {
+      "case": "review_v1",
+      "failure_type": "AssertionError",
+      "prompt_sha256": "15b7f13cdf9c92b7be915c8804cf719f3a889464b1dcf34b86dc8009c3bf0a18",
+      "has_explicit_narrative_layer": true
+    },
+    {
+      "case": "review_v2",
+      "failure_type": "AssertionError",
+      "prompt_sha256": "d41e1788c39c8b1e9ee3b4a83f33cd2f1384c344cebf74b37bfc7050ff5a9e67",
+      "has_explicit_narrative_layer": true
+    },
+    {
+      "case": "v4",
+      "failure_type": "AssertionError",
+      "prompt_sha256": "b4d8703e116c4b39303642bc5ccfe0c37456320e0fe7aba9557268b6b15d90db",
+      "has_explicit_narrative_layer": true
+    },
+    {
+      "case": "v5",
+      "failure_type": "AssertionError",
+      "prompt_sha256": "e4942b551b8989acca01e693cd8319beccbe7829564ea9849c1f215f5d0a07d1",
+      "has_explicit_narrative_layer": true
+    },
+    {
+      "case": "v4_in_v5",
+      "failure_type": "AssertionError",
+      "prompt_sha256": "b4d8703e116c4b39303642bc5ccfe0c37456320e0fe7aba9557268b6b15d90db",
+      "has_explicit_narrative_layer": true
+    }
+  ],
+  "model_calls_are_fixtures": true,
+  "network_disabled": true,
+  "actual_historical_runs_modified": false
+}

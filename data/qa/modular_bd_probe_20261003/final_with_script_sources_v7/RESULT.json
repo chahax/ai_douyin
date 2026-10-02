@@ -1,0 +1,20 @@
+{
+  "exit_code": 0,
+  "files": [
+    "tests/test_creative_linear_script_v2.py",
+    "tests/test_linear_script_probe_v3.py",
+    "tests/test_linear_script_probe_v5.py",
+    "tests/test_linear_script_probe_v6.py",
+    "tests/test_modular_shot_bridge_v2.py",
+    "tests/test_modular_step_shot_contract_v3.py",
+    "tests/test_modular_bd_probe_runner.py",
+    "tests/test_creative_modular_tool_export.py",
+    "tests/test_creative_modular_contract.py",
+    "tests/test_creative_full_script_revision.py",
+    "tests/test_creative_response_contract.py",
+    "tests/test_minimax_rule_probe_runner.py",
+    "tests/test_creative_script_review_sources_v7.py"
+  ],
+  "network_calls": 0,
+  "production_quality_passed": false
+}

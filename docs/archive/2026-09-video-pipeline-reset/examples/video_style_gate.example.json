@@ -1,0 +1,28 @@
+{
+  "template": "video_style_gate/v1",
+  "id": "style_gate_example",
+  "reference": {
+    "id": "approved_style",
+    "path": "../../data/qa/style_gate/reference.png",
+    "region": [0, 0, 1, 1]
+  },
+  "candidates": [
+    {
+      "id": "shot_01",
+      "path": "../../data/qa/style_gate/shot_01.mp4",
+      "control_report": "../../data/qa/style_gate/shot_01.control.report.json",
+      "region": [0, 0, 1, 1]
+    }
+  ],
+  "sampling": {
+    "sample_count": 5,
+    "fingerprint_size": 128
+  },
+  "acceptance": {
+    "maximum_style_distance": 0.2,
+    "maximum_palette_distance": 0.28,
+    "maximum_edge_density_delta": 0.12,
+    "maximum_edge_strength_delta": 0.035,
+    "maximum_temporal_drift": 0.1
+  }
+}

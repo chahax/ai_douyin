@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.738" timestamp="2026-10-02T20:58:18.787506+08:00" hostname="DESKTOP-DP111LI"><testcase classname="data.qa.creative_platform_refactor_20261002.feedback_consistency_v23.baseline.test_inflight_feedback_contract" name="test_must_fix_during_model_call_survives_runner_save" time="0.492"><failure message="AssertionError: runner save discarded accepted user must_fix feedback&#10;assert False">data\qa\creative_platform_refactor_20261002\feedback_consistency_v23\baseline\test_inflight_feedback_contract.py:15: in test_must_fix_during_model_call_survives_runner_save
+    assert proof['feedback_present_after_call'], 'runner save discarded accepted user must_fix feedback'
+E   AssertionError: runner save discarded accepted user must_fix feedback
+E   assert False</failure></testcase></testsuite></testsuites>

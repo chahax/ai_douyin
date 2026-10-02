@@ -1,0 +1,8 @@
+{
+  "template": "video_review_packet/v1",
+  "id": "sonic_anime_existing_probe",
+  "video_path": "D:\\IT\\AI_vido\\ComfyUI\\output\\sonic_test\\sonic_api_test_00001_.mp4",
+  "output_dir": "D:\\IT\\ai_douyin\\data\\qa\\sonic_anime_existing_probe_review",
+  "sample_count": 5,
+  "reference_image": "D:\\IT\\AI_vido\\ComfyUI\\input\\sonic_test_anime1.png"
+}

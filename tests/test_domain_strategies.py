@@ -117,6 +117,17 @@ def test_legal_and_novel_build_different_query_and_brief_contracts() -> None:
     assert any("证据" in item for item in legal_brief.script_structure)
     assert any("反转" in item for item in novel_brief.script_structure)
     assert "授权章节" in " ".join(novel_brief.risks)
+    assert novel_brief.source_scope["highlight_analysis_required"] is True
+    assert novel_brief.source_scope["script_driver"] == "novel_highlight"
+    assert novel_brief.source_scope["available_script_drivers"] == [
+        "novel_highlight",
+        "reference_video",
+    ]
+    assert novel_brief.source_scope["video_duration_seconds"] == {
+        "minimum": 45,
+        "default": 60,
+        "maximum": 180,
+    }
 
 
 def test_strategy_rejects_unknown_domain_config_fields() -> None:
@@ -175,7 +186,7 @@ def test_analyzer_is_account_scoped_and_uses_domain_specific_briefs() -> None:
     assert legal_briefs[0].source_scope["domain"] == "legal"
     assert novel_briefs[0].source_scope["domain"] == "novel"
     assert "处理结果" in legal_briefs[0].recommended_hook
-    assert "秘密" in novel_briefs[0].recommended_hook
+    assert "授权原文" in novel_briefs[0].recommended_hook
 
 
 class EducationConfig(BaseModel):

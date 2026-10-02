@@ -1,0 +1,11 @@
+{
+  "template": "video_review_packet/v1",
+  "id": "xiaojie_liveportrait_voiceover_v1",
+  "video_path": "D:\\IT\\ai_douyin\\data\\qa\\liveportrait_voiceover_v1\\xiaojie_liveportrait_voiceover_v1.mp4",
+  "output_dir": "D:\\IT\\ai_douyin\\data\\qa\\liveportrait_voiceover_v1\\review",
+  "sample_count": 5,
+  "plan_report": "D:\\IT\\ai_douyin\\data\\qa\\video_control_plan.example.report.json",
+  "shot_id": "anime_voiceover",
+  "control_report": "D:\\IT\\ai_douyin\\data\\qa\\liveportrait_voiceover_v1.control.report.json",
+  "reference_image": "D:\\IT\\AI_vido\\ComfyUI\\input\\liveportrait_xiaojie_3q.png"
+}

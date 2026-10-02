@@ -1,0 +1,21 @@
+{
+  "schema": "modular_trial_stage_stop/v1",
+  "status": "needs_attention",
+  "script_call": 48,
+  "full_review_call": 49,
+  "review_status": "interface_rejected",
+  "review_fault": "RESPONSE_TRUNCATED",
+  "partial_review_not_adopted": true,
+  "adoptable_script": false,
+  "director_plan_complete": false,
+  "local_physical_performance_complete": false,
+  "production_handoff_complete": false,
+  "remaining_reported_tokens": 9087,
+  "budget_reset": false,
+  "media_calls": 0,
+  "resume_requirements": [
+    "complete evidence-valid full review without salvaging truncated response",
+    "source-step-bound typed operations and physical compiler trace equivalence",
+    "preflight inherited actual ledger and supported contract before any future call"
+  ]
+}

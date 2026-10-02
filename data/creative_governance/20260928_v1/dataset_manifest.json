@@ -1,0 +1,647 @@
+{
+  "schema_version": "creative_dataset_manifest/v1",
+  "source_hash": "efef00040687c3cdc82f2715df2d3911a3b14f7114e5da4f2efd2c5fd05042a8",
+  "created_at": "2026-09-28T13:49:21.882337+00:00",
+  "implementation_status": "candidate_dataset_incomplete",
+  "cases": [
+    {
+      "case_id": "R01_BAD",
+      "category": "interaction",
+      "case_kind": "error",
+      "scenario": "B2对白表演写her gaze lifts from the folder back up toward Chen He as she finishes；B3又从文件夹抬眼，typed末态仍看文件夹。",
+      "expected_disposition": "failed",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "source_family": "say_no_20260928",
+      "independence_group": "say_no_20260928",
+      "split": "development",
+      "used_for_prompt_tuning": true,
+      "expected_issues": [
+        {
+          "issue_id": "R01",
+          "severity": "major"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "state_plan.beats.1.dialogue_performance",
+          "value": "Lin Yao delivers the refusal in a measured, even tone; mouth shapes the words cleanly without apology phrasing; breath held briefly before the line, then a small exhale after; her gaze lifts from the folder back up toward Chen He as she finishes."
+        },
+        {
+          "path": "state_plan.beats.2.groups.0",
+          "value": {
+            "id": "B3_G1",
+            "script_slot": "before",
+            "kind": "action",
+            "duration_seconds": 1.5,
+            "hold_subject": "",
+            "performance": "Lin Yao lifts her gaze slowly from the folder up to Chen He's eyes, a small deliberate motion; face careful, not apologetic.",
+            "operations": [
+              {
+                "kind": "gaze",
+                "actor": "C01",
+                "target": "",
+                "value": "Chen He's eyes"
+              }
+            ]
+          }
+        },
+        {
+          "path": "shots.shots.1.visible_performance",
+          "value": "0–2.5秒：C01 视线转向the folder in Chen He's hand；C01 可见情绪变为quiet pre-refusal tension；表演补充：Lin Yao's gaze drops from Chen He's eyes down to the kraft-brown folder in Chen He's hand; a small visible swallow, breath held a beat, shoulders settle very slightly as she decides.；该段结束状态变化：[{\"entity\": \"C01\", \"field\": \"gaze\", \"from\": \"toward Chen He's general direction as she readies to leave\", \"to\": \"the folder in Chen He's hand\"}, {\"entity\": \"C01\", \"field\": \"affect\", \"from\": \"polite readiness to say goodbye\", \"to\": \"quiet pre-refusal tension\"}]\n2.5–5.08571秒：；表演补充：Lin Yao delivers the refusal in a measured, even tone; mouth shapes the words cleanly without apology phrasing; breath held briefly before the line, then a small exhale after; her gaze lifts from the folder back up toward Chen He as she finishes.；该段结束状态变化：[]\n5.08571–9.08571秒：；表演补充：Chen He keeps her arm and hand softly in place; the folder hovers mid-air between them without being extended toward Lin Yao; her expression stays open and neutral, listening posture, no retreat and no push.；该段结束状态变化：[]\n9.08571–10秒：；表演补充：保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长；该段结束状态变化：[]\n对白2.5–5.08571秒：林遥：今天不行，我赶时间。\n情绪反应窗口2.5–5.08571秒，陈禾：Chen He hears the refusal land; she neither withdraws the folder nor pushes it forward — simply holds her ground and waits, face still neutral and open, no hurt on the surface."
+        }
+      ],
+      "source_paths": [
+        "state_plan.beats.1.dialogue_performance",
+        "state_plan.beats.2.groups.0",
+        "shots.shots.1.visible_performance"
+      ],
+      "production_validated": false
+    },
+    {
+      "case_id": "R01_OK_CANDIDATE",
+      "category": "interaction",
+      "case_kind": "correct",
+      "scenario": "Lin Yao keeps her gaze on the folder while delivering the refusal; only breathing and mouth movement change. The upward gaze belongs to the next beat.",
+      "expected_disposition": "passed",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "source_family": "say_no_20260928",
+      "independence_group": "say_no_20260928",
+      "split": "development",
+      "used_for_prompt_tuning": true,
+      "expected_issues": [],
+      "evidence": [
+        {
+          "local_revision_of": "state_plan.beats.1.dialogue_performance",
+          "replacement": "Lin Yao keeps her gaze on the folder while delivering the refusal; only breathing and mouth movement change. The upward gaze belongs to the next beat."
+        }
+      ],
+      "source_paths": [
+        "state_plan.beats.1.dialogue_performance",
+        "state_plan.beats.2.groups.0",
+        "shots.shots.1.visible_performance"
+      ],
+      "production_validated": false,
+      "scope": "Local conceptual counterexample only; not a complete repaired production plan"
+    },
+    {
+      "case_id": "R02_BAD",
+      "category": "camera",
+      "case_kind": "error",
+      "scenario": "camera要求cut on the moment the folder touches the desk surface；程序排时放夹于6.5秒完成，接受对白6.5–9.371秒，cut_reason却要求说完接受再切。",
+      "expected_disposition": "failed",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "source_family": "say_no_20260928",
+      "independence_group": "say_no_20260928",
+      "split": "development",
+      "used_for_prompt_tuning": true,
+      "expected_issues": [
+        {
+          "issue_id": "R02",
+          "severity": "major"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "state_plan.beats.2.camera",
+          "value": "Static two-shot, eye level; slow, almost imperceptible settling of framing on their held gaze; cut on the moment the folder touches the desk surface."
+        },
+        {
+          "path": "state_plan.beats.2.cut_reason",
+          "value": "Chen He places the folder down on her own desk and quietly accepts out loud — the held silence resolves into acceptance, refusal honored, relationship intact."
+        },
+        {
+          "path": "state_plan.beats.2.groups.2",
+          "value": {
+            "id": "B3_G3",
+            "script_slot": "before",
+            "kind": "action",
+            "duration_seconds": 3,
+            "hold_subject": "",
+            "performance": "Chen He's expression softens — brow and jaw ease; she brings her hand down and lays the kraft-brown folder flat on her own desk surface next to her other papers, releasing it without ceremony; no further gesture toward Lin Yao.",
+            "operations": [
+              {
+                "kind": "affect",
+                "actor": "C02",
+                "target": "",
+                "value": "quiet acceptance, softened face"
+              },
+              {
+                "kind": "place",
+                "actor": "C02",
+                "target": "P01",
+                "value": "on Chen He's desk (E01)"
+              }
+            ]
+          }
+        }
+      ],
+      "source_paths": [
+        "state_plan.beats.2.camera",
+        "state_plan.beats.2.cut_reason",
+        "state_plan.beats.2.groups.2"
+      ],
+      "production_validated": false
+    },
+    {
+      "case_id": "R02_OK_CANDIDATE",
+      "category": "camera",
+      "case_kind": "correct",
+      "scenario": "One continuous fixed shot; retain the frame through the complete acceptance line and its ending reaction. Camera contains no separate cut instruction.",
+      "expected_disposition": "passed",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "source_family": "say_no_20260928",
+      "independence_group": "say_no_20260928",
+      "split": "development",
+      "used_for_prompt_tuning": true,
+      "expected_issues": [],
+      "evidence": [
+        {
+          "local_revision_of": "state_plan.beats.2.camera",
+          "replacement": "One continuous fixed shot; retain the frame through the complete acceptance line and its ending reaction. Camera contains no separate cut instruction."
+        }
+      ],
+      "source_paths": [
+        "state_plan.beats.2.camera",
+        "state_plan.beats.2.cut_reason",
+        "state_plan.beats.2.groups.2"
+      ],
+      "production_validated": false,
+      "scope": "Local conceptual counterexample only; not a complete repaired production plan"
+    },
+    {
+      "case_id": "R03_BAD",
+      "category": "space",
+      "case_kind": "error",
+      "scenario": "performance要求steps behind her chair, and sits down，operations只有gaze/affect/sit，没有到可坐侧的位移。",
+      "expected_disposition": "failed",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "source_family": "say_no_20260928",
+      "independence_group": "say_no_20260928",
+      "split": "development",
+      "used_for_prompt_tuning": true,
+      "expected_issues": [
+        {
+          "issue_id": "R03",
+          "severity": "major"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "state_plan.beats.3.groups.2.performance",
+          "value": "Chen He turns her torso back to face her own desk, steps behind her chair, and sits down with a small settling motion; her hands come to rest near the papers on the desk surface, ready to resume working."
+        },
+        {
+          "path": "state_plan.beats.3.groups.2.operations",
+          "value": [
+            {
+              "kind": "gaze",
+              "actor": "C02",
+              "target": "",
+              "value": "her own desk surface"
+            },
+            {
+              "kind": "affect",
+              "actor": "C02",
+              "target": "",
+              "value": "calm focus, returning to work"
+            },
+            {
+              "kind": "sit",
+              "actor": "C02",
+              "target": "E02",
+              "value": "E02"
+            }
+          ]
+        }
+      ],
+      "source_paths": [
+        "state_plan.beats.3.groups.2.performance",
+        "state_plan.beats.3.groups.2.operations"
+      ],
+      "production_validated": false
+    },
+    {
+      "case_id": "R03_OK_CANDIDATE",
+      "category": "space",
+      "case_kind": "correct",
+      "scenario": "Chen He is standing on the accessible front side of the chair facing the desk; from that position she sits onto its seat without moving through the chair back.",
+      "expected_disposition": "passed",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "source_family": "say_no_20260928",
+      "independence_group": "say_no_20260928",
+      "split": "development",
+      "used_for_prompt_tuning": true,
+      "expected_issues": [],
+      "evidence": [
+        {
+          "local_revision_of": "state_plan.beats.3.groups.2.performance",
+          "replacement": "Chen He is standing on the accessible front side of the chair facing the desk; from that position she sits onto its seat without moving through the chair back."
+        }
+      ],
+      "source_paths": [
+        "state_plan.beats.3.groups.2.performance",
+        "state_plan.beats.3.groups.2.operations"
+      ],
+      "production_validated": false,
+      "scope": "Local conceptual counterexample only; not a complete repaired production plan"
+    },
+    {
+      "case_id": "STATE_OK",
+      "category": "action",
+      "case_kind": "correct",
+      "scenario": "standing -> sit on known seat",
+      "expected_disposition": "passed",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "source_family": "STATE_checker",
+      "independence_group": "STATE_checker",
+      "split": "development",
+      "used_for_prompt_tuning": true,
+      "expected_issues": [],
+      "evidence": [],
+      "source_paths": [],
+      "production_validated": false,
+      "scope": "Deterministic checker fixture; not an independent story or approved quality label"
+    },
+    {
+      "case_id": "STATE_BAD",
+      "category": "action",
+      "case_kind": "error",
+      "scenario": "sitting -> sit with no stand",
+      "expected_disposition": "failed",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "source_family": "STATE_checker",
+      "independence_group": "STATE_checker",
+      "split": "development",
+      "used_for_prompt_tuning": true,
+      "expected_issues": [
+        {
+          "issue_id": "STATE_BAD",
+          "severity": "major"
+        }
+      ],
+      "evidence": [],
+      "source_paths": [],
+      "production_validated": false,
+      "scope": "Deterministic checker fixture; not an independent story or approved quality label"
+    },
+    {
+      "case_id": "HOLD_OK",
+      "category": "action",
+      "case_kind": "correct",
+      "scenario": "turn 0..1; hold 1..3; stimulus 3",
+      "expected_disposition": "passed",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "source_family": "HOLD_checker",
+      "independence_group": "HOLD_checker",
+      "split": "development",
+      "used_for_prompt_tuning": true,
+      "expected_issues": [],
+      "evidence": [],
+      "source_paths": [],
+      "production_validated": false,
+      "scope": "Deterministic checker fixture; not an independent story or approved quality label"
+    },
+    {
+      "case_id": "HOLD_BAD",
+      "category": "action",
+      "case_kind": "error",
+      "scenario": "turn 0..1; declared hold 0..2; stimulus 2",
+      "expected_disposition": "failed",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "source_family": "HOLD_checker",
+      "independence_group": "HOLD_checker",
+      "split": "development",
+      "used_for_prompt_tuning": true,
+      "expected_issues": [
+        {
+          "issue_id": "HOLD_BAD",
+          "severity": "major"
+        }
+      ],
+      "evidence": [],
+      "source_paths": [],
+      "production_validated": false,
+      "scope": "Deterministic checker fixture; not an independent story or approved quality label"
+    },
+    {
+      "case_id": "SOURCE_OK",
+      "category": "interface",
+      "case_kind": "correct",
+      "scenario": "unchanged source and derived hashes",
+      "expected_disposition": "passed",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "source_family": "SOURCE_checker",
+      "independence_group": "SOURCE_checker",
+      "split": "development",
+      "used_for_prompt_tuning": true,
+      "expected_issues": [],
+      "evidence": [],
+      "source_paths": [],
+      "production_validated": false,
+      "scope": "Deterministic checker fixture; not an independent story or approved quality label"
+    },
+    {
+      "case_id": "SOURCE_BAD",
+      "category": "interface",
+      "case_kind": "error",
+      "scenario": "derived storyboard changed without source plan revision",
+      "expected_disposition": "failed",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "source_family": "SOURCE_checker",
+      "independence_group": "SOURCE_checker",
+      "split": "development",
+      "used_for_prompt_tuning": true,
+      "expected_issues": [
+        {
+          "issue_id": "SOURCE_BAD",
+          "severity": "major"
+        }
+      ],
+      "evidence": [],
+      "source_paths": [],
+      "production_validated": false,
+      "scope": "Deterministic checker fixture; not an independent story or approved quality label"
+    },
+    {
+      "case_id": "BOUNDARY_CONFLICT_1",
+      "category": "action",
+      "case_kind": "boundary",
+      "scenario": "同一镜要求固定10秒且必须连续拍满20秒",
+      "expected_disposition": "blocked",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "source_family": "BOUNDARY_CONFLICT_1",
+      "independence_group": "BOUNDARY_CONFLICT_1",
+      "split": "development",
+      "used_for_prompt_tuning": true,
+      "expected_issues": [],
+      "evidence": [],
+      "source_paths": [],
+      "production_validated": false,
+      "required_error_code": "REQUIREMENT_CONFLICT"
+    },
+    {
+      "case_id": "BOUNDARY_CONFLICT_2",
+      "category": "action",
+      "case_kind": "boundary",
+      "scenario": "只允许一名角色且必须同时呈现两名不同角色",
+      "expected_disposition": "blocked",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "source_family": "BOUNDARY_CONFLICT_2",
+      "independence_group": "BOUNDARY_CONFLICT_2",
+      "split": "development",
+      "used_for_prompt_tuning": true,
+      "expected_issues": [],
+      "evidence": [],
+      "source_paths": [],
+      "production_validated": false,
+      "required_error_code": "REQUIREMENT_CONFLICT"
+    },
+    {
+      "case_id": "BOUNDARY_EXPRESSION_1",
+      "category": "action",
+      "case_kind": "boundary",
+      "scenario": "当前协议仅支持站走，但源剧情必须连续爬行穿过矮通道",
+      "expected_disposition": "expression_unsupported",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "source_family": "BOUNDARY_EXPRESSION_1",
+      "independence_group": "BOUNDARY_EXPRESSION_1",
+      "split": "development",
+      "used_for_prompt_tuning": true,
+      "expected_issues": [],
+      "evidence": [],
+      "source_paths": [],
+      "production_validated": false,
+      "required_error_code": "EXPRESSION_UNSUPPORTED"
+    },
+    {
+      "case_id": "BOUNDARY_EXPRESSION_2",
+      "category": "action",
+      "case_kind": "boundary",
+      "scenario": "源剧本必须在关键递物动作中说完整一句话，而当前串行协议不能表达",
+      "expected_disposition": "expression_unsupported",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "source_family": "BOUNDARY_EXPRESSION_2",
+      "independence_group": "BOUNDARY_EXPRESSION_2",
+      "split": "development",
+      "used_for_prompt_tuning": true,
+      "expected_issues": [],
+      "evidence": [],
+      "source_paths": [],
+      "production_validated": false,
+      "required_error_code": "EXPRESSION_UNSUPPORTED"
+    },
+    {
+      "case_id": "BOUNDARY_SIMULTANEOUS_1",
+      "category": "action",
+      "case_kind": "boundary",
+      "scenario": "角色边走边问路，对方原地回答；现实可行，按协议能力通过或明确不兼容",
+      "expected_disposition": "passed_or_expression_unsupported",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "source_family": "BOUNDARY_SIMULTANEOUS_1",
+      "independence_group": "BOUNDARY_SIMULTANEOUS_1",
+      "split": "development",
+      "used_for_prompt_tuning": true,
+      "expected_issues": [],
+      "evidence": [],
+      "source_paths": [],
+      "production_validated": false,
+      "required_error_code": null
+    },
+    {
+      "case_id": "BOUNDARY_SIMULTANEOUS_2",
+      "category": "action",
+      "case_kind": "boundary",
+      "scenario": "甲讲述时乙喝水，不得把独立人物动作强制串行",
+      "expected_disposition": "passed_or_expression_unsupported",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "source_family": "BOUNDARY_SIMULTANEOUS_2",
+      "independence_group": "BOUNDARY_SIMULTANEOUS_2",
+      "split": "development",
+      "used_for_prompt_tuning": true,
+      "expected_issues": [],
+      "evidence": [],
+      "source_paths": [],
+      "production_validated": false,
+      "required_error_code": null
+    },
+    {
+      "case_id": "BOUNDARY_AMBIGUOUS_1",
+      "category": "space",
+      "case_kind": "boundary",
+      "scenario": "只说她把它还给她，双方人名和物品均未明确",
+      "expected_disposition": "review_required",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "source_family": "BOUNDARY_AMBIGUOUS_1",
+      "independence_group": "BOUNDARY_AMBIGUOUS_1",
+      "split": "development",
+      "used_for_prompt_tuning": true,
+      "expected_issues": [],
+      "evidence": [],
+      "source_paths": [],
+      "production_validated": false,
+      "required_error_code": null
+    },
+    {
+      "case_id": "BOUNDARY_AMBIGUOUS_2",
+      "category": "space",
+      "case_kind": "boundary",
+      "scenario": "空间仅写椅子附近，不能判断人物是否在可坐侧",
+      "expected_disposition": "review_required",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "source_family": "BOUNDARY_AMBIGUOUS_2",
+      "independence_group": "BOUNDARY_AMBIGUOUS_2",
+      "split": "development",
+      "used_for_prompt_tuning": true,
+      "expected_issues": [],
+      "evidence": [],
+      "source_paths": [],
+      "production_validated": false,
+      "required_error_code": null
+    },
+    {
+      "case_id": "BOUNDARY_CORRECT_1",
+      "category": "action",
+      "case_kind": "boundary",
+      "scenario": "固定摄影机保持原位，人物沿已留出的纵深通道离开",
+      "expected_disposition": "passed",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "source_family": "BOUNDARY_CORRECT_1",
+      "independence_group": "BOUNDARY_CORRECT_1",
+      "split": "development",
+      "used_for_prompt_tuning": true,
+      "expected_issues": [],
+      "evidence": [],
+      "source_paths": [],
+      "production_validated": false,
+      "required_error_code": null
+    },
+    {
+      "case_id": "BOUNDARY_CORRECT_2",
+      "category": "action",
+      "case_kind": "boundary",
+      "scenario": "第一帧站立，动作从0秒开始，不要求人为新增静止等待",
+      "expected_disposition": "passed",
+      "label_status": "candidate",
+      "adjudication": {
+        "approved_by": null,
+        "approved_at": null,
+        "candidate_author": "Codex assistant; requires independent human adjudication"
+      },
+      "source_family": "BOUNDARY_CORRECT_2",
+      "independence_group": "BOUNDARY_CORRECT_2",
+      "split": "development",
+      "used_for_prompt_tuning": true,
+      "expected_issues": [],
+      "evidence": [],
+      "source_paths": [],
+      "production_validated": false,
+      "required_error_code": null
+    }
+  ],
+  "independence_note": "R01-R03 and their correct variants share one production source. Checker variants and boundary scenarios do not establish 80 independently approved stories."
+}

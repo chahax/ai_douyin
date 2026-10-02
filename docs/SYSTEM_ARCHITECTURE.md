@@ -1,222 +1,68 @@
 ---
 doc_status: current
 doc_category: mainline
-last_reviewed: 2026-06-15
-model_usage: 当前系统架构说明。描述已落地结构与后续目标，避免把规划当成已实现。
+last_reviewed: 2026-10-02
 ---
 
-> 文档状态：当前主线文档，可以作为当前项目状态或实施依据。
+# 系统架构
 
-# AI Douyin 系统架构说明
+创作执行与账号运营分别组织。研究可作为创作输入；文本交接、媒体生成、用户审核和发布保持各自的
+版本、回执及执行门，任何阶段的技术成功都不自动代替下一阶段的审核。
 
-更新时间：2026-06-15
-
-## 项目定位
-
-`ai_douyin` 是一个本地运行的 AI 短视频内容生成与抖音运营自动化项目。当前主线目标是把"内容生产"、"平台操作"和"对话式 AI 调度"连成可用工具，而不是先做服务化平台。
-
-当前已落地的主链路：
+## 核心执行链
 
 ```text
-关键词/文本/文章
-  -> 书籍/RAG 知识
-  -> LLM 生成脚本
-  -> Edge-TTS 分段配音
-  -> Sonic 角色视频层
-  -> 动漫背景
-  -> FFmpeg 合成 Presenter 视频
-  -> 抖音浏览器自动化发布
-  -> 同步视频/评论
-  -> 自动回复
-
-对话入口（Agent / Skill）：
-  用户消息 -> Memory 分层记忆 -> Agent LLM 决策 -> Skill Registry -> 上述任一能力 -> 写回记忆
+原创简报 / 小说正文 / 已有视频分析 / 表达参考
+        ↓ 冻结材料、逻辑任务和预算
+候选与人物 → 导演简报 → 完整剧本生成与全文复审
+        ↓ 用户可暂停、比较和反馈；返修回到责任阶段
+整体导演安排 → 状态计划与分段分镜 → 请求编译和来源绑定
+        ↓ 明确执行当前段
+服务成功与文件保存 → awaiting_human_review → 用户决定
+        ↓ 批准当前原片与服务原始尾帧后继续紧邻下一段
+批准链合成 → 整片 awaiting_human_review → 用户整片批准
+        ↓ 独立交付和明确发布
+绑定账号浏览器发布 → 原作品独立核验 → 对应作品运营回接
 ```
 
-## 当前架构图
+## 模块与入口
 
-```mermaid
-graph TD
-    A["CLI main.py / Streamlit"] --> B["Services"]
-    A --> AG["Agent (对话入口)"]
-    AG --> SR["SkillRegistry"]
-    SR --> B
-    AG --> MM["Memory (分层)"]
-    AG --> SCH["Scheduler"]
-
-    B --> C["GenerationService"]
-    B --> D["AutoPublishService"]
-    B --> E["Video/Comment/Reply Services"]
-    C --> F["BookProcessor / WisdomRetriever"]
-    F --> G["ChromaDB"]
-    C --> H["WisdomExtractor / ScriptGenerator"]
-    H --> I["LLM Client / Providers"]
-    C --> J["TTSEngine"]
-    J --> K["GPT-SoVITS / Edge-TTS"]
-    C --> L["AudioMixer"]
-    D --> M["VideoComposer / PresenterPipeline"]
-    M --> N["FFmpeg"]
-    D --> O["DouyinAdapter"]
-    O --> P["Browser Automation"]
-    B --> R["FanqiePromotionService MVP"]
-    B --> WU["DouyinWarmupService"]
-    E --> Q["SQLite data/douyin.db"]
-    SCH --> CR["CronScheduler (APScheduler)"]
-    SCH --> TQ["TaskQueue Worker"]
-    TQ --> SR
-```
-
-## 模块职责
-
-| 模块 | 位置 | 职责 |
+| 边界 | 主要实现 | 职责 |
 |---|---|---|
-| CLI | `main.py` | 参数解析和服务调用 |
-| Web | `src/web/app.py` | Streamlit 管理后台（含调度管理页面） |
-| Agent | `src/agent/` | 对话入口、Skill 注册表、LLM 计划生成与用户确认拦截 |
-| Memory | `src/memory/` | 用户画像、会话/消息、分层记忆（对话/偏好/问题）、问题跟进 |
-| Scheduler | `src/scheduler/` | 定时任务（APScheduler）+ 任务队列 + 后台 Worker |
-| 服务层 | `src/services/` | 编排生成、发布、同步、评论、回复 |
-| 内容工厂 | `src/content_factory/` | 文案、TTS、混音、视频合成、微动作、Presenter 管线 |
-| 知识检索 | `src/rag_engine/` | 书籍导入和 Chroma 检索 |
-| 平台适配 | `src/platform_adapter/` | 抖音发布/同步/评论、抖音养号、番茄推广 MVP、浏览器会话封装 |
-| 共享层 | `src/shared/` | 配置、日志、数据库、LLM Provider |
-| 数据目录 | `data/` | 书籍、向量库、视频、浏览器登录态、SQLite |
+| 任务入口 | scripts/run_creative_workflow.py、creative_workflow_inputs | 材料、简报、逻辑任务登记及继承预算 |
+| 文本编排 | creative_workflow、creative_full_script_revision、creative_segmented_director | 编剧/导演调用、完整新稿、文本审核和分镜安排 |
+| 阶段控制 | creative_stage_runtime、creative_stage_contracts、creative_stage_debug | 同一运行器的自动/调试、冻结输入、版本、依赖和反馈 |
+| 状态提交 | creative_state_store、creative_execution_control | 跨进程短提交锁、有序不可变命令、状态版本、派发许可和消费证明 |
+| 媒体执行 | creative_media_workbench、creative_segment_execution、media_review_policy | 请求/候选来源链、预算、原 ID 查询、人工决定、批准链和合成 |
+| 交付发布 | creative_delivery、DouyinAdapter、PublishWorkflow | 成片批准、账号核验、主动声明、提交锁和独立作品核验 |
+| 质量证据 | creative_quality_evidence、creative_evaluation | 候选、人工金标、冻结留出、评分及原始用量 |
+| 创作页面 | creative_workflow_dashboard、creative_workbench_panel | 复用共享命令/服务；部分计划与回执仍需 CLI 或路径输入 |
+| 队列 | scheduler.queue、scheduler.runner | 原子领取、租约/心跳、未知结果与迟到提交保护 |
+| 研究与运营 | operations_accounts、trend_intelligence、platform_adapter | 身份绑定、调研、趋势、机会、作品与评论回接 |
 
-## Agent / Memory / Scheduler 概要
+以上 creative 模块位于 `src/content_factory/`，页面位于 `src/web/`。准确代码链接及命令副作用
+见[大模型导航](AI_PROJECT_GUIDE.md)。核心 runner 仍承载较多预算、验证与返修逻辑，F04 是继续拆分责任的增量工作。
 
-### 对话式入口：`src/agent/`
+## 状态与并发
 
-- `Agent.chat()`：接收用户消息 → 自动入库 MemoryLayer → 注入用户偏好 + 最近对话 → 调 LLM 生成回复或计划。
-- 计划拦截：`requires_confirmation=True` 的 Skill 由 LLM 输出 `​```plan ... ```​` 块，用户回复"确认/取消"才执行。
-- `SkillRegistry`：注册 18+ Skill（生成/发布/同步/评论/养号/番茄/知识库/记忆管理等），所有能力可由 LLM 调用。
-- 出错兜底：任何异常都会被 `_handle_chat_failure` 接住，记录到 ProblemMemory 并返回兜底文本，绝不抛到 UI。
+文本和媒体执行锁避免同任务重复派发，崩溃遗留锁仍须对账；它们与 v23 的短状态提交锁不同。
+短提交锁不跨模型等待持有，反馈、停止/恢复及运行器提交以同一命令顺序协调。
+旧内存保存先重放已接受命令；返修只解决冻结请求真正消费的反馈，新反馈继续待修。
 
-### 分层记忆：`src/memory/`
+未决反馈失效下游并阻止新的文本或绑定媒体提交；在途响应保留，原媒体 ID 查询继续可用。
+任务状态、产物版本、反馈和 resolution 可追溯，不通过删除回执或换目录恢复额度。
 
-- `MemoryManager`：用户画像（偏好、抖音账号绑定）、会话、消息、待确认计划、对话历史。
-- `MemoryLayerManager` / `ProblemMemory`：把消息自动分成 `preference / problem / discarded / normal`；`problem` 自动入 ProblemMemory；定期 cron 调用 `investigate_problems` 让 LLM 给调查摘要。
-- 滑动窗口：单会话保留最近 20 条 `normal` 消息，超出自动丢弃。
+## 治理与历史
 
-### 任务调度：`src/scheduler/`
+只有 `production_protocol=governed_production_v1` 的新任务绑定当前 v23 治理包；
+该协议需要 `evidence_review_v6`。普通入口及旧任务的真实配置以参数和任务状态为准。
+恢复不能更换已保存的协议、模型、提示词、审核版本或预算；源码/规则哈希不符时在调用前停止。
 
-- `models.py`：`ScheduledTask` / `TaskExecution` 两张表，状态机 `pending → running → completed/failed/cancelled`，支持 `max_retries` 重试。
-- `cron.py`：APScheduler 包装，定时/间隔触发；到期只入队，不直接执行。
-- `queue.py`：`TaskQueue.worker_loop()` 后台线程 `SELECT ... FOR UPDATE SKIP LOCKED` 抢任务，调 SkillRegistry 执行。
-- `ui.py`：Streamlit "任务调度"页面（仪表板 / 定时任务 / 队列 / 执行记录）。
-- `runner.py`：app.py 启动时静默拉起调度器和 Worker。
+工作目录文档可维护，冻结治理包和其中的实现文档快照保留。
+旧任务在原冻结环境恢复或只读；跨版本迁移和执行锁接管工具尚未提供完整操作闭环。
 
-## 视频生成架构
+## 验证范围
 
-### 动漫数字人主讲视频
-
-当前生产主线：
-
-```mermaid
-flowchart LR
-    A["keywords/text/article"] --> B["GenerationService / PresenterPipeline"]
-    B --> C["ScriptGenerator"]
-    C --> D["PresenterPipeline"]
-    D --> E["Edge-TTS segments"]
-    D --> F["Sonic character layer"]
-    D --> G["BackgroundResolver"]
-    G --> H["ComfyUI on demand or fallback background"]
-    E --> I["PresenterComposer / FFmpeg"]
-    F --> I
-    H --> I
-    I --> J["final mp4"]
-    J --> K["DouyinAdapter publish"]
-```
-
-关键点：
-
-- 管理后台和 `AutoPublishRequest.video_mode` 当前默认 `presenter_anime`。
-- ComfyUI 不随平台启动，只在 Presenter 背景生成阶段按需启动；生成完成后代码会尝试关闭。
-- ComfyUI 不可用时，背景会回退到本地兜底背景。
-- 单人口播模板视频仍由 `compose_video()` 支持，但现在是历史/兜底模式。
-
-### 双角色与序列视频
-
-已具备组件：
-
-- `DialogueGenerator`：生成 A/B 对话脚本。
-- `TTSEngine(provider_type="edge")`：生成双角色音频。
-- `compose_dual_character_video()`：叠加角色视频或 PNG。
-- `compose_dual_character_sequence_video()`：叠加两组 PNG 序列。
-- `micro_motion.py`：生成眨眼/呼吸角色序列。
-- `framepack_pipeline.py`：处理 FramePack 输出后的帧序列。
-
-当前状态：
-
-- 可本地验证成片。
-- 管理后台可选择 `dual_framepack_active`。
-- 需要补资源检查、模式选择和失败回退。
-
-## 平台运营架构
-
-抖音平台能力通过浏览器自动化实现：
-
-- 登录态：`data/browser/douyin/`
-- 发布：上传视频、标题、描述、话题、可见性
-- 同步：读取创作者后台视频列表
-- 评论：抓取评论，写入 SQLite
-- 回复：规则/LLM/默认回复，浏览器发送
-
-抖音账号养号支线：
-
-- 代码：`src/platform_adapter/douyin_warmup.py`
-- 数据：`data/douyin_warmup/`
-- 能力：多账号 profile、手动登录、低频观看、评论区浏览、可控视频/评论点赞
-
-番茄小说推广 MVP：
-
-- 代码：`src/platform_adapter/fanqie_promotion.py`
-- 浏览器会话：`data/browser/fanqie/`
-- 任务与章节素材：`data/fanqie_promotion/`
-- 能力：番茄达人中心登录、申请推广、获取小说章节、生成推广脚本和 Presenter 视频
-- 边界：页面 DOM、验证码/短信/安全验证和推广申请结果仍需人工实测；绑定抖音视频 ID 尚未实现
-
-数据落地：
-
-- `data/douyin.db`
-- 视频表、评论表、回复历史、规则、违禁词、用户配置等
-- 记忆系统：`user_profiles` / `conversation_sessions` / `conversation_messages` / `user_memory` / `problem_memory` / `conversation_memory`
-- 调度系统：`scheduled_tasks` / `task_executions`
-
-## 配置入口
-
-主要配置在 `.env` 和 `src/shared/config.py`：
-
-- LLM：`LLM_PROVIDER`、`OLLAMA_BASE_URL`、`OLLAMA_MODEL`
-- TTS：`TTS_PROVIDER`、`GPT_SOVITS_*`
-- 存储：`VIDEOS_DIR`、`BOOKS_DIR`、`CHROMA_PERSIST_DIR`
-- 抖音：`DOUYIN_*`
-- 浏览器：`BROWSER_*`
-
-## 当前缺口
-
-- 没有 FastAPI 服务入口。
-- 没有 Docker/compose 部署契约。
-- 双角色/FramePack 仍需要补素材检查和失败回退。
-- 番茄推广仍是 MVP CLI，尚未拆成正式 `src/novel_promotion/` 包，也未接管理后台。
-- Agent 当前只暴露在 Streamlit；尚未拆为独立 HTTP/WebSocket 服务。
-
-## 下一阶段架构建议
-
-Agent + Skill Registry + Scheduler 已经把"内容生产"和"平台操作"的所有能力挂在同一层，下一步优先补齐：
-
-```text
-FastAPI 网关 (HTTP/WebSocket)
-  -> 对话接口 ↔ Agent
-  -> 任务接口   ↔ TaskQueue.enqueue
-  -> 平台回调   ↔ Skill
-
-Scheduler
-  -> cron/interval trigger  （已落地）
-  -> 条件触发器（评论阈值/视频发布后） （已建模，未实现）
-```
-
-等 FastAPI 落地后再补：
-
-- 多用户隔离（目前 `user_id="default"`）
-- 鉴权与限流
-- 跨进程任务队列（目前 SQLite + SKIP LOCKED，仅适合单进程 Worker）
+核心流程和 F01 已有离线执行证据。完整工作台、真实内容质量和真实服务/媒体格式/浏览器发布
+仍按 F02–F07 单独验收，见[当前实现](CREATIVE_WORKFLOW_IMPLEMENTATION.md)。
+旧视频组合保留在[历史设计基线](VIDEO_PIPELINE_V2_BASELINE.md)及归档中，不能据代码存在恢复生产。

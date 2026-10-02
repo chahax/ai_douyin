@@ -1,0 +1,958 @@
+{
+  "schema": "narrative_multishot_bridge_offline_v2",
+  "status": "offline_compiled_pending_full_review",
+  "semantic_approval": false,
+  "source_script": {
+    "title": "离线多镜桥接样例",
+    "duration_seconds": 12,
+    "beats": [
+      {
+        "id": "B1",
+        "duration_seconds": 6,
+        "event": "乙拿起桌上的文件夹",
+        "dialogue": [
+          {
+            "speaker": "乙",
+            "text": "明天见。"
+          }
+        ]
+      },
+      {
+        "id": "B2",
+        "duration_seconds": 6,
+        "event": "乙坐下",
+        "dialogue": []
+      }
+    ]
+  },
+  "source_script_sha256": "a38ac1ceebe287e07073569be2d63419d6eae498c7b3ddd9c3f09d93e9c0c849",
+  "context_sha256": "419024f262d676b10474e75703d3a75c87043dd7fae5c437a20debe06c5c0916",
+  "direction_sha256": "4d5883b3eb925a76d9ae05b4b986b6943424ab1d44111c32ba0355c87747e246",
+  "derived_execution_script": {
+    "title": "离线多镜桥接样例",
+    "duration_seconds": 12,
+    "beats": [
+      {
+        "id": "B1_S1",
+        "duration_seconds": 3,
+        "event": "乙拿起桌上的文件夹",
+        "dialogue": [
+          {
+            "speaker": "乙",
+            "text": "明天见。"
+          }
+        ]
+      },
+      {
+        "id": "B1_S2",
+        "duration_seconds": 3,
+        "event": "观察原拍已发生刺激后的反应，原事件不再执行",
+        "dialogue": []
+      },
+      {
+        "id": "B2_S1",
+        "duration_seconds": 3,
+        "event": "乙坐下",
+        "dialogue": []
+      },
+      {
+        "id": "B2_S2",
+        "duration_seconds": 3,
+        "event": "观察原拍已发生刺激后的反应，原事件不再执行",
+        "dialogue": []
+      }
+    ]
+  },
+  "derived_action_plan": {
+    "schema": "whole_film_action_plan_v2",
+    "initial_state": {
+      "C01": {
+        "posture": "standing",
+        "position": "桌前",
+        "gaze": "C02",
+        "affect": "平静",
+        "facing": "桌面"
+      },
+      "C02": {
+        "posture": "standing",
+        "position": "桌旁",
+        "gaze": "C01",
+        "affect": "平静",
+        "facing": "桌面"
+      },
+      "P01": {
+        "holder": "none",
+        "location": "桌面"
+      }
+    },
+    "spatial_contract": {
+      "seats": [
+        {
+          "seat_id": "E02",
+          "access_positions": [
+            "桌旁"
+          ],
+          "required_facing": "桌面"
+        }
+      ]
+    },
+    "beats": [
+      {
+        "purpose": "原事件",
+        "composition": "行动中景",
+        "camera": "稳定单机位",
+        "dialogue_mode": "画内对白",
+        "cut_reason": "新增事实后观察影响",
+        "beat_id": "B1_S1",
+        "groups": [
+          {
+            "id": "G1_1",
+            "script_slot": "before",
+            "kind": "action",
+            "duration_seconds": 1,
+            "hold_subject": "",
+            "performance": "完成原事件",
+            "operations": [
+              {
+                "kind": "take",
+                "actor": "C02",
+                "target": "P01",
+                "value": "右手"
+              }
+            ]
+          }
+        ],
+        "dialogue_performance": "原说话人自然完整说出原台词",
+        "reaction": {
+          "anchor": "G1_1",
+          "subject": "C01",
+          "meaning": "观察影响"
+        },
+        "cut_after_event_id": "dialogue_0",
+        "completion_condition": "all_required_events_complete"
+      },
+      {
+        "purpose": "让反应可读",
+        "composition": "甲的反应近景",
+        "camera": "稳定单机位",
+        "dialogue_mode": "无对白",
+        "cut_reason": "新增事实后观察影响",
+        "beat_id": "B1_S2",
+        "groups": [
+          {
+            "id": "G1_2",
+            "script_slot": "before",
+            "kind": "hold",
+            "duration_seconds": 2,
+            "hold_subject": "C01",
+            "performance": "保持甲可读的反应",
+            "operations": []
+          }
+        ],
+        "dialogue_performance": "原说话人自然完整说出原台词",
+        "reaction": {
+          "anchor": "G1_2",
+          "subject": "C01",
+          "meaning": "观察影响"
+        },
+        "cut_after_event_id": "G1_2",
+        "completion_condition": "all_required_events_complete"
+      },
+      {
+        "purpose": "原事件",
+        "composition": "行动中景",
+        "camera": "稳定单机位",
+        "dialogue_mode": "无对白",
+        "cut_reason": "新增事实后观察影响",
+        "beat_id": "B2_S1",
+        "groups": [
+          {
+            "id": "G2_1",
+            "script_slot": "before",
+            "kind": "action",
+            "duration_seconds": 1,
+            "hold_subject": "",
+            "performance": "完成原事件",
+            "operations": [
+              {
+                "kind": "sit",
+                "actor": "C02",
+                "target": "E02",
+                "value": "椅上"
+              }
+            ]
+          }
+        ],
+        "dialogue_performance": "原说话人自然完整说出原台词",
+        "reaction": {
+          "anchor": "G2_1",
+          "subject": "C01",
+          "meaning": "观察影响"
+        },
+        "cut_after_event_id": "G2_1",
+        "completion_condition": "all_required_events_complete"
+      },
+      {
+        "purpose": "让反应可读",
+        "composition": "甲的反应近景",
+        "camera": "稳定单机位",
+        "dialogue_mode": "无对白",
+        "cut_reason": "新增事实后观察影响",
+        "beat_id": "B2_S2",
+        "groups": [
+          {
+            "id": "G2_2",
+            "script_slot": "before",
+            "kind": "hold",
+            "duration_seconds": 2,
+            "hold_subject": "C01",
+            "performance": "保持甲可读的反应",
+            "operations": []
+          }
+        ],
+        "dialogue_performance": "原说话人自然完整说出原台词",
+        "reaction": {
+          "anchor": "G2_2",
+          "subject": "C01",
+          "meaning": "观察影响"
+        },
+        "cut_after_event_id": "G2_2",
+        "completion_condition": "all_required_events_complete"
+      }
+    ]
+  },
+  "source_map": [
+    {
+      "shot_id": "B1_S1",
+      "source_beat_id": "B1",
+      "source_refs": [
+        "script.beats.0.event",
+        "script.beats.0.dialogue.0.text"
+      ],
+      "dialogue_indices": [
+        0
+      ],
+      "event_owner": true
+    },
+    {
+      "shot_id": "B1_S2",
+      "source_beat_id": "B1",
+      "source_refs": [
+        "script.beats.0.event"
+      ],
+      "dialogue_indices": [],
+      "event_owner": false
+    },
+    {
+      "shot_id": "B2_S1",
+      "source_beat_id": "B2",
+      "source_refs": [
+        "script.beats.1.event"
+      ],
+      "dialogue_indices": [],
+      "event_owner": true
+    },
+    {
+      "shot_id": "B2_S2",
+      "source_beat_id": "B2",
+      "source_refs": [
+        "script.beats.1.event"
+      ],
+      "dialogue_indices": [],
+      "event_owner": false
+    }
+  ],
+  "storyboard": {
+    "style": {
+      "style_option_id": "S01",
+      "visual_medium": "二维手绘动画",
+      "palette": "灰蓝米白",
+      "light_source": "右上暖灯",
+      "character_lock": "确定2名人物的静态身份外观：[{\"age_group\": \"成年\", \"body_shape\": \"成年体型\", \"clothing\": \"通勤衬衣\", \"hair\": \"短发\", \"id\": \"C01\", \"name\": \"甲\"}, {\"age_group\": \"成年\", \"body_shape\": \"成年体型\", \"clothing\": \"通勤衬衣\", \"hair\": \"短发\", \"id\": \"C02\", \"name\": \"乙\"}]",
+      "spatial_layout": "{\"elements\": [{\"appearance\": \"米白桌面\", \"id\": \"E01\", \"name\": \"桌子\"}, {\"appearance\": \"深灰靠背椅\", \"id\": \"E02\", \"name\": \"椅子\"}], \"name\": \"办公室\", \"relations\": [{\"reference\": \"E01\", \"relation\": \"behind\", \"subject\": \"E02\"}]}"
+    },
+    "shots": [
+      {
+        "id": "SH01",
+        "beat_id": "B1_S1",
+        "duration_seconds": 3,
+        "purpose": "原事件",
+        "composition": "行动中景",
+        "camera": "稳定单机位",
+        "cut_reason": "程序切点：3秒，dialogue_0完成且全部必需事件已完成。叙事目的（非执行指令）：新增事实后观察影响",
+        "visible_performance": "0–1秒：C02拿起P01至右手；表演补充：完成原事件；该段结束状态变化：[{\"entity\": \"P01\", \"field\": \"holder\", \"from\": \"none\", \"to\": \"C02\"}, {\"entity\": \"P01\", \"field\": \"location\", \"from\": \"桌面\", \"to\": \"右手\"}]\n1–2.15714秒：；表演补充：原说话人自然完整说出原台词；该段结束状态变化：[]\n2.15714–3秒：；表演补充：保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长；该段结束状态变化：[]\n对白1–2.15714秒：乙：明天见。\n情绪反应窗口0–1秒，甲：观察影响\n唯一执行切点：3秒；dialogue_0及全部必需事件已完成。",
+        "start_state": "{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌旁\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"none\", \"location\": \"桌面\"}}",
+        "end_state": "{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌旁\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"右手\"}}",
+        "event_lock": "乙拿起桌上的文件夹",
+        "dialogue_lock": [
+          {
+            "speaker": "乙",
+            "text": "明天见。"
+          }
+        ],
+        "dialogue_mode": "画内对白",
+        "continuity_mode": "planned_cut_requires_adapter",
+        "production_choices": [],
+        "prompt": "制作风格与资产锁：{\"characters\": [{\"age_group\": \"成年\", \"body_shape\": \"成年体型\", \"clothing\": \"通勤衬衣\", \"hair\": \"短发\", \"id\": \"C01\", \"name\": \"甲\"}, {\"age_group\": \"成年\", \"body_shape\": \"成年体型\", \"clothing\": \"通勤衬衣\", \"hair\": \"短发\", \"id\": \"C02\", \"name\": \"乙\"}], \"props\": [{\"appearance\": \"墨蓝A4封面\", \"id\": \"P01\", \"name\": \"文件夹\", \"owner_id\": \"C02\"}], \"render\": {\"light_source\": \"右上暖灯\", \"palette\": \"灰蓝米白\", \"style_option_id\": \"S01\", \"visual_medium\": \"二维手绘动画\"}, \"scene\": {\"elements\": [{\"appearance\": \"米白桌面\", \"id\": \"E01\", \"name\": \"桌子\"}, {\"appearance\": \"深灰靠背椅\", \"id\": \"E02\", \"name\": \"椅子\"}], \"name\": \"办公室\", \"relations\": [{\"reference\": \"E01\", \"relation\": \"behind\", \"subject\": \"E02\"}]}, \"schema\": \"static_visual_manifest_v1\"}\n固定构图：行动中景\n连续机位：稳定单机位\n时长：3秒\n第一帧静态状态：{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌旁\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"none\", \"location\": \"桌面\"}}\n唯一动作时间轴：0–1秒：C02拿起P01至右手；表演补充：完成原事件；该段结束状态变化：[{\"entity\": \"P01\", \"field\": \"holder\", \"from\": \"none\", \"to\": \"C02\"}, {\"entity\": \"P01\", \"field\": \"location\", \"from\": \"桌面\", \"to\": \"右手\"}]\n1–2.15714秒：；表演补充：原说话人自然完整说出原台词；该段结束状态变化：[]\n2.15714–3秒：；表演补充：保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长；该段结束状态变化：[]\n对白1–2.15714秒：乙：明天见。\n情绪反应窗口0–1秒，甲：观察影响\n唯一执行切点：3秒；dialogue_0及全部必需事件已完成。\n对白锁：[{\"speaker\": \"乙\", \"text\": \"明天见。\"}]\n最后一帧状态：{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌旁\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"右手\"}}"
+      },
+      {
+        "id": "SH02",
+        "beat_id": "B1_S2",
+        "duration_seconds": 3,
+        "purpose": "让反应可读",
+        "composition": "甲的反应近景",
+        "camera": "稳定单机位",
+        "cut_reason": "程序切点：3秒，G1_2完成且全部必需事件已完成。叙事目的（非执行指令）：新增事实后观察影响",
+        "visible_performance": "0–2秒：；表演补充：保持甲可读的反应；该段结束状态变化：[]\n2–3秒：；表演补充：保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长；该段结束状态变化：[]\n情绪反应窗口0–2秒，甲：观察影响\n唯一执行切点：3秒；G1_2及全部必需事件已完成。",
+        "start_state": "{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌旁\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"右手\"}}",
+        "end_state": "{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌旁\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"右手\"}}",
+        "event_lock": "观察原拍已发生刺激后的反应，原事件不再执行",
+        "dialogue_lock": [],
+        "dialogue_mode": "无对白",
+        "continuity_mode": "planned_cut_requires_adapter",
+        "production_choices": [],
+        "prompt": "制作风格与资产锁：{\"characters\": [{\"age_group\": \"成年\", \"body_shape\": \"成年体型\", \"clothing\": \"通勤衬衣\", \"hair\": \"短发\", \"id\": \"C01\", \"name\": \"甲\"}, {\"age_group\": \"成年\", \"body_shape\": \"成年体型\", \"clothing\": \"通勤衬衣\", \"hair\": \"短发\", \"id\": \"C02\", \"name\": \"乙\"}], \"props\": [{\"appearance\": \"墨蓝A4封面\", \"id\": \"P01\", \"name\": \"文件夹\", \"owner_id\": \"C02\"}], \"render\": {\"light_source\": \"右上暖灯\", \"palette\": \"灰蓝米白\", \"style_option_id\": \"S01\", \"visual_medium\": \"二维手绘动画\"}, \"scene\": {\"elements\": [{\"appearance\": \"米白桌面\", \"id\": \"E01\", \"name\": \"桌子\"}, {\"appearance\": \"深灰靠背椅\", \"id\": \"E02\", \"name\": \"椅子\"}], \"name\": \"办公室\", \"relations\": [{\"reference\": \"E01\", \"relation\": \"behind\", \"subject\": \"E02\"}]}, \"schema\": \"static_visual_manifest_v1\"}\n固定构图：甲的反应近景\n连续机位：稳定单机位\n时长：3秒\n第一帧静态状态：{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌旁\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"右手\"}}\n唯一动作时间轴：0–2秒：；表演补充：保持甲可读的反应；该段结束状态变化：[]\n2–3秒：；表演补充：保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长；该段结束状态变化：[]\n情绪反应窗口0–2秒，甲：观察影响\n唯一执行切点：3秒；G1_2及全部必需事件已完成。\n对白锁：[]\n最后一帧状态：{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌旁\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"右手\"}}"
+      },
+      {
+        "id": "SH03",
+        "beat_id": "B2_S1",
+        "duration_seconds": 3,
+        "purpose": "原事件",
+        "composition": "行动中景",
+        "camera": "稳定单机位",
+        "cut_reason": "程序切点：3秒，G2_1完成且全部必需事件已完成。叙事目的（非执行指令）：新增事实后观察影响",
+        "visible_performance": "0–1秒：C02在E02坐下至椅上；表演补充：完成原事件；该段结束状态变化：[{\"entity\": \"C02\", \"field\": \"posture\", \"from\": \"standing\", \"to\": \"sitting\"}, {\"entity\": \"C02\", \"field\": \"position\", \"from\": \"桌旁\", \"to\": \"椅上\"}]\n1–3秒：；表演补充：保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长；该段结束状态变化：[]\n情绪反应窗口0–1秒，甲：观察影响\n唯一执行切点：3秒；G2_1及全部必需事件已完成。",
+        "start_state": "{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌旁\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"右手\"}}",
+        "end_state": "{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"椅上\", \"posture\": \"sitting\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"右手\"}}",
+        "event_lock": "乙坐下",
+        "dialogue_lock": [],
+        "dialogue_mode": "无对白",
+        "continuity_mode": "planned_cut_requires_adapter",
+        "production_choices": [],
+        "prompt": "制作风格与资产锁：{\"characters\": [{\"age_group\": \"成年\", \"body_shape\": \"成年体型\", \"clothing\": \"通勤衬衣\", \"hair\": \"短发\", \"id\": \"C01\", \"name\": \"甲\"}, {\"age_group\": \"成年\", \"body_shape\": \"成年体型\", \"clothing\": \"通勤衬衣\", \"hair\": \"短发\", \"id\": \"C02\", \"name\": \"乙\"}], \"props\": [{\"appearance\": \"墨蓝A4封面\", \"id\": \"P01\", \"name\": \"文件夹\", \"owner_id\": \"C02\"}], \"render\": {\"light_source\": \"右上暖灯\", \"palette\": \"灰蓝米白\", \"style_option_id\": \"S01\", \"visual_medium\": \"二维手绘动画\"}, \"scene\": {\"elements\": [{\"appearance\": \"米白桌面\", \"id\": \"E01\", \"name\": \"桌子\"}, {\"appearance\": \"深灰靠背椅\", \"id\": \"E02\", \"name\": \"椅子\"}], \"name\": \"办公室\", \"relations\": [{\"reference\": \"E01\", \"relation\": \"behind\", \"subject\": \"E02\"}]}, \"schema\": \"static_visual_manifest_v1\"}\n固定构图：行动中景\n连续机位：稳定单机位\n时长：3秒\n第一帧静态状态：{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌旁\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"右手\"}}\n唯一动作时间轴：0–1秒：C02在E02坐下至椅上；表演补充：完成原事件；该段结束状态变化：[{\"entity\": \"C02\", \"field\": \"posture\", \"from\": \"standing\", \"to\": \"sitting\"}, {\"entity\": \"C02\", \"field\": \"position\", \"from\": \"桌旁\", \"to\": \"椅上\"}]\n1–3秒：；表演补充：保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长；该段结束状态变化：[]\n情绪反应窗口0–1秒，甲：观察影响\n唯一执行切点：3秒；G2_1及全部必需事件已完成。\n对白锁：[]\n最后一帧状态：{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"椅上\", \"posture\": \"sitting\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"右手\"}}"
+      },
+      {
+        "id": "SH04",
+        "beat_id": "B2_S2",
+        "duration_seconds": 3,
+        "purpose": "让反应可读",
+        "composition": "甲的反应近景",
+        "camera": "稳定单机位",
+        "cut_reason": "程序切点：3秒，G2_2完成且全部必需事件已完成。叙事目的（非执行指令）：新增事实后观察影响",
+        "visible_performance": "0–2秒：；表演补充：保持甲可读的反应；该段结束状态变化：[]\n2–3秒：；表演补充：保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长；该段结束状态变化：[]\n情绪反应窗口0–2秒，甲：观察影响\n唯一执行切点：3秒；G2_2及全部必需事件已完成。",
+        "start_state": "{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"椅上\", \"posture\": \"sitting\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"右手\"}}",
+        "end_state": "{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"椅上\", \"posture\": \"sitting\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"右手\"}}",
+        "event_lock": "观察原拍已发生刺激后的反应，原事件不再执行",
+        "dialogue_lock": [],
+        "dialogue_mode": "无对白",
+        "continuity_mode": "planned_cut_requires_adapter",
+        "production_choices": [],
+        "prompt": "制作风格与资产锁：{\"characters\": [{\"age_group\": \"成年\", \"body_shape\": \"成年体型\", \"clothing\": \"通勤衬衣\", \"hair\": \"短发\", \"id\": \"C01\", \"name\": \"甲\"}, {\"age_group\": \"成年\", \"body_shape\": \"成年体型\", \"clothing\": \"通勤衬衣\", \"hair\": \"短发\", \"id\": \"C02\", \"name\": \"乙\"}], \"props\": [{\"appearance\": \"墨蓝A4封面\", \"id\": \"P01\", \"name\": \"文件夹\", \"owner_id\": \"C02\"}], \"render\": {\"light_source\": \"右上暖灯\", \"palette\": \"灰蓝米白\", \"style_option_id\": \"S01\", \"visual_medium\": \"二维手绘动画\"}, \"scene\": {\"elements\": [{\"appearance\": \"米白桌面\", \"id\": \"E01\", \"name\": \"桌子\"}, {\"appearance\": \"深灰靠背椅\", \"id\": \"E02\", \"name\": \"椅子\"}], \"name\": \"办公室\", \"relations\": [{\"reference\": \"E01\", \"relation\": \"behind\", \"subject\": \"E02\"}]}, \"schema\": \"static_visual_manifest_v1\"}\n固定构图：甲的反应近景\n连续机位：稳定单机位\n时长：3秒\n第一帧静态状态：{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"椅上\", \"posture\": \"sitting\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"右手\"}}\n唯一动作时间轴：0–2秒：；表演补充：保持甲可读的反应；该段结束状态变化：[]\n2–3秒：；表演补充：保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长；该段结束状态变化：[]\n情绪反应窗口0–2秒，甲：观察影响\n唯一执行切点：3秒；G2_2及全部必需事件已完成。\n对白锁：[]\n最后一帧状态：{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C02\", \"position\": \"桌前\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"椅上\", \"posture\": \"sitting\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"右手\"}}"
+      }
+    ],
+    "media_assumptions": []
+  },
+  "scheduled_execution": {
+    "schema": "whole_film_state_plan_v3",
+    "initial_state": {
+      "C01": {
+        "posture": "standing",
+        "position": "桌前",
+        "gaze": "C02",
+        "affect": "平静"
+      },
+      "C02": {
+        "posture": "standing",
+        "position": "桌旁",
+        "gaze": "C01",
+        "affect": "平静"
+      },
+      "P01": {
+        "holder": "none",
+        "location": "桌面"
+      }
+    },
+    "beats": [
+      {
+        "beat_id": "B1_S1",
+        "purpose": "原事件",
+        "composition": "行动中景",
+        "camera": "稳定单机位",
+        "dialogue_mode": "画内对白",
+        "cut_reason": "程序切点：3秒，dialogue_0完成且全部必需事件已完成。叙事目的（非执行指令）：新增事实后观察影响",
+        "events": [
+          {
+            "start": 0.0,
+            "end": 1.0,
+            "phase": "before_first_line",
+            "script_slot": "before",
+            "dialogue_index": -1,
+            "performance": "完成原事件",
+            "operations": [
+              {
+                "kind": "take",
+                "actor": "C02",
+                "target": "P01",
+                "value": "右手"
+              }
+            ]
+          },
+          {
+            "start": 1.0,
+            "end": 2.157142857142857,
+            "phase": "first_line_delivery",
+            "script_slot": "dialogue_performance",
+            "dialogue_index": 0,
+            "performance": "原说话人自然完整说出原台词",
+            "operations": []
+          },
+          {
+            "start": 2.157142857142857,
+            "end": 3,
+            "phase": "after_last_line",
+            "script_slot": "after",
+            "dialogue_index": -1,
+            "performance": "保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长",
+            "operations": []
+          }
+        ],
+        "dialogue_windows": [
+          {
+            "start": 1.0,
+            "end": 2.157142857142857
+          }
+        ],
+        "reaction_window": {
+          "start": 0.0,
+          "end": 1.0,
+          "subject": "C01",
+          "meaning": "观察影响"
+        }
+      },
+      {
+        "beat_id": "B1_S2",
+        "purpose": "让反应可读",
+        "composition": "甲的反应近景",
+        "camera": "稳定单机位",
+        "dialogue_mode": "无对白",
+        "cut_reason": "程序切点：3秒，G1_2完成且全部必需事件已完成。叙事目的（非执行指令）：新增事实后观察影响",
+        "events": [
+          {
+            "start": 0.0,
+            "end": 2.0,
+            "phase": "no_dialogue",
+            "script_slot": "before",
+            "dialogue_index": -1,
+            "performance": "保持甲可读的反应",
+            "operations": []
+          },
+          {
+            "start": 2.0,
+            "end": 3,
+            "phase": "no_dialogue",
+            "script_slot": "after",
+            "dialogue_index": -1,
+            "performance": "保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长",
+            "operations": []
+          }
+        ],
+        "dialogue_windows": [],
+        "reaction_window": {
+          "start": 0.0,
+          "end": 2.0,
+          "subject": "C01",
+          "meaning": "观察影响"
+        }
+      },
+      {
+        "beat_id": "B2_S1",
+        "purpose": "原事件",
+        "composition": "行动中景",
+        "camera": "稳定单机位",
+        "dialogue_mode": "无对白",
+        "cut_reason": "程序切点：3秒，G2_1完成且全部必需事件已完成。叙事目的（非执行指令）：新增事实后观察影响",
+        "events": [
+          {
+            "start": 0.0,
+            "end": 1.0,
+            "phase": "no_dialogue",
+            "script_slot": "before",
+            "dialogue_index": -1,
+            "performance": "完成原事件",
+            "operations": [
+              {
+                "kind": "sit",
+                "actor": "C02",
+                "target": "E02",
+                "value": "椅上"
+              }
+            ]
+          },
+          {
+            "start": 1.0,
+            "end": 3,
+            "phase": "no_dialogue",
+            "script_slot": "after",
+            "dialogue_index": -1,
+            "performance": "保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长",
+            "operations": []
+          }
+        ],
+        "dialogue_windows": [],
+        "reaction_window": {
+          "start": 0.0,
+          "end": 1.0,
+          "subject": "C01",
+          "meaning": "观察影响"
+        }
+      },
+      {
+        "beat_id": "B2_S2",
+        "purpose": "让反应可读",
+        "composition": "甲的反应近景",
+        "camera": "稳定单机位",
+        "dialogue_mode": "无对白",
+        "cut_reason": "程序切点：3秒，G2_2完成且全部必需事件已完成。叙事目的（非执行指令）：新增事实后观察影响",
+        "events": [
+          {
+            "start": 0.0,
+            "end": 2.0,
+            "phase": "no_dialogue",
+            "script_slot": "before",
+            "dialogue_index": -1,
+            "performance": "保持甲可读的反应",
+            "operations": []
+          },
+          {
+            "start": 2.0,
+            "end": 3,
+            "phase": "no_dialogue",
+            "script_slot": "after",
+            "dialogue_index": -1,
+            "performance": "保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长",
+            "operations": []
+          }
+        ],
+        "dialogue_windows": [],
+        "reaction_window": {
+          "start": 0.0,
+          "end": 2.0,
+          "subject": "C01",
+          "meaning": "观察影响"
+        }
+      }
+    ]
+  },
+  "schedule": {
+    "schema": "action_plan_schedule_report/v2",
+    "policy": "preferred_3.5_units_per_second_plus_0.3; maximum_5; no_action_or_hold_compression",
+    "beats": [
+      {
+        "beat_id": "B1_S1",
+        "action_and_hold_seconds": 1,
+        "preferred_dialogue_seconds": [
+          1.157142857142857
+        ],
+        "actual_dialogue_seconds": [
+          1.157142857142857
+        ],
+        "dialogue_units": [
+          3
+        ],
+        "reason": "使用优选语速与余量",
+        "unused_tail_seconds": 0.842857142857143,
+        "cut_contract": {
+          "cut_after_event_id": "dialogue_0",
+          "completion_condition": "all_required_events_complete",
+          "required_events": [
+            {
+              "event_id": "G1_1",
+              "end": 1.0
+            },
+            {
+              "event_id": "dialogue_0",
+              "end": 2.157142857142857
+            }
+          ],
+          "completion_seconds": 2.157142857142857,
+          "execution_cut_seconds": 3
+        }
+      },
+      {
+        "beat_id": "B1_S2",
+        "action_and_hold_seconds": 2,
+        "preferred_dialogue_seconds": [],
+        "actual_dialogue_seconds": [],
+        "dialogue_units": [],
+        "reason": "使用优选语速与余量",
+        "unused_tail_seconds": 1.0,
+        "cut_contract": {
+          "cut_after_event_id": "G1_2",
+          "completion_condition": "all_required_events_complete",
+          "required_events": [
+            {
+              "event_id": "G1_2",
+              "end": 2.0
+            }
+          ],
+          "completion_seconds": 2.0,
+          "execution_cut_seconds": 3
+        }
+      },
+      {
+        "beat_id": "B2_S1",
+        "action_and_hold_seconds": 1,
+        "preferred_dialogue_seconds": [],
+        "actual_dialogue_seconds": [],
+        "dialogue_units": [],
+        "reason": "使用优选语速与余量",
+        "unused_tail_seconds": 2.0,
+        "cut_contract": {
+          "cut_after_event_id": "G2_1",
+          "completion_condition": "all_required_events_complete",
+          "required_events": [
+            {
+              "event_id": "G2_1",
+              "end": 1.0
+            }
+          ],
+          "completion_seconds": 1.0,
+          "execution_cut_seconds": 3
+        }
+      },
+      {
+        "beat_id": "B2_S2",
+        "action_and_hold_seconds": 2,
+        "preferred_dialogue_seconds": [],
+        "actual_dialogue_seconds": [],
+        "dialogue_units": [],
+        "reason": "使用优选语速与余量",
+        "unused_tail_seconds": 1.0,
+        "cut_contract": {
+          "cut_after_event_id": "G2_2",
+          "completion_condition": "all_required_events_complete",
+          "required_events": [
+            {
+              "event_id": "G2_2",
+              "end": 2.0
+            }
+          ],
+          "completion_seconds": 2.0,
+          "execution_cut_seconds": 3
+        }
+      }
+    ],
+    "source_schema": "whole_film_action_plan_v2",
+    "semantic_comparisons": [
+      {
+        "beat_id": "B1_S1",
+        "operation_sources": [
+          {
+            "path": "state_plan.beats.0.groups.0.operations",
+            "value": [
+              {
+                "kind": "take",
+                "actor": "C02",
+                "target": "P01",
+                "value": "右手"
+              }
+            ]
+          }
+        ],
+        "prose_sources": [
+          {
+            "path": "state_plan.beats.0.camera",
+            "value": "稳定单机位"
+          },
+          {
+            "path": "state_plan.beats.0.cut_reason",
+            "value": "新增事实后观察影响"
+          },
+          {
+            "path": "state_plan.beats.0.dialogue_performance",
+            "value": "原说话人自然完整说出原台词"
+          },
+          {
+            "path": "state_plan.beats.0.composition",
+            "value": "行动中景"
+          },
+          {
+            "path": "state_plan.beats.0.groups.0.performance",
+            "value": "完成原事件"
+          }
+        ],
+        "cut_contract": {
+          "cut_after_event_id": "dialogue_0",
+          "completion_condition": "all_required_events_complete",
+          "required_events": [
+            {
+              "event_id": "G1_1",
+              "end": 1.0
+            },
+            {
+              "event_id": "dialogue_0",
+              "end": 2.157142857142857
+            }
+          ],
+          "completion_seconds": 2.157142857142857,
+          "execution_cut_seconds": 3
+        },
+        "spatial_checks": [],
+        "semantic_status": "not_checked"
+      },
+      {
+        "beat_id": "B1_S2",
+        "operation_sources": [
+          {
+            "path": "state_plan.beats.1.groups.0.operations",
+            "value": []
+          }
+        ],
+        "prose_sources": [
+          {
+            "path": "state_plan.beats.1.camera",
+            "value": "稳定单机位"
+          },
+          {
+            "path": "state_plan.beats.1.cut_reason",
+            "value": "新增事实后观察影响"
+          },
+          {
+            "path": "state_plan.beats.1.dialogue_performance",
+            "value": "原说话人自然完整说出原台词"
+          },
+          {
+            "path": "state_plan.beats.1.composition",
+            "value": "甲的反应近景"
+          },
+          {
+            "path": "state_plan.beats.1.groups.0.performance",
+            "value": "保持甲可读的反应"
+          }
+        ],
+        "cut_contract": {
+          "cut_after_event_id": "G1_2",
+          "completion_condition": "all_required_events_complete",
+          "required_events": [
+            {
+              "event_id": "G1_2",
+              "end": 2.0
+            }
+          ],
+          "completion_seconds": 2.0,
+          "execution_cut_seconds": 3
+        },
+        "spatial_checks": [],
+        "semantic_status": "not_checked"
+      },
+      {
+        "beat_id": "B2_S1",
+        "operation_sources": [
+          {
+            "path": "state_plan.beats.2.groups.0.operations",
+            "value": [
+              {
+                "kind": "sit",
+                "actor": "C02",
+                "target": "E02",
+                "value": "椅上"
+              }
+            ]
+          }
+        ],
+        "prose_sources": [
+          {
+            "path": "state_plan.beats.2.camera",
+            "value": "稳定单机位"
+          },
+          {
+            "path": "state_plan.beats.2.cut_reason",
+            "value": "新增事实后观察影响"
+          },
+          {
+            "path": "state_plan.beats.2.dialogue_performance",
+            "value": "原说话人自然完整说出原台词"
+          },
+          {
+            "path": "state_plan.beats.2.composition",
+            "value": "行动中景"
+          },
+          {
+            "path": "state_plan.beats.2.groups.0.performance",
+            "value": "完成原事件"
+          }
+        ],
+        "cut_contract": {
+          "cut_after_event_id": "G2_1",
+          "completion_condition": "all_required_events_complete",
+          "required_events": [
+            {
+              "event_id": "G2_1",
+              "end": 1.0
+            }
+          ],
+          "completion_seconds": 1.0,
+          "execution_cut_seconds": 3
+        },
+        "spatial_checks": [
+          {
+            "path": "beats.2.groups.0.operations.0",
+            "status": "passed",
+            "seat": "E02",
+            "position": "桌旁",
+            "facing": "桌面"
+          }
+        ],
+        "semantic_status": "not_checked"
+      },
+      {
+        "beat_id": "B2_S2",
+        "operation_sources": [
+          {
+            "path": "state_plan.beats.3.groups.0.operations",
+            "value": []
+          }
+        ],
+        "prose_sources": [
+          {
+            "path": "state_plan.beats.3.camera",
+            "value": "稳定单机位"
+          },
+          {
+            "path": "state_plan.beats.3.cut_reason",
+            "value": "新增事实后观察影响"
+          },
+          {
+            "path": "state_plan.beats.3.dialogue_performance",
+            "value": "原说话人自然完整说出原台词"
+          },
+          {
+            "path": "state_plan.beats.3.composition",
+            "value": "甲的反应近景"
+          },
+          {
+            "path": "state_plan.beats.3.groups.0.performance",
+            "value": "保持甲可读的反应"
+          }
+        ],
+        "cut_contract": {
+          "cut_after_event_id": "G2_2",
+          "completion_condition": "all_required_events_complete",
+          "required_events": [
+            {
+              "event_id": "G2_2",
+              "end": 2.0
+            }
+          ],
+          "completion_seconds": 2.0,
+          "execution_cut_seconds": 3
+        },
+        "spatial_checks": [],
+        "semantic_status": "not_checked"
+      }
+    ],
+    "spatial_boundaries": [
+      {
+        "beat_id": "B1_S1",
+        "start_facing": {
+          "C01": "桌面",
+          "C02": "桌面"
+        },
+        "end_facing": {
+          "C01": "桌面",
+          "C02": "桌面"
+        }
+      },
+      {
+        "beat_id": "B1_S2",
+        "start_facing": {
+          "C01": "桌面",
+          "C02": "桌面"
+        },
+        "end_facing": {
+          "C01": "桌面",
+          "C02": "桌面"
+        }
+      },
+      {
+        "beat_id": "B2_S1",
+        "start_facing": {
+          "C01": "桌面",
+          "C02": "桌面"
+        },
+        "end_facing": {
+          "C01": "桌面",
+          "C02": "桌面"
+        }
+      },
+      {
+        "beat_id": "B2_S2",
+        "start_facing": {
+          "C01": "桌面",
+          "C02": "桌面"
+        },
+        "end_facing": {
+          "C01": "桌面",
+          "C02": "桌面"
+        }
+      }
+    ],
+    "spatial_checks": [
+      {
+        "path": "beats.2.groups.0.operations.0",
+        "status": "passed",
+        "seat": "E02",
+        "position": "桌旁",
+        "facing": "桌面"
+      }
+    ],
+    "group_operation_checks": [
+      {
+        "path": "beats.0.groups.0.operations.0",
+        "group_id": "G1_1",
+        "preconditions_satisfied_at": "group_start",
+        "effects_committed_at": "group_end"
+      },
+      {
+        "path": "beats.2.groups.0.operations.0",
+        "group_id": "G2_1",
+        "preconditions_satisfied_at": "group_start",
+        "effects_committed_at": "group_end"
+      }
+    ]
+  },
+  "performance_checks": [
+    {
+      "requirement_id": "R1",
+      "shot_id": "B1_S2",
+      "source_shot_id": "B1_S1",
+      "relation": "after",
+      "start": 3.0,
+      "end": 5.0,
+      "passed": true
+    },
+    {
+      "requirement_id": "R2",
+      "shot_id": "B2_S2",
+      "source_shot_id": "B2_S1",
+      "relation": "after",
+      "start": 9.0,
+      "end": 11.0,
+      "passed": true
+    }
+  ],
+  "source_narrative_beat_count": 2,
+  "execution_shot_count": 4,
+  "all_shots_complete": true,
+  "total_duration_seconds": 12,
+  "full_review_required": true,
+  "prefix_only": false,
+  "automatic_media_submit": false,
+  "limitations": [
+    "structured steps and detailed before/during/after source text are unsupported and rejected before tool dispatch",
+    "one whole source event per narrative beat has one action-shot owner",
+    "non-owner shots currently support holds and allocated complete dialogue only",
+    "cross-shot only completed-stimulus after windows are implemented",
+    "free prose, action completeness, facial readability and cinematic quality require full review"
+  ]
+}

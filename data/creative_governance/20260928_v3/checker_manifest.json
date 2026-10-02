@@ -1,0 +1,83 @@
+{
+  "schema_version": "creative_p1_checker_manifest/v1",
+  "source_hash": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+  "created_at": "2026-09-28T13:55:55.609742+00:00",
+  "implementation_status": "offline_implemented_not_production_validated",
+  "manifest": {
+    "schema_version": "action_checker_manifest/v2",
+    "plan_version": "whole_film_action_plan_v2",
+    "checkers": [
+      {
+        "checker": "check_cut_completion",
+        "failure_codes": [
+          "PLAN_CUT_BEFORE_REQUIRED_EVENT",
+          "PLAN_CUT_EVENT_UNKNOWN"
+        ],
+        "kind": "deterministic",
+        "status": "implemented"
+      },
+      {
+        "checker": "check_sit_preconditions",
+        "failure_codes": [
+          "PLAN_SEAT_ACCESS_INVALID",
+          "PLAN_SEAT_ACCESS_UNKNOWN",
+          "PLAN_FACING_INVALID"
+        ],
+        "kind": "deterministic_explicit_evidence_only",
+        "status": "implemented"
+      },
+      {
+        "checker": "check_adjacent_state_transition",
+        "failure_codes": [
+          "PLAN_BOUNDARY_STATE_CONFLICT"
+        ],
+        "kind": "deterministic",
+        "status": "implemented"
+      },
+      {
+        "checker": "check_gaze_text_consistency",
+        "failure_codes": [
+          "PLAN_GAZE_TEXT_CONFLICT"
+        ],
+        "kind": "semantic",
+        "status": "requires_independent_review"
+      },
+      {
+        "checker": "check_camera_cut_consistency",
+        "failure_codes": [
+          "PLAN_CUT_TEXT_CONFLICT"
+        ],
+        "kind": "semantic",
+        "status": "requires_independent_review"
+      }
+    ]
+  },
+  "registry_mapping": [
+    {
+      "checker": "check_cut_completion",
+      "registry_rule_id": "CUT.EXECUTION.002",
+      "exclusion_reason": null
+    },
+    {
+      "checker": "check_sit_preconditions",
+      "registry_rule_id": "SPACE.SEAT_TYPED.002",
+      "exclusion_reason": null
+    },
+    {
+      "checker": "check_adjacent_state_transition",
+      "registry_rule_id": "STATE.BOUNDARY.002",
+      "exclusion_reason": null
+    },
+    {
+      "checker": "check_gaze_text_consistency",
+      "registry_rule_id": "ACT.GAZE.001",
+      "exclusion_reason": null
+    },
+    {
+      "checker": "check_camera_cut_consistency",
+      "registry_rule_id": "CUT.COMPLETION.001",
+      "exclusion_reason": null
+    }
+  ],
+  "production_validated": false
+}

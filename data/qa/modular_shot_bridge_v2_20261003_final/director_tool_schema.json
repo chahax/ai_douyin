@@ -1,0 +1,345 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "context_sha256",
+    "emotional_arc",
+    "causal_chain",
+    "ending_intent",
+    "initial_state",
+    "spatial_contract",
+    "beats"
+  ],
+  "properties": {
+    "schema": {
+      "enum": [
+        "narrative_multishot_direction_offline_v2"
+      ]
+    },
+    "context_sha256": {
+      "enum": [
+        "419024f262d676b10474e75703d3a75c87043dd7fae5c437a20debe06c5c0916"
+      ]
+    },
+    "emotional_arc": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causal_chain": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "ending_intent": {
+      "type": "string",
+      "minLength": 1
+    },
+    "initial_state": {
+      "type": "object",
+      "properties": {
+        "C01": {
+          "type": "object",
+          "properties": {
+            "posture": {
+              "type": "string",
+              "enum": [
+                "standing",
+                "sitting",
+                "kneeling",
+                "lying",
+                "other"
+              ]
+            },
+            "position": {
+              "type": "string"
+            },
+            "gaze": {
+              "type": "string"
+            },
+            "affect": {
+              "type": "string"
+            },
+            "facing": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          },
+          "required": [
+            "posture",
+            "position",
+            "gaze",
+            "affect",
+            "facing"
+          ],
+          "additionalProperties": false
+        },
+        "C02": {
+          "type": "object",
+          "properties": {
+            "posture": {
+              "type": "string",
+              "enum": [
+                "standing",
+                "sitting",
+                "kneeling",
+                "lying",
+                "other"
+              ]
+            },
+            "position": {
+              "type": "string"
+            },
+            "gaze": {
+              "type": "string"
+            },
+            "affect": {
+              "type": "string"
+            },
+            "facing": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          },
+          "required": [
+            "posture",
+            "position",
+            "gaze",
+            "affect",
+            "facing"
+          ],
+          "additionalProperties": false
+        },
+        "P01": {
+          "type": "object",
+          "properties": {
+            "holder": {
+              "type": "string",
+              "enum": [
+                "C01",
+                "C02",
+                "none"
+              ]
+            },
+            "location": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "holder",
+            "location"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "C01",
+        "C02",
+        "P01"
+      ],
+      "additionalProperties": false
+    },
+    "spatial_contract": {
+      "type": "object",
+      "properties": {
+        "seats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "seat_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "access_positions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "required_facing": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1
+              }
+            },
+            "required": [
+              "seat_id",
+              "access_positions",
+              "required_facing"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "seats"
+      ],
+      "additionalProperties": false
+    },
+    "beats": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "beat_id",
+          "shots"
+        ],
+        "properties": {
+          "beat_id": {
+            "enum": [
+              "B1",
+              "B2"
+            ]
+          },
+          "shots": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "shot_id",
+                "purpose",
+                "composition",
+                "camera",
+                "dialogue_mode",
+                "cut_reason",
+                "new_information",
+                "observation_object",
+                "source_refs",
+                "event_owner",
+                "dialogue_indices",
+                "performance_requirements"
+              ],
+              "properties": {
+                "shot_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "purpose": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "composition": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "camera": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "dialogue_mode": {
+                  "enum": [
+                    "画内对白",
+                    "画外对白",
+                    "混合对白",
+                    "无对白"
+                  ]
+                },
+                "cut_reason": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "new_information": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "observation_object": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "source_refs": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "script.beats.0.event",
+                      "script.beats.0.dialogue.0.text",
+                      "script.beats.1.event"
+                    ]
+                  }
+                },
+                "event_owner": {
+                  "type": "boolean"
+                },
+                "dialogue_indices": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                },
+                "performance_requirements": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "id",
+                      "subject",
+                      "stimulus_source",
+                      "relation",
+                      "minimum_seconds"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "subject": {
+                        "enum": [
+                          "C01",
+                          "C02"
+                        ]
+                      },
+                      "stimulus_source": {
+                        "type": "string",
+                        "enum": [
+                          "script.beats.0.event",
+                          "script.beats.0.dialogue.0.text",
+                          "script.beats.1.event"
+                        ]
+                      },
+                      "relation": {
+                        "enum": [
+                          "before",
+                          "during",
+                          "after"
+                        ]
+                      },
+                      "minimum_seconds": {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "description": "保持完整原叙事剧本，不为镜头拆分改写正文。beats按原拍顺序，每拍shots是镜头数组。每镜必须写新增信息、观察对象、source_refs和切镜理由；引用填写本拍规范路径。dialogue_indices为本拍原对白下标数组，从0计，全部镜头依次恰好覆盖每句一次；不拆一句、不重说对白。每拍恰好一镜event_owner=true，承载完整原事件；其余镜只承载对白和无状态操作的明确hold反应。当前原型不支持把原事件拆成多镜动作。performance_requirements是数组，subject填人物ID，stimulus_source为本拍规范路径，relation用before/during/after；事件不可during，跨镜只支持已完成刺激后的after反应。每条要求的minimum_seconds为正数，局部performance_windows完整绑定真实锚点。initial_state是首事件前状态；owner不等于holder；固定座椅ID来自manifest。出现不能表达的并行或跨镜能力缺口应停止，不能靠删画面、改台词或增加叙事拍迁就。"
+}

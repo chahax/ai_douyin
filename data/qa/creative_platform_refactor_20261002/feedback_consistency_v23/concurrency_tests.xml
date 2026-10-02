@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="11" time="9.046" timestamp="2026-10-02T21:08:34.890332+08:00" hostname="DESKTOP-DP111LI"><testcase classname="tests.test_creative_feedback_consistency" name="test_two_concurrent_feedbacks_during_call_preserve_history_budget_and_block_downstream" time="0.507" /><testcase classname="tests.test_creative_feedback_consistency" name="test_stop_feedback_interleavings_keep_all_commands[actions0]" time="0.209"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: 'must_fix'&#10;  Actual message: 'creative stage breakpoint reached: director_shots'">tests\test_creative_feedback_consistency.py:122: in test_stop_feedback_interleavings_keep_all_commands
+    blocked_downstream(root, state)
+tests\test_creative_feedback_consistency.py:43: in blocked_downstream
+    with pytest.raises(RuntimeError, match="must_fix"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: Regex pattern did not match.
+E     Expected regex: 'must_fix'
+E     Actual message: 'creative stage breakpoint reached: director_shots'</failure></testcase><testcase classname="tests.test_creative_feedback_consistency" name="test_stop_feedback_interleavings_keep_all_commands[actions1]" time="0.222"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: 'must_fix'&#10;  Actual message: 'creative stage breakpoint reached: director_shots'">tests\test_creative_feedback_consistency.py:122: in test_stop_feedback_interleavings_keep_all_commands
+    blocked_downstream(root, state)
+tests\test_creative_feedback_consistency.py:43: in blocked_downstream
+    with pytest.raises(RuntimeError, match="must_fix"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: Regex pattern did not match.
+E     Expected regex: 'must_fix'
+E     Actual message: 'creative stage breakpoint reached: director_shots'</failure></testcase><testcase classname="tests.test_creative_feedback_consistency" name="test_stop_feedback_interleavings_keep_all_commands[actions2]" time="0.247" /><testcase classname="tests.test_creative_feedback_consistency" name="test_feedback_arriving_during_same_stage_repair_is_not_resolved_by_unconsumed_response" time="0.122"><failure message="ValueError: current stage receipt verification failed: writer_analysis">tests\test_creative_feedback_consistency.py:145: in test_feedback_arriving_during_same_stage_repair_is_not_resolved_by_unconsumed_response
+    ).run(bundle)
+      ^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6606: in run
+    return self._run_unlocked(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6844: in _run_unlocked
+    analysis = self._stage(
+src\content_factory\creative_workflow.py:5847: in _stage
+    return execute_stage(self, name, role, payload, validator)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_stage_runtime.py:252: in execute_stage
+    raw = self._stage_impl(name, role, payload, validator)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_workflow.py:6294: in _stage_impl
+    result: RoleResult = self._call_model(
+src\content_factory\creative_workflow.py:3487: in _call_model
+    result = self.clients.call(transport, messages, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_creative_feedback_consistency.py:135: in call
+    feedback(
+tests\test_creative_feedback_consistency.py:30: in feedback
+    current = next(x for x in service.inspect()["stages"] if x["stage_id"] == stage)
+                              ^^^^^^^^^^^^^^^^^
+src\content_factory\creative_stage_debug.py:506: in inspect
+    return stage_snapshot(self.run_dir)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\content_factory\creative_stage_debug.py:288: in stage_snapshot
+    raise ValueError(f"current stage receipt verification failed: {name}")
+E   ValueError: current stage receipt verification failed: writer_analysis</failure></testcase><testcase classname="tests.test_creative_feedback_consistency" name="test_command_crash_recovery_is_idempotent_and_preserves_stale_runner_budget[before_command]" time="0.142" /><testcase classname="tests.test_creative_feedback_consistency" name="test_command_crash_recovery_is_idempotent_and_preserves_stale_runner_budget[after_command]" time="0.132" /><testcase classname="tests.test_creative_feedback_consistency" name="test_command_crash_recovery_is_idempotent_and_preserves_stale_runner_budget[after_state]" time="0.143" /><testcase classname="tests.test_creative_feedback_consistency" name="test_resolution_receipt_before_state_commit_recovers_without_an_extra_call" time="0.928" /><testcase classname="tests.test_creative_feedback_consistency" name="test_feedback_accepted_after_budget_reservation_blocks_provider_and_rebuilds_after_repair" time="0.431" /><testcase classname="tests.test_creative_feedback_consistency" name="test_cross_process_feedback_and_kernel_lock_crash_do_not_need_manual_unlock" time="5.113" /></testsuite></testsuites>

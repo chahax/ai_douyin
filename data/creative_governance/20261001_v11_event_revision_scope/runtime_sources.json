@@ -1,0 +1,80 @@
+{
+  "schema_version": "creative_runtime_sources/v1",
+  "source_hash": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+  "created_at": "2026-09-30T17:51:34.510595+00:00",
+  "implementation_status": "offline_implemented_not_production_validated",
+  "sources": [
+    {
+      "path": "src/content_factory/creative_action_plan_v2.py",
+      "sha256": "74bef6f461fa3884e39707f6ea533cc13ed71bcb20d14534e2fce9b39a514970"
+    },
+    {
+      "path": "src/content_factory/creative_state_plan_v6.py",
+      "sha256": "1cc460eaecf0d71ec05a0b2e6bc1a35a3a7f650ec15ec2b99d8520aee97704bb"
+    },
+    {
+      "path": "src/content_factory/creative_review_packet.py",
+      "sha256": "3a190b106277fb4c4b5216bf6fc2440256383c7af588d4ea6063b2a33ea241ca"
+    },
+    {
+      "path": "src/content_factory/creative_review_resolution.py",
+      "sha256": "a394f7bf6103524b81dd4b3548dad4db7a1783b794c2ab7af654f552819dedae"
+    },
+    {
+      "path": "src/content_factory/creative_focused_review_stage.py",
+      "sha256": "489a09d9a0b8b75a484097dca7cb4620c2a91a46f7c64a084545b5a63363067d"
+    },
+    {
+      "path": "src/content_factory/creative_governed_runtime.py",
+      "sha256": "9f1a36988f347dd4f8ce74ed31ea233601c6dc0e30468cdcb56f070244369910"
+    },
+    {
+      "path": "src/content_factory/creative_workflow.py",
+      "sha256": "3c5ec716f402e13ddce59cf30f0a44bbd974a5949ecf7047b031af15a5f1553c"
+    },
+    {
+      "path": "src/content_factory/creative_plan_patch.py",
+      "sha256": "4383b3795520a1c0dfff699f3a70c1326fc88810e366a25f5aebc0dca15b854a"
+    },
+    {
+      "path": "src/content_factory/creative_segmented_director.py",
+      "sha256": "4ee428059f92c0cae91a91ab86ddcc9f0944136d39c50a8459f3d7a16ed69925"
+    },
+    {
+      "path": "src/content_factory/creative_state_plan_binding.py",
+      "sha256": "b8bf8ec912e15bb1adc900c5f10a12b026bb934cded10e2eba7cb08f003e9a68"
+    },
+    {
+      "path": "src/content_factory/creative_rule_registry.py",
+      "sha256": "95a1dac7650006c2ab200bb2646e95f5add27046eda02140cc66e8d7d3e49fac"
+    },
+    {
+      "path": "src/content_factory/creative_evaluation.py",
+      "sha256": "14e152c68a7e026d474e736c502f9ca8a53cc69b8cead8e478d5af3514ef4090"
+    },
+    {
+      "path": "src/content_factory/creative_narrative_focus.py",
+      "sha256": "fb03a72e5a513194fb7ae26f0678e27d6770161d318301a74f109207dff0ee62"
+    },
+    {
+      "path": "src/content_factory/creative_narrative_transfer.py",
+      "sha256": "8022b3c6c9aefc703ef7f1fe972c1f666eccb1dc7ac6caf7da06d908baf8da11"
+    },
+    {
+      "path": "src/content_factory/creative_seedance_segments.py",
+      "sha256": "04641b4ddce8b38494502ba2664ea18a6d8a5dfe70f2b6c9b2f937832ea025ca"
+    },
+    {
+      "path": "src/content_factory/creative_event_recovery.py",
+      "sha256": "f8b3a12dd5fdcafa3f04e21551e4f63bc00cbaf28f1f96e0d42e2e67dd55c5db"
+    },
+    {
+      "path": "src/content_factory/creative_event_script.py",
+      "sha256": "510cc0c37306f6f627c19f1d078afc95365ca6753f06e92d527dd1e39ec8fdfc"
+    }
+  ],
+  "rule_inventory_coverage_claim": false,
+  "supersedes": "data/creative_governance/20261001_v6_narrative",
+  "change": "Final request text joins existing semantic review; v2 binds stage dispatch and exports exact narrative transfer.",
+  "revision_note": "Event revision locks existing IDs/count, at most two dialogue events; recovery compiles screenplay before revision validator."
+}

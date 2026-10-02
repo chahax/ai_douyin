@@ -1,0 +1,9 @@
+{
+  "policy_version": "v3_20260922",
+  "max_calls": 20,
+  "max_total_tokens": 500000,
+  "max_contract_repairs": 4,
+  "max_revisions": 2,
+  "applies_to": "new_creative_tasks_only",
+  "reason": "四份 v2 真实任务中，格式与字段错误常在完整剧本形成前耗尽两次技术修复。提高技术修复上限但不增加调用或 token 总额；无效回显仍立即停止，旧任务预算不改变。"
+}

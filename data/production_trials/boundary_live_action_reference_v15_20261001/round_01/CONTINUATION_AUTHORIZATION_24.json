@@ -1,0 +1,532 @@
+{
+  "schema": "creative_budget_extension_authorization/v1",
+  "created_at": "2026-10-01T13:34:47.875426+00:00",
+  "authorization": "用户明确回复允许：将本稿调用上限从20提高到24，最多新增4次额度，继续完整文本生产流程。",
+  "previous_max_calls": 20,
+  "new_max_calls": 24,
+  "calls_started": 17,
+  "reported_tokens": 245469,
+  "other_budget_changes": false,
+  "retry_archive": {
+    "director_state_plan__00.json": "90fbeddd63375cc9613dd6c12980aada74b570940ac9b064c9f03f88ed6b5452",
+    "director_state_plan__00__contract_repair.json": "414b7e3273776bf77a91c8275d68aa0bda76f073180a74921d5af59423512898"
+  },
+  "previous_stage_recovery": {
+    "version": "failed_plan_full_rebuild_v1",
+    "requirements": "重新提交完整whole_film_action_plan_v2，使用当前新manifest身份，不沿用旧P08或把桌子E01当座椅。逐拍守住script实际动作对白顺序。根据每拍秒数给对白先留自然窗口，action/hold合计还要加对白才是总长，不机械添加长hold；数值必须number。完整保留必要动作和关键反应，不为排时删剧情；原稿不要求的停顿可以重新分配。检查所有拍而非只改B2。before在第一句前，during在第一句后、其余句前，after在全部对白后；performance不能藏take/place/move/stand/sit等物理操作。坐前位置、朝向、standing前提都要在前组成立；hold必须无物理动作。不编造操作kind，不伪造已完成状态。",
+    "previous_invalid_output": {
+      "schema": "whole_film_action_plan_v2",
+      "initial_state": {
+        "C01": {
+          "posture": "standing",
+          "position": "E02林屿工位桌边",
+          "gaze": "P04咖啡杯",
+          "affect": "平常，惯性顺手",
+          "facing": "朝E02桌面方向"
+        },
+        "C02": {
+          "posture": "standing",
+          "position": "E02林屿工位桌前",
+          "gaze": "P05客户明细单",
+          "affect": "埋头专注对数字",
+          "facing": "朝E02桌面方向"
+        },
+        "P01": {
+          "holder": "C01",
+          "location": "方澄身上挎着"
+        },
+        "P02": {
+          "holder": "none",
+          "location": "E01方澄桌角，露出在敞口包内"
+        },
+        "P03": {
+          "holder": "none",
+          "location": "E01方澄桌角，三张不同日期便利贴"
+        },
+        "P04": {
+          "holder": "none",
+          "location": "E02林屿桌沿，靠近方澄一侧"
+        },
+        "P05": {
+          "holder": "C02",
+          "location": "E02林屿桌面，铺开在林屿手前"
+        },
+        "P06": {
+          "holder": "none",
+          "location": "E02林屿桌边，叠放在桌面侧方"
+        },
+        "P07": {
+          "holder": "C02",
+          "location": "E02林屿桌面，握在手中"
+        },
+        "P08": {
+          "holder": "C01",
+          "location": "E01方澄工位，桌前空椅"
+        }
+      },
+      "spatial_contract": {
+        "seats": [
+          {
+            "seat_id": "E01",
+            "access_positions": [
+              "P08前方",
+              "P08侧方"
+            ],
+            "required_facing": "朝E01桌面方向"
+          }
+        ]
+      },
+      "beats": [
+        {
+          "beat_id": "B1",
+          "purpose": "建立傍晚办公室与两人日常相处基调：方澄习惯性顺手善后，林屿埋头对账；桌面物件与林屿那句\"上次那批也是你帮我对完的\"共同告诉观众方澄过去不止一次替林屿善后，包口露出的票根则暗示她今晚另有安排。",
+          "composition": "中景偏宽，方澄在前景右侧靠近林屿桌沿，林屿在画面左侧埋首桌前；夕光从窗口斜入形成柔和侧光，桌面物件（咖啡杯、客户明细单、敞口挎包与露出的票根/便利贴）可被看清。",
+          "camera": "固定机位单机连续拍摄，不切。",
+          "dialogue_mode": "画内对白",
+          "cut_reason": "建立空间、人物关系与历史负担，为后续转折提供依据；连续镜头让观众一次性看清桌面物件与两人位置。",
+          "groups": [
+            {
+              "id": "B1-G1",
+              "script_slot": "before",
+              "kind": "action",
+              "duration_seconds": 2.5,
+              "hold_subject": "",
+              "performance": "方澄脚步轻、动作随手不犹豫；右手握住杯身中段，左手虚扶杯底，平稳端起放下，指尖无多余停顿，呈现长期形成的肌肉记忆。",
+              "operations": [
+                {
+                  "kind": "move",
+                  "actor": "C01",
+                  "target": "",
+                  "value": "E02林屿桌沿边"
+                },
+                {
+                  "kind": "take",
+                  "actor": "C01",
+                  "target": "P04",
+                  "value": "单手端于手中"
+                },
+                {
+                  "kind": "place",
+                  "actor": "C01",
+                  "target": "P04",
+                  "value": "E02桌面中央，远离桌沿"
+                }
+              ]
+            },
+            {
+              "id": "B1-G2",
+              "script_slot": "after",
+              "kind": "action",
+              "duration_seconds": 2.5,
+              "hold_subject": "",
+              "performance": "方澄步速平稳回到自己工位，转身把挎包翻盖搭在椅背外沿，让敞口自然朝外；动作不刻意，使票根与三张便利贴的边角可被观众在余光中识别。",
+              "operations": [
+                {
+                  "kind": "move",
+                  "actor": "C01",
+                  "target": "",
+                  "value": "E01方澄工位椅P08侧方"
+                },
+                {
+                  "kind": "face",
+                  "actor": "C01",
+                  "target": "",
+                  "value": "朝P08椅背方向"
+                },
+                {
+                  "kind": "place",
+                  "actor": "C01",
+                  "target": "P01",
+                  "value": "P08椅背上沿，敞口朝外"
+                }
+              ]
+            },
+            {
+              "id": "B1-G3",
+              "script_slot": "after",
+              "kind": "action",
+              "duration_seconds": 2.5,
+              "hold_subject": "",
+              "performance": "林屿肩线微前倾，刘海半遮眉心；握笔的中指抵住纸面做支点，笔尖沿明细格逐行轻划，嘴唇抿紧不抬，呼吸平而浅，呈现长时间核对数字的专注。",
+              "operations": [
+                {
+                  "kind": "gaze",
+                  "actor": "C02",
+                  "target": "",
+                  "value": "P05客户明细单逐行数字"
+                },
+                {
+                  "kind": "affect",
+                  "actor": "C02",
+                  "target": "",
+                  "value": "埋头专注，呼吸平稳"
+                }
+              ]
+            },
+            {
+              "id": "B1-G4",
+              "script_slot": "after",
+              "kind": "hold",
+              "duration_seconds": 3.5,
+              "hold_subject": "C02",
+              "performance": "林屿保持低头对数字的姿态，笔尖持续小幅度移动；夕光在侧脸形成稳定暖阴影，桌面物件状态不变，让观众有充分时间看清敞口包内的票根与三张便利贴。",
+              "operations": []
+            }
+          ],
+          "dialogue_performance": "林屿说话时眼未离开明细单，嘴唇随语句轻微张合，尾音\"谢谢啊\"略微上扬带客套惯性，语速平而轻，未抬头寻找对方目光。",
+          "reaction": {
+            "anchor": "dialogue_0",
+            "subject": "C01",
+            "meaning": "方澄听到林屿习惯性的致谢，没有停下善后动作也没有回应，继续走回自己工位；身体动作的连贯与对白的轻飘形成对照，让观众看出她已把这种帮忙视为日常。"
+          },
+          "cut_after_event_id": "B1-G4",
+          "completion_condition": "all_required_events_complete"
+        },
+        {
+          "beat_id": "B2",
+          "purpose": "林屿把帮忙当作理所当然地随口提出，方澄手指捏住包带、目光在林屿脸与桌角票根之间来回——犹豫被具体化为可见动作，让观众替她的选择紧张。",
+          "composition": "中景偏紧，方澄侧对镜头站在自己工位旁，林屿在画面另一侧抬脸；夕光从方澄身后斜入，使其侧脸轮廓清晰，包带与指尖的收紧动作可被读出。",
+          "camera": "固定机位单机连续拍摄，不切。",
+          "dialogue_mode": "画内对白",
+          "cut_reason": "用方澄的手部与视线变化承载犹豫，需在同一镜头中保持连贯可读，避免切换打断她正在酝酿的判断。",
+          "groups": [
+            {
+              "id": "B2-G1",
+              "script_slot": "before",
+              "kind": "action",
+              "duration_seconds": 3.5,
+              "hold_subject": "",
+              "performance": "方澄抬手把挎包带从中段拉起，搭上右肩；指尖在金属扣位置微微停一拍才扣好，肩线略紧，透出\"准备离开\"与\"被叫住\"之间的犹豫先兆。",
+              "operations": [
+                {
+                  "kind": "take",
+                  "actor": "C01",
+                  "target": "P01",
+                  "value": "右肩挎包带位，指尖捏住带扣"
+                },
+                {
+                  "kind": "face",
+                  "actor": "C01",
+                  "target": "",
+                  "value": "朝C02林屿方向"
+                }
+              ]
+            },
+            {
+              "id": "B2-G2",
+              "script_slot": "after",
+              "kind": "action",
+              "duration_seconds": 3.5,
+              "hold_subject": "",
+              "performance": "方澄视线先落在林屿抬起的脸上，停半拍后缓慢移向E01桌角露出的院线票根；眼睑微微收窄，喉结轻动一下，指尖把包带又收紧半寸，呼吸变浅——犹豫被外化为目光往返与手部微动作。",
+              "operations": [
+                {
+                  "kind": "gaze",
+                  "actor": "C01",
+                  "target": "",
+                  "value": "从C02林屿脸移到E01桌角P02院线票根"
+                },
+                {
+                  "kind": "affect",
+                  "actor": "C01",
+                  "target": "",
+                  "value": "犹豫，眉心微蹙，嘴唇抿紧"
+                }
+              ]
+            },
+            {
+              "id": "B2-G3",
+              "script_slot": "after",
+              "kind": "hold",
+              "duration_seconds": 3.5,
+              "hold_subject": "C01",
+              "performance": "方澄保持视线停在票根、指尖捏紧包带的姿势不动；林屿在画面另一侧维持抬脸等待的微表情，形成对视落空与等待未到的张力，让观众的紧张感在静止中累积。",
+              "operations": []
+            }
+          ],
+          "dialogue_performance": "林屿抬头看向方澄，语调随意上扬，尾句\"帮我对一下\"略带笑意，眼神是习惯性的\"她应该会答应\"的松弛；嘴唇动作轻，未刻意组织语言，呈现随口提出的自然感。",
+          "reaction": {
+            "anchor": "B2-G2",
+            "subject": "C02",
+            "meaning": "林屿看到方澄的目光移开、捏紧包带，意识到她没有像往常一样立刻答应；抬起的脸维持着笑容但眼神出现轻微不确定，等待的姿势开始带出\"她会拒绝吗\"的苗头。"
+          },
+          "cut_after_event_id": "B2-G3",
+          "completion_condition": "all_required_events_complete"
+        },
+        {
+          "beat_id": "B3",
+          "purpose": "清楚的拒绝与笔尖停住同时被看见：方澄放下包、合上包口、轻声但明确地说出\"这次我先走，你自己对吧\"；林屿手部近景里笔尖停住，没签完的字划出短斜线——转折落在事实，不靠台词解释。",
+          "composition": "前半段中近景，方澄在画面中央偏右，林屿侧脸在后景；插入林屿手部近景（客户明细单上的笔尖与短斜线清晰可读），随后回到中近景看到两人反应。",
+          "camera": "单机连续拍摄，组内不切；林屿手部近景通过演员在同一画面内前景位置与景深实现，不切机位。",
+          "dialogue_mode": "画内对白",
+          "cut_reason": "拒绝与笔停必须在同一拍内被观众同时看见，以事实承担转折；切机位会打断\"她说—他停\"的同步性。",
+          "groups": [
+            {
+              "id": "B3-G1",
+              "script_slot": "before",
+              "kind": "action",
+              "duration_seconds": 2.5,
+              "hold_subject": "",
+              "performance": "方澄把包带从肩上慢慢卸下，双手把P01挎包放在E01桌面上，双手合上翻盖；动作不急但也不再犹豫——放下与合口本身就是决定，让观众从动作先于台词读到选择。",
+              "operations": [
+                {
+                  "kind": "take",
+                  "actor": "C01",
+                  "target": "P01",
+                  "value": "双手合握于胸前"
+                },
+                {
+                  "kind": "place",
+                  "actor": "C01",
+                  "target": "P01",
+                  "value": "E01方澄桌面，靠身前侧"
+                },
+                {
+                  "kind": "face",
+                  "actor": "C01",
+                  "target": "",
+                  "value": "朝C02林屿方向"
+                }
+              ]
+            },
+            {
+              "id": "B3-G2",
+              "script_slot": "during",
+              "kind": "action",
+              "duration_seconds": 3,
+              "hold_subject": "",
+              "performance": "林屿手部在前景近景位置：握笔的中指悬停、笔尖压住纸面轻微一顿再拖出约一厘米的短斜线；指节泛白，呼吸卡在胸腔；表情区域（侧脸颧骨到下颌）在浅景深中保持可读，眉心微拧、嘴角下沉。",
+              "operations": [
+                {
+                  "kind": "gaze",
+                  "actor": "C02",
+                  "target": "",
+                  "value": "P05客户明细单，停在未签完的字处"
+                },
+                {
+                  "kind": "affect",
+                  "actor": "C02",
+                  "target": "",
+                  "value": "愣住，眉心微拧，嘴唇微张"
+                }
+              ]
+            },
+            {
+              "id": "B3-G3",
+              "script_slot": "after",
+              "kind": "hold",
+              "duration_seconds": 4.5,
+              "hold_subject": "C02",
+              "performance": "林屿保持笔尖停在短斜线末端的姿势，手部近景清晰可见短斜线与未完成的字；呼吸浅而不匀，肩线绷紧——停顿本身在告诉观众：她在等那个\"好吧\"没有来。",
+              "operations": []
+            }
+          ],
+          "dialogue_performance": "方澄说话时嘴唇动作轻而明确，音量不高但吐字清晰；气息先沉一下再开口，尾句\"你自己对吧\"语调平且略往下落，没有解释、没有道歉；呼吸在说完后略长一拍才吸回，呈现不需对方确认的笃定。",
+          "reaction": {
+            "anchor": "dialogue_0",
+            "subject": "C02",
+            "meaning": "林屿听到方澄清楚地说出\"这次我先走\"，手里的笔停在未签完的字上；笔尖拖出的短斜线就是她意识到\"这次她没有答应\"的具体痕迹——转折不是情绪，是动作与墨迹。"
+          },
+          "cut_after_event_id": "B3-G3",
+          "completion_condition": "all_required_events_complete"
+        },
+        {
+          "beat_id": "B4",
+          "purpose": "方澄背起挎包走到门口，林屿低声说出依赖式回应\"我以为你会帮我的\"；方澄在门口停一下、没有回头、推门走出去——拒绝与离开被双方各自承住，余白留给门口停顿。",
+          "composition": "前半段方澄背影从工位走向门口，林屿在景深中保持坐姿；门口停顿给到方澄背影与肩线的中近景，让\"没有回头\"被看见；推门出去以背影消失在门缝光线变化中完成。",
+          "camera": "单机连续拍摄，方澄从工位走向门口的过程不切机位，靠演员调度与景深变化承担空间移动。",
+          "dialogue_mode": "画内对白",
+          "cut_reason": "依赖式回应与不停下不回头必须在同一拍内被观众同时听见与看见；若切换会破坏\"话落下—脚步不停\"的同步张力。",
+          "groups": [
+            {
+              "id": "B4-G1",
+              "script_slot": "before",
+              "kind": "action",
+              "duration_seconds": 3.5,
+              "hold_subject": "",
+              "performance": "方澄动作连贯不拖泥带水：双手提起P01挎包、单肩挎上、转身背对林屿向E04门走去；步速比之前稍快但不显慌张，背影稳定；到达门口时右手自然搭上门把横杆，五指虚握未下压。",
+              "operations": [
+                {
+                  "kind": "take",
+                  "actor": "C01",
+                  "target": "P01",
+                  "value": "右肩挎起，背带贴肩"
+                },
+                {
+                  "kind": "face",
+                  "actor": "C01",
+                  "target": "",
+                  "value": "朝E04门方向"
+                },
+                {
+                  "kind": "move",
+                  "actor": "C01",
+                  "target": "",
+                  "value": "E04门把手前"
+                }
+              ]
+            },
+            {
+              "id": "B4-G2",
+              "script_slot": "during",
+              "kind": "action",
+              "duration_seconds": 2,
+              "hold_subject": "",
+              "performance": "方澄在门口停顿：右手握把不动，肩线一沉，没有转头、没有回头看林屿；后脑勺与肩颈的轮廓在门口暖光中清晰可见，呼吸放慢一拍——这是\"听到了，但选择不回头\"的可见决定。",
+              "operations": [
+                {
+                  "kind": "affect",
+                  "actor": "C01",
+                  "target": "",
+                  "value": "沉默克制，肩线下沉，不回头"
+                },
+                {
+                  "kind": "gaze",
+                  "actor": "C01",
+                  "target": "",
+                  "value": "前方门外方向，不回头"
+                }
+              ]
+            },
+            {
+              "id": "B4-G3",
+              "script_slot": "during",
+              "kind": "action",
+              "duration_seconds": 3,
+              "hold_subject": "",
+              "performance": "方澄右手下压门把，门向内开，门缝透出走廊冷白光与方澄侧影；她侧身出门，背影被门板逐渐遮住，最后一线肩线消失在门外——离开干脆，但用门合上的声音留出余响。",
+              "operations": [
+                {
+                  "kind": "face",
+                  "actor": "C01",
+                  "target": "",
+                  "value": "朝门外走廊方向"
+                },
+                {
+                  "kind": "move",
+                  "actor": "C01",
+                  "target": "",
+                  "value": "E04门外走廊"
+                }
+              ]
+            },
+            {
+              "id": "B4-G4",
+              "script_slot": "after",
+              "kind": "hold",
+              "duration_seconds": 3.5,
+              "hold_subject": "C02",
+              "performance": "林屿保持坐姿，目光停在自己抬起的方向或明细单上；嘴微张未合，呼吸在对方消失后明显长出一口；肩线从前倾缓缓塌回椅背——关系变化的实感落在空掉的桌面与未合拢的嘴上。",
+              "operations": []
+            }
+          ],
+          "dialogue_performance": "林屿声音比前两句低，尾音往下掉，气息先抖一下才把字推出来；\"我以为你会帮我的\"语速慢、咬字略含糊，像是不自觉把心里话漏了出来；说完后嘴唇合不紧，喉结轻动一下咽了口气。",
+          "reaction": {
+            "anchor": "dialogue_0",
+            "subject": "C01",
+            "meaning": "方澄听见林屿低声说\"我以为你会帮我的\"，在门口停顿、压住门把但没有回头，没有接话也没有道歉——停顿本身承担了\"听到了，但不再为此让步\"的回应。"
+          },
+          "cut_after_event_id": "B4-G4",
+          "completion_condition": "all_required_events_complete"
+        },
+        {
+          "beat_id": "B5",
+          "purpose": "林屿独坐桌前，把桌角三张日期便利贴揭下整齐叠好放进抽屉，再从旁边拿出自己那份结算单，落笔开始对——关系变化由具体行动收束，不靠台词或口号。",
+          "composition": "方澄工位方向的近景到中景：先看清桌角三张便利贴被揭下、叠齐、收入抽屉；再看到林屿从E02桌边抽出P06结算单，落笔动作可读；夕光在结算单纸面留下暖色高光，让\"重新开始\"被一帧画面收住。",
+          "camera": "单机连续拍摄，林屿从E02走到E01桌角揭便利贴再走回E02抽屉柜再回E02桌前的过程，由演员调度在同一机位内完成。",
+          "dialogue_mode": "无对白",
+          "cut_reason": "收尾段以行为承担主题，演员动作序列需连贯，单机不切才能让\"揭下—叠齐—收抽屉—抽结算单—落笔\"成为一个完整仪式。",
+          "groups": [
+            {
+              "id": "B5-G1",
+              "script_slot": "before",
+              "kind": "action",
+              "duration_seconds": 3.5,
+              "hold_subject": "",
+              "performance": "林屿从E02起身走到E01方澄桌角，右手拇指与食指捏住P03第一张便利贴边角轻揭，三张依次揭下不撕裂；在桌面用掌根对齐压平两次，再走向E03抽屉柜，拉开中斗抽屉放入并推回——动作细致不仓促，像在正式收场。",
+              "operations": [
+                {
+                  "kind": "move",
+                  "actor": "C02",
+                  "target": "",
+                  "value": "E01方澄桌角"
+                },
+                {
+                  "kind": "take",
+                  "actor": "C02",
+                  "target": "P03",
+                  "value": "右手三张捏齐，对齐压平"
+                },
+                {
+                  "kind": "move",
+                  "actor": "C02",
+                  "target": "",
+                  "value": "E03抽屉柜前"
+                },
+                {
+                  "kind": "place",
+                  "actor": "C02",
+                  "target": "P03",
+                  "value": "E03抽屉中斗内"
+                }
+              ]
+            },
+            {
+              "id": "B5-G2",
+              "script_slot": "after",
+              "kind": "action",
+              "duration_seconds": 2.5,
+              "hold_subject": "",
+              "performance": "林屿回到E02桌前坐下，从桌面侧方把P06结算单抽到面前铺平；右手把P07签字笔从客户明细单旁拿回，换到结算单第一行格子上落笔——落笔那一刻肩线明显放松，呼吸重新归于平稳。",
+              "operations": [
+                {
+                  "kind": "move",
+                  "actor": "C02",
+                  "target": "",
+                  "value": "E02林屿工位桌前"
+                },
+                {
+                  "kind": "take",
+                  "actor": "C02",
+                  "target": "P06",
+                  "value": "双手铺平于E02桌面中央"
+                },
+                {
+                  "kind": "gaze",
+                  "actor": "C02",
+                  "target": "",
+                  "value": "P06结算单第一行格子"
+                },
+                {
+                  "kind": "affect",
+                  "actor": "C02",
+                  "target": "",
+                  "value": "沉静专注，肩线放松"
+                }
+              ]
+            },
+            {
+              "id": "B5-G3",
+              "script_slot": "after",
+              "kind": "hold",
+              "duration_seconds": 4,
+              "hold_subject": "C02",
+              "performance": "林屿保持低头落笔对结算单的姿态，笔尖在纸面小幅度移动；夕光把结算单纸面染成暖橘色，桌面只剩自己的明细与结算单——空掉的对面工位与独坐的身影共同把关系变化落在画面里。",
+              "operations": []
+            }
+          ],
+          "dialogue_performance": "本拍无对白，仅以呼吸与笔尖划过纸面的细响作为可听表演：揭便利贴时呼吸略重，收进抽屉后长出一口气，落笔时呼吸重新归于平稳。",
+          "reaction": {
+            "anchor": "B5-G2",
+            "subject": "C02",
+            "meaning": "林屿揭下方澄桌角那三张善后便利贴、收进抽屉、抽出自己的结算单落笔开始对——不再等别人来善后，由她自己拿起自己的账，这一个动作就是关系变化的全部回应。"
+          },
+          "cut_after_event_id": "B5-G3",
+          "completion_condition": "all_required_events_complete"
+        }
+      ]
+    }
+  },
+  "proposal_sha256": "61c812ea7c5361458e5e069803157784ee050c33c5c7ef43cf68fe162981251e",
+  "automatic_content_approval": false
+}

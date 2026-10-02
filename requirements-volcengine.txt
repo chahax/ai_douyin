@@ -1,0 +1,2 @@
+# Optional management SDK for read-only account balance queries.
+volcengine-python-sdk==5.0.48

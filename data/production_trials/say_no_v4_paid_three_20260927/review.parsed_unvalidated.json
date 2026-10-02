@@ -1,0 +1,232 @@
+{
+  "story_preserved": false,
+  "issues": [
+    {
+      "id": "I01",
+      "owner": "director",
+      "location": "SH04",
+      "severity": "blocking",
+      "rule": "同一动作在镜内时间轴与构图/首帧描述中必须一致；不得在同一连续镜头内安排两套互斥的机位或构图。",
+      "evidence": "visible_performance 4.7–8.0秒写林遥“身体开始右转带动深灰外套侧背影沿走道朝画面深处门口走出两步”；但 composition 与 prompt 的固定构图写“林遥站立于画框右侧桌边偏前、胸腰以上入画、面朝画面左侧陈禾方向”，且 camera 声明“固定机位（无推拉、无手持晃动、无切镜）”。",
+      "contradiction": "固定双人中景（胸腰以上、面朝左侧）与林遥转身成侧背影、沿纵深走道走出两步并停在画面深处，是两套互斥的取景/机位安排；固定机位无法同时保持胸腰以上双人中景又让林遥走入画面深处。",
+      "impact": "生成时无法同时满足固定中景与纵深走位，必然出现镜内硬切、机位漂移或动作被压缩，破坏“单镜连续收束”的叙事意图。",
+      "proposal": "统一为单一连续机位与单一构图：要么保持固定双人中景、把林遥离开处理为在画面内可读的有限位移，要么明确改为可容纳纵深走位的连续运镜并同步修正 composition/camera/start_state/end_state，不得保留两套互斥描述。",
+      "evidence_refs": [
+        {
+          "path": "shots.shots.0.visible_performance",
+          "quote": "身体开始右转带动深灰外套侧背影沿走道朝画面深处门口走出两步"
+        },
+        {
+          "path": "shots.shots.0.composition",
+          "quote": "竖屏9:16 固定双人中景：林遥站立于画框右侧桌边偏前、胸腰以上入画、面朝画面左侧陈禾方向"
+        },
+        {
+          "path": "shots.shots.0.camera",
+          "quote": "固定机位（无推拉、无手持晃动、无切镜）"
+        }
+      ]
+    },
+    {
+      "id": "I02",
+      "owner": "director",
+      "location": "SH04",
+      "severity": "blocking",
+      "rule": "分镜时间轴必须服从剧本实际播放顺序：剧本 B4 为“林遥转身朝门口走出两步，自然道别离开”在前，“陈禾转身面向桌面，坐下接手工作”在后；且对白应在道别离开的语境中说出。",
+      "evidence": "script.beats[B4].during 为“林遥转身朝室内门口走出两步，自然道别离开”，after 为“陈禾转身面向自己的桌面，坐下接手工作”；而 visible_performance 把对白放在 2.0–4.7 秒、走两步放在 4.7–8.0 秒，陈禾转身坐下放在 8.0–10.0 秒。",
+      "contradiction": "剧本顺序是“走两步/道别离开→陈禾转身坐下”，分镜把对白提前到走两步之前，使“道别离开”与“走出两步”被拆成对白先、走位后，改变了剧本的播放顺序。",
+      "impact": "观众看到的因果顺序与剧本不一致，道别对白不再与离开动作同步，削弱“自然道别离开”的收束感。",
+      "proposal": "按剧本顺序重排时间轴：先呈现林遥转身朝门口走出两步并自然道别，再呈现陈禾转身面向桌面、坐下接手工作；对白应落在离开动作的语境中，不得把走位拆到对白之后。",
+      "evidence_refs": [
+        {
+          "path": "script.beats.0.during",
+          "quote": "林遥转身朝室内门口走出两步，自然道别离开。"
+        },
+        {
+          "path": "script.beats.0.after",
+          "quote": "陈禾转身面向自己的桌面，坐下接手工作。"
+        },
+        {
+          "path": "shots.shots.0.visible_performance",
+          "quote": "2.0–4.7秒：林遥嘴部清晰开口说出道别对白\"麻烦你了，明天见。\""
+        },
+        {
+          "path": "shots.shots.0.visible_performance",
+          "quote": "4.7–8.0秒：林遥嘴部闭合，目光朝画面深处门口方向，身体开始右转带动深灰外套侧背影沿走道朝画面深处门口走出两步"
+        }
+      ]
+    },
+    {
+      "id": "I03",
+      "owner": "director",
+      "location": "SH04",
+      "severity": "major",
+      "rule": "首帧应是该动作发生前的静态状态；若上一镜实际已开始该动作，应按真实进度承接，不能重演或提前。",
+      "evidence": "start_state 写“肩线仍保持SH03末帧微紧状态不提前下沉”，而 visible_performance 0.0–1.5秒写“林遥肩部在听见陈禾口头接受之后完成可见松沉”；previous_shot.end_state 写“肩线仍保持微紧不松”。",
+      "contradiction": "上一镜末帧肩线仍微紧，本镜首帧也写微紧，但本镜 0.0 秒即开始松沉，首帧与第一个动作之间缺少“动作发生前”的静态临界点，等于把松沉动作从 0.0 秒起算，与“首帧不提前下沉”的自我声明相冲突。",
+      "impact": "首帧若已进入松沉，则“听见才松”的因果起点被前移，观众无法读到“等待接受→听见→放松”的完整过程。",
+      "proposal": "明确首帧为松沉发生前的静态状态，并把松沉起始点放在首帧之后；若上一镜末帧已开始松沉，则按真实进度承接而非重演。",
+      "evidence_refs": [
+        {
+          "path": "shots.shots.0.start_state",
+          "quote": "肩线仍保持SH03末帧微紧状态不提前下沉"
+        },
+        {
+          "path": "shots.shots.0.visible_performance",
+          "quote": "0.0–1.5秒：林遥肩部在听见陈禾口头接受之后完成可见松沉"
+        },
+        {
+          "path": "previous_shot.end_state",
+          "quote": "肩线仍保持微紧不松"
+        }
+      ]
+    }
+  ],
+  "suggestions": [
+    {
+      "location": "SH04",
+      "proposal": "在保持单镜连续的前提下，用林遥肩部松沉、点头、道别口型与陈禾坐回桌面的身体语言承担收束，避免用机位变化代替表演。",
+      "reason": "本拍核心是“听见才松”的因果与关系保持正常，表演层次比运镜数量更重要。"
+    },
+    {
+      "location": "SH04",
+      "proposal": "对白“麻烦你了，明天见。”可保持平稳、尾音自然收住，不追加解释或客套。",
+      "reason": "creative_brief 要求自然温暖、不讲道理，结尾不增加解释或新任务。"
+    }
+  ],
+  "calibration_focus": [
+    "生成后核对林遥肩部松沉是否严格发生在听见陈禾口头接受之后，且首帧为松沉前静态状态。",
+    "生成后核对林遥道别对白与“转身朝门口走出两步”的播放顺序是否与剧本 B4 一致。",
+    "生成后核对固定机位与纵深走位是否在同一连续镜头内成立，无镜内硬切或机位漂移。",
+    "生成后核对墨蓝色文件夹是否始终平放在陈禾桌面、未递给林遥、未打开或翻页。",
+    "生成后核对陈禾转身面向桌面并坐下接手工作是否发生在林遥道别离开之后。"
+  ],
+  "coverage": [
+    {
+      "id": "SH04",
+      "checks": {
+        "requirements": {
+          "status": "fail",
+          "reason": "人物关系、道具归属与结尾方向基本符合简报，但剧本 B4 的播放顺序（先走两步/道别离开，后陈禾转身坐下）在分镜中被改为对白先、走位后，未满足“分镜服从剧本播放顺序”的适用约束。",
+          "evidence_refs": [
+            {
+              "path": "script.beats.0.during",
+              "quote": "林遥转身朝室内门口走出两步，自然道别离开。"
+            },
+            {
+              "path": "script.beats.0.after",
+              "quote": "陈禾转身面向自己的桌面，坐下接手工作。"
+            },
+            {
+              "path": "shots.shots.0.visible_performance",
+              "quote": "2.0–4.7秒：林遥嘴部清晰开口说出道别对白\"麻烦你了，明天见。\""
+            }
+          ],
+          "issue_ids": [
+            "I02"
+          ]
+        },
+        "timing": {
+          "status": "fail",
+          "reason": "剧本实际播放为“走两步/道别离开→陈禾转身坐下”，分镜时间轴把对白放在走两步之前，且固定机位与纵深走位互斥，同一动作在两处安排不一致。",
+          "evidence_refs": [
+            {
+              "path": "shots.shots.0.visible_performance",
+              "quote": "4.7–8.0秒：林遥嘴部闭合，目光朝画面深处门口方向，身体开始右转带动深灰外套侧背影沿走道朝画面深处门口走出两步"
+            },
+            {
+              "path": "shots.shots.0.prompt",
+              "quote": "连续机位：固定机位（无推拉、无手持晃动、无切镜）"
+            },
+            {
+              "path": "script.beats.0.during",
+              "quote": "林遥转身朝室内门口走出两步，自然道别离开。"
+            }
+          ],
+          "issue_ids": [
+            "I01",
+            "I02"
+          ]
+        },
+        "continuity": {
+          "status": "fail",
+          "reason": "上一镜末帧林遥肩线仍微紧、陈禾文件夹已平放桌面，本镜首帧承接了这两点；但首帧声明“不提前下沉”的同时 0.0 秒即开始松沉，且固定双人中景与林遥纵深侧背影走位无法在同一连续机位内成立。",
+          "evidence_refs": [
+            {
+              "path": "shots.shots.0.start_state",
+              "quote": "肩线仍保持SH03末帧微紧状态不提前下沉"
+            },
+            {
+              "path": "shots.shots.0.end_state",
+              "quote": "林遥停在画面深处走道上的两步落点处、深灰外套侧背影稳定"
+            },
+            {
+              "path": "shots.shots.0.visible_performance",
+              "quote": "0.0–1.5秒：林遥肩部在听见陈禾口头接受之后完成可见松沉"
+            },
+            {
+              "path": "previous_shot.end_state",
+              "quote": "肩线仍保持微紧不松"
+            }
+          ],
+          "issue_ids": [
+            "I01",
+            "I03"
+          ]
+        },
+        "dialogue_timing": {
+          "status": "fail",
+          "reason": "唯一对白“麻烦你了，明天见。”共 8 字，分镜给 2.0–4.7 秒约 2.7 秒，字面估算可行；但该对白被放在“走两步”之前，与剧本“道别离开”同步的播放顺序不符，且未区分串行/并行必要动作。",
+          "evidence_refs": [
+            {
+              "path": "shots.shots.0.dialogue_lock.0.text",
+              "quote": "麻烦你了，明天见。"
+            },
+            {
+              "path": "shots.shots.0.visible_performance",
+              "quote": "2.0–4.7秒：林遥嘴部清晰开口说出道别对白\"麻烦你了，明天见。\""
+            },
+            {
+              "path": "script.beats.0.during",
+              "quote": "林遥转身朝室内门口走出两步，自然道别离开。"
+            }
+          ],
+          "issue_ids": [
+            "I02"
+          ]
+        },
+        "first_frame": {
+          "status": "fail",
+          "reason": "start_state 写肩线仍微紧、不提前下沉，但 visible_performance 从 0.0 秒即开始松沉，首帧与第一个动作之间缺少“动作发生前”的静态临界点，等于把松沉从首帧起算。",
+          "evidence_refs": [
+            {
+              "path": "shots.shots.0.start_state",
+              "quote": "肩线仍保持SH03末帧微紧状态不提前下沉"
+            },
+            {
+              "path": "shots.shots.0.visible_performance",
+              "quote": "0.0–1.5秒：林遥肩部在听见陈禾口头接受之后完成可见松沉"
+            }
+          ],
+          "issue_ids": [
+            "I03"
+          ]
+        },
+        "assets": {
+          "status": "pass",
+          "reason": "本镜可见人物、道具、场景与 style.character_lock、palette、spatial_layout 及 media_assumptions 中林遥、陈禾、墨蓝色文件夹、晚间办公室定义一致；文件夹始终平放在陈禾桌面、未递给林遥，符合简报道具约束。",
+          "evidence_refs": [
+            {
+              "path": "shots.shots.0.composition",
+              "quote": "墨蓝色文件夹平放在她自己桌面米白色块上"
+            },
+            {
+              "path": "shots.shots.0.visible_performance",
+              "quote": "墨蓝色文件夹始终平放在陈禾桌面、归属陈禾、不出现打开、翻页或递向林遥"
+            }
+          ],
+          "issue_ids": []
+        }
+      }
+    }
+  ]
+}

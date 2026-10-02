@@ -1,0 +1,9 @@
+{
+  "policy_version": "v4_20260923",
+  "max_calls": 20,
+  "max_total_tokens": 500000,
+  "max_contract_repairs": 8,
+  "max_revisions": 2,
+  "applies_to": "new_creative_tasks_only",
+  "reason": "校园真实任务 24、27、28 均在完整文本复核前后耗尽四次技术修复；供应商结构与引文归位消耗了额度，使后续明确的对白时长错误无法修复。提高格式与契约修复上限到八次，不增加实质返修轮数、总调用或 token 上限；旧任务预算不改变。"
+}

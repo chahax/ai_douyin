@@ -1,0 +1,82 @@
+{
+  "schema": "p1_actual_runner_cli_chain/v1",
+  "initial_director_repair_and_rebuild_calls": 5,
+  "rounds": [
+    {
+      "calls_before": 5,
+      "calls_after": 6,
+      "model_calls": 1,
+      "current_feedback_binding": true,
+      "breakpoint": {
+        "schema": "creative_stage_breakpoint/v1",
+        "stage_id": "writer_script",
+        "reason": "next_stage_completed",
+        "input_sha256": "1ec484a005cbcf7ec28d1fe290f9b75fc3d953e042b2198aca5b85c5bff76387",
+        "output_sha256": "270d4f684afd258d4a87d4bf46d3a03e3abe3538a9bb193c6d7c20b7320894e0",
+        "calls_started": 6,
+        "stopped_at": "2026-10-02T07:23:31.742081+00:00",
+        "automatic_media_submit": false
+      },
+      "feedback_status": "resolved",
+      "cached_replay_calls": 0,
+      "comparison": {
+        "schema": "creative_stage_comparison/v1",
+        "stage_id": "writer_script",
+        "base_sha256": "2d2dee139d6349536e5dd19afddb2867993ece82d83329bc27f57053ad7746a0",
+        "target_sha256": "270d4f684afd258d4a87d4bf46d3a03e3abe3538a9bb193c6d7c20b7320894e0",
+        "diff": "--- 2d2dee139d6349536e5dd19afddb2867993ece82d83329bc27f57053ad7746a0\n+++ 270d4f684afd258d4a87d4bf46d3a03e3abe3538a9bb193c6d7c20b7320894e0\n@@ -27,5 +27,5 @@\n   \"premise\": \"两人消除误会\",\n   \"screenplay_markdown\": \"甲和乙相遇，因误会争执。解释后两人理解彼此。\",\n   \"selected_candidate_id\": \"C01\",\n-  \"title\": \"FIXTURE rebuilt script\"\n+  \"title\": \"FIXTURE CLI revised version 6\"\n }"
+      }
+    },
+    {
+      "calls_before": 6,
+      "calls_after": 7,
+      "model_calls": 1,
+      "current_feedback_binding": true,
+      "breakpoint": {
+        "schema": "creative_stage_breakpoint/v1",
+        "stage_id": "writer_script",
+        "reason": "next_stage_completed",
+        "input_sha256": "7e866b8bbe244a85463895316d177a2f84add7a8132363141216d46d4c2f95dc",
+        "output_sha256": "c54cdc67263d6b1dcec41fc0400ec69160597e70875d4aa11114796dec6d8b5b",
+        "calls_started": 7,
+        "stopped_at": "2026-10-02T07:23:32.064003+00:00",
+        "automatic_media_submit": false
+      },
+      "feedback_status": "resolved",
+      "cached_replay_calls": 0,
+      "comparison": {
+        "schema": "creative_stage_comparison/v1",
+        "stage_id": "writer_script",
+        "base_sha256": "270d4f684afd258d4a87d4bf46d3a03e3abe3538a9bb193c6d7c20b7320894e0",
+        "target_sha256": "c54cdc67263d6b1dcec41fc0400ec69160597e70875d4aa11114796dec6d8b5b",
+        "diff": "--- 270d4f684afd258d4a87d4bf46d3a03e3abe3538a9bb193c6d7c20b7320894e0\n+++ c54cdc67263d6b1dcec41fc0400ec69160597e70875d4aa11114796dec6d8b5b\n@@ -27,5 +27,5 @@\n   \"premise\": \"两人消除误会\",\n   \"screenplay_markdown\": \"甲和乙相遇，因误会争执。解释后两人理解彼此。\",\n   \"selected_candidate_id\": \"C01\",\n-  \"title\": \"FIXTURE CLI revised version 6\"\n+  \"title\": \"FIXTURE CLI revised version 7\"\n }"
+      }
+    }
+  ],
+  "final_calls_started": 7,
+  "reported_total_tokens": 7,
+  "budget": {
+    "max_calls": 20,
+    "max_total_tokens": 500000,
+    "max_revisions": 5,
+    "max_contract_repairs": 8,
+    "budget_policy_version": "v5_20261001"
+  },
+  "current_stage_count": 3,
+  "history_record_count": 7,
+  "historical_artifacts_and_resolutions_unchanged": true,
+  "original_upstream_unchanged": true,
+  "derived_history_hash_names_valid": true,
+  "derived_current_director_binding_valid": true,
+  "stage_dependencies": {
+    "writer_analysis": [],
+    "director_brief": [
+      "writer_analysis"
+    ],
+    "writer_script": [
+      "director_brief"
+    ]
+  },
+  "paid_calls": 0,
+  "media_review_performed": false
+}

@@ -297,8 +297,9 @@ def _try_restore_session_from_cookie(cookies) -> bool:
     return True
 
 
-def render_login_page() -> bool:
-    st.set_page_config(page_title="Douyin Studio · 内容创作与运营", page_icon="✦", layout="wide")
+def render_login_page(*, configure_page: bool = True) -> bool:
+    if configure_page:
+        st.set_page_config(page_title="Douyin Studio · 内容创作与运营", page_icon="✦", layout="wide")
     from src.web.components.ui import inject_app_theme
 
     inject_app_theme()

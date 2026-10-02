@@ -1,0 +1,599 @@
+{
+  "schema": "p1_v21_independent_confirmation/v1",
+  "created_at_bjt": "2026-10-02T15:31:11.785987+08:00",
+  "verdict": "four_closure_items_confirmed_full_direction_p1_incomplete",
+  "reported_four_closure_items_passed": true,
+  "full_direction_report_p1_complete": false,
+  "uniform_offline_regression": {
+    "tests": 379,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 379
+  },
+  "test_selection": [
+    "tests/test_creative_workflow.py",
+    "tests/test_creative_stage_debug.py",
+    "tests/test_media_review_policy.py",
+    "tests/test_media_user_review.py",
+    "tests/test_task_queue_claim.py",
+    "tests/test_llm_provider_contracts.py",
+    "tests/test_creative_governance.py",
+    "tests/test_creative_governed_protocol.py",
+    "tests/test_creative_governed_rollback.py",
+    "tests/test_migration_readiness.py",
+    "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\v20_confirmation\\test_recovery_boundaries.py",
+    "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\v20_confirmation\\test_extended_recovery.py",
+    "tests/test_creative_workflow_ui.py",
+    "tests/test_creative_full_script_revision.py"
+  ],
+  "cli_chain": {
+    "schema": "p1_actual_runner_cli_chain/v1",
+    "initial_director_repair_and_rebuild_calls": 5,
+    "rounds": [
+      {
+        "calls_before": 5,
+        "calls_after": 6,
+        "model_calls": 1,
+        "current_feedback_binding": true,
+        "breakpoint": {
+          "schema": "creative_stage_breakpoint/v1",
+          "stage_id": "writer_script",
+          "reason": "next_stage_completed",
+          "input_sha256": "1ec484a005cbcf7ec28d1fe290f9b75fc3d953e042b2198aca5b85c5bff76387",
+          "output_sha256": "270d4f684afd258d4a87d4bf46d3a03e3abe3538a9bb193c6d7c20b7320894e0",
+          "calls_started": 6,
+          "stopped_at": "2026-10-02T07:23:31.742081+00:00",
+          "automatic_media_submit": false
+        },
+        "feedback_status": "resolved",
+        "cached_replay_calls": 0,
+        "comparison": {
+          "schema": "creative_stage_comparison/v1",
+          "stage_id": "writer_script",
+          "base_sha256": "2d2dee139d6349536e5dd19afddb2867993ece82d83329bc27f57053ad7746a0",
+          "target_sha256": "270d4f684afd258d4a87d4bf46d3a03e3abe3538a9bb193c6d7c20b7320894e0",
+          "diff": "--- 2d2dee139d6349536e5dd19afddb2867993ece82d83329bc27f57053ad7746a0\n+++ 270d4f684afd258d4a87d4bf46d3a03e3abe3538a9bb193c6d7c20b7320894e0\n@@ -27,5 +27,5 @@\n   \"premise\": \"两人消除误会\",\n   \"screenplay_markdown\": \"甲和乙相遇，因误会争执。解释后两人理解彼此。\",\n   \"selected_candidate_id\": \"C01\",\n-  \"title\": \"FIXTURE rebuilt script\"\n+  \"title\": \"FIXTURE CLI revised version 6\"\n }"
+        }
+      },
+      {
+        "calls_before": 6,
+        "calls_after": 7,
+        "model_calls": 1,
+        "current_feedback_binding": true,
+        "breakpoint": {
+          "schema": "creative_stage_breakpoint/v1",
+          "stage_id": "writer_script",
+          "reason": "next_stage_completed",
+          "input_sha256": "7e866b8bbe244a85463895316d177a2f84add7a8132363141216d46d4c2f95dc",
+          "output_sha256": "c54cdc67263d6b1dcec41fc0400ec69160597e70875d4aa11114796dec6d8b5b",
+          "calls_started": 7,
+          "stopped_at": "2026-10-02T07:23:32.064003+00:00",
+          "automatic_media_submit": false
+        },
+        "feedback_status": "resolved",
+        "cached_replay_calls": 0,
+        "comparison": {
+          "schema": "creative_stage_comparison/v1",
+          "stage_id": "writer_script",
+          "base_sha256": "270d4f684afd258d4a87d4bf46d3a03e3abe3538a9bb193c6d7c20b7320894e0",
+          "target_sha256": "c54cdc67263d6b1dcec41fc0400ec69160597e70875d4aa11114796dec6d8b5b",
+          "diff": "--- 270d4f684afd258d4a87d4bf46d3a03e3abe3538a9bb193c6d7c20b7320894e0\n+++ c54cdc67263d6b1dcec41fc0400ec69160597e70875d4aa11114796dec6d8b5b\n@@ -27,5 +27,5 @@\n   \"premise\": \"两人消除误会\",\n   \"screenplay_markdown\": \"甲和乙相遇，因误会争执。解释后两人理解彼此。\",\n   \"selected_candidate_id\": \"C01\",\n-  \"title\": \"FIXTURE CLI revised version 6\"\n+  \"title\": \"FIXTURE CLI revised version 7\"\n }"
+        }
+      }
+    ],
+    "final_calls_started": 7,
+    "reported_total_tokens": 7,
+    "budget": {
+      "max_calls": 20,
+      "max_total_tokens": 500000,
+      "max_revisions": 5,
+      "max_contract_repairs": 8,
+      "budget_policy_version": "v5_20261001"
+    },
+    "current_stage_count": 3,
+    "history_record_count": 7,
+    "historical_artifacts_and_resolutions_unchanged": true,
+    "original_upstream_unchanged": true,
+    "derived_history_hash_names_valid": true,
+    "derived_current_director_binding_valid": true,
+    "stage_dependencies": {
+      "writer_analysis": [],
+      "director_brief": [
+        "writer_analysis"
+      ],
+      "writer_script": [
+        "director_brief"
+      ]
+    },
+    "paid_calls": 0,
+    "media_review_performed": false
+  },
+  "new_governed_task": {
+    "schema": "p1_actual_governed_original_task/v1",
+    "rule_registry_binding": {
+      "schema_version": "creative_rule_registry_binding/v1",
+      "registry_dir": "data/creative_governance/20261002_v21_platform_refactor_multi_feedback",
+      "artifact_manifest_sha256": "5a4cd2c93cecc35af2084fbe746bb67f5ad999865889fe06489089e8f8c66ecb",
+      "rules_sha256": "5b4af265c0dd49f80f67a0195398cbd574bc6edde127e726a1a953fb9143fa9f",
+      "repository_wide_complete": false,
+      "automatic_rule_activation": false
+    },
+    "initial_calls_started": 1,
+    "repair_calls_started": 2,
+    "cached_replay_model_calls": 0,
+    "feedback_status": "resolved",
+    "feedback_output_sha256": "dcd00e74ac5ad7a36de6c6232c940918d5808cca093e9b392cd8f0be39bfa985",
+    "new_output_sha256": "fe97961c659aab9f9b4c506eb73818a05b806fc128c83a572b20a613ba5bb4a6",
+    "production_protocol": "governed_production_v1",
+    "paid_calls": 0,
+    "using_retained_text_response_fixture": true
+  },
+  "integrity": {
+    "schema": "p1_v21_integrity/v1",
+    "packs": {
+      "v21": {
+        "directory": "data/creative_governance/20261002_v21_platform_refactor_multi_feedback",
+        "artifact_count": 49,
+        "artifact_mismatches": [],
+        "manifest_sha256": "5a4cd2c93cecc35af2084fbe746bb67f5ad999865889fe06489089e8f8c66ecb",
+        "runtime_manifest_sha256": "bf58aeece0a284c78ea065b2e7d936e6d445d3e3a08f98dac920049d35c141ef",
+        "runtime_source_count": 33,
+        "runtime_mismatches": []
+      },
+      "v20": {
+        "directory": "data/creative_governance/20261002_v20_platform_refactor_repair_resume",
+        "artifact_count": 49,
+        "artifact_mismatches": [],
+        "manifest_sha256": "42882e59e94483ca1beb37377afdd906cdae0d354515dd84b636b5eb229f01ea",
+        "runtime_manifest_sha256": "23fad17bea36c87c5dd92ab45866f1334a0e280d4c46cb8780f58078dac92350",
+        "manifest_unchanged_from_v20_confirmation": true,
+        "runtime_manifest_unchanged_from_v20_confirmation": true
+      },
+      "v19": {
+        "directory": "data/creative_governance/20261002_v19_platform_refactor_p1_recovery",
+        "artifact_count": 49,
+        "artifact_mismatches": [],
+        "manifest_sha256": "5744b0681fa9b80dbb46593883f62f326d16c4bb143bbdf09c43c177863e2a0b",
+        "runtime_manifest_sha256": "100a9f8cd9743cbc5dce288603c1146466f868ef4b0f35e4a2fad33f3b7ec42d",
+        "manifest_unchanged_from_v20_confirmation": true,
+        "runtime_manifest_unchanged_from_v20_confirmation": true
+      },
+      "v18": {
+        "directory": "data/creative_governance/20261002_v18_platform_refactor",
+        "artifact_count": 48,
+        "artifact_mismatches": [],
+        "manifest_sha256": "04ef58715f4cd3d8130d44b2ff60baff3c9acc64e708cd10c8852951ed750998",
+        "runtime_manifest_sha256": "527f57493ac58c9611a6c51df3be0a1dff1e2119c05d8b6c0a2026a5e0af4c4c",
+        "manifest_unchanged_from_v20_confirmation": true,
+        "runtime_manifest_unchanged_from_v20_confirmation": true
+      }
+    },
+    "new_task_binding": {
+      "schema_version": "creative_rule_registry_binding/v1",
+      "registry_dir": "data/creative_governance/20261002_v21_platform_refactor_multi_feedback",
+      "artifact_manifest_sha256": "5a4cd2c93cecc35af2084fbe746bb67f5ad999865889fe06489089e8f8c66ecb",
+      "rules_sha256": "5b4af265c0dd49f80f67a0195398cbd574bc6edde127e726a1a953fb9143fa9f",
+      "repository_wide_complete": false,
+      "automatic_rule_activation": false
+    },
+    "actual_new_task_binding_matches": true,
+    "governance_validation": {
+      "binding": {
+        "schema_version": "creative_rule_registry_binding/v1",
+        "registry_dir": "data/creative_governance/20261002_v21_platform_refactor_multi_feedback",
+        "artifact_manifest_sha256": "5a4cd2c93cecc35af2084fbe746bb67f5ad999865889fe06489089e8f8c66ecb",
+        "rules_sha256": "5b4af265c0dd49f80f67a0195398cbd574bc6edde127e726a1a953fb9143fa9f",
+        "repository_wide_complete": false,
+        "automatic_rule_activation": false
+      },
+      "validation": {
+        "schema_valid": true,
+        "inventory_complete_within_declared_scope": true,
+        "repository_wide_complete": false,
+        "rule_count": 10,
+        "runtime_sources": {
+          "status": "verified",
+          "source_count": 33,
+          "rule_inventory_coverage_claim": false
+        }
+      },
+      "activation": {
+        "active_rule_ids": [
+          "EVIDENCE.BIND.001"
+        ],
+        "excluded": [
+          {
+            "rule_id": "STATE.PRECONDITION.001",
+            "reason": "different_stage"
+          },
+          {
+            "rule_id": "TIME.HOLD.001",
+            "reason": "different_stage"
+          },
+          {
+            "rule_id": "SOURCE.BIND.001",
+            "reason": "different_stage"
+          },
+          {
+            "rule_id": "ACT.GAZE.001",
+            "reason": "status_proposed"
+          },
+          {
+            "rule_id": "CUT.COMPLETION.001",
+            "reason": "status_proposed"
+          },
+          {
+            "rule_id": "SPACE.SEAT.001",
+            "reason": "status_proposed"
+          },
+          {
+            "rule_id": "CUT.EXECUTION.002",
+            "reason": "different_stage"
+          },
+          {
+            "rule_id": "SPACE.SEAT_TYPED.002",
+            "reason": "different_stage"
+          },
+          {
+            "rule_id": "STATE.BOUNDARY.002",
+            "reason": "different_stage"
+          }
+        ],
+        "semantic_rule_count": 0,
+        "semantic_limit": 12,
+        "requires_split_or_merge": false,
+        "serialized_characters": 877,
+        "token_count": null,
+        "token_count_status": "not_tokenized; characters_are_not_tokens",
+        "silently_truncated": false
+      }
+    },
+    "source_checks": [
+      {
+        "path": "src/content_factory/creative_action_plan_v2.py",
+        "sha256": "74bef6f461fa3884e39707f6ea533cc13ed71bcb20d14534e2fce9b39a514970",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/content_factory/creative_state_plan_v6.py",
+        "sha256": "1cc460eaecf0d71ec05a0b2e6bc1a35a3a7f650ec15ec2b99d8520aee97704bb",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/content_factory/creative_review_packet.py",
+        "sha256": "3a190b106277fb4c4b5216bf6fc2440256383c7af588d4ea6063b2a33ea241ca",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/content_factory/creative_review_resolution.py",
+        "sha256": "a394f7bf6103524b81dd4b3548dad4db7a1783b794c2ab7af654f552819dedae",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/content_factory/creative_focused_review_stage.py",
+        "sha256": "489a09d9a0b8b75a484097dca7cb4620c2a91a46f7c64a084545b5a63363067d",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/content_factory/creative_governed_runtime.py",
+        "sha256": "65cbaad82567f56ae3eaffa1dc2004e7073fd7ca99c5b800327e0225c348631d",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/content_factory/creative_workflow.py",
+        "sha256": "c95d7e37bbd89df62960b03344d9cc3f6926cfc3b0b55a2f354dc65c5199d673",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/content_factory/creative_plan_patch.py",
+        "sha256": "0ea9f2a260a74f60fe365d91f531f6a0a018e87d59c309293d8dc526cc1e2cf7",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/content_factory/creative_segmented_director.py",
+        "sha256": "4ee428059f92c0cae91a91ab86ddcc9f0944136d39c50a8459f3d7a16ed69925",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/content_factory/creative_state_plan_binding.py",
+        "sha256": "b8bf8ec912e15bb1adc900c5f10a12b026bb934cded10e2eba7cb08f003e9a68",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/content_factory/creative_rule_registry.py",
+        "sha256": "95a1dac7650006c2ab200bb2646e95f5add27046eda02140cc66e8d7d3e49fac",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/content_factory/creative_evaluation.py",
+        "sha256": "14e152c68a7e026d474e736c502f9ca8a53cc69b8cead8e478d5af3514ef4090",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/content_factory/creative_narrative_focus.py",
+        "sha256": "b73c43fb64633c16e4abb294e4d21eb4f9d41329e35142ae2e15b60c56e089e6",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/content_factory/creative_narrative_transfer.py",
+        "sha256": "8022b3c6c9aefc703ef7f1fe972c1f666eccb1dc7ac6caf7da06d908baf8da11",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/content_factory/creative_seedance_segments.py",
+        "sha256": "04641b4ddce8b38494502ba2664ea18a6d8a5dfe70f2b6c9b2f937832ea025ca",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/content_factory/creative_event_recovery.py",
+        "sha256": "78f8788c3e16552a12804c95e323fb861c1c4d05299ba185a8f3bd61fa8f4904",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/content_factory/creative_event_script.py",
+        "sha256": "510cc0c37306f6f627c19f1d078afc95365ca6753f06e92d527dd1e39ec8fdfc",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/content_factory/creative_brief.py",
+        "sha256": "22e83b70eead1d4d10b93e4cf8b6fb00bbe1d6e3e94275edfddd9ae9495c23c1",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/content_factory/creative_original_prompt.py",
+        "sha256": "a15a66b5b030c39be92783cc5eec310e9cd7cfe381831b6d17409d752d33cb6a",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/content_factory/creative_workflow_contract.py",
+        "sha256": "b91df553261252944f704514f2db5f95b7c18c66fe236ae504d98c335836aa36",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/content_factory/creative_full_script_revision.py",
+        "sha256": "127b43ba1b43ae14bd8e72eff0449c13ef64c186bb1833ac88c81d9e7d00bf0b",
+        "syntax_valid": true
+      },
+      {
+        "path": "scripts/run_creative_workflow.py",
+        "sha256": "482ba5f8178c70ca295f72a0fb7a707bc3c61cf680ad80dd5e15922eefe15a70",
+        "syntax_valid": true
+      },
+      {
+        "path": "config/creative_workflow_budget_v5.json",
+        "sha256": "21e42547ddbfc9fbeaf36d57f7f74a669ccc89457a148ccd14f9ab5fb8876c95",
+        "syntax_valid": null
+      },
+      {
+        "path": "src/web/creative_workflow_dashboard.py",
+        "sha256": "8b6a84c726e6d9a8bb710ffb6efa99331b087cf7bf135e5cf5d2faacda5efdf0",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/content_factory/creative_reference_expression.py",
+        "sha256": "8bd192af8e29bea967744396ee32b01a6ff375cd603cb6f4e8096c159dfbb7e0",
+        "syntax_valid": true
+      },
+      {
+        "path": "config/creative_reference_defaults.json",
+        "sha256": "72d9422b2a3615fd25af5acf086779ea281b65f81590375e00d1af3d1b8ee1a1",
+        "syntax_valid": null
+      },
+      {
+        "path": "data/reference_reviews/reusable_expression_20261001/EXPRESSION_REFERENCE.md",
+        "sha256": "f007ea01a63dfb6c280b9cb3203774fe9828fe469582a03a060a82eee58f3216",
+        "syntax_valid": null
+      },
+      {
+        "path": "data/reference_reviews/reusable_expression_20261001/SELECTION.json",
+        "sha256": "27cca9e9c2cb8a520561e14f85c43ef80fc556bc0856a59cd4774bafe5628927",
+        "syntax_valid": null
+      },
+      {
+        "path": "scripts/resume_failed_plan_production.py",
+        "sha256": "9a18224191dc159160cd07a8ebcba8ce0cdc8366ecc21007437472d6e311397d",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/content_factory/creative_stage_debug.py",
+        "sha256": "8506dbbfdf44ab03cb716c6b0549a380fb2f7a75e10d6f9fde1072db10ae3330",
+        "syntax_valid": true
+      },
+      {
+        "path": "scripts/debug_creative_workflow.py",
+        "sha256": "c1f2d13ac69ce298abf599313baca1921afea62297fd62ca313ccc64d266b4f2",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/content_factory/media_review_policy.py",
+        "sha256": "774420e3fe06b1a8e5ea12ddb3a0b29cd6b27853ec923fff97e2323a60f086d0",
+        "syntax_valid": true
+      },
+      {
+        "path": "src/scheduler/queue.py",
+        "sha256": "d8a0572079513cff53a08849972bd5533515aec8a4a1332c04930955e1b936d2",
+        "syntax_valid": true
+      }
+    ],
+    "changed_file_checks": [
+      {
+        "path": "src/content_factory/creative_workflow.py",
+        "sha256": "c95d7e37bbd89df62960b03344d9cc3f6926cfc3b0b55a2f354dc65c5199d673",
+        "trailing_whitespace_lines": []
+      },
+      {
+        "path": "src/content_factory/creative_stage_debug.py",
+        "sha256": "8506dbbfdf44ab03cb716c6b0549a380fb2f7a75e10d6f9fde1072db10ae3330",
+        "trailing_whitespace_lines": []
+      },
+      {
+        "path": "src/content_factory/creative_governed_runtime.py",
+        "sha256": "65cbaad82567f56ae3eaffa1dc2004e7073fd7ca99c5b800327e0225c348631d",
+        "trailing_whitespace_lines": []
+      },
+      {
+        "path": "src/web/creative_workflow_dashboard.py",
+        "sha256": "8b6a84c726e6d9a8bb710ffb6efa99331b087cf7bf135e5cf5d2faacda5efdf0",
+        "trailing_whitespace_lines": []
+      },
+      {
+        "path": "scripts/version_creative_governance_runtime.py",
+        "sha256": "139e221ac013aabedf7319e8d037560f23487f7d040d4c1f0f2d35e97b613411",
+        "trailing_whitespace_lines": []
+      },
+      {
+        "path": "tests/test_creative_stage_debug.py",
+        "sha256": "3a6e056f0a251fee6e149e04c91a2b564c22197a4577171f47d8742f72aabbef",
+        "trailing_whitespace_lines": []
+      },
+      {
+        "path": "tests/test_creative_workflow_ui.py",
+        "sha256": "8d7293bf65fc03ef8cacacbc0b5212934c3bc2b33e09d971b31804a5f8679a5e",
+        "trailing_whitespace_lines": []
+      },
+      {
+        "path": "docs/CREATIVE_STAGE_DEBUGGING.md",
+        "sha256": "19f00bc7119d0d96a48f0e36a9a0f762094927a5f82bef3876f406c2e6dfbc93",
+        "trailing_whitespace_lines": []
+      },
+      {
+        "path": "docs/CREATIVE_WORKFLOW_IMPLEMENTATION.md",
+        "sha256": "e570d9ab553d419adee8a9c9bb676f5cfd7867f2af62821ac7bfc442eb5fac49",
+        "trailing_whitespace_lines": []
+      }
+    ],
+    "old_v20_rejection": {
+      "error": "RUNTIME_SOURCE_CHANGED: src/content_factory/creative_governed_runtime.py",
+      "binding_unchanged": true,
+      "state_file_unchanged": true,
+      "model_calls": 0
+    },
+    "scoped_diff_exit_code": 0,
+    "migration_provenance_correct": true,
+    "prior_confirmation_sha256": "874a91b4ab3e7a33b9a031d1fbacd4d78c0b75abc8cff317845e70a1e7c9f188"
+  },
+  "historical_compatibility": {
+    "v20": {
+      "error": "writer_revise__preflight_story_00_01 提示词版本已改变，不能复用旧阶段回执",
+      "model_calls": 0,
+      "calls_started": 30,
+      "status": "needs_attention"
+    },
+    "v21": {
+      "error": "writer_revise__preflight_story_00_01 提示词版本已改变，不能复用旧阶段回执",
+      "model_calls": 0,
+      "calls_started": 30,
+      "status": "needs_attention"
+    },
+    "matches_v20_failure": true,
+    "historical_source_unchanged": true
+  },
+  "historical_baseline_file_hash_checks": {
+    "workflow": true,
+    "stage_debug": true
+  },
+  "remaining_direction_requirements": [
+    {
+      "id": "P1.INPUT_PREVIEW",
+      "status": "unfinished_direction_report_requirement",
+      "severity": "feature_gap",
+      "source": "data/qa/creative_platform_refactor_20261002/direction_report.html",
+      "source_line": 123,
+      "requirement": "P1 文本阶段调试包含冻结输入预览，CLI/UI 共用命令层。",
+      "observation": "阶段执行回执已保存 request.messages 和哈希；当前命令服务只有 inspect/compare/feedback，inspect 返回输入哈希与产物路径。实际调试 UI 提供阶段列表、历史、差异、反馈及运行控制，未显示该阶段完整模型输入和提示词，也无冻结输入预览入口。",
+      "evidence": "input_preview_inventory.json",
+      "implementation_files": [
+        "src/content_factory/creative_stage_debug.py:496",
+        "src/web/creative_workflow_dashboard.py:178",
+        "scripts/debug_creative_workflow.py:25"
+      ],
+      "acceptance": "提供共用的只读冻结输入预览入口，让 CLI/UI 可查看所选阶段绑定的输入、完整提示词、参数、版本和哈希；查询不调用模型，不能改写已验证回执或增加预算。"
+    }
+  ],
+  "functional_preview_inventory": {
+    "schema": "p1_input_preview_surface_inventory/v1",
+    "direction_requirement": "P1 文本阶段调试：冻结输入预览",
+    "ui_labels": {
+      "button": [
+        "创建并运行新版文本流程",
+        "刷新状态",
+        "比较该阶段最近两版",
+        "绑定阶段反馈",
+        "运行下一阶段",
+        "运行到此阶段"
+      ],
+      "selectbox": [
+        "故事来源",
+        "查看已有任务",
+        "反馈责任阶段",
+        "反馈类型"
+      ],
+      "checkbox": [
+        "显示历史阶段版本（只读）"
+      ],
+      "text_input": [
+        "项目标题",
+        "本次对照焦点（可选）",
+        "已获取小说正文绝对路径",
+        "书籍元数据绝对路径（可选）",
+        "创作简报 JSON 路径（原创必需，其他来源可选）",
+        "运行到阶段（精确 stage_id）"
+      ],
+      "text_area": [
+        "表达参考分析路径（可选，每行一个）",
+        "反馈原话"
+      ],
+      "expander": [
+        "阶段调试与不可变版本"
+      ]
+    },
+    "ui_exception_count": 0,
+    "current_model_input_displayed_in_code_view": false,
+    "current_model_prompt_displayed_in_code_view": false,
+    "cli_commands": [
+      "inspect",
+      "compare",
+      "feedback"
+    ],
+    "runner_debug_options": [
+      "--stop-after-stage",
+      "--next-stage"
+    ],
+    "inspect_current_stage_keys": [
+      "ordinal",
+      "stage_id",
+      "role",
+      "input_sha256",
+      "output_sha256",
+      "version_count",
+      "artifact",
+      "artifact_verified",
+      "validity",
+      "usage"
+    ],
+    "stage_receipt_has_request_messages": true,
+    "command_service_public_methods": [
+      "inspect",
+      "compare",
+      "feedback"
+    ],
+    "finding": "Request messages are persisted, but the shared command service and debug UI have no frozen input/full prompt preview entry. Existing inspect exposes hashes and artifact paths; no preview command or before-call preview control is wired.",
+    "model_calls_started": 0,
+    "media_review_performed": false
+  },
+  "limits": [
+    "Offline fake service and retained text response fixtures only; no creative-quality evaluation",
+    "No paid generation, real media inspection or publishing",
+    "No actual production task migration performed",
+    "Known old retained-receipt prompt hash mismatch remains explicit and unchanged from hash-exact v20 workflow",
+    "P2 field-level dependencies and P3 human-approved quality evaluation remain outside this P1 closure verification"
+  ],
+  "work_safety": {
+    "business_code_modified": false,
+    "original_acceptance_receipts_overwritten": false,
+    "paid_calls_started": 0,
+    "real_media_content_inspected": false
+  },
+  "runtime_sources_unchanged_after_verification": true
+}

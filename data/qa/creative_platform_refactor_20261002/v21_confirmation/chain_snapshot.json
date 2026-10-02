@@ -1,0 +1,191 @@
+{
+  "schema": "creative_stage_snapshot/v1",
+  "run_dir": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\v21_confirmation\\chain_case\\run",
+  "workflow_status": "debug_breakpoint",
+  "breakpoint": {
+    "schema": "creative_stage_breakpoint/v1",
+    "stage_id": "writer_script",
+    "reason": "requested_stage",
+    "input_sha256": "7e866b8bbe244a85463895316d177a2f84add7a8132363141216d46d4c2f95dc",
+    "output_sha256": "c54cdc67263d6b1dcec41fc0400ec69160597e70875d4aa11114796dec6d8b5b",
+    "calls_started": 7,
+    "stopped_at": "2026-10-02T07:23:32.103737+00:00",
+    "automatic_media_submit": false
+  },
+  "feedback_status": "resolved",
+  "calls_started": 7,
+  "budget_policy_version": "v5_20261001",
+  "stages": [
+    {
+      "ordinal": 1,
+      "stage_id": "writer_analysis",
+      "role": "writer",
+      "input_sha256": "09139daf5f72740d5cae62dcfbfabcc65f0dc6774860e0a58d55e81a574d63e5",
+      "output_sha256": "4717243b05f3deeba97565c488e878b02d38542546c5c4c5511e3f55a0de5ecc",
+      "version_count": 1,
+      "artifact": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\v21_confirmation\\chain_case\\run\\.creative_debug\\artifacts\\writer_analysis\\4717243b05f3deeba97565c488e878b02d38542546c5c4c5511e3f55a0de5ecc.json",
+      "artifact_verified": true,
+      "validity": "current",
+      "usage": {
+        "role": "writer",
+        "requested_model": "test",
+        "total_tokens": 1
+      }
+    },
+    {
+      "ordinal": 4,
+      "stage_id": "director_brief",
+      "role": "director",
+      "input_sha256": "e19ff9b0d0e5379f8a5d8e5cd2865647c3cdf6ce93f70e44687049e6333cb838",
+      "output_sha256": "0ad0185daaf2fa1af166abc5a342969fe593ff1cb72f8ecd9780571406d4e58f",
+      "version_count": 2,
+      "artifact": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\v21_confirmation\\chain_case\\run\\.creative_debug\\artifacts\\director_brief\\0ad0185daaf2fa1af166abc5a342969fe593ff1cb72f8ecd9780571406d4e58f.json",
+      "artifact_verified": true,
+      "validity": "current",
+      "usage": {
+        "role": "director",
+        "requested_model": "test",
+        "total_tokens": 1
+      }
+    },
+    {
+      "ordinal": 7,
+      "stage_id": "writer_script",
+      "role": "writer",
+      "input_sha256": "7e866b8bbe244a85463895316d177a2f84add7a8132363141216d46d4c2f95dc",
+      "output_sha256": "c54cdc67263d6b1dcec41fc0400ec69160597e70875d4aa11114796dec6d8b5b",
+      "version_count": 4,
+      "artifact": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\v21_confirmation\\chain_case\\run\\.creative_debug\\artifacts\\writer_script\\c54cdc67263d6b1dcec41fc0400ec69160597e70875d4aa11114796dec6d8b5b.json",
+      "artifact_verified": true,
+      "validity": "current",
+      "usage": {
+        "role": "writer",
+        "requested_model": "test",
+        "total_tokens": 1
+      }
+    }
+  ],
+  "history": [
+    {
+      "ordinal": 1,
+      "stage_id": "writer_analysis",
+      "role": "writer",
+      "input_sha256": "09139daf5f72740d5cae62dcfbfabcc65f0dc6774860e0a58d55e81a574d63e5",
+      "output_sha256": "4717243b05f3deeba97565c488e878b02d38542546c5c4c5511e3f55a0de5ecc",
+      "version_count": 1,
+      "artifact": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\v21_confirmation\\chain_case\\run\\.creative_debug\\artifacts\\writer_analysis\\4717243b05f3deeba97565c488e878b02d38542546c5c4c5511e3f55a0de5ecc.json",
+      "artifact_verified": true,
+      "validity": "current",
+      "usage": {
+        "role": "writer",
+        "requested_model": "test",
+        "total_tokens": 1
+      }
+    },
+    {
+      "ordinal": 2,
+      "stage_id": "director_brief",
+      "role": "director",
+      "input_sha256": "78982e6583351d3648779e32209251545bdfe9e9988b60abd3e71e7ded63ba0c",
+      "output_sha256": "f6d3fd0ed92ddcee4024f85dd9cdab1eb49269dc0149068028c8658d3c00ffdb",
+      "version_count": 2,
+      "artifact": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\v21_confirmation\\chain_case\\run\\.creative_debug\\artifacts\\director_brief\\f6d3fd0ed92ddcee4024f85dd9cdab1eb49269dc0149068028c8658d3c00ffdb.json",
+      "artifact_verified": true,
+      "validity": "historical",
+      "usage": {
+        "role": "director",
+        "requested_model": "test",
+        "total_tokens": 1
+      }
+    },
+    {
+      "ordinal": 3,
+      "stage_id": "writer_script",
+      "role": "writer",
+      "input_sha256": "1ba170e4fc3c582c5265c5124a9400efd52ce1b3cfb1d345d0b5bb6aaf850b1c",
+      "output_sha256": "a808bfb254eebafee4ddbcf09f53beb76d5813bba1835ea5a0cb44939b56524a",
+      "version_count": 4,
+      "artifact": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\v21_confirmation\\chain_case\\run\\.creative_debug\\artifacts\\writer_script\\a808bfb254eebafee4ddbcf09f53beb76d5813bba1835ea5a0cb44939b56524a.json",
+      "artifact_verified": true,
+      "validity": "historical",
+      "usage": {
+        "role": "writer",
+        "requested_model": "test",
+        "total_tokens": 1
+      }
+    },
+    {
+      "ordinal": 4,
+      "stage_id": "director_brief",
+      "role": "director",
+      "input_sha256": "e19ff9b0d0e5379f8a5d8e5cd2865647c3cdf6ce93f70e44687049e6333cb838",
+      "output_sha256": "0ad0185daaf2fa1af166abc5a342969fe593ff1cb72f8ecd9780571406d4e58f",
+      "version_count": 2,
+      "artifact": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\v21_confirmation\\chain_case\\run\\.creative_debug\\artifacts\\director_brief\\0ad0185daaf2fa1af166abc5a342969fe593ff1cb72f8ecd9780571406d4e58f.json",
+      "artifact_verified": true,
+      "validity": "current",
+      "usage": {
+        "role": "director",
+        "requested_model": "test",
+        "total_tokens": 1
+      }
+    },
+    {
+      "ordinal": 5,
+      "stage_id": "writer_script",
+      "role": "writer",
+      "input_sha256": "599fe7d440e692373c56cde4216a0a6ebf8b3895483daa8966a94103727c8c5f",
+      "output_sha256": "2d2dee139d6349536e5dd19afddb2867993ece82d83329bc27f57053ad7746a0",
+      "version_count": 4,
+      "artifact": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\v21_confirmation\\chain_case\\run\\.creative_debug\\artifacts\\writer_script\\2d2dee139d6349536e5dd19afddb2867993ece82d83329bc27f57053ad7746a0.json",
+      "artifact_verified": true,
+      "validity": "historical",
+      "usage": {
+        "role": "writer",
+        "requested_model": "test",
+        "total_tokens": 1
+      }
+    },
+    {
+      "ordinal": 6,
+      "stage_id": "writer_script",
+      "role": "writer",
+      "input_sha256": "1ec484a005cbcf7ec28d1fe290f9b75fc3d953e042b2198aca5b85c5bff76387",
+      "output_sha256": "270d4f684afd258d4a87d4bf46d3a03e3abe3538a9bb193c6d7c20b7320894e0",
+      "version_count": 4,
+      "artifact": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\v21_confirmation\\chain_case\\run\\.creative_debug\\artifacts\\writer_script\\270d4f684afd258d4a87d4bf46d3a03e3abe3538a9bb193c6d7c20b7320894e0.json",
+      "artifact_verified": true,
+      "validity": "historical",
+      "usage": {
+        "role": "writer",
+        "requested_model": "test",
+        "total_tokens": 1
+      }
+    },
+    {
+      "ordinal": 7,
+      "stage_id": "writer_script",
+      "role": "writer",
+      "input_sha256": "7e866b8bbe244a85463895316d177a2f84add7a8132363141216d46d4c2f95dc",
+      "output_sha256": "c54cdc67263d6b1dcec41fc0400ec69160597e70875d4aa11114796dec6d8b5b",
+      "version_count": 4,
+      "artifact": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\v21_confirmation\\chain_case\\run\\.creative_debug\\artifacts\\writer_script\\c54cdc67263d6b1dcec41fc0400ec69160597e70875d4aa11114796dec6d8b5b.json",
+      "artifact_verified": true,
+      "validity": "current",
+      "usage": {
+        "role": "writer",
+        "requested_model": "test",
+        "total_tokens": 1
+      }
+    }
+  ],
+  "stage_dependencies": {
+    "writer_analysis": [],
+    "director_brief": [
+      "writer_analysis"
+    ],
+    "writer_script": [
+      "director_brief"
+    ]
+  }
+}

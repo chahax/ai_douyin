@@ -18,3 +18,32 @@ class MockProvider(BaseLLMProvider):
                 }
             )
         return "This is a mock response from MockProvider."
+
+    def chat_with_tools(self, messages, tools, temperature=0.3, tool_choice="auto"):
+        """Return a deterministic provider-compatible tool envelope.
+
+        The mock never invents an external side effect in ``auto`` mode. A
+        caller that explicitly requires a tool receives one empty-argument call
+        for the first declared function, which is sufficient for offline loop
+        and contract tests.
+        """
+
+        if tool_choice == "required" and tools:
+            first = tools[0]
+            function = first.get("function", first) if isinstance(first, dict) else {}
+            name = function.get("name") if isinstance(function, dict) else None
+            if name:
+                arguments = "{}"
+                return {
+                    "content": "",
+                    "tool_calls": [{
+                        "id": "mock-tool-call-1",
+                        "name": name,
+                        "args": arguments,
+                        "function": {"name": name, "arguments": arguments},
+                    }],
+                }
+        return {
+            "content": self.chat_completion(messages, temperature=temperature) or "",
+            "tool_calls": [],
+        }

@@ -1,0 +1,56 @@
+{
+  "schema_version": "creative_p1_field_ownership/v1",
+  "source_hash": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+  "created_at": "2026-09-28T13:58:18.903886+00:00",
+  "implementation_status": "offline_implemented_not_production_validated",
+  "ownership": {
+    "schema_version": "action_field_ownership/v2",
+    "plan_version": "whole_film_action_plan_v2",
+    "owners": [
+      {
+        "field_paths": [
+          "initial_state",
+          "beats.*.groups.*.operations"
+        ],
+        "authority": "action_plan",
+        "derived_fields": [
+          "shots.*.start_state",
+          "shots.*.end_state"
+        ]
+      },
+      {
+        "field_paths": [
+          "spatial_contract.seats"
+        ],
+        "authority": "action_plan_spatial_contract",
+        "derived_fields": [
+          "scheduling_report.spatial_checks"
+        ]
+      },
+      {
+        "field_paths": [
+          "beats.*.cut_after_event_id",
+          "beats.*.completion_condition"
+        ],
+        "authority": "action_plan_cut_contract",
+        "derived_fields": [
+          "scheduling_report.beats.*.cut_contract"
+        ]
+      },
+      {
+        "field_paths": [
+          "beats.*.camera",
+          "beats.*.cut_reason",
+          "beats.*.dialogue_performance",
+          "beats.*.groups.*.performance"
+        ],
+        "authority": "presentation_only",
+        "constraint": "cannot_add_physical_facts_or_cut_time",
+        "checker_kind": "semantic",
+        "runtime_semantic_verification": "required_not_proven_by_compiler"
+      }
+    ]
+  },
+  "verified_schema_path_count": 9,
+  "production_validated": false
+}

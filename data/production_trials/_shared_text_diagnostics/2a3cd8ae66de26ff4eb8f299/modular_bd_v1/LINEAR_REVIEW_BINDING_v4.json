@@ -1,0 +1,12 @@
+{
+  "version": "linear_full_review_v4",
+  "path": "D:\\IT\\ai_douyin\\scripts\\review_linear_script_probe_v4.py",
+  "sha256": "ad6bdc5d4310e3132555550ae537d57c1a87354f4f5321bf3b9a810d456a7b84",
+  "linear_operator": {
+    "version": "linear_complete_script_probe_v3",
+    "source_manifest": {
+      "scripts/run_linear_script_probe_v3.py": "1ec73982c9eb93d87c5c06bdff01be64d6188ba6e0d865015cfa40b80777cbb6",
+      "scripts/creative_linear_script_v2.py": "cdce92447fbdc7a8296aeb44123160141f2188d2aec3a9c0950eea0b27a66bfe"
+    }
+  }
+}

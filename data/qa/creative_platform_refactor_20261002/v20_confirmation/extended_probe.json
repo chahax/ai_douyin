@@ -1,0 +1,27 @@
+{
+  "first_repair_and_resume_passed": true,
+  "second_feedback_output_sha256": "a808bfb254eebafee4ddbcf09f53beb76d5813bba1835ea5a0cb44939b56524a",
+  "current_script_output_sha256": "2d2dee139d6349536e5dd19afddb2867993ece82d83329bc27f57053ad7746a0",
+  "second_feedback_binds_current_output": false,
+  "upstream_director_validity_after_second_feedback": "invalidated",
+  "stage_history_before_second_feedback": [
+    "writer_analysis",
+    "director_brief",
+    "writer_script",
+    "director_brief",
+    "writer_script"
+  ],
+  "calls_before_second_feedback": 5,
+  "new_feedback_stage": "writer_script",
+  "already_resolved_upstream_stage": "director_brief",
+  "first_resolution_matches_current_output": true,
+  "second_repair_status": "needs_attention",
+  "second_repair_error": "阶段 writer_script 存在未修复的 must_fix 反馈；已在 director_brief 调用前阻断，需先修订责任阶段",
+  "second_repair_model_calls": 0,
+  "second_repair_reached_target": false,
+  "feedback_status_after_second_resume": "revision_required",
+  "derived_receipt_history_count": 1,
+  "derived_history_hash_names_valid": true,
+  "derived_current_director_sha256": "38deed5eb123a0f65f31b4db5a9d3b922ca741b121ab6d3ab799eb3d5d9cebab",
+  "derived_current_matches_revised_director": true
+}

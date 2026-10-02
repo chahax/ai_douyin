@@ -1,0 +1,12 @@
+{
+  "schema_version": "creative_governance_runtime_upgrade/v1",
+  "created_at": "2026-10-02T12:02:21.536128+00:00",
+  "base_directory": "data/creative_governance/20261002_v21_platform_refactor_multi_feedback",
+  "base_artifact_manifest_sha256": "5a4cd2c93cecc35af2084fbe746bb67f5ad999865889fe06489089e8f8c66ecb",
+  "base_runtime_sources_sha256": "bf58aeece0a284c78ea065b2e7d936e6d445d3e3a08f98dac920049d35c141ef",
+  "runtime_sources_sha256": "2b78ee05cd7ebb6096bf66490182ccf1a5664a2130502e362dc5949ebe58bacf",
+  "semantic_rules_changed": false,
+  "quality_claim_added": false,
+  "media_review_performed": false,
+  "existing_task_migration": "20261002_v21_platform_refactor_multi_feedback task state is never silently rebound. Completed runs remain immutable history. Keep in-progress 20261002_v21_platform_refactor_multi_feedback runs under their original frozen environment. The current CLI binds the same intent to its original run and budget; no automatic same-intent cross-version migration is exposed. A source/hash mismatch stops before dispatch. Do not change the creative focus, delete a registry claim, or create a new directory merely to obtain fresh quota. New independent stories use the existing registration entry. Any future migration must carry cumulative budget, receipts and unresolved feedback and revalidate every adopted artifact before external effects."
+}

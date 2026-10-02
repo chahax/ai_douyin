@@ -1,0 +1,25 @@
+{
+  "schema": "linear_script_director_compatibility/v1",
+  "source_call": 48,
+  "raw_sha256": "2e3cf8c730a5360c0fa5be5f7193bb52a4dc9b2cce48e03d2f673c9d35730802",
+  "source_steps": 29,
+  "old_bridge": {
+    "compatible": false,
+    "error": "BRIDGE_UNSUPPORTED: 源拍存在详细before/during/after正文，本原型不能证明多动作及对白顺序保持",
+    "detail": {
+      "code": "BRIDGE_UNSUPPORTED",
+      "path": "B1",
+      "automatic_retry": false,
+      "blocks_handoff": true,
+      "semantic_approval": false,
+      "source_script_rewritten": false
+    }
+  },
+  "step_reference_contract_schema_constructed": true,
+  "direction_generated": false,
+  "physical_state_verified": false,
+  "production_ready": false,
+  "receipt_unchanged": true,
+  "model_calls": 0,
+  "remaining_adapter": "typed operations bound to each action_ref + compiler schedule trace equivalence"
+}

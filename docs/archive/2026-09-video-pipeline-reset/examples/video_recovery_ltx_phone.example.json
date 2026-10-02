@@ -1,0 +1,17 @@
+{
+  "template": "video_recovery/v1",
+  "id": "anti_fraud_l01_ltx_phone_recovery",
+  "review_report": "D:\\IT\\AI_vido\\ComfyUI\\output\\anti_fraud_ltx_v2\\qa\\af_v2_s01_hook_l01_narrator\\af_v2_s01_hook_l01_narrator_ltx_v2_review.json",
+  "inventory_report": "../../data/qa/video_tool_inventory_20260726_deterministic_motion.json",
+  "current_tool": "ltx_i2v",
+  "intent": {
+    "motion": "micro",
+    "framing": "medium",
+    "camera": "locked",
+    "background": "static",
+    "preserve_reference": true,
+    "contains_hands": true,
+    "contains_phone": true,
+    "multi_person": false
+  }
+}

@@ -1,0 +1,607 @@
+{
+  "schema": "creative_implementation_review/v1",
+  "created_at": "2026-10-02T20:35:04.333920+08:00",
+  "scope": "Current v22 document, relevant source paths, new offline fault reproduction and targeted regression. Not a repository-wide certification.",
+  "core_direction": "data/qa/creative_platform_refactor_20261002/direction_report.html",
+  "implementation_document": "docs/CREATIVE_WORKFLOW_IMPLEMENTATION.md",
+  "conclusion": "已有 v22 闭环接口基础；仍有 1 处实证反馈并发缺陷，需优先修复。其后完善分段工作台和真实质量试点，增量拆分核心、产品化恢复、优化依赖与补真实运行证据。",
+  "tests": {
+    "independent_targeted": {
+      "tests": 47,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "new_boundary_contract": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "author_full_suite_claim": 738,
+    "author_full_suite_rerun_this_review": false,
+    "ui_rerun_this_review": false
+  },
+  "inflight_feedback": {
+    "expected_version_hashes_supplied": true,
+    "feedback_id": "51df2e141aaab020637c",
+    "feedback_present_during_call": true,
+    "feedback_status_during_call": "revision_required",
+    "final_status": "debug_breakpoint",
+    "final_feedback_status": null,
+    "feedback_present_after_call": false,
+    "pending_feedback_count": 0,
+    "feedback_receipt_retained": true,
+    "model_calls": 1,
+    "downstream_calls_after_lost_feedback": 1,
+    "continued_status": "debug_breakpoint",
+    "continued_breakpoint": "director_shots"
+  },
+  "integrity_and_dataset": {
+    "default_registry": "data/creative_governance/20261002_v22_platform_refactor_workbench",
+    "runtime_source_count": 51,
+    "runtime_source_mismatches": [],
+    "artifact_count": 55,
+    "artifact_mismatches": [],
+    "dataset": {
+      "case_count": 28,
+      "approved_case_count": 0,
+      "candidate_case_count": 28,
+      "approved_independent_count": 0,
+      "holdout_count": 0,
+      "source_family_count": 15,
+      "failures": [
+        "APPROVED_INDEPENDENT_SAMPLE_SHORTFALL",
+        "FROZEN_HOLDOUT_SHORTFALL",
+        "CATEGORY_SHORTFALL:action:error",
+        "CATEGORY_SHORTFALL:action:correct",
+        "HOLDOUT_CATEGORY_SHORTFALL:action:error",
+        "HOLDOUT_CATEGORY_SHORTFALL:action:correct",
+        "CATEGORY_SHORTFALL:interaction:error",
+        "CATEGORY_SHORTFALL:interaction:correct",
+        "HOLDOUT_CATEGORY_SHORTFALL:interaction:error",
+        "HOLDOUT_CATEGORY_SHORTFALL:interaction:correct",
+        "CATEGORY_SHORTFALL:space:error",
+        "CATEGORY_SHORTFALL:space:correct",
+        "HOLDOUT_CATEGORY_SHORTFALL:space:error",
+        "HOLDOUT_CATEGORY_SHORTFALL:space:correct",
+        "CATEGORY_SHORTFALL:camera:error",
+        "CATEGORY_SHORTFALL:camera:correct",
+        "HOLDOUT_CATEGORY_SHORTFALL:camera:error",
+        "HOLDOUT_CATEGORY_SHORTFALL:camera:correct"
+      ],
+      "qualified": false,
+      "gold_labels_missing": 28,
+      "source_family_leaks": []
+    },
+    "historical_artifacts": [
+      {
+        "version": "v18",
+        "directory": "data\\creative_governance\\20261002_v18_platform_refactor",
+        "count": 48,
+        "mismatches": []
+      },
+      {
+        "version": "v19",
+        "directory": "data\\creative_governance\\20261002_v19_platform_refactor_p1_recovery",
+        "count": 49,
+        "mismatches": []
+      },
+      {
+        "version": "v19",
+        "directory": "data\\creative_governance\\20261002_v19_platform_refactor_p1_recovery_draft_pre_replay_fix",
+        "count": 49,
+        "mismatches": []
+      },
+      {
+        "version": "v20",
+        "directory": "data\\creative_governance\\20261002_v20_platform_refactor_repair_resume",
+        "count": 49,
+        "mismatches": []
+      },
+      {
+        "version": "v21",
+        "directory": "data\\creative_governance\\20261002_v21_platform_refactor_multi_feedback",
+        "count": 49,
+        "mismatches": []
+      }
+    ],
+    "reviewed_source_unchanged": true
+  },
+  "code_inventory": [
+    {
+      "path": "src/content_factory/creative_workflow.py",
+      "lines": 8298,
+      "sha256": "fcf843f6a929eb4135d050682ff23503705c7c60349ea1be8cc33b6cf689dc92",
+      "function_count": 138,
+      "largest_functions": [
+        {
+          "name": "_validate_or_repair",
+          "line": 4033,
+          "lines": 1721
+        },
+        {
+          "name": "_run_unlocked",
+          "line": 6594,
+          "lines": 1018
+        },
+        {
+          "name": "revise_from_assistant",
+          "line": 7613,
+          "lines": 542
+        },
+        {
+          "name": "_stage_impl",
+          "line": 5858,
+          "lines": 487
+        }
+      ]
+    },
+    {
+      "path": "src/content_factory/creative_stage_runtime.py",
+      "lines": 267,
+      "sha256": "c5130a22357614a7d12630818c6495d559473a7c9123f3a0446f7f536d73fd18",
+      "function_count": 2,
+      "largest_functions": [
+        {
+          "name": "execute_stage",
+          "line": 86,
+          "lines": 182
+        },
+        {
+          "name": "finish_stage",
+          "line": 13,
+          "lines": 71
+        }
+      ]
+    },
+    {
+      "path": "src/content_factory/creative_stage_contracts.py",
+      "lines": 262,
+      "sha256": "a8929c40b0bdeed43f96dbda2023818b2d3299d5cafb662ee33171baab8c6cfc",
+      "function_count": 10,
+      "largest_functions": [
+        {
+          "name": "reconcile_cached_stage",
+          "line": 123,
+          "lines": 50
+        },
+        {
+          "name": "projections",
+          "line": 49,
+          "lines": 39
+        },
+        {
+          "name": "archive_stage_dependents",
+          "line": 227,
+          "lines": 36
+        },
+        {
+          "name": "record_input",
+          "line": 90,
+          "lines": 31
+        }
+      ]
+    },
+    {
+      "path": "src/content_factory/creative_stage_debug.py",
+      "lines": 552,
+      "sha256": "15cc1383ca32d7318de52b9b6cc6dd553f5f581b77b483ff74dc3dbd374dfc9c",
+      "function_count": 27,
+      "largest_functions": [
+        {
+          "name": "record_stage_feedback",
+          "line": 376,
+          "lines": 78
+        },
+        {
+          "name": "stage_snapshot",
+          "line": 242,
+          "lines": 76
+        },
+        {
+          "name": "record_stage_artifact",
+          "line": 178,
+          "lines": 62
+        },
+        {
+          "name": "compare_stage_versions",
+          "line": 320,
+          "lines": 54
+        }
+      ]
+    },
+    {
+      "path": "src/content_factory/creative_segment_execution.py",
+      "lines": 399,
+      "sha256": "202f9e1c12462c9f289ddad225d7524e41114b3083baa22ee542bb6677756c65",
+      "function_count": 10,
+      "largest_functions": [
+        {
+          "name": "_execute_segment",
+          "line": 132,
+          "lines": 163
+        },
+        {
+          "name": "reserve_media_attempt",
+          "line": 320,
+          "lines": 80
+        },
+        {
+          "name": "validate",
+          "line": 30,
+          "lines": 63
+        },
+        {
+          "name": "payload",
+          "line": 105,
+          "lines": 25
+        }
+      ]
+    },
+    {
+      "path": "src/content_factory/creative_media_workbench.py",
+      "lines": 486,
+      "sha256": "e4a9a942c1bfdab272f0543c0b5df498e939c436c89c73b65e10546b52fe7aaa",
+      "function_count": 9,
+      "largest_functions": [
+        {
+          "name": "media_feedback",
+          "line": 130,
+          "lines": 107
+        },
+        {
+          "name": "prepare_segment",
+          "line": 282,
+          "lines": 104
+        },
+        {
+          "name": "assemble_approved",
+          "line": 388,
+          "lines": 99
+        },
+        {
+          "name": "register_candidate",
+          "line": 53,
+          "lines": 44
+        }
+      ]
+    },
+    {
+      "path": "src/content_factory/creative_delivery.py",
+      "lines": 262,
+      "sha256": "1525ba5b9a9ff78eba439169ed9f4100eeeba1dbf30df879cf939f2ad5d24896",
+      "function_count": 7,
+      "largest_functions": [
+        {
+          "name": "publish_delivery",
+          "line": 133,
+          "lines": 54
+        },
+        {
+          "name": "prepare_delivery",
+          "line": 13,
+          "lines": 43
+        },
+        {
+          "name": "collect_operations",
+          "line": 221,
+          "lines": 42
+        },
+        {
+          "name": "journal_evidence",
+          "line": 91,
+          "lines": 40
+        }
+      ]
+    },
+    {
+      "path": "src/content_factory/creative_quality_evidence.py",
+      "lines": 223,
+      "sha256": "ae28a6dcdaf886a9362b5b7914976ca8f1be05fa7a008fa303696ffd32c16eaf",
+      "function_count": 4,
+      "largest_functions": [
+        {
+          "name": "collect_case",
+          "line": 17,
+          "lines": 75
+        },
+        {
+          "name": "annotate_case",
+          "line": 94,
+          "lines": 57
+        },
+        {
+          "name": "quality_report",
+          "line": 171,
+          "lines": 53
+        },
+        {
+          "name": "freeze_dataset",
+          "line": 153,
+          "lines": 16
+        }
+      ]
+    },
+    {
+      "path": "src/web/creative_workflow_dashboard.py",
+      "lines": 383,
+      "sha256": "51d10bf8034bf93ef87f3cad8f0a6c2808cbd6cbc95981e5b8e07e28909b767a",
+      "function_count": 3,
+      "largest_functions": [
+        {
+          "name": "page_creative_workflow",
+          "line": 69,
+          "lines": 315
+        },
+        {
+          "name": "_resume_argv",
+          "line": 22,
+          "lines": 36
+        },
+        {
+          "name": "_launch_detached",
+          "line": 60,
+          "lines": 7
+        }
+      ]
+    },
+    {
+      "path": "scripts/creative_workbench.py",
+      "lines": 183,
+      "sha256": "1985f5b91e43751529baf43eb1ebcc8c30311924c0086a326150405d18a45e8f",
+      "function_count": 3,
+      "largest_functions": [
+        {
+          "name": "dispatch",
+          "line": 72,
+          "lines": 78
+        },
+        {
+          "name": "parser",
+          "line": 15,
+          "lines": 55
+        },
+        {
+          "name": "main",
+          "line": 152,
+          "lines": 28
+        }
+      ]
+    }
+  ],
+  "roadmap": [
+    {
+      "id": "F01",
+      "priority": "P1",
+      "kind": "已复现缺陷",
+      "title": "统一任务状态提交，防止运行中的反馈丢失",
+      "current": "文本执行锁只串行化 runner；反馈命令仍能另行写 state.json。页面所见输入、输出哈希的检查已经存在。",
+      "evidence": "director_brief 已验证后，在 writer_script 的模拟模型调用内部提交带双版本哈希的 must_fix。写入时 revision_required；模型返回后反馈索引和失效状态被旧 runner 状态覆盖。不可变反馈收据仍在，恢复却继续调用 director_shots 1 次。",
+      "impact": "用户已经提交的必修问题可能没有返修就继续消耗下游调用；破坏分段调试的核心约束。",
+      "change": "让反馈、停止和 runner 共享有版本的任务状态提交规则。可采用追加式命令收件箱，由执行器持久化消费；或事务/CAS 存储。当前在途响应照常保存为历史，应用反馈并失效后续，下一次派发前检查。原子替换只能解决半写，不能解决旧状态覆盖新状态。",
+      "acceptance": [
+        "本报告独立边界用例转为通过；带双版本哈希的反馈在调用返回、保存和恢复后都可追溯。",
+        "并发的多条反馈、停止与反馈交错、消费命令前后崩溃不丢记录，不重复消费。",
+        "责任阶段未修复前下游模型调用数为 0；原调用、预算、历史不重置。"
+      ],
+      "sources": [
+        {
+          "path": "src/content_factory/creative_workflow.py",
+          "line": 3512
+        },
+        {
+          "path": "src/content_factory/creative_workflow.py",
+          "line": 6580
+        },
+        {
+          "path": "src/content_factory/creative_stage_debug.py",
+          "line": 376
+        }
+      ],
+      "phase": "立即修复，再做依赖与模块优化"
+    },
+    {
+      "id": "F02",
+      "priority": "P2",
+      "kind": "可用性缺口",
+      "title": "把分段调试做成连续的用户工作台",
+      "current": "正文、分镜、输入/输出版本差异、媒体请求预览、人工视频决定和交付入口已存在；不是从零重做。输入合同已经保存。",
+      "evidence": "页面仍要求手填单段计划、保存目录、候选回执和完整成片审核回执。prepare-segment、assembly-chain、assemble 已有 CLI/服务，但未接入当前面板的完整操作链。文本阶段页面及 debug CLI 没有独立的完整冻结输入查看/派发前预览入口，当前主要提供哈希和双版本差异。",
+      "impact": "用户仍需要了解目录和回执结构，难以在“看文本 → 改责任阶段 → 审当前段 → 继续下一段”之间自然推进。",
+      "change": "以阶段和镜段卡片展示当前稿、导演安排、情绪重心、反应窗口、在途任务和人工决定。自动从绑定任务选择计划、候选和批准链；页面加入首帧选择、批准尾帧续段、合成与整片审核。文本阶段提供派发前冻结请求摘要及可展开的原请求，修改只能通过版本化编辑/反馈命令。",
+      "acceptance": [
+        "在界面完成文本返修、单段准备与显式提交、人工批准后续段、合成与整片人工审核，无需手填内部回执路径。",
+        "预览与实际派发采用同一输入/提示绑定；预览后源变化必须重新确认当前版本。",
+        "视频由用户审查；技术成功保持 awaiting_human_review；下游付费生成及发布保留明确执行按钮。"
+      ],
+      "sources": [
+        {
+          "path": "src/web/creative_workbench_panel.py",
+          "line": 105
+        },
+        {
+          "path": "src/web/creative_workbench_panel.py",
+          "line": 143
+        },
+        {
+          "path": "src/web/creative_workbench_panel.py",
+          "line": 222
+        },
+        {
+          "path": "scripts/creative_workbench.py",
+          "line": 91
+        },
+        {
+          "path": "scripts/debug_creative_workflow.py",
+          "line": 22
+        }
+      ],
+      "phase": "反馈一致性修复后，优先改善日常使用"
+    },
+    {
+      "id": "F03",
+      "priority": "P2",
+      "kind": "运维与版本支持缺口",
+      "title": "提供可审计的锁恢复和旧环境恢复工具",
+      "current": "重复文本派发、媒体回执写入有独占锁；异常遗留锁保留以防盲重发。旧任务不静默改绑，也不领取新预算。这些保护应保留。",
+      "evidence": "文本锁仅保存 scope 和禁止自动解锁字段，媒体锁为固定字符串；缺少统一的 owner/PID/启动身份、时间及请求关联信息。当前创作命令没有对账后安全恢复遗留锁的入口。MIGRATION.md 明确旧任务须恢复原冻结环境或只读，本版没有跨治理版本迁移命令。",
+      "impact": "崩溃后正确停住，但恢复依赖操作者手工查进程、文件和外部任务；源码哈希与运行环境恢复之间仍有操作成本。",
+      "change": "增加锁拥有者及进程启动身份、主机、时间、阶段、请求/媒体 ID 的审计元数据；提供诊断和显式对账恢复命令，确认旧进程结束后才接管。交付可重建的冻结源码、依赖锁定和启动步骤。另做显式迁移 dry-run，展示可携带产物、未决任务/反馈和累计预算，再生成迁移收据。",
+      "acceptance": [
+        "模拟进程强退后能够核对旧请求并恢复；有 ID 只查询，unknown 无 ID 不因清锁而再次提交。",
+        "旧进程仍活跃、请求无法对账、租约/所有权不明时拒绝接管；恢复动作有不可变回执。",
+        "旧任务恢复或迁移保持 task lineage、累计调用/token/返修/媒体失败预算和历史；身份变化重新人工批准。"
+      ],
+      "sources": [
+        {
+          "path": "src/content_factory/creative_workflow.py",
+          "line": 6580
+        },
+        {
+          "path": "src/content_factory/creative_segment_execution.py",
+          "line": 297
+        },
+        {
+          "path": "data/creative_governance/20261002_v22_platform_refactor_workbench/MIGRATION.md",
+          "line": null
+        }
+      ],
+      "phase": "与工作台完善并行，先恢复工具后自动迁移"
+    },
+    {
+      "id": "F04",
+      "priority": "P2",
+      "kind": "架构改善",
+      "title": "继续拆分核心编排与验证返修责任",
+      "current": "媒体、交付、合同和阶段运行模块已经拆出，边界确有进展；核心 runner 仍持有大部分逻辑。",
+      "evidence": "AST 统计 creative_workflow.py 8,298 行、138 个函数；_validate_or_repair 1,721 行，_run_unlocked 1,018 行。creative_stage_runtime.execute_stage 仍从 workflow 导入工具/常量，并调用 runner 的 state、预算和私有实现。",
+      "impact": "同一函数承担多个阶段的合同、返修和状态转换，变更难以局部验证；增加分段调试功能时容易牵动老流程。行数是耦合线索，不单独构成缺陷。",
+      "change": "在现有技术栈内逐步拆为预算与调用账本、请求/响应持久化、阶段合同与 validator 注册、文本审核/返修、阶段编排。用显式 StageContext 和服务接口替代把整个 runner 传入各模块。每次移动一种责任，保留原入口和治理协议。",
+      "acceptance": [
+        "每个阶段能用冻结输入单独执行与重放，模拟 provider、预算和持久化，验证失败路由。",
+        "新阶段只注册合同/依赖/校验与执行函数，不再增加 giant runner 分支。",
+        "原断点、全文整体采用、审核门、缓存零调用、预算及历史回归保持通过；冻结旧包不修改。"
+      ],
+      "sources": [
+        {
+          "path": "src/content_factory/creative_workflow.py",
+          "line": 4033
+        },
+        {
+          "path": "src/content_factory/creative_workflow.py",
+          "line": 6594
+        },
+        {
+          "path": "src/content_factory/creative_stage_runtime.py",
+          "line": 86
+        }
+      ],
+      "phase": "增量拆分，不建议一次重写"
+    },
+    {
+      "id": "F05",
+      "priority": "P2",
+      "kind": "依赖优化",
+      "title": "把字段投影提升为显式输入来源合同",
+      "current": "实际非空对象/数组投影与完整输入/提示兼容复用已经实现；保守失效回退仍然存在。不能再把字段级处理列为完全未实现。",
+      "evidence": "projections 通过子树内容哈希相同匹配父产物与请求字段，排除标量；相同内容在不同路径出现时并不等同于声明了来源关系。完整请求兼容检查仍是安全边界。",
+      "impact": "目前能证明请求包含这些内容，但依赖解释和更细粒度的安全复用仍有限；完整父对象被复制时自然依赖其全部字段。",
+      "change": "为 StageContract 声明 source stage/version、输出字段路径与目标输入字段；生成请求时记录显式消费绑定。展示“哪处修改导致哪阶段重建”，减少不必要的完整上下文复制，但未知依赖仍按保守阶段失效。",
+      "acceptance": [
+        "消费字段变化必重建，未消费字段变化在完整请求仍兼容时可复用；审核决定不跨不同请求复用。",
+        "覆盖同值不同来源、重复对象、标量引用、数组重排、移除/空值和规则/模板版本变化。",
+        "复用证明可读且可追溯，预算下降按原调用回执统计。"
+      ],
+      "sources": [
+        {
+          "path": "src/content_factory/creative_stage_contracts.py",
+          "line": 49
+        },
+        {
+          "path": "src/content_factory/creative_stage_contracts.py",
+          "line": 123
+        }
+      ],
+      "phase": "核心责任拆分后优化，先确保正确性"
+    },
+    {
+      "id": "F06",
+      "priority": "P3",
+      "kind": "质量证据缺口",
+      "title": "用真实人工案例验证分段调试是否改善创作",
+      "current": "候选采集、人工标注、留出冻结和评分接口已存在，当前不宣称真实质量提升，文档表述诚实。",
+      "evidence": "独立检查 v22 治理包 dataset_manifest：28 个候选、0 人工批准金标、0 合格留出；这仅说明当前包的证据，不能把自动夹具计为真实创作样本。",
+      "impact": "目前可以证明流程机制，仍不能回答用户最关心的效果：剧本是否更好、情绪反应窗口是否合适、返修是否减少、视频是否符合预期。",
+      "change": "先建开发试点：6 个独立简报、12 个实际修复案例、10 个边界案例，记录用户原问题、修订目标、阶段前后版本与人工耗时。按既定标准建设 80 独立人工金标、40 冻结留出、每版本 3 轮评估；开发样本不转为留出。增加当前+归档全部尝试的调用用量、真实账单、时延和人工工时采集。",
+      "acceptance": [
+        "文本评价覆盖因果、人物动机、重要对白前中后反应和导演可执行性；视频评价仅使用用户明确的人工决定。",
+        "预先冻结基线、评分准则与留出来源，再比较改版；重复执行不增加独立样本数。",
+        "缺失金额/时延/工时保持未知；分开报告创作质量、规则检测能力、返修成功率和每份合格交付成本。"
+      ],
+      "sources": [
+        {
+          "path": "src/content_factory/creative_quality_evidence.py",
+          "line": 171
+        },
+        {
+          "path": "src/content_factory/creative_evaluation.py",
+          "line": 7
+        },
+        {
+          "path": "data/creative_governance/20261002_v22_platform_refactor_workbench/dataset_manifest.json",
+          "line": null
+        }
+      ],
+      "phase": "工作台完善时并行做开发试点，满足证据门后宣称提升"
+    },
+    {
+      "id": "F07",
+      "priority": "P3/P4",
+      "kind": "真实运行证据缺口",
+      "title": "补服务、媒体技术格式与浏览器运行验收",
+      "current": "Mock 故障、媒体 ID 查询、人工批准链和浏览器发布夹具已经验证；本轮没有执行真实媒体或发布。",
+      "evidence": "实现文档明确 v22 验收为离线代码/故障链；媒体字节和人工决定是夹具。原验收的 738 项不能替代真实服务及真实浏览器运行证据。",
+      "impact": "真实 provider 的合同、连接中断、账单字段、异构媒体音轨/帧率和发布控件变化仍需受控验证，尚不能宣布生产全链路验收完成。",
+      "change": "先补不付费的格式与服务合同故障集，再在明确授权的真实任务中验证最小完整链：文字阶段、显式单段生成、人工批准原尾帧、续段、原音轨合成、整片人工审核、浏览器发布与准确作品核验。",
+      "acceptance": [
+        "服务提交后的连接故障不盲重发；已知 ID 续查，无 ID unknown 对账；保存文件与原尾帧身份正确。",
+        "媒体仅检验技术完整性和格式兼容，内容由用户审查；无音轨/格式不兼容清楚报错或有明确配方。",
+        "真实发布有主动 AI 声明控件读回、虚构前缀、账号/作品绑定和独立核验；平台待审核保持待核验并锁住提交。"
+      ],
+      "sources": [
+        {
+          "path": "docs/CREATIVE_WORKFLOW_IMPLEMENTATION.md",
+          "line": 47
+        },
+        {
+          "path": "docs/CREATIVE_WORKFLOW_IMPLEMENTATION.md",
+          "line": 59
+        },
+        {
+          "path": "src/content_factory/creative_media_workbench.py",
+          "line": 388
+        },
+        {
+          "path": "src/content_factory/creative_delivery.py",
+          "line": 133
+        }
+      ],
+      "phase": "夹具验收与真实验收分别登记，不自动发起付费或发布"
+    }
+  ],
+  "work_performed": {
+    "business_source_changed": false,
+    "governance_pack_changed": false,
+    "paid_calls": false,
+    "real_media_generation_or_content_review": false,
+    "production_publish_or_migration": false
+  },
+  "sequence": [
+    "F01：反馈一致性及在途边界专测，完成新治理版本绑定与回归。",
+    "F02 + F06：顺畅的文本/镜段工作台与真实人工开发试点。",
+    "F03 + F04：异常恢复工具及核心责任增量拆分。",
+    "F05：基于真实消费绑定缩小重建范围并证明收益。",
+    "F07：在授权的真实任务中逐项补运行证据。"
+  ]
+}

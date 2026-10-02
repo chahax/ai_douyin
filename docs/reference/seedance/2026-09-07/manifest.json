@@ -1,0 +1,45 @@
+{
+  "schema": "seedance_guide_archive/v1",
+  "archived_at": "2026-09-07T14:57:25.930775+00:00",
+  "source": "User-pasted official documentation; exact bytes preserved",
+  "publication_time": "not supplied",
+  "remote_media_downloaded": false,
+  "files": [
+    {
+      "file": "seedance_2_0_api.md",
+      "title": "Doubao Seedance 2.0 系列能力与调用说明",
+      "sha256": "c9a6781c75c5813cd90a98c8b018c2712189cedd92e70851625f4f5ec2d823ed",
+      "bytes": 88039,
+      "source_attachment": "da9542f2-98fc-4d06-bcdd-d734dd817a7a",
+      "official_url": "https://docs.volcengine.com/docs/82379/2291680",
+      "official_url_basis": "linked from supplied guide"
+    },
+    {
+      "file": "seedance_2_0_prompt.md",
+      "title": "Doubao Seedance 2.0 系列提示词指南",
+      "sha256": "10f1318c86fa03fc3064e6dae3bb5af9616127694983cdb9b641215c53c6b4eb",
+      "bytes": 55080,
+      "source_attachment": "3aa6fcfd-eba8-4cd9-9425-c84d57185932",
+      "official_url": "https://docs.volcengine.com/docs/82379/2222480",
+      "official_url_basis": "linked from supplied guide"
+    },
+    {
+      "file": "seedance_2_5_api.md",
+      "title": "Doubao Seedance 2.5 能力与调用说明",
+      "sha256": "4ee6baf05c125d3ec3fa4cb0efc49fb12319811803ad260f3c122f3e29bcf949",
+      "bytes": 143177,
+      "source_attachment": "16f71eec-496d-46d6-8b1c-bdb1fd93fc1e",
+      "official_url": "https://docs.volcengine.com/docs/82379/2607688",
+      "official_url_basis": "linked from supplied guide"
+    },
+    {
+      "file": "seedance_2_5_prompt.md",
+      "title": "Doubao Seedance 2.5 提示词指南",
+      "sha256": "72a3ce7e6ee9b846cf69591ac438ff5a6a53675ad3cca7a4961be9bd189a6eaf",
+      "bytes": 50562,
+      "source_attachment": "dd430110-a9b9-4bfb-b3de-88169a5ba16c",
+      "official_url": "https://docs.volcengine.com/docs/82379/2607689",
+      "official_url_basis": "linked from supplied Seedance 2.5 API guide"
+    }
+  ]
+}

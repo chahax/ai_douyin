@@ -1,0 +1,49 @@
+{
+  "schema": "creative_context_strategy/v1",
+  "material_sha256": "b0f5dfe7dce0f300af26a517b56edae479868626faad80b595921812262d8575",
+  "source_driver": "original",
+  "strategy": {
+    "mode": "full",
+    "direct_context_limit_characters": 42000,
+    "initial_payload_serialized_characters": 7987,
+    "source_sha256": "e0f61a360a00f25759eec6f521f6b83af9775100fd886066a3b85bf59d16aa82",
+    "reference_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+    "sent_payload_sha256": "b545b290800cf7ded944f69a573f4aaa43dbf19f4c456fa52c88d7d2f78c42ab"
+  },
+  "direct_context_limit_characters": 42000,
+  "final_payload_serialized_characters": 7987,
+  "final_payload_sha256": "b545b290800cf7ded944f69a573f4aaa43dbf19f4c456fa52c88d7d2f78c42ab",
+  "planning_estimation": "序列化 Unicode 字符数按一字符一 token 作保守输入估算；这不是供应商 tokenizer 结果，响应 usage 才是实际用量",
+  "role_context_capabilities": {
+    "writer": {
+      "provider": "minimax",
+      "model": "MiniMax-M3",
+      "planning_context_window_tokens": 512000,
+      "advertised_context_window_tokens": 1000000,
+      "source_url": "https://www.minimax.io/models/text/m3",
+      "verified_on": "2026-09-24"
+    },
+    "director": {
+      "provider": "minimax",
+      "model": "MiniMax-M3",
+      "planning_context_window_tokens": 512000,
+      "advertised_context_window_tokens": 1000000,
+      "source_url": "https://www.minimax.io/models/text/m3",
+      "verified_on": "2026-09-24"
+    },
+    "reviewer": {
+      "provider": "deepseek",
+      "model": "deepseek-flash",
+      "planning_context_window_tokens": 1000000,
+      "advertised_context_window_tokens": 1000000,
+      "source_url": "https://api-docs.deepseek.com/quick_start/pricing/",
+      "verified_on": "2026-09-24"
+    }
+  },
+  "source_delivery": "full_source_text",
+  "reference_delivery": "full_reference_text",
+  "not_sent_verbatim_to_initial_analysis": [],
+  "unread_or_unverified": [
+    "简报仅确定创作意图，实际生成效果待检查"
+  ]
+}

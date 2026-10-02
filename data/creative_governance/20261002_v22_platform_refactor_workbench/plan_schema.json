@@ -1,0 +1,539 @@
+{
+  "type": "object",
+  "properties": {
+    "schema": {
+      "type": "string",
+      "enum": [
+        "whole_film_action_plan_v2"
+      ]
+    },
+    "initial_state": {
+      "type": "object",
+      "properties": {
+        "C01": {
+          "type": "object",
+          "properties": {
+            "posture": {
+              "type": "string",
+              "enum": [
+                "standing",
+                "sitting",
+                "kneeling",
+                "lying",
+                "other"
+              ]
+            },
+            "position": {
+              "type": "string"
+            },
+            "gaze": {
+              "type": "string"
+            },
+            "affect": {
+              "type": "string"
+            },
+            "facing": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          },
+          "required": [
+            "posture",
+            "position",
+            "gaze",
+            "affect",
+            "facing"
+          ],
+          "additionalProperties": false
+        },
+        "C02": {
+          "type": "object",
+          "properties": {
+            "posture": {
+              "type": "string",
+              "enum": [
+                "standing",
+                "sitting",
+                "kneeling",
+                "lying",
+                "other"
+              ]
+            },
+            "position": {
+              "type": "string"
+            },
+            "gaze": {
+              "type": "string"
+            },
+            "affect": {
+              "type": "string"
+            },
+            "facing": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          },
+          "required": [
+            "posture",
+            "position",
+            "gaze",
+            "affect",
+            "facing"
+          ],
+          "additionalProperties": false
+        },
+        "P01": {
+          "type": "object",
+          "properties": {
+            "holder": {
+              "type": "string",
+              "enum": [
+                "C01",
+                "C02",
+                "none"
+              ]
+            },
+            "location": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "holder",
+            "location"
+          ],
+          "additionalProperties": false
+        },
+        "P02": {
+          "type": "object",
+          "properties": {
+            "holder": {
+              "type": "string",
+              "enum": [
+                "C01",
+                "C02",
+                "none"
+              ]
+            },
+            "location": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "holder",
+            "location"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "C01",
+        "C02",
+        "P01",
+        "P02"
+      ],
+      "additionalProperties": false
+    },
+    "beats": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "beat_id": {
+            "type": "string",
+            "enum": [
+              "B1",
+              "B2",
+              "B3",
+              "B4"
+            ]
+          },
+          "purpose": {
+            "type": "string"
+          },
+          "composition": {
+            "type": "string"
+          },
+          "camera": {
+            "type": "string"
+          },
+          "dialogue_mode": {
+            "type": "string",
+            "enum": [
+              "画内对白",
+              "画外对白",
+              "混合对白",
+              "无对白"
+            ]
+          },
+          "cut_reason": {
+            "type": "string"
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "实际对白窗口内嘴部、呼吸、情绪表演；只有此字段承载说话中的表演"
+                },
+                "script_slot": {
+                  "type": "string",
+                  "enum": [
+                    "before",
+                    "during",
+                    "after"
+                  ],
+                  "description": "源剧本段落：before在第一句前；during在第一句完整说完后、其余句前（不是说话期间）；after在全部对白后"
+                },
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "action",
+                    "hold"
+                  ]
+                },
+                "duration_seconds": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "hold_subject": {
+                  "type": "string",
+                  "enum": [
+                    "",
+                    "C01",
+                    "C02"
+                  ]
+                },
+                "performance": {
+                  "type": "string",
+                  "description": "实际对白窗口内嘴部、呼吸、情绪表演；只有此字段承载说话中的表演"
+                },
+                "operations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "enum": [
+                          "move",
+                          "gaze",
+                          "affect",
+                          "sit",
+                          "stand",
+                          "take",
+                          "place",
+                          "pass",
+                          "face"
+                        ]
+                      },
+                      "actor": {
+                        "type": "string",
+                        "enum": [
+                          "C01",
+                          "C02"
+                        ]
+                      },
+                      "target": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "move/sit/stand为动作后具体位置；take为手持位置；place为落点；pass为接收人物；gaze/face为目标；affect为表情"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "actor",
+                      "target",
+                      "value"
+                    ],
+                    "additionalProperties": false,
+                    "allOf": [
+                      {
+                        "if": {
+                          "properties": {
+                            "kind": {
+                              "enum": [
+                                "take",
+                                "place",
+                                "pass"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "kind"
+                          ]
+                        },
+                        "then": {
+                          "properties": {
+                            "target": {
+                              "enum": [
+                                "P01",
+                                "P02"
+                              ],
+                              "description": "被拿起/放下/交接的移动道具ID，不是桌子等落点"
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "if": {
+                          "properties": {
+                            "kind": {
+                              "const": "sit"
+                            }
+                          },
+                          "required": [
+                            "kind"
+                          ]
+                        },
+                        "then": {
+                          "properties": {
+                            "target": {
+                              "enum": [
+                                "E01",
+                                "E02",
+                                "E03",
+                                "E04",
+                                "E05",
+                                "E06",
+                                "E07",
+                                "E08",
+                                "E09"
+                              ],
+                              "description": "固定可坐物ID；实际可坐性还需空间前提及语义审核"
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "if": {
+                          "properties": {
+                            "kind": {
+                              "enum": [
+                                "move",
+                                "gaze",
+                                "affect",
+                                "face",
+                                "stand"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "kind"
+                          ]
+                        },
+                        "then": {
+                          "properties": {
+                            "target": {
+                              "const": ""
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "if": {
+                          "properties": {
+                            "kind": {
+                              "const": "pass"
+                            }
+                          },
+                          "required": [
+                            "kind"
+                          ]
+                        },
+                        "then": {
+                          "properties": {
+                            "value": {
+                              "enum": [
+                                "C01",
+                                "C02"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "id",
+                "script_slot",
+                "kind",
+                "duration_seconds",
+                "hold_subject",
+                "performance",
+                "operations"
+              ],
+              "additionalProperties": false,
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "kind": {
+                        "const": "hold"
+                      }
+                    },
+                    "required": [
+                      "kind"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "operations": {
+                        "const": []
+                      },
+                      "hold_subject": {
+                        "enum": [
+                          "C01",
+                          "C02"
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "kind": {
+                        "const": "action"
+                      }
+                    },
+                    "required": [
+                      "kind"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "hold_subject": {
+                        "const": ""
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "dialogue_performance": {
+            "type": "string",
+            "description": "实际对白窗口内嘴部、呼吸、情绪表演；只有此字段承载说话中的表演"
+          },
+          "reaction": {
+            "type": "object",
+            "properties": {
+              "anchor": {
+                "type": "string",
+                "description": "实际对白窗口内嘴部、呼吸、情绪表演；只有此字段承载说话中的表演"
+              },
+              "subject": {
+                "type": "string",
+                "enum": [
+                  "C01",
+                  "C02"
+                ]
+              },
+              "meaning": {
+                "type": "string",
+                "description": "实际对白窗口内嘴部、呼吸、情绪表演；只有此字段承载说话中的表演"
+              }
+            },
+            "required": [
+              "anchor",
+              "subject",
+              "meaning"
+            ],
+            "additionalProperties": false
+          },
+          "cut_after_event_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "completion_condition": {
+            "const": "all_required_events_complete"
+          }
+        },
+        "required": [
+          "beat_id",
+          "purpose",
+          "composition",
+          "camera",
+          "dialogue_mode",
+          "cut_reason",
+          "groups",
+          "dialogue_performance",
+          "reaction",
+          "cut_after_event_id",
+          "completion_condition"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "spatial_contract": {
+      "type": "object",
+      "properties": {
+        "seats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "seat_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "access_positions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "required_facing": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1
+              }
+            },
+            "required": [
+              "seat_id",
+              "access_positions",
+              "required_facing"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "seats"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema",
+    "initial_state",
+    "beats",
+    "spatial_contract"
+  ],
+  "additionalProperties": false,
+  "x-artifact-metadata": {
+    "schema_version": "creative_plan_schema_artifact/v1",
+    "source_hash": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+    "created_at": "2026-09-28T14:36:59.681531+00:00",
+    "implementation_status": "offline_implemented_not_production_validated",
+    "source_module": "src/content_factory/creative_action_plan_v2.py",
+    "source_module_sha256": "74bef6f461fa3884e39707f6ea533cc13ed71bcb20d14534e2fce9b39a514970"
+  }
+}

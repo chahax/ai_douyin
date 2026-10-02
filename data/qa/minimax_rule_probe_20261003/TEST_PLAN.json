@@ -1,0 +1,730 @@
+{
+  "schema": "minimax_small_context_rule_probe_plan/v1",
+  "status": "prepared_pending_new_call_budget",
+  "paid_calls": 0,
+  "network_model_calls": 0,
+  "dispatch_enabled": false,
+  "model_parameters": {
+    "model": "MiniMax-M3",
+    "temperature": 0.4,
+    "thinking": "disabled",
+    "max_completion_tokens": 1024,
+    "tool_choice": {
+      "type": "function",
+      "function": {
+        "name": "submit_creative_json"
+      }
+    }
+  },
+  "context_sha256": "42c3763ae6b77b009c4bd983c1a4c77a59a55947154e09fabd67f634d4e75ae3",
+  "context": {
+    "schema": "synthetic_rule_probe_context/v1",
+    "fixture_only": true,
+    "characters": [
+      {
+        "id": "C01",
+        "name": "甲"
+      },
+      {
+        "id": "C02",
+        "name": "乙"
+      }
+    ],
+    "script": {
+      "beats": [
+        {
+          "id": "B1",
+          "event": "甲把杯子放到桌面。",
+          "dialogue": [
+            {
+              "speaker": "C02",
+              "text": "今晚我自己弄，你先走。"
+            }
+          ]
+        }
+      ]
+    },
+    "task": "只提交两项表演要求：第一项，放杯事件结束后观察甲两秒；第二项，乙说这句对白期间观察甲两秒。来源填写对应剧本字段路径。"
+  },
+  "cases": [
+    {
+      "case_id": "A",
+      "title": "基本工具格式",
+      "compare_to": null,
+      "input_context_sha256": "42c3763ae6b77b009c4bd983c1a4c77a59a55947154e09fabd67f634d4e75ae3",
+      "request_sha256": "3ecac48ad11cabeca054118c7d4574e81c307dcdf111ec9243af7282b6d20801",
+      "request": {
+        "model": "MiniMax-M3",
+        "messages": [
+          {
+            "role": "system",
+            "content": "用指定工具提交本任务的完整结果。不要写分析或其他正文。"
+          },
+          {
+            "role": "user",
+            "content": "{\"characters\":[{\"id\":\"C01\",\"name\":\"甲\"},{\"id\":\"C02\",\"name\":\"乙\"}],\"fixture_only\":true,\"schema\":\"synthetic_rule_probe_context/v1\",\"script\":{\"beats\":[{\"dialogue\":[{\"speaker\":\"C02\",\"text\":\"今晚我自己弄，你先走。\"}],\"event\":\"甲把杯子放到桌面。\",\"id\":\"B1\"}]},\"task\":\"只提交两项表演要求：第一项，放杯事件结束后观察甲两秒；第二项，乙说这句对白期间观察甲两秒。来源填写对应剧本字段路径。\"}"
+          }
+        ],
+        "temperature": 0.4,
+        "max_completion_tokens": 1024,
+        "thinking": {
+          "type": "disabled"
+        },
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "submit_creative_json",
+              "description": "提交本阶段完整结构化创作结果",
+              "parameters": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "performance_requirements"
+                ],
+                "properties": {
+                  "performance_requirements": {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "id",
+                        "subject",
+                        "stimulus_source",
+                        "relation",
+                        "minimum_seconds"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "subject": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "stimulus_source": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "relation": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "minimum_seconds": {
+                          "type": "number",
+                          "exclusiveMinimum": 0
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "tool_choice": {
+          "type": "function",
+          "function": {
+            "name": "submit_creative_json"
+          }
+        }
+      },
+      "conservative_token_reservation": 2314
+    },
+    {
+      "case_id": "B",
+      "title": "基本格式加中文关系说明",
+      "compare_to": "A",
+      "input_context_sha256": "42c3763ae6b77b009c4bd983c1a4c77a59a55947154e09fabd67f634d4e75ae3",
+      "request_sha256": "934f39c4b953aa796f883cfa565db70137030bb85d6bc40d90e759f9c438af9d",
+      "request": {
+        "model": "MiniMax-M3",
+        "messages": [
+          {
+            "role": "system",
+            "content": "用指定工具提交本任务的完整结果。不要写分析或其他正文。\nperformance_requirements必须直接是数组，不能用item或items对象包裹。每项是一个对象，包含id、subject、stimulus_source、relation、minimum_seconds。id互不重复；subject是被观察的人物编号。stimulus_source只能是script.beats.0.event或script.beats.0.dialogue.0.text。relation说明观察窗口相对刺激的时间：before在刺激之前，during在刺激期间，after在刺激结束之后。本协议事件来源只能选before/after；对白来源允许before/during/after。minimum_seconds是数值。"
+          },
+          {
+            "role": "user",
+            "content": "{\"characters\":[{\"id\":\"C01\",\"name\":\"甲\"},{\"id\":\"C02\",\"name\":\"乙\"}],\"fixture_only\":true,\"schema\":\"synthetic_rule_probe_context/v1\",\"script\":{\"beats\":[{\"dialogue\":[{\"speaker\":\"C02\",\"text\":\"今晚我自己弄，你先走。\"}],\"event\":\"甲把杯子放到桌面。\",\"id\":\"B1\"}]},\"task\":\"只提交两项表演要求：第一项，放杯事件结束后观察甲两秒；第二项，乙说这句对白期间观察甲两秒。来源填写对应剧本字段路径。\"}"
+          }
+        ],
+        "temperature": 0.4,
+        "max_completion_tokens": 1024,
+        "thinking": {
+          "type": "disabled"
+        },
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "submit_creative_json",
+              "description": "提交本阶段完整结构化创作结果",
+              "parameters": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "performance_requirements"
+                ],
+                "properties": {
+                  "performance_requirements": {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "id",
+                        "subject",
+                        "stimulus_source",
+                        "relation",
+                        "minimum_seconds"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "subject": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "stimulus_source": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "relation": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "minimum_seconds": {
+                          "type": "number",
+                          "exclusiveMinimum": 0
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "tool_choice": {
+          "type": "function",
+          "function": {
+            "name": "submit_creative_json"
+          }
+        }
+      },
+      "conservative_token_reservation": 2649
+    },
+    {
+      "case_id": "C",
+      "title": "中文说明加另一场景的正确结构示例",
+      "compare_to": "B",
+      "input_context_sha256": "42c3763ae6b77b009c4bd983c1a4c77a59a55947154e09fabd67f634d4e75ae3",
+      "request_sha256": "7cad4006897e43a57fd79c96509e428a5da2350b9d0cb782bbf178ef035e47a3",
+      "request": {
+        "model": "MiniMax-M3",
+        "messages": [
+          {
+            "role": "system",
+            "content": "用指定工具提交本任务的完整结果。不要写分析或其他正文。\nperformance_requirements必须直接是数组，不能用item或items对象包裹。每项是一个对象，包含id、subject、stimulus_source、relation、minimum_seconds。id互不重复；subject是被观察的人物编号。stimulus_source只能是script.beats.0.event或script.beats.0.dialogue.0.text。relation说明观察窗口相对刺激的时间：before在刺激之前，during在刺激期间，after在刺激结束之后。本协议事件来源只能选before/after；对白来源允许before/during/after。minimum_seconds是数值。\n下面是另一场景的完整格式示例，只参考结构，不复制其中人物、路径、关系或数值：\n{\"performance_requirements\":[{\"id\":\"DEMO_EVENT\",\"minimum_seconds\":1,\"relation\":\"before\",\"stimulus_source\":\"script.beats.8.event\",\"subject\":\"C02\"},{\"id\":\"DEMO_DIALOGUE\",\"minimum_seconds\":1,\"relation\":\"after\",\"stimulus_source\":\"script.beats.8.dialogue.0.text\",\"subject\":\"C02\"}]}"
+          },
+          {
+            "role": "user",
+            "content": "{\"characters\":[{\"id\":\"C01\",\"name\":\"甲\"},{\"id\":\"C02\",\"name\":\"乙\"}],\"fixture_only\":true,\"schema\":\"synthetic_rule_probe_context/v1\",\"script\":{\"beats\":[{\"dialogue\":[{\"speaker\":\"C02\",\"text\":\"今晚我自己弄，你先走。\"}],\"event\":\"甲把杯子放到桌面。\",\"id\":\"B1\"}]},\"task\":\"只提交两项表演要求：第一项，放杯事件结束后观察甲两秒；第二项，乙说这句对白期间观察甲两秒。来源填写对应剧本字段路径。\"}"
+          }
+        ],
+        "temperature": 0.4,
+        "max_completion_tokens": 1024,
+        "thinking": {
+          "type": "disabled"
+        },
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "submit_creative_json",
+              "description": "提交本阶段完整结构化创作结果",
+              "parameters": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "performance_requirements"
+                ],
+                "properties": {
+                  "performance_requirements": {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "id",
+                        "subject",
+                        "stimulus_source",
+                        "relation",
+                        "minimum_seconds"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "subject": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "stimulus_source": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "relation": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "minimum_seconds": {
+                          "type": "number",
+                          "exclusiveMinimum": 0
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "tool_choice": {
+          "type": "function",
+          "function": {
+            "name": "submit_creative_json"
+          }
+        }
+      },
+      "conservative_token_reservation": 3005
+    },
+    {
+      "case_id": "D",
+      "title": "基本格式加简单字段枚举",
+      "compare_to": "A",
+      "input_context_sha256": "42c3763ae6b77b009c4bd983c1a4c77a59a55947154e09fabd67f634d4e75ae3",
+      "request_sha256": "eec10942a13cc983a67618f4410ce7b61aa4f46553f01267b573e1c57bc16899",
+      "request": {
+        "model": "MiniMax-M3",
+        "messages": [
+          {
+            "role": "system",
+            "content": "用指定工具提交本任务的完整结果。不要写分析或其他正文。"
+          },
+          {
+            "role": "user",
+            "content": "{\"characters\":[{\"id\":\"C01\",\"name\":\"甲\"},{\"id\":\"C02\",\"name\":\"乙\"}],\"fixture_only\":true,\"schema\":\"synthetic_rule_probe_context/v1\",\"script\":{\"beats\":[{\"dialogue\":[{\"speaker\":\"C02\",\"text\":\"今晚我自己弄，你先走。\"}],\"event\":\"甲把杯子放到桌面。\",\"id\":\"B1\"}]},\"task\":\"只提交两项表演要求：第一项，放杯事件结束后观察甲两秒；第二项，乙说这句对白期间观察甲两秒。来源填写对应剧本字段路径。\"}"
+          }
+        ],
+        "temperature": 0.4,
+        "max_completion_tokens": 1024,
+        "thinking": {
+          "type": "disabled"
+        },
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "submit_creative_json",
+              "description": "提交本阶段完整结构化创作结果",
+              "parameters": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "performance_requirements"
+                ],
+                "properties": {
+                  "performance_requirements": {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "id",
+                        "subject",
+                        "stimulus_source",
+                        "relation",
+                        "minimum_seconds"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "subject": {
+                          "type": "string",
+                          "enum": [
+                            "C01",
+                            "C02"
+                          ]
+                        },
+                        "stimulus_source": {
+                          "type": "string",
+                          "enum": [
+                            "script.beats.0.event",
+                            "script.beats.0.dialogue.0.text"
+                          ]
+                        },
+                        "relation": {
+                          "enum": [
+                            "before",
+                            "during",
+                            "after"
+                          ]
+                        },
+                        "minimum_seconds": {
+                          "type": "number",
+                          "exclusiveMinimum": 0
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "tool_choice": {
+          "type": "function",
+          "function": {
+            "name": "submit_creative_json"
+          }
+        }
+      },
+      "conservative_token_reservation": 2377
+    },
+    {
+      "case_id": "E",
+      "title": "简单枚举加if/then条件",
+      "compare_to": "D",
+      "input_context_sha256": "42c3763ae6b77b009c4bd983c1a4c77a59a55947154e09fabd67f634d4e75ae3",
+      "request_sha256": "1a173367d742dcab4c5fa177a08d4ab9d6ff6a2603bada574d09f131969610f9",
+      "request": {
+        "model": "MiniMax-M3",
+        "messages": [
+          {
+            "role": "system",
+            "content": "用指定工具提交本任务的完整结果。不要写分析或其他正文。"
+          },
+          {
+            "role": "user",
+            "content": "{\"characters\":[{\"id\":\"C01\",\"name\":\"甲\"},{\"id\":\"C02\",\"name\":\"乙\"}],\"fixture_only\":true,\"schema\":\"synthetic_rule_probe_context/v1\",\"script\":{\"beats\":[{\"dialogue\":[{\"speaker\":\"C02\",\"text\":\"今晚我自己弄，你先走。\"}],\"event\":\"甲把杯子放到桌面。\",\"id\":\"B1\"}]},\"task\":\"只提交两项表演要求：第一项，放杯事件结束后观察甲两秒；第二项，乙说这句对白期间观察甲两秒。来源填写对应剧本字段路径。\"}"
+          }
+        ],
+        "temperature": 0.4,
+        "max_completion_tokens": 1024,
+        "thinking": {
+          "type": "disabled"
+        },
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "submit_creative_json",
+              "description": "提交本阶段完整结构化创作结果",
+              "parameters": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "performance_requirements"
+                ],
+                "properties": {
+                  "performance_requirements": {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "id",
+                        "subject",
+                        "stimulus_source",
+                        "relation",
+                        "minimum_seconds"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "subject": {
+                          "type": "string",
+                          "enum": [
+                            "C01",
+                            "C02"
+                          ]
+                        },
+                        "stimulus_source": {
+                          "type": "string",
+                          "enum": [
+                            "script.beats.0.event",
+                            "script.beats.0.dialogue.0.text"
+                          ]
+                        },
+                        "relation": {
+                          "enum": [
+                            "before",
+                            "during",
+                            "after"
+                          ]
+                        },
+                        "minimum_seconds": {
+                          "type": "number",
+                          "exclusiveMinimum": 0
+                        }
+                      },
+                      "allOf": [
+                        {
+                          "if": {
+                            "properties": {
+                              "stimulus_source": {
+                                "const": "script.beats.0.event"
+                              }
+                            },
+                            "required": [
+                              "stimulus_source"
+                            ]
+                          },
+                          "then": {
+                            "properties": {
+                              "relation": {
+                                "enum": [
+                                  "before",
+                                  "after"
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "tool_choice": {
+          "type": "function",
+          "function": {
+            "name": "submit_creative_json"
+          }
+        }
+      },
+      "conservative_token_reservation": 2556
+    },
+    {
+      "case_id": "F",
+      "title": "条件Schema加中文关系说明",
+      "compare_to": "E",
+      "input_context_sha256": "42c3763ae6b77b009c4bd983c1a4c77a59a55947154e09fabd67f634d4e75ae3",
+      "request_sha256": "b184118283ffddc9cb57eb397c30bc3a17cdde12b254f702ea1abfbf5208ecb4",
+      "request": {
+        "model": "MiniMax-M3",
+        "messages": [
+          {
+            "role": "system",
+            "content": "用指定工具提交本任务的完整结果。不要写分析或其他正文。\nperformance_requirements必须直接是数组，不能用item或items对象包裹。每项是一个对象，包含id、subject、stimulus_source、relation、minimum_seconds。id互不重复；subject是被观察的人物编号。stimulus_source只能是script.beats.0.event或script.beats.0.dialogue.0.text。relation说明观察窗口相对刺激的时间：before在刺激之前，during在刺激期间，after在刺激结束之后。本协议事件来源只能选before/after；对白来源允许before/during/after。minimum_seconds是数值。"
+          },
+          {
+            "role": "user",
+            "content": "{\"characters\":[{\"id\":\"C01\",\"name\":\"甲\"},{\"id\":\"C02\",\"name\":\"乙\"}],\"fixture_only\":true,\"schema\":\"synthetic_rule_probe_context/v1\",\"script\":{\"beats\":[{\"dialogue\":[{\"speaker\":\"C02\",\"text\":\"今晚我自己弄，你先走。\"}],\"event\":\"甲把杯子放到桌面。\",\"id\":\"B1\"}]},\"task\":\"只提交两项表演要求：第一项，放杯事件结束后观察甲两秒；第二项，乙说这句对白期间观察甲两秒。来源填写对应剧本字段路径。\"}"
+          }
+        ],
+        "temperature": 0.4,
+        "max_completion_tokens": 1024,
+        "thinking": {
+          "type": "disabled"
+        },
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "submit_creative_json",
+              "description": "提交本阶段完整结构化创作结果",
+              "parameters": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "performance_requirements"
+                ],
+                "properties": {
+                  "performance_requirements": {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "id",
+                        "subject",
+                        "stimulus_source",
+                        "relation",
+                        "minimum_seconds"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "subject": {
+                          "type": "string",
+                          "enum": [
+                            "C01",
+                            "C02"
+                          ]
+                        },
+                        "stimulus_source": {
+                          "type": "string",
+                          "enum": [
+                            "script.beats.0.event",
+                            "script.beats.0.dialogue.0.text"
+                          ]
+                        },
+                        "relation": {
+                          "enum": [
+                            "before",
+                            "during",
+                            "after"
+                          ]
+                        },
+                        "minimum_seconds": {
+                          "type": "number",
+                          "exclusiveMinimum": 0
+                        }
+                      },
+                      "allOf": [
+                        {
+                          "if": {
+                            "properties": {
+                              "stimulus_source": {
+                                "const": "script.beats.0.event"
+                              }
+                            },
+                            "required": [
+                              "stimulus_source"
+                            ]
+                          },
+                          "then": {
+                            "properties": {
+                              "relation": {
+                                "enum": [
+                                  "before",
+                                  "after"
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "tool_choice": {
+          "type": "function",
+          "function": {
+            "name": "submit_creative_json"
+          }
+        }
+      },
+      "conservative_token_reservation": 2891
+    }
+  ],
+  "expected_fixture": {
+    "performance_requirements": [
+      {
+        "id": "EVENT_REACTION",
+        "subject": "C01",
+        "stimulus_source": "script.beats.0.event",
+        "relation": "after",
+        "minimum_seconds": 2
+      },
+      {
+        "id": "DIALOGUE_REACTION",
+        "subject": "C01",
+        "stimulus_source": "script.beats.0.dialogue.0.text",
+        "relation": "during",
+        "minimum_seconds": 2
+      }
+    ]
+  },
+  "repeat_plan": {
+    "first_round": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F"
+    ],
+    "second_round": [
+      "F",
+      "E",
+      "D",
+      "C",
+      "B",
+      "A"
+    ],
+    "third_round": [
+      "C",
+      "D",
+      "A",
+      "F",
+      "E",
+      "B"
+    ],
+    "max_new_calls_proposed": 18,
+    "first_round_call_limit_alternative": 6,
+    "no_auto_retry": true
+  },
+  "conservative_tokens_all_18": 47376,
+  "budget": {
+    "parent_run": "D:\\IT\\ai_douyin\\data\\production_trials\\boundary_live_action_reference_v15_20261001\\round_01",
+    "frozen_parent_calls": 21,
+    "effective_calls_started": 24,
+    "current_max_calls": 24,
+    "current_reported_tokens": 379026,
+    "current_max_total_tokens": 500000,
+    "remaining_tokens": 120974,
+    "new_max_calls_if_6_approved": 30,
+    "new_max_calls_if_18_approved": 42,
+    "max_total_tokens_unchanged": true,
+    "new_call_authorization": null,
+    "old_budget_reset": false
+  },
+  "limits": [
+    "sample follows one synthetic context only; no production creative approval",
+    "one or three successes cannot prove strict server decoding",
+    "a complex-schema failure cannot distinguish unsupported keyword from model error without further evidence",
+    "no provider/model/endpoint/temperature change within this matrix",
+    "no picture/video/full screenplay generation; no DeepSeek review",
+    "source paths and task relation checks are evaluated separately from object/array shape",
+    "example values intentionally differ from the target to expose example copying"
+  ],
+  "official_docs": {
+    "openai": "https://platform.minimax.io/docs/api-reference/text-openai-api",
+    "anthropic": "https://platform.minimax.io/docs/api-reference/text-anthropic-api",
+    "finding": "tools are documented; strict/prefixItems/if-then support guarantee not found in pages read; absence is not proof of non-support"
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "case_id": "C",
+  "title": "中文说明加另一场景的正确结构示例",
+  "compare_to": "B",
+  "input_context_sha256": "42c3763ae6b77b009c4bd983c1a4c77a59a55947154e09fabd67f634d4e75ae3",
+  "request_sha256": "7cad4006897e43a57fd79c96509e428a5da2350b9d0cb782bbf178ef035e47a3",
+  "request": {
+    "model": "MiniMax-M3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "用指定工具提交本任务的完整结果。不要写分析或其他正文。\nperformance_requirements必须直接是数组，不能用item或items对象包裹。每项是一个对象，包含id、subject、stimulus_source、relation、minimum_seconds。id互不重复；subject是被观察的人物编号。stimulus_source只能是script.beats.0.event或script.beats.0.dialogue.0.text。relation说明观察窗口相对刺激的时间：before在刺激之前，during在刺激期间，after在刺激结束之后。本协议事件来源只能选before/after；对白来源允许before/during/after。minimum_seconds是数值。\n下面是另一场景的完整格式示例，只参考结构，不复制其中人物、路径、关系或数值：\n{\"performance_requirements\":[{\"id\":\"DEMO_EVENT\",\"minimum_seconds\":1,\"relation\":\"before\",\"stimulus_source\":\"script.beats.8.event\",\"subject\":\"C02\"},{\"id\":\"DEMO_DIALOGUE\",\"minimum_seconds\":1,\"relation\":\"after\",\"stimulus_source\":\"script.beats.8.dialogue.0.text\",\"subject\":\"C02\"}]}"
+      },
+      {
+        "role": "user",
+        "content": "{\"characters\":[{\"id\":\"C01\",\"name\":\"甲\"},{\"id\":\"C02\",\"name\":\"乙\"}],\"fixture_only\":true,\"schema\":\"synthetic_rule_probe_context/v1\",\"script\":{\"beats\":[{\"dialogue\":[{\"speaker\":\"C02\",\"text\":\"今晚我自己弄，你先走。\"}],\"event\":\"甲把杯子放到桌面。\",\"id\":\"B1\"}]},\"task\":\"只提交两项表演要求：第一项，放杯事件结束后观察甲两秒；第二项，乙说这句对白期间观察甲两秒。来源填写对应剧本字段路径。\"}"
+      }
+    ],
+    "temperature": 0.4,
+    "max_completion_tokens": 1024,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "submit_creative_json",
+          "description": "提交本阶段完整结构化创作结果",
+          "parameters": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "performance_requirements"
+            ],
+            "properties": {
+              "performance_requirements": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "id",
+                    "subject",
+                    "stimulus_source",
+                    "relation",
+                    "minimum_seconds"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "subject": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "stimulus_source": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "relation": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "minimum_seconds": {
+                      "type": "number",
+                      "exclusiveMinimum": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "tool_choice": {
+      "type": "function",
+      "function": {
+        "name": "submit_creative_json"
+      }
+    }
+  },
+  "conservative_token_reservation": 3005
+}

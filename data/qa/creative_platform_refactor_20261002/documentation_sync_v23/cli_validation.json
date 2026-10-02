@@ -1,0 +1,70 @@
+{
+  "offline": true,
+  "commands": [
+    {
+      "script": "scripts/run_creative_workflow.py",
+      "help_ok": true,
+      "expected_flags_or_commands": [
+        "--next-stage",
+        "--stop-after-stage",
+        "--production-protocol",
+        "--review-policy-version"
+      ]
+    },
+    {
+      "script": "scripts/debug_creative_workflow.py",
+      "help_ok": true,
+      "expected_flags_or_commands": [
+        "inspect",
+        "compare",
+        "feedback",
+        "stop",
+        "resume"
+      ]
+    },
+    {
+      "script": "scripts/compile_creative_seedance_segments.py",
+      "help_ok": true,
+      "expected_flags_or_commands": [
+        "run_dir",
+        "output",
+        "--revised"
+      ]
+    },
+    {
+      "script": "scripts/run_creative_seedance_segment.py",
+      "help_ok": true,
+      "expected_flags_or_commands": [
+        "preview",
+        "submit",
+        "query",
+        "--output-dir"
+      ]
+    },
+    {
+      "script": "scripts/creative_workbench.py",
+      "help_ok": true,
+      "expected_flags_or_commands": [
+        "prepare-segment",
+        "assembly-chain",
+        "assemble",
+        "prepare-delivery",
+        "publish",
+        "verify-publish",
+        "collect-operations",
+        "quality-report"
+      ]
+    },
+    {
+      "script": "scripts/review_media_candidate.py",
+      "help_ok": true,
+      "expected_flags_or_commands": [
+        "approved",
+        "rejected",
+        "--user-statement"
+      ]
+    }
+  ],
+  "assemble_and_publish_require_execute": true,
+  "generation_or_publish_performed": false
+}

@@ -1,0 +1,43 @@
+{
+  "baseline_matches_frozen_v20": true,
+  "baseline_sha256": "89cce6a6b2cf3ef3830675b5cb96298f796e5e08edf380d06867ca0f00e5dd4c",
+  "ruff_exit_code": 1,
+  "baseline_issues": [
+    {
+      "cell": null,
+      "code": "F841",
+      "end_location": {
+        "column": 14,
+        "row": 378
+      },
+      "filename": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\p1_closure_v21\\baseline_v20_stage_debug.py",
+      "fix": {
+        "applicability": "unsafe",
+        "edits": [
+          {
+            "content": "",
+            "end_location": {
+              "column": 17,
+              "row": 378
+            },
+            "location": {
+              "column": 5,
+              "row": 378
+            }
+          }
+        ],
+        "message": "Remove assignment to unused variable `summaries`"
+      },
+      "location": {
+        "column": 5,
+        "row": 378
+      },
+      "message": "Local variable `summaries` is assigned to but never used",
+      "name": "unused-variable",
+      "noqa_row": 378,
+      "severity": "error",
+      "url": "https://docs.astral.sh/ruff/rules/unused-variable"
+    }
+  ],
+  "same_existing_unused_summaries": true
+}

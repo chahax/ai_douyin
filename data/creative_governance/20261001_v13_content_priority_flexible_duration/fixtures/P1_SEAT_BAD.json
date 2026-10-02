@@ -1,0 +1,30 @@
+{
+  "schema_version": "creative_eval_case/v1",
+  "source_hash": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+  "created_at": "2026-09-28T14:36:59.681531+00:00",
+  "implementation_status": "candidate_label_not_gold",
+  "case": {
+    "case_id": "P1_SEAT_BAD",
+    "category": "space",
+    "case_kind": "error",
+    "scenario": "Executable existing checker test: test_seat_wrong_side_is_failure_and_does_not_guess_move",
+    "expected_disposition": "blocked",
+    "label_status": "candidate",
+    "adjudication": {
+      "approved_by": null,
+      "approved_at": null,
+      "candidate_author": "Codex assistant; requires independent human adjudication"
+    },
+    "source_family": "P1_SHARED_SAMPLE",
+    "independence_group": "P1_SHARED_SAMPLE",
+    "split": "development",
+    "used_for_prompt_tuning": true,
+    "expected_issues": [],
+    "evidence": [],
+    "source_paths": [
+      "tests/test_creative_action_plan_v2.py:test_seat_wrong_side_is_failure_and_does_not_guess_move"
+    ],
+    "production_validated": false,
+    "test_source_sha256": "3ec76ff0b5d134e8f1fab839b89b7707151f5b67844e84df4353ac3d6f918e38"
+  }
+}

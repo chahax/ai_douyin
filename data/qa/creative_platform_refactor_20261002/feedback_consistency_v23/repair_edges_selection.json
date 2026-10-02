@@ -1,0 +1,5 @@
+[
+  "tests/test_creative_feedback_consistency.py",
+  "tests/test_creative_workflow.py::test_assistant_major_review_reopens_task_without_reusing_text_handoff",
+  "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\v20_confirmation\\test_extended_recovery.py"
+]

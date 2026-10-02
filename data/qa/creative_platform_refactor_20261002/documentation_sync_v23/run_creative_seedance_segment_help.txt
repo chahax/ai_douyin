@@ -1,0 +1,12 @@
+usage: run_creative_seedance_segment.py [-h] --output-dir OUTPUT_DIR
+                                        [--wait-timeout WAIT_TIMEOUT]
+                                        {preview,submit,query} plan
+
+positional arguments:
+  {preview,submit,query}
+  plan
+
+options:
+  -h, --help            show this help message and exit
+  --output-dir OUTPUT_DIR
+  --wait-timeout WAIT_TIMEOUT

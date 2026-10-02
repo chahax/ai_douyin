@@ -1,0 +1,21 @@
+{
+  "source_references_valid": true,
+  "qa_script_syntax_valid": true,
+  "renders": [
+    {
+      "layout": "desktop",
+      "width": 1365,
+      "scrollWidth": 1365,
+      "articles": 8,
+      "links": 38
+    },
+    {
+      "layout": "mobile",
+      "width": 430,
+      "scrollWidth": 430,
+      "articles": 8,
+      "links": 38
+    }
+  ],
+  "reviewed_source_unchanged": true
+}

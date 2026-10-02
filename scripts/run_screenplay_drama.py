@@ -329,6 +329,8 @@ def main():
         result = parse_json(raw)
         if args.stage == 'draft':
             validate_drama(result, args.kind, duration, full_sources, args.reference_source_id, companion)
+            from src.trend_intelligence.dramatic_pacing import require_new_draft_pacing
+            state['dramatic_pacing_sha256'] = save('dramatic_pacing.json', require_new_draft_pacing(result, args.kind))
             state['candidate_sha256'] = save('drama.json', result)
         elif args.stage == 'revise':
             state['revision_output_sha256'] = save('revision.json', result)

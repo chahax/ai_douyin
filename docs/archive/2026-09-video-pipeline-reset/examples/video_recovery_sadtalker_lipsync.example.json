@@ -1,0 +1,17 @@
+{
+  "template": "video_recovery/v1",
+  "id": "sadtalker_lipsync_recovery",
+  "review_report": "../../data/qa/sadtalker_xiaojie_audio_test_review/decision.report.json",
+  "inventory_report": "../../data/qa/video_tool_inventory_20260726_deterministic_motion.json",
+  "current_tool": "sadtalker",
+  "intent": {
+    "motion": "micro",
+    "framing": "head_shoulders",
+    "camera": "locked",
+    "background": "static",
+    "preserve_reference": true,
+    "audio_driven": true,
+    "visual_style": "anime",
+    "lip_sync_required": true
+  }
+}

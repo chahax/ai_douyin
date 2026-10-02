@@ -23,13 +23,34 @@ from src.workflow.selection_store import (
 def test_builtin_registry_has_one_default_and_one_contract_per_stage() -> None:
     registry = build_default_registry()
 
-    assert {"tts", "video_pipeline", "video_generation", "portrait_animation"} <= set(
-        registry.stages()
-    )
+    assert {
+        "trend_collection",
+        "media_acquisition",
+        "content_analysis",
+        "opportunity_ranking",
+        "tts",
+        "video_pipeline",
+        "video_generation",
+        "portrait_animation",
+    } <= set(registry.stages())
     for stage in registry.stages():
         implementations = registry.implementations(stage)
         assert sum(item.default for item in implementations) == 1
         assert len({item.contract_signature() for item in implementations}) == 1
+    video_implementations = registry.implementations("video_pipeline")
+    assert [item.implementation_id for item in video_implementations] == [
+        "disabled_pending_redesign"
+    ]
+    for stage in (
+        "background",
+        "portrait_animation",
+        "video_generation",
+        "frame_interpolation",
+        "composition",
+    ):
+        assert [item.implementation_id for item in registry.implementations(stage)] == [
+            "disabled_pending_redesign"
+        ]
 
 
 def test_registry_rejects_contract_mismatch() -> None:
@@ -159,8 +180,8 @@ def test_auto_publish_resolves_three_hot_switch_nodes(
 
     selected = {
         "tts": "gpt_sovits",
-        "video_pipeline": "dual_framepack_active",
-        "background": "local_fallback",
+        "video_pipeline": "disabled_pending_redesign",
+        "background": "disabled_pending_redesign",
     }
     monkeypatch.setattr(
         runtime,
@@ -172,5 +193,47 @@ def test_auto_publish_resolves_three_hot_switch_nodes(
     AutoPublishService._apply_workflow_selections(request)
 
     assert request.tts_provider == "gpt_sovits"
-    assert request.video_mode == "dual_framepack_active"
-    assert request.background_provider == "local_fallback"
+    assert request.video_mode == "disabled_pending_redesign"
+    assert request.background_provider == "disabled_pending_redesign"
+
+
+def test_retired_workflow_node_fails_closed_without_side_effects() -> None:
+    from src.workflow.contracts import NodeExecutionRequest
+    from src.workflow.disabled import reject_execution
+
+    result = reject_execution(
+        NodeExecutionRequest(
+            run_id="reset-test",
+            node_id="shot-1",
+            stage="video_generation",
+            implementation_id="disabled_pending_redesign",
+            inputs={},
+        )
+    )
+
+    assert result.success is False
+    assert result.error_code == "VIDEO_PIPELINE_DISABLED"
+    assert result.retryable is False
+
+
+def test_auto_publish_stops_before_account_or_generation_when_video_is_disabled(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from src.services.auto_publish_service import AutoPublishRequest, AutoPublishService
+
+    service = AutoPublishService()
+    monkeypatch.setattr(
+        service,
+        "_apply_workflow_selections",
+        lambda request: setattr(request, "video_mode", "disabled_pending_redesign"),
+    )
+    monkeypatch.setattr(
+        service,
+        "_init_adapter",
+        lambda request: pytest.fail("disabled video flow must stop before account access"),
+    )
+
+    result = service.publish(AutoPublishRequest(account_key="account01"))
+
+    assert result.success is False
+    assert "已重置" in result.message

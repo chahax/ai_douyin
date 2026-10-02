@@ -7,10 +7,7 @@ auto_reply_service.py — 自动回复机器人主服务
 from dataclasses import dataclass, field
 from typing import List
 
-from src.platform_adapter.browser_session import BrowserSession, build_default_browser_session_config
-from src.platform_adapter.comment_workflow import CommentWorkflow
 from src.platform_adapter.models import CommentRecord
-from src.platform_adapter.reply_bot_workflow import ReplyBotWorkflow
 from src.services.comment_filter import should_reply
 from src.services.reply_context_service import (
     get_context, add_user_comment, add_bot_reply, build_context_prompt,
@@ -53,13 +50,21 @@ class AutoReplyService:
       5. 更新用户计数、上下文、回复历史
     """
 
-    def __init__(self, session: BrowserSession | None = None):
-        self.session = session or BrowserSession(build_default_browser_session_config())
-        self.comment_workflow = CommentWorkflow(self.session)
-        self.reply_bot = ReplyBotWorkflow(self.session)
+    def __init__(self, account_key: str):
+        from src.platform_adapter.douyin_adapter import DouyinAdapter
+
+        if not account_key.strip():
+            raise ValueError("生成回复建议前必须选择已绑定的运营账号。")
+        self.adapter = DouyinAdapter.for_account(account_key)
+        self.session = self.adapter.session
         self.llm_client = LLMClient()
 
-    def process_video(self, video_id: str) -> AutoReplyResult:
+    def process_video(
+        self,
+        video_id: str,
+        *,
+        confirmed_comment_ids: set[str] | None = None,
+    ) -> AutoReplyResult:
         """
         对指定视频执行自动回复。
         """
@@ -71,9 +76,8 @@ class AutoReplyService:
         rag_context = video_info.get("rag_context", "") if video_info else ""
 
         # 1. 抓取评论
-        comment_workflow = CommentWorkflow(self.session)
         from src.platform_adapter.models import CommentQuery
-        fetch_result = comment_workflow.fetch_comments(CommentQuery(post_id=video_id))
+        fetch_result = self.adapter.fetch_comments(CommentQuery(post_id=video_id))
 
         if not fetch_result.success:
             return AutoReplyResult(
@@ -107,21 +111,29 @@ class AutoReplyService:
             # 3. 生成回复内容
             reply_content, source = self._generate_reply(comment, video_title, rag_context)
 
-            # 4. 发送回复
-            bot_result = self.reply_bot.reply(video_id, comment.comment_id, reply_content)
+            actions.append(ReplyAction(comment, reply_content, source))
+            # 外部互动必须由管理员逐条提交 comment_id 作为人工确认凭据。
+            if comment.comment_id not in (confirmed_comment_ids or set()):
+                skipped += 1
+                continue
+            sent = self.adapter.reply_to_comment(
+                video_id,
+                comment.comment_id,
+                reply_content,
+                human_confirmed=True,
+            )
 
-            if bot_result.success:
+            if sent:
                 # 5. 记录
                 record_reply(comment.author_name)
                 add_user_comment(comment.author_name, video_id, comment.content)
                 add_bot_reply(comment.author_name, video_id, reply_content)
                 _save_reply_history(comment, video_id, reply_content, source)
 
-                actions.append(ReplyAction(comment, reply_content, source))
                 logger.info(f"  回复成功 [{comment.comment_id}] {reply_content[:30]}")
                 replied += 1
             else:
-                logger.warning(f"  回复失败 [{comment.comment_id}]: {bot_result.message}")
+                logger.warning(f"  回复失败 [{comment.comment_id}]")
                 failed += 1
 
         logger.info(f"处理完成: 回复={replied}, 跳过={skipped}, 失败={failed}")
@@ -134,8 +146,14 @@ class AutoReplyService:
             skipped=skipped,
             failed=failed,
             actions=actions,
-            message=f"回复 {replied}/{len(comments)} 条",
+            message=(
+                f"生成 {len(actions)} 条回复建议；已发送 {replied} 条。"
+                "未逐条人工确认的建议不会发送。"
+            ),
         )
+
+    def close(self) -> None:
+        self.adapter.close()
 
     def _generate_reply(self, comment: CommentRecord, video_title: str, rag_context: str = "") -> tuple[str, str]:
         """
@@ -167,10 +185,10 @@ class AutoReplyService:
     def _llm_generate(self, comment: CommentRecord, video_title: str, rag_context: str = "", model: str | None = None) -> str:
         """调用 LLM 生成回复"""
         try:
-            context = get_context(comment.author_name, comment.video_id or "", limit=5)
+            context = get_context(comment.author_name, "", limit=5)
             context_text = build_context_prompt(context)
 
-            prompt = self._build_prompt(comment.content, context_text, video_title, rag_context)
+            prompt = self._build_prompt(comment, context_text, video_title, rag_context)
             model = model or "qwen2.5:7b"
 
             response = self.llm_client.chat(
@@ -186,7 +204,7 @@ class AutoReplyService:
 
         return ""
 
-    def _build_prompt(self, comment_content: str, context_text: str, video_title: str, rag_context: str = "") -> str:
+    def _build_prompt(self, comment: CommentRecord, context_text: str, video_title: str, rag_context: str = "") -> str:
         """构建 LLM 回复 Prompt"""
         context_part = f"评论历史：\n{context_text}\n" if context_text else ""
         rag_part = f"【知识库参考】\n{rag_context}\n" if rag_context else ""
@@ -194,7 +212,7 @@ class AutoReplyService:
 {rag_part}视频主题：{video_title}
 {context_part}当前评论：
 评论者：{comment.author_name}
-内容：{comment_content}
+内容：{comment.content}
 
 请结合知识库内容，生成一条简短、自然的回复（20字以内）："""
 

@@ -1,0 +1,37 @@
+[
+  {
+    "cell": null,
+    "code": "F841",
+    "end_location": {
+      "column": 14,
+      "row": 442
+    },
+    "filename": "D:\\IT\\ai_douyin\\src\\content_factory\\creative_stage_debug.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 17,
+            "row": 442
+          },
+          "location": {
+            "column": 5,
+            "row": 442
+          }
+        }
+      ],
+      "message": "Remove assignment to unused variable `summaries`"
+    },
+    "location": {
+      "column": 5,
+      "row": 442
+    },
+    "message": "Local variable `summaries` is assigned to but never used",
+    "name": "unused-variable",
+    "noqa_row": 442,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unused-variable"
+  }
+]

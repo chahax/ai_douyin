@@ -1,0 +1,20 @@
+{
+  "schema": "creative_evidence_review_decision/v1",
+  "packet_sha256": "1d604e1b251f07b6f41accfb614e22037ba778b2cd473c00db30ceec780f029b",
+  "reviewed_by": "assistant",
+  "reviewed_full_text": false,
+  "summary": "",
+  "decisions": [
+    {
+      "id": "I1",
+      "decision": null,
+      "reason": ""
+    },
+    {
+      "id": "I2",
+      "decision": null,
+      "reason": ""
+    }
+  ],
+  "additional_issues": []
+}

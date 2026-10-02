@@ -3,6 +3,7 @@ import argparse
 import json
 import sys
 from dataclasses import asdict
+from pathlib import Path
 
 from src.platform_adapter import DouyinAdapter
 from src.platform_adapter.browser_session import BrowserSession, build_default_browser_session_config
@@ -20,7 +21,11 @@ from src.services import (
 from src.content_factory.presenter import DEFAULT_SONIC_FOX_CHARACTER, INPUT_MODES, PresenterRequest
 from src.content_factory.presenter_pipeline import PresenterPipeline
 from src.content_factory.presenter.scene_planner import ScenePlanner
+from src.content_factory.video_quality import available_quality_profiles
+from src.content_factory.story_video import compose_story_video
+from src.content_factory.triple_panel import compose_triple_panel_video
 from src.shared.config import settings
+from src.shared.console import safe_print_json
 from src.shared.database import init_db, SessionLocal
 from src.shared.logger import logger
 from src.shared.migration import ensure_migrated
@@ -63,6 +68,16 @@ except Exception:
 
 service = GenerationService()
 DEFAULT_BGM_PATH = service.default_bgm_path
+VIDEO_PIPELINE_RESET_MESSAGE = (
+    "旧视频生成命令已于 2026-09-04 退役；"
+    "Video Pipeline V2 通过质量与人工验收前禁止生成。"
+)
+
+
+def reject_retired_video_command(command: str) -> None:
+    """Fail closed before a retired CLI route initializes any video provider."""
+    logger.error(f"{command}: {VIDEO_PIPELINE_RESET_MESSAGE}")
+    raise SystemExit(1)
 
 
 def build_parser():
@@ -106,10 +121,26 @@ def build_parser():
     presenter_parser.add_argument("--audio", type=str, default="", help="Use an existing audio file and skip TTS")
     presenter_parser.add_argument("--bgm", type=str, default="", help="Optional BGM path")
     presenter_parser.add_argument("--output-dir", type=str, default="data/videos", help="Output directory for final mp4")
+    presenter_parser.add_argument("--quality-profile", type=str, default="publish", choices=available_quality_profiles(), help="Video output quality: preview, publish, or master")
     presenter_parser.add_argument("--tts-provider", type=str, default="edge", choices=["edge", "gpt_sovits"], help="TTS provider")
     presenter_parser.add_argument("--voice", type=str, default="", help="Voice ID or reference audio path")
     presenter_parser.add_argument("--max-segments", type=int, default=0, help="Maximum number of presenter segments. 0 means no truncation")
     presenter_parser.add_argument("--no-comfy-background", action="store_true", help="Use local fallback anime backgrounds without ComfyUI")
+
+
+    triple_panel_parser = subparsers.add_parser(
+        "triple-panel",
+        help="Compose a full-screen generated video or an intentional three-panel layout",
+    )
+    triple_panel_parser.add_argument("--manifest", type=str, required=True, help="Path to a triple_panel/v1 manifest JSON")
+    triple_panel_parser.add_argument("--output", type=str, required=True, help="Final MP4 output path")
+
+    story_video_parser = subparsers.add_parser(
+        "story-video",
+        help="Synthesize narrator and character lines, then compose generated scene videos",
+    )
+    story_video_parser.add_argument("--manifest", type=str, required=True, help="Path to a story_video/v1 manifest JSON")
+    story_video_parser.add_argument("--output", type=str, required=True, help="Final MP4 output path")
 
     presenter_assets_parser = subparsers.add_parser("presenter-assets", help="Generate presenter script, segment audio, and background images without composing video")
     presenter_assets_parser.add_argument("--keywords", type=str, default="", help="Keywords/topic for script generation")
@@ -145,22 +176,31 @@ def build_parser():
     fanqie_apply_parser.add_argument("--publish-type", type=str, default="AI数字人", help="发文类型（preferred list first match wins），默认 AI数字人")
     fanqie_apply_parser.add_argument("--max-alias-attempts", type=int, default=5, help="撞名时最多尝试的推荐别名个数")
 
-    fanqie_fetch_parser = subparsers.add_parser("fanqie-book-fetch", help="Search Fanqie novel and fetch first chapters")
-    fanqie_fetch_parser.add_argument("--book-name", type=str, required=True, help="Novel name")
-    fanqie_fetch_parser.add_argument("--chapters", type=int, default=10, help="Chapter count to fetch")
+    fanqie_fetch_parser = subparsers.add_parser("fanqie-book-fetch", help="Fetch and store one or more novels directly (no DB)")
+    fanqie_fetch_parser.add_argument("--book-name", type=str, nargs="+", help="Novel name(s), space-separated (mutually exclusive with --from-kol)")
+    fanqie_fetch_parser.add_argument("--book-id", type=str, default="", help="Known Fanqie book ID; bypass current ranking search (single --book-name only)")
+    fanqie_fetch_parser.add_argument("--from-kol", action="store_true", help="从达人中心 list 扫 --kol-count 本（不指定书名）")
+    fanqie_fetch_parser.add_argument("--kol-count", type=int, default=5, help="--from-kol 模式下扫几本 unique")
+    fanqie_fetch_parser.add_argument("--ranking", type=str, default="爆款榜", choices=["爆款榜", "阅读榜", "潜力榜", "全部内容"], help="--from-kol 模式的榜单 (单选)")
+    fanqie_fetch_parser.add_argument("--chapters", type=int, default=20, help="Chapter count to fetch (0/all)")
+    fanqie_fetch_parser.add_argument("--interval-s", type=float, default=10.0, help="Sleep seconds between books (anti-crawl)")
     fanqie_fetch_parser.add_argument("--headless", action="store_true", help="Run browser in headless mode")
 
     fanqie_list_parser = subparsers.add_parser("fanqie-promo-list", help="Scan Fanqie promotion-list page and sync alias status to task.json")
     fanqie_list_parser.add_argument("--type", type=str, default="novel", choices=["novel", "audio"], help="Promotion content type")
     fanqie_list_parser.add_argument("--headless", action="store_true", help="Run browser in headless mode")
     fanqie_list_parser.add_argument("--no-sync", action="store_true", help="List only, do not write back to task.json")
+    fanqie_list_parser.add_argument(
+        "--output", type=str, default="",
+        help="Write an exclusive JSON audit snapshot; refuses to overwrite",
+    )
 
     fanqie_books_parser = subparsers.add_parser("fanqie-list-books", help="List all books already fetched (scan data/fanqie_promotion/books/)")
 
     # ── 番茄批量抓取（DB 清单驱动） ──
     fanqie_batch_add = subparsers.add_parser("fanqie-batch-add", help="Add books to batch fetch queue (DB)")
     fanqie_batch_add.add_argument("--book-names", type=str, nargs="+", required=True, help="Book names to add")
-    fanqie_batch_add.add_argument("--chapters", type=int, default=5, help="Chapters per book (default 5)")
+    fanqie_batch_add.add_argument("--chapters", type=int, default=40, help="Chapters per book (default 40)")
     fanqie_batch_add.add_argument("--interval-s", type=int, default=30, help="Seconds between books (default 30)")
     fanqie_batch_add.add_argument("--note", type=str, default="", help="Note about why these books")
 
@@ -173,14 +213,26 @@ def build_parser():
     fanqie_batch_run = subparsers.add_parser("fanqie-batch-run", help="Run batch fetch from DB pending (NO book_names)")
     fanqie_batch_run.add_argument("--interval-s", type=float, default=30.0, help="Override interval seconds (default 30)")
     fanqie_batch_run.add_argument("--max-count", type=int, default=10, help="Max books to run (default 10)")
+    fanqie_batch_run.add_argument("--headful", action="store_true", help="Open visible browser window (default: headless)")
 
     fanqie_batch_enqueue = subparsers.add_parser("fanqie-batch-enqueue", help="Enqueue all DB pending to TaskQueue")
     fanqie_batch_seed = subparsers.add_parser("fanqie-batch-seed", help="Seed DB from config/fanqie_batch_books.yaml")
 
     fanqie_batch_from_kol = subparsers.add_parser("fanqie-batch-from-kol", help="Scan KOL center list + add all to DB queue (default: 4 rankings ~40 books)")
-    fanqie_batch_from_kol.add_argument("--chapters", type=int, default=5)
+    fanqie_batch_from_kol.add_argument("--chapters", type=int, default=40)
     fanqie_batch_from_kol.add_argument("--interval-s", type=int, default=30)
     fanqie_batch_from_kol.add_argument("--target", type=int, default=40, help="Stop when unique books count >= target")
+
+    fanqie_batch_filtered = subparsers.add_parser("fanqie-batch-fetch-filtered", help="Scan KOL center with filter args (KolFilterArgs)")
+    fanqie_batch_filtered.add_argument("--ranking", type=str, default="爆款榜", choices=["爆款榜", "阅读榜", "潜力榜", "全部内容"], help="榜单 (必填, 4 选 1)")
+    fanqie_batch_filtered.add_argument("--target", type=int, default=40, help="要抓几本 unique (>0)")
+    fanqie_batch_filtered.add_argument("--status", type=str, default="all", choices=["all", "serial", "done"], help="连载状态 (单选)")
+    fanqie_batch_filtered.add_argument("--gender", type=str, default="all", choices=["all", "male", "female", "general"], help="男频/女频/通用 (单选)")
+    fanqie_batch_filtered.add_argument("--copyright", type=str, default="all", choices=["all", "exclusive", "non_exclusive"], help="番茄独家/非独家 (单选)")
+    fanqie_batch_filtered.add_argument("--category", type=str, default="", help="题材 JSON, e.g. '{\"mapping_id\":7220798290399330363,\"category_ids\":\"23\"}' (不传=全部)")
+    fanqie_batch_filtered.add_argument("--days", type=str, default="all", choices=["all", "1d", "5d", "10d", "30d", "30d+"], help="更新时间 (单选)")
+    fanqie_batch_filtered.add_argument("--word-count", type=str, default="all", choices=["all", "<100", "100-150", "150-200", "200-300", "300-500", ">500"], help="字数 (单选)")
+    fanqie_batch_filtered.add_argument("--chapters", type=int, default=40, help="每本抓几章")
 
     fanqie_video_parser = subparsers.add_parser("fanqie-promo-video", help="Generate a Fanqie novel promotion presenter video")
     fanqie_video_parser.add_argument("--task-file", type=str, default="", help="Task JSON from fanqie-promo-apply")
@@ -200,36 +252,52 @@ def build_parser():
     login_parser.add_argument("--pause-seconds", type=int, default=600, help="How long to keep the browser open")
     login_parser.add_argument("--wait-for-enter", action="store_true", help="Keep browser open until Enter is pressed")
 
-    warmup_login_parser = subparsers.add_parser("douyin-warmup-login", help="Open a per-account Douyin warmup browser for manual login")
+    warmup_login_parser = subparsers.add_parser("douyin-warmup-login", help="Legacy: open a per-account browser; final binding still requires admin confirmation in the web UI")
     warmup_login_parser.add_argument("--account-id", type=str, required=True, help="Local account id, e.g. douyin_novel_01")
     warmup_login_parser.add_argument("--display-name", type=str, default="", help="Human readable account name")
     warmup_login_parser.add_argument("--url", type=str, default=settings.DOUYIN_HOME_URL, help="Target login URL")
     warmup_login_parser.add_argument("--pause-seconds", type=int, default=900, help="How long to keep the browser open")
     warmup_login_parser.add_argument("--wait-for-enter", action="store_true", help="Keep browser open until Enter is pressed")
 
-    warmup_parser = subparsers.add_parser("douyin-warmup", help="Run low-frequency random Douyin browsing for one account")
-    warmup_parser.add_argument("--account-id", type=str, required=True, help="Local account id created by douyin-warmup-login")
-    warmup_parser.add_argument("--mode", type=str, default="daily", choices=["daily", "pre-publish", "post-publish"], help="Warmup mode")
-    warmup_parser.add_argument("--keyword", type=str, default="", help="Search keyword. Random default if omitted")
-    warmup_parser.add_argument("--url", type=str, default="", help="Start URL. Default: https://www.douyin.com/jingxuan")
-    warmup_parser.add_argument("--use-search", action="store_true", help="Use keyword search page instead of recommend page")
-    warmup_parser.add_argument("--min-watch", type=int, default=8, help="Minimum watch seconds per video")
-    warmup_parser.add_argument("--max-watch", type=int, default=45, help="Maximum watch seconds per video. 0 means no cap when duration is detected")
-    warmup_parser.add_argument("--no-comment-max-watch", type=int, default=10, help="Max watch seconds when no comment entry is detected")
-    warmup_parser.add_argument("--duration-ratio-min", type=float, default=0.1, help="Minimum watch ratio of video duration when duration is detected")
-    warmup_parser.add_argument("--duration-ratio-max", type=float, default=2.0, help="Maximum watch ratio of video duration when duration is detected")
-    warmup_parser.add_argument("--max-videos", type=int, default=12, help="Maximum videos in one session")
-    warmup_parser.add_argument("--duration-minutes", type=int, default=0, help="Optional total duration limit. 0 means use max-videos only")
-    warmup_parser.add_argument("--comment-probability", type=float, default=0.0, help="Probability to open comments for viewing only, 0-1")
-    warmup_parser.add_argument("--min-comment-opens", type=int, default=1, help="Minimum comment panels to open per session")
-    warmup_parser.add_argument("--comment-scrolls", type=int, default=3, help="Scroll count inside each opened comment panel")
-    warmup_parser.add_argument("--comment-like-probability", type=float, default=0.0, help="Probability to like visible comments, 0-1. Default 0 disables comment likes")
-    warmup_parser.add_argument("--max-comment-likes", type=int, default=0, help="Maximum comment likes in one warmup session. Default 0 disables comment likes")
-    warmup_parser.add_argument("--like-probability", type=float, default=0.0, help="Probability to like a video, 0-1. Default 0 disables likes")
-    warmup_parser.add_argument("--max-likes", type=int, default=0, help="Maximum likes in one warmup session. Default 0 disables likes")
-    warmup_parser.add_argument("--close-on-blocked", action="store_true", help="Close browser immediately when login/captcha/security check is detected")
-    warmup_parser.add_argument("--keep-open", action="store_true", help="Keep browser open after warmup until Enter is pressed")
-    warmup_parser.add_argument("--headless", action="store_true", help="Run browser in headless mode")
+    for command_name, command_help in (
+        ("douyin-maintenance", "Run account health, research, relevant playback, or owned-data sync"),
+        ("douyin-warmup", "Deprecated alias of douyin-maintenance"),
+    ):
+        maintenance_parser = subparsers.add_parser(command_name, help=command_help)
+        maintenance_parser.add_argument(
+            "--account-id",
+            type=str,
+            required=True,
+            help="Bound operation account id",
+        )
+        maintenance_parser.add_argument(
+            "--mode",
+            type=str,
+            default="daily",
+            choices=["daily", "pre-publish", "smart-operations", "playback", "post-publish"],
+            help="Maintenance mode",
+        )
+        maintenance_parser.add_argument(
+            "--headless",
+            action="store_true",
+            help="Run browser checks/playback in headless mode",
+        )
+        maintenance_parser.add_argument(
+            "--authorization-reference",
+            type=str,
+            default="",
+            help="Authorization note/ticket required by daily, pre-publish, smart-operations and playback",
+        )
+        maintenance_parser.add_argument("--max-videos", type=int, default=20, help="Playback mode: maximum relevant videos")
+        maintenance_parser.add_argument("--per-video-seconds", type=int, default=90, help="Playback mode: per-video watch cap")
+        maintenance_parser.add_argument("--total-minutes", type=int, default=20, help="Playback mode: total wall-time cap")
+        maintenance_parser.add_argument("--min-relevance-score", type=float, default=60.0, help="Playback mode: minimum analyzed relevance score")
+        maintenance_parser.add_argument("--auto-like", action="store_true", help="Playback mode: enable guarded automatic likes")
+        maintenance_parser.add_argument("--auto-comment", action="store_true", help="Playback mode: enable guarded automatic comments")
+        maintenance_parser.add_argument("--like-ratio", type=float, default=0.25, help="Playback mode: base daily like ratio, dynamically adjusted by candidate quality")
+        maintenance_parser.add_argument("--comment-ratio", type=float, default=0.05, help="Playback mode: base daily comment ratio, dynamically adjusted by candidate quality")
+        maintenance_parser.add_argument("--max-likes", type=int, default=0, help="Playback mode: optional emergency per-run like ceiling; 0 uses only the ratio budget")
+        maintenance_parser.add_argument("--max-comments", type=int, default=0, help="Playback mode: optional emergency per-run comment ceiling; 0 uses only the ratio budget")
 
     warmup_report_parser = subparsers.add_parser("douyin-warmup-report", help="Show recent Douyin warmup logs for one account")
     warmup_report_parser.add_argument("--account-id", type=str, required=True, help="Local account id")
@@ -251,11 +319,13 @@ def build_parser():
         "douyin-upload-page",
         help="Open Douyin creator upload page, click 上传视频, and keep browser paused",
     )
+    upload_page_parser.add_argument("--account-id", type=str, required=True, help="Bound operation account id")
     upload_page_parser.add_argument("--url", type=str, default=settings.DOUYIN_UPLOAD_URL, help="Upload page URL")
     upload_page_parser.add_argument("--pause-seconds", type=int, default=600, help="How long to keep the browser open")
     upload_page_parser.add_argument("--wait-for-enter", action="store_true", help="Keep browser open until Enter is pressed")
 
     publish_parser = subparsers.add_parser("douyin-publish", help="Publish a video to Douyin via browser automation")
+    publish_parser.add_argument("--account-id", type=str, required=True, help="Bound operation account id")
     publish_parser.add_argument("--video", type=str, required=True, help="Path to video file")
     publish_parser.add_argument("--title", type=str, required=True, help="Video title")
     publish_parser.add_argument("--desc", type=str, default="", help="Video description")
@@ -265,6 +335,7 @@ def build_parser():
     publish_parser.add_argument("--wait-for-enter", action="store_true", help="Keep browser open after publish until Enter is pressed")
 
     sync_parser = subparsers.add_parser("douyin-sync", help="Sync published videos from Douyin creator dashboard")
+    sync_parser.add_argument("--account-id", type=str, required=True, help="Bound operation account id")
     sync_parser.add_argument("--page-limit", type=int, default=5, help="Maximum number of pages to sync (default: 5)")
     sync_parser.add_argument("--interactive", action="store_true", help="Step-by-step mode, wait for confirmation at each step")
     sync_parser.add_argument("--wait-for-enter", action="store_true", help="Keep browser open after sync until Enter is pressed")
@@ -272,12 +343,14 @@ def build_parser():
 
     # 评论抓取命令
     comments_parser = subparsers.add_parser("douyin-fetch-comments", help="Fetch comments for a specific video or all published videos")
+    comments_parser.add_argument("--account-id", type=str, required=True, help="Bound operation account id")
     comments_parser.add_argument("--video-id", type=str, default=None, help="Specific video ID to fetch comments for")
     comments_parser.add_argument("--all", action="store_true", help="Fetch comments for all published videos in database")
     comments_parser.add_argument("--headless", action="store_true", help="Run browser in headless mode (no visible window)")
 
     # 评论回复命令
     reply_parser = subparsers.add_parser("douyin-reply-comment", help="Reply to a specific comment")
+    reply_parser.add_argument("--account-id", type=str, required=True, help="Bound operation account id")
     reply_parser.add_argument("--video-id", type=str, required=True, help="Video ID")
     reply_parser.add_argument("--comment-id", type=str, required=True, help="Comment ID to reply to")
     reply_parser.add_argument("--content", type=str, required=True, help="Reply content text")
@@ -285,11 +358,13 @@ def build_parser():
 
     # 自动回复命令
     auto_reply_parser = subparsers.add_parser("auto-reply", help="Auto-reply to comments on a video")
+    auto_reply_parser.add_argument("--account-id", type=str, required=True, help="Bound operation account id")
     auto_reply_parser.add_argument("--video-id", type=str, default=None, help="Specific video ID to process")
     auto_reply_parser.add_argument("--all", action="store_true", help="Process all published videos in database")
     auto_reply_parser.add_argument("--headless", action="store_true", help="Run browser in headless mode (no visible window)")
 
     auto_parser = subparsers.add_parser("auto-publish", help="Generate script + TTS + BGM + compose video + publish to Douyin in one command")
+    auto_parser.add_argument("--account-id", type=str, required=True, help="Bound operation account id")
     auto_parser.add_argument("--keywords", type=str, required=True, help="Keywords to generate script (RAG search)")
     auto_parser.add_argument("--title", type=str, default="", help="Video title (auto-generated if empty)")
     auto_parser.add_argument("--desc", type=str, default="", help="Video description")
@@ -298,6 +373,7 @@ def build_parser():
     auto_parser.add_argument("--bgm", type=str, default="", help="BGM file path (use default if empty)")
     auto_parser.add_argument("--bgm-volume", type=float, default=0.2, help="BGM volume (0.0-1.0)")
     auto_parser.add_argument("--output-dir", type=str, default="data/videos", help="Output directory for generated videos")
+    auto_parser.add_argument("--quality-profile", type=str, default="publish", choices=available_quality_profiles(), help="Video output quality: preview, publish, or master")
     auto_parser.add_argument("--interactive", action="store_true", help="Step-by-step mode, wait for confirmation at each step")
     auto_parser.add_argument("--wait-for-enter", action="store_true", help="Keep browser open after publish until Enter is pressed")
 
@@ -366,6 +442,7 @@ def main():
         return
 
     if args.command == "presenter":
+        reject_retired_video_command(args.command)
         if not args.text and not args.text_file and not args.keywords:
             logger.error("presenter command requires --keywords, --text, or --text-file.")
             sys.exit(1)
@@ -390,6 +467,7 @@ def main():
             background_style=args.background_style,
             bgm=args.bgm or "",
             output_dir=args.output_dir,
+            quality_profile=args.quality_profile,
             audio_path=args.audio or "",
             max_segments=args.max_segments,
             use_comfy_background=not args.no_comfy_background,
@@ -403,7 +481,30 @@ def main():
         print(result.video_path)
         return
 
+    if args.command == "triple-panel":
+        reject_retired_video_command(args.command)
+        try:
+            output = compose_triple_panel_video(args.manifest, args.output)
+        except (OSError, RuntimeError, ValueError) as exc:
+            logger.error(f"Triple panel composition failed: {exc}")
+            sys.exit(1)
+        logger.info(f"Triple panel composition completed: {output}")
+        print(output)
+        return
+
+    if args.command == "story-video":
+        reject_retired_video_command(args.command)
+        try:
+            output = compose_story_video(args.manifest, args.output)
+        except (OSError, RuntimeError, ValueError) as exc:
+            logger.error(f"Story video composition failed: {exc}")
+            sys.exit(1)
+        logger.info(f"Story video composition completed: {output}")
+        print(output)
+        return
+
     if args.command == "presenter-assets":
+        reject_retired_video_command(args.command)
         if not args.text and not args.text_file and not args.keywords:
             logger.error("presenter-assets command requires --keywords, --text, or --text-file.")
             sys.exit(1)
@@ -437,9 +538,10 @@ def main():
         return
 
     if args.command == "debug-background-plan":
+        reject_retired_video_command(args.command)
         planner = ScenePlanner()
         prompt, plan = planner.plan(args.text)
-        print(json.dumps({"prompt": prompt, "plan": plan}, ensure_ascii=False, indent=2))
+        safe_print_json({"prompt": prompt, "plan": plan})
         return
 
     if args.command == "fanqie-login":
@@ -453,7 +555,7 @@ def main():
         except Exception as exc:
             logger.error(f"番茄登录窗口失败: {exc}")
             sys.exit(1)
-        print(json.dumps(state, ensure_ascii=False, indent=2))
+        safe_print_json(state)
         return
 
     if args.command == "fanqie-promo-apply":
@@ -473,24 +575,111 @@ def main():
         except Exception as exc:
             logger.error(f"番茄推广申请失败: {exc}")
             sys.exit(1)
-        print(json.dumps(asdict(task), ensure_ascii=False, indent=2))
+        safe_print_json(asdict(task))
         return
 
     if args.command == "fanqie-book-fetch":
-        fanqie = FanqiePromotionService()
-        try:
-            result = fanqie.fetch_book(
-                book_name=args.book_name,
-                chapters=args.chapters,
-                headless=args.headless,
-            )
-        except Exception as exc:
-            logger.error(f"番茄小说内容获取失败: {exc}")
+        # 互斥校验：--book-name 或 --from-kol 二选一
+        if bool(args.book_name) == bool(args.from_kol):
+            logger.error("--book-name 和 --from-kol 必须二选一（不能同时传或都不传）")
             sys.exit(1)
-        print(json.dumps(asdict(result), ensure_ascii=False, indent=2))
+
+        from src.platform_adapter.fanqie_promotion import FanqiePromotionService as _FPS
+        from src.platform_adapter.fanqie_kol_filter import KolFilterArgs
+        from src.platform_adapter.fanqie_batch import add_books_from_kol_filtered, _finalize_kol_scan
+
+        if args.from_kol:
+            # 模式 1: 从达人中心按 ranking 扫 --kol-count 本 → 直接抓
+            logger.info(f"[fanqie-book-fetch] --from-kol 模式: 扫 {args.ranking} {args.kol_count} 本")
+            kol_args = KolFilterArgs(
+                ranking=args.ranking,
+                target_count=args.kol_count,
+            )
+            try:
+                # 1) 扫达人中心拿 N 个书名（不入库；直接给 report.unique_titles）
+                service = _FPS()
+                sess = service._open_browser_cache_session(headless=args.headless)
+                try:
+                    from src.platform_adapter.fanqie_kol_filter import apply_filters, _collect_book_titles
+                    page = sess.open_page(
+                        "https://kol.fanqieopen.com/page/content?tab_type=2&top_tab_genre=-1"
+                    )
+                    try:
+                        page.wait_for_selector(".book-hQ7GYr", timeout=10_000)
+                    except Exception:
+                        raise RuntimeError("达人中心书卡未渲染")
+                    page.wait_for_timeout(2000)
+                    apply_filters(page, kol_args)
+                    from src.platform_adapter.fanqie_kol_filter import scroll_to_load_books
+                    titles = scroll_to_load_books(
+                        page, target_count=kol_args.target_count, max_scroll=30,
+                    )
+                finally:
+                    sess.stop()
+                if not titles:
+                    logger.error(f"--from-kol 扫描 {args.ranking} 没拿到书")
+                    sys.exit(1)
+                logger.info(f"[fanqie-book-fetch] 扫到 {len(titles)} 本: {titles}")
+
+                # 2) 直接抓（不经过 DB）
+                results = []
+                sess2 = service._open_browser_cache_session(headless=args.headless)
+                try:
+                    for idx, name in enumerate(titles, start=1):
+                        logger.info(f"[fanqie-book-fetch] [{idx}/{len(titles)}] 抓 {name}")
+                        if idx > 1 and args.interval_s > 0:
+                            import time as _t
+                            _t.sleep(args.interval_s)
+                        try:
+                            r = service.fetch_book(
+                                book_name=name, chapters=args.chapters,
+                                headless=args.headless, session=sess2,
+                            )
+                            results.append(asdict(r))
+                        except Exception as exc:
+                            logger.error(f"抓 {name} 失败: {exc}")
+                finally:
+                    sess2.stop()
+                safe_print_json(results)
+                return
+            except Exception as exc:
+                logger.error(f"--from-kol 失败: {exc}")
+                sys.exit(1)
+
+        # 模式 2: 直接传 --book-name 抓
+        if args.book_id and len(args.book_name) != 1:
+            logger.error("--book-id 只能和一个 --book-name 一起使用")
+            sys.exit(1)
+        service = _FPS()
+        sess = service._open_browser_cache_session(headless=args.headless)
+        results = []
+        try:
+            for idx, name in enumerate(args.book_name, start=1):
+                logger.info(f"[fanqie-book-fetch] [{idx}/{len(args.book_name)}] {name}")
+                if idx > 1 and args.interval_s > 0:
+                    import time as _t
+                    logger.info(f"sleeping {args.interval_s}s before next book")
+                    _t.sleep(args.interval_s)
+                try:
+                    r = service.fetch_book(
+                        book_name=name,
+                        chapters=args.chapters,
+                        headless=args.headless,
+                        session=sess,
+                        book_id=args.book_id or "",
+                    )
+                except Exception as exc:
+                    logger.error(f"抓 {name} 失败: {exc}")
+                    r = None
+                if r is not None:
+                    results.append(asdict(r))
+        finally:
+            sess.stop()
+        safe_print_json(results)
         return
 
     if args.command == "fanqie-promo-video":
+        reject_retired_video_command(args.command)
         fanqie = FanqiePromotionService()
         try:
             task = fanqie.generate_promo_video(
@@ -506,7 +695,7 @@ def main():
         except Exception as exc:
             logger.error(f"番茄推广视频生成失败: {exc}")
             sys.exit(1)
-        print(json.dumps(asdict(task), ensure_ascii=False, indent=2))
+        safe_print_json(asdict(task))
         return
 
     if args.command == "fanqie-promo-list":
@@ -520,13 +709,22 @@ def main():
         except Exception as exc:
             logger.error(f"番茄推广列表扫描失败: {exc}")
             sys.exit(1)
-        print(json.dumps(result, ensure_ascii=False, indent=2))
+        if args.output:
+            snapshot_path = Path(args.output).resolve()
+            snapshot_path.parent.mkdir(parents=True, exist_ok=True)
+            try:
+                with snapshot_path.open("x", encoding="utf-8") as handle:
+                    json.dump(result, handle, ensure_ascii=False, indent=2)
+            except FileExistsError:
+                logger.error(f"番茄推广列表审计文件已存在，拒绝覆盖: {snapshot_path}")
+                sys.exit(1)
+        safe_print_json(result)
         return
 
     if args.command == "fanqie-list-books":
         fanqie = FanqiePromotionService()
         books = fanqie.list_books()
-        print(json.dumps(books, ensure_ascii=False, indent=2))
+        safe_print_json(books)
         return
 
     if args.command == "fanqie-batch-add":
@@ -537,32 +735,36 @@ def main():
             interval_s=args.interval_s,
             note=args.note,
         )
-        print(json.dumps(result, ensure_ascii=False, indent=2))
+        safe_print_json(result)
         return
 
     if args.command == "fanqie-batch-list":
         from src.platform_adapter.fanqie_batch import list_books
         s = None if args.status == "all" else args.status
         books = list_books(status=s, limit=args.limit)
-        print(json.dumps({"count": len(books), "books": books}, ensure_ascii=False, indent=2))
+        safe_print_json({"count": len(books), "books": books})
         return
 
     if args.command == "fanqie-batch-run":
         from src.platform_adapter.fanqie_batch import batch_fetch_sync, _summarize_report
-        report = batch_fetch_sync(interval_s=args.interval_s, max_count=args.max_count)
-        print(json.dumps(_summarize_report(report), ensure_ascii=False, indent=2))
+        report = batch_fetch_sync(
+            interval_s=args.interval_s,
+            max_count=args.max_count,
+            headless=not args.headful,
+        )
+        safe_print_json(_summarize_report(report))
         return
 
     if args.command == "fanqie-batch-enqueue":
         from src.platform_adapter.fanqie_batch import batch_enqueue_pending
         result = batch_enqueue_pending()
-        print(json.dumps(result, ensure_ascii=False, indent=2))
+        safe_print_json(result)
         return
 
     if args.command == "fanqie-batch-seed":
         from src.platform_adapter.fanqie_batch import seed_from_yaml
         result = seed_from_yaml()
-        print(json.dumps(result, ensure_ascii=False, indent=2))
+        safe_print_json(result)
         return
 
     if args.command == "fanqie-batch-from-kol":
@@ -572,7 +774,51 @@ def main():
             interval_s=args.interval_s,
             target_count=args.target,
         )
-        print(json.dumps(result, ensure_ascii=False, indent=2))
+        safe_print_json(result)
+        return
+
+    if args.command == "fanqie-batch-fetch-filtered":
+        from src.platform_adapter.fanqie_batch import add_books_from_kol_filtered
+        from src.platform_adapter.fanqie_kol_filter import KolFilterArgs, FilterValidationError
+
+        # category: string → dict
+        category_dict = None
+        if args.category:
+            try:
+                category_dict = json.loads(args.category)
+            except json.JSONDecodeError as exc:
+                safe_print_json({
+                    "success": False,
+                    "error": f"category JSON 解析失败: {exc}",
+                })
+                sys.exit(1)
+
+        try:
+            kol_args = KolFilterArgs(
+                ranking=args.ranking,
+                target_count=args.target,
+                status=args.status,
+                gender=args.gender,
+                copyright=args.copyright,
+                category=category_dict,
+                days=args.days,
+                word_count=args.word_count,
+            )
+            kol_args.validate()
+        except FilterValidationError as exc:
+            safe_print_json({
+                "success": False,
+                "code": "validation_error",
+                "error": str(exc),
+            })
+            sys.exit(1)
+
+        result = add_books_from_kol_filtered(
+            kol_args,
+            chapters=args.chapters,
+            interval_s=30,
+        )
+        safe_print_json(result)
         return
 
     if args.command == "import-knowledge":
@@ -582,7 +828,10 @@ def main():
         return
 
     if args.command == "douyin-login":
-        adapter = DouyinAdapter()
+        adapter = DouyinAdapter.for_account(
+            args.account_id,
+            headless=not args.interactive,
+        )
         try:
             state = adapter.open_login_window(
                 url=args.url,
@@ -613,58 +862,71 @@ def main():
             logger.error(str(exc))
             sys.exit(1)
 
-        logger.info(f"养号账号登录窗口已结束: {account.account_id}")
+        logger.info(f"账号浏览器登录窗口已结束: {account.account_id}")
         logger.info(f"登录状态: {account.login_status}")
         logger.info(f"浏览器用户目录: {account.browser_profile_dir}")
-        print(json.dumps(asdict(account), ensure_ascii=False, indent=2))
+        logger.warning("登录态尚未形成正式绑定，请到管理页核对昵称、头像和 UID 后确认。")
+        safe_print_json(asdict(account))
         return
 
-    if args.command == "douyin-warmup":
-        warmup_service = DouyinWarmupService()
-        try:
-            result = warmup_service.run_warmup(
-                account_id=args.account_id,
-                mode=args.mode,
-                keyword=args.keyword or "",
-                min_watch=args.min_watch,
-                max_watch=args.max_watch,
-                max_videos=args.max_videos,
-                duration_minutes=args.duration_minutes,
-                comment_probability=args.comment_probability,
-                headless=args.headless,
-                keep_open_on_blocked=not args.close_on_blocked,
-                start_url=args.url or "",
-                use_search=args.use_search,
-                keep_open_after_run=args.keep_open,
-                no_comment_max_watch=args.no_comment_max_watch,
-                duration_ratio_min=args.duration_ratio_min,
-                duration_ratio_max=args.duration_ratio_max,
-                like_probability=args.like_probability,
-                max_likes=args.max_likes,
-                min_comment_opens=args.min_comment_opens,
-                comment_scrolls=args.comment_scrolls,
-                comment_like_probability=args.comment_like_probability,
-                max_comment_likes=args.max_comment_likes,
-            )
-        except Exception as exc:
-            logger.error(f"养号任务失败: {exc}")
-            sys.exit(1)
+    if args.command in {"douyin-maintenance", "douyin-warmup"}:
+        from src.operations_accounts.maintenance import AccountMaintenanceService
+        from src.platform_adapter.douyin_playback import PlaybackOptions
 
-        logger.info(f"养号任务完成: {result.status}, videos_seen={result.videos_seen}")
+        if args.command == "douyin-warmup":
+            logger.warning("douyin-warmup 已弃用，请改用 douyin-maintenance。")
+        playback_options = (
+            PlaybackOptions(
+                max_videos=args.max_videos,
+                per_video_seconds=args.per_video_seconds,
+                total_minutes=args.total_minutes,
+                min_relevance_score=args.min_relevance_score,
+                auto_like=args.auto_like,
+                auto_comment=args.auto_comment,
+                base_like_ratio=args.like_ratio if args.auto_like else 0,
+                base_comment_ratio=args.comment_ratio if args.auto_comment else 0,
+                max_likes=args.max_likes,
+                max_comments=args.max_comments,
+            )
+            if args.mode == "playback"
+            else None
+        )
+        result = AccountMaintenanceService().run(
+            args.account_id,
+            args.mode,
+            authorization_reference=args.authorization_reference,
+            headless=args.headless,
+            playback_options=playback_options,
+        )
+        logger.info(
+            "账号维护完成: %s, relevant=%s, playback=%s, interactions=%s, synced=%s",
+            result.status,
+            result.unique_relevant_videos,
+            result.playback_verified_videos,
+            result.interaction_actions,
+            result.synced_videos,
+        )
         logger.info(f"日志: {result.log_path}")
-        print(json.dumps(asdict(result), ensure_ascii=False, indent=2))
+        safe_print_json(asdict(result))
         if result.status not in {"completed"}:
             sys.exit(1)
         return
 
     if args.command == "douyin-warmup-report":
-        warmup_service = DouyinWarmupService()
         try:
-            rows = warmup_service.report(account_id=args.account_id, days=args.days)
+            log_dir = Path("data/account_maintenance") / args.account_id
+            rows = [
+                json.loads(path.read_text(encoding="utf-8"))
+                for path in sorted(
+                    log_dir.glob("maintenance_*.json"),
+                    key=lambda item: item.stat().st_mtime,
+                    reverse=True,
+                )[: max(1, args.days * 8)]
+            ]
         except Exception as exc:
             logger.error(str(exc))
             sys.exit(1)
-        print(json.dumps(rows, ensure_ascii=False, indent=2))
+        safe_print_json(rows)
         return
 
     if args.command == "douyin-warmup-account":
@@ -672,7 +934,7 @@ def main():
         try:
             if args.action == "list":
                 accounts = warmup_service.list_accounts()
-                print(json.dumps([asdict(item) for item in accounts], ensure_ascii=False, indent=2))
+                safe_print_json([asdict(item) for item in accounts])
                 return
 
             if not args.account_id:
@@ -681,7 +943,7 @@ def main():
 
             if args.action == "show":
                 account = warmup_service.get_account(args.account_id)
-                print(json.dumps(asdict(account), ensure_ascii=False, indent=2))
+                safe_print_json(asdict(account))
                 return
 
             keywords = None
@@ -698,14 +960,14 @@ def main():
                 notes=args.notes or "",
                 keywords=keywords,
             )
-            print(json.dumps(asdict(account), ensure_ascii=False, indent=2))
+            safe_print_json(asdict(account))
             return
         except Exception as exc:
             logger.error(str(exc))
             sys.exit(1)
 
     if args.command == "douyin-upload-page":
-        adapter = DouyinAdapter()
+        adapter = DouyinAdapter.for_account(args.account_id, headless=False)
         try:
             state = adapter.open_upload_page(
                 url=args.url,
@@ -723,7 +985,10 @@ def main():
         return
 
     if args.command == "douyin-publish":
-        adapter = DouyinAdapter()
+        adapter = DouyinAdapter.for_account(
+            args.account_id,
+            headless=not args.interactive,
+        )
         hashtags = [t.strip() for t in args.tags.split(",") if t.strip()] if args.tags else []
         request = PublishRequest(
             video_path=args.video,
@@ -733,8 +998,8 @@ def main():
             cover_path=args.cover,
         )
         result = adapter.publish_video(request, interactive=args.interactive)
-        if result.success:
-            logger.info(f"发布成功: {result.message}")
+        if result.success and result.status == "published":
+            logger.info(f"发布并核验完成: {result.message}")
             logger.info(f"视频ID: {result.post_id}")
             logger.info(f"链接: {result.publish_url}")
             print(result.publish_url or result.post_id)
@@ -744,28 +1009,27 @@ def main():
                     input()
                 except (EOFError, OSError):
                     pass
+        elif result.success:
+            logger.warning(f"发布已提交但尚未完成核验: {result.message}")
+            logger.warning("保留提交锁，禁止重复上传；请继续核验原作品。")
+            print(result.status)
         else:
             logger.error(f"发布失败: {result.message}")
             sys.exit(1)
         return
 
     if args.command == "douyin-sync":
-        if args.headless:
-            session_config = build_default_browser_session_config()
-            session_config.headless = True
-            adapter = DouyinAdapter(session=BrowserSession(session_config))
-        else:
-            adapter = DouyinAdapter()
+        adapter = DouyinAdapter.for_account(args.account_id, headless=args.headless)
         result = adapter.sync_videos(page_limit=args.page_limit, interactive=args.interactive)
         if result.videos:
             logger.info(f"同步成功: {result.message}")
             for v in result.videos:
                 logger.info(f"  [{v.status.value}] {v.title} (id: {v.video_id})")
             # 输出JSON列表供其他程序使用
-            print(json.dumps([
+            safe_print_json([
                 {"video_id": v.video_id, "title": v.title, "status": v.status.value, "publish_time": v.publish_time}
                 for v in result.videos
-            ], ensure_ascii=False, indent=2))
+            ])
         else:
             logger.warning("未同步到任何视频，请确认是否已登录")
         if args.wait_for_enter:
@@ -780,18 +1044,17 @@ def main():
         from src.services.video_service import get_videos
         from src.platform_adapter.models import CommentQuery
 
-        if args.headless:
-            session_config = build_default_browser_session_config()
-            session_config.headless = True
-            adapter = DouyinAdapter(session=BrowserSession(session_config))
-        else:
-            adapter = DouyinAdapter()
+        adapter = DouyinAdapter.for_account(args.account_id, headless=args.headless)
 
         target_ids = []
         if args.video_id:
             target_ids = [args.video_id]
         elif args.all:
-            videos = get_videos(status="published", limit=100)
+            videos = get_videos(
+                status="published",
+                limit=100,
+                account_uuid=adapter.runtime_context.account_uuid,
+            )
             target_ids = [v["video_id"] for v in videos if v.get("video_id")]
         else:
             logger.error("请指定 --video-id 或 --all")
@@ -811,14 +1074,14 @@ def main():
         return
 
     if args.command == "douyin-reply-comment":
-        if args.headless:
-            session_config = build_default_browser_session_config()
-            session_config.headless = True
-            adapter = DouyinAdapter(session=BrowserSession(session_config))
-        else:
-            adapter = DouyinAdapter()
+        adapter = DouyinAdapter.for_account(args.account_id, headless=args.headless)
 
-        success = adapter.reply_to_comment(args.video_id, args.comment_id, args.content)
+        success = adapter.reply_to_comment(
+            args.video_id,
+            args.comment_id,
+            args.content,
+            human_confirmed=True,
+        )
         if success:
             logger.info(f"回复成功！comment_id={args.comment_id}")
         else:
@@ -827,47 +1090,16 @@ def main():
         return
 
     if args.command == "auto-reply":
-        from src.platform_adapter.auto_reply_service import AutoReplyService
-        from src.services.video_service import get_videos
-
-        if args.headless:
-            session_config = build_default_browser_session_config()
-            session_config.headless = True
-            session = BrowserSession(session_config)
-        else:
-            session = None
-
-        reply_service = AutoReplyService(session=session)
-
-        target_ids = []
-        if args.video_id:
-            target_ids = [args.video_id]
-        elif args.all:
-            videos = get_videos(status="published", limit=100)
-            target_ids = [v["video_id"] for v in videos if v.get("video_id")]
-        else:
-            logger.error("请指定 --video-id 或 --all")
-            sys.exit(1)
-
-        total_replied = 0
-        total_skipped = 0
-        total_failed = 0
-        for vid in target_ids:
-            logger.info(f"处理视频评论: {vid}")
-            result = reply_service.process_video(vid)
-            total_replied += result.replied
-            total_skipped += result.skipped
-            total_failed += result.failed
-            logger.info(f"  → 回复={result.replied}, 跳过={result.skipped}, 失败={result.failed}, 总评论={result.total_comments}")
-
-        logger.info(f"全部完成: 回复={total_replied}, 跳过={total_skipped}, 失败={total_failed}")
-        if total_failed > 0:
-            sys.exit(1)
-        return
+        logger.error(
+            "自动回复已停用：外部评论互动必须逐条人工确认。"
+            "请使用 douyin-reply-comment 对单条评论执行确认后的回复。"
+        )
+        sys.exit(1)
 
     if args.command == "auto-publish":
         auto_service = AutoPublishService()
         request = AutoPublishRequest(
+            account_key=args.account_id,
             keywords=args.keywords,
             title=args.title or _auto_generate_title(args.keywords),
             description=args.desc,
@@ -876,15 +1108,21 @@ def main():
             bgm=args.bgm or "",
             bgm_volume=args.bgm_volume,
             output_dir=args.output_dir,
+            quality_profile=args.quality_profile,
             interactive=args.interactive,
         )
         result = auto_service.publish(request)
-        if result.success:
-            logger.info(f"自动发布成功！")
+        if result.success and result.status == "published":
+            logger.info("自动发布并核验完成！")
             logger.info(f"  视频路径: {result.video_path}")
             logger.info(f"  抖音ID: {result.post_id}")
             logger.info(f"  链接: {result.publish_url}")
             print(result.publish_url or result.post_id or result.video_path)
+        elif result.success:
+            logger.warning(
+                f"自动发布已提交但尚未完成核验: {result.status}；禁止重复上传"
+            )
+            print(result.status)
         else:
             logger.error(f"自动发布失败: {result.message}")
             sys.exit(1)

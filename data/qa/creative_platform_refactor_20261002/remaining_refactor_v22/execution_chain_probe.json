@@ -1,0 +1,1260 @@
+{
+  "schema": "creative_v22_execution_probe/v1",
+  "cases": {
+    "stop_resume": {
+      "assertions_passed": true,
+      "directory": "data/qa/creative_platform_refactor_20261002/remaining_refactor_v22/execution_chain/stop_resume"
+    },
+    "field_dependency": {
+      "assertions_passed": true,
+      "directory": "data/qa/creative_platform_refactor_20261002/remaining_refactor_v22/execution_chain/field_dependency"
+    },
+    "media_chain": {
+      "assertions_passed": true,
+      "directory": "data/qa/creative_platform_refactor_20261002/remaining_refactor_v22/execution_chain/media_chain"
+    },
+    "unknown_dispatch": {
+      "assertions_passed": true,
+      "directory": "data/qa/creative_platform_refactor_20261002/remaining_refactor_v22/execution_chain/unknown_dispatch"
+    },
+    "same_script_budget": {
+      "assertions_passed": true,
+      "directory": "data/qa/creative_platform_refactor_20261002/remaining_refactor_v22/execution_chain/same_script_budget"
+    },
+    "browser_publish": {
+      "assertions_passed": true,
+      "real_publish": false,
+      "browser_page": "fixture; existing PublishWorkflow executed"
+    }
+  },
+  "network_blocked": true,
+  "paid_calls": 0,
+  "media_content_review_performed": false,
+  "human_decisions": "explicitly marked test fixtures only; no real user approval claimed",
+  "ffmpeg": "injected fixture runner; native-audio argument wiring checked; no real film quality claim",
+  "stop_resume": {
+    "narrative_focus_binding": null,
+    "reference_expression_version": null,
+    "script_revision_binding": null,
+    "schema": "creative_workflow_state/v1",
+    "model_profile": "legacy_writer_minimax_director_deepseek",
+    "writer_prompt_version": "legacy",
+    "review_policy_version": "legacy",
+    "production_protocol": "legacy",
+    "segmented_director_binding": null,
+    "original_director_binding": null,
+    "original_brief_priority_binding": null,
+    "writer_prompt_binding": null,
+    "created_at": "2026-10-02T11:56:23.627587+00:00",
+    "status": "debug_breakpoint",
+    "source_driver": "novel",
+    "creative_focus": "",
+    "logical_task_id": null,
+    "material_sha256": "cc208d1a2eef35104bfa366f59c007bf3bb1061a100230f11d7230b51d4046aa",
+    "calls_started": 2,
+    "max_calls": 20,
+    "max_total_tokens": 500000,
+    "max_revisions": 2,
+    "budget_policy_version": "v4_20260923",
+    "max_contract_repairs": 8,
+    "contract_repairs_used": 0,
+    "format_repairs_used": 0,
+    "revision_rounds": 0,
+    "revision_committed": [],
+    "stages": [
+      {
+        "name": "writer_analysis",
+        "role": "writer",
+        "input_sha256": "09139daf5f72740d5cae62dcfbfabcc65f0dc6774860e0a58d55e81a574d63e5",
+        "output_sha256": "4717243b05f3deeba97565c488e878b02d38542546c5c4c5511e3f55a0de5ecc",
+        "context_budget": {
+          "schema": "creative_context_budget/v1",
+          "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+          "serialized_input_characters": 3889,
+          "estimated_input_tokens": 3889,
+          "requested_max_output_tokens": 12000,
+          "estimated_total_tokens": 15889,
+          "provider": "minimax",
+          "model": "MiniMax-M3",
+          "planning_context_window_tokens": 512000,
+          "advertised_context_window_tokens": 1000000,
+          "source_url": "https://www.minimax.io/models/text/m3",
+          "verified_on": "2026-09-24"
+        },
+        "usage": {
+          "role": "writer",
+          "requested_model": "test",
+          "total_tokens": 1
+        }
+      },
+      {
+        "name": "director_brief",
+        "role": "director",
+        "input_sha256": "78982e6583351d3648779e32209251545bdfe9e9988b60abd3e71e7ded63ba0c",
+        "output_sha256": "f6d3fd0ed92ddcee4024f85dd9cdab1eb49269dc0149068028c8658d3c00ffdb",
+        "context_budget": {
+          "schema": "creative_context_budget/v1",
+          "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+          "serialized_input_characters": 4882,
+          "estimated_input_tokens": 4882,
+          "requested_max_output_tokens": 20000,
+          "estimated_total_tokens": 24882,
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "planning_context_window_tokens": 1000000,
+          "advertised_context_window_tokens": 1000000,
+          "source_url": "https://api-docs.deepseek.com/quick_start/pricing/",
+          "verified_on": "2026-09-24"
+        },
+        "usage": {
+          "role": "director",
+          "requested_model": "test",
+          "total_tokens": 1
+        }
+      }
+    ],
+    "assistant_review_required": true,
+    "calibration_milestone_at_start": null,
+    "workflow_profile_sha256": "74cffeee7832fa50c117e41d284057a724489ec40258c0df363c8556b83f0743",
+    "input_profile_sha256": "f3c3041c37159255f7218cc46d2175fad490054338c70a625ca2ad711b470e16",
+    "calibrated_style_classes_at_start": [],
+    "review_reopen_reasons": [],
+    "text_pass_sequence": 0,
+    "video_pass_sequence": 0,
+    "reported_tokens": 2,
+    "context_strategy": {
+      "mode": "full",
+      "direct_context_limit_characters": 42000,
+      "initial_payload_serialized_characters": 695,
+      "source_sha256": "ad30b4a7c29ddc4f3e9c1b443b4d2dc5e4e27556a4e792de859d38f6a48ddbcb",
+      "reference_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "sent_payload_sha256": "09139daf5f72740d5cae62dcfbfabcc65f0dc6774860e0a58d55e81a574d63e5"
+    },
+    "stage_input_bindings": {
+      "writer_analysis": {
+        "receipt": ".creative_debug/inputs/writer_analysis/1c944225110f6b420dd398adaa2cb5a262de663454c3fde7e54b542f8258ec44.json",
+        "sha256": "1c944225110f6b420dd398adaa2cb5a262de663454c3fde7e54b542f8258ec44"
+      },
+      "director_brief": {
+        "receipt": ".creative_debug/inputs/director_brief/bf859e4154b6b641cdd15b930fc2c4fe20a1a0a857a9ec1ff93056938e628840.json",
+        "sha256": "bf859e4154b6b641cdd15b930fc2c4fe20a1a0a857a9ec1ff93056938e628840"
+      }
+    },
+    "debug_stage_dependencies": {
+      "writer_analysis": [],
+      "director_brief": [
+        "writer_analysis"
+      ]
+    },
+    "debug_stage_validity": {
+      "writer_analysis": "current",
+      "director_brief": "current"
+    },
+    "debug_breakpoint_history": [
+      {
+        "schema": "creative_stage_breakpoint/v1",
+        "stage_id": "writer_analysis",
+        "reason": "user_stop",
+        "command_id": "13336def64574ad8b2d84b18384ee9f4",
+        "calls_started": 1,
+        "automatic_media_submit": false
+      }
+    ],
+    "debug_breakpoint": {
+      "schema": "creative_stage_breakpoint/v1",
+      "stage_id": "director_brief",
+      "reason": "next_stage_completed",
+      "input_sha256": "78982e6583351d3648779e32209251545bdfe9e9988b60abd3e71e7ded63ba0c",
+      "output_sha256": "f6d3fd0ed92ddcee4024f85dd9cdab1eb49269dc0149068028c8658d3c00ffdb",
+      "calls_started": 2,
+      "stopped_at": "2026-10-02T11:56:23.857817+00:00",
+      "automatic_media_submit": false
+    }
+  },
+  "field_compare": {
+    "base_sha256": "f6d3fd0ed92ddcee4024f85dd9cdab1eb49269dc0149068028c8658d3c00ffdb",
+    "target_sha256": "f6d3fd0ed92ddcee4024f85dd9cdab1eb49269dc0149068028c8658d3c00ffdb",
+    "base_input_sha256": "99e2b3dc6e8daff50e2bb7a870eb8119b19154b612dc24fc8958b3b3854a7d7b",
+    "target_input_sha256": "99da73bc934b15b46ad4f07e0a25940a32d2f11be03a05b6143bbf1d52f0f8d9",
+    "output_identical": true,
+    "input_snapshots_available": true,
+    "input_diff": "--- 99e2b3dc6e8daff50e2bb7a870eb8119b19154b612dc24fc8958b3b3854a7d7b\n+++ 99da73bc934b15b46ad4f07e0a25940a32d2f11be03a05b6143bbf1d52f0f8d9\n@@ -1,7 +1,7 @@\n {\n   \"selected_candidate\": {\n     \"aftermath\": \"和解\",\n-    \"conflict\": \"误会\",\n+    \"conflict\": \"[fixture] changed\",\n     \"duration_seconds\": 20,\n     \"end_quote\": \"结局句。\",\n     \"id\": \"C01\","
+  },
+  "quality": {
+    "schema": "creative_quality_evidence_report/v1",
+    "call_sources": [
+      {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\field_dependency\\run\\director_brief.json",
+        "sha256": "1fd5e6b59c5fd29362b11f9cc69b0d3f5aff8fb8563045bbbea81ce5857c1e6a"
+      },
+      {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\field_dependency\\run\\director_brief__invalidated_a591ad545da79030763acfa9a9ece057e60d0937396ac7cf74b04c30c2e4dd4e.json",
+        "sha256": "a591ad545da79030763acfa9a9ece057e60d0937396ac7cf74b04c30c2e4dd4e"
+      },
+      {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\field_dependency\\run\\writer_analysis.json",
+        "sha256": "20ba2ad007d697f69d4ac4e77ca2176899d9e39abd895c21c430b42f08676377"
+      },
+      {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\field_dependency\\run\\writer_analysis__before_feedback_b906abb6740ab626430b.json",
+        "sha256": "4e39cdec65e9675e2858b783c7ae685936f0b336303d82efd84ae5a4140ff58e"
+      }
+    ],
+    "dataset_source": null,
+    "runs_source": null,
+    "production_source": null,
+    "evaluation": {
+      "dataset": {
+        "case_count": 0,
+        "approved_case_count": 0,
+        "candidate_case_count": 0,
+        "approved_independent_count": 0,
+        "holdout_count": 0,
+        "source_family_count": 0,
+        "failures": [
+          "APPROVED_INDEPENDENT_SAMPLE_SHORTFALL",
+          "FROZEN_HOLDOUT_SHORTFALL",
+          "CATEGORY_SHORTFALL:action:error",
+          "CATEGORY_SHORTFALL:action:correct",
+          "HOLDOUT_CATEGORY_SHORTFALL:action:error",
+          "HOLDOUT_CATEGORY_SHORTFALL:action:correct",
+          "CATEGORY_SHORTFALL:interaction:error",
+          "CATEGORY_SHORTFALL:interaction:correct",
+          "HOLDOUT_CATEGORY_SHORTFALL:interaction:error",
+          "HOLDOUT_CATEGORY_SHORTFALL:interaction:correct",
+          "CATEGORY_SHORTFALL:space:error",
+          "CATEGORY_SHORTFALL:space:correct",
+          "HOLDOUT_CATEGORY_SHORTFALL:space:error",
+          "HOLDOUT_CATEGORY_SHORTFALL:space:correct",
+          "CATEGORY_SHORTFALL:camera:error",
+          "CATEGORY_SHORTFALL:camera:correct",
+          "HOLDOUT_CATEGORY_SHORTFALL:camera:error",
+          "HOLDOUT_CATEGORY_SHORTFALL:camera:correct"
+        ],
+        "qualified": false,
+        "gold_labels_missing": 0,
+        "source_family_leaks": []
+      },
+      "per_repeat": [],
+      "complete_repetitions": false,
+      "major_conclusion_flips": [],
+      "holdout_repeated_validation_passed": false,
+      "independence_warning": "Repeated results are correlated; do not count repeated executions as independent cases."
+    },
+    "production": {
+      "normal_passed": false,
+      "boundary_passed": false,
+      "qualified": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null,
+        "wilson_95": null
+      },
+      "first_draft_qualified": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null,
+        "wilson_95": null
+      },
+      "boundary_correct": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null,
+        "wilson_95": null
+      },
+      "unknown_human_review_count": 0
+    },
+    "cost": {
+      "call_count": 4,
+      "providers": {
+        "unknown": {
+          "calls": 4,
+          "input_tokens": null,
+          "output_tokens": null,
+          "reported_total_tokens": 4,
+          "cost_by_currency": {
+            "unknown": {
+              "amount": null,
+              "actual_only": false,
+              "missing_amount_calls": 4
+            }
+          }
+        }
+      },
+      "qualified_handoffs": 0,
+      "model_cost": null,
+      "total_cost_including_active_human": null,
+      "currency": null,
+      "human_active_minutes": null,
+      "human_wait_minutes": null,
+      "cost_per_qualified_handoff": null,
+      "missing_fields_are_zero": false,
+      "cross_currency_conversion": "not_performed; explicit dated FX required",
+      "actual_cost_reduction_verified": false
+    },
+    "media_review_performed": false,
+    "quality_improvement_verified": false,
+    "automatic_paid_execution": false
+  },
+  "budget": {
+    "schema": "creative_media_budget/v1",
+    "failure_limit": 1,
+    "scope": "current_script",
+    "budget_reset_supported": false,
+    "confirmed_failed_current_script": 1,
+    "confirmed_failure_records": [
+      "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\same_script_budget\\media_run\\.creative_debug\\media\\submissions\\5a158d5f91c2a146e0c6b3bb9ac0df16009155d13e75a39032f44f6d4d03ba6d.reservation.json"
+    ],
+    "historical_other_script_failures": "retained_in_original_script_ledgers; not charged to this script"
+  },
+  "budget_rejected_before_provider": {
+    "schema": "creative_seedance_segment_receipt/v1",
+    "status": "blocked_before_submit",
+    "technical_status": "not_submitted",
+    "content_status": "not_available",
+    "review_policy_version": "user_manual_review_only/v1",
+    "plan": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\same_script_budget\\media_run\\revised.plan.json",
+    "plan_sha256": "6511b427d5a7dd602c00dadb897ddb99faa22f9757d790868f5d3c30e6944fc7",
+    "plan_snapshot": {
+      "schema": "creative_seedance_segment_plan/v1",
+      "source_run": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\same_script_budget\\media_run",
+      "segment_id": "SEG001",
+      "shot_id": "SH01",
+      "segment_order": [
+        "SEG001",
+        "SEG002",
+        "SEG003"
+      ],
+      "logical_task_id": "fixture_story",
+      "provider": "ark_api",
+      "model": "doubao-seedance-2-0-mini-260615",
+      "duration_seconds": 8,
+      "ratio": "9:16",
+      "resolution": "480p",
+      "seed": 20261003,
+      "prompt": "竖屏 9:16，写实电影质感。色彩与光线：低饱和冷暖对比；窗外侧光与室内暖灯。空间与人物锁定：两人隔桌相对；甲短发深色外套，乙长发浅色外套。本段只拍一个连续镜头，时长 8 秒，片段内部不切镜、不换场。构图：双人中近景。摄影：固定机位。表演和动作：甲停顿，乙抬眼。首帧状态：两人隔桌站立。尾帧状态：两人视线相遇。事件锁：两人确认决定。本镜信息与反应重点：读清反应。剪辑意图（不触发人物动作）：情绪视角变化。本段没有对白，不增加旁白、画外解释或内心独白。制作边界：固定服装与桌面道具。保持人物脸型、发型、年龄感、服装、道具、站位和持物连续；返回原始尾帧供下一段审核。",
+      "payload_template": {
+        "model": "doubao-seedance-2-0-mini-260615",
+        "content": [
+          {
+            "type": "text",
+            "text": "竖屏 9:16，写实电影质感。色彩与光线：低饱和冷暖对比；窗外侧光与室内暖灯。空间与人物锁定：两人隔桌相对；甲短发深色外套，乙长发浅色外套。本段只拍一个连续镜头，时长 8 秒，片段内部不切镜、不换场。构图：双人中近景。摄影：固定机位。表演和动作：甲停顿，乙抬眼。首帧状态：两人隔桌站立。尾帧状态：两人视线相遇。事件锁：两人确认决定。本镜信息与反应重点：读清反应。剪辑意图（不触发人物动作）：情绪视角变化。本段没有对白，不增加旁白、画外解释或内心独白。制作边界：固定服装与桌面道具。保持人物脸型、发型、年龄感、服装、道具、站位和持物连续；返回原始尾帧供下一段审核。"
+          },
+          {
+            "type": "image_url",
+            "image_url": {
+              "url": "asset://pending-reviewed-opening/SH01"
+            },
+            "role": "first_frame"
+          }
+        ],
+        "generate_audio": true,
+        "resolution": "480p",
+        "ratio": "9:16",
+        "duration": 8,
+        "watermark": false,
+        "return_last_frame": true
+      },
+      "payload_template_sha256": "65ed90d33318181b0261a432e93e6b86d1b0a38862e9d326a0e0c0bdf02ee9ad",
+      "cut_adapter_version": "native_audio_concat_human_review/v1",
+      "request_chain_sha256": "a7ecc7f0ff25f58e7a2fc1a064f25aa827ebd68a8201d493321a9d5f1c33e76f",
+      "sources": {
+        "script": {
+          "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\same_script_budget\\media_run\\SCREENPLAY.json",
+          "sha256": "67bb3a5ffd8071ec8e7ccfa1e2ad17f942b234e50934ce30802207c137abd353"
+        },
+        "storyboard": {
+          "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\same_script_budget\\media_run\\STORYBOARD.json",
+          "sha256": "5f2d1bdc90eb3ca446640b8ebd58b42f773c96e530cf297021df26d4cca245c9"
+        },
+        "capability": {
+          "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\same_script_budget\\media_run\\MEDIA_CAPABILITY_AUDIT.json",
+          "sha256": "e2f15ee6185b828d3f6548e18e826e7ffcd0909020c092160d9f895f71e9a876"
+        },
+        "compiled_plan": {
+          "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\same_script_budget\\media_run\\segments.json",
+          "sha256": "7bb15568d096fb2cfab2b287c12457a1377d843b08a8a1a0f3359c41c35beb60"
+        }
+      },
+      "first_frame": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\same_script_budget\\media_run\\opening.png",
+        "sha256": "18f03f8b3e96e3e93904efdfd9e6861ecfc40427fb9f093a9f5b5b93cc8da1d3"
+      },
+      "opening_frame_source": "reviewed_opening_frame",
+      "first_frame_review": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\same_script_budget\\media_run\\opening.review.json",
+        "sha256": "9376381738ea3ac07429eb9cb35acf61c85c7da92b04465847e98ed2f6d037a1"
+      }
+    },
+    "segment_id": "SEG001",
+    "shot_id": "SH01",
+    "provider": "ark_api",
+    "model": "doubao-seedance-2-0-mini-260615",
+    "logical_task_id": "fixture_story",
+    "source_bindings": {
+      "script": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\same_script_budget\\media_run\\SCREENPLAY.json",
+        "sha256": "67bb3a5ffd8071ec8e7ccfa1e2ad17f942b234e50934ce30802207c137abd353"
+      },
+      "storyboard": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\same_script_budget\\media_run\\STORYBOARD.json",
+        "sha256": "5f2d1bdc90eb3ca446640b8ebd58b42f773c96e530cf297021df26d4cca245c9"
+      },
+      "capability": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\same_script_budget\\media_run\\MEDIA_CAPABILITY_AUDIT.json",
+        "sha256": "e2f15ee6185b828d3f6548e18e826e7ffcd0909020c092160d9f895f71e9a876"
+      },
+      "compiled_plan": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\same_script_budget\\media_run\\segments.json",
+        "sha256": "7bb15568d096fb2cfab2b287c12457a1377d843b08a8a1a0f3359c41c35beb60"
+      },
+      "first_frame_input": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\same_script_budget\\media_run\\opening.png",
+        "sha256": "18f03f8b3e96e3e93904efdfd9e6861ecfc40427fb9f093a9f5b5b93cc8da1d3"
+      },
+      "first_frame_review": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\same_script_budget\\media_run\\opening.review.json",
+        "sha256": "9376381738ea3ac07429eb9cb35acf61c85c7da92b04465847e98ed2f6d037a1"
+      }
+    },
+    "request": {
+      "model": "doubao-seedance-2-0-mini-260615",
+      "generate_audio": true,
+      "resolution": "480p",
+      "ratio": "9:16",
+      "duration": 8,
+      "watermark": false,
+      "return_last_frame": true,
+      "seed": 20261003,
+      "content": [
+        {
+          "type": "text",
+          "text": "竖屏 9:16，写实电影质感。色彩与光线：低饱和冷暖对比；窗外侧光与室内暖灯。空间与人物锁定：两人隔桌相对；甲短发深色外套，乙长发浅色外套。本段只拍一个连续镜头，时长 8 秒，片段内部不切镜、不换场。构图：双人中近景。摄影：固定机位。表演和动作：甲停顿，乙抬眼。首帧状态：两人隔桌站立。尾帧状态：两人视线相遇。事件锁：两人确认决定。本镜信息与反应重点：读清反应。剪辑意图（不触发人物动作）：情绪视角变化。本段没有对白，不增加旁白、画外解释或内心独白。制作边界：固定服装与桌面道具。保持人物脸型、发型、年龄感、服装、道具、站位和持物连续；返回原始尾帧供下一段审核。"
+        },
+        {
+          "type": "image_url",
+          "role": "first_frame",
+          "image_url": {
+            "data_sha256": "18f03f8b3e96e3e93904efdfd9e6861ecfc40427fb9f093a9f5b5b93cc8da1d3",
+            "mime": "image/png"
+          }
+        }
+      ]
+    },
+    "request_sha256": "0d5d7457b91a30cfd18efffdbbd474dcb35f3ff0ecdf7de188d014a84daa5dd3",
+    "created_at": "2026-10-02T11:56:34.122748+00:00",
+    "task_created": false,
+    "error_type": "ValueError",
+    "error": "current-script media failure budget exhausted; history retained"
+  },
+  "unknown_original": {
+    "schema": "creative_seedance_segment_receipt/v1",
+    "status": "submit_outcome_unknown",
+    "technical_status": "unknown",
+    "content_status": "not_available",
+    "review_policy_version": "user_manual_review_only/v1",
+    "plan": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\SEG001.plan.json",
+    "plan_sha256": "1934112fd98edd3ef8813c1d9f568dab0ca7cf303b290c1c393e1da6250624e1",
+    "plan_snapshot": {
+      "schema": "creative_seedance_segment_plan/v1",
+      "source_run": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run",
+      "segment_id": "SEG001",
+      "shot_id": "SH01",
+      "segment_order": [
+        "SEG001",
+        "SEG002",
+        "SEG003"
+      ],
+      "logical_task_id": "fixture_story",
+      "provider": "ark_api",
+      "model": "doubao-seedance-2-0-mini-260615",
+      "duration_seconds": 8,
+      "ratio": "9:16",
+      "resolution": "480p",
+      "seed": 20261002,
+      "prompt": "竖屏 9:16，写实电影质感。色彩与光线：低饱和冷暖对比；窗外侧光与室内暖灯。空间与人物锁定：两人隔桌相对；甲短发深色外套，乙长发浅色外套。本段只拍一个连续镜头，时长 8 秒，片段内部不切镜、不换场。构图：双人中近景。摄影：固定机位。表演和动作：甲停顿，乙抬眼。首帧状态：两人隔桌站立。尾帧状态：两人视线相遇。事件锁：两人确认决定。本镜信息与反应重点：读清反应。剪辑意图（不触发人物动作）：情绪视角变化。本段没有对白，不增加旁白、画外解释或内心独白。制作边界：固定服装与桌面道具。保持人物脸型、发型、年龄感、服装、道具、站位和持物连续；返回原始尾帧供下一段审核。",
+      "payload_template": {
+        "model": "doubao-seedance-2-0-mini-260615",
+        "content": [
+          {
+            "type": "text",
+            "text": "竖屏 9:16，写实电影质感。色彩与光线：低饱和冷暖对比；窗外侧光与室内暖灯。空间与人物锁定：两人隔桌相对；甲短发深色外套，乙长发浅色外套。本段只拍一个连续镜头，时长 8 秒，片段内部不切镜、不换场。构图：双人中近景。摄影：固定机位。表演和动作：甲停顿，乙抬眼。首帧状态：两人隔桌站立。尾帧状态：两人视线相遇。事件锁：两人确认决定。本镜信息与反应重点：读清反应。剪辑意图（不触发人物动作）：情绪视角变化。本段没有对白，不增加旁白、画外解释或内心独白。制作边界：固定服装与桌面道具。保持人物脸型、发型、年龄感、服装、道具、站位和持物连续；返回原始尾帧供下一段审核。"
+          },
+          {
+            "type": "image_url",
+            "image_url": {
+              "url": "asset://pending-reviewed-opening/SH01"
+            },
+            "role": "first_frame"
+          }
+        ],
+        "generate_audio": true,
+        "resolution": "480p",
+        "ratio": "9:16",
+        "duration": 8,
+        "watermark": false,
+        "return_last_frame": true
+      },
+      "payload_template_sha256": "65ed90d33318181b0261a432e93e6b86d1b0a38862e9d326a0e0c0bdf02ee9ad",
+      "cut_adapter_version": "native_audio_concat_human_review/v1",
+      "request_chain_sha256": "badeb5264d530e8569bc053b050d23aa9b42e4554ec0f7aef364eaa3393ac6d8",
+      "sources": {
+        "script": {
+          "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\SCREENPLAY.json",
+          "sha256": "67bb3a5ffd8071ec8e7ccfa1e2ad17f942b234e50934ce30802207c137abd353"
+        },
+        "storyboard": {
+          "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\STORYBOARD.json",
+          "sha256": "5f2d1bdc90eb3ca446640b8ebd58b42f773c96e530cf297021df26d4cca245c9"
+        },
+        "capability": {
+          "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\MEDIA_CAPABILITY_AUDIT.json",
+          "sha256": "a04bc422c90352f7cefc6340e1228ba669d210ce26c2c8b466f1c96cca0e5119"
+        },
+        "compiled_plan": {
+          "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\segments.json",
+          "sha256": "33b8693d349698e81bf678115d70ef85f2f4b48f5427755b5a7b034b73b7add2"
+        }
+      },
+      "first_frame": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\opening.png",
+        "sha256": "18f03f8b3e96e3e93904efdfd9e6861ecfc40427fb9f093a9f5b5b93cc8da1d3"
+      },
+      "opening_frame_source": "reviewed_opening_frame",
+      "first_frame_review": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\opening.review.json",
+        "sha256": "9376381738ea3ac07429eb9cb35acf61c85c7da92b04465847e98ed2f6d037a1"
+      }
+    },
+    "segment_id": "SEG001",
+    "shot_id": "SH01",
+    "provider": "ark_api",
+    "model": "doubao-seedance-2-0-mini-260615",
+    "logical_task_id": "fixture_story",
+    "source_bindings": {
+      "script": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\SCREENPLAY.json",
+        "sha256": "67bb3a5ffd8071ec8e7ccfa1e2ad17f942b234e50934ce30802207c137abd353"
+      },
+      "storyboard": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\STORYBOARD.json",
+        "sha256": "5f2d1bdc90eb3ca446640b8ebd58b42f773c96e530cf297021df26d4cca245c9"
+      },
+      "capability": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\MEDIA_CAPABILITY_AUDIT.json",
+        "sha256": "a04bc422c90352f7cefc6340e1228ba669d210ce26c2c8b466f1c96cca0e5119"
+      },
+      "compiled_plan": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\segments.json",
+        "sha256": "33b8693d349698e81bf678115d70ef85f2f4b48f5427755b5a7b034b73b7add2"
+      },
+      "first_frame_input": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\opening.png",
+        "sha256": "18f03f8b3e96e3e93904efdfd9e6861ecfc40427fb9f093a9f5b5b93cc8da1d3"
+      },
+      "first_frame_review": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\opening.review.json",
+        "sha256": "9376381738ea3ac07429eb9cb35acf61c85c7da92b04465847e98ed2f6d037a1"
+      }
+    },
+    "request": {
+      "model": "doubao-seedance-2-0-mini-260615",
+      "generate_audio": true,
+      "resolution": "480p",
+      "ratio": "9:16",
+      "duration": 8,
+      "watermark": false,
+      "return_last_frame": true,
+      "seed": 20261002,
+      "content": [
+        {
+          "type": "text",
+          "text": "竖屏 9:16，写实电影质感。色彩与光线：低饱和冷暖对比；窗外侧光与室内暖灯。空间与人物锁定：两人隔桌相对；甲短发深色外套，乙长发浅色外套。本段只拍一个连续镜头，时长 8 秒，片段内部不切镜、不换场。构图：双人中近景。摄影：固定机位。表演和动作：甲停顿，乙抬眼。首帧状态：两人隔桌站立。尾帧状态：两人视线相遇。事件锁：两人确认决定。本镜信息与反应重点：读清反应。剪辑意图（不触发人物动作）：情绪视角变化。本段没有对白，不增加旁白、画外解释或内心独白。制作边界：固定服装与桌面道具。保持人物脸型、发型、年龄感、服装、道具、站位和持物连续；返回原始尾帧供下一段审核。"
+        },
+        {
+          "type": "image_url",
+          "role": "first_frame",
+          "image_url": {
+            "data_sha256": "18f03f8b3e96e3e93904efdfd9e6861ecfc40427fb9f093a9f5b5b93cc8da1d3",
+            "mime": "image/png"
+          }
+        }
+      ]
+    },
+    "request_sha256": "5399cdb2cfd43318fcedfc9746e68a5327ed75ef604ce07da828561d9958cc44",
+    "created_at": "2026-10-02T11:56:33.020964+00:00",
+    "error_type": "TimeoutError",
+    "error": "[fixture] unknown submission",
+    "task_created": null
+  },
+  "changed_directory_blocked": {
+    "schema": "creative_seedance_segment_receipt/v1",
+    "status": "blocked_before_submit",
+    "technical_status": "not_submitted",
+    "content_status": "not_available",
+    "review_policy_version": "user_manual_review_only/v1",
+    "plan": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\SEG001.plan.json",
+    "plan_sha256": "1934112fd98edd3ef8813c1d9f568dab0ca7cf303b290c1c393e1da6250624e1",
+    "plan_snapshot": {
+      "schema": "creative_seedance_segment_plan/v1",
+      "source_run": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run",
+      "segment_id": "SEG001",
+      "shot_id": "SH01",
+      "segment_order": [
+        "SEG001",
+        "SEG002",
+        "SEG003"
+      ],
+      "logical_task_id": "fixture_story",
+      "provider": "ark_api",
+      "model": "doubao-seedance-2-0-mini-260615",
+      "duration_seconds": 8,
+      "ratio": "9:16",
+      "resolution": "480p",
+      "seed": 20261002,
+      "prompt": "竖屏 9:16，写实电影质感。色彩与光线：低饱和冷暖对比；窗外侧光与室内暖灯。空间与人物锁定：两人隔桌相对；甲短发深色外套，乙长发浅色外套。本段只拍一个连续镜头，时长 8 秒，片段内部不切镜、不换场。构图：双人中近景。摄影：固定机位。表演和动作：甲停顿，乙抬眼。首帧状态：两人隔桌站立。尾帧状态：两人视线相遇。事件锁：两人确认决定。本镜信息与反应重点：读清反应。剪辑意图（不触发人物动作）：情绪视角变化。本段没有对白，不增加旁白、画外解释或内心独白。制作边界：固定服装与桌面道具。保持人物脸型、发型、年龄感、服装、道具、站位和持物连续；返回原始尾帧供下一段审核。",
+      "payload_template": {
+        "model": "doubao-seedance-2-0-mini-260615",
+        "content": [
+          {
+            "type": "text",
+            "text": "竖屏 9:16，写实电影质感。色彩与光线：低饱和冷暖对比；窗外侧光与室内暖灯。空间与人物锁定：两人隔桌相对；甲短发深色外套，乙长发浅色外套。本段只拍一个连续镜头，时长 8 秒，片段内部不切镜、不换场。构图：双人中近景。摄影：固定机位。表演和动作：甲停顿，乙抬眼。首帧状态：两人隔桌站立。尾帧状态：两人视线相遇。事件锁：两人确认决定。本镜信息与反应重点：读清反应。剪辑意图（不触发人物动作）：情绪视角变化。本段没有对白，不增加旁白、画外解释或内心独白。制作边界：固定服装与桌面道具。保持人物脸型、发型、年龄感、服装、道具、站位和持物连续；返回原始尾帧供下一段审核。"
+          },
+          {
+            "type": "image_url",
+            "image_url": {
+              "url": "asset://pending-reviewed-opening/SH01"
+            },
+            "role": "first_frame"
+          }
+        ],
+        "generate_audio": true,
+        "resolution": "480p",
+        "ratio": "9:16",
+        "duration": 8,
+        "watermark": false,
+        "return_last_frame": true
+      },
+      "payload_template_sha256": "65ed90d33318181b0261a432e93e6b86d1b0a38862e9d326a0e0c0bdf02ee9ad",
+      "cut_adapter_version": "native_audio_concat_human_review/v1",
+      "request_chain_sha256": "badeb5264d530e8569bc053b050d23aa9b42e4554ec0f7aef364eaa3393ac6d8",
+      "sources": {
+        "script": {
+          "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\SCREENPLAY.json",
+          "sha256": "67bb3a5ffd8071ec8e7ccfa1e2ad17f942b234e50934ce30802207c137abd353"
+        },
+        "storyboard": {
+          "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\STORYBOARD.json",
+          "sha256": "5f2d1bdc90eb3ca446640b8ebd58b42f773c96e530cf297021df26d4cca245c9"
+        },
+        "capability": {
+          "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\MEDIA_CAPABILITY_AUDIT.json",
+          "sha256": "a04bc422c90352f7cefc6340e1228ba669d210ce26c2c8b466f1c96cca0e5119"
+        },
+        "compiled_plan": {
+          "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\segments.json",
+          "sha256": "33b8693d349698e81bf678115d70ef85f2f4b48f5427755b5a7b034b73b7add2"
+        }
+      },
+      "first_frame": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\opening.png",
+        "sha256": "18f03f8b3e96e3e93904efdfd9e6861ecfc40427fb9f093a9f5b5b93cc8da1d3"
+      },
+      "opening_frame_source": "reviewed_opening_frame",
+      "first_frame_review": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\opening.review.json",
+        "sha256": "9376381738ea3ac07429eb9cb35acf61c85c7da92b04465847e98ed2f6d037a1"
+      }
+    },
+    "segment_id": "SEG001",
+    "shot_id": "SH01",
+    "provider": "ark_api",
+    "model": "doubao-seedance-2-0-mini-260615",
+    "logical_task_id": "fixture_story",
+    "source_bindings": {
+      "script": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\SCREENPLAY.json",
+        "sha256": "67bb3a5ffd8071ec8e7ccfa1e2ad17f942b234e50934ce30802207c137abd353"
+      },
+      "storyboard": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\STORYBOARD.json",
+        "sha256": "5f2d1bdc90eb3ca446640b8ebd58b42f773c96e530cf297021df26d4cca245c9"
+      },
+      "capability": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\MEDIA_CAPABILITY_AUDIT.json",
+        "sha256": "a04bc422c90352f7cefc6340e1228ba669d210ce26c2c8b466f1c96cca0e5119"
+      },
+      "compiled_plan": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\segments.json",
+        "sha256": "33b8693d349698e81bf678115d70ef85f2f4b48f5427755b5a7b034b73b7add2"
+      },
+      "first_frame_input": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\opening.png",
+        "sha256": "18f03f8b3e96e3e93904efdfd9e6861ecfc40427fb9f093a9f5b5b93cc8da1d3"
+      },
+      "first_frame_review": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\remaining_refactor_v22\\execution_chain\\unknown_dispatch\\media_run\\opening.review.json",
+        "sha256": "9376381738ea3ac07429eb9cb35acf61c85c7da92b04465847e98ed2f6d037a1"
+      }
+    },
+    "request": {
+      "model": "doubao-seedance-2-0-mini-260615",
+      "generate_audio": true,
+      "resolution": "480p",
+      "ratio": "9:16",
+      "duration": 8,
+      "watermark": false,
+      "return_last_frame": true,
+      "seed": 20261002,
+      "content": [
+        {
+          "type": "text",
+          "text": "竖屏 9:16，写实电影质感。色彩与光线：低饱和冷暖对比；窗外侧光与室内暖灯。空间与人物锁定：两人隔桌相对；甲短发深色外套，乙长发浅色外套。本段只拍一个连续镜头，时长 8 秒，片段内部不切镜、不换场。构图：双人中近景。摄影：固定机位。表演和动作：甲停顿，乙抬眼。首帧状态：两人隔桌站立。尾帧状态：两人视线相遇。事件锁：两人确认决定。本镜信息与反应重点：读清反应。剪辑意图（不触发人物动作）：情绪视角变化。本段没有对白，不增加旁白、画外解释或内心独白。制作边界：固定服装与桌面道具。保持人物脸型、发型、年龄感、服装、道具、站位和持物连续；返回原始尾帧供下一段审核。"
+        },
+        {
+          "type": "image_url",
+          "role": "first_frame",
+          "image_url": {
+            "data_sha256": "18f03f8b3e96e3e93904efdfd9e6861ecfc40427fb9f093a9f5b5b93cc8da1d3",
+            "mime": "image/png"
+          }
+        }
+      ]
+    },
+    "request_sha256": "5399cdb2cfd43318fcedfc9746e68a5327ed75ef604ce07da828561d9958cc44",
+    "created_at": "2026-10-02T11:56:33.026622+00:00",
+    "task_created": false,
+    "error_type": "ValueError",
+    "error": "prior segment submission or human review remains unresolved; query its original receipt"
+  },
+  "files": [
+    {
+      "path": "execution_chain/browser_publish/.creative_debug/delivery/667fbe5f3cd6d11d7dd718eaa188139d0a06d247d9d3f480961c329fbb12ea38/delivery.json",
+      "sha256": "ddd99671984d8fb5e8abf8648b3345b0eb078ffa58e01877c030da1c463db523"
+    },
+    {
+      "path": "execution_chain/browser_publish/.creative_debug/delivery/667fbe5f3cd6d11d7dd718eaa188139d0a06d247d9d3f480961c329fbb12ea38/operations/a3d1f426ee23f6203298807f6a88cab30f19ea2d7d07446f9ee501371ee7f97c.json",
+      "sha256": "d583e6ea8311ca6789ce4741fde8b8db7293129e4392ec3b909abd4f6acfd4b5"
+    },
+    {
+      "path": "execution_chain/browser_publish/.creative_debug/delivery/667fbe5f3cd6d11d7dd718eaa188139d0a06d247d9d3f480961c329fbb12ea38/publish_receipt.json",
+      "sha256": "86480e295aadb5babc956e63b431a7e46a7c773ae212e5ef8ba4868a47750daa"
+    },
+    {
+      "path": "execution_chain/browser_publish/.creative_debug/delivery/667fbe5f3cd6d11d7dd718eaa188139d0a06d247d9d3f480961c329fbb12ea38/submission.json",
+      "sha256": "5da2524793eae995332d50e1aba002caea3df79850982e7f140c9d83bcf1c6c5"
+    },
+    {
+      "path": "execution_chain/browser_publish/data/publish_runs/6c4875340b3c3afa9ac56c8534c8f4a630aadf10425a2865017a51766a4c4ebc.20261002T115634197642.ai-declaration-selected.png",
+      "sha256": "3c6b3c220877902b9a9311cc502b7c8d9a135d51b425315615f41e8a21973069"
+    },
+    {
+      "path": "execution_chain/browser_publish/data/publish_runs/6c4875340b3c3afa9ac56c8534c8f4a630aadf10425a2865017a51766a4c4ebc.20261002T115634197642.ai-declaration-verified.png",
+      "sha256": "3c6b3c220877902b9a9311cc502b7c8d9a135d51b425315615f41e8a21973069"
+    },
+    {
+      "path": "execution_chain/browser_publish/data/publish_runs/6c4875340b3c3afa9ac56c8534c8f4a630aadf10425a2865017a51766a4c4ebc.20261002T115634197642.jsonl",
+      "sha256": "b51347b3f054a241ac7e9d3df1d7e88f7ad7f3be47d3847b04662ece62e1f2b6"
+    },
+    {
+      "path": "execution_chain/browser_publish/data/publish_runs/6c4875340b3c3afa9ac56c8534c8f4a630aadf10425a2865017a51766a4c4ebc.20261002T115634197642.published-work.png",
+      "sha256": "d8d3194ac0b26750637196ba60e1c867443eac4da998c8410512f4e9e5ffddd1"
+    },
+    {
+      "path": "execution_chain/browser_publish/data/publish_runs/6c4875340b3c3afa9ac56c8534c8f4a630aadf10425a2865017a51766a4c4ebc.20261002T115634197642.status.json",
+      "sha256": "a17cebf59b287997e7761e785122d951ee4126ba7ec53c79c4fdf968952be642"
+    },
+    {
+      "path": "execution_chain/browser_publish/data/publish_runs/6c4875340b3c3afa9ac56c8534c8f4a630aadf10425a2865017a51766a4c4ebc.submitted.json",
+      "sha256": "174f913519f88c6f1a4722450b10bde4a89b92c8a31112f9a08c9883b3808dbb"
+    },
+    {
+      "path": "execution_chain/browser_publish/final.human_review.json",
+      "sha256": "798dd8aa715fa56235e3615739f955c2c2b26932b61cdc95c017f4fdb48778a0"
+    },
+    {
+      "path": "execution_chain/browser_publish/final.json",
+      "sha256": "08300b8bdb25fbae6cd92087bbc8aeacbbeef7385992dbd8687c2032b326f20c"
+    },
+    {
+      "path": "execution_chain/browser_publish/final.last.png",
+      "sha256": "29add8e99e6217024a2dfdd347425b7df4653665791f6f4feedb22cc6e90095c"
+    },
+    {
+      "path": "execution_chain/browser_publish/final.mp4",
+      "sha256": "6c2b5dfd017ec0d69488cb5e355293842e33739c2fa5f96db4167c7379a4811f"
+    },
+    {
+      "path": "execution_chain/field_dependency/novel.txt",
+      "sha256": "959da910312d4644ce13bf7866fb3c48007e5cf0e00c50f16c6d71af91f1cefd"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/.creative_debug/artifacts/director_brief/f6d3fd0ed92ddcee4024f85dd9cdab1eb49269dc0149068028c8658d3c00ffdb__99da73bc934b15b46ad4f07e0a25940a32d2f11be03a05b6143bbf1d52f0f8d9.json",
+      "sha256": "98d2393b2384e32568318b55ccb99efeb2dd5fb6d2a33c46b52c83062df2f888"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/.creative_debug/artifacts/director_brief/f6d3fd0ed92ddcee4024f85dd9cdab1eb49269dc0149068028c8658d3c00ffdb__99e2b3dc6e8daff50e2bb7a870eb8119b19154b612dc24fc8958b3b3854a7d7b.json",
+      "sha256": "20a2f45b966657f0dda6ab87ad7f5d1f2461e16f9c47af4266e8100ad0eea58e"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/.creative_debug/artifacts/writer_analysis/4717243b05f3deeba97565c488e878b02d38542546c5c4c5511e3f55a0de5ecc__09139daf5f72740d5cae62dcfbfabcc65f0dc6774860e0a58d55e81a574d63e5.json",
+      "sha256": "d3d552ce111becc810c8613ed2998d2a3365552c03af43754905a6b40af20cc2"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/.creative_debug/artifacts/writer_analysis/ee7d82c21cbeb8e08475872fddf5f68f9ce324b936d338cacb35ae1421da9028__b5ddfb75a74fba3ba232095bd6fbe5f32dff215ebacce83610b8df361bf39bab.json",
+      "sha256": "cb70c7155a5285f0a457202d8a72fc27f9e212167d1f2edbf91252b50caf758c"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/.creative_debug/compatibility/director_brief/0f69e7274b86d79aec736c096dbdff452e9a6f2f441354b13c2009ddf1ca71d5.json",
+      "sha256": "200c744600495972326a0fcb61fc920c85a68a137e09b15f555ddacabaf3eab3"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/.creative_debug/compatibility/director_brief/1bae4dc09359bf890aad7d5f95e14b8ebaa6e550cefd97b9bb7accc83ae36a98.json",
+      "sha256": "1a6cea6ba523cb445cfab2f64d39bb7ed142f4d43cc8fc45923642c903ef15ce"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/.creative_debug/feedback/writer_analysis/b906abb6740ab626430b.json",
+      "sha256": "925617ad0bc7a367644915bb71c3d209cc9aa9a657f8df004b65e2ec7df40660"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/.creative_debug/feedback/writer_analysis/b906abb6740ab626430b.resolution.json",
+      "sha256": "9fd1ce7f43b66ea2e32f62cf4deb70e749620a12c2470183ba57140d0ee4cb12"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/.creative_debug/index.json",
+      "sha256": "41dea8e098cd0942176adc722785e9193de79c8115598a8b2bb838c0128428d1"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/.creative_debug/inputs/director_brief/5f4e2d74c180db2d07f874e2488934d5c68acaa41fa1b24cb4d4baf54cad7fdb.json",
+      "sha256": "5dff2ac79eb48d80b68b7bcf5d079a175717d8a5e5407037c5e0049b7799b5eb"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/.creative_debug/inputs/director_brief/d495f256ca447f2d02c3b3813e033a1fc8a2d775fb5ed2b18f343d8783a3162d.json",
+      "sha256": "086cf67c3e6f2a62e4a4da0252be16f86d3d459181d4c329bcf9e8c2b5008be6"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/.creative_debug/inputs/director_brief/f1ba68f0b4c5fdd6cf6837b5dfcdebb9bdd89c5e7d8bc9e8c3a20ff63d7d49af.json",
+      "sha256": "77111c25734d52bcdc91b5d3aae5ec4b2adbde835b491c830bf6d3b959a68e7c"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/.creative_debug/inputs/writer_analysis/1c944225110f6b420dd398adaa2cb5a262de663454c3fde7e54b542f8258ec44.json",
+      "sha256": "3eb520c73c5ef21dc8e2e26bb8fb7d50b03149bbc91e7f86f6af36dc23e23808"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/.creative_debug/inputs/writer_analysis/e08dbfed661daa5d8c741197394d10e3fad526f22366807472ce96b8705351e2.json",
+      "sha256": "9e8c1ab027afd24e17260f7cef1d280975557a4844ca210c89ce3aa2670e73a5"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/.creative_debug/quality/reports/f39c2664622231d8d8a1b968d0d55d713993ffa87a87fcb2065c664cf547a741.json",
+      "sha256": "11955407ac9fbaa432767344a44b4b18bdc98ee98dff1d22e52c23a63ca2a8eb"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/.creative_debug/results/director_brief/10d3ff877cd7a5c0ba22d9dc2a2936aad9bbd500746bb098e2f2fc235e732a32.json",
+      "sha256": "179b59430a82860e7ed47a6762e49a619cb616fc2d2724b34ec2ca90dfbc9e46"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/.creative_debug/results/director_brief/15355fb15291a59c7d2314959971bf40a38861eaf89caed2f98698e92cc9030d.json",
+      "sha256": "f6517d85b55819d2199ae161728dcf3a215f2701ecf71bcf2ee9fe5e8197bd0f"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/.creative_debug/results/director_brief/7de051113c7a1025ba882ee16575210c6f0e7bae9c6304eccd1a75c34b4c5c70.json",
+      "sha256": "87e6eb4d401698dd4cb7bd1cda159ec94533d6242d1037016d431abf166893c3"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/.creative_debug/results/writer_analysis/38a8dbc31d2de1d1e0cd3511ae743328f9d26538c42c337b8bde8c15491daee4.json",
+      "sha256": "848eaf46ab93236c419078f53c537b809cc6e15a0eba2622035776dc5c806b67"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/.creative_debug/results/writer_analysis/4a877ede9f36e8ee1b58a8bc5bb0bacf847e6929ab141104261ed683b82826d0.json",
+      "sha256": "250bd394c43dcdebf4263cd33c74106601367fb725c5cc2d49f441f44c037616"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/CONTEXT_STRATEGY.json",
+      "sha256": "c3315d994f3676b65b9eebfe41e97bfcfd427df9274d56fc45fbd704afdb6ac8"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/director_brief.json",
+      "sha256": "1fd5e6b59c5fd29362b11f9cc69b0d3f5aff8fb8563045bbbea81ce5857c1e6a"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/director_brief__invalidated_a591ad545da79030763acfa9a9ece057e60d0937396ac7cf74b04c30c2e4dd4e.json",
+      "sha256": "a591ad545da79030763acfa9a9ece057e60d0937396ac7cf74b04c30c2e4dd4e"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/materials.json",
+      "sha256": "4d517ab68398b408a253404d702842dec868ad4214fb196ae7d9418503026a57"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/state.json",
+      "sha256": "8bd8dd9db33b03df044e8a37ee9fd907026df75653f508dfb306a4767583f74d"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/writer_analysis.json",
+      "sha256": "20ba2ad007d697f69d4ac4e77ca2176899d9e39abd895c21c430b42f08676377"
+    },
+    {
+      "path": "execution_chain/field_dependency/run/writer_analysis__before_feedback_b906abb6740ab626430b.json",
+      "sha256": "4e39cdec65e9675e2858b783c7ae685936f0b336303d82efd84ae5a4140ff58e"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/.creative_debug/commands/1ead5b3109ea4d64a07a1e66cdbc1796.json",
+      "sha256": "01f2ab0b78f1de99ca6cb9766649d55fb30b2d246caf132d1504e98b6b7829a5"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/.creative_debug/delivery/8c1fb11efecf91143fe17f00620cbac13f7cdb11095f6716bf41eff1309022a4/delivery.json",
+      "sha256": "9592227cbd8a69eec8dadc30b5301b883604b26958ca1452cb46206a456cbc79"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/.creative_debug/media/candidates/0a5e1b77523cc5267a8117dacda97f595eb4479a4581560f70b9e1870707b9cb.json",
+      "sha256": "8281f39a0662ab6372c3528c97d7253c21391191f185abf6534058148c6cb130"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/.creative_debug/media/candidates/292b6c0a4b0ec3db89281a15b78fa7a8848941aa323ca0e89b97917ddfed2f35.json",
+      "sha256": "e6c6d74f6115c5f1041db637ac8c5937b14d2997033c30aec32486ad7af8219e"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/.creative_debug/media/candidates/8d9fe7ba187a3a17dbd86fe10056d372abdf9563ffecd03b67cc237ff29c540f.json",
+      "sha256": "7f98cef4a6dcebb404fdb9824155ffe7913fd4084ed2aaf08033fe73a85cca2b"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/.creative_debug/media/current_preview.json",
+      "sha256": "6f0596c1d649ad25f4c81c65d487bfe551f73a63656fc149ea6b934f013563e1"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/.creative_debug/media/feedback/0a8ab98fc24c3ed346f27056f1b5edbf97cded8aed792c686079a8c99f1e22e8.json",
+      "sha256": "ca9faff6d04083d8bbd68431e1d0ace0c37c4ab4450e022c2156461ce6cb7012"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/.creative_debug/media/index.json",
+      "sha256": "f8781042e250c945a8ff4cff21436fb85586f2c8c493707810ca892b0898fe3c"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/.creative_debug/media/previews/74248f8b2ac5540b42b5a8375fd3b4f6a6ff0b0b28a1dcdcb605c796f6513b58.json",
+      "sha256": "272ef6b167bf5d6b888a5899651f5ec85498cd119349ade9b9f9e05109ac4e00"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/.creative_debug/media/submissions/3de33b861d8c5743e62ab8ae68c366054f8c50f302ff0687a2e077314e1b8545.reservation.json",
+      "sha256": "d6def74d134971405b3827639ccc61c8b4f130c707ba799e6247dcee0b41351d"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/.creative_debug/media/submissions/9ee0a3c12568b6b8cfdafb3ff44ca4b43ec3394c84abe4c08f7618fc2f5137aa.reservation.json",
+      "sha256": "f47d81c7bca58e7e9daecd6261845fce73aa68770b643687b4f90fa0aabed14e"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/.creative_debug/media/submissions/budget.json",
+      "sha256": "44d17c5bba1534bfd4c1af2702187c1816a85e1c2f13b5577d2429355097057a"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/.creative_debug/media/submissions/dae3b03ab2fd8dc43cad2447e362d6862b3b797b7cb65edc0c99ae061f03f569.reservation.json",
+      "sha256": "790d120d25186a97adff33b247d621718316763658f5d71b63a036a7bb27559a"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/assembly.chain.json",
+      "sha256": "b9b2d5dedf0a1d88d2e73cd68a5aef0ce935bf9a923bf75482e09689ea5d8317"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/final/full_film_candidate.mp4",
+      "sha256": "4aca3254a43a802915ff8d9e852fa31ec6949e3685e4368f9a5e783e6ee06973"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/final/receipt.human_review.json",
+      "sha256": "11c64571f94b057de44a86cac7f111d26e8156ba70d39f36cec4e7e3db5cbb02"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/final/receipt.json",
+      "sha256": "8f3cb6e9b6563e8cad3ceb9f082f06c0bc095efaab8196535ac4515c1de9a457"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/MEDIA_CAPABILITY_AUDIT.json",
+      "sha256": "9f0099d7f24aacf94a632b5469700af64d0f90289bb93c604928cc9e8f72236b"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/opening.png",
+      "sha256": "18f03f8b3e96e3e93904efdfd9e6861ecfc40427fb9f093a9f5b5b93cc8da1d3"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/opening.review.json",
+      "sha256": "9376381738ea3ac07429eb9cb35acf61c85c7da92b04465847e98ed2f6d037a1"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/SCREENPLAY.json",
+      "sha256": "67bb3a5ffd8071ec8e7ccfa1e2ad17f942b234e50934ce30802207c137abd353"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/SEG001/receipt.human_review.json",
+      "sha256": "3865b06b3bd7d423b0ea29d7c237689e8a57ddd5aec6179f62e140931ebc46ba"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/SEG001/receipt.json",
+      "sha256": "6b4f3d800345e51825455961d8635296a4d0bc3e4c4abe55e76e5d81dd9c8c4f"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/SEG001/request.preview.json",
+      "sha256": "62ca281c02b7787c414e34c3b3cb9704782f529af61dc9249ff5aa57e515be6f"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/SEG001/SEG001.last.png",
+      "sha256": "d427fadd3649b200c1b20b60dda0181889d6f29e16d003a865bc2ce67292798f"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/SEG001/SEG001.mp4",
+      "sha256": "e21430b65c8be6831818c68199519b124d4df47edb3de3c91ab40b6cd3535821"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/SEG001.plan.json",
+      "sha256": "9ee0a3c12568b6b8cfdafb3ff44ca4b43ec3394c84abe4c08f7618fc2f5137aa"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/SEG002/receipt.human_review.json",
+      "sha256": "5c2573dd6ec9696f23e2dfd379859c19702d5805b2f69944210f50aac3a87055"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/SEG002/receipt.json",
+      "sha256": "ad9f5d1e7da540397c6d8534012db4cc576ba01182d022a7edcb81546ee8d7f2"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/SEG002/SEG002.last.png",
+      "sha256": "47dc8db087b7b151b5629c3b1ac4ad61c3760262935cfa783197a5cac630af5c"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/SEG002/SEG002.mp4",
+      "sha256": "ee20a8aa653f2a1863a48624858f7bea87e09a96ad097490b1f295eecb9a5806"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/SEG002.plan.json",
+      "sha256": "dae3b03ab2fd8dc43cad2447e362d6862b3b797b7cb65edc0c99ae061f03f569"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/SEG003/receipt.human_review.json",
+      "sha256": "f200f08f37aa5e7dfe8efbe39cefd6cc4040aa43a4404a8febb6c5d1af46a9af"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/SEG003/receipt.json",
+      "sha256": "39800d513d2d2d325f222975a54362596c61459c79c74c14db343228f1e15f29"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/SEG003/SEG003.last.png",
+      "sha256": "bc9fd245196f0f93e60408e3c618213071f275c765999d546aa5334e17400db2"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/SEG003/SEG003.mp4",
+      "sha256": "aef7e49509dbecedaf2816a23c18436c927179b1422a5b9918b510878e9fb860"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/SEG003.plan.json",
+      "sha256": "3de33b861d8c5743e62ab8ae68c366054f8c50f302ff0687a2e077314e1b8545"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/segments.json",
+      "sha256": "1147fb54491b207c2e96a87143e8d757a2d3b44148a342ce902182dd04a6d8a4"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/state.json",
+      "sha256": "a88b5b9298c0a55465a6cc60a216ba63ca8f89605312de6b162f0842010f198b"
+    },
+    {
+      "path": "execution_chain/media_chain/media_run/STORYBOARD.json",
+      "sha256": "5f2d1bdc90eb3ca446640b8ebd58b42f773c96e530cf297021df26d4cca245c9"
+    },
+    {
+      "path": "execution_chain/same_script_budget/media_run/.creative_debug/media/candidates/d0afe9aaac917999f5075d9bb99a9ba7dc33789851adc591c45bf23f6a75cb37.json",
+      "sha256": "b744928cc9922451a61cf4bc3d011fc629ca1d49e52fc60c7cc0cb5c69362faa"
+    },
+    {
+      "path": "execution_chain/same_script_budget/media_run/.creative_debug/media/current_preview.json",
+      "sha256": "552ba9708d11088367a6d6c79a15f99df902d3cbd5a778b2d0af74dfd375df79"
+    },
+    {
+      "path": "execution_chain/same_script_budget/media_run/.creative_debug/media/index.json",
+      "sha256": "f8524f59907b026e61d562880e5aeacdee3a0eeddaf80b79125994c3b1ab472e"
+    },
+    {
+      "path": "execution_chain/same_script_budget/media_run/.creative_debug/media/previews/a7ecc7f0ff25f58e7a2fc1a064f25aa827ebd68a8201d493321a9d5f1c33e76f.json",
+      "sha256": "bcfeb612420617db58cf9eae164fa925b53aa271300482a5c1452307a7d28af4"
+    },
+    {
+      "path": "execution_chain/same_script_budget/media_run/.creative_debug/media/submissions/5a158d5f91c2a146e0c6b3bb9ac0df16009155d13e75a39032f44f6d4d03ba6d.reservation.json",
+      "sha256": "877e24b452343749709c8b593a5fbead7e4e98f4bb4fd6a32379d388c291992d"
+    },
+    {
+      "path": "execution_chain/same_script_budget/media_run/.creative_debug/media/submissions/budget.json",
+      "sha256": "e42010c3e7e77aa2444ace3699d5e089cb5647664b9cd0744dd1cd37f650dc29"
+    },
+    {
+      "path": "execution_chain/same_script_budget/media_run/first/receipt.human_review.json",
+      "sha256": "5eaf149f9588c2543b27e98a932be46f77aa5ba6a8fa700c9f2b07167fbc7ba8"
+    },
+    {
+      "path": "execution_chain/same_script_budget/media_run/first/receipt.json",
+      "sha256": "45d4dc7f1112c99ffc67e91ad55c7ccd5f559dc6eb50a2b9081318290fc8f5c5"
+    },
+    {
+      "path": "execution_chain/same_script_budget/media_run/first/SEG001.last.png",
+      "sha256": "d427fadd3649b200c1b20b60dda0181889d6f29e16d003a865bc2ce67292798f"
+    },
+    {
+      "path": "execution_chain/same_script_budget/media_run/first/SEG001.mp4",
+      "sha256": "e21430b65c8be6831818c68199519b124d4df47edb3de3c91ab40b6cd3535821"
+    },
+    {
+      "path": "execution_chain/same_script_budget/media_run/MEDIA_CAPABILITY_AUDIT.json",
+      "sha256": "e2f15ee6185b828d3f6548e18e826e7ffcd0909020c092160d9f895f71e9a876"
+    },
+    {
+      "path": "execution_chain/same_script_budget/media_run/opening.png",
+      "sha256": "18f03f8b3e96e3e93904efdfd9e6861ecfc40427fb9f093a9f5b5b93cc8da1d3"
+    },
+    {
+      "path": "execution_chain/same_script_budget/media_run/opening.review.json",
+      "sha256": "9376381738ea3ac07429eb9cb35acf61c85c7da92b04465847e98ed2f6d037a1"
+    },
+    {
+      "path": "execution_chain/same_script_budget/media_run/revised.plan.json",
+      "sha256": "6511b427d5a7dd602c00dadb897ddb99faa22f9757d790868f5d3c30e6944fc7"
+    },
+    {
+      "path": "execution_chain/same_script_budget/media_run/SCREENPLAY.json",
+      "sha256": "67bb3a5ffd8071ec8e7ccfa1e2ad17f942b234e50934ce30802207c137abd353"
+    },
+    {
+      "path": "execution_chain/same_script_budget/media_run/second/receipt.json",
+      "sha256": "d40c1692a3e7373b57d5ab2fe2f5dbcbd94d5ebcb717d7f8855ae71bea3b477b"
+    },
+    {
+      "path": "execution_chain/same_script_budget/media_run/SEG001.plan.json",
+      "sha256": "5a158d5f91c2a146e0c6b3bb9ac0df16009155d13e75a39032f44f6d4d03ba6d"
+    },
+    {
+      "path": "execution_chain/same_script_budget/media_run/segments.json",
+      "sha256": "7bb15568d096fb2cfab2b287c12457a1377d843b08a8a1a0f3359c41c35beb60"
+    },
+    {
+      "path": "execution_chain/same_script_budget/media_run/state.json",
+      "sha256": "1f53c65fd0bf0aa29a657238cf9d67913d4c4397d524b840af65943efb40b352"
+    },
+    {
+      "path": "execution_chain/same_script_budget/media_run/STORYBOARD.json",
+      "sha256": "5f2d1bdc90eb3ca446640b8ebd58b42f773c96e530cf297021df26d4cca245c9"
+    },
+    {
+      "path": "execution_chain/stop_resume/novel.txt",
+      "sha256": "959da910312d4644ce13bf7866fb3c48007e5cf0e00c50f16c6d71af91f1cefd"
+    },
+    {
+      "path": "execution_chain/stop_resume/run/.creative_debug/artifacts/director_brief/f6d3fd0ed92ddcee4024f85dd9cdab1eb49269dc0149068028c8658d3c00ffdb__78982e6583351d3648779e32209251545bdfe9e9988b60abd3e71e7ded63ba0c.json",
+      "sha256": "3f3d6f55506d006ea96c9d19d230920ba942c00c7ea457ea23f7a0b005789ecb"
+    },
+    {
+      "path": "execution_chain/stop_resume/run/.creative_debug/artifacts/writer_analysis/4717243b05f3deeba97565c488e878b02d38542546c5c4c5511e3f55a0de5ecc__09139daf5f72740d5cae62dcfbfabcc65f0dc6774860e0a58d55e81a574d63e5.json",
+      "sha256": "d3d552ce111becc810c8613ed2998d2a3365552c03af43754905a6b40af20cc2"
+    },
+    {
+      "path": "execution_chain/stop_resume/run/.creative_debug/control.json",
+      "sha256": "f244719d1df3863e81f5ec4e36fe195a19566ea250f582fdc7b4f40c26b9fc28"
+    },
+    {
+      "path": "execution_chain/stop_resume/run/.creative_debug/control_history/13336def64574ad8b2d84b18384ee9f4.json",
+      "sha256": "3574c3d69121a679430a90fdfd2dbf39e65518307e72762ca83894b14c2c73be"
+    },
+    {
+      "path": "execution_chain/stop_resume/run/.creative_debug/control_history/cd814df8e950493fa267d19fe825ad5c.json",
+      "sha256": "f244719d1df3863e81f5ec4e36fe195a19566ea250f582fdc7b4f40c26b9fc28"
+    },
+    {
+      "path": "execution_chain/stop_resume/run/.creative_debug/index.json",
+      "sha256": "2d3fc9e2ea994fcd3bbd8fb00acc873f2afafa307724ee638a557be7a204331a"
+    },
+    {
+      "path": "execution_chain/stop_resume/run/.creative_debug/inputs/director_brief/bf859e4154b6b641cdd15b930fc2c4fe20a1a0a857a9ec1ff93056938e628840.json",
+      "sha256": "7e8e3e0760b0852120a710faff81405177887a6636700f58cb1f5fd01b9be3e7"
+    },
+    {
+      "path": "execution_chain/stop_resume/run/.creative_debug/inputs/writer_analysis/1c944225110f6b420dd398adaa2cb5a262de663454c3fde7e54b542f8258ec44.json",
+      "sha256": "3eb520c73c5ef21dc8e2e26bb8fb7d50b03149bbc91e7f86f6af36dc23e23808"
+    },
+    {
+      "path": "execution_chain/stop_resume/run/.creative_debug/results/director_brief/8118610e4f6483db4a0568602808bad35da6f8dc2757d75c4d37eece35ae8c02.json",
+      "sha256": "82c8fffa5318726ea78ba25cdeaab8c0f946e9e051a0257653e077502b61fa9a"
+    },
+    {
+      "path": "execution_chain/stop_resume/run/.creative_debug/results/writer_analysis/4a877ede9f36e8ee1b58a8bc5bb0bacf847e6929ab141104261ed683b82826d0.json",
+      "sha256": "250bd394c43dcdebf4263cd33c74106601367fb725c5cc2d49f441f44c037616"
+    },
+    {
+      "path": "execution_chain/stop_resume/run/CONTEXT_STRATEGY.json",
+      "sha256": "544089dbb0366668ec58198af107999067ccae3ece243be197561aebf8760067"
+    },
+    {
+      "path": "execution_chain/stop_resume/run/director_brief.json",
+      "sha256": "4c5f04fa88be36462c1cae8db00a044a7858a8402af84352cde58d3bc7cf0d89"
+    },
+    {
+      "path": "execution_chain/stop_resume/run/materials.json",
+      "sha256": "92b54b4f3aca3bb3be9128f4ad0a22a2ccfc38a4607f5fa346b7b248955ff6e6"
+    },
+    {
+      "path": "execution_chain/stop_resume/run/state.json",
+      "sha256": "fefe18a64a72a367bd7967df860b400687b31eb3a84e695a808bdf3e7961a7d7"
+    },
+    {
+      "path": "execution_chain/stop_resume/run/writer_analysis.json",
+      "sha256": "5d994155b391803f8f6f548c35120a974bc3242a7058b770e4d411c91d7b3018"
+    },
+    {
+      "path": "execution_chain/unknown_dispatch/media_run/.creative_debug/media/current_preview.json",
+      "sha256": "c88d0ca8eac127d9cf47cc73849bc76e7f1b790d0017344fc66e002030118ec4"
+    },
+    {
+      "path": "execution_chain/unknown_dispatch/media_run/.creative_debug/media/previews/badeb5264d530e8569bc053b050d23aa9b42e4554ec0f7aef364eaa3393ac6d8.json",
+      "sha256": "2d4641f12e716936a098179b79fa3b36d19248e924d9641a99af508ff184f9dc"
+    },
+    {
+      "path": "execution_chain/unknown_dispatch/media_run/.creative_debug/media/submissions/1934112fd98edd3ef8813c1d9f568dab0ca7cf303b290c1c393e1da6250624e1.reservation.json",
+      "sha256": "3878f86a7face6978ac5cdb6025a794b01504493586df7001b01ec741169524b"
+    },
+    {
+      "path": "execution_chain/unknown_dispatch/media_run/.creative_debug/media/submissions/budget.json",
+      "sha256": "64a88e16fe27fe99852df970db37c9b692ea2723b3c2ecf81db6ead94b3fe9f8"
+    },
+    {
+      "path": "execution_chain/unknown_dispatch/media_run/MEDIA_CAPABILITY_AUDIT.json",
+      "sha256": "a04bc422c90352f7cefc6340e1228ba669d210ce26c2c8b466f1c96cca0e5119"
+    },
+    {
+      "path": "execution_chain/unknown_dispatch/media_run/opening.png",
+      "sha256": "18f03f8b3e96e3e93904efdfd9e6861ecfc40427fb9f093a9f5b5b93cc8da1d3"
+    },
+    {
+      "path": "execution_chain/unknown_dispatch/media_run/opening.review.json",
+      "sha256": "9376381738ea3ac07429eb9cb35acf61c85c7da92b04465847e98ed2f6d037a1"
+    },
+    {
+      "path": "execution_chain/unknown_dispatch/media_run/renamed-output/receipt.json",
+      "sha256": "1d819ea3f0857ecee8d8e974c91b25b144162cd0a3fdde5442e12566156b51d7"
+    },
+    {
+      "path": "execution_chain/unknown_dispatch/media_run/SCREENPLAY.json",
+      "sha256": "67bb3a5ffd8071ec8e7ccfa1e2ad17f942b234e50934ce30802207c137abd353"
+    },
+    {
+      "path": "execution_chain/unknown_dispatch/media_run/SEG001.plan.json",
+      "sha256": "1934112fd98edd3ef8813c1d9f568dab0ca7cf303b290c1c393e1da6250624e1"
+    },
+    {
+      "path": "execution_chain/unknown_dispatch/media_run/segments.json",
+      "sha256": "33b8693d349698e81bf678115d70ef85f2f4b48f5427755b5a7b034b73b7add2"
+    },
+    {
+      "path": "execution_chain/unknown_dispatch/media_run/state.json",
+      "sha256": "a88b5b9298c0a55465a6cc60a216ba63ca8f89605312de6b162f0842010f198b"
+    },
+    {
+      "path": "execution_chain/unknown_dispatch/media_run/STORYBOARD.json",
+      "sha256": "5f2d1bdc90eb3ca446640b8ebd58b42f773c96e530cf297021df26d4cca245c9"
+    },
+    {
+      "path": "execution_chain/unknown_dispatch/media_run/unknown-original/receipt.json",
+      "sha256": "662945cd1d9fc46d7b5091ea334dad807d5f8dd99a4a2da3f6085f3363d5cd48"
+    }
+  ]
+}

@@ -1,0 +1,466 @@
+{
+  "schema": "creative_evidence_ids_expansion/v1",
+  "context_sha256": "3da4562a6549c95ecb9dda148038a17a55345a3307012a3fcf8e63ba468877a6",
+  "catalog_sha256": "f30c0c9876ab5d1ba0e34f80e52abb609830e9d961e910459858a3685fddfd2a",
+  "raw_review_sha256": "5ded01d4435e67c5bace20cc3d1a5484bc3eef5cb8ed62cc2e8d9bde39a36c55",
+  "effective_review_sha256": "73e43dd6dc165ca5e0805cc5a3c99a841d719f52c30071dd36b58f1ce29086f0",
+  "effective_review": {
+    "story_preserved": true,
+    "issues": [],
+    "suggestions": [
+      {
+        "location": "B1",
+        "proposal": "可在林屿台词中补一句更具体的过往次数或后果（如“上个月那两次也是你帮我收的”），让“不止一次”更直接落在自然对白上，而不只依赖三张便签。",
+        "reason": "当前三张不同日期便签加“上次那批”已能建立多次善后，但若希望观众更快、更稳地接收“习惯性付出历史”，对白可再具体一点。"
+      },
+      {
+        "location": "B4",
+        "proposal": "可在方澄门口停顿时保留一个更可读的肩背或手部近景，让“没有回头”与“推门走出去”之间的选择余白更清楚。",
+        "reason": "结尾行动已成立，但门口停顿若只靠文字描述，后续分镜和最终提示词需要确保这个反应窗口可见。"
+      }
+    ],
+    "calibration_focus": [
+      "B1 三张不同日期便利贴与“上次那批”台词是否在最终视频提示词中同时可见，足以让观众在拒绝前理解她过去不止一次替林屿善后。",
+      "B2 林屿提出请求后，方澄从林屿脸到票根的目光移动与包带收紧是否在最终提示词中有明确反应窗口。",
+      "B3 方澄拒绝台词与林屿笔尖停住、明细单短斜线是否在同一转折窗口内可读。",
+      "B4 林屿“我以为你会帮我的”之后，方澄门口停顿、没有回头、推门离开是否保留足够反应时间。",
+      "B5 林屿揭下三张便签、收进抽屉、拿出自己结算单并落笔对账的动作链是否在最终提示词中完整可见。"
+    ],
+    "coverage": [
+      {
+        "id": "B1",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "B1通过林屿台词“上次那批也是你帮我对完的”和三张不同日期便利贴“对账/改明细/收尾”在实际动作与可见物件中建立她过去不止一次替林屿善后；院线票根也交代她今晚另有安排。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.0.dialogue.0.text",
+                "quote": "上次那批也是你帮我对完的，谢谢啊。"
+              },
+              {
+                "path": "script.beats.0.during",
+                "quote": "方澄走回自己工位，挎包敞口搁在椅背上，桌角露出今晚院线开场票根和三张不同日期的便利贴，分别写着\"对账\"\"改明细\"\"收尾\"。"
+              },
+              {
+                "path": "creative_brief.constraints.0",
+                "quote": "观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "B1先有方澄端回咖啡杯、林屿说“上次那批也是你帮我对完的”，随后方澄走回工位并露出票根与便签，刺激、听到、反应和后续信息顺序成立。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.0.before",
+                "quote": "傍晚办公室里，方澄在林屿桌边停下，把滑到桌沿的咖啡杯端回林屿桌中央。"
+              },
+              {
+                "path": "script.beats.0.dialogue.0.text",
+                "quote": "上次那批也是你帮我对完的，谢谢啊。"
+              },
+              {
+                "path": "script.beats.0.during",
+                "quote": "方澄走回自己工位，挎包敞口搁在椅背上，桌角露出今晚院线开场票根和三张不同日期的便利贴，分别写着\"对账\"\"改明细\"\"收尾\"。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "B1为首镜，内部连续：方澄在林屿桌边停下、端杯回桌中央，再走回自己工位；挎包敞口搁在椅背，票根和便签在桌角可见，初始状态与后续B2拉包带可衔接。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.0.before",
+                "quote": "傍晚办公室里，方澄在林屿桌边停下，把滑到桌沿的咖啡杯端回林屿桌中央。"
+              },
+              {
+                "path": "script.beats.0.during",
+                "quote": "方澄走回自己工位，挎包敞口搁在椅背上，桌角露出今晚院线开场票根和三张不同日期的便利贴，分别写着\"对账\"\"改明细\"\"收尾\"。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "pass",
+            "reason": "B1仅林屿一句“上次那批也是你帮我对完的，谢谢啊。”约18个中文字，14秒窗口内包含端杯、走回工位、露出票根便签等动作，语速与反应空间自然。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.0.dialogue.0.text",
+                "quote": "上次那批也是你帮我对完的，谢谢啊。"
+              },
+              {
+                "path": "script.beats.0.duration_seconds",
+                "quote": "14"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "B1为剧本节拍，不是分镜首帧；当前无分镜首帧需要核对。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "not_applicable",
+            "reason": "当前未提供production_design资产映射；B1只检查可见需求，办公室、咖啡杯、客户明细单、挎包、院线票根和三张便签的资产映射待后续联合审查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "B2",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "B2让林屿习惯性提出“今晚又得麻烦你帮我对一下”，方澄手指捏住包带、目光在林屿脸与票根之间移动，兑现她想离开和担心拒绝的原因在实际事件中成立。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.1.dialogue.0.text",
+                "quote": "今晚又得麻烦你帮我对一下。"
+              },
+              {
+                "path": "script.beats.1.during",
+                "quote": "方澄眼神从林屿抬起的脸移到桌角那张院线票根，包带在指尖收紧。"
+              },
+              {
+                "path": "creative_brief.constraints.1",
+                "quote": "她想离开和担心拒绝的原因要在实际事件中成立。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "B2先写方澄拉起挎包带搭肩、手指捏住带扣，随后林屿提出请求，再写方澄眼神从林屿脸移到票根、包带收紧，刺激到反应顺序明确。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.1.before",
+                "quote": "方澄拉起挎包带搭到肩上，手指捏住带扣。"
+              },
+              {
+                "path": "script.beats.1.dialogue.0.text",
+                "quote": "今晚又得麻烦你帮我对一下。"
+              },
+              {
+                "path": "script.beats.1.during",
+                "quote": "方澄眼神从林屿抬起的脸移到桌角那张院线票根，包带在指尖收紧。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "B1末方澄已回到自己工位，B2首方澄拉起挎包带搭到肩上，位置和持物状态连续；票根仍在桌角，目光可自然移向票根。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.0.during",
+                "quote": "方澄走回自己工位，挎包敞口搁在椅背上，桌角露出今晚院线开场票根和三张不同日期的便利贴，分别写着\"对账\"\"改明细\"\"收尾\"。"
+              },
+              {
+                "path": "script.beats.1.before",
+                "quote": "方澄拉起挎包带搭到肩上，手指捏住带扣。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "pass",
+            "reason": "B2林屿台词“今晚又得麻烦你帮我对一下。”约12个中文字，11秒窗口内包含拉包带、请求、方澄目光移动和包带收紧，速度自然且有反应空间。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.1.dialogue.0.text",
+                "quote": "今晚又得麻烦你帮我对一下。"
+              },
+              {
+                "path": "script.beats.1.duration_seconds",
+                "quote": "11"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "B2为剧本节拍，不是分镜首帧；当前无分镜首帧需要核对。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "not_applicable",
+            "reason": "当前未提供production_design资产映射；B2只检查可见需求，挎包、票根、林屿与方澄的资产映射待后续联合审查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "B3",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "B3让方澄把挎包带放下、合上包口，并说出“这次我先走，你自己对吧。”，明确拒绝；林屿笔尖停住、明细单划出短斜线，转折落到可见事实。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.2.before",
+                "quote": "方澄把挎包带重新放下，双手合上包口。"
+              },
+              {
+                "path": "script.beats.2.dialogue.0.text",
+                "quote": "这次我先走，你自己对吧。"
+              },
+              {
+                "path": "script.beats.2.during",
+                "quote": "林屿手部近景，笔尖停住，没签完的字在明细单上划出一道短斜线。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "B3先写方澄放下包带、合上包口，再写拒绝台词，随后林屿手部近景笔尖停住并划出短斜线；拒绝刺激与对方反应顺序成立。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.2.before",
+                "quote": "方澄把挎包带重新放下，双手合上包口。"
+              },
+              {
+                "path": "script.beats.2.dialogue.0.text",
+                "quote": "这次我先走，你自己对吧。"
+              },
+              {
+                "path": "script.beats.2.during",
+                "quote": "林屿手部近景，笔尖停住，没签完的字在明细单上划出一道短斜线。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "B2末方澄包带在指尖收紧，B3首方澄把挎包带重新放下并合上包口，动作承接自然；林屿仍在桌前对账，笔和明细单状态连续。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.1.during",
+                "quote": "方澄眼神从林屿抬起的脸移到桌角那张院线票根，包带在指尖收紧。"
+              },
+              {
+                "path": "script.beats.2.before",
+                "quote": "方澄把挎包带重新放下，双手合上包口。"
+              },
+              {
+                "path": "script.beats.2.during",
+                "quote": "林屿手部近景，笔尖停住，没签完的字在明细单上划出一道短斜线。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "pass",
+            "reason": "B3方澄台词“这次我先走，你自己对吧。”约11个中文字，10秒窗口内包含放包带、合包口、说拒绝和林屿停笔反应，速度自然。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.2.dialogue.0.text",
+                "quote": "这次我先走，你自己对吧。"
+              },
+              {
+                "path": "script.beats.2.duration_seconds",
+                "quote": "10"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "B3为剧本节拍，不是分镜首帧；当前无分镜首帧需要核对。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "not_applicable",
+            "reason": "当前未提供production_design资产映射；B3只检查可见需求，挎包、客户明细单、笔和人物近景资产映射待后续联合审查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "B4",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "B4让方澄背起挎包走到门口，林屿低声说“我以为你会帮我的。”，方澄停一下、没有回头、推门走出去；对方面对拒绝并以依赖式回应承住，结尾主动者仍是方澄。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.3.before",
+                "quote": "方澄背起挎包走到办公室门口，手搭上门把。"
+              },
+              {
+                "path": "script.beats.3.dialogue.0.text",
+                "quote": "我以为你会帮我的。"
+              },
+              {
+                "path": "script.beats.3.during",
+                "quote": "方澄在门口停一下，没有回头，推门走出去。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "B4先写方澄走到门口、手搭门把，林屿低声回应，再写方澄停一下、没有回头、推门走出去；刺激、听到、反应和离开顺序成立。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.3.before",
+                "quote": "方澄背起挎包走到办公室门口，手搭上门把。"
+              },
+              {
+                "path": "script.beats.3.dialogue.0.text",
+                "quote": "我以为你会帮我的。"
+              },
+              {
+                "path": "script.beats.3.during",
+                "quote": "方澄在门口停一下，没有回头，推门走出去。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "B3末方澄已拒绝并合上包口，B4首方澄背起挎包走到门口，动作承接合理；林屿仍在办公室内，方澄在门口停顿后推门离开。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.2.before",
+                "quote": "方澄把挎包带重新放下，双手合上包口。"
+              },
+              {
+                "path": "script.beats.3.before",
+                "quote": "方澄背起挎包走到办公室门口，手搭上门把。"
+              },
+              {
+                "path": "script.beats.3.during",
+                "quote": "方澄在门口停一下，没有回头，推门走出去。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "pass",
+            "reason": "B4林屿台词“我以为你会帮我的。”约9个中文字，12秒窗口内包含走到门口、低声回应、方澄停顿和推门离开，语速与反应空间自然。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.3.dialogue.0.text",
+                "quote": "我以为你会帮我的。"
+              },
+              {
+                "path": "script.beats.3.duration_seconds",
+                "quote": "12"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "B4为剧本节拍，不是分镜首帧；当前无分镜首帧需要核对。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "not_applicable",
+            "reason": "当前未提供production_design资产映射；B4只检查可见需求，办公室门口、挎包、门把和人物资产映射待后续联合审查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          }
+        }
+      },
+      {
+        "id": "B5",
+        "checks": {
+          "requirements": {
+            "status": "pass",
+            "reason": "B5以林屿独坐、揭下三张日期便签叠齐收进抽屉、拿出自己那份结算单并落笔对账收尾，用具体行动兑现边界及关系变化，不靠口号或强行和解。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.4.before",
+                "quote": "林屿把桌角剩的三张日期便签揭下，叠齐收进抽屉。"
+              },
+              {
+                "path": "script.beats.4.event",
+                "quote": "林屿独坐桌前，把桌角那几张日期便签揭下整齐叠好放进抽屉，再从旁边拿出自己那份结算单，落笔开始对。"
+              },
+              {
+                "path": "creative_brief.ending",
+                "quote": "以新的行动兑现边界及关系变化；不预先规定两人必须和解，不用主题口号收尾。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "timing": {
+            "status": "pass",
+            "reason": "B5先写林屿揭下便签、叠齐收进抽屉，再写从桌边抽出自己那份结算单、落笔开始对账；无对白，动作顺序清楚。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.4.before",
+                "quote": "林屿把桌角剩的三张日期便签揭下，叠齐收进抽屉。"
+              },
+              {
+                "path": "script.beats.4.event",
+                "quote": "林屿独坐桌前，把桌角那几张日期便签揭下整齐叠好放进抽屉，再从旁边拿出自己那份结算单，落笔开始对。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "continuity": {
+            "status": "pass",
+            "reason": "B4末方澄推门离开，B5首林屿独坐桌前，空间与人物状态承接合理；桌角三张便签仍在，林屿揭下并收进抽屉，再拿出自己结算单，道具落点连续。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.3.during",
+                "quote": "方澄在门口停一下，没有回头，推门走出去。"
+              },
+              {
+                "path": "script.beats.4.before",
+                "quote": "林屿把桌角剩的三张日期便签揭下，叠齐收进抽屉。"
+              },
+              {
+                "path": "script.beats.4.event",
+                "quote": "林屿独坐桌前，把桌角那几张日期便签揭下整齐叠好放进抽屉，再从旁边拿出自己那份结算单，落笔开始对。"
+              }
+            ],
+            "issue_ids": []
+          },
+          "dialogue_timing": {
+            "status": "not_applicable",
+            "reason": "B5无对白，因此不核算台词字数与语速；10秒窗口用于揭便签、收抽屉、拿结算单和落笔对账。",
+            "evidence_refs": [
+              {
+                "path": "script.beats.4.duration_seconds",
+                "quote": "10"
+              },
+              {
+                "path": "script.beats.4.during",
+                "quote": "（无新增动作）"
+              }
+            ],
+            "issue_ids": []
+          },
+          "first_frame": {
+            "status": "not_applicable",
+            "reason": "B5为剧本节拍，不是分镜首帧；当前无分镜首帧需要核对。",
+            "evidence_refs": [],
+            "issue_ids": []
+          },
+          "assets": {
+            "status": "not_applicable",
+            "reason": "当前未提供production_design资产映射；B5只检查可见需求，三张日期便签、抽屉、结算单、笔和办公桌资产映射待后续联合审查。",
+            "evidence_refs": [],
+            "issue_ids": []
+          }
+        }
+      }
+    ]
+  },
+  "automatic_approval": false
+}

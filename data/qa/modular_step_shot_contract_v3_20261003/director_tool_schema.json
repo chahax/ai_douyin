@@ -1,0 +1,119 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "context_sha256",
+    "raw_linear_script_sha256",
+    "emotional_arc",
+    "causal_chain",
+    "ending_intent",
+    "beats"
+  ],
+  "properties": {
+    "schema": {
+      "enum": [
+        "linear_step_shot_direction_offline_v3"
+      ]
+    },
+    "context_sha256": {
+      "enum": [
+        "4c38d2ba466632b1585ece7ccdc1ea9b3ace1af941ea29a0d353c459976df133"
+      ]
+    },
+    "raw_linear_script_sha256": {
+      "enum": [
+        "48864dd2c0ef292fabf604a6592edaf9008117b44d61483d82e23591ef244ae6"
+      ]
+    },
+    "emotional_arc": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causal_chain": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "ending_intent": {
+      "type": "string",
+      "minLength": 1
+    },
+    "beats": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "beat_id",
+          "shots"
+        ],
+        "properties": {
+          "beat_id": {
+            "enum": [
+              "B1"
+            ]
+          },
+          "shots": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "shot_id",
+                "source_step_refs",
+                "new_information",
+                "observation_object",
+                "camera",
+                "cut_reason"
+              ],
+              "properties": {
+                "shot_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "source_step_refs": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "raw_linear_script.beats.0.steps.0",
+                      "raw_linear_script.beats.0.steps.1",
+                      "raw_linear_script.beats.0.steps.2",
+                      "raw_linear_script.beats.0.steps.3"
+                    ]
+                  }
+                },
+                "new_information": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "observation_object": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "camera": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "cut_reason": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "description": "原raw_linear_script.steps是唯一播放顺序，event仅为摘要，不作为动作源。整片情绪、因果、结尾方向独立填写；每拍shots数组只分配镜头。source_step_refs填写raw_linear_script.beats.N.steps.M完整路径，每镜是本拍连续步骤区间，全部镜依次恰好覆盖原步骤一次，不拆步骤、不复制、不跨拍重排，不改原text或speaker。动作组action_ref只绑定kind=action的原步骤；反应也仍为原action，可标semantic_role=reaction。对白只引用原dialogue步骤，不重新输出台词。本合同只验证源覆盖与先后，物理动作、反应时长、状态及成片感染力仍待后续编译和全文审查。"
+}

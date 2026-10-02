@@ -1,0 +1,55 @@
+{
+  "schema": "creative_assistant_feedback/v1",
+  "handoff_sha256": "aba79f7e2a5b9c599fcdebdd6ce44396c7aae7bc1229b13964c1221f1d6f94c0",
+  "assistant_review_sha256": "05a7da4a7bc9e370fea95dcf3d94146beb1a8dd993763b582e96b529b7431463",
+  "issues": [
+    {
+      "owner": "director",
+      "location": "SH01 SH02 SH03 SH04 SH05",
+      "evidence": "当前分镜14/18/17/16/20秒；Seedance能力审计每请求4–15秒，SH02–SH05 payload_template=null。SH04又在一镜里要求手部切面部。",
+      "impact": "文本虽然回核但无法执行，且近景无法同时展示脚部转向。",
+      "proposal": "按真实能力拆成独立4–15秒镜头，同一请求只一个连续机位；保持全部故事信息及对白顺序。为主要反应留可读时窗，不用冻结填时。每个新镜明确承接状态，不能把实际换机位虚标raw_tail_continuation。",
+      "severity": "major"
+    },
+    {
+      "owner": "director",
+      "location": "SH03",
+      "evidence": "构图与prompt都说林屿在画外，但dialogue_mode=画内，dialogue_lock还含陈默及林屿。",
+      "impact": "模式丢失画内外区别，易让听者替画外人对口型。",
+      "proposal": "明确每位说话人的归属；需要时拆开画内陈默与画外林屿的镜段，保留原对白次序和完整内容。",
+      "severity": "major"
+    },
+    {
+      "owner": "writer",
+      "location": "B03 B04 B05",
+      "evidence": "B03右手始终握画笔，B04未放笔，B05同一右手直接握凳并松手垂下。",
+      "impact": "画笔会无故消失，拉凳动作不具备连续初态。",
+      "proposal": "用最少必要动作建立画笔稳定放置位置与空手状态，再拉凳，不增加新的无信息操作。",
+      "severity": "major"
+    },
+    {
+      "owner": "writer",
+      "location": "B01 B02 B03 B04 B05",
+      "evidence": "B04无声轻碰与看手看脸16秒，B05拉凳后又回画架20秒，合计36/85秒；放弃送客主要由文字声称，原送客意图不清。",
+      "impact": "后段重复表现松动并拖长操作，情绪信息不足，结尾邀请动作被回画架冲淡。",
+      "proposal": "重新分配允许范围内的节拍时长与对白前后反应，压缩无新信息重复停顿和多余收尾；让送客到邀请的变化有明确可见前后对照，不靠隐形心理标签，保留候选已定事件与关系结果。",
+      "severity": "major"
+    },
+    {
+      "owner": "director",
+      "location": "SH01 SH02 SH03 SH04 SH05",
+      "evidence": "实际陈默母版为深灰夹克、蓝灰内衫、黑裤，无围裙；林屿母版齐肩黑发、米白针织外套、橄榄内衫、深色裤。当前稿擅加围裙，设计required_tags又添加库中不存在的neutral_studio_light、painter、empty_background等，使三项全被判generate。",
+      "impact": "声明复用却实际重建，增加成本并改变人物服装。",
+      "proposal": "制作外观以已看原图为准，陈默保持历史夹克服装；资产设计仅使用确实需要且库中已证实的兼容标签。要改衣服必须作为新资产明确提出，不能声称旧图已满足。",
+      "severity": "major"
+    },
+    {
+      "owner": "director",
+      "location": "SH01 SH02 SH03 SH04 SH05",
+      "evidence": "实际STUDIO_REFERENCE原图是左上窗、右后门，大桌占前景，画架与木凳在后方；稿件反写左后门、右后窗台并假定画架两侧畅通。",
+      "impact": "实际资产空间与人物进场、视线、光线不一致。",
+      "proposal": "依据已看图片安排可见站位、视线和通道；若现图角度不能支撑必要表演，明确需要对应新机位背景，不把旧图当已满足。不能因拆镜或换机位假称原始尾帧已能直接适配。",
+      "severity": "major"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "schema": "creative_authorized_final_plan_rebuild/v1",
+  "created_at": "2026-10-01T13:45:56.413880+00:00",
+  "calls_before": 20,
+  "max_calls": 24,
+  "authorization_file": "CONTINUATION_AUTHORIZATION_24.json",
+  "revision_before": 3,
+  "previous_stage_recovery": {
+    "version": "failed_plan_full_rebuild_v1",
+    "requirements": "提交完整whole_film_action_plan_v2，沿用当前已生成办公室静态清单（E09/E10为椅子），保留当前完整剧本事件与对白。逐拍先给对白自然语速留时间，再安排必要动作与情绪反应；不能将action/hold之和写满拍长。对照numeric_timing_budget检查每一拍，不能只修B2；如确实无法容纳完整动作和自然对白，应返回具体表达冲突，不删剧情。允许重分配非必要hold。script_slot during是第一句完整说完之后，不是对白进行中；实际说话中表演只用dialogue_performance。所有数组必须是真实JSON数组，空operations用[]；duration_seconds用number。完整计划必须通过原编译和独立文本审查，不能以接口成功代替审核通过。\n以下是编译器实际共享时间预算，优先按preferred_dialogue_seconds预留自然对白；minimum仅是硬下限。每拍groups时长之和+对白时长<=shot_seconds。不要复制旧稿不合格时长；检查B1到B5全部拍：\n[{\"beat_id\": \"B1\", \"shot_seconds\": 14, \"minimum_dialogue_seconds\": 3.0, \"preferred_dialogue_seconds\": 4.585714, \"maximum_action_and_hold_seconds\": 11.0, \"current_action_and_hold_seconds\": 11.0, \"shortfall_seconds\": 0}, {\"beat_id\": \"B2\", \"shot_seconds\": 11, \"minimum_dialogue_seconds\": 2.4, \"preferred_dialogue_seconds\": 3.728571, \"maximum_action_and_hold_seconds\": 8.6, \"current_action_and_hold_seconds\": 10.5, \"shortfall_seconds\": 1.9}, {\"beat_id\": \"B3\", \"shot_seconds\": 10, \"minimum_dialogue_seconds\": 2.0, \"preferred_dialogue_seconds\": 3.157143, \"maximum_action_and_hold_seconds\": 8.0, \"current_action_and_hold_seconds\": 10.0, \"shortfall_seconds\": 2.0}, {\"beat_id\": \"B4\", \"shot_seconds\": 12, \"minimum_dialogue_seconds\": 1.6, \"preferred_dialogue_seconds\": 2.585714, \"maximum_action_and_hold_seconds\": 10.4, \"current_action_and_hold_seconds\": 12.0, \"shortfall_seconds\": 1.6}, {\"beat_id\": \"B5\", \"shot_seconds\": 10, \"minimum_dialogue_seconds\": 0, \"preferred_dialogue_seconds\": 0, \"maximum_action_and_hold_seconds\": 10, \"current_action_and_hold_seconds\": 10.0, \"shortfall_seconds\": 0}]\n不要把字幕/票根/便签已可读当成实际生成图片事实；本阶段只安排可拍表达。performance与operations应一致，真正移动、坐下、拿放必须有对应操作和空间前提；无物理动作的hold用operations:[]。反应视线不能无刺激重置，对白主体与构图一致。\n输出协议优先：直接调用submit_creative_json提交完整计划，不输出英文分析、思考过程、计算推演、空间草图、说明或前言。你已有全部必要输入，后台完成判断后一次提交结果。保持文本简洁：每组performance写可见表演，最多两句；purpose/cut_reason/reaction只写当前拍作用，不复述规则。不复制旧失败计划，不请求更多预算。",
+    "previous_invalid_output": {
+      "status": "incomplete_model_response",
+      "code": "MODEL_RESPONSE_LENGTH_NO_JSON",
+      "source_receipt": "director_state_plan__00__incomplete_attempt_01.json",
+      "finish_reason": "length",
+      "plan_delivered": false
+    }
+  },
+  "archive": {
+    "director_state_plan__00.json": "c0767971aec84c22e61d1f4b490ab8278653faeea110b1d91d33236bb55b95a4",
+    "director_state_plan__00__contract_repair.json": "e24b8b854f219c4fa61ce20508a09bfb6ffc042a8055b5c6b89944a617d237fe"
+  },
+  "automatic_content_approval": false
+}

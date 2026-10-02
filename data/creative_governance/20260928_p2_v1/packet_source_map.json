@@ -1,0 +1,1753 @@
+{
+  "schema_version": "focused_review_packet_v1",
+  "source_hash": "0381767d1f4f890c29db9361b7112fb51766932f45449d5e8d104123897ac0ed",
+  "created_at": "2026-09-28T13:50:16.401736+00:00",
+  "implementation_status": "implemented_offline_verified_not_production_verified",
+  "source_map_encoding": "nested_field_tree/v1",
+  "source_map": {
+    "creative_brief": {
+      "schema": "E0001",
+      "theme": "E0002",
+      "duration_seconds": {
+        "0": "E0003",
+        "1": "E0004"
+      },
+      "audience": "E0005",
+      "relationships": "E0006",
+      "audience_emotion": "E0007",
+      "visual_style": "E0008",
+      "turn": "E0009",
+      "ending": "E0010",
+      "constraints": {
+        "0": "E0011",
+        "1": "E0012",
+        "2": "E0013",
+        "3": "E0014",
+        "4": "E0015"
+      },
+      "avoid": {
+        "0": "E0016",
+        "1": "E0017",
+        "2": "E0018"
+      }
+    },
+    "script": {
+      "title": "E0019",
+      "premise": "E0020",
+      "selected_candidate_id": "E0021",
+      "duration_seconds": "E0022",
+      "beats": {
+        "0": {
+          "id": "E0023",
+          "duration_seconds": "E0024",
+          "event": "E0025",
+          "trigger": "E0026",
+          "before": "E0027",
+          "during": "E0028",
+          "after": "E0028",
+          "dialogue": {
+            "0": {
+              "speaker": "E0029",
+              "text": "E0030"
+            }
+          }
+        },
+        "1": {
+          "id": "E0031",
+          "duration_seconds": "E0024",
+          "event": "E0032",
+          "trigger": "E0033",
+          "before": "E0034",
+          "during": "E0035",
+          "after": "E0028",
+          "dialogue": {
+            "0": {
+              "speaker": "E0036",
+              "text": "E0037"
+            }
+          }
+        },
+        "2": {
+          "id": "E0038",
+          "duration_seconds": "E0024",
+          "event": "E0039",
+          "trigger": "E0040",
+          "before": "E0041",
+          "during": "E0028",
+          "after": "E0028",
+          "dialogue": {
+            "0": {
+              "speaker": "E0029",
+              "text": "E0042"
+            }
+          }
+        },
+        "3": {
+          "id": "E0043",
+          "duration_seconds": "E0024",
+          "event": "E0044",
+          "trigger": "E0045",
+          "before": "E0046",
+          "during": "E0047",
+          "after": "E0048",
+          "dialogue": {
+            "0": {
+              "speaker": "E0036",
+              "text": "E0049"
+            }
+          }
+        }
+      }
+    },
+    "shots": {
+      "style": {
+        "style_option_id": "E0050",
+        "visual_medium": "E0051",
+        "palette": "E0052",
+        "light_source": "E0053",
+        "character_lock": "E0054",
+        "spatial_layout": "E0055"
+      },
+      "shots": {
+        "0": {
+          "id": "E0056",
+          "beat_id": "E0023",
+          "duration_seconds": "E0024",
+          "purpose": "E0057",
+          "composition": "E0058",
+          "camera": "E0059",
+          "cut_reason": "E0060",
+          "visible_performance": "E0061",
+          "start_state": "E0062",
+          "end_state": "E0063",
+          "event_lock": "E0025",
+          "dialogue_lock": {
+            "0": {
+              "speaker": "E0029",
+              "text": "E0030"
+            }
+          },
+          "dialogue_mode": "E0064",
+          "continuity_mode": "E0065",
+          "prompt": "E0066"
+        },
+        "1": {
+          "id": "E0067",
+          "beat_id": "E0031",
+          "duration_seconds": "E0024",
+          "purpose": "E0068",
+          "composition": "E0069",
+          "camera": "E0070",
+          "cut_reason": "E0071",
+          "visible_performance": "E0072",
+          "start_state": "E0063",
+          "end_state": "E0073",
+          "event_lock": "E0032",
+          "dialogue_lock": {
+            "0": {
+              "speaker": "E0036",
+              "text": "E0037"
+            }
+          },
+          "dialogue_mode": "E0064",
+          "continuity_mode": "E0065",
+          "prompt": "E0074"
+        },
+        "2": {
+          "id": "E0075",
+          "beat_id": "E0038",
+          "duration_seconds": "E0024",
+          "purpose": "E0076",
+          "composition": "E0077",
+          "camera": "E0078",
+          "cut_reason": "E0079",
+          "visible_performance": "E0080",
+          "start_state": "E0073",
+          "end_state": "E0081",
+          "event_lock": "E0039",
+          "dialogue_lock": {
+            "0": {
+              "speaker": "E0029",
+              "text": "E0042"
+            }
+          },
+          "dialogue_mode": "E0064",
+          "continuity_mode": "E0065",
+          "prompt": "E0082"
+        },
+        "3": {
+          "id": "E0083",
+          "beat_id": "E0043",
+          "duration_seconds": "E0024",
+          "purpose": "E0084",
+          "composition": "E0085",
+          "camera": "E0086",
+          "cut_reason": "E0087",
+          "visible_performance": "E0088",
+          "start_state": "E0081",
+          "end_state": "E0089",
+          "event_lock": "E0044",
+          "dialogue_lock": {
+            "0": {
+              "speaker": "E0036",
+              "text": "E0049"
+            }
+          },
+          "dialogue_mode": "E0064",
+          "continuity_mode": "E0065",
+          "prompt": "E0090"
+        }
+      }
+    },
+    "static_visual_manifest": {
+      "schema": "E0091",
+      "render": {
+        "style_option_id": "E0050",
+        "visual_medium": "E0051",
+        "palette": "E0052",
+        "light_source": "E0053"
+      },
+      "characters": {
+        "0": {
+          "id": "E0021",
+          "name": "E0036",
+          "age_group": "E0092",
+          "hair": "E0093",
+          "clothing": "E0094",
+          "body_shape": "E0095"
+        },
+        "1": {
+          "id": "E0096",
+          "name": "E0029",
+          "age_group": "E0092",
+          "hair": "E0097",
+          "clothing": "E0098",
+          "body_shape": "E0099"
+        }
+      },
+      "props": {
+        "0": {
+          "id": "E0100",
+          "name": "E0101",
+          "appearance": "E0102",
+          "owner_id": "E0096"
+        },
+        "1": {
+          "id": "E0103",
+          "name": "E0104",
+          "appearance": "E0105",
+          "owner_id": "E0021"
+        }
+      },
+      "scene": {
+        "name": "E0106",
+        "elements": {
+          "0": {
+            "id": "E0107",
+            "name": "E0108",
+            "appearance": "E0109"
+          },
+          "1": {
+            "id": "E0110",
+            "name": "E0111",
+            "appearance": "E0112"
+          },
+          "2": {
+            "id": "E0113",
+            "name": "E0114",
+            "appearance": "E0115"
+          },
+          "3": {
+            "id": "E0116",
+            "name": "E0117",
+            "appearance": "E0118"
+          },
+          "4": {
+            "id": "E0119",
+            "name": "E0120",
+            "appearance": "E0121"
+          },
+          "5": {
+            "id": "E0122",
+            "name": "E0123",
+            "appearance": "E0124"
+          },
+          "6": {
+            "id": "E0125",
+            "name": "E0126",
+            "appearance": "E0127"
+          },
+          "7": {
+            "id": "E0128",
+            "name": "E0129",
+            "appearance": "E0130"
+          },
+          "8": {
+            "id": "E0131",
+            "name": "E0132",
+            "appearance": "E0133"
+          }
+        },
+        "relations": {
+          "0": {
+            "subject": "E0110",
+            "relation": "E0134",
+            "reference": "E0107"
+          },
+          "1": {
+            "subject": "E0113",
+            "relation": "E0135",
+            "reference": "E0107"
+          },
+          "2": {
+            "subject": "E0119",
+            "relation": "E0134",
+            "reference": "E0116"
+          },
+          "3": {
+            "subject": "E0116",
+            "relation": "E0136",
+            "reference": "E0107"
+          },
+          "4": {
+            "subject": "E0122",
+            "relation": "E0137",
+            "reference": "E0125"
+          },
+          "5": {
+            "subject": "E0122",
+            "relation": "E0136",
+            "reference": "E0107"
+          },
+          "6": {
+            "subject": "E0131",
+            "relation": "E0138",
+            "reference": "E0107"
+          },
+          "7": {
+            "subject": "E0128",
+            "relation": "E0137",
+            "reference": "E0107"
+          }
+        }
+      }
+    },
+    "state_plan": {
+      "schema": "E0139",
+      "initial_state": {
+        "C01": {
+          "posture": "E0140",
+          "position": "E0141",
+          "gaze": "E0142",
+          "affect": "E0143"
+        },
+        "C02": {
+          "posture": "E0140",
+          "position": "E0144",
+          "gaze": "E0145",
+          "affect": "E0146"
+        },
+        "P01": {
+          "holder": "E0147",
+          "location": "E0148"
+        },
+        "P02": {
+          "holder": "E0021",
+          "location": "E0149"
+        }
+      },
+      "beats": {
+        "0": {
+          "beat_id": "E0023",
+          "purpose": "E0057",
+          "composition": "E0058",
+          "camera": "E0059",
+          "dialogue_mode": "E0064",
+          "cut_reason": "E0060",
+          "groups": {
+            "0": {
+              "id": "E0150",
+              "script_slot": "E0151",
+              "kind": "E0152",
+              "duration_seconds": "E0153",
+              "hold_subject": "E0154",
+              "performance": "E0155",
+              "operations": {
+                "0": {
+                  "kind": "E0156",
+                  "actor": "E0021",
+                  "target": "E0154",
+                  "value": "E0157"
+                },
+                "1": {
+                  "kind": "E0158",
+                  "actor": "E0021",
+                  "target": "E0154",
+                  "value": "E0159"
+                },
+                "2": {
+                  "kind": "E0160",
+                  "actor": "E0096",
+                  "target": "E0100",
+                  "value": "E0100"
+                },
+                "3": {
+                  "kind": "E0161",
+                  "actor": "E0096",
+                  "target": "E0154",
+                  "value": "E0162"
+                },
+                "4": {
+                  "kind": "E0158",
+                  "actor": "E0096",
+                  "target": "E0154",
+                  "value": "E0163"
+                }
+              }
+            }
+          },
+          "dialogue_performance": "E0164",
+          "reaction": {
+            "anchor": "E0165",
+            "subject": "E0021",
+            "meaning": "E0166"
+          }
+        },
+        "1": {
+          "beat_id": "E0031",
+          "purpose": "E0068",
+          "composition": "E0069",
+          "camera": "E0070",
+          "dialogue_mode": "E0064",
+          "cut_reason": "E0071",
+          "groups": {
+            "0": {
+              "id": "E0167",
+              "script_slot": "E0151",
+              "kind": "E0152",
+              "duration_seconds": "E0168",
+              "hold_subject": "E0154",
+              "performance": "E0169",
+              "operations": {
+                "0": {
+                  "kind": "E0161",
+                  "actor": "E0021",
+                  "target": "E0154",
+                  "value": "E0170"
+                },
+                "1": {
+                  "kind": "E0158",
+                  "actor": "E0021",
+                  "target": "E0154",
+                  "value": "E0171"
+                }
+              }
+            },
+            "1": {
+              "id": "E0172",
+              "script_slot": "E0173",
+              "kind": "E0174",
+              "duration_seconds": "E0175",
+              "hold_subject": "E0096",
+              "performance": "E0176"
+            }
+          },
+          "dialogue_performance": "E0177",
+          "reaction": {
+            "anchor": "E0165",
+            "subject": "E0096",
+            "meaning": "E0178"
+          }
+        },
+        "2": {
+          "beat_id": "E0038",
+          "purpose": "E0076",
+          "composition": "E0077",
+          "camera": "E0078",
+          "dialogue_mode": "E0064",
+          "cut_reason": "E0079",
+          "groups": {
+            "0": {
+              "id": "E0179",
+              "script_slot": "E0151",
+              "kind": "E0152",
+              "duration_seconds": "E0180",
+              "hold_subject": "E0154",
+              "performance": "E0181",
+              "operations": {
+                "0": {
+                  "kind": "E0161",
+                  "actor": "E0021",
+                  "target": "E0154",
+                  "value": "E0182"
+                }
+              }
+            },
+            "1": {
+              "id": "E0183",
+              "script_slot": "E0151",
+              "kind": "E0174",
+              "duration_seconds": "E0184",
+              "hold_subject": "E0021",
+              "performance": "E0185"
+            },
+            "2": {
+              "id": "E0186",
+              "script_slot": "E0151",
+              "kind": "E0152",
+              "duration_seconds": "E0187",
+              "hold_subject": "E0154",
+              "performance": "E0188",
+              "operations": {
+                "0": {
+                  "kind": "E0158",
+                  "actor": "E0096",
+                  "target": "E0154",
+                  "value": "E0189"
+                },
+                "1": {
+                  "kind": "E0190",
+                  "actor": "E0096",
+                  "target": "E0100",
+                  "value": "E0191"
+                }
+              }
+            }
+          },
+          "dialogue_performance": "E0192",
+          "reaction": {
+            "anchor": "E0183",
+            "subject": "E0096",
+            "meaning": "E0193"
+          }
+        },
+        "3": {
+          "beat_id": "E0043",
+          "purpose": "E0084",
+          "composition": "E0085",
+          "camera": "E0086",
+          "dialogue_mode": "E0064",
+          "cut_reason": "E0087",
+          "groups": {
+            "0": {
+              "id": "E0194",
+              "script_slot": "E0151",
+              "kind": "E0152",
+              "duration_seconds": "E0184",
+              "hold_subject": "E0154",
+              "performance": "E0195",
+              "operations": {
+                "0": {
+                  "kind": "E0158",
+                  "actor": "E0021",
+                  "target": "E0154",
+                  "value": "E0196"
+                }
+              }
+            },
+            "1": {
+              "id": "E0197",
+              "script_slot": "E0173",
+              "kind": "E0152",
+              "duration_seconds": "E0187",
+              "hold_subject": "E0154",
+              "performance": "E0198",
+              "operations": {
+                "0": {
+                  "kind": "E0161",
+                  "actor": "E0021",
+                  "target": "E0154",
+                  "value": "E0199"
+                },
+                "1": {
+                  "kind": "E0156",
+                  "actor": "E0021",
+                  "target": "E0154",
+                  "value": "E0200"
+                }
+              }
+            },
+            "2": {
+              "id": "E0201",
+              "script_slot": "E0202",
+              "kind": "E0152",
+              "duration_seconds": "E0184",
+              "hold_subject": "E0154",
+              "performance": "E0203",
+              "operations": {
+                "0": {
+                  "kind": "E0161",
+                  "actor": "E0096",
+                  "target": "E0154",
+                  "value": "E0204"
+                },
+                "1": {
+                  "kind": "E0158",
+                  "actor": "E0096",
+                  "target": "E0154",
+                  "value": "E0205"
+                },
+                "2": {
+                  "kind": "E0206",
+                  "actor": "E0096",
+                  "target": "E0110",
+                  "value": "E0110"
+                }
+              }
+            }
+          },
+          "dialogue_performance": "E0207",
+          "reaction": {
+            "anchor": "E0194",
+            "subject": "E0021",
+            "meaning": "E0208"
+          }
+        }
+      }
+    },
+    "review_scope": "E0209",
+    "scheduled_state_plan": {
+      "schema": "E0210",
+      "initial_state": {
+        "C01": {
+          "posture": "E0140",
+          "position": "E0141",
+          "gaze": "E0142",
+          "affect": "E0143"
+        },
+        "C02": {
+          "posture": "E0140",
+          "position": "E0144",
+          "gaze": "E0145",
+          "affect": "E0146"
+        },
+        "P01": {
+          "holder": "E0147",
+          "location": "E0148"
+        },
+        "P02": {
+          "holder": "E0021",
+          "location": "E0149"
+        }
+      },
+      "beats": {
+        "0": {
+          "beat_id": "E0023",
+          "purpose": "E0057",
+          "composition": "E0058",
+          "camera": "E0059",
+          "dialogue_mode": "E0064",
+          "cut_reason": "E0060",
+          "events": {
+            "0": {
+              "start": "E0211",
+              "end": "E0212",
+              "phase": "E0213",
+              "script_slot": "E0151",
+              "dialogue_index": "E0214",
+              "performance": "E0155",
+              "operations": {
+                "0": {
+                  "kind": "E0156",
+                  "actor": "E0021",
+                  "target": "E0154",
+                  "value": "E0157"
+                },
+                "1": {
+                  "kind": "E0158",
+                  "actor": "E0021",
+                  "target": "E0154",
+                  "value": "E0159"
+                },
+                "2": {
+                  "kind": "E0160",
+                  "actor": "E0096",
+                  "target": "E0100",
+                  "value": "E0100"
+                },
+                "3": {
+                  "kind": "E0161",
+                  "actor": "E0096",
+                  "target": "E0154",
+                  "value": "E0162"
+                },
+                "4": {
+                  "kind": "E0158",
+                  "actor": "E0096",
+                  "target": "E0154",
+                  "value": "E0163"
+                }
+              }
+            },
+            "1": {
+              "start": "E0212",
+              "end": "E0215",
+              "phase": "E0216",
+              "script_slot": "E0217",
+              "dialogue_index": "E0218",
+              "performance": "E0164"
+            },
+            "2": {
+              "start": "E0215",
+              "end": "E0024",
+              "phase": "E0219",
+              "script_slot": "E0202",
+              "dialogue_index": "E0214",
+              "performance": "E0220"
+            }
+          },
+          "dialogue_windows": {
+            "0": {
+              "start": "E0212",
+              "end": "E0215"
+            }
+          },
+          "reaction_window": {
+            "start": "E0212",
+            "end": "E0215",
+            "subject": "E0021",
+            "meaning": "E0166"
+          }
+        },
+        "1": {
+          "beat_id": "E0031",
+          "purpose": "E0068",
+          "composition": "E0069",
+          "camera": "E0070",
+          "dialogue_mode": "E0064",
+          "cut_reason": "E0071",
+          "events": {
+            "0": {
+              "start": "E0211",
+              "end": "E0168",
+              "phase": "E0213",
+              "script_slot": "E0151",
+              "dialogue_index": "E0214",
+              "performance": "E0169",
+              "operations": {
+                "0": {
+                  "kind": "E0161",
+                  "actor": "E0021",
+                  "target": "E0154",
+                  "value": "E0170"
+                },
+                "1": {
+                  "kind": "E0158",
+                  "actor": "E0021",
+                  "target": "E0154",
+                  "value": "E0171"
+                }
+              }
+            },
+            "1": {
+              "start": "E0168",
+              "end": "E0221",
+              "phase": "E0216",
+              "script_slot": "E0217",
+              "dialogue_index": "E0218",
+              "performance": "E0177"
+            },
+            "2": {
+              "start": "E0221",
+              "end": "E0222",
+              "phase": "E0219",
+              "script_slot": "E0173",
+              "dialogue_index": "E0214",
+              "performance": "E0176"
+            },
+            "3": {
+              "start": "E0222",
+              "end": "E0024",
+              "phase": "E0219",
+              "script_slot": "E0202",
+              "dialogue_index": "E0214",
+              "performance": "E0220"
+            }
+          },
+          "dialogue_windows": {
+            "0": {
+              "start": "E0168",
+              "end": "E0221"
+            }
+          },
+          "reaction_window": {
+            "start": "E0168",
+            "end": "E0221",
+            "subject": "E0096",
+            "meaning": "E0178"
+          }
+        },
+        "2": {
+          "beat_id": "E0038",
+          "purpose": "E0076",
+          "composition": "E0077",
+          "camera": "E0078",
+          "dialogue_mode": "E0064",
+          "cut_reason": "E0079",
+          "events": {
+            "0": {
+              "start": "E0211",
+              "end": "E0180",
+              "phase": "E0213",
+              "script_slot": "E0151",
+              "dialogue_index": "E0214",
+              "performance": "E0181",
+              "operations": {
+                "0": {
+                  "kind": "E0161",
+                  "actor": "E0021",
+                  "target": "E0154",
+                  "value": "E0182"
+                }
+              }
+            },
+            "1": {
+              "start": "E0180",
+              "end": "E0223",
+              "phase": "E0213",
+              "script_slot": "E0151",
+              "dialogue_index": "E0214",
+              "performance": "E0185"
+            },
+            "2": {
+              "start": "E0223",
+              "end": "E0224",
+              "phase": "E0213",
+              "script_slot": "E0151",
+              "dialogue_index": "E0214",
+              "performance": "E0188",
+              "operations": {
+                "0": {
+                  "kind": "E0158",
+                  "actor": "E0096",
+                  "target": "E0154",
+                  "value": "E0189"
+                },
+                "1": {
+                  "kind": "E0190",
+                  "actor": "E0096",
+                  "target": "E0100",
+                  "value": "E0191"
+                }
+              }
+            },
+            "3": {
+              "start": "E0224",
+              "end": "E0225",
+              "phase": "E0216",
+              "script_slot": "E0217",
+              "dialogue_index": "E0218",
+              "performance": "E0192"
+            },
+            "4": {
+              "start": "E0225",
+              "end": "E0024",
+              "phase": "E0219",
+              "script_slot": "E0202",
+              "dialogue_index": "E0214",
+              "performance": "E0220"
+            }
+          },
+          "dialogue_windows": {
+            "0": {
+              "start": "E0224",
+              "end": "E0225"
+            }
+          },
+          "reaction_window": {
+            "start": "E0180",
+            "end": "E0223",
+            "subject": "E0096",
+            "meaning": "E0193"
+          }
+        },
+        "3": {
+          "beat_id": "E0043",
+          "purpose": "E0084",
+          "composition": "E0085",
+          "camera": "E0086",
+          "dialogue_mode": "E0064",
+          "cut_reason": "E0087",
+          "events": {
+            "0": {
+              "start": "E0211",
+              "end": "E0226",
+              "phase": "E0213",
+              "script_slot": "E0151",
+              "dialogue_index": "E0214",
+              "performance": "E0195",
+              "operations": {
+                "0": {
+                  "kind": "E0158",
+                  "actor": "E0021",
+                  "target": "E0154",
+                  "value": "E0196"
+                }
+              }
+            },
+            "1": {
+              "start": "E0226",
+              "end": "E0227",
+              "phase": "E0216",
+              "script_slot": "E0217",
+              "dialogue_index": "E0218",
+              "performance": "E0207"
+            },
+            "2": {
+              "start": "E0227",
+              "end": "E0228",
+              "phase": "E0219",
+              "script_slot": "E0173",
+              "dialogue_index": "E0214",
+              "performance": "E0198",
+              "operations": {
+                "0": {
+                  "kind": "E0161",
+                  "actor": "E0021",
+                  "target": "E0154",
+                  "value": "E0199"
+                },
+                "1": {
+                  "kind": "E0156",
+                  "actor": "E0021",
+                  "target": "E0154",
+                  "value": "E0200"
+                }
+              }
+            },
+            "3": {
+              "start": "E0228",
+              "end": "E0229",
+              "phase": "E0219",
+              "script_slot": "E0202",
+              "dialogue_index": "E0214",
+              "performance": "E0203",
+              "operations": {
+                "0": {
+                  "kind": "E0161",
+                  "actor": "E0096",
+                  "target": "E0154",
+                  "value": "E0204"
+                },
+                "1": {
+                  "kind": "E0158",
+                  "actor": "E0096",
+                  "target": "E0154",
+                  "value": "E0205"
+                },
+                "2": {
+                  "kind": "E0206",
+                  "actor": "E0096",
+                  "target": "E0110",
+                  "value": "E0110"
+                }
+              }
+            },
+            "4": {
+              "start": "E0229",
+              "end": "E0024",
+              "phase": "E0219",
+              "script_slot": "E0202",
+              "dialogue_index": "E0214",
+              "performance": "E0220"
+            }
+          },
+          "dialogue_windows": {
+            "0": {
+              "start": "E0226",
+              "end": "E0227"
+            }
+          },
+          "reaction_window": {
+            "start": "E0211",
+            "end": "E0226",
+            "subject": "E0021",
+            "meaning": "E0208"
+          }
+        }
+      }
+    },
+    "scheduling_report": {
+      "schema": "E0230",
+      "policy": "E0231",
+      "beats": {
+        "0": {
+          "beat_id": "E0023",
+          "action_and_hold_seconds": "E0153",
+          "preferred_dialogue_seconds": {
+            "0": "E0232"
+          },
+          "actual_dialogue_seconds": {
+            "0": "E0232"
+          },
+          "dialogue_units": {
+            "0": "E0233"
+          },
+          "reason": "E0234",
+          "unused_tail_seconds": "E0235"
+        },
+        "1": {
+          "beat_id": "E0031",
+          "action_and_hold_seconds": "E0224",
+          "preferred_dialogue_seconds": {
+            "0": "E0236"
+          },
+          "actual_dialogue_seconds": {
+            "0": "E0236"
+          },
+          "dialogue_units": {
+            "0": "E0237"
+          },
+          "reason": "E0234",
+          "unused_tail_seconds": "E0238"
+        },
+        "2": {
+          "beat_id": "E0038",
+          "action_and_hold_seconds": "E0224",
+          "preferred_dialogue_seconds": {
+            "0": "E0239"
+          },
+          "actual_dialogue_seconds": {
+            "0": "E0239"
+          },
+          "dialogue_units": {
+            "0": "E0240"
+          },
+          "reason": "E0234",
+          "unused_tail_seconds": "E0241"
+        },
+        "3": {
+          "beat_id": "E0043",
+          "action_and_hold_seconds": "E0242",
+          "preferred_dialogue_seconds": {
+            "0": "E0243"
+          },
+          "actual_dialogue_seconds": {
+            "0": "E0243"
+          },
+          "dialogue_units": {
+            "0": "E0242"
+          },
+          "reason": "E0234",
+          "unused_tail_seconds": "E0244"
+        }
+      }
+    },
+    "review_evidence_interface_version": "E0245"
+  },
+  "sources": {
+    "E0001": "creative_brief/v1",
+    "E0002": "一个习惯答应同事额外请求的人，第一次平静拒绝，发现关系并没有因此破裂。",
+    "E0003": 36,
+    "E0004": 44,
+    "E0005": "在工作中不敢说不的成年人",
+    "E0006": "林遥和陈禾是平级成年女同事，互相尊重；陈禾提出临时帮忙请求，林遥决定拒绝。没有上司施压、恋爱或亲属关系。",
+    "E0007": "从怕让人失望的小紧张，到说出界限后的等待，最后释然；自然温暖，不讲道理。",
+    "E0008": "竖屏9:16，电影感二维手绘动画，低饱和办公空间、柔和晚间灯光，稳定成年人物比例。",
+    "E0009": "林遥明确拒绝后，陈禾实际听完并接受，自己收回待办；林遥看到对方态度才放松，不把拒绝改成勉强答应。",
+    "E0010": "林遥自然道别、松开紧绷的姿势，朝房间门口走出两步；陈禾留在桌边接手自己的工作，双方关系保持正常。",
+    "E0011": "仅林遥、陈禾两名成年人，场景固定同一间办公室桌边到室内门口的短距离，不切外景。",
+    "E0012": "唯一关键可移动道具是一只文件夹，始终由提出请求的陈禾持有或放在她自己桌面，不能交给林遥。桌椅为固定场景资产。",
+    "E0013": "关键拒绝和接受由本人清晰对白表达，不靠手机、屏幕、小字、旁白或闪回承担因果。",
+    "E0014": "重要拒绝后有至少2秒可读等待反应，再由陈禾自然接受；林遥在听见接受后才明显放松。",
+    "E0015": "每拍最多两句对白。结尾不超过10秒，只兑现离开与各自承担，不增加解释或新任务。",
+    "E0016": "把平级同事写成刻薄上司",
+    "E0017": "道歉独白、励志说教、突然冲突反转",
+    "E0018": "用反复握手、搬椅子和文件交接填时长",
+    "E0019": "这次先回去",
+    "E0020": "晚间办公室，林遥背起包走到陈禾桌边准备离开，陈禾拿起一只文件夹开口请求帮忙顺路带一下；林遥第一次平静拒绝，陈禾先听完再把文件夹平放回自己桌面并口头接受，林遥听见后才放松，自然道别走向门口，陈禾坐回接手自己工作，关系保持正常。",
+    "E0021": "C01",
+    "E0022": 40,
+    "E0023": "B1",
+    "E0024": 10,
+    "E0025": "晚间办公室，林遥背起包走到陈禾桌边准备道别；陈禾从桌面拿起一只文件夹，抬眼叫住她。",
+    "E0026": "陈禾持文件夹叫住林遥，请求信号显形",
+    "E0027": "林遥背起包走到陈禾桌边，脚步放缓准备道别。\n陈禾从桌面拿起一只文件夹，抬眼看向林遥。",
+    "E0028": "（无新增动作）",
+    "E0029": "陈禾",
+    "E0030": "这份今天能顺路帮我带一下吗？",
+    "E0031": "B2",
+    "E0032": "林遥停下看着文件夹，短暂停顿后口头拒绝。",
+    "E0033": "林遥明确拒绝，拒绝由本人清晰对白完成",
+    "E0034": "林遥停下脚步，目光落在陈禾手中文件夹上。",
+    "E0035": "陈禾的手仍持文件夹，没递出，停在半空。",
+    "E0036": "林遥",
+    "E0037": "今天不行，我赶时间。",
+    "E0038": "B3",
+    "E0039": "两人完成至少两秒可读沉默后，陈禾把文件夹平放回自己桌面，并口头接受。",
+    "E0040": "陈禾先听完再表态，等待可读后再开口接受",
+    "E0041": "林遥从陈禾手中的文件夹抬眼看向陈禾。\n两人保持沉默对视至少2秒，肩线不动，呼吸可见。\n陈禾面部先软化，把文件夹平放回自己桌面。",
+    "E0042": "那我明早自己跑一趟。",
+    "E0043": "B4",
+    "E0044": "林遥听见接受后肩膀微松、点头道别，朝门口走出两步；陈禾转身面向桌面，坐下接手工作。",
+    "E0045": "林遥放松发生在听到接受之后，结尾只兑现离开与各自承担",
+    "E0046": "林遥肩膀微松，点了点头。",
+    "E0047": "林遥转身朝室内门口走出两步，自然道别离开。",
+    "E0048": "陈禾转身面向自己的桌面，坐下接手工作。",
+    "E0049": "麻烦你了，明天见。",
+    "E0050": "S01",
+    "E0051": "cinematic 2D hand-drawn animation",
+    "E0052": "low-saturation evening office: muted teal walls, warm amber desk lamp glow, cool ambient fill, desaturated browns and greys for furniture",
+    "E0053": "warm overhead desk lamp on Chen He's desk as primary key; soft cool ambient fill from off-screen window; subtle rim light separating figures from background",
+    "E0054": {
+      "$concat": [
+        "确定2名人物的静态身份外观：[{\"age_group\": \"adult\", \"body_shape\": \"",
+        {
+          "source_id": "E0095"
+        },
+        "\", \"clothing\": \"",
+        {
+          "source_id": "E0094"
+        },
+        "\", \"hair\": \"short bob, dark brown\", \"id\": \"C01\", \"name\": \"林遥\"}, {\"age_group\": \"adult\", \"body_shape\": \"",
+        {
+          "source_id": "E0099"
+        },
+        "\", \"clothing\": \"",
+        {
+          "source_id": "E0098"
+        },
+        "\", \"hair\": \"",
+        {
+          "source_id": "E0097"
+        },
+        "\", \"id\": \"C02\", \"name\": \"陈禾\"}]"
+      ]
+    },
+    "E0055": {
+      "$concat": [
+        "{\"elements\": [{\"appearance\": \"",
+        {
+          "source_id": "E0109"
+        },
+        "\", \"id\": \"E01\", \"name\": \"陈禾的办公桌\"}, {\"appearance\": \"",
+        {
+          "source_id": "E0112"
+        },
+        "\", \"id\": \"E02\", \"name\": \"陈禾的办公椅\"}, {\"appearance\": \"",
+        {
+          "source_id": "E0115"
+        },
+        "\", \"id\": \"E03\", \"name\": \"台灯\"}, {\"appearance\": \"",
+        {
+          "source_id": "E0118"
+        },
+        "\", \"id\": \"E04\", \"name\": \"林遥的办公桌\"}, {\"appearance\": \"",
+        {
+          "source_id": "E0121"
+        },
+        "\", \"id\": \"E05\", \"name\": \"林遥的办公椅\"}, {\"appearance\": \"",
+        {
+          "source_id": "E0124"
+        },
+        "\", \"id\": \"E06\", \"name\": \"室内门\"}, {\"appearance\": \"",
+        {
+          "source_id": "E0127"
+        },
+        "\", \"id\": \"E07\", \"name\": \"墙面与踢脚线\"}, {\"appearance\": \"",
+        {
+          "source_id": "E0130"
+        },
+        "\", \"id\": \"E08\", \"name\": \"地面\"}, {\"appearance\": \"",
+        {
+          "source_id": "E0133"
+        },
+        "\", \"id\": \"E09\", \"name\": \"背景书架\"}], \"name\": \"晚间办公室\", \"relations\": [{\"reference\": \"E01\", \"relation\": \"in_front_of\", \"subject\": \"E02\"}, {\"reference\": \"E01\", \"relation\": \"on\", \"subject\": \"E03\"}, {\"reference\": \"E04\", \"relation\": \"in_front_of\", \"subject\": \"E05\"}, {\"reference\": \"E01\", \"relation\": \"left_of\", \"subject\": \"E04\"}, {\"reference\": \"E07\", \"relation\": \"below\", \"subject\": \"E06\"}, {\"reference\": \"E01\", \"relation\": \"left_of\", \"subject\": \"E06\"}, {\"reference\": \"E01\", \"relation\": \"right_of\", \"subject\": \"E09\"}, {\"reference\": \"E01\", \"relation\": \"below\", \"subject\": \"E08\"}]}"
+      ]
+    },
+    "E0056": "SH01",
+    "E0057": "Establish the evening office: Lin Yao shoulders her bag and drifts toward Chen He's desk to say goodbye; Chen He reaches to her own desk, lifts the folder and gently calls out a small favor as she looks up to Lin Yao.",
+    "E0058": "Medium two-shot at Chen He's desk area: Lin Yao enters from frame-left (her desk side), Chen He stands behind her own desk on frame-right with the desk lamp spilling warm key light across the surface between them; folder visible on the desk at start.",
+    "E0059": "Static medium shot with a barely perceptible slow push-in; eye level, slight warm desk-lamp dominance, cool ambient fill from off-screen window.",
+    "E0060": "Chen He holds folder mid-air and asks her favor out loud — the request is delivered, opening beat ends on a small ask hanging between the two of them.",
+    "E0061": {
+      "$concat": [
+        "0–5秒：C01 移动至Chen He's desk side；C01 可见情绪变为polite readiness to say goodbye；C02拿起P01至P01；C02 视线转向Lin Yao's eyes；C02 可见情绪变为polite, mildly hopeful asking；表演补充：",
+        {
+          "source_id": "E0155"
+        },
+        "；该段结束状态变化：[{\"entity\": \"C01\", \"field\": \"position\", \"from\": \"",
+        {
+          "source_id": "E0141"
+        },
+        "\", \"to\": \"Chen He's desk side\"}, {\"entity\": \"C01\", \"field\": \"affect\", \"from\": \"",
+        {
+          "source_id": "E0143"
+        },
+        "\", \"to\": \"polite readiness to say goodbye\"}, {\"entity\": \"P01\", \"field\": \"holder\", \"from\": \"none\", \"to\": \"C02\"}, {\"entity\": \"P01\", \"field\": \"location\", \"from\": \"on top of Chen He's desk (E01)\", \"to\": \"P01\"}, {\"entity\": \"C02\", \"field\": \"gaze\", \"from\": \"down at the folder on her own desk\", \"to\": \"Lin Yao's eyes\"}, {\"entity\": \"C02\", \"field\": \"affect\", \"from\": \"quietly focused on wrapping up evening work\", \"to\": \"polite, mildly hopeful asking\"}]\n5–9.01429秒：；表演补充：",
+        {
+          "source_id": "E0164"
+        },
+        "；该段结束状态变化：[]\n9.01429–10秒：；表演补充：保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长；该段结束状态变化：[]\n对白5–9.01429秒：陈禾：这份今天能顺路帮我带一下吗？\n情绪反应窗口5–9.01429秒，林遥：",
+        {
+          "source_id": "E0166"
+        }
+      ]
+    },
+    "E0062": {
+      "$concat": [
+        "{\"C01(林遥)\": {\"affect\": \"",
+        {
+          "source_id": "E0143"
+        },
+        "\", \"gaze\": \"",
+        {
+          "source_id": "E0142"
+        },
+        "\", \"position\": \"",
+        {
+          "source_id": "E0141"
+        },
+        "\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"quietly focused on wrapping up evening work\", \"gaze\": \"down at the folder on her own desk\", \"position\": \"",
+        {
+          "source_id": "E0144"
+        },
+        "\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"none\", \"location\": \"on top of Chen He's desk (E01)\"}, \"P02(林遥的单肩包)\": {\"holder\": \"C01\", \"location\": \"worn crossbody on Lin Yao's shoulder\"}}"
+      ]
+    },
+    "E0063": {
+      "$concat": [
+        "{\"C01(林遥)\": {\"affect\": \"polite readiness to say goodbye\", \"gaze\": \"",
+        {
+          "source_id": "E0142"
+        },
+        "\", \"position\": \"Chen He's desk side\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"polite, mildly hopeful asking\", \"gaze\": \"Lin Yao's eyes\", \"position\": \"",
+        {
+          "source_id": "E0144"
+        },
+        "\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"P01\"}, \"P02(林遥的单肩包)\": {\"holder\": \"C01\", \"location\": \"worn crossbody on Lin Yao's shoulder\"}}"
+      ]
+    },
+    "E0064": "画内对白",
+    "E0065": "planned_cut_requires_adapter",
+    "E0066": {
+      "$concat": [
+        "制作风格与资产锁：{\"characters\": [{\"age_group\": \"adult\", \"body_shape\": \"",
+        {
+          "source_id": "E0095"
+        },
+        "\", \"clothing\": \"",
+        {
+          "source_id": "E0094"
+        },
+        "\", \"hair\": \"short bob, dark brown\", \"id\": \"C01\", \"name\": \"林遥\"}, {\"age_group\": \"adult\", \"body_shape\": \"",
+        {
+          "source_id": "E0099"
+        },
+        "\", \"clothing\": \"",
+        {
+          "source_id": "E0098"
+        },
+        "\", \"hair\": \"",
+        {
+          "source_id": "E0097"
+        },
+        "\", \"id\": \"C02\", \"name\": \"陈禾\"}], \"props\": [{\"appearance\": \"",
+        {
+          "source_id": "E0102"
+        },
+        "\", \"id\": \"P01\", \"name\": \"文件夹\", \"owner_id\": \"C02\"}, {\"appearance\": \"",
+        {
+          "source_id": "E0105"
+        },
+        "\", \"id\": \"P02\", \"name\": \"林遥的单肩包\", \"owner_id\": \"C01\"}], \"render\": {\"light_source\": \"",
+        {
+          "source_id": "E0053"
+        },
+        "\", \"palette\": \"",
+        {
+          "source_id": "E0052"
+        },
+        "\", \"style_option_id\": \"S01\", \"visual_medium\": \"cinematic 2D hand-drawn animation\"}, \"scene\": ",
+        {
+          "source_id": "E0055"
+        },
+        ", \"schema\": \"static_visual_manifest_v2\"}\n固定构图：",
+        {
+          "source_id": "E0058"
+        },
+        "\n连续机位：",
+        {
+          "source_id": "E0059"
+        },
+        "\n时长：10秒\n第一帧静态状态：",
+        {
+          "source_id": "E0062"
+        },
+        "\n唯一动作时间轴：",
+        {
+          "source_id": "E0061"
+        },
+        "\n对白锁：[{\"speaker\": \"陈禾\", \"text\": \"这份今天能顺路帮我带一下吗？\"}]\n最后一帧状态：",
+        {
+          "source_id": "E0063"
+        }
+      ]
+    },
+    "E0067": "SH02",
+    "E0068": "Lay the core of the scene: Lin Yao pauses, takes in the folder, and for the first time clearly and calmly refuses out loud. Chen He does not push the folder forward; she keeps it held in mid-air, neutral, waiting.",
+    "E0069": "Tighter medium shot biased toward Lin Yao at the desk edge; Chen He's hand holding the folder visible in the foreground right, soft lamp glow on the kraft cover; both characters in same frame so the held-state is legible.",
+    "E0070": "Static with micro settle; eye level, shallow depth keeping Lin Yao's face and the folder sharp together.",
+    "E0071": "Lin Yao's measured refusal lands — the central, uncomfortable beat of the scene completes on the spoken no.",
+    "E0072": {
+      "$concat": [
+        "0–2.5秒：C01 视线转向the folder in Chen He's hand；C01 可见情绪变为quiet pre-refusal tension；表演补充：",
+        {
+          "source_id": "E0169"
+        },
+        "；该段结束状态变化：[{\"entity\": \"C01\", \"field\": \"gaze\", \"from\": \"",
+        {
+          "source_id": "E0142"
+        },
+        "\", \"to\": \"the folder in Chen He's hand\"}, {\"entity\": \"C01\", \"field\": \"affect\", \"from\": \"polite readiness to say goodbye\", \"to\": \"quiet pre-refusal tension\"}]\n2.5–5.08571秒：；表演补充：",
+        {
+          "source_id": "E0177"
+        },
+        "；该段结束状态变化：[]\n5.08571–9.08571秒：；表演补充：",
+        {
+          "source_id": "E0176"
+        },
+        "；该段结束状态变化：[]\n9.08571–10秒：；表演补充：保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长；该段结束状态变化：[]\n对白2.5–5.08571秒：林遥：今天不行，我赶时间。\n情绪反应窗口2.5–5.08571秒，陈禾：",
+        {
+          "source_id": "E0178"
+        }
+      ]
+    },
+    "E0073": {
+      "$concat": [
+        "{\"C01(林遥)\": {\"affect\": \"quiet pre-refusal tension\", \"gaze\": \"the folder in Chen He's hand\", \"position\": \"Chen He's desk side\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"polite, mildly hopeful asking\", \"gaze\": \"Lin Yao's eyes\", \"position\": \"",
+        {
+          "source_id": "E0144"
+        },
+        "\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"C02\", \"location\": \"P01\"}, \"P02(林遥的单肩包)\": {\"holder\": \"C01\", \"location\": \"worn crossbody on Lin Yao's shoulder\"}}"
+      ]
+    },
+    "E0074": {
+      "$concat": [
+        "制作风格与资产锁：{\"characters\": [{\"age_group\": \"adult\", \"body_shape\": \"",
+        {
+          "source_id": "E0095"
+        },
+        "\", \"clothing\": \"",
+        {
+          "source_id": "E0094"
+        },
+        "\", \"hair\": \"short bob, dark brown\", \"id\": \"C01\", \"name\": \"林遥\"}, {\"age_group\": \"adult\", \"body_shape\": \"",
+        {
+          "source_id": "E0099"
+        },
+        "\", \"clothing\": \"",
+        {
+          "source_id": "E0098"
+        },
+        "\", \"hair\": \"",
+        {
+          "source_id": "E0097"
+        },
+        "\", \"id\": \"C02\", \"name\": \"陈禾\"}], \"props\": [{\"appearance\": \"",
+        {
+          "source_id": "E0102"
+        },
+        "\", \"id\": \"P01\", \"name\": \"文件夹\", \"owner_id\": \"C02\"}, {\"appearance\": \"",
+        {
+          "source_id": "E0105"
+        },
+        "\", \"id\": \"P02\", \"name\": \"林遥的单肩包\", \"owner_id\": \"C01\"}], \"render\": {\"light_source\": \"",
+        {
+          "source_id": "E0053"
+        },
+        "\", \"palette\": \"",
+        {
+          "source_id": "E0052"
+        },
+        "\", \"style_option_id\": \"S01\", \"visual_medium\": \"cinematic 2D hand-drawn animation\"}, \"scene\": ",
+        {
+          "source_id": "E0055"
+        },
+        ", \"schema\": \"static_visual_manifest_v2\"}\n固定构图：",
+        {
+          "source_id": "E0069"
+        },
+        "\n连续机位：",
+        {
+          "source_id": "E0070"
+        },
+        "\n时长：10秒\n第一帧静态状态：",
+        {
+          "source_id": "E0063"
+        },
+        "\n唯一动作时间轴：",
+        {
+          "source_id": "E0072"
+        },
+        "\n对白锁：[{\"speaker\": \"林遥\", \"text\": \"今天不行，我赶时间。\"}]\n最后一帧状态：",
+        {
+          "source_id": "E0073"
+        }
+      ]
+    },
+    "E0075": "SH03",
+    "E0076": "Hold the silence long enough for the refusal to truly register (both of them); then Chen He softens her face and lays the folder back flat on her own desk — her calm acceptance made visible through action, not words alone.",
+    "E0077": "Medium two-shot framed so both faces are clearly visible at eye level, desk lamp edge-lighting their features; the folder becomes a visible object that travels from Chen He's hand down onto her own desk surface within the frame.",
+    "E0078": "Static two-shot, eye level; slow, almost imperceptible settling of framing on their held gaze; cut on the moment the folder touches the desk surface.",
+    "E0079": "Chen He places the folder down on her own desk and quietly accepts out loud — the held silence resolves into acceptance, refusal honored, relationship intact.",
+    "E0080": {
+      "$concat": [
+        "0–1.5秒：C01 视线转向Chen He's eyes；表演补充：",
+        {
+          "source_id": "E0181"
+        },
+        "；该段结束状态变化：[{\"entity\": \"C01\", \"field\": \"gaze\", \"from\": \"the folder in Chen He's hand\", \"to\": \"Chen He's eyes\"}]\n1.5–3.5秒：；表演补充：",
+        {
+          "source_id": "E0185"
+        },
+        "；该段结束状态变化：[]\n3.5–6.5秒：C02 可见情绪变为quiet acceptance, softened face；C02将P01放在on Chen He's desk (E01)；表演补充：",
+        {
+          "source_id": "E0188"
+        },
+        "；该段结束状态变化：[{\"entity\": \"C02\", \"field\": \"affect\", \"from\": \"polite, mildly hopeful asking\", \"to\": \"quiet acceptance, softened face\"}, {\"entity\": \"P01\", \"field\": \"holder\", \"from\": \"C02\", \"to\": \"none\"}, {\"entity\": \"P01\", \"field\": \"location\", \"from\": \"P01\", \"to\": \"on Chen He's desk (E01)\"}]\n6.5–9.37143秒：；表演补充：",
+        {
+          "source_id": "E0192"
+        },
+        "；该段结束状态变化：[]\n9.37143–10秒：；表演补充：保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长；该段结束状态变化：[]\n对白6.5–9.37143秒：陈禾：那我明早自己跑一趟。\n情绪反应窗口1.5–3.5秒，陈禾：",
+        {
+          "source_id": "E0193"
+        }
+      ]
+    },
+    "E0081": {
+      "$concat": [
+        "{\"C01(林遥)\": {\"affect\": \"quiet pre-refusal tension\", \"gaze\": \"Chen He's eyes\", \"position\": \"Chen He's desk side\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"quiet acceptance, softened face\", \"gaze\": \"Lin Yao's eyes\", \"position\": \"",
+        {
+          "source_id": "E0144"
+        },
+        "\", \"posture\": \"standing\"}, \"P01(文件夹)\": {\"holder\": \"none\", \"location\": \"on Chen He's desk (E01)\"}, \"P02(林遥的单肩包)\": {\"holder\": \"C01\", \"location\": \"worn crossbody on Lin Yao's shoulder\"}}"
+      ]
+    },
+    "E0082": {
+      "$concat": [
+        "制作风格与资产锁：{\"characters\": [{\"age_group\": \"adult\", \"body_shape\": \"",
+        {
+          "source_id": "E0095"
+        },
+        "\", \"clothing\": \"",
+        {
+          "source_id": "E0094"
+        },
+        "\", \"hair\": \"short bob, dark brown\", \"id\": \"C01\", \"name\": \"林遥\"}, {\"age_group\": \"adult\", \"body_shape\": \"",
+        {
+          "source_id": "E0099"
+        },
+        "\", \"clothing\": \"",
+        {
+          "source_id": "E0098"
+        },
+        "\", \"hair\": \"",
+        {
+          "source_id": "E0097"
+        },
+        "\", \"id\": \"C02\", \"name\": \"陈禾\"}], \"props\": [{\"appearance\": \"",
+        {
+          "source_id": "E0102"
+        },
+        "\", \"id\": \"P01\", \"name\": \"文件夹\", \"owner_id\": \"C02\"}, {\"appearance\": \"",
+        {
+          "source_id": "E0105"
+        },
+        "\", \"id\": \"P02\", \"name\": \"林遥的单肩包\", \"owner_id\": \"C01\"}], \"render\": {\"light_source\": \"",
+        {
+          "source_id": "E0053"
+        },
+        "\", \"palette\": \"",
+        {
+          "source_id": "E0052"
+        },
+        "\", \"style_option_id\": \"S01\", \"visual_medium\": \"cinematic 2D hand-drawn animation\"}, \"scene\": ",
+        {
+          "source_id": "E0055"
+        },
+        ", \"schema\": \"static_visual_manifest_v2\"}\n固定构图：",
+        {
+          "source_id": "E0077"
+        },
+        "\n连续机位：",
+        {
+          "source_id": "E0078"
+        },
+        "\n时长：10秒\n第一帧静态状态：",
+        {
+          "source_id": "E0073"
+        },
+        "\n唯一动作时间轴：",
+        {
+          "source_id": "E0080"
+        },
+        "\n对白锁：[{\"speaker\": \"陈禾\", \"text\": \"那我明早自己跑一趟。\"}]\n最后一帧状态：",
+        {
+          "source_id": "E0081"
+        }
+      ]
+    },
+    "E0083": "SH04",
+    "E0084": "Land the release: hearing Chen He accept, Lin Yao's shoulders soften, she nods and says a clean goodbye, then walks two unhurried steps toward the indoor door. Chen He turns back to her own desk and sits down to resume her work. Both parties remain fine.",
+    "E0085": "Wider medium shot that includes both the desk area and the door on frame-left; Lin Yao's movement toward the door stays within frame; Chen He's turn-and-sit happens inside the same composition at her desk.",
+    "E0086": "Static wide two-shot at eye level; composition holds both the desk and the indoor door so the walk-out registers without re-framing.",
+    "E0087": "Lin Yao says goodbye, walks away; Chen He sits back to her own work — relationship settled, scene closes on each returning to her own responsibilities.",
+    "E0088": {
+      "$concat": [
+        "0–2秒：C01 可见情绪变为visible relief, warmth returning；表演补充：",
+        {
+          "source_id": "E0195"
+        },
+        "；该段结束状态变化：[{\"entity\": \"C01\", \"field\": \"affect\", \"from\": \"quiet pre-refusal tension\", \"to\": \"visible relief, warmth returning\"}]\n2–4.3秒：；表演补充：",
+        {
+          "source_id": "E0207"
+        },
+        "；该段结束状态变化：[]\n4.3–7.3秒：C01 视线转向toward the indoor door；C01 移动至toward the indoor door (E06), two steps；表演补充：",
+        {
+          "source_id": "E0198"
+        },
+        "；该段结束状态变化：[{\"entity\": \"C01\", \"field\": \"gaze\", \"from\": \"Chen He's eyes\", \"to\": \"toward the indoor door\"}, {\"entity\": \"C01\", \"field\": \"position\", \"from\": \"Chen He's desk side\", \"to\": \"toward the indoor door (E06), two steps\"}]\n7.3–9.3秒：C02 视线转向her own desk surface；C02 可见情绪变为calm focus, returning to work；C02在E02坐下至E02；表演补充：",
+        {
+          "source_id": "E0203"
+        },
+        "；该段结束状态变化：[{\"entity\": \"C02\", \"field\": \"gaze\", \"from\": \"Lin Yao's eyes\", \"to\": \"her own desk surface\"}, {\"entity\": \"C02\", \"field\": \"affect\", \"from\": \"quiet acceptance, softened face\", \"to\": \"calm focus, returning to work\"}, {\"entity\": \"C02\", \"field\": \"posture\", \"from\": \"standing\", \"to\": \"sitting\"}, {\"entity\": \"C02\", \"field\": \"position\", \"from\": \"",
+        {
+          "source_id": "E0144"
+        },
+        "\", \"to\": \"E02\"}]\n9.3–10秒：；表演补充：保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长；该段结束状态变化：[]\n对白2–4.3秒：林遥：麻烦你了，明天见。\n情绪反应窗口0–2秒，林遥：",
+        {
+          "source_id": "E0208"
+        }
+      ]
+    },
+    "E0089": "{\"C01(林遥)\": {\"affect\": \"visible relief, warmth returning\", \"gaze\": \"toward the indoor door\", \"position\": \"toward the indoor door (E06), two steps\", \"posture\": \"standing\"}, \"C02(陈禾)\": {\"affect\": \"calm focus, returning to work\", \"gaze\": \"her own desk surface\", \"position\": \"E02\", \"posture\": \"sitting\"}, \"P01(文件夹)\": {\"holder\": \"none\", \"location\": \"on Chen He's desk (E01)\"}, \"P02(林遥的单肩包)\": {\"holder\": \"C01\", \"location\": \"worn crossbody on Lin Yao's shoulder\"}}",
+    "E0090": {
+      "$concat": [
+        "制作风格与资产锁：{\"characters\": [{\"age_group\": \"adult\", \"body_shape\": \"",
+        {
+          "source_id": "E0095"
+        },
+        "\", \"clothing\": \"",
+        {
+          "source_id": "E0094"
+        },
+        "\", \"hair\": \"short bob, dark brown\", \"id\": \"C01\", \"name\": \"林遥\"}, {\"age_group\": \"adult\", \"body_shape\": \"",
+        {
+          "source_id": "E0099"
+        },
+        "\", \"clothing\": \"",
+        {
+          "source_id": "E0098"
+        },
+        "\", \"hair\": \"",
+        {
+          "source_id": "E0097"
+        },
+        "\", \"id\": \"C02\", \"name\": \"陈禾\"}], \"props\": [{\"appearance\": \"",
+        {
+          "source_id": "E0102"
+        },
+        "\", \"id\": \"P01\", \"name\": \"文件夹\", \"owner_id\": \"C02\"}, {\"appearance\": \"",
+        {
+          "source_id": "E0105"
+        },
+        "\", \"id\": \"P02\", \"name\": \"林遥的单肩包\", \"owner_id\": \"C01\"}], \"render\": {\"light_source\": \"",
+        {
+          "source_id": "E0053"
+        },
+        "\", \"palette\": \"",
+        {
+          "source_id": "E0052"
+        },
+        "\", \"style_option_id\": \"S01\", \"visual_medium\": \"cinematic 2D hand-drawn animation\"}, \"scene\": ",
+        {
+          "source_id": "E0055"
+        },
+        ", \"schema\": \"static_visual_manifest_v2\"}\n固定构图：",
+        {
+          "source_id": "E0085"
+        },
+        "\n连续机位：",
+        {
+          "source_id": "E0086"
+        },
+        "\n时长：10秒\n第一帧静态状态：",
+        {
+          "source_id": "E0081"
+        },
+        "\n唯一动作时间轴：",
+        {
+          "source_id": "E0088"
+        },
+        "\n对白锁：[{\"speaker\": \"林遥\", \"text\": \"麻烦你了，明天见。\"}]\n最后一帧状态：",
+        {
+          "source_id": "E0089"
+        }
+      ]
+    },
+    "E0091": "static_visual_manifest_v2",
+    "E0092": "adult",
+    "E0093": "short bob, dark brown",
+    "E0094": "light beige knit cardigan over white crew-neck tee, dark grey straight-cut trousers, low black leather flats",
+    "E0095": "slim average adult female proportions, medium height",
+    "E0096": "C02",
+    "E0097": "shoulder-length straight hair tied in low ponytail, natural black",
+    "E0098": "soft sage-green button-up blouse with rolled sleeves, charcoal A-line midi skirt, black low heels",
+    "E0099": "average adult female proportions, similar height to Lin Yao",
+    "E0100": "P01",
+    "E0101": "文件夹",
+    "E0102": "thin A4 document folder, matte kraft-brown cover, small white label on front, slightly worn edges",
+    "E0103": "P02",
+    "E0104": "林遥的单肩包",
+    "E0105": "small structured crossbody bag, deep olive leather, brass circular buckle",
+    "E0106": "晚间办公室",
+    "E0107": "E01",
+    "E0108": "陈禾的办公桌",
+    "E0109": "rectangular light oak wood desk, four legs, single shallow drawer on left, positioned against the back wall",
+    "E0110": "E02",
+    "E0111": "陈禾的办公椅",
+    "E0112": "mid-back office chair, matte black five-star base, charcoal mesh back, fixed gas lift",
+    "E0113": "E03",
+    "E0114": "台灯",
+    "E0115": "slim brass-arm desk lamp with dome shade, mounted at back-right corner of Chen He's desk",
+    "E0116": "E04",
+    "E0117": "林遥的办公桌",
+    "E0118": "matching light oak rectangular desk, four legs, single shallow drawer on right, positioned to the left and slightly forward of Chen He's desk",
+    "E0119": "E05",
+    "E0120": "林遥的办公椅",
+    "E0121": {
+      "$concat": [
+        "matching ",
+        {
+          "source_id": "E0112"
+        }
+      ]
+    },
+    "E0122": "E06",
+    "E0123": "室内门",
+    "E0124": "single flush wooden door with brushed steel lever handle, located on the front-left wall",
+    "E0125": "E07",
+    "E0126": "墙面与踢脚线",
+    "E0127": "muted teal painted wall, off-white painted baseboard, thin picture-rail molding near ceiling",
+    "E0128": "E08",
+    "E0129": "地面",
+    "E0130": "pale grey vinyl composition tile, faint grid seams",
+    "E0131": "E09",
+    "E0132": "背景书架",
+    "E0133": "low open shelving unit against the right wall, light oak frame, holding neutral-toned binders and a small potted plant",
+    "E0134": "in_front_of",
+    "E0135": "on",
+    "E0136": "left_of",
+    "E0137": "below",
+    "E0138": "right_of",
+    "E0139": "whole_film_action_plan_v1",
+    "E0140": "standing",
+    "E0141": "at Lin Yao's own desk (near E04), on the room side facing Chen He's desk",
+    "E0142": "toward Chen He's general direction as she readies to leave",
+    "E0143": "polite end-of-day composure, gently ready to depart",
+    "E0144": "beside her own desk (E01), folder within reach on the desk surface",
+    "E0145": "down at the folder on her own desk",
+    "E0146": "quietly focused on wrapping up evening work",
+    "E0147": "none",
+    "E0148": "on top of Chen He's desk (E01)",
+    "E0149": "worn crossbody on Lin Yao's shoulder",
+    "E0150": "B1_G1",
+    "E0151": "before",
+    "E0152": "action",
+    "E0153": 5,
+    "E0154": "",
+    "E0155": "Lin Yao drifts the last few steps toward Chen He's desk, slowing as she reaches it, body softening into a departure posture. At nearly the same moment, Chen He reaches down to her own desk, picks up the kraft-brown folder with her right hand, and lifts her eyes to meet Lin Yao's.",
+    "E0156": "move",
+    "E0157": "Chen He's desk side",
+    "E0158": "affect",
+    "E0159": "polite readiness to say goodbye",
+    "E0160": "take",
+    "E0161": "gaze",
+    "E0162": "Lin Yao's eyes",
+    "E0163": "polite, mildly hopeful asking",
+    "E0164": "Chen He speaks her line at a low, conversational volume; mouth opens and closes naturally around each phrase, breath steady; eyes remain on Lin Yao throughout; the hand holding the folder stays softly lifted near her own shoulder, not extended toward Lin Yao.",
+    "E0165": "dialogue_0",
+    "E0166": "Lin Yao arrives to say goodbye, hears Chen He call her by name and ask a small favor — she pauses inside, the friendly ask landing mid-departure.",
+    "E0167": "B2_G1",
+    "E0168": 2.5,
+    "E0169": "Lin Yao's gaze drops from Chen He's eyes down to the kraft-brown folder in Chen He's hand; a small visible swallow, breath held a beat, shoulders settle very slightly as she decides.",
+    "E0170": "the folder in Chen He's hand",
+    "E0171": "quiet pre-refusal tension",
+    "E0172": "B2_G2",
+    "E0173": "during",
+    "E0174": "hold",
+    "E0175": 4,
+    "E0176": "Chen He keeps her arm and hand softly in place; the folder hovers mid-air between them without being extended toward Lin Yao; her expression stays open and neutral, listening posture, no retreat and no push.",
+    "E0177": "Lin Yao delivers the refusal in a measured, even tone; mouth shapes the words cleanly without apology phrasing; breath held briefly before the line, then a small exhale after; her gaze lifts from the folder back up toward Chen He as she finishes.",
+    "E0178": "Chen He hears the refusal land; she neither withdraws the folder nor pushes it forward — simply holds her ground and waits, face still neutral and open, no hurt on the surface.",
+    "E0179": "B3_G1",
+    "E0180": 1.5,
+    "E0181": "Lin Yao lifts her gaze slowly from the folder up to Chen He's eyes, a small deliberate motion; face careful, not apologetic.",
+    "E0182": "Chen He's eyes",
+    "E0183": "B3_G2",
+    "E0184": 2,
+    "E0185": "Both women hold each other's gaze in a fully readable 2-second silence; shoulder lines do not move; Lin Yao's cardigan rises and falls with visible breath; Chen He's face stays neutral through the pause, taking it in.",
+    "E0186": "B3_G3",
+    "E0187": 3,
+    "E0188": "Chen He's expression softens — brow and jaw ease; she brings her hand down and lays the kraft-brown folder flat on her own desk surface next to her other papers, releasing it without ceremony; no further gesture toward Lin Yao.",
+    "E0189": "quiet acceptance, softened face",
+    "E0190": "place",
+    "E0191": "on Chen He's desk (E01)",
+    "E0192": "Chen He speaks her acceptance line calmly after the pause; mouth opens and closes simply, voice steady and small; she is already softened in posture from the previous group, so the words land as confirmation rather than new decision.",
+    "E0193": "After truly sitting with the refused silence, Chen He accepts — she softens her face, returns the folder to her own desk, and takes the errand back on herself without flinching.",
+    "E0194": "B4_G1",
+    "E0195": "Lin Yao's shoulders drop a clear notch from their previously held line; a small visible exhale; she gives one unhurried nod; her face eases from careful to simply warm.",
+    "E0196": "visible relief, warmth returning",
+    "E0197": "B4_G2",
+    "E0198": "Lin Yao turns her body toward the indoor door on frame-left and walks two natural steps in that direction; her pace stays unhurried, no glance back, the bag stays settled on her shoulder.",
+    "E0199": "toward the indoor door",
+    "E0200": "toward the indoor door (E06), two steps",
+    "E0201": "B4_G3",
+    "E0202": "after",
+    "E0203": "Chen He turns her torso back to face her own desk, steps behind her chair, and sits down with a small settling motion; her hands come to rest near the papers on the desk surface, ready to resume working.",
+    "E0204": "her own desk surface",
+    "E0205": "calm focus, returning to work",
+    "E0206": "sit",
+    "E0207": "Lin Yao says the parting line warmly, voice lighter now that the tension has released; mouth forms a brief closed-mouth smile around 明天见; her turn toward the door and her steps away carry the same ease.",
+    "E0208": "Now that Chen He has calmly accepted the no, Lin Yao's held tension dissolves — her shoulders drop, she nods, and she is free to leave without guilt or rupture between them.",
+    "E0209": "whole_film_state_plan",
+    "E0210": "whole_film_state_plan_v3",
+    "E0211": 0.0,
+    "E0212": 5.0,
+    "E0213": "before_first_line",
+    "E0214": -1,
+    "E0215": 9.014285714285714,
+    "E0216": "first_line_delivery",
+    "E0217": "dialogue_performance",
+    "E0218": 0,
+    "E0219": "after_last_line",
+    "E0220": "保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长",
+    "E0221": 5.085714285714285,
+    "E0222": 9.085714285714285,
+    "E0223": 3.5,
+    "E0224": 6.5,
+    "E0225": 9.371428571428572,
+    "E0226": 2.0,
+    "E0227": 4.3,
+    "E0228": 7.3,
+    "E0229": 9.3,
+    "E0230": "action_plan_schedule_report/v1",
+    "E0231": "preferred_3.5_units_per_second_plus_0.3; maximum_5; no_action_or_hold_compression",
+    "E0232": 4.014285714285714,
+    "E0233": 13,
+    "E0234": "使用优选语速与余量",
+    "E0235": 0.9857142857142858,
+    "E0236": 2.5857142857142854,
+    "E0237": 8,
+    "E0238": 0.9142857142857146,
+    "E0239": 2.8714285714285714,
+    "E0240": 9,
+    "E0241": 0.6285714285714281,
+    "E0242": 7,
+    "E0243": 2.3,
+    "E0244": 0.6999999999999993,
+    "E0245": "evidence_ids_v1"
+  },
+  "packet_sha256": "b9b6b9d3d02d5b73db8f38baf9e531c48fd256a43ff84a17848326c55f8e0563"
+}

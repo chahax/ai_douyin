@@ -1,0 +1,160 @@
+{
+  "state": {
+    "narrative_focus_binding": null,
+    "reference_expression_version": null,
+    "script_revision_binding": null,
+    "schema": "creative_workflow_state/v1",
+    "model_profile": "legacy_writer_minimax_director_deepseek",
+    "writer_prompt_version": "legacy",
+    "review_policy_version": "legacy",
+    "production_protocol": "legacy",
+    "segmented_director_binding": null,
+    "original_director_binding": null,
+    "original_brief_priority_binding": null,
+    "writer_prompt_binding": null,
+    "created_at": "2026-10-02T12:31:25.893789+00:00",
+    "status": "debug_resuming",
+    "source_driver": "novel",
+    "creative_focus": "",
+    "logical_task_id": null,
+    "material_sha256": "885594e6782ceb15e4ff88d05b35a909fde1e77b9ca29a1d531d2cf9852e4ccb",
+    "calls_started": 3,
+    "max_calls": 20,
+    "max_total_tokens": 500000,
+    "max_revisions": 2,
+    "budget_policy_version": "v4_20260923",
+    "max_contract_repairs": 8,
+    "contract_repairs_used": 0,
+    "format_repairs_used": 0,
+    "revision_rounds": 0,
+    "revision_committed": [],
+    "stages": [
+      {
+        "name": "writer_analysis",
+        "role": "writer",
+        "input_sha256": "09139daf5f72740d5cae62dcfbfabcc65f0dc6774860e0a58d55e81a574d63e5",
+        "output_sha256": "4717243b05f3deeba97565c488e878b02d38542546c5c4c5511e3f55a0de5ecc",
+        "context_budget": {
+          "schema": "creative_context_budget/v1",
+          "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+          "serialized_input_characters": 3889,
+          "estimated_input_tokens": 3889,
+          "requested_max_output_tokens": 12000,
+          "estimated_total_tokens": 15889,
+          "provider": "minimax",
+          "model": "MiniMax-M3",
+          "planning_context_window_tokens": 512000,
+          "advertised_context_window_tokens": 1000000,
+          "source_url": "https://www.minimax.io/models/text/m3",
+          "verified_on": "2026-09-24"
+        },
+        "usage": {
+          "role": "writer",
+          "requested_model": "test",
+          "total_tokens": 1
+        }
+      },
+      {
+        "name": "director_brief",
+        "role": "director",
+        "input_sha256": "78982e6583351d3648779e32209251545bdfe9e9988b60abd3e71e7ded63ba0c",
+        "output_sha256": "f6d3fd0ed92ddcee4024f85dd9cdab1eb49269dc0149068028c8658d3c00ffdb",
+        "context_budget": {
+          "schema": "creative_context_budget/v1",
+          "estimation_method": "serialized_unicode_characters_as_conservative_input_token_estimate; provider_usage_is_authoritative_after_response",
+          "serialized_input_characters": 4882,
+          "estimated_input_tokens": 4882,
+          "requested_max_output_tokens": 20000,
+          "estimated_total_tokens": 24882,
+          "provider": "deepseek",
+          "model": "deepseek-flash",
+          "planning_context_window_tokens": 1000000,
+          "advertised_context_window_tokens": 1000000,
+          "source_url": "https://api-docs.deepseek.com/quick_start/pricing/",
+          "verified_on": "2026-09-24"
+        },
+        "usage": {
+          "role": "director",
+          "requested_model": "test",
+          "total_tokens": 1
+        }
+      }
+    ],
+    "assistant_review_required": true,
+    "calibration_milestone_at_start": null,
+    "workflow_profile_sha256": "74cffeee7832fa50c117e41d284057a724489ec40258c0df363c8556b83f0743",
+    "input_profile_sha256": "f3c3041c37159255f7218cc46d2175fad490054338c70a625ca2ad711b470e16",
+    "calibrated_style_classes_at_start": [],
+    "review_reopen_reasons": [],
+    "text_pass_sequence": 0,
+    "video_pass_sequence": 0,
+    "reported_tokens": 2,
+    "context_strategy": {
+      "mode": "full",
+      "direct_context_limit_characters": 42000,
+      "initial_payload_serialized_characters": 695,
+      "source_sha256": "ad30b4a7c29ddc4f3e9c1b443b4d2dc5e4e27556a4e792de859d38f6a48ddbcb",
+      "reference_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "sent_payload_sha256": "09139daf5f72740d5cae62dcfbfabcc65f0dc6774860e0a58d55e81a574d63e5"
+    },
+    "stage_input_bindings": {
+      "writer_analysis": {
+        "receipt": ".creative_debug/inputs/writer_analysis/1c944225110f6b420dd398adaa2cb5a262de663454c3fde7e54b542f8258ec44.json",
+        "sha256": "1c944225110f6b420dd398adaa2cb5a262de663454c3fde7e54b542f8258ec44"
+      },
+      "director_brief": {
+        "receipt": ".creative_debug/inputs/director_brief/bf859e4154b6b641cdd15b930fc2c4fe20a1a0a857a9ec1ff93056938e628840.json",
+        "sha256": "bf859e4154b6b641cdd15b930fc2c4fe20a1a0a857a9ec1ff93056938e628840"
+      },
+      "writer_script": {
+        "receipt": ".creative_debug/inputs/writer_script/13ad699acd8858d93bad38bd4907f46ec4ea12b4c70045440a1e34fbbc374737.json",
+        "sha256": "13ad699acd8858d93bad38bd4907f46ec4ea12b4c70045440a1e34fbbc374737"
+      }
+    },
+    "debug_stage_dependencies": {
+      "writer_analysis": [],
+      "director_brief": [
+        "writer_analysis"
+      ]
+    },
+    "debug_stage_validity": {
+      "writer_analysis": "current",
+      "director_brief": "needs_revision"
+    },
+    "debug_breakpoint_history": [
+      {
+        "schema": "creative_stage_breakpoint/v1",
+        "stage_id": "director_brief",
+        "reason": "requested_stage",
+        "input_sha256": "78982e6583351d3648779e32209251545bdfe9e9988b60abd3e71e7ded63ba0c",
+        "output_sha256": "f6d3fd0ed92ddcee4024f85dd9cdab1eb49269dc0149068028c8658d3c00ffdb",
+        "calls_started": 2,
+        "stopped_at": "2026-10-02T12:31:25.937602+00:00",
+        "automatic_media_submit": false
+      }
+    ],
+    "style_class": "cinematic_realism",
+    "debug_feedback": [
+      {
+        "feedback_id": "51df2e141aaab020637c",
+        "stage_id": "director_brief",
+        "input_sha256": "78982e6583351d3648779e32209251545bdfe9e9988b60abd3e71e7ded63ba0c",
+        "output_sha256": "f6d3fd0ed92ddcee4024f85dd9cdab1eb49269dc0149068028c8658d3c00ffdb",
+        "disposition": "must_fix",
+        "receipt": ".creative_debug/feedback/director_brief/51df2e141aaab020637c.json"
+      }
+    ],
+    "debug_feedback_status": "revision_required"
+  },
+  "feedback_receipt": {
+    "schema": "creative_stage_feedback/v1",
+    "feedback_id": "51df2e141aaab020637c",
+    "stage_id": "director_brief",
+    "input_sha256": "78982e6583351d3648779e32209251545bdfe9e9988b60abd3e71e7ded63ba0c",
+    "output_sha256": "f6d3fd0ed92ddcee4024f85dd9cdab1eb49269dc0149068028c8658d3c00ffdb",
+    "disposition": "must_fix",
+    "message": "FIXTURE user reports a director issue while the downstream model is running",
+    "evidence": [],
+    "recorded_at": "2026-10-02T12:31:25.973872+00:00"
+  }
+}

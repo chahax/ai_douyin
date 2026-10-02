@@ -1,0 +1,199 @@
+{
+  "schema_version": "creative_governance_artifacts/v1",
+  "source_hash": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+  "created_at": "2026-09-30T17:16:35.726682+00:00",
+  "implementation_status": "offline_implemented_not_production_validated",
+  "artifacts": [
+    {
+      "path": "activation_example.json",
+      "sha256": "026681117f5d1def627aedc5a6c72ce2cb10810f2f526dc3e20f4249a6ce9054"
+    },
+    {
+      "path": "baseline_metrics.json",
+      "sha256": "2aa6bed5f74d20837dcf2ba9cf2d3ddee832b66f54028644ab0121c0c9d95034"
+    },
+    {
+      "path": "checker_manifest.json",
+      "sha256": "c5e2aa19dc6592bf4ab57245645c67e531f27a44153d416157c62ea44d063367"
+    },
+    {
+      "path": "dataset_manifest.json",
+      "sha256": "705b14ff4a0d8909d6c1068faa9a79ad1f724c3fb3b583999d19ad3e5dd0d2ab"
+    },
+    {
+      "path": "eval_config.json",
+      "sha256": "2e500ae2495b0f0bae7f1df0c7191a4d61b8619e79cf71d86b9129026bed408c"
+    },
+    {
+      "path": "eval_results.jsonl",
+      "sha256": "2a572d2189c47a5aa08a9cec513da7bb218f274edb6ba36780b7597bf5a14148"
+    },
+    {
+      "path": "field_ownership.json",
+      "sha256": "e7c1a3a1c220380c6376ed3ecffc6e0bfe98268e9f521cac851d786ffe9ca342"
+    },
+    {
+      "path": "fixtures/BOUNDARY_AMBIGUOUS_1.json",
+      "sha256": "64fee10795f847419daed7a736668b108814f3cdaa6cbd59a725ff41857610eb"
+    },
+    {
+      "path": "fixtures/BOUNDARY_AMBIGUOUS_2.json",
+      "sha256": "64d8627127d0f063397106ad19c57036329b029ad2b1e475a3cf000d6636c448"
+    },
+    {
+      "path": "fixtures/BOUNDARY_CONFLICT_1.json",
+      "sha256": "90cbd916f7b0fbcb0842f5c5b7d39c493199a381e9077933949f78594465d479"
+    },
+    {
+      "path": "fixtures/BOUNDARY_CONFLICT_2.json",
+      "sha256": "259f933b42c905d849934092c93b5f48ee027f620a8591c4da784255b2923471"
+    },
+    {
+      "path": "fixtures/BOUNDARY_CORRECT_1.json",
+      "sha256": "eedd3b69ea9a4d510dce2ccb958060a26a05ee388c08578e3205ec41aa7fdf9d"
+    },
+    {
+      "path": "fixtures/BOUNDARY_CORRECT_2.json",
+      "sha256": "4d8f09591b86ea8cc43a8fed8556dbb34afe137bc95feb2caaa569dc09eddc59"
+    },
+    {
+      "path": "fixtures/BOUNDARY_EXPRESSION_1.json",
+      "sha256": "e9e152e7d5d399b66a86037f65fab0f5a2285b6515e3fa4fc0c6a7ca8be0b30a"
+    },
+    {
+      "path": "fixtures/BOUNDARY_EXPRESSION_2.json",
+      "sha256": "3b002112d8f9d74f9358b32342299634abedfde269f8758daf91a1b3c462fe04"
+    },
+    {
+      "path": "fixtures/BOUNDARY_SIMULTANEOUS_1.json",
+      "sha256": "91b2a4bf9ef815c9ce7fe6debad14ceb9c94a9a1e06da95bfe0fbd3b86fa3250"
+    },
+    {
+      "path": "fixtures/BOUNDARY_SIMULTANEOUS_2.json",
+      "sha256": "be0589b35074e55105095cf1d789762dcebd405d212e8234150700129e4454f5"
+    },
+    {
+      "path": "fixtures/frozen_context.json",
+      "sha256": "682d5c6ed97ae6eae7704b9316dda769fcf097b8d5fb946bfcf88a2263dc8533"
+    },
+    {
+      "path": "fixtures/HOLD_BAD.json",
+      "sha256": "c580534ee7da349811bca3f58309c5b72fc6143a6de21cdc24cd4c1a31c6b838"
+    },
+    {
+      "path": "fixtures/HOLD_OK.json",
+      "sha256": "745a3f2340f65f9004786a19f85844c43db2526bc5120a3087a7a095592de590"
+    },
+    {
+      "path": "fixtures/index.json",
+      "sha256": "d2c051eec6a5221a6c5d148b25be8a60828939f63ead027ca2903e983d83115c"
+    },
+    {
+      "path": "fixtures/P1_BOUNDARY_BAD.json",
+      "sha256": "e069a3e5bcc4fd8ea60b56d52bcb98b7d801e9e3592f2eeb70143f0610cf4c82"
+    },
+    {
+      "path": "fixtures/P1_BOUNDARY_OK.json",
+      "sha256": "d0d98fe8823f1a00c2d639e845662a9395e456667aac8aafca9a71d51362414f"
+    },
+    {
+      "path": "fixtures/p1_checker_context.json",
+      "sha256": "443b435857eb2e4034e45b33c1aeb3394ba4fc0e62e41c86b4fad388b87d9d49"
+    },
+    {
+      "path": "fixtures/P1_CUT_BAD.json",
+      "sha256": "f6928cc92c302fc7c5978f005f4ccf3d1a59c59a544abf77a4e822c0bfa10ee4"
+    },
+    {
+      "path": "fixtures/P1_CUT_OK.json",
+      "sha256": "2ca943ae8848fd0f7f3424ff04bc357f4d28c54d0431e1fbaab26b5a4002e835"
+    },
+    {
+      "path": "fixtures/P1_SEAT_BAD.json",
+      "sha256": "7ea0b115ee8d54ee817b3a18ef099bc2d949e96807ba00a89eadfcd83efaae22"
+    },
+    {
+      "path": "fixtures/P1_SEAT_OK.json",
+      "sha256": "802f8c8b26a57158bd3380c10d8b9b4e7d9474b1319373c232495a2789e2214a"
+    },
+    {
+      "path": "fixtures/R01_BAD.json",
+      "sha256": "7169a2801114a2d6ad2cef831c8f6b6a6b2cd83940682eea76421f4e071a2c4f"
+    },
+    {
+      "path": "fixtures/R01_OK_CANDIDATE.json",
+      "sha256": "6b7d9a0ccd097bb9e858d9a20870855c3dfbeea5b223597b90a6b1c0a21a4578"
+    },
+    {
+      "path": "fixtures/R02_BAD.json",
+      "sha256": "9aaa46ccea1f6c6ea1d40d9180126dd127ed0fcdb216ca6f021324bf6204fb25"
+    },
+    {
+      "path": "fixtures/R02_OK_CANDIDATE.json",
+      "sha256": "71705a88c6de220c1cfca3b13ef0ab6dc61791a17090369009e4a61efcf4c25b"
+    },
+    {
+      "path": "fixtures/R03_BAD.json",
+      "sha256": "abd09e38eeb16a4b71a6d58b025dc4a97960a8b37f90e920d825a40089d96053"
+    },
+    {
+      "path": "fixtures/R03_OK_CANDIDATE.json",
+      "sha256": "c03559de9a887ea02acce6623f1bb849ede39ca73d8757feb69e0b584b403c2a"
+    },
+    {
+      "path": "fixtures/SOURCE_BAD.json",
+      "sha256": "06967a1173665ed5ab4c12ef82dae5f09a40e87572883d5e4537bbde613e9a41"
+    },
+    {
+      "path": "fixtures/SOURCE_OK.json",
+      "sha256": "9d3de3d80a66f7790ada364631c77c75cded2cce7d8ef48af73cf2b209e272c1"
+    },
+    {
+      "path": "fixtures/STATE_BAD.json",
+      "sha256": "8af8aa073fffa6f901773ae5f8541673ec8381e855e3cde9b3a788500d95413c"
+    },
+    {
+      "path": "fixtures/STATE_OK.json",
+      "sha256": "4a2e028980cb174ef5f654988840aacd516d58d578eef08f6a14e7d6d3a08b83"
+    },
+    {
+      "path": "labels.json",
+      "sha256": "b7a936a6fbbdbbee071b5d7ac0762866815139da7e154922bb4e5d6c95703bf2"
+    },
+    {
+      "path": "plan_schema.json",
+      "sha256": "d7cf9642bb7c48532dc305747098070b5cb7f6d39d858f9b6b1377d98d9ecff1"
+    },
+    {
+      "path": "plan_v2_field_ownership.json",
+      "sha256": "c348e08e64e5f70995c42edb7d661dfd3dc5473c1030896abaaefff09d708056"
+    },
+    {
+      "path": "quality_cost_report.md",
+      "sha256": "dddac63bd7df15d5302da5c27e10746d163e54fae5333b787ceb887eda2b8e7d"
+    },
+    {
+      "path": "rule_registry.schema.json",
+      "sha256": "4c8d856a34dfd732db0fe92d0b8f7a3b63e4652d761ecfa44fe4626590715c10"
+    },
+    {
+      "path": "rule_source_map.json",
+      "sha256": "35dcab374c85eaf469c0c45e1810c72f3ad208d40e859c2217e1742fd53e4dd6"
+    },
+    {
+      "path": "rules.json",
+      "sha256": "5b4af265c0dd49f80f67a0195398cbd574bc6edde127e726a1a953fb9143fa9f"
+    },
+    {
+      "path": "runtime_sources.json",
+      "sha256": "935d502e8e5ccc566b5af9ac2aec9cf362f3d1aa344196b1609c47c271ebd852"
+    },
+    {
+      "path": "validation_receipt.json",
+      "sha256": "6362a3eff1a50b65a0663332a3aa4a117e4b906ddd65cee55f257a85ba4a3544"
+    }
+  ],
+  "repository_root": "D:\\IT\\ai_douyin",
+  "source_plan": "docs/VIDEO_PRODUCTION_ROOT_CAUSE_AND_CHANGE_PLAN_20260928.md",
+  "supersedes": "data/creative_governance/20261001_v6_narrative"
+}

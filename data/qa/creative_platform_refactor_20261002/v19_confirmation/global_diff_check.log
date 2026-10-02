@@ -1,0 +1,2 @@
+src/shared/llm_providers/base.py:156: new blank line at EOF.
+tests/test_script_llm_response.py:70: new blank line at EOF.

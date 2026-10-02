@@ -1,0 +1,71 @@
+{
+  "default_registry": "data/creative_governance/20261002_v22_platform_refactor_workbench",
+  "runtime_source_count": 51,
+  "runtime_source_mismatches": [],
+  "artifact_count": 55,
+  "artifact_mismatches": [],
+  "dataset": {
+    "case_count": 28,
+    "approved_case_count": 0,
+    "candidate_case_count": 28,
+    "approved_independent_count": 0,
+    "holdout_count": 0,
+    "source_family_count": 15,
+    "failures": [
+      "APPROVED_INDEPENDENT_SAMPLE_SHORTFALL",
+      "FROZEN_HOLDOUT_SHORTFALL",
+      "CATEGORY_SHORTFALL:action:error",
+      "CATEGORY_SHORTFALL:action:correct",
+      "HOLDOUT_CATEGORY_SHORTFALL:action:error",
+      "HOLDOUT_CATEGORY_SHORTFALL:action:correct",
+      "CATEGORY_SHORTFALL:interaction:error",
+      "CATEGORY_SHORTFALL:interaction:correct",
+      "HOLDOUT_CATEGORY_SHORTFALL:interaction:error",
+      "HOLDOUT_CATEGORY_SHORTFALL:interaction:correct",
+      "CATEGORY_SHORTFALL:space:error",
+      "CATEGORY_SHORTFALL:space:correct",
+      "HOLDOUT_CATEGORY_SHORTFALL:space:error",
+      "HOLDOUT_CATEGORY_SHORTFALL:space:correct",
+      "CATEGORY_SHORTFALL:camera:error",
+      "CATEGORY_SHORTFALL:camera:correct",
+      "HOLDOUT_CATEGORY_SHORTFALL:camera:error",
+      "HOLDOUT_CATEGORY_SHORTFALL:camera:correct"
+    ],
+    "qualified": false,
+    "gold_labels_missing": 28,
+    "source_family_leaks": []
+  },
+  "historical_artifacts": [
+    {
+      "version": "v18",
+      "directory": "data\\creative_governance\\20261002_v18_platform_refactor",
+      "count": 48,
+      "mismatches": []
+    },
+    {
+      "version": "v19",
+      "directory": "data\\creative_governance\\20261002_v19_platform_refactor_p1_recovery",
+      "count": 49,
+      "mismatches": []
+    },
+    {
+      "version": "v19",
+      "directory": "data\\creative_governance\\20261002_v19_platform_refactor_p1_recovery_draft_pre_replay_fix",
+      "count": 49,
+      "mismatches": []
+    },
+    {
+      "version": "v20",
+      "directory": "data\\creative_governance\\20261002_v20_platform_refactor_repair_resume",
+      "count": 49,
+      "mismatches": []
+    },
+    {
+      "version": "v21",
+      "directory": "data\\creative_governance\\20261002_v21_platform_refactor_multi_feedback",
+      "count": 49,
+      "mismatches": []
+    }
+  ],
+  "reviewed_source_unchanged": true
+}

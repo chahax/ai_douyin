@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="9" time="1.275" timestamp="2026-10-02T13:37:56.387220+08:00" hostname="DESKTOP-DP111LI"><testcase classname="data.qa.creative_platform_refactor_20261002.v19_confirmation.test_recovery_boundaries" name="test_unverified_upstream_cannot_skip_feedback_target[prompt_hash]" time="0.092" /><testcase classname="data.qa.creative_platform_refactor_20261002.v19_confirmation.test_recovery_boundaries" name="test_unverified_upstream_cannot_skip_feedback_target[input_hash]" time="0.087" /><testcase classname="data.qa.creative_platform_refactor_20261002.v19_confirmation.test_recovery_boundaries" name="test_unverified_upstream_cannot_skip_feedback_target[output_hash]" time="0.079" /><testcase classname="data.qa.creative_platform_refactor_20261002.v19_confirmation.test_recovery_boundaries" name="test_unverified_upstream_cannot_skip_feedback_target[uncertain_status]" time="0.086" /><testcase classname="data.qa.creative_platform_refactor_20261002.v19_confirmation.test_recovery_boundaries" name="test_unverified_upstream_cannot_skip_feedback_target[invalidated]" time="0.080" /><testcase classname="data.qa.creative_platform_refactor_20261002.v19_confirmation.test_recovery_boundaries" name="test_unverified_upstream_cannot_skip_feedback_target[missing_receipt]" time="0.074" /><testcase classname="data.qa.creative_platform_refactor_20261002.v19_confirmation.test_recovery_boundaries" name="test_unchanged_repair_output_cannot_resolve_must_fix" time="0.098" /><testcase classname="data.qa.creative_platform_refactor_20261002.v19_confirmation.test_recovery_boundaries" name="test_repair_breakpoint_then_next_resume_reaches_invalidated_downstream" time="0.149"><failure message="AssertionError: director_brief 提示词版本已改变，不能复用旧阶段回执&#10;assert 'needs_attention' == 'debug_breakpoint'&#10;  &#10;  - debug_breakpoint&#10;  + needs_attention">tmp_path = WindowsPath('D:/IT/ai_douyin/data/qa/creative_platform_refactor_20261002/v19_confirmation/boundary_tmp_final/test_repair_breakpoint_then_ne0')
+
+    def test_repair_breakpoint_then_next_resume_reaches_invalidated_downstream(tmp_path):
+     run,bundle,feedback=prepared(tmp_path,stop='writer_script')
+     old=read(run/'director_brief.json');upstream=hashlib.sha256((run/'writer_analysis.json').read_bytes()).hexdigest()
+     revised=deepcopy(_answers()[1]);revised['visual_strategy']='FIXTURE revised visual strategy'
+     clients=FakeClients([revised]);state=resume(run,bundle,clients,'director_brief')
+     assert state['status']=='debug_breakpoint' and len(clients.calls)==1
+     assert state['debug_feedback_status']=='resolved'
+     assert state['debug_stage_validity']['writer_script']=='invalidated'
+     assert hashlib.sha256((run/'writer_analysis.json').read_bytes()).hexdigest()==upstream
+     archive=run/('director_brief__before_feedback_'+feedback['feedback_id']+'.json')
+     assert read(archive)['output_sha256']==old['output_sha256']
+     script=deepcopy(_answers()[2]);script['title']='FIXTURE downstream revised script'
+     next_clients=FakeClients([script]);next_state=resume(run,bundle,next_clients,'writer_script')
+&gt;    assert next_state['status']=='debug_breakpoint',next_state.get('last_error')
+E    AssertionError: director_brief 提示词版本已改变，不能复用旧阶段回执
+E    assert 'needs_attention' == 'debug_breakpoint'
+E      
+E      - debug_breakpoint
+E      + needs_attention
+
+data\qa\creative_platform_refactor_20261002\v19_confirmation\test_recovery_boundaries.py:61: AssertionError</failure></testcase><testcase classname="data.qa.creative_platform_refactor_20261002.v19_confirmation.test_recovery_boundaries" name="test_old_v18_task_binding_is_rejected_without_silent_rebind" time="0.143" /></testsuite></testsuites>

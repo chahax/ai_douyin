@@ -1,0 +1,198 @@
+{
+  "schema": "creative_refactor_independent_confirmation/v1",
+  "created_at_bjt": "2026-10-02T02:29:51.690341+08:00",
+  "verdict": "cannot_confirm_complete",
+  "scope": "Offline implementation verification; no business code modifications",
+  "confirmed": [
+    "127-test prior audit baseline passes",
+    "v18 runtime source and frozen artifact hashes validate",
+    "v17 frozen artifacts validate and manifest matches the upgrade base",
+    "single Alembic script head 0008_task_execution_leases",
+    "new stage controls and media review modules exist"
+  ],
+  "test_runs": {
+    "baseline": {
+      "tests": 127,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 127,
+      "duration_seconds": 71.23,
+      "failed_cases": [],
+      "test_selection": "baseline_selected_tests.json",
+      "junit": "baseline_tests.xml"
+    },
+    "refactor": {
+      "tests": 327,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 326,
+      "duration_seconds": 145.05,
+      "failed_cases": [
+        "tests.test_creative_workflow_ui.test_page_displays_detached_launch_failure"
+      ],
+      "test_selection": "refactor_selected_tests.json",
+      "junit": "refactor_tests.xml"
+    },
+    "ui": {
+      "tests": 11,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 10,
+      "duration_seconds": 4.65,
+      "failed_cases": [
+        "tests.test_creative_workflow_ui.test_page_can_reopen_saved_run_after_fresh_session"
+      ],
+      "test_selection": "ui_selected_tests.json",
+      "junit": "ui_tests.xml"
+    },
+    "ui_long": {
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 11,
+      "duration_seconds": 1.1,
+      "failed_cases": [],
+      "test_selection": "ui_long_selected_tests.json",
+      "junit": "ui_long_tests.xml"
+    }
+  },
+  "ui_long_diagnostic_timeout_seconds": 10,
+  "reported_331_receipt_note": "Original delivery provides aggregate counts but no exact module selection or raw JUnit/log in that directory; this independent 15-module run contains 327 cases and is not claimed equivalent to the original 331-case selection.",
+  "findings": [
+    {
+      "id": "C01",
+      "priority": "P1",
+      "title": "必修反馈和下游失效未参与实际执行门控",
+      "file": "src/content_factory/creative_workflow.py",
+      "line": 5867,
+      "evidence_file": "boundary_reproductions.json",
+      "probe": "must_fix_feedback",
+      "detail": "record_stage_feedback 只写 debug_feedback_status / debug_stage_validity。执行器没有读取这些字段。假模型中给 writer_analysis 登记 must_fix 后，恢复仍复用 invalidated 的 director_brief 并调用 writer_script，调用数由 2 增到 3。",
+      "required_fix": "执行器和交接入口必须读取版本有效性；未解决反馈要阻止推进并进入责任阶段返修，完成修订与复审后再按实际依赖重建下游。",
+      "acceptance": "登记必须修复后，普通 resume / next-stage 不得调用下游；修订完成前不能交接。证明旧记录与预算保留。"
+    },
+    {
+      "id": "C02",
+      "priority": "P1",
+      "title": "源媒体回执指向新候选时仍沿用旧批准",
+      "file": "src/content_factory/media_review_policy.py",
+      "line": 151,
+      "evidence_file": "boundary_reproductions.json",
+      "probe": "media_receipt_integrity",
+      "detail": "validate_approved_tail 比较回执内缓存的 technical_receipt_sha256，未重新核对不可变技术快照或当前候选绑定。将已批准回执的 video_path / video_sha256 / task_id 改成另一假候选，校验仍返回原尾帧，未关闭。未修改真实媒体或审批记录。",
+      "required_fix": "独立保留不可变技术回执，核对其真实哈希及 provider task、原视频和原尾帧字段；当前回执必须与批准对应的候选一致。",
+      "acceptance": "改变任何技术来源绑定均拒绝续段；审批字段的合法写入不破坏独立技术快照校验。"
+    },
+    {
+      "id": "C03",
+      "priority": "P1",
+      "title": "Worker 未接通周期心跳，迟到结果缺少租约条件校验",
+      "file": "src/scheduler/queue.py",
+      "line": 462,
+      "evidence_file": "boundary_reproductions.json",
+      "probe": "expired_lease_late_result",
+      "detail": "heartbeat 有实现但调度执行路径没有调用，默认租约 120 秒。隔离数据库中模拟执行期间租约到期，另一个队列将其改为 outcome_unknown，旧 Worker 返回后无条件把它写成 completed。",
+      "required_fix": "执行期间用独立会话周期续租；状态写入校验 owner、租约或执行代次，并对迟到结果使用明确的核对流程，防止覆盖较新的状态。",
+      "acceptance": "超过租约的正常长任务持续续租；丢失租约的 Worker 不能覆盖任务的新状态，迟到结果留档并可核对。"
+    },
+    {
+      "id": "C04",
+      "priority": "P2",
+      "title": "Streamlit 默认 3 秒 AppTest 启动容限下存在间歇超时",
+      "file": "tests/test_creative_workflow_ui.py",
+      "line": 7,
+      "detail": "本次联合回归及独立 UI 回归各有一项 3 秒启动超时，失败案例不同；不修改源码，仅在诊断运行中将 AppTest 初始容限设为 10 秒后 11 项通过。不能据此断言产品逻辑错误或把默认配置回归写为全绿。",
+      "required_fix": "明确 UI 启动预算，定位启动扫描与耗时，按真实容限稳定回归；保留超时原始回执。"
+    }
+  ],
+  "boundary_probes": {
+    "must_fix_feedback": {
+      "before_calls": 2,
+      "after_calls": 3,
+      "after_status": "debug_breakpoint",
+      "next_stage": "writer_script",
+      "feedback_status": "revision_required",
+      "validity": {
+        "writer_analysis": "needs_revision",
+        "director_brief": "invalidated",
+        "writer_script": "current"
+      },
+      "must_fix_prevented_progression": false
+    },
+    "media_receipt_integrity": {
+      "mutated_source_receipt_rejected": false,
+      "tail_binding_returned": {
+        "path": "D:\\IT\\ai_douyin\\data\\qa\\creative_platform_refactor_20261002\\independent_confirmation\\media_npfimf2v\\receipt.last.png",
+        "sha256": "29add8e99e6217024a2dfdd347425b7df4653665791f6f4feedb22cc6e90095c"
+      },
+      "review_approved_video_is_current_receipt_video": false
+    },
+    "expired_lease_late_result": {
+      "recovered_count": 1,
+      "status_after_recovery": "outcome_unknown",
+      "status_after_old_worker_returned": "completed",
+      "old_worker_blocked_after_lease_lost": false
+    }
+  },
+  "integrity_checks": {
+    "v18_runtime_and_artifacts_valid": true,
+    "runtime_verification": {
+      "status": "verified",
+      "source_count": 31,
+      "rule_inventory_coverage_claim": false
+    },
+    "v18_dataset": {
+      "case_count": 28,
+      "approved_case_count": 0,
+      "candidate_case_count": 28,
+      "approved_independent_count": 0,
+      "holdout_count": 0,
+      "source_family_count": 15,
+      "failures": [
+        "APPROVED_INDEPENDENT_SAMPLE_SHORTFALL",
+        "FROZEN_HOLDOUT_SHORTFALL",
+        "CATEGORY_SHORTFALL:action:error",
+        "CATEGORY_SHORTFALL:action:correct",
+        "HOLDOUT_CATEGORY_SHORTFALL:action:error",
+        "HOLDOUT_CATEGORY_SHORTFALL:action:correct",
+        "CATEGORY_SHORTFALL:interaction:error",
+        "CATEGORY_SHORTFALL:interaction:correct",
+        "HOLDOUT_CATEGORY_SHORTFALL:interaction:error",
+        "HOLDOUT_CATEGORY_SHORTFALL:interaction:correct",
+        "CATEGORY_SHORTFALL:space:error",
+        "CATEGORY_SHORTFALL:space:correct",
+        "HOLDOUT_CATEGORY_SHORTFALL:space:error",
+        "HOLDOUT_CATEGORY_SHORTFALL:space:correct",
+        "CATEGORY_SHORTFALL:camera:error",
+        "CATEGORY_SHORTFALL:camera:correct",
+        "HOLDOUT_CATEGORY_SHORTFALL:camera:error",
+        "HOLDOUT_CATEGORY_SHORTFALL:camera:correct"
+      ],
+      "qualified": false,
+      "gold_labels_missing": 28,
+      "source_family_leaks": []
+    },
+    "v17_frozen_artifact_failures": [],
+    "v17_manifest_matches_upgrade_base": true,
+    "alembic_heads": [
+      "0008_task_execution_leases"
+    ],
+    "configured_governance_directory": "data/creative_governance/20261002_v18_platform_refactor"
+  },
+  "limitations": [
+    "Field-level dependency narrowing remains unimplemented, as disclosed",
+    "No human-approved gold or holdout labels; creative quality improvement remains unverified",
+    "Actual production database readiness and real media pipeline were not executed"
+  ],
+  "work_safety": {
+    "paid_calls_started": 0,
+    "real_media_content_inspected": false,
+    "publishing_performed": false,
+    "business_code_modified": false,
+    "prior_receipts_overwritten": false
+  }
+}

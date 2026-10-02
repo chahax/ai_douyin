@@ -1,0 +1,91 @@
+{
+  "verdict": "core_workflow_refactor_and_known_F01_verified_offline; F02_F07_still_pending",
+  "independent_tests": {
+    "tests": 18,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "original_fault_reproduction": {
+    "expected_version_hashes_supplied": true,
+    "feedback_id": "51df2e141aaab020637c",
+    "feedback_present_during_call": true,
+    "feedback_status_during_call": "revision_required",
+    "final_status": "debug_breakpoint",
+    "final_feedback_status": "revision_required",
+    "feedback_present_after_call": true,
+    "pending_feedback_count": 1,
+    "feedback_receipt_retained": true,
+    "model_calls": 1,
+    "downstream_block_reason": "阶段 director_brief 存在未修复的 must_fix 反馈；已在 director_shots 调用前阻断，需先修订责任阶段",
+    "upstream_repair_calls": 1,
+    "downstream_calls_after_lost_feedback": 0,
+    "continued_status": "debug_breakpoint",
+    "continued_breakpoint": "director_brief"
+  },
+  "receipt_and_hash_verification": {
+    "author_junit": [
+      {
+        "file": "core_final_tests.xml",
+        "tests": 743,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ui_final_tests.xml",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "author_distinct_cases": 756,
+    "author_duplicate_cases": 0,
+    "sources": {
+      "count": 53,
+      "mismatches": []
+    },
+    "artifacts": {
+      "count": 55,
+      "mismatches": []
+    },
+    "old_artifacts": [
+      {
+        "pack": "20261002_v18_platform_refactor",
+        "count": 48,
+        "mismatches": []
+      },
+      {
+        "pack": "20261002_v19_platform_refactor_p1_recovery",
+        "count": 49,
+        "mismatches": []
+      },
+      {
+        "pack": "20261002_v19_platform_refactor_p1_recovery_draft_pre_replay_fix",
+        "count": 49,
+        "mismatches": []
+      },
+      {
+        "pack": "20261002_v20_platform_refactor_repair_resume",
+        "count": 49,
+        "mismatches": []
+      },
+      {
+        "pack": "20261002_v21_platform_refactor_multi_feedback",
+        "count": 49,
+        "mismatches": []
+      },
+      {
+        "pack": "20261002_v22_platform_refactor_workbench",
+        "count": 55,
+        "mismatches": []
+      }
+    ]
+  },
+  "source_mismatches_after_testing": [],
+  "all_756_rerun_this_turn": false,
+  "business_source_modified": false,
+  "paid_calls": false,
+  "real_media_review_or_publish": false
+}

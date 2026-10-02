@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from pydantic import BaseModel, ConfigDict, Field
+from typing import Literal
+
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from src.operations_accounts import AccountProfile
 
@@ -39,6 +41,24 @@ class NovelPromotionConfig(BaseModel):
     promotion_platform: str = "番茄小说"
     require_authorized_chapters: bool = True
     reading_cta: str = "引导在平台内搜索书名或继续阅读"
+    script_driver: Literal["novel_highlight", "reference_video"] = "novel_highlight"
+    highlight_scan_chunk_chars: int = Field(default=6000, ge=1200, le=12000)
+    highlight_scan_overlap_chars: int = Field(default=1200, ge=0, le=3000)
+    min_video_seconds: int = Field(default=45, ge=30, le=180)
+    default_video_seconds: int = Field(default=60, ge=30, le=240)
+    max_video_seconds: int = Field(default=180, ge=45, le=300)
+
+    @model_validator(mode="after")
+    def _validate_ranges(self) -> "NovelPromotionConfig":
+        if self.highlight_scan_overlap_chars >= self.highlight_scan_chunk_chars // 2:
+            raise ValueError("highlight scan overlap must be below half a chunk")
+        if not (
+            self.min_video_seconds
+            <= self.default_video_seconds
+            <= self.max_video_seconds
+        ):
+            raise ValueError("novel video duration must satisfy min <= default <= max")
+        return self
 
 
 class NovelPromotionStrategy(PydanticDomainStrategy):
@@ -112,22 +132,26 @@ class NovelPromotionStrategy(PydanticDomainStrategy):
         return DomainBriefBlueprint(
             audience_questions=[
                 f"喜欢“{title}”的用户最期待哪种身份冲突和情绪回报？",
-                "前三秒应先展示人物困境、背叛还是高能结果？",
-                "在哪个反转前断开最容易形成搜索或追更意图？",
+                "长文本中哪一段同时具备完整前因、冲突升级、情绪爆发和人物余波？",
+                "参考视频的高光出现在什么时间位置，如何只借表达节奏放大小说原有高光？",
+                "在哪个原文悬念点断开最容易形成搜索或追更意图？",
             ],
             angles=[
-                "悬念钩子：先给高风险结果，再回到冲突起点",
-                "人设爽点：突出身份落差、误判和反击",
-                "情绪回报：围绕委屈、背叛、反转和清算推进",
+                "高光定位：分段扫描长文本，对冲突、情绪、反转、可视化和完整度排序",
+                "高光放大：保留必要前因，让峰值前后的动作、表情和对手反应获得镜头时间",
+                "动态时长：根据选中高光的事件跨度和情绪台阶，在配置范围内决定成片长度",
             ],
             recommended_hook=(
-                f"所有人都以为她会输，直到“{title}”背后的秘密被当众揭开。"
+                f"从“{title}”授权原文选中高光的可见后果开场，"
+                "隐藏造成后果的最后一个信息。"
             ),
             script_structure=[
-                "0—3秒：身份、背叛或危险结果",
-                "3—8秒：主角困境和关键关系",
-                "8—13秒：证据、身份或局势反转",
-                f"13—15秒：停在回报前并给出阅读引导（{config['reading_cta']}）",
+                "前10%：高光预示，只展示失控结果或关键动作",
+                "10%—25%：必要前因，建立人物目标与关系",
+                "25%—50%：冲突连续升级，以行动和对白推进",
+                "50%—75%：呈现剧情反转并放大情绪峰值，保留关键对白前、中、后的反应",
+                "75%—90%：保留峰值余波和关系变化",
+                f"最后10%：停在原文悬念点并给出阅读引导（{config['reading_cta']}）",
             ],
             risks=risks,
             source_scope={
@@ -136,5 +160,14 @@ class NovelPromotionStrategy(PydanticDomainStrategy):
                 "authorized_chapters_required": config[
                     "require_authorized_chapters"
                 ],
+                "highlight_analysis_required": True,
+                "highlight_analysis_schema": "novel_highlight_analysis/v1",
+                "script_driver": config["script_driver"],
+                "available_script_drivers": ["novel_highlight", "reference_video"],
+                "video_duration_seconds": {
+                    "minimum": config["min_video_seconds"],
+                    "default": config["default_video_seconds"],
+                    "maximum": config["max_video_seconds"],
+                },
             },
         )

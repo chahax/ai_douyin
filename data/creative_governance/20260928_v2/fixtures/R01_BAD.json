@@ -1,0 +1,64 @@
+{
+  "schema_version": "creative_eval_case/v1",
+  "source_hash": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+  "created_at": "2026-09-28T13:54:12.499432+00:00",
+  "implementation_status": "candidate_label_not_gold",
+  "case": {
+    "case_id": "R01_BAD",
+    "category": "interaction",
+    "case_kind": "error",
+    "scenario": "B2对白表演写her gaze lifts from the folder back up toward Chen He as she finishes；B3又从文件夹抬眼，typed末态仍看文件夹。",
+    "expected_disposition": "failed",
+    "label_status": "candidate",
+    "adjudication": {
+      "approved_by": null,
+      "approved_at": null,
+      "candidate_author": "Codex assistant; requires independent human adjudication"
+    },
+    "source_family": "say_no_20260928",
+    "independence_group": "say_no_20260928",
+    "split": "development",
+    "used_for_prompt_tuning": true,
+    "expected_issues": [
+      {
+        "issue_id": "R01",
+        "severity": "major"
+      }
+    ],
+    "evidence": [
+      {
+        "path": "state_plan.beats.1.dialogue_performance",
+        "value": "Lin Yao delivers the refusal in a measured, even tone; mouth shapes the words cleanly without apology phrasing; breath held briefly before the line, then a small exhale after; her gaze lifts from the folder back up toward Chen He as she finishes."
+      },
+      {
+        "path": "state_plan.beats.2.groups.0",
+        "value": {
+          "id": "B3_G1",
+          "script_slot": "before",
+          "kind": "action",
+          "duration_seconds": 1.5,
+          "hold_subject": "",
+          "performance": "Lin Yao lifts her gaze slowly from the folder up to Chen He's eyes, a small deliberate motion; face careful, not apologetic.",
+          "operations": [
+            {
+              "kind": "gaze",
+              "actor": "C01",
+              "target": "",
+              "value": "Chen He's eyes"
+            }
+          ]
+        }
+      },
+      {
+        "path": "shots.shots.1.visible_performance",
+        "value": "0–2.5秒：C01 视线转向the folder in Chen He's hand；C01 可见情绪变为quiet pre-refusal tension；表演补充：Lin Yao's gaze drops from Chen He's eyes down to the kraft-brown folder in Chen He's hand; a small visible swallow, breath held a beat, shoulders settle very slightly as she decides.；该段结束状态变化：[{\"entity\": \"C01\", \"field\": \"gaze\", \"from\": \"toward Chen He's general direction as she readies to leave\", \"to\": \"the folder in Chen He's hand\"}, {\"entity\": \"C01\", \"field\": \"affect\", \"from\": \"polite readiness to say goodbye\", \"to\": \"quiet pre-refusal tension\"}]\n2.5–5.08571秒：；表演补充：Lin Yao delivers the refusal in a measured, even tone; mouth shapes the words cleanly without apology phrasing; breath held briefly before the line, then a small exhale after; her gaze lifts from the folder back up toward Chen He as she finishes.；该段结束状态变化：[]\n5.08571–9.08571秒：；表演补充：Chen He keeps her arm and hand softly in place; the folder hovers mid-air between them without being extended toward Lin Yao; her expression stays open and neutral, listening posture, no retreat and no push.；该段结束状态变化：[]\n9.08571–10秒：；表演补充：保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长；该段结束状态变化：[]\n对白2.5–5.08571秒：林遥：今天不行，我赶时间。\n情绪反应窗口2.5–5.08571秒，陈禾：Chen He hears the refusal land; she neither withdraws the folder nor pushes it forward — simply holds her ground and waits, face still neutral and open, no hurt on the surface."
+      }
+    ],
+    "source_paths": [
+      "state_plan.beats.1.dialogue_performance",
+      "state_plan.beats.2.groups.0",
+      "shots.shots.1.visible_performance"
+    ],
+    "production_validated": false
+  }
+}

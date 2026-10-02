@@ -1,0 +1,63 @@
+{
+  "schema_version": "creative_field_ownership/v1",
+  "source_hash": "e52cf3fc35b43305ebca71aa9daff9d92f47ac07134604101d722fe462f07ddc",
+  "created_at": "2026-09-28T13:54:12.499432+00:00",
+  "implementation_status": "offline_implemented_not_production_validated",
+  "fields": [
+    {
+      "field_path": "script.beats[*].dialogue",
+      "owner": "screenplay",
+      "authority": "locked script",
+      "status": "active"
+    },
+    {
+      "field_path": "static_visual_manifest.characters",
+      "owner": "static_manifest",
+      "authority": "static identity",
+      "status": "active"
+    },
+    {
+      "field_path": "state_plan.initial_state",
+      "owner": "action_plan",
+      "authority": "initial state",
+      "status": "active"
+    },
+    {
+      "field_path": "state_plan.beats[*].groups[*].operations",
+      "owner": "action_plan",
+      "authority": "typed state operations",
+      "status": "active"
+    },
+    {
+      "field_path": "state_plan.beats[*].groups[*].duration_seconds",
+      "owner": "action_plan",
+      "authority": "action and hold budgets",
+      "status": "active"
+    },
+    {
+      "field_path": "state_plan.beats[*].dialogue_performance",
+      "owner": "action_plan",
+      "authority": "performance-only prose; not state authority",
+      "status": "active"
+    },
+    {
+      "field_path": "shots.shots[*].start_state",
+      "owner": "compiler",
+      "authority": "derived; never independently writable",
+      "status": "active"
+    },
+    {
+      "field_path": "shots.shots[*].end_state",
+      "owner": "compiler",
+      "authority": "derived; never independently writable",
+      "status": "active"
+    },
+    {
+      "field_path": "proposed:cut_after_event_id",
+      "owner": "action_plan",
+      "authority": "single cut event; current camera/cut_reason conflict is unresolved",
+      "status": "proposed"
+    }
+  ],
+  "coverage_scope": "Only listed paths; not all execution fields."
+}

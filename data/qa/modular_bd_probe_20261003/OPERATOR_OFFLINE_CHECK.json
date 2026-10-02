@@ -1,0 +1,8 @@
+{
+  "source_findings_leaf_quotes_valid": true,
+  "full_previous_script_preserved": true,
+  "full_reference_in_request": true,
+  "schema_valid": true,
+  "operator_source_bound": true,
+  "network_calls": 0
+}

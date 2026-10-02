@@ -1,0 +1,39 @@
+{
+  "schema": "paid_text_continuation_outcome/v1",
+  "parent_run": "data/creative_workflows/say_no_reviewed_segments_20260927",
+  "new_calls": 3,
+  "parent_calls": 30,
+  "combined_calls": 33,
+  "total_tokens_reported": 36307,
+  "image_calls": 0,
+  "video_calls": 0,
+  "execution_draft_review": "B4_action_plan_text_accepted_by_assistant",
+  "compiled_prompt_review": "blocked_dynamic_state_in_visual_lock",
+  "deepseek_review_contract": "rejected_missing_coverage_camera_cut_reason",
+  "full_workflow_passed": false,
+  "asset_opening_review": "not_run",
+  "assistant_adjudication": [
+    {
+      "id": "I01",
+      "decision": "dismiss",
+      "reason": "固定机位不要求人物固定不动；构图已预留纵深两步位置，走远自然改变人物画面尺寸不等于硬切。实际可读性仍待真实画面。"
+    },
+    {
+      "id": "I02",
+      "decision": "dismiss",
+      "reason": "真实剧本顺序before→首句dialogue→during→after；先说道别，再走两步，再陈禾坐下，与分镜一致。不能把during里的自然道别离开重新解释成强制同步对白。"
+    },
+    {
+      "id": "I03",
+      "decision": "dismiss",
+      "reason": "首帧明确仍微紧未下沉，0–1.5秒描述从该状态开始到动作完成，不要求另留静止帧段。陈禾接受上一段已说完，因此未抢先反应。"
+    }
+  ],
+  "additional_blocking_issue": {
+    "id": "A_STYLE",
+    "evidence": "repair.effective.json style.character_lock以及自动编译prompt首段仍写陈禾双手将文件夹从桌面拿起握于胸前；林遥肩线自然微紧",
+    "contradiction": "SH04明确夹已平放，林遥即将松肩。历史style混有动态动作且编译器当作全镜制作锁注入。",
+    "owner": "style_asset_schema_and_prompt_compiler",
+    "required_fix": "将持久身份/外观与逐镜动作状态分开；不要仅继续改B4时间轴，也不直接覆盖旧原回执。"
+  }
+}

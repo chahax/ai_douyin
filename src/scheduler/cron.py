@@ -113,6 +113,17 @@ class CronScheduler:
         if self._scheduler.running:
             return
         self.sync_from_db()
+        from src.scheduler.account_refresh import refresh_due_accounts
+        # Durable due times handle long shutdowns. Only one missed refresh is run.
+        startup = {'first': True}
+        def refresh():
+            reason = 'startup_catchup' if startup['first'] else 'periodic'
+            startup['first'] = False
+            refresh_due_accounts(reason=reason)
+        self._scheduler.add_job(refresh, 'interval', seconds=60,
+                                id='account_information_refresh', replace_existing=True,
+                                next_run_time=datetime.now(), coalesce=True, max_instances=1,
+                                misfire_grace_time=60)
         self._scheduler.start()
         logger.info("CronScheduler 已启动")
 

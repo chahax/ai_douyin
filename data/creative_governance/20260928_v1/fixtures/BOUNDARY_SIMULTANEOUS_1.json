@@ -1,0 +1,28 @@
+{
+  "schema_version": "creative_eval_case/v1",
+  "source_hash": "efef00040687c3cdc82f2715df2d3911a3b14f7114e5da4f2efd2c5fd05042a8",
+  "created_at": "2026-09-28T13:49:21.882337+00:00",
+  "implementation_status": "candidate_label_not_gold",
+  "case": {
+    "case_id": "BOUNDARY_SIMULTANEOUS_1",
+    "category": "action",
+    "case_kind": "boundary",
+    "scenario": "角色边走边问路，对方原地回答；现实可行，按协议能力通过或明确不兼容",
+    "expected_disposition": "passed_or_expression_unsupported",
+    "label_status": "candidate",
+    "adjudication": {
+      "approved_by": null,
+      "approved_at": null,
+      "candidate_author": "Codex assistant; requires independent human adjudication"
+    },
+    "source_family": "BOUNDARY_SIMULTANEOUS_1",
+    "independence_group": "BOUNDARY_SIMULTANEOUS_1",
+    "split": "development",
+    "used_for_prompt_tuning": true,
+    "expected_issues": [],
+    "evidence": [],
+    "source_paths": [],
+    "production_validated": false,
+    "required_error_code": null
+  }
+}

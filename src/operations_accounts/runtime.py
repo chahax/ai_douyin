@@ -98,6 +98,8 @@ class AccountRuntimeService:
         self, account_key: str
     ) -> PreparedBrowserEnvironment:
         profile = self.profiles.get(account_key)
+        if profile.status != 'active':
+            raise AccountRuntimeError('account_disabled', '该运营账号已暂停或停用，不能启动浏览器任务。')
         warmup = DouyinWarmupService()
         warmup.update_account(
             profile.account_key,

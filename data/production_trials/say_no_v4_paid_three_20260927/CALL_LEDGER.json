@@ -1,0 +1,29 @@
+{
+  "schema": "authorized_production_continuation/v1",
+  "authorization": "用户明确授权修复后付费3轮生产调用；本执行限定最多3个文本API请求，无自动重试",
+  "parent_run": "D:\\IT\\ai_douyin\\data\\creative_workflows\\say_no_reviewed_segments_20260927",
+  "same_story": true,
+  "parent_calls": 30,
+  "parent_content_revisions": 6,
+  "parent_contract_repairs": 4,
+  "max_new_calls": 3,
+  "calls_started": 3,
+  "media_calls": 0,
+  "requests": [
+    {
+      "number": 1,
+      "mode": "generate",
+      "request_sha256": "6c41ffc90ba21fc678b07c95ac0612b730dea0243ca736d6c5392ff07b91e861"
+    },
+    {
+      "number": 2,
+      "mode": "repair",
+      "request_sha256": "6a258727784da8bcfdaf9a2dcfe5fbe47ed7bf216d9e434cd09c7f6e932edaff"
+    },
+    {
+      "number": 3,
+      "mode": "review",
+      "request_sha256": "3617f9b6ee56189de2678faf4a4710f0780bbbc15eed2ac4d37f99623c35e3f7"
+    }
+  ]
+}

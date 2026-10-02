@@ -22,6 +22,8 @@ class TaskStatus(str, Enum):
     RUNNING = "running"
     COMPLETED = "completed"
     FAILED = "failed"
+    OUTCOME_UNKNOWN = "outcome_unknown"
+    AWAITING_VERIFICATION = "awaiting_verification"
     CANCELLED = "cancelled"
 
 
@@ -125,6 +127,9 @@ class TaskExecution(Base):
 
     # 性能
     started_at = Column(DateTime, nullable=True)
+    claim_owner = Column(String(128), nullable=True, index=True)
+    lease_expires_at = Column(DateTime, nullable=True, index=True)
+    heartbeat_at = Column(DateTime, nullable=True)
     completed_at = Column(DateTime, nullable=True)
     duration_seconds = Column(Integer, nullable=True)
 

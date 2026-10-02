@@ -1,0 +1,9 @@
+{
+  "schema": "creative_evidence_review_decision/v1",
+  "packet_sha256": "061aa97582eb9224274807d3323cb822336a5a6ba45884d9141b8c7d72d02ee4",
+  "reviewed_by": "assistant",
+  "reviewed_full_text": false,
+  "summary": "",
+  "decisions": [],
+  "additional_issues": []
+}

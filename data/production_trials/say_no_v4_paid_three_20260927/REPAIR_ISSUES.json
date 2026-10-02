@@ -1,0 +1,32 @@
+[
+  {
+    "id": "R1",
+    "owner": "director",
+    "location": "SH04",
+    "severity": "major",
+    "rule": "style_lock逐字不变",
+    "evidence": "spatial_layout增加了仍字",
+    "impact": "导致固定制作锁校验不通过",
+    "proposal": "style对象逐字复制输入style_lock，不改任何字符，尤其椅在身后空着，不增加仍字。"
+  },
+  {
+    "id": "R2",
+    "owner": "director",
+    "location": "SH04",
+    "severity": "major",
+    "rule": "换构图不能声明原尾帧自然接续",
+    "evidence": "continuity_mode为raw_tail_continuation但start_state与SH03末态不同且更换构图",
+    "impact": "下游误用原尾帧直接生成而无适配",
+    "proposal": "设planned_cut_requires_adapter。保持单一连续机位，固定双人中景（可见双方脸、肩、桌边及坐下的上身变化，预留纵深两步位置），不在镜内切换机位。首帧仍紧肩，椅位不动。"
+  },
+  {
+    "id": "R3",
+    "owner": "director",
+    "location": "SH04",
+    "severity": "major",
+    "rule": "依script的during走两步之后才执行after陈禾转身坐下",
+    "evidence": "4.7–6秒陈禾已经开始转身，林遥到8秒才完成两步",
+    "impact": "分镜改变已锁剧本动作顺序",
+    "proposal": "0–4.7秒保留松肩点头道别；4.7–8秒只有林遥转身走两步，陈禾保持看林遥和原站位；8–10秒陈禾才转向自己桌面并坐回身后既有椅子。只改visible_performance对应时段，prompt仍占位自动编译、production_choices=[]，无新增动作台词。"
+  }
+]

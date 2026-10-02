@@ -1,0 +1,20 @@
+{
+  "schema": "p1_actual_governed_original_task/v1",
+  "rule_registry_binding": {
+    "schema_version": "creative_rule_registry_binding/v1",
+    "registry_dir": "data/creative_governance/20261002_v21_platform_refactor_multi_feedback",
+    "artifact_manifest_sha256": "5a4cd2c93cecc35af2084fbe746bb67f5ad999865889fe06489089e8f8c66ecb",
+    "rules_sha256": "5b4af265c0dd49f80f67a0195398cbd574bc6edde127e726a1a953fb9143fa9f",
+    "repository_wide_complete": false,
+    "automatic_rule_activation": false
+  },
+  "initial_calls_started": 1,
+  "repair_calls_started": 2,
+  "cached_replay_model_calls": 0,
+  "feedback_status": "resolved",
+  "feedback_output_sha256": "dcd00e74ac5ad7a36de6c6232c940918d5808cca093e9b392cd8f0be39bfa985",
+  "new_output_sha256": "fe97961c659aab9f9b4c506eb73818a05b806fc128c83a572b20a613ba5bb4a6",
+  "production_protocol": "governed_production_v1",
+  "paid_calls": 0,
+  "using_retained_text_response_fixture": true
+}

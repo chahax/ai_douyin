@@ -1,0 +1,70 @@
+{
+  "schema": "production_round_analysis/v1",
+  "round": 1,
+  "analysis_complete": true,
+  "passed": false,
+  "status": "production_exception",
+  "calls_started": 4,
+  "reported_tokens": 43670,
+  "media_calls": 0,
+  "deepseek_review_reached": false,
+  "qualified_handoff": false,
+  "interface_failures": [
+    {
+      "code": "PLAN_HOLD_HAS_ACTION",
+      "evidence": "beats.0.groups.1 and beats.2.groups.1 mark hold but contain gaze/affect operations"
+    },
+    {
+      "code": "PATCH_VALUE_TYPE",
+      "evidence": "both repair responses use string [] instead of JSON array"
+    },
+    {
+      "code": "PATCH_PATH_INVALID",
+      "evidence": "second repair references beats.3.groups.3.operations although B4 has only three groups"
+    }
+  ],
+  "content_failures": [
+    {
+      "id": "R01",
+      "category": "interaction",
+      "evidence": "B2 groups[0] already changes gaze from folder to C02, then B3 groups[0] again claims gaze rises from folder"
+    },
+    {
+      "id": "R03_group_precondition",
+      "category": "action_space",
+      "evidence": "B4 groups[2] changes face to desk and sits in same group; facing at group start is lin_yao"
+    },
+    {
+      "id": "PROP_TARGET_INVERTED",
+      "category": "interface_action",
+      "evidence": "B3 place uses target E01, value P02 instead of target P02 and destination value E01"
+    },
+    {
+      "id": "POST_DIALOGUE_PROSE",
+      "category": "interaction_timing",
+      "evidence": "B2 during describes finishing the line; B4 during says mouth naturally says goodbye, although scheduler places the single locked line before during groups",
+      "verification": "literal prose conflict; actual media not generated"
+    }
+  ],
+  "improvements": [
+    "folder starts unheld on desk",
+    "standing position is chair front rather than behind chair",
+    "cut anchor selects last required event; no prior immediate-folder-cut prose"
+  ],
+  "root_causes": [
+    "v2 generation schema permits hold operations despite runtime prohibition",
+    "operation target/value roles insufficiently specified for place",
+    "patch value schema unconstrained and supplier ignored valid-path enumeration",
+    "generated gaze actions contradict approved story"
+  ],
+  "next_round_required_changes": [
+    "conditional hold/operation schema",
+    "typed bounded patch values with authentic path metadata",
+    "explicit operation target/value contract",
+    "preserve story actions rather than erase operations to meet shape"
+  ],
+  "notes": "Round1 raw replies and old rule snapshot remain unchanged. No second-round production started before this analysis.",
+  "nonblocking_observations": [
+    "Mostly fixed medium shots; extra 2-second confirmation after acceptance may weaken relief, currently aesthetic suggestion only"
+  ]
+}
