@@ -1,0 +1,62 @@
+{
+  "source_receipt_sha256": "9725050bc1c44d4d7759a292f29a18171c030ca62d3d83dd2fab3a03ba011795",
+  "response_received": true,
+  "outer_envelope_valid": true,
+  "inner_json_parsed_read_only": true,
+  "top_level_keys": [
+    "title",
+    "relationship_pressure",
+    "viewer_emotional_arc",
+    "causal_events",
+    "asset_ids"
+  ],
+  "missing_required": [
+    "ending_action"
+  ],
+  "original_document_adopted": false,
+  "usage": {
+    "role": "writer",
+    "provider": "minimax",
+    "requested_model": "MiniMax-M3",
+    "response_model": "MiniMax-M3",
+    "response_id": "0711cbc718fd4c3be2bbde25cd99cdb2",
+    "finish_reason": "tool_calls",
+    "thinking_mode": "disabled",
+    "output_mode": "tool_call",
+    "prompt_tokens": 7903,
+    "completion_tokens": 1875,
+    "total_tokens": 9778
+  },
+  "cumulative": {
+    "schema": "authorized_creative_continuation/v2",
+    "new_calls": 1,
+    "effective_calls_started": 63,
+    "new_reported_tokens": 9778,
+    "effective_reported_tokens": 630604,
+    "unknown_token_reservations": 0,
+    "max_total_tokens": null,
+    "unbounded_aggregate_text_authorized": true,
+    "old_budget_reset": false,
+    "old_governance_migrated": false,
+    "media_calls": 0,
+    "semantic_approval": false
+  },
+  "content_feedback_fields": [
+    {
+      "category": "verified_inner_schema",
+      "finding": "第63次只返回title/relationship_pressure/viewer_emotional_arc/causal_events/asset_ids，漏顶层ending_action；本次六个顶层字段必须完整。ending_action是独立字符串字段，不能删去、写入最后event或只在emotional_arc暗示。"
+    },
+    {
+      "category": "verified_source_location_conflict",
+      "quote": "又把另外两张粉、蓝便利贴一张张收回到自己桌面",
+      "finding": "旧回复E05已把三张便签都收回林屿桌面，E06却让方澄从那三张便签下抽电影票，原票在她桌角。这是已发生移位与后续位置来源矛盾。新完整方向只写有明确用途的移动，票的位置变化前提一致；不要复制这条失败链。"
+    },
+    {
+      "category": "unclear_visible_event",
+      "quote": "结算单压在另一边看杯口",
+      "finding": "这不是可制作的清晰观察或动作。表达一个具体对账困难与持续承担，使用已有两张单据，不添含混句来凑细节。"
+    }
+  ],
+  "reason_not_token_exhaustion": "finish_reason=tool_calls and completion1875 < cap4096; no evidence of service truncation",
+  "automatic_retry": false
+}

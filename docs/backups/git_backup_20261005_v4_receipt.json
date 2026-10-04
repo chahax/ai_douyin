@@ -1,0 +1,20 @@
+{
+  "schema": "git_incremental_creative_backup_receipt/v1",
+  "base": "97a0c3a6ce37ac63b3741a508a4d538e8db65d5e",
+  "commit": "533bdfd426641af46fe45f001c9680f8df8dc03b",
+  "tree": "bca445ea5c0a60b4a6f93ff199bd7e9fe4443519",
+  "branch": "codex/backup-ai-creative-20261003",
+  "changed_files_including_manifest": 508,
+  "bytes": 9009482,
+  "working_head_preserved": true,
+  "original_index_unchanged": true,
+  "all_changed_raw_blobs_verified": true,
+  "pushed": true,
+  "new_media_files": 0,
+  "pending_content_alignment": true,
+  "remote_commit_verified": "533bdfd426641af46fe45f001c9680f8df8dc03b",
+  "verified_at_utc": "2026-10-04T18:03:35.696242+00:00",
+  "repository": "chahax/ai_douyin",
+  "repository_visibility": "PUBLIC",
+  "raw_byte_restore": "clone with core.autocrlf=false; verify manifest SHA256"
+}

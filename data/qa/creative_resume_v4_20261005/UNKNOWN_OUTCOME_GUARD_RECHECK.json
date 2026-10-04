@@ -1,0 +1,10 @@
+{
+  "timestamp_utc": "2026-10-04T19:18:52.208668+00:00",
+  "command": ".venv/Scripts/python.exe -m pytest tests/test_creative_resume_dispatch_v2.py -k \"unknown or timeout or usage\" -q",
+  "passed": 10,
+  "deselected": 39,
+  "scope": "offline simulated provider only; unknown/timeout/usage gates do not duplicate dispatch and preserve reservations",
+  "warning": "pytest cache path creation warning; assertions passed",
+  "live_provider_calls": 0,
+  "does_not_reconcile_call70": true
+}

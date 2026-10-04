@@ -1,0 +1,58 @@
+{
+  "previous_unadopted_review_protocol_fault": "第66次coverage.2.continuity只引当前拍和第0拍，缺script.beats.1.上一相邻拍证据，完整审查被拒绝。不要沿旧零问题结论，独立审当前新稿全文。",
+  "current_predecessor_contract": [
+    {
+      "row_id": "B01",
+      "current_leaf_prefix": "script.beats.0.",
+      "previous_leaf_prefix": null
+    },
+    {
+      "row_id": "B02",
+      "current_leaf_prefix": "script.beats.1.",
+      "previous_leaf_prefix": "script.beats.0."
+    },
+    {
+      "row_id": "B03",
+      "current_leaf_prefix": "script.beats.2.",
+      "previous_leaf_prefix": "script.beats.1."
+    },
+    {
+      "row_id": "B04",
+      "current_leaf_prefix": "script.beats.3.",
+      "previous_leaf_prefix": "script.beats.2."
+    },
+    {
+      "row_id": "B05",
+      "current_leaf_prefix": "script.beats.4.",
+      "previous_leaf_prefix": "script.beats.3."
+    },
+    {
+      "row_id": "B06",
+      "current_leaf_prefix": "script.beats.5.",
+      "previous_leaf_prefix": "script.beats.4."
+    },
+    {
+      "row_id": "B07",
+      "current_leaf_prefix": "script.beats.6.",
+      "previous_leaf_prefix": "script.beats.5."
+    },
+    {
+      "row_id": "B08",
+      "current_leaf_prefix": "script.beats.7.",
+      "previous_leaf_prefix": "script.beats.6."
+    },
+    {
+      "row_id": "B09",
+      "current_leaf_prefix": "script.beats.8.",
+      "previous_leaf_prefix": "script.beats.7."
+    }
+  ],
+  "source_semantic_focus": [
+    "台词只在dialogue发声，任何action实际说同一句再由dialogue播放都报告，不把动作里的发声当无声描述；纸面文字的引用本身不是发声",
+    "根据steps的派生顺序核对刺激、开口前的反应、对白、听后反应，不把event摘要当播放步骤替代时序",
+    "已登记电影票的取用/实际离开、对账具体困难及独立承担、拒绝是否无补偿，逐全文核对",
+    "笔/便利贴/两张单据的初态、取拿/放置、持有和位置是否在正文里可成立；模糊之处应报告，不能因原格式有效默认通过"
+  ],
+  "current_user_creative_expectation": "真实克制，但开场更快出现冲突、他具体承担、她去赴自己的约要可见。没有新增人、手机/消息/电脑或外景；不用加薪/道歉奖励拒绝。",
+  "review_boundary": "本阶段没有实际local秒数，dialogue_timing必须not_applicable；timing必须审源先后，不能not_applicable；不拿程序预算当实调通过。真实的问题须列writer blocking/major并引用当前实际相关叶子，不填假证据或为了通过补上一拍引用。"
+}

@@ -1,0 +1,32 @@
+{
+  "revision_mode": "complete_model_authored_new_script",
+  "adopted_direction_call": 64,
+  "verified_previous_full_source_faults": [
+    {
+      "path": "beats.5.steps.1.text",
+      "quote": "轻声说\"那我先走了\"",
+      "finding": "同一句告别之后在B07 dialogue再次发声，同一次发声被重复安排；完整返修时只能保留实际一次。"
+    },
+    {
+      "path": "beats.3.steps.1.text",
+      "quote": "她顿了一下，声音不大",
+      "finding": "actual steps先播完拒绝，再写发声/顿一下的表演，源顺序和说话描述需要整体重排；此处不能由local倒移原动作掩盖。"
+    },
+    {
+      "path": "beats.5.steps.0.text",
+      "quote": "停停顿顿",
+      "finding": "用户要求的具体对账困难仍只有概括，不足以让观众看到承担的代价。"
+    }
+  ],
+  "source_revision_request": "按当前整片方向重新创作完整播放正文；event/trigger只简短概括，不逐字重复正文。steps为唯一实际播放顺序，能听到的话只放dialogue，每次发声仅一次；action不能写轻声说/重复对白，也不能在对白后回写开口前的顿一下和刚才语气。拍数和时长按故事需求，不填秒数。",
+  "creative_acceptance": [
+    "用最早的工作请求与她准备赴约建立冲突，保留两次过去替同事加班的可听事实",
+    "她的拒绝前必须有可读的犹豫/选择，拒绝后给林屿真实反应，再让她离开；不要倒叙重演同一次说话",
+    "林屿需面对一个具体账目不相符或找不到对应项的可见困难，并自己继续核对；不是泛写停停顿顿",
+    "她要实际带走已有纸质电影票、离开办公室，给观众她去赴自己约的清晰出口；不新增手机、消息、同事或外景",
+    "明确是拿起笔并手持递出，还是在桌面推笔；若握笔必须正文有取起前提。便利贴若放下再挪，原文要成立，不让local补动作",
+    "只保留有叙事作用的操作，资产清单不表示全部出场；没有新增红笔、屏幕、手机、工作文件等对象"
+  ],
+  "format": "四个顶层字段title/premise/selected_candidate_id/beats；每beat仅id/event/trigger/steps；完整一次JSON字符串，不写分析、不局部替换。",
+  "request": "提交一个完整的新剧本，完整事件与先后重新组织。不要复制上一失败稿只改两行；也不要机械复述宏观方向的每一句。所有对白与动作由当前新稿给出。"
+}

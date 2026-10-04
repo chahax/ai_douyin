@@ -1,0 +1,197 @@
+{
+  "source_semantic_verification_sha256": "4bb0cf8eb876cdc381f14a7de2eac9647bb1535482dca1cf07c98c6a3c9d47f7",
+  "creative_focus": [
+    "开场实际镜头中早呈现电影票/临时交活的同时冲突，不能先空拍办公室氛围。",
+    "B02长台词的时间必须根据真实局部安排确认；初步预算不证明实际完成。",
+    "B05拒绝前、说话中、说话后保留可读方澄表演；B06独立林屿反应窗口。",
+    "B07比对数字、划掉重写和B08携票离开必须可读；不靠第三人/手机/加薪补充新剧情。",
+    "便利贴独立成员拆分只作结构资产登记，不增加新道具；所有权与当前持有分别记录。"
+  ],
+  "pen_continuity_source": {
+    "actual_quotes": [
+      "林屿伸手把黑色签字笔从自己桌沿拿起来",
+      "目光顺着那只握笔停住的手抬向林屿的眼睛",
+      "林屿递笔的手悬在桌面上方停住"
+    ],
+    "interpretation": "按这些实际步骤的连续持笔解释安排；“搁”可为笔尖落近桌面，不能擅增放开整笔或再次拿笔动作。事件标题不通顺片段不作为新增动作来源。"
+  },
+  "scope": "只补导演构图、反应窗口与局部执行合同，不改原稿steps/对白，不新增角色或手机。",
+  "previous_complete_response_errors": {
+    "schema": "complete_direction_rejection_analysis/v1",
+    "ordinal": 69,
+    "failure_category": "state_contract",
+    "server_cause_unknown": true,
+    "schema_errors": [
+      {
+        "path": "",
+        "message": "'ending_intent' is a required property"
+      },
+      {
+        "path": "beats.0",
+        "message": "Additional properties are not allowed ('beats' was unexpected)"
+      },
+      {
+        "path": "beats.0.shots.0",
+        "message": "'dialogue_mode' is a required property"
+      },
+      {
+        "path": "beats.0.shots.1",
+        "message": "'dialogue_mode' is a required property"
+      },
+      {
+        "path": "beats.0.shots.1.performance_requirements.0.stimulus_ref",
+        "message": "'raw_linear.beats.0.steps.1' is not one of ['raw_linear_script.beats.0.steps.0', 'raw_linear_script.beats.0.steps.1', 'raw_linear_script.beats.1.steps.0', 'raw_linear_script.beats.1.steps.1', 'raw_linear_script.beats.2.steps.0', 'raw_linear_script.beats.2.steps.1', 'raw_linear_script.beats.2.steps.2', 'raw_linear_script.beats.3.steps.0', 'raw_linear_script.beats.4.steps.0', 'raw_linear_script.beats.5.steps.0', 'raw_linear_script.beats.5.steps.1', 'raw_linear_script.beats.6.steps.0', 'raw_linear_script.beats.7.steps.0', 'raw_linear_script.beats.7.steps.1', 'raw_linear_script.beats.7.steps.2', '"
+      },
+      {
+        "path": "beats.1",
+        "message": "Additional properties are not allowed ('beats' was unexpected)"
+      },
+      {
+        "path": "beats.1.shots.1",
+        "message": "'dialogue_mode' is a required property"
+      },
+      {
+        "path": "beats.2",
+        "message": "Additional properties are not allowed ('beats' was unexpected)"
+      },
+      {
+        "path": "beats.2.shots.0",
+        "message": "'dialogue_mode' is a required property"
+      },
+      {
+        "path": "beats.2.shots.2",
+        "message": "'dialogue_mode' is a required property"
+      },
+      {
+        "path": "beats.3",
+        "message": "Additional properties are not allowed ('beats' was unexpected)"
+      },
+      {
+        "path": "beats.3.shots.0",
+        "message": "'dialogue_mode' is a required property"
+      },
+      {
+        "path": "beats.4",
+        "message": "Additional properties are not allowed ('beats' was unexpected)"
+      },
+      {
+        "path": "beats.5",
+        "message": "Additional properties are not allowed ('beats' was unexpected)"
+      },
+      {
+        "path": "beats.5.shots.0",
+        "message": "'dialogue_mode' is a required property"
+      },
+      {
+        "path": "beats.5.shots.1",
+        "message": "'dialogue_mode' is a required property"
+      },
+      {
+        "path": "beats.6",
+        "message": "Additional properties are not allowed ('beats' was unexpected)"
+      },
+      {
+        "path": "beats.6.shots.0",
+        "message": "'dialogue_mode' is a required property"
+      },
+      {
+        "path": "beats.7",
+        "message": "Additional properties are not allowed ('beats' was unexpected)"
+      },
+      {
+        "path": "beats.7.shots.0",
+        "message": "'dialogue_mode' is a required property"
+      },
+      {
+        "path": "beats.8",
+        "message": "Additional properties are not allowed ('beats' was unexpected)"
+      },
+      {
+        "path": "beats.8.shots.0",
+        "message": "'dialogue_mode' is a required property"
+      }
+    ],
+    "source_semantic_errors": [
+      {
+        "path": "initial_state.P03_Y.holder",
+        "actual": "C01",
+        "source_quote": "林屿侧身从方澄桌角那叠便利贴里抽出浅黄、浅粉、浅蓝三张",
+        "finding": "三张便利贴开场桌角叠放不是方澄手持；owner仍为C01但holder必须none。其他两张同理。"
+      },
+      {
+        "path": "beats.0.shots",
+        "finding": "开场被分为仅气氛与票、再纸单两镜；第一观察点应立刻建立票/递活冲突，可在同镜覆盖连续steps。不要把每一个操作都拆为独立镜。"
+      },
+      {
+        "path": "beats.7.shots.1.composition",
+        "actual": "门后是走廊暖灰调",
+        "finding": "未注册走廊新场景细节不可臆造；离场可以在已注册办公室门内朝门拍摄，门外不作为新增需制作场景。"
+      }
+    ],
+    "original_response_preserved": true,
+    "manual_document_patch": false
+  },
+  "full_document_required_keys": [
+    "schema",
+    "context_sha256",
+    "raw_linear_script_sha256",
+    "emotional_arc",
+    "causal_chain",
+    "ending_intent",
+    "beats",
+    "initial_state",
+    "spatial_contract"
+  ],
+  "interface_reminder": "顶层和拍对象只能含Schema属性；拍对象不额外加beats。每镜必须填写全部required属性，dialogue_mode也是必填，按其enum取值。所有source refs取现有enum完整路径；完整新稿，不返回补丁。",
+  "ownership_vs_holding": "P03_Y/P03_P/P03_B所有权C01，但开场均在surface:E01:...桌角叠放，holder=none；包椅背悬挂并非手持。spatial_contract只填schema的seats，席位access_positions和required_facing必须用于后续坐/站前提；不新增schema没有的门区域/位置边字段。",
+  "creative_scope": "镜数根据新增信息、观察对象和切镜因果选择，不按一step一镜。开场在一个有意义构图呈现电影票/交活冲突；B05说不后给B06独立可读反应；B07具体困难、B08携票离场；不用额外第三人/手机/走廊资产。",
+  "shot_required_keys": [
+    "shot_id",
+    "source_step_refs",
+    "new_information",
+    "observation_object",
+    "camera",
+    "cut_reason",
+    "purpose",
+    "composition",
+    "dialogue_mode",
+    "performance_requirements"
+  ],
+  "shot_dialogue_mode_enum": {
+    "enum": [
+      "画内对白",
+      "画外对白",
+      "混合对白",
+      "无对白"
+    ]
+  },
+  "previous_business_contract_errors": [
+    {
+      "shot": "B01_S01",
+      "requirement": "B01_S01_PR01",
+      "failure": "during只支持同一整句dialogue窗口；当前为action或路径无效"
+    },
+    {
+      "shot": "B01_S02",
+      "requirement": "B01_S02_PR01",
+      "failure": "during只支持同一整句dialogue窗口；当前为action或路径无效"
+    },
+    {
+      "shot": "B03_S01",
+      "requirement": "B03_S01_PR01",
+      "failure": "during只支持同一整句dialogue窗口；当前为action或路径无效"
+    },
+    {
+      "shot": "B03_S03",
+      "requirement": "B03_S03_PR01",
+      "failure": "during只支持同一整句dialogue窗口；当前为action或路径无效"
+    },
+    {
+      "shot": "B08_S02",
+      "requirement": "B08_S02_PR02",
+      "failure": "during只支持同一整句dialogue窗口；当前为action或路径无效"
+    }
+  ],
+  "performance_window_contract": "during只允许stimulus_ref=reaction_ref=同一dialogue完整句路径。跨镜只有after；action不能与对白并行。普通拿放/移动步骤由step_units执行顺序覆盖，不必每个操作声明反应窗口。重点为拒绝前方澄可读犹豫、拒绝整句during、拒绝后林屿独立after反应；不是每step一镜或每操作强制停留。",
+  "unsubmitted_feedback_correction": "前两份r2反馈草案未进入模型请求，现纠正dialogue_mode为每镜必填和空间字段边界；本文件为实际唯一r2输入。"
+}

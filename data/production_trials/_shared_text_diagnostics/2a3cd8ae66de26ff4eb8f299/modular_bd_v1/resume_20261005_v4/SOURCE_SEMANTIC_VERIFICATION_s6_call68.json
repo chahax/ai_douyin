@@ -1,0 +1,80 @@
+{
+  "schema": "assistant_source_semantic_verification/v1",
+  "script_ordinal": 67,
+  "review_ordinal": 68,
+  "raw_script_sha256": "c38f75d6efa1a3a016458e7da8497bc987663b93b76d64be304c2d01c93bd090",
+  "review_context_sha256": "32004e2d437df598e1f1785e79e94edafc73cae2af54ada8ffdcc1f57ac00067",
+  "full_script_read": true,
+  "complete_review_evidence_valid": true,
+  "review_issue_count": 0,
+  "actual_timing_verified": false,
+  "production_handoff_complete": false,
+  "creative_quality_passed": false,
+  "approved_scope": "source narrative adopted for direction only; actual execution windows and full joint review pending",
+  "evidence": [
+    {
+      "path": "script.beats.1.dialogue.0.text",
+      "quote": "熬到十一点",
+      "finding": "实际可听旧事说明反复承担，包含周末帮忙，不仅是主题标签。"
+    },
+    {
+      "path": "script.beats.2.after",
+      "quote": "拿起来",
+      "finding": "林屿取笔的前提实际在正文；B04握笔、B06递笔的手共同支持连续持有，不把搁笔尖解释为放开整笔。"
+    },
+    {
+      "path": "script.beats.3.before",
+      "quote": "握笔停住的手",
+      "finding": "拒绝前先从笔看向持笔的林屿，刺激与准备反应存在。"
+    },
+    {
+      "path": "script.beats.4.dialogue.0.text",
+      "quote": "今晚不行",
+      "finding": "拒绝没有道歉、补偿或追加讨好；原电影安排保留。"
+    },
+    {
+      "path": "script.beats.5.before",
+      "quote": "递笔的手悬在桌面上方停住",
+      "finding": "听完拒绝后有独立无对白反应，再收回笔和任务；持笔不能由导演变成放下再拿起。"
+    },
+    {
+      "path": "script.beats.6.before",
+      "quote": "把那个数字划掉重写",
+      "finding": "承担工作落实为具体比对与修改困难，没有让他靠道歉或奖励替代认领。"
+    },
+    {
+      "path": "script.beats.7.before",
+      "quote": "拿起桌角那张米白底深红字的院线电影票",
+      "finding": "她取包并携票赴约，而非停在门口；真实携票动作有来源。"
+    },
+    {
+      "path": "script.beats.7.dialogue.0.text",
+      "quote": "那我先走了",
+      "finding": "告别只有一个实际dialogue utterance，event文字不构成第二次发声。"
+    },
+    {
+      "path": "script.beats.7.after",
+      "quote": "走出办公室",
+      "finding": "兑现她实际离开，不用他奖励、道歉或加薪替她的边界作许可。"
+    },
+    {
+      "path": "script.beats.8.before",
+      "quote": "没抬头去喊她",
+      "finding": "最后独自继续对账确认边界被接住；未断言关系未来一定和解。"
+    }
+  ],
+  "nonblocking_source_wording": [
+    {
+      "path": "beats.3.event",
+      "quote": "方澄看着被推到两人之间的笔收笔尖，没有伸手去拿，抬眼看林屿。",
+      "finding": "事件标题有“笔收笔尖”不通顺字样；不把它当新增动作。实际可表演内容由完整steps确定；原稿不手改，导演须用已存在的握笔/递笔来源保持连续持有。"
+    }
+  ],
+  "director_checks": [
+    "开场实际镜头中早呈现电影票/临时交活的同时冲突，不能先空拍办公室氛围。",
+    "B02长台词的时间必须根据真实局部安排确认；初步预算不证明实际完成。",
+    "B05拒绝前、说话中、说话后保留可读方澄表演；B06独立林屿反应窗口。",
+    "B07比对数字、划掉重写和B08携票离开必须可读；不靠第三人/手机/加薪补充新剧情。",
+    "便利贴独立成员拆分只作结构资产登记，不增加新道具；所有权与当前持有分别记录。"
+  ]
+}

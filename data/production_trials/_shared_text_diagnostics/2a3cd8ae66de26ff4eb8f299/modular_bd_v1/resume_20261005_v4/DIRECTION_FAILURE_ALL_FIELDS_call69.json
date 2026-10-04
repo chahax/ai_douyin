@@ -1,0 +1,115 @@
+{
+  "schema": "complete_direction_rejection_analysis/v1",
+  "ordinal": 69,
+  "failure_category": "state_contract",
+  "server_cause_unknown": true,
+  "schema_errors": [
+    {
+      "path": "",
+      "message": "'ending_intent' is a required property"
+    },
+    {
+      "path": "beats.0",
+      "message": "Additional properties are not allowed ('beats' was unexpected)"
+    },
+    {
+      "path": "beats.0.shots.0",
+      "message": "'dialogue_mode' is a required property"
+    },
+    {
+      "path": "beats.0.shots.1",
+      "message": "'dialogue_mode' is a required property"
+    },
+    {
+      "path": "beats.0.shots.1.performance_requirements.0.stimulus_ref",
+      "message": "'raw_linear.beats.0.steps.1' is not one of ['raw_linear_script.beats.0.steps.0', 'raw_linear_script.beats.0.steps.1', 'raw_linear_script.beats.1.steps.0', 'raw_linear_script.beats.1.steps.1', 'raw_linear_script.beats.2.steps.0', 'raw_linear_script.beats.2.steps.1', 'raw_linear_script.beats.2.steps.2', 'raw_linear_script.beats.3.steps.0', 'raw_linear_script.beats.4.steps.0', 'raw_linear_script.beats.5.steps.0', 'raw_linear_script.beats.5.steps.1', 'raw_linear_script.beats.6.steps.0', 'raw_linear_script.beats.7.steps.0', 'raw_linear_script.beats.7.steps.1', 'raw_linear_script.beats.7.steps.2', '"
+    },
+    {
+      "path": "beats.1",
+      "message": "Additional properties are not allowed ('beats' was unexpected)"
+    },
+    {
+      "path": "beats.1.shots.1",
+      "message": "'dialogue_mode' is a required property"
+    },
+    {
+      "path": "beats.2",
+      "message": "Additional properties are not allowed ('beats' was unexpected)"
+    },
+    {
+      "path": "beats.2.shots.0",
+      "message": "'dialogue_mode' is a required property"
+    },
+    {
+      "path": "beats.2.shots.2",
+      "message": "'dialogue_mode' is a required property"
+    },
+    {
+      "path": "beats.3",
+      "message": "Additional properties are not allowed ('beats' was unexpected)"
+    },
+    {
+      "path": "beats.3.shots.0",
+      "message": "'dialogue_mode' is a required property"
+    },
+    {
+      "path": "beats.4",
+      "message": "Additional properties are not allowed ('beats' was unexpected)"
+    },
+    {
+      "path": "beats.5",
+      "message": "Additional properties are not allowed ('beats' was unexpected)"
+    },
+    {
+      "path": "beats.5.shots.0",
+      "message": "'dialogue_mode' is a required property"
+    },
+    {
+      "path": "beats.5.shots.1",
+      "message": "'dialogue_mode' is a required property"
+    },
+    {
+      "path": "beats.6",
+      "message": "Additional properties are not allowed ('beats' was unexpected)"
+    },
+    {
+      "path": "beats.6.shots.0",
+      "message": "'dialogue_mode' is a required property"
+    },
+    {
+      "path": "beats.7",
+      "message": "Additional properties are not allowed ('beats' was unexpected)"
+    },
+    {
+      "path": "beats.7.shots.0",
+      "message": "'dialogue_mode' is a required property"
+    },
+    {
+      "path": "beats.8",
+      "message": "Additional properties are not allowed ('beats' was unexpected)"
+    },
+    {
+      "path": "beats.8.shots.0",
+      "message": "'dialogue_mode' is a required property"
+    }
+  ],
+  "source_semantic_errors": [
+    {
+      "path": "initial_state.P03_Y.holder",
+      "actual": "C01",
+      "source_quote": "林屿侧身从方澄桌角那叠便利贴里抽出浅黄、浅粉、浅蓝三张",
+      "finding": "三张便利贴开场桌角叠放不是方澄手持；owner仍为C01但holder必须none。其他两张同理。"
+    },
+    {
+      "path": "beats.0.shots",
+      "finding": "开场被分为仅气氛与票、再纸单两镜；第一观察点应立刻建立票/递活冲突，可在同镜覆盖连续steps。不要把每一个操作都拆为独立镜。"
+    },
+    {
+      "path": "beats.7.shots.1.composition",
+      "actual": "门后是走廊暖灰调",
+      "finding": "未注册走廊新场景细节不可臆造；离场可以在已注册办公室门内朝门拍摄，门外不作为新增需制作场景。"
+    }
+  ],
+  "original_response_preserved": true,
+  "manual_document_patch": false
+}

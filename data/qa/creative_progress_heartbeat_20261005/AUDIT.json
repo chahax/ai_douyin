@@ -1,0 +1,29 @@
+{
+  "schema": "creative_progress_heartbeat_audit/v1",
+  "automation_id": "codex",
+  "status": "ACTIVE",
+  "interval_minutes": 30,
+  "source": "automation.toml + Codex read_thread observed records",
+  "previous_long_turn": {
+    "id": "01a10759-cee7-7943-877d-5a5e7e6c21da",
+    "started_unix": 1791124688,
+    "completed_unix": 1791137046,
+    "started_beijing": "2026-10-04T22:38:08+08:00",
+    "completed_beijing": "2026-10-05T02:04:06+08:00"
+  },
+  "observed_heartbeat": {
+    "id": "01a10816-63ce-75d2-ae23-8a3a53a8cdc9",
+    "started_unix": 1791137047,
+    "completed_unix": 1791137153,
+    "visible_final_present": true,
+    "started_beijing": "2026-10-05T02:04:07+08:00",
+    "completed_beijing": "2026-10-05T02:05:53+08:00"
+  },
+  "observed_order": "This heartbeat began one second after the preceding long turn completed. This single sample does not prove whether every due run was dispatched or why this one was delayed.",
+  "scheduler_delay_root_cause": "unknown",
+  "foreground_action": "During active work check elapsed time at tool boundaries and post visible content-and-progress checkpoints; retain existing heartbeat as scheduled follow-up.",
+  "quota_monitor_enabled": false,
+  "notification_prefs_unchanged": true,
+  "official_source": "https://learn.chatgpt.com/docs/automations",
+  "new_prompt_saved_in_app": true
+}

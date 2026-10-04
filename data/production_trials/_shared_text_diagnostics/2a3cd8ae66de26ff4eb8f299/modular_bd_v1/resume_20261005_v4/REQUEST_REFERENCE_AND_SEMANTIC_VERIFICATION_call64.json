@@ -1,0 +1,54 @@
+{
+  "receipt_sha256": "8239e40790a8252f63f35514516fe2b17dd024ac6d605be7261f8f3d798cf816",
+  "request_sha256": "35fb950ca0c62d3b2e043a43a3915fdab7457cc6c36e60d0f115bae0cb9597e9",
+  "plan_sha256": "91c8dbdaf6b3dc9a0c95884a7e6113279b867f9dabbf54bbef4b5c7115479cf8",
+  "full_reference_equals_original": true,
+  "full_brief_equals_original": true,
+  "full_assets_equal_original": true,
+  "approved_only_for_complete_script": true,
+  "semantic_evidence": [
+    {
+      "path": "relationship_pressure",
+      "quote": "承担关系可能变冷的结果",
+      "finding": "拒绝会给具体协作关系带来压力；不是把林屿设为反派或靠奖赏允许她离开。"
+    },
+    {
+      "path": "causal_events.0.new_information",
+      "quote": "电影票",
+      "finding": "开场把自己的赴约与对方交活放在一起，结束原先仅铺办公室气氛的开场；具体第一镜执行仍待导演。"
+    },
+    {
+      "path": "causal_events.1.visible_event",
+      "quote": "熬到十一点",
+      "finding": "过去一次替同事加班是观众实际听到的旧事，不仅是分析标签。"
+    },
+    {
+      "path": "causal_events.1.visible_event",
+      "quote": "周末过来",
+      "finding": "跨次替同事加班的证据保留在可听事件中。"
+    },
+    {
+      "path": "causal_events.3.visible_event",
+      "quote": "今晚不行，七点我有一场早就买好票的电影，得先走。",
+      "finding": "她有自己的明确安排，拒绝不靠补偿式退让。"
+    },
+    {
+      "path": "causal_events.5.visible_event",
+      "quote": "没再抬头喊她",
+      "finding": "他开始自己核对工作，她不再被喊回；具体对账困难和她的释放尚须下一完整剧本兑现。"
+    },
+    {
+      "path": "ending_action",
+      "quote": "去赴七点那场院线电影",
+      "finding": "结尾目标是她拿回自己的时间，不强迫他道歉/加薪；真实离开及携票前提在源剧本阶段明确。"
+    }
+  ],
+  "deferred_to_complete_source_script": [
+    "具体对账困难不能仍只有停停顿顿",
+    "观众实际看到她的赴约/释压出口，不能只在情绪分析里声称",
+    "笔推近/递笔表述在源步骤中区分桌面滑动与实际持有，宏观方向尚不维护typed状态",
+    "电影票携带/落点及离开必须由完整原steps明确"
+  ],
+  "production_quality_passed": false,
+  "media_calls": 0
+}

@@ -1,0 +1,113 @@
+{
+  "schema": "creative_progress_monitor/v1",
+  "automation_id": "codex",
+  "interval_minutes": 30,
+  "enabled": true,
+  "updated_at_utc": "2026-10-04T18:41:49.790104+00:00",
+  "current_goal": "完整剧本、整片导演规划、逐镜表演、确定性编译和制作交接",
+  "actual_latest_call": 66,
+  "latest_script": {
+    "ordinal": 67,
+    "version": "s6",
+    "status": "adopted_for_direction_only"
+  },
+  "current_stage": "director original response unknown; new model dispatch blocked",
+  "effective_calls_started": 70,
+  "effective_reported_tokens": 709272,
+  "aggregate_text_token_limit": null,
+  "quota_monitor_cancelled": true,
+  "media_calls": 0,
+  "unresolved": [
+    "新稿格式有效但已发现台词重复和源先后问题",
+    "具体对账困难与她赴约时的释放尚未充分兑现",
+    "完整导演/局部表演/实际编译/制作交接未完成",
+    "MiniMax历史服务端原因与心跳调度延后原因均未查明"
+  ],
+  "latest_story_direction": "call64 revised macro adopted only for complete new script",
+  "latest_user_direction_confirmation": "用户已确认完整主线符合目标并要求继续；具体方向和成稿仍须实际验收",
+  "latest_transport_candidate": "same MiniMax-M3 single-string transport: individual valid57/58/60 and invalid56/59 inner JSON; no general guarantee",
+  "latest_offline_validation": {
+    "tests_passed": 500,
+    "subtests_passed": 14,
+    "production_pass": false
+  },
+  "last_completed_semantic_review": 60,
+  "latest_independent_semantic_review": "data/qa/draft_s4_source_review_20261005/INDEPENDENT_REVIEW.json",
+  "latest_operator_clarification": "data/production_trials/_shared_text_diagnostics/2a3cd8ae66de26ff4eb8f299/modular_bd_v1/resume_20261005_v3/OPERATOR_CLARIFICATION_after_call57.json",
+  "adopted_story_direction": {
+    "ordinal": 60,
+    "decision": "data/production_trials/_shared_text_diagnostics/2a3cd8ae66de26ff4eb8f299/modular_bd_v1/resume_20261005_v3/STORY_PLAN_DECISION_call60.json",
+    "plan_sha256": "ca2a8b594b5fd30289967b2a31a2ff847776082b7363bc5565f672432675c234",
+    "approved_for_complete_script": true,
+    "media_approval": false
+  },
+  "latest_call": 70,
+  "pending_calls": [],
+  "unknown_usage_calls": [],
+  "spend_snapshot": {
+    "scope": "inherited55/558395 plus seven v3 calls56–62; all actual usage verified",
+    "pending_token_reservations": 0,
+    "unknown_token_reservations": 0,
+    "unknown_reservation_reset": false
+  },
+  "unknown_token_reservations": 64010,
+  "stage": "director original response unknown; new model dispatch blocked",
+  "offline_regression": {
+    "passed": 500,
+    "subtests_passed": 14,
+    "actual_model_calls": 0,
+    "proof": "data/qa/creative_resume_v4_20261005/REGRESSION_AFTER_SOURCE_AUDIT.txt"
+  },
+  "latest_user_alignment": "2026-10-05 符合，继续这条主线",
+  "next_step": "保存检查点与Git备份；核实原70请求结果及真实用量后才能继续；不重新派发",
+  "content_alignment_pending": {
+    "optional_preference": "真实克制释放更清楚 / 强对抗反击",
+    "question_sent": true,
+    "working_assumption": "真实克制释放更清楚",
+    "user_evaluation_record": "data/qa/creative_resume_v4_20261005/USER_CREATIVE_FEEDBACK_FOR_STORY_R9.json"
+  },
+  "latest_git_backup": {
+    "branch": "codex/backup-ai-creative-20261003",
+    "commit": "533bdfd426641af46fe45f001c9680f8df8dc03b",
+    "remote_verified": true,
+    "incremental_files": 508,
+    "all_raw_blobs_verified": true
+  },
+  "content_review_artifact": "data/qa/creative_resume_v4_20261005/COMPLETE_DRAFT_s5_call65_PENDING_REVIEW.md",
+  "last_progress_check": {
+    "at_utc": "2026-10-04T18:05:37.878486+00:00",
+    "latest_actual_call": 62,
+    "effective_reported_tokens": 620826,
+    "new_provider_calls": 0,
+    "production_root_v4_prepared": false,
+    "full_text_handoff_available": false,
+    "content_review_pending": true,
+    "frozen_records_modified": false
+  },
+  "content_feedback_received": true,
+  "foreground_progress_check": {
+    "last_visible_checkpoint_utc": "2026-10-04T18:25:11.426466+00:00",
+    "interval_minutes": 30,
+    "content_required": true,
+    "reason": "Observed last scheduled heartbeat started after long turn ended; scheduler cause unknown."
+  },
+  "heartbeat_configuration_audit": "data/qa/creative_progress_heartbeat_20261005/AUDIT.json",
+  "last_periodic_visible_summary_utc": "2026-10-04T19:13:46Z",
+  "last_periodic_visible_summary_beijing": "2026-10-05 02:35",
+  "latest_review": "call66 DeepSeek ordinary tool returned complete payload but predecessor evidence rejected; zero issues missed actual source faults; unadopted",
+  "effective_calls": 70,
+  "latest_text_review": {
+    "ordinal": 68,
+    "version": "script_review_s6_r1",
+    "status": "complete_review_evidence_valid",
+    "issues": 0,
+    "production_quality_passed": false
+  },
+  "production_handoff": null,
+  "periodic_summary_delay_note": "本次前台核对晚于上次30分钟约8分钟，未把自动任务ACTIVE解释为准点保证；人工继续在工作边界核对。",
+  "calls_with_known_usage": 69,
+  "unknown_outcome_ordinals": [
+    70
+  ],
+  "quota_queries_enabled": false
+}
