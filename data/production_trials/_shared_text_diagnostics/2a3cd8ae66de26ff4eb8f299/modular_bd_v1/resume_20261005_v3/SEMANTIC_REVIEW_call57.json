@@ -1,0 +1,292 @@
+{
+  "schema": "independent_story_direction_semantic_review/v1",
+  "call": 57,
+  "created_at": "2026-10-04T16:49:32.761018+00:00",
+  "reviewer": "assistant_independent_readonly",
+  "paid_calls": 0,
+  "source_receipt_sha256": "603139e4bb7d63921516d978499f74f7386b0b6064a9a51875ed58ad80885075",
+  "request_sha256": "b43794d5ad8044d52038bd96b29fda0ce36eaff264dffe2e2645b344c934899a",
+  "document_sha256": "f761aa3f220f17952461a58aa7cc80d2313af6d419e1123ad11d778d36c96987",
+  "transport": {
+    "outer_json_valid": true,
+    "inner_json_valid": true,
+    "document_schema_valid": true,
+    "exact_original_strings_preserved": true,
+    "document_sha256_matches": true,
+    "source_string_modified": false,
+    "automatic_repair": false,
+    "scope": "one real call57 only; not long-term guarantee"
+  },
+  "semantic_approval": false,
+  "production_ready": false,
+  "issues": [
+    {
+      "id": "S57_I01",
+      "classification": "verified_required_evidence_gap",
+      "rule": "brief_history_overtime_before_refusal",
+      "finding": "E02能证实上月与去年底至少两次帮忙，却未说明当时是替林屿加班；emotional_turn直接称加班史，超出可听台词和可见便签所证明的范围。拒绝前需要真实事件证据，不能仅改分析字段。",
+      "evidence": [
+        {
+          "source": "context",
+          "path": "creative_brief.constraints.0",
+          "quote": "观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。"
+        },
+        {
+          "source": "receipt",
+          "path": "document_output.causal_events.1.visible_event",
+          "quote": "上个月那张客户对账单是你帮我重新打的吧，去年底那批结算明细也是你顺手帮我改过"
+        },
+        {
+          "source": "receipt",
+          "path": "document_output.causal_events.1.emotional_turn",
+          "quote": "一长串被默认的加班史"
+        }
+      ],
+      "disposition": "模型完整新方向明确补足跨次加班证据，不把过去帮忙直接等同加班，不手填台词。"
+    },
+    {
+      "id": "S57_I02",
+      "classification": "verified_narrative_source_violation",
+      "rule": "registered_assets_and_locations",
+      "finding": "登记仅包含办公室固定元素、7项道具；正文却安排茶水间、纸杯、当前使用红笔及键盘/屏幕参与实际叙事。asset_ids都在枚举内，不能抵消正文新增对象。",
+      "evidence": [
+        {
+          "source": "receipt",
+          "path": "document_output.causal_events.0.visible_event",
+          "quote": "他边敲键盘边叹气"
+        },
+        {
+          "source": "receipt",
+          "path": "document_output.causal_events.1.visible_event",
+          "quote": "对着屏幕说"
+        },
+        {
+          "source": "receipt",
+          "path": "document_output.causal_events.2.visible_event",
+          "quote": "方澄转身去茶水间倒水"
+        },
+        {
+          "source": "receipt",
+          "path": "document_output.causal_events.2.visible_event",
+          "quote": "继续在明细单上用红笔圈数字"
+        },
+        {
+          "source": "receipt",
+          "path": "document_output.causal_events.2.visible_event",
+          "quote": "方澄拿着纸杯"
+        },
+        {
+          "source": "receipt",
+          "path": "document_output.causal_events.3.visible_event",
+          "quote": "被压在键盘边的院线电影票根"
+        },
+        {
+          "source": "receipt",
+          "path": "document_output.causal_events.5.result",
+          "quote": "键盘声和红笔批注声"
+        }
+      ],
+      "registered_manifest_evidence": "REGISTRATION_EVIDENCE",
+      "disposition": "维持现有输入登记，模型提交完整新方向解决新增物件和场所；不本地拼接或事后默默增资产。"
+    },
+    {
+      "id": "S57_R01",
+      "classification": "unresolved_ink_source_risk_not_hard_physical_contradiction",
+      "rule": "prop_identity_and_new_mark_source",
+      "finding": "E04传递黑色签字笔，E06收回同一笔后新增红字。P07只描述黑色外观，没有独立ink_color；不能断言黑色笔身只能黑墨。P05既有红笔批注仅是纸原外观，不自动登记写新增红字的工具。当前明确故障是E03实际使用未登记红笔；E06需完整新稿说明与登记一致的墨色/新增批注来源或避免依赖它。",
+      "evidence": [
+        {
+          "source": "context",
+          "path": "static_visual_manifest.props.6.appearance",
+          "quote": "黑色细头签字笔，金属笔夹"
+        },
+        {
+          "source": "context",
+          "path": "static_visual_manifest.props.4.appearance",
+          "quote": "黑字数字，红笔批注"
+        },
+        {
+          "source": "receipt",
+          "path": "document_output.causal_events.3.visible_event",
+          "quote": "拿起黑色签字笔递向方澄"
+        },
+        {
+          "source": "receipt",
+          "path": "document_output.causal_events.5.visible_event",
+          "quote": "林屿把签字笔收回来，自己在明细单上写下第一行红字批注"
+        }
+      ],
+      "disposition": "不以笔身颜色等同墨色来判硬物理失败。下一稿保守避免新增红字可继续，不要求手工重写原回执或在途请求。"
+    }
+  ],
+  "REGISTRATION_EVIDENCE": {
+    "source": "context from exact json.loads(receipt.request.messages.1.content)",
+    "registered_props": [
+      {
+        "path": "static_visual_manifest.props.0.name",
+        "id": "P01",
+        "name": "挎包",
+        "appearance": "软皮小号斜挎包，米灰色金属扣，单层翻盖"
+      },
+      {
+        "path": "static_visual_manifest.props.1.name",
+        "id": "P02",
+        "name": "院线电影票根",
+        "appearance": "竖版窄长纸片，米白底深红字，右侧带撕齿虚线，今晚院线开场时间与座位号可读"
+      },
+      {
+        "path": "static_visual_manifest.props.2.name",
+        "id": "P03",
+        "name": "善后便利贴三张",
+        "appearance": "正方形小纸片，分别为浅黄、浅粉、浅蓝底，深灰手写短词（对账/改明细/收尾）"
+      },
+      {
+        "path": "static_visual_manifest.props.3.name",
+        "id": "P04",
+        "name": "咖啡杯",
+        "appearance": "白色陶瓷马克杯，杯身外侧无图案，杯口微宽"
+      },
+      {
+        "path": "static_visual_manifest.props.4.name",
+        "id": "P05",
+        "name": "客户明细单",
+        "appearance": "A4横版打印表格纸，浅灰线条格，黑字数字，红笔批注"
+      },
+      {
+        "path": "static_visual_manifest.props.5.name",
+        "id": "P06",
+        "name": "结算单",
+        "appearance": "A4纵版表格纸，右上角有彩色公司logo条，浅蓝表头"
+      },
+      {
+        "path": "static_visual_manifest.props.6.name",
+        "id": "P07",
+        "name": "签字笔",
+        "appearance": "黑色细头签字笔，金属笔夹"
+      }
+    ],
+    "registered_scene_elements": [
+      {
+        "path": "static_visual_manifest.scene.elements.0.name",
+        "id": "E01",
+        "name": "方澄工位桌"
+      },
+      {
+        "path": "static_visual_manifest.scene.elements.1.name",
+        "id": "E02",
+        "name": "林屿工位桌"
+      },
+      {
+        "path": "static_visual_manifest.scene.elements.2.name",
+        "id": "E03",
+        "name": "抽屉柜"
+      },
+      {
+        "path": "static_visual_manifest.scene.elements.3.name",
+        "id": "E04",
+        "name": "办公室门"
+      },
+      {
+        "path": "static_visual_manifest.scene.elements.4.name",
+        "id": "E05",
+        "name": "窗户"
+      },
+      {
+        "path": "static_visual_manifest.scene.elements.5.name",
+        "id": "E06",
+        "name": "顶灯"
+      },
+      {
+        "path": "static_visual_manifest.scene.elements.6.name",
+        "id": "E07",
+        "name": "地面"
+      },
+      {
+        "path": "static_visual_manifest.scene.elements.7.name",
+        "id": "E08",
+        "name": "墙面"
+      },
+      {
+        "path": "static_visual_manifest.scene.elements.8.name",
+        "id": "E09",
+        "name": "办公椅（方澄）"
+      },
+      {
+        "path": "static_visual_manifest.scene.elements.9.name",
+        "id": "E10",
+        "name": "办公椅（林屿）"
+      }
+    ],
+    "named_red_pen_registered": false,
+    "teawater_room_registered": false,
+    "paper_cup_registered": false,
+    "keyboard_or_screen_registered": false
+  },
+  "creative_notes": [
+    {
+      "status": "usable_direction_mechanism_pending_full_revision",
+      "finding": "默认递笔/请求→她不接笔且说明先走→他收笔自己开始工作→她出门，目标、阻力和关系行动有可用因果骨架；具体感染力仍待完整稿、表演安排与人工视频审查。",
+      "evidence": [
+        {
+          "source": "receipt",
+          "path": "document_output.causal_events.3.visible_event",
+          "quote": "拿起黑色签字笔递向方澄"
+        },
+        {
+          "source": "receipt",
+          "path": "document_output.causal_events.4.visible_event",
+          "quote": "方澄没有接那支签字笔"
+        },
+        {
+          "source": "receipt",
+          "path": "document_output.causal_events.4.visible_event",
+          "quote": "我七点有事，得先走"
+        },
+        {
+          "source": "receipt",
+          "path": "document_output.causal_events.5.visible_event",
+          "quote": "林屿把签字笔收回来"
+        }
+      ]
+    },
+    {
+      "status": "not_a_fault",
+      "finding": "brief允许时长浮动、结尾不和解；本次没有固定拍数、秒数或完美和解要求。6个因果事件本身不是错误。",
+      "evidence": [
+        {
+          "source": "context",
+          "path": "creative_brief.duration_policy",
+          "quote": "flexible"
+        },
+        {
+          "source": "context",
+          "path": "creative_brief.ending",
+          "quote": "不预先规定两人必须和解"
+        }
+      ]
+    },
+    {
+      "status": "inference_only",
+      "finding": "E05「今天对不上了」可能被观众理解为数字不符或来不及，但结合先走台词和不接笔动作，尚不能证明拒绝必然失败；可在后续完整稿澄清，不列为硬错。",
+      "evidence": [
+        {
+          "source": "receipt",
+          "path": "document_output.causal_events.4.visible_event",
+          "quote": "今天对不上了，我七点有事，得先走"
+        }
+      ]
+    }
+  ],
+  "source_path_convention": {
+    "receipt": "paths resolve directly in immutable call57 JSON",
+    "context": "paths resolve in context decoded from the actual user message at request.messages.1.content; not fabricated nested fields of that raw string"
+  },
+  "blocked_next_steps": [
+    "adopt direction",
+    "generate downstream local production modules",
+    "handoff as production ready"
+  ],
+  "required_next_action": "MiniMax same model/endpoint submits complete new direction; full semantic recheck; no manual patch/merge of call57",
+  "original_receipt_modified": false,
+  "media_calls": 0
+}

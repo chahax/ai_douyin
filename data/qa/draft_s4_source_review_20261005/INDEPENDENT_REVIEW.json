@@ -1,0 +1,55 @@
+{
+  "schema": "independent_complete_draft_source_review/v1",
+  "receipt_path": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v3\\call_062_draft_s4.json",
+  "receipt_sha256": "62e370c4034fe06372160ece01966a1813b0ac04b23af3b38a1619c00db3e18f",
+  "request_sha256": "8fe4ae8234c0724425aad6530c7e486fba6f42a5c539882b2cca4e1bffb4bbe1",
+  "source_binding_sha256": "883c00b7e08943dd60228ca3632c4ee4b87ba784706fbda26f9c8e05e5cb9c4f",
+  "source_status": "contract_rejected",
+  "original_inner_equal_saved_document": true,
+  "payload_sha256": "2511dc3792528ff66099392984540719fa75c62499eb4384376197b01b24d68c",
+  "document_sha256": "b72a38e8ec69b67abbe4b8d32d5b3dd23dcf5354cf596e6f56167db81461835b",
+  "required_feedback": [
+    {
+      "path": "document_output.beats.0.steps.1.text",
+      "quote": "方澄手指搭在挎包带子上没动，目光从自己桌面那三张便利贴慢慢移到林屿桌角那只白色陶瓷咖啡杯上——液面平整，几乎没动过。再看回林屿手边摊着的另一张A4纵版结算单，浅蓝表头在夕光里反着一点微亮。林屿没抬头，黑色签字笔搁在桌面，他拿的是另一支红笔，正在明细单边角又添一行批注。",
+      "classification": "confirmed_asset_source_conflict",
+      "evidence": "The script explicitly introduces another red pen. Original registered props include only black P07; red annotations belong to the static P05 paper, not a separately registered pen.",
+      "feedback": "完整新稿使用已登记道具保持取用一致；已有红批注不是新红笔。新增红笔及其持有悬置不得交给导演猜测或手补。"
+    },
+    {
+      "path": "document_output.beats.3.steps.2.text",
+      "quote": "她没笑，也没接他那杯还没递出的奶茶式补偿，说完把目光从林屿脸上移到自己椅背上挂着的米灰色挎包上。",
+      "classification": "confirmed_physical_metaphor_ambiguity_not_proven_new_prop",
+      "evidence": "The action refers to 那杯还没递出的奶茶式补偿, while an earlier line is only a promise to buy milk tea. The wording mixes visible cup and metaphor; it does not prove a cup was introduced physically.",
+      "feedback": "保留对白中请喝奶茶的选择自由；动作只表达真实可见的拒绝后反应，不把口头承诺写成场内那杯奶茶。"
+    },
+    {
+      "path": "document_output.beats.5.steps.2.text",
+      "quote": "方澄从椅背上取下米灰色挎包，单肩挎好，看了他低头改明细的侧脸一眼，转身朝办公室门走去。林屿桌角那只白色陶瓷咖啡杯液面依旧几乎没动，A4纵版结算单仍摊在原处，他没喊她。",
+      "classification": "confirmed_source_transition_gap",
+      "support_path": "document_output.beats.0.steps.0.text",
+      "support_quote": "傍晚办公室，临窗的暖橙夕光斜落在浅木色桌面上。米白色半透明卷帘半垂，窗框外天色正一点点压深。方澄穿着灰蓝色薄针织开衫，内搭白色圆领T恤，坐在靠窗一侧的黑色网面转椅上，米灰色软皮挎包已经挂在椅背一侧。她垂眼看了一眼桌角压着的三张便利贴——浅黄、浅粉、浅蓝，底色不一，上面各有深灰手写短词，她没去碰。林屿穿着米驼色棉质衬衫，袖口挽至前臂，坐在她右边平行的工位，低头对着一份A4横版客户明细单核对，纸面红笔批注密密麻麻。",
+      "evidence": "Fang starts seated and no intervening original step explicitly rises before the bag and walk-to-door action. This is a missing departure prerequisite, not proof that walking is physically impossible.",
+      "feedback": "完整新稿在自然离开动作中明确从坐态起身及取包先后；不用为起身新增独立叙事拍，不让导演凭空补动作。"
+    }
+  ],
+  "uncertainties": [
+    {
+      "path": "document_output.beats.6.steps.0.text",
+      "quote": "方澄走到房间远端侧墙那扇米灰色木纹平板门前，下半部金属横拉把手在夕光里反着一道细亮。她抬手握住把手，拉开，推门走出办公室，门在身后缓缓合拢。",
+      "classification": "wording_ambiguity_not_proven_physical_impossibility",
+      "reason": "拉开、推门走出 has two possible literal direction cues, but no hinge or opening direction is specified. Do not infer a hard mechanical contradiction from two Chinese words or the bar handle alone.",
+      "suggestion": "完整新稿自然写清一条一致开门与离开路径；不增加第四项硬错误。"
+    }
+  ],
+  "not_faults": [
+    "The offer 我请你喝奶茶 is valid dialogue and does not require a physical milk-tea asset.",
+    "Existing red annotations on the client sheet match P05.",
+    "Inferred stand-to-walk is not declared physically impossible; feedback addresses explicit source continuity for production.",
+    "Door push/pull wording alone does not establish impossible mechanics."
+  ],
+  "scope_boundary": "Original call62 is a complete stored model document but contract_rejected. Review feedback only; no adoption, repair, splice, physical timing approval, model call or final creative quality approval.",
+  "model_calls": 0,
+  "original_record_modified": false,
+  "semantic_approval": false
+}

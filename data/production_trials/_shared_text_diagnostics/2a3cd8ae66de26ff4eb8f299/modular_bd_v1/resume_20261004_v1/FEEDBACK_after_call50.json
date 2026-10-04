@@ -1,0 +1,42 @@
+{
+  "previous_received_call": 50,
+  "source_adopted": false,
+  "schema_fault": {
+    "message": "Additional properties are not allowed ('$text' was unexpected)",
+    "path": [
+      "beats",
+      3,
+      "steps",
+      0
+    ]
+  },
+  "required_format": "beats仅包含完整{id,duration_seconds,event,trigger,steps}拍对象；steps仅包含{kind,speaker,text}对象，kind仅action/dialogue。不要$text字段，不要将步骤放到beats层。提交完整新稿，不修补JSON。",
+  "verified_full_source_faults": [
+    {
+      "location": "B1.steps.2",
+      "quote": "林屿说着顺手",
+      "problem": "对白之后的串行action又表示说话同时，仍未修复已反馈故障。"
+    },
+    {
+      "location": "B1.steps.2",
+      "quote": "红色签字笔旁边",
+      "problem": "静态资产只登记黑色签字笔，没有红笔；新道具没有登记，不能假定可用。"
+    },
+    {
+      "location": "B2.steps.1 / B7.steps.1",
+      "quote": "把明细单放在自己桌边 / 自己桌上的A4横版客户明细单",
+      "problem": "纸堆已在方澄桌边，却无取回动作跳回林屿桌上；不能局部模型补道具转移掩盖。"
+    },
+    {
+      "location": "B5.event / B5.steps.0",
+      "quote": "挎包带从肩上放下 / 挎包带从手上放下",
+      "problem": "事件摘要和实际原步骤不一致，未有背上包的动作。"
+    },
+    {
+      "location": "B13.steps.0 / B13.steps.1",
+      "quote": "坐下 / 他起身把",
+      "problem": "刚坐下又起身取纸且未写回位就开始对账；微操作增加状态与场面负担，没有新增必要叙事信息。"
+    }
+  ],
+  "creative_revision_request": "不要围绕逐个故障叠加拿笔、放笔、转移纸堆、坐下站起操作。先重新把整片情绪、清楚因果、拒绝之前的难处和关系变化想成立，再提交一份完整独立新稿；用尽量少的有作用事件和自然叙事单元。保留已授权主题、人物关系、观众感受、写实画风与结尾机制，时长浮动、拍数不限。参考只借表达机制，不照搬剧情。原稿仅是失败证据，不需保留其动作链。"
+}

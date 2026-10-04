@@ -1,0 +1,34 @@
+{
+  "schema": "authorized_creative_continuation/v1",
+  "authorization": "用户2026-10-04明确恢复：继续吧先不设token预算。后续文本调用暂不设总token硬上限；旧49次490913以及原500000历史记录完整承接，不重置账本。保持MiniMax创作、DeepSeek少量文本复审；不含媒体调用或发布。",
+  "authorized_at": "2026-10-04T15:52:24.655447+00:00",
+  "starting_spend": {
+    "calls_started": 52,
+    "reported_tokens": 531221,
+    "legacy_max_total_tokens": 500000,
+    "historical_legacy_calls": 49,
+    "historical_legacy_reported_tokens": 490913,
+    "original_parent_run": "D:\\IT\\ai_douyin\\data\\production_trials\\boundary_live_action_reference_v15_20261001\\round_01",
+    "prior_evidence_sha256": {
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v1\\CALL_LEDGER.json": "e382030e42e3a0eea3c89c8da7558562e161c5ffb56e38cc8c52a415ade2d0b9",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v1\\AUTHORIZATION.json": "c3c86e357c0b3a6e97eef12095f5177191abbc5a762a99274814a99cd77cbf70",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v1\\RESULT.json": "8429ebebabdc649c9877c0117cd03f81ed9ac943cf3fcd3dfee41e1154a78349",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v1\\SOURCE_DIAGNOSTIC_call51.json": "521b50440ecd42cd8d0cae37dfbb1ee515d5375689b00090f16af1f2ab015beb",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v1\\call_050_draft_s1.json": "d9adb9e27421c14e924177dfd8fd77352d9390e10378dcca6fa26a75b0d6ecc2",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v1\\call_051_draft_s2.json": "ecc9d7c5e06377969578b4a0fbf364a049ce0bd2bada97d6140d301382ca5b86",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v1\\call_052_script_review_s2_r1.json": "614f8dd39ce6a4f51a60306cd62fd6489cc215d348d1ceb68e21e57b50115b93"
+    },
+    "prior_aggregate_limit": null,
+    "operator_extension": "story direction before fresh detail; concrete review format/schema; exact narrative/execution evidence binding",
+    "last_rejection": {
+      "ordinal": 52,
+      "code": "RESPONSE_TRUNCATED",
+      "known_usage": 17908,
+      "response_not_retried": true
+    }
+  },
+  "max_total_tokens": null,
+  "old_budget_reset": false,
+  "old_governance_migrated": false,
+  "media_calls_authorized": false
+}

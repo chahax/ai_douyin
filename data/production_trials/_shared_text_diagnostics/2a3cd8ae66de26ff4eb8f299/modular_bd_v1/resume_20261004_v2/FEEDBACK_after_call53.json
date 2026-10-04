@@ -1,0 +1,22 @@
+{
+  "received_plan_call": 53,
+  "status": "not_adopted_pending_whole_direction_revision",
+  "verified_direction_issues": [
+    {
+      "path": "relationship_pressure",
+      "quote": "如果她拒绝，林屿今晚就得自己加班",
+      "finding": "计划把独自加班作为拒绝的代价。"
+    },
+    {
+      "path": "causal_events.5.visible_event",
+      "quote": "今天你也就准时收工",
+      "finding": "后面却由方澄保证他也准时收工，与前述代价相冲突；观众不能同时相信不可轻松完成和保证准时。结尾关怀话语还弱化各自负责的实际行动。"
+    },
+    {
+      "path": "causal_events.2.visible_event",
+      "quote": "对账/改明细/收尾",
+      "finding": "这三个一般任务短词没有日期或明确替林加班的联系，却被new_information称为多次帮他的实证。首请求的“赶得上你先走”也未说明过去多次帮忙。元信息不能替可见可听的前提。"
+    }
+  ],
+  "whole_direction_request": "重新提交完整故事方向，先把观众在拒绝前知道的多次付出、实际关系顾虑、此次选择的代价和结尾关系新行动成立。少量自然事件即可，不把拿放、摆工具、喝杯的微操作或全部资产塞入大方向；详细姿态和机位留下一阶段。不要以抽象new_information/result解释替正文已经展示的事，不做完美理解或安慰口号。无需保留上一方向的动作链，不返回字段补丁。"
+}

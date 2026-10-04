@@ -1,0 +1,9 @@
+{
+  "ordinal": 53,
+  "request_sha256": "17d41d2c2aae21419f4139e97b94a54417da0dd32ae57c821936973a8f5b5d77",
+  "full_reference_pack_equal_original": true,
+  "reference_pack_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+  "full_brief_equal_original": true,
+  "full_manifest_equal_original": true,
+  "old_full_failed_script_in_context": false
+}

@@ -1,0 +1,1063 @@
+{
+  "schema": "step_index_physical_adapter_offline_v5",
+  "status": "physical_compiled_pending_semantic_review",
+  "complete": true,
+  "source_raw_linear_script": {
+    "title": "单拍多镜顺序夹具",
+    "premise": "拒绝后各自承担",
+    "selected_candidate_id": "FIXTURE",
+    "beats": [
+      {
+        "id": "B1",
+        "event": "仅摘要，不用于生成动作",
+        "trigger": "听后反应承接选择",
+        "steps": [
+          {
+            "kind": "action",
+            "speaker": "",
+            "text": "乙沿桌面把浅黄对账便签推近甲，浅粉和浅蓝不动。"
+          },
+          {
+            "kind": "dialogue",
+            "speaker": "甲",
+            "text": "这次你自己做。"
+          },
+          {
+            "kind": "action",
+            "speaker": "",
+            "text": "甲抬眼看乙，并保持两秒。"
+          },
+          {
+            "kind": "action",
+            "speaker": "",
+            "text": "乙沿同一桌面把浅黄便签收回自己面前，浅粉和浅蓝不动。"
+          }
+        ]
+      }
+    ]
+  },
+  "source_raw_sha256": "9c7aa6582bacde0397d791aae18a85f369edc5c53b059da01431ca1606f9263c",
+  "context_sha256": "2c59f6d410723e915f5963aab7e5eb7edb28b6f7fe0982bd127aee1227046592",
+  "direction_sha256": "ddcf02cd7fe8bba6f5391485b3803dd080af4ad9dee80c0525de54554c0a8e29",
+  "locals_sha256": [
+    "d79229be055308d1ca672caa26f698a43469c3cc94efd84077ebbe1dbd5b9ffe",
+    "c8468f08a6129e527e574ce4a1440ed6df2b95b4d8991b34485d956843004626"
+  ],
+  "derived_execution_script": {
+    "title": "单拍多镜顺序夹具",
+    "beats": [
+      {
+        "id": "S1",
+        "duration_seconds": 4,
+        "event": "原steps执行投影；事件摘要不是实际动作源",
+        "dialogue": [
+          {
+            "speaker": "甲",
+            "text": "这次你自己做。"
+          }
+        ]
+      },
+      {
+        "id": "S2",
+        "duration_seconds": 4,
+        "event": "原steps执行投影；事件摘要不是实际动作源",
+        "dialogue": []
+      }
+    ],
+    "duration_seconds": 8
+  },
+  "derived_action_plan": {
+    "schema": "creative_surface_action_v1",
+    "initial_state": {
+      "C01": {
+        "posture": "standing",
+        "position": "桌左",
+        "gaze": "桌面",
+        "affect": "平静",
+        "facing": "C02"
+      },
+      "C02": {
+        "posture": "standing",
+        "position": "桌右",
+        "gaze": "C01",
+        "affect": "平静",
+        "facing": "桌面"
+      },
+      "P01": {
+        "holder": "none",
+        "location": "surface:E02:cup_corner"
+      },
+      "P02": {
+        "holder": "none",
+        "location": "surface:E02:pen_corner"
+      },
+      "P03_Y": {
+        "holder": "none",
+        "location": "surface:E02:lin_center"
+      },
+      "P03_P": {
+        "holder": "none",
+        "location": "surface:E02:lin_center"
+      },
+      "P03_B": {
+        "holder": "none",
+        "location": "surface:E02:lin_center"
+      }
+    },
+    "spatial_contract": {
+      "seats": []
+    },
+    "beats": [
+      {
+        "beat_id": "S1",
+        "purpose": "选择被说清",
+        "composition": "双人行动与回应可读",
+        "camera": "中景",
+        "dialogue_mode": "画内对白",
+        "cut_reason": "对白完成后看承受者",
+        "groups": [
+          {
+            "id": "G_SLIDE_NEAR",
+            "kind": "action",
+            "duration_seconds": 1,
+            "hold_subject": "",
+            "performance": "浅黄便签沿林屿桌面推向方澄，粉蓝不动",
+            "operations": [
+              {
+                "kind": "slide",
+                "actor": "C02",
+                "target": "P03_Y",
+                "value": "surface:E02:near_fang"
+              }
+            ],
+            "script_slot": "before"
+          }
+        ],
+        "dialogue_performance": "甲完整说出原句，关键动作与对白依次进行",
+        "reaction": {
+          "anchor": "dialogue_0",
+          "subject": "C01",
+          "meaning": "源索引绑定的可读表演，语义待审"
+        },
+        "cut_after_event_id": "dialogue_0",
+        "completion_condition": "all_required_events_complete"
+      },
+      {
+        "beat_id": "S2",
+        "purpose": "双方开始承受结果",
+        "composition": "双人行动与回应可读",
+        "camera": "连续观察",
+        "dialogue_mode": "无对白",
+        "cut_reason": "新的实际行动完成",
+        "groups": [
+          {
+            "id": "G_GAZE",
+            "kind": "action",
+            "duration_seconds": 0.25,
+            "hold_subject": "",
+            "performance": "按原步骤自然完成，具体感染力待审",
+            "operations": [
+              {
+                "kind": "gaze",
+                "actor": "C01",
+                "target": "",
+                "value": "C02"
+              }
+            ],
+            "script_slot": "before"
+          },
+          {
+            "id": "G_HOLD",
+            "kind": "hold",
+            "duration_seconds": 2,
+            "hold_subject": "C01",
+            "performance": "按原步骤自然完成，具体感染力待审",
+            "operations": [],
+            "script_slot": "before"
+          },
+          {
+            "id": "G_SLIDE_BACK",
+            "kind": "action",
+            "duration_seconds": 1,
+            "hold_subject": "",
+            "performance": "浅黄便签沿原桌面滑回林屿面前，粉蓝不动",
+            "operations": [
+              {
+                "kind": "slide",
+                "actor": "C02",
+                "target": "P03_Y",
+                "value": "surface:E02:lin_center"
+              }
+            ],
+            "script_slot": "before"
+          }
+        ],
+        "dialogue_performance": "乙完整说出原句，语速和声画仍待后续审查",
+        "reaction": {
+          "anchor": "G_HOLD",
+          "subject": "C01",
+          "meaning": "源索引绑定的可读表演，语义待审"
+        },
+        "cut_after_event_id": "G_SLIDE_BACK",
+        "completion_condition": "all_required_events_complete"
+      }
+    ]
+  },
+  "scheduled_execution": {
+    "schema": "creative_surface_state_bridge_v1",
+    "initial_state": {
+      "C01": {
+        "posture": "standing",
+        "position": "桌左",
+        "gaze": "桌面",
+        "affect": "平静"
+      },
+      "C02": {
+        "posture": "standing",
+        "position": "桌右",
+        "gaze": "C01",
+        "affect": "平静"
+      },
+      "P01": {
+        "holder": "none",
+        "location": "surface:E02:cup_corner"
+      },
+      "P02": {
+        "holder": "none",
+        "location": "surface:E02:pen_corner"
+      },
+      "P03_Y": {
+        "holder": "none",
+        "location": "surface:E02:lin_center"
+      },
+      "P03_P": {
+        "holder": "none",
+        "location": "surface:E02:lin_center"
+      },
+      "P03_B": {
+        "holder": "none",
+        "location": "surface:E02:lin_center"
+      }
+    },
+    "beats": [
+      {
+        "beat_id": "S1",
+        "purpose": "选择被说清",
+        "composition": "双人行动与回应可读",
+        "camera": "中景",
+        "dialogue_mode": "画内对白",
+        "cut_reason": "程序切点：4秒，dialogue_0完成且全部必需事件已完成。叙事目的（非执行指令）：对白完成后看承受者",
+        "events": [
+          {
+            "start": 0.0,
+            "end": 1.0,
+            "phase": "before_first_line",
+            "script_slot": "before",
+            "dialogue_index": -1,
+            "performance": "浅黄便签沿林屿桌面推向方澄，粉蓝不动",
+            "operations": [
+              {
+                "kind": "slide",
+                "actor": "C02",
+                "target": "P03_Y",
+                "value": "surface:E02:near_fang"
+              }
+            ]
+          },
+          {
+            "start": 1.0,
+            "end": 3.0142857142857142,
+            "phase": "first_line_delivery",
+            "script_slot": "dialogue_performance",
+            "dialogue_index": 0,
+            "performance": "甲完整说出原句，关键动作与对白依次进行",
+            "operations": []
+          },
+          {
+            "start": 3.0142857142857142,
+            "end": 4,
+            "phase": "after_last_line",
+            "script_slot": "after",
+            "dialogue_index": -1,
+            "performance": "保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长",
+            "operations": []
+          }
+        ],
+        "dialogue_windows": [
+          {
+            "start": 1.0,
+            "end": 3.0142857142857142
+          }
+        ],
+        "reaction_window": {
+          "start": 1.0,
+          "end": 3.0142857142857142,
+          "subject": "C01",
+          "meaning": "源索引绑定的可读表演，语义待审"
+        }
+      },
+      {
+        "beat_id": "S2",
+        "purpose": "双方开始承受结果",
+        "composition": "双人行动与回应可读",
+        "camera": "连续观察",
+        "dialogue_mode": "无对白",
+        "cut_reason": "程序切点：4秒，G_SLIDE_BACK完成且全部必需事件已完成。叙事目的（非执行指令）：新的实际行动完成",
+        "events": [
+          {
+            "start": 0.0,
+            "end": 0.25,
+            "phase": "no_dialogue",
+            "script_slot": "before",
+            "dialogue_index": -1,
+            "performance": "按原步骤自然完成，具体感染力待审",
+            "operations": [
+              {
+                "kind": "gaze",
+                "actor": "C01",
+                "target": "",
+                "value": "C02"
+              }
+            ]
+          },
+          {
+            "start": 0.25,
+            "end": 2.25,
+            "phase": "no_dialogue",
+            "script_slot": "before",
+            "dialogue_index": -1,
+            "performance": "按原步骤自然完成，具体感染力待审",
+            "operations": []
+          },
+          {
+            "start": 2.25,
+            "end": 3.25,
+            "phase": "no_dialogue",
+            "script_slot": "before",
+            "dialogue_index": -1,
+            "performance": "浅黄便签沿原桌面滑回林屿面前，粉蓝不动",
+            "operations": [
+              {
+                "kind": "slide",
+                "actor": "C02",
+                "target": "P03_Y",
+                "value": "surface:E02:lin_center"
+              }
+            ]
+          },
+          {
+            "start": 3.25,
+            "end": 4,
+            "phase": "no_dialogue",
+            "script_slot": "after",
+            "dialogue_index": -1,
+            "performance": "保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长",
+            "operations": []
+          }
+        ],
+        "dialogue_windows": [],
+        "reaction_window": {
+          "start": 0.25,
+          "end": 2.25,
+          "subject": "C01",
+          "meaning": "源索引绑定的可读表演，语义待审"
+        }
+      }
+    ]
+  },
+  "source_trace": [
+    {
+      "shot_id": "S1",
+      "source_ref": "raw_linear_script.beats.0.steps.0",
+      "anchor": "G_SLIDE_NEAR",
+      "kind": "group",
+      "start": 0.0,
+      "end": 1.0,
+      "group": {
+        "id": "G_SLIDE_NEAR",
+        "kind": "action",
+        "duration_seconds": 1,
+        "hold_subject": "",
+        "performance": "浅黄便签沿林屿桌面推向方澄，粉蓝不动",
+        "operations": [
+          {
+            "kind": "slide",
+            "actor": "C02",
+            "target": "P03_Y",
+            "value": "surface:E02:near_fang"
+          }
+        ],
+        "script_slot": "before"
+      },
+      "scheduler_projection": {
+        "id": "G_SLIDE_NEAR",
+        "kind": "action",
+        "duration_seconds": 1,
+        "hold_subject": "",
+        "performance": "浅黄便签沿林屿桌面推向方澄，粉蓝不动",
+        "operations": [
+          {
+            "kind": "slide",
+            "actor": "C02",
+            "target": "P03_Y",
+            "value": "surface:E02:near_fang"
+          }
+        ],
+        "script_slot": "before"
+      },
+      "actual_scheduled_payload": {
+        "start": 0.0,
+        "end": 1.0,
+        "phase": "before_first_line",
+        "script_slot": "before",
+        "dialogue_index": -1,
+        "performance": "浅黄便签沿林屿桌面推向方澄，粉蓝不动",
+        "operations": [
+          {
+            "kind": "slide",
+            "actor": "C02",
+            "target": "P03_Y",
+            "value": "surface:E02:near_fang"
+          }
+        ]
+      },
+      "payload_matched": true,
+      "physical_operations": [
+        {
+          "kind": "slide",
+          "actor": "C02",
+          "target": "P03_Y",
+          "value": "surface:E02:near_fang"
+        }
+      ],
+      "scheduled_operations": [
+        {
+          "kind": "slide",
+          "actor": "C02",
+          "target": "P03_Y",
+          "value": "surface:E02:near_fang"
+        }
+      ],
+      "projection_note": "identity"
+    },
+    {
+      "shot_id": "S1",
+      "source_ref": "raw_linear_script.beats.0.steps.1",
+      "anchor": "dialogue_0",
+      "kind": "dialogue",
+      "start": 1.0,
+      "end": 3.0142857142857142,
+      "group": null,
+      "scheduler_projection": null,
+      "actual_scheduled_payload": {
+        "start": 1.0,
+        "end": 3.0142857142857142,
+        "phase": "first_line_delivery",
+        "script_slot": "dialogue_performance",
+        "dialogue_index": 0,
+        "performance": "甲完整说出原句，关键动作与对白依次进行",
+        "operations": []
+      },
+      "payload_matched": true,
+      "physical_operations": [],
+      "scheduled_operations": [],
+      "projection_note": "identity"
+    },
+    {
+      "shot_id": "S2",
+      "source_ref": "raw_linear_script.beats.0.steps.2",
+      "anchor": "G_GAZE",
+      "kind": "group",
+      "start": 4.0,
+      "end": 4.25,
+      "group": {
+        "id": "G_GAZE",
+        "kind": "action",
+        "duration_seconds": 0.25,
+        "hold_subject": "",
+        "performance": "按原步骤自然完成，具体感染力待审",
+        "operations": [
+          {
+            "kind": "gaze",
+            "actor": "C01",
+            "target": "",
+            "value": "C02"
+          }
+        ],
+        "script_slot": "before"
+      },
+      "scheduler_projection": {
+        "id": "G_GAZE",
+        "kind": "action",
+        "duration_seconds": 0.25,
+        "hold_subject": "",
+        "performance": "按原步骤自然完成，具体感染力待审",
+        "operations": [
+          {
+            "kind": "gaze",
+            "actor": "C01",
+            "target": "",
+            "value": "C02"
+          }
+        ],
+        "script_slot": "before"
+      },
+      "actual_scheduled_payload": {
+        "start": 0.0,
+        "end": 0.25,
+        "phase": "no_dialogue",
+        "script_slot": "before",
+        "dialogue_index": -1,
+        "performance": "按原步骤自然完成，具体感染力待审",
+        "operations": [
+          {
+            "kind": "gaze",
+            "actor": "C01",
+            "target": "",
+            "value": "C02"
+          }
+        ]
+      },
+      "payload_matched": true,
+      "physical_operations": [
+        {
+          "kind": "gaze",
+          "actor": "C01",
+          "target": "",
+          "value": "C02"
+        }
+      ],
+      "scheduled_operations": [
+        {
+          "kind": "gaze",
+          "actor": "C01",
+          "target": "",
+          "value": "C02"
+        }
+      ],
+      "projection_note": "identity"
+    },
+    {
+      "shot_id": "S2",
+      "source_ref": "raw_linear_script.beats.0.steps.2",
+      "anchor": "G_HOLD",
+      "kind": "group",
+      "start": 4.25,
+      "end": 6.25,
+      "group": {
+        "id": "G_HOLD",
+        "kind": "hold",
+        "duration_seconds": 2,
+        "hold_subject": "C01",
+        "performance": "按原步骤自然完成，具体感染力待审",
+        "operations": [],
+        "script_slot": "before"
+      },
+      "scheduler_projection": {
+        "id": "G_HOLD",
+        "kind": "hold",
+        "duration_seconds": 2,
+        "hold_subject": "C01",
+        "performance": "按原步骤自然完成，具体感染力待审",
+        "operations": [],
+        "script_slot": "before"
+      },
+      "actual_scheduled_payload": {
+        "start": 0.25,
+        "end": 2.25,
+        "phase": "no_dialogue",
+        "script_slot": "before",
+        "dialogue_index": -1,
+        "performance": "按原步骤自然完成，具体感染力待审",
+        "operations": []
+      },
+      "payload_matched": true,
+      "physical_operations": [],
+      "scheduled_operations": [],
+      "projection_note": "identity"
+    },
+    {
+      "shot_id": "S2",
+      "source_ref": "raw_linear_script.beats.0.steps.3",
+      "anchor": "G_SLIDE_BACK",
+      "kind": "group",
+      "start": 6.25,
+      "end": 7.25,
+      "group": {
+        "id": "G_SLIDE_BACK",
+        "kind": "action",
+        "duration_seconds": 1,
+        "hold_subject": "",
+        "performance": "浅黄便签沿原桌面滑回林屿面前，粉蓝不动",
+        "operations": [
+          {
+            "kind": "slide",
+            "actor": "C02",
+            "target": "P03_Y",
+            "value": "surface:E02:lin_center"
+          }
+        ],
+        "script_slot": "before"
+      },
+      "scheduler_projection": {
+        "id": "G_SLIDE_BACK",
+        "kind": "action",
+        "duration_seconds": 1,
+        "hold_subject": "",
+        "performance": "浅黄便签沿原桌面滑回林屿面前，粉蓝不动",
+        "operations": [
+          {
+            "kind": "slide",
+            "actor": "C02",
+            "target": "P03_Y",
+            "value": "surface:E02:lin_center"
+          }
+        ],
+        "script_slot": "before"
+      },
+      "actual_scheduled_payload": {
+        "start": 2.25,
+        "end": 3.25,
+        "phase": "no_dialogue",
+        "script_slot": "before",
+        "dialogue_index": -1,
+        "performance": "浅黄便签沿原桌面滑回林屿面前，粉蓝不动",
+        "operations": [
+          {
+            "kind": "slide",
+            "actor": "C02",
+            "target": "P03_Y",
+            "value": "surface:E02:lin_center"
+          }
+        ]
+      },
+      "payload_matched": true,
+      "physical_operations": [
+        {
+          "kind": "slide",
+          "actor": "C02",
+          "target": "P03_Y",
+          "value": "surface:E02:lin_center"
+        }
+      ],
+      "scheduled_operations": [
+        {
+          "kind": "slide",
+          "actor": "C02",
+          "target": "P03_Y",
+          "value": "surface:E02:lin_center"
+        }
+      ],
+      "projection_note": "identity"
+    }
+  ],
+  "source_map": [
+    {
+      "source_step_ref": "raw_linear_script.beats.0.steps.0",
+      "source_step": {
+        "kind": "action",
+        "speaker": "",
+        "text": "乙沿桌面把浅黄对账便签推近甲，浅粉和浅蓝不动。"
+      },
+      "shot_id": "S1",
+      "group_ids": [
+        "G_SLIDE_NEAR"
+      ],
+      "dialogue_ref": null,
+      "scheduled_anchors": [
+        "G_SLIDE_NEAR"
+      ],
+      "semantic_correspondence": "pending_full_source_operations_review"
+    },
+    {
+      "source_step_ref": "raw_linear_script.beats.0.steps.1",
+      "source_step": {
+        "kind": "dialogue",
+        "speaker": "甲",
+        "text": "这次你自己做。"
+      },
+      "shot_id": "S1",
+      "group_ids": [],
+      "dialogue_ref": "raw_linear_script.beats.0.steps.1",
+      "scheduled_anchors": [
+        "dialogue_0"
+      ],
+      "semantic_correspondence": "pending_full_source_operations_review"
+    },
+    {
+      "source_step_ref": "raw_linear_script.beats.0.steps.2",
+      "source_step": {
+        "kind": "action",
+        "speaker": "",
+        "text": "甲抬眼看乙，并保持两秒。"
+      },
+      "shot_id": "S2",
+      "group_ids": [
+        "G_GAZE",
+        "G_HOLD"
+      ],
+      "dialogue_ref": null,
+      "scheduled_anchors": [
+        "G_GAZE",
+        "G_HOLD"
+      ],
+      "semantic_correspondence": "pending_full_source_operations_review"
+    },
+    {
+      "source_step_ref": "raw_linear_script.beats.0.steps.3",
+      "source_step": {
+        "kind": "action",
+        "speaker": "",
+        "text": "乙沿同一桌面把浅黄便签收回自己面前，浅粉和浅蓝不动。"
+      },
+      "shot_id": "S2",
+      "group_ids": [
+        "G_SLIDE_BACK"
+      ],
+      "dialogue_ref": null,
+      "scheduled_anchors": [
+        "G_SLIDE_BACK"
+      ],
+      "semantic_correspondence": "pending_full_source_operations_review"
+    }
+  ],
+  "source_unit_coverage_status": "complete",
+  "storyboard": {
+    "style": {
+      "style_option_id": "S01",
+      "visual_medium": "二维手绘动画",
+      "palette": "灰蓝米白",
+      "light_source": "右上暖灯",
+      "character_lock": "确定2名人物的静态身份外观：[{\"age_group\": \"成年\", \"body_shape\": \"成年体型\", \"clothing\": \"通勤衬衣\", \"hair\": \"短发\", \"id\": \"C01\", \"name\": \"甲\"}, {\"age_group\": \"成年\", \"body_shape\": \"成年体型\", \"clothing\": \"通勤衬衣\", \"hair\": \"短发\", \"id\": \"C02\", \"name\": \"乙\"}]",
+      "spatial_layout": "{\"elements\": [{\"appearance\": \"浅木桌面\", \"id\": \"E01\", \"name\": \"桌子\"}, {\"appearance\": \"浅木桌面\", \"id\": \"E02\", \"name\": \"林屿桌\"}, {\"appearance\": \"黑色办公椅\", \"id\": \"E03\", \"name\": \"椅子\"}], \"name\": \"办公室\", \"relations\": [{\"reference\": \"E01\", \"relation\": \"behind\", \"subject\": \"E02\"}]}"
+    },
+    "shots": [
+      {
+        "id": "SH01",
+        "beat_id": "S1",
+        "duration_seconds": 4,
+        "purpose": "选择被说清",
+        "composition": "双人行动与回应可读",
+        "camera": "中景",
+        "cut_reason": "程序切点：4秒，dialogue_0完成且全部必需事件已完成。叙事目的（非执行指令）：对白完成后看承受者",
+        "visible_performance": "0–1秒：C02执行slide：在支持面E02将独立道具P03_Y从lin_center滑移至near_fang；holder维持none；表演补充：浅黄便签沿林屿桌面推向方澄，粉蓝不动；该段结束状态变化：[{\"entity\": \"P03_Y\", \"field\": \"location\", \"from\": \"surface:E02:lin_center\", \"to\": \"surface:E02:near_fang\"}]\n1–3.01429秒：；表演补充：甲完整说出原句，关键动作与对白依次进行；该段结束状态变化：[]\n3.01429–4秒：；表演补充：保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长；该段结束状态变化：[]\n对白1–3.01429秒：甲：这次你自己做。\n情绪反应窗口1–3.01429秒，甲：源索引绑定的可读表演，语义待审\n唯一执行切点：4秒；dialogue_0及全部必需事件已完成。",
+        "start_state": "{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"C02\", \"gaze\": \"桌面\", \"position\": \"桌左\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌右\", \"posture\": \"standing\"}, \"P01(杯子)\": {\"holder\": \"none\", \"location\": \"surface:E02:cup_corner\"}, \"P02(笔)\": {\"holder\": \"none\", \"location\": \"surface:E02:pen_corner\"}, \"P03_B(浅蓝收尾便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:lin_center\"}, \"P03_P(浅粉改明细便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:lin_center\"}, \"P03_Y(浅黄对账便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:lin_center\"}}",
+        "end_state": "{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"C02\", \"gaze\": \"桌面\", \"position\": \"桌左\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌右\", \"posture\": \"standing\"}, \"P01(杯子)\": {\"holder\": \"none\", \"location\": \"surface:E02:cup_corner\"}, \"P02(笔)\": {\"holder\": \"none\", \"location\": \"surface:E02:pen_corner\"}, \"P03_B(浅蓝收尾便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:lin_center\"}, \"P03_P(浅粉改明细便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:lin_center\"}, \"P03_Y(浅黄对账便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:near_fang\"}}",
+        "event_lock": "原steps执行投影；事件摘要不是实际动作源",
+        "dialogue_lock": [
+          {
+            "speaker": "甲",
+            "text": "这次你自己做。"
+          }
+        ],
+        "dialogue_mode": "画内对白",
+        "continuity_mode": "planned_cut_requires_adapter",
+        "production_choices": [],
+        "prompt": "制作风格与资产锁：{\"characters\": [{\"age_group\": \"成年\", \"body_shape\": \"成年体型\", \"clothing\": \"通勤衬衣\", \"hair\": \"短发\", \"id\": \"C01\", \"name\": \"甲\"}, {\"age_group\": \"成年\", \"body_shape\": \"成年体型\", \"clothing\": \"通勤衬衣\", \"hair\": \"短发\", \"id\": \"C02\", \"name\": \"乙\"}], \"props\": [{\"appearance\": \"白色杯子\", \"id\": \"P01\", \"name\": \"杯子\", \"owner_id\": \"C02\"}, {\"appearance\": \"黑色笔\", \"id\": \"P02\", \"name\": \"笔\", \"owner_id\": \"C02\"}, {\"appearance\": \"正方形小纸片，浅黄底，深灰手写短词（对账）\", \"id\": \"P03_Y\", \"name\": \"浅黄对账便利贴\", \"owner_id\": \"C01\"}, {\"appearance\": \"正方形小纸片，浅粉底，深灰手写短词（改明细）\", \"id\": \"P03_P\", \"name\": \"浅粉改明细便利贴\", \"owner_id\": \"C01\"}, {\"appearance\": \"正方形小纸片，浅蓝底，深灰手写短词（收尾）\", \"id\": \"P03_B\", \"name\": \"浅蓝收尾便利贴\", \"owner_id\": \"C01\"}], \"render\": {\"light_source\": \"右上暖灯\", \"palette\": \"灰蓝米白\", \"style_option_id\": \"S01\", \"visual_medium\": \"二维手绘动画\"}, \"scene\": {\"elements\": [{\"appearance\": \"浅木桌面\", \"id\": \"E01\", \"name\": \"桌子\"}, {\"appearance\": \"浅木桌面\", \"id\": \"E02\", \"name\": \"林屿桌\"}, {\"appearance\": \"黑色办公椅\", \"id\": \"E03\", \"name\": \"椅子\"}], \"name\": \"办公室\", \"relations\": [{\"reference\": \"E01\", \"relation\": \"behind\", \"subject\": \"E02\"}]}, \"schema\": \"static_visual_manifest_v1\"}\n固定构图：双人行动与回应可读\n连续机位：中景\n时长：4秒\n第一帧静态状态：{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"C02\", \"gaze\": \"桌面\", \"position\": \"桌左\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌右\", \"posture\": \"standing\"}, \"P01(杯子)\": {\"holder\": \"none\", \"location\": \"surface:E02:cup_corner\"}, \"P02(笔)\": {\"holder\": \"none\", \"location\": \"surface:E02:pen_corner\"}, \"P03_B(浅蓝收尾便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:lin_center\"}, \"P03_P(浅粉改明细便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:lin_center\"}, \"P03_Y(浅黄对账便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:lin_center\"}}\n唯一动作时间轴：0–1秒：C02执行slide：在支持面E02将独立道具P03_Y从lin_center滑移至near_fang；holder维持none；表演补充：浅黄便签沿林屿桌面推向方澄，粉蓝不动；该段结束状态变化：[{\"entity\": \"P03_Y\", \"field\": \"location\", \"from\": \"surface:E02:lin_center\", \"to\": \"surface:E02:near_fang\"}]\n1–3.01429秒：；表演补充：甲完整说出原句，关键动作与对白依次进行；该段结束状态变化：[]\n3.01429–4秒：；表演补充：保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长；该段结束状态变化：[]\n对白1–3.01429秒：甲：这次你自己做。\n情绪反应窗口1–3.01429秒，甲：源索引绑定的可读表演，语义待审\n唯一执行切点：4秒；dialogue_0及全部必需事件已完成。\n对白锁：[{\"speaker\": \"甲\", \"text\": \"这次你自己做。\"}]\n最后一帧状态：{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"C02\", \"gaze\": \"桌面\", \"position\": \"桌左\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌右\", \"posture\": \"standing\"}, \"P01(杯子)\": {\"holder\": \"none\", \"location\": \"surface:E02:cup_corner\"}, \"P02(笔)\": {\"holder\": \"none\", \"location\": \"surface:E02:pen_corner\"}, \"P03_B(浅蓝收尾便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:lin_center\"}, \"P03_P(浅粉改明细便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:lin_center\"}, \"P03_Y(浅黄对账便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:near_fang\"}}"
+      },
+      {
+        "id": "SH02",
+        "beat_id": "S2",
+        "duration_seconds": 4,
+        "purpose": "双方开始承受结果",
+        "composition": "双人行动与回应可读",
+        "camera": "连续观察",
+        "cut_reason": "程序切点：4秒，G_SLIDE_BACK完成且全部必需事件已完成。叙事目的（非执行指令）：新的实际行动完成",
+        "visible_performance": "0–0.25秒：C01 视线转向C02；表演补充：按原步骤自然完成，具体感染力待审；该段结束状态变化：[{\"entity\": \"C01\", \"field\": \"gaze\", \"from\": \"桌面\", \"to\": \"C02\"}]\n0.25–2.25秒：；表演补充：按原步骤自然完成，具体感染力待审；该段结束状态变化：[]\n2.25–3.25秒：C02执行slide：在支持面E02将独立道具P03_Y从near_fang滑移至lin_center；holder维持none；表演补充：浅黄便签沿原桌面滑回林屿面前，粉蓝不动；该段结束状态变化：[{\"entity\": \"P03_Y\", \"field\": \"location\", \"from\": \"surface:E02:near_fang\", \"to\": \"surface:E02:lin_center\"}]\n3.25–4秒：；表演补充：保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长；该段结束状态变化：[]\n情绪反应窗口0.25–2.25秒，甲：源索引绑定的可读表演，语义待审\n唯一执行切点：4秒；G_SLIDE_BACK及全部必需事件已完成。",
+        "start_state": "{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"C02\", \"gaze\": \"桌面\", \"position\": \"桌左\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌右\", \"posture\": \"standing\"}, \"P01(杯子)\": {\"holder\": \"none\", \"location\": \"surface:E02:cup_corner\"}, \"P02(笔)\": {\"holder\": \"none\", \"location\": \"surface:E02:pen_corner\"}, \"P03_B(浅蓝收尾便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:lin_center\"}, \"P03_P(浅粉改明细便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:lin_center\"}, \"P03_Y(浅黄对账便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:near_fang\"}}",
+        "end_state": "{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"C02\", \"gaze\": \"C02\", \"position\": \"桌左\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌右\", \"posture\": \"standing\"}, \"P01(杯子)\": {\"holder\": \"none\", \"location\": \"surface:E02:cup_corner\"}, \"P02(笔)\": {\"holder\": \"none\", \"location\": \"surface:E02:pen_corner\"}, \"P03_B(浅蓝收尾便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:lin_center\"}, \"P03_P(浅粉改明细便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:lin_center\"}, \"P03_Y(浅黄对账便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:lin_center\"}}",
+        "event_lock": "原steps执行投影；事件摘要不是实际动作源",
+        "dialogue_lock": [],
+        "dialogue_mode": "无对白",
+        "continuity_mode": "planned_cut_requires_adapter",
+        "production_choices": [],
+        "prompt": "制作风格与资产锁：{\"characters\": [{\"age_group\": \"成年\", \"body_shape\": \"成年体型\", \"clothing\": \"通勤衬衣\", \"hair\": \"短发\", \"id\": \"C01\", \"name\": \"甲\"}, {\"age_group\": \"成年\", \"body_shape\": \"成年体型\", \"clothing\": \"通勤衬衣\", \"hair\": \"短发\", \"id\": \"C02\", \"name\": \"乙\"}], \"props\": [{\"appearance\": \"白色杯子\", \"id\": \"P01\", \"name\": \"杯子\", \"owner_id\": \"C02\"}, {\"appearance\": \"黑色笔\", \"id\": \"P02\", \"name\": \"笔\", \"owner_id\": \"C02\"}, {\"appearance\": \"正方形小纸片，浅黄底，深灰手写短词（对账）\", \"id\": \"P03_Y\", \"name\": \"浅黄对账便利贴\", \"owner_id\": \"C01\"}, {\"appearance\": \"正方形小纸片，浅粉底，深灰手写短词（改明细）\", \"id\": \"P03_P\", \"name\": \"浅粉改明细便利贴\", \"owner_id\": \"C01\"}, {\"appearance\": \"正方形小纸片，浅蓝底，深灰手写短词（收尾）\", \"id\": \"P03_B\", \"name\": \"浅蓝收尾便利贴\", \"owner_id\": \"C01\"}], \"render\": {\"light_source\": \"右上暖灯\", \"palette\": \"灰蓝米白\", \"style_option_id\": \"S01\", \"visual_medium\": \"二维手绘动画\"}, \"scene\": {\"elements\": [{\"appearance\": \"浅木桌面\", \"id\": \"E01\", \"name\": \"桌子\"}, {\"appearance\": \"浅木桌面\", \"id\": \"E02\", \"name\": \"林屿桌\"}, {\"appearance\": \"黑色办公椅\", \"id\": \"E03\", \"name\": \"椅子\"}], \"name\": \"办公室\", \"relations\": [{\"reference\": \"E01\", \"relation\": \"behind\", \"subject\": \"E02\"}]}, \"schema\": \"static_visual_manifest_v1\"}\n固定构图：双人行动与回应可读\n连续机位：连续观察\n时长：4秒\n第一帧静态状态：{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"C02\", \"gaze\": \"桌面\", \"position\": \"桌左\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌右\", \"posture\": \"standing\"}, \"P01(杯子)\": {\"holder\": \"none\", \"location\": \"surface:E02:cup_corner\"}, \"P02(笔)\": {\"holder\": \"none\", \"location\": \"surface:E02:pen_corner\"}, \"P03_B(浅蓝收尾便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:lin_center\"}, \"P03_P(浅粉改明细便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:lin_center\"}, \"P03_Y(浅黄对账便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:near_fang\"}}\n唯一动作时间轴：0–0.25秒：C01 视线转向C02；表演补充：按原步骤自然完成，具体感染力待审；该段结束状态变化：[{\"entity\": \"C01\", \"field\": \"gaze\", \"from\": \"桌面\", \"to\": \"C02\"}]\n0.25–2.25秒：；表演补充：按原步骤自然完成，具体感染力待审；该段结束状态变化：[]\n2.25–3.25秒：C02执行slide：在支持面E02将独立道具P03_Y从near_fang滑移至lin_center；holder维持none；表演补充：浅黄便签沿原桌面滑回林屿面前，粉蓝不动；该段结束状态变化：[{\"entity\": \"P03_Y\", \"field\": \"location\", \"from\": \"surface:E02:near_fang\", \"to\": \"surface:E02:lin_center\"}]\n3.25–4秒：；表演补充：保持已成立末态，不新增动作；余量不能抵扣较早指定的保持时长；该段结束状态变化：[]\n情绪反应窗口0.25–2.25秒，甲：源索引绑定的可读表演，语义待审\n唯一执行切点：4秒；G_SLIDE_BACK及全部必需事件已完成。\n对白锁：[]\n最后一帧状态：{\"C01(甲)\": {\"affect\": \"平静\", \"facing\": \"C02\", \"gaze\": \"C02\", \"position\": \"桌左\", \"posture\": \"standing\"}, \"C02(乙)\": {\"affect\": \"平静\", \"facing\": \"桌面\", \"gaze\": \"C01\", \"position\": \"桌右\", \"posture\": \"standing\"}, \"P01(杯子)\": {\"holder\": \"none\", \"location\": \"surface:E02:cup_corner\"}, \"P02(笔)\": {\"holder\": \"none\", \"location\": \"surface:E02:pen_corner\"}, \"P03_B(浅蓝收尾便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:lin_center\"}, \"P03_P(浅粉改明细便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:lin_center\"}, \"P03_Y(浅黄对账便利贴)\": {\"holder\": \"none\", \"location\": \"surface:E02:lin_center\"}}"
+      }
+    ],
+    "media_assumptions": []
+  },
+  "schedule_report": {
+    "schema": "surface_action_plan_schedule_report/v1",
+    "policy": "preferred_3.5_units_per_second_plus_0.3; maximum_5; no_action_or_hold_compression",
+    "beats": [
+      {
+        "beat_id": "S1",
+        "action_and_hold_seconds": 1,
+        "preferred_dialogue_seconds": [
+          2.0142857142857142
+        ],
+        "actual_dialogue_seconds": [
+          2.0142857142857142
+        ],
+        "dialogue_units": [
+          6
+        ],
+        "reason": "使用优选语速与余量",
+        "unused_tail_seconds": 0.9857142857142858,
+        "cut_contract": {
+          "cut_after_event_id": "dialogue_0",
+          "completion_condition": "all_required_events_complete",
+          "required_events": [
+            {
+              "event_id": "G_SLIDE_NEAR",
+              "end": 1.0
+            },
+            {
+              "event_id": "dialogue_0",
+              "end": 3.0142857142857142
+            }
+          ],
+          "completion_seconds": 3.0142857142857142,
+          "execution_cut_seconds": 4
+        }
+      },
+      {
+        "beat_id": "S2",
+        "action_and_hold_seconds": 3.25,
+        "preferred_dialogue_seconds": [],
+        "actual_dialogue_seconds": [],
+        "dialogue_units": [],
+        "reason": "使用优选语速与余量",
+        "unused_tail_seconds": 0.75,
+        "cut_contract": {
+          "cut_after_event_id": "G_SLIDE_BACK",
+          "completion_condition": "all_required_events_complete",
+          "required_events": [
+            {
+              "event_id": "G_GAZE",
+              "end": 0.25
+            },
+            {
+              "event_id": "G_HOLD",
+              "end": 2.25
+            },
+            {
+              "event_id": "G_SLIDE_BACK",
+              "end": 3.25
+            }
+          ],
+          "completion_seconds": 3.25,
+          "execution_cut_seconds": 4
+        }
+      }
+    ],
+    "source_schema": "creative_surface_action_v1",
+    "semantic_comparisons": [
+      {
+        "beat_id": "S1",
+        "operation_sources": [
+          {
+            "path": "state_plan.beats.0.groups.0.operations",
+            "value": [
+              {
+                "kind": "slide",
+                "actor": "C02",
+                "target": "P03_Y",
+                "value": "surface:E02:near_fang"
+              }
+            ]
+          }
+        ],
+        "prose_sources": [
+          {
+            "path": "state_plan.beats.0.camera",
+            "value": "中景"
+          },
+          {
+            "path": "state_plan.beats.0.cut_reason",
+            "value": "对白完成后看承受者"
+          },
+          {
+            "path": "state_plan.beats.0.dialogue_performance",
+            "value": "甲完整说出原句，关键动作与对白依次进行"
+          },
+          {
+            "path": "state_plan.beats.0.composition",
+            "value": "双人行动与回应可读"
+          },
+          {
+            "path": "state_plan.beats.0.groups.0.performance",
+            "value": "浅黄便签沿林屿桌面推向方澄，粉蓝不动"
+          }
+        ],
+        "cut_contract": {
+          "cut_after_event_id": "dialogue_0",
+          "completion_condition": "all_required_events_complete",
+          "required_events": [
+            {
+              "event_id": "G_SLIDE_NEAR",
+              "end": 1.0
+            },
+            {
+              "event_id": "dialogue_0",
+              "end": 3.0142857142857142
+            }
+          ],
+          "completion_seconds": 3.0142857142857142,
+          "execution_cut_seconds": 4
+        },
+        "spatial_checks": [],
+        "semantic_status": "not_checked"
+      },
+      {
+        "beat_id": "S2",
+        "operation_sources": [
+          {
+            "path": "state_plan.beats.1.groups.0.operations",
+            "value": [
+              {
+                "kind": "gaze",
+                "actor": "C01",
+                "target": "",
+                "value": "C02"
+              }
+            ]
+          },
+          {
+            "path": "state_plan.beats.1.groups.1.operations",
+            "value": []
+          },
+          {
+            "path": "state_plan.beats.1.groups.2.operations",
+            "value": [
+              {
+                "kind": "slide",
+                "actor": "C02",
+                "target": "P03_Y",
+                "value": "surface:E02:lin_center"
+              }
+            ]
+          }
+        ],
+        "prose_sources": [
+          {
+            "path": "state_plan.beats.1.camera",
+            "value": "连续观察"
+          },
+          {
+            "path": "state_plan.beats.1.cut_reason",
+            "value": "新的实际行动完成"
+          },
+          {
+            "path": "state_plan.beats.1.dialogue_performance",
+            "value": "乙完整说出原句，语速和声画仍待后续审查"
+          },
+          {
+            "path": "state_plan.beats.1.composition",
+            "value": "双人行动与回应可读"
+          },
+          {
+            "path": "state_plan.beats.1.groups.0.performance",
+            "value": "按原步骤自然完成，具体感染力待审"
+          },
+          {
+            "path": "state_plan.beats.1.groups.1.performance",
+            "value": "按原步骤自然完成，具体感染力待审"
+          },
+          {
+            "path": "state_plan.beats.1.groups.2.performance",
+            "value": "浅黄便签沿原桌面滑回林屿面前，粉蓝不动"
+          }
+        ],
+        "cut_contract": {
+          "cut_after_event_id": "G_SLIDE_BACK",
+          "completion_condition": "all_required_events_complete",
+          "required_events": [
+            {
+              "event_id": "G_GAZE",
+              "end": 0.25
+            },
+            {
+              "event_id": "G_HOLD",
+              "end": 2.25
+            },
+            {
+              "event_id": "G_SLIDE_BACK",
+              "end": 3.25
+            }
+          ],
+          "completion_seconds": 3.25,
+          "execution_cut_seconds": 4
+        },
+        "spatial_checks": [],
+        "semantic_status": "not_checked"
+      }
+    ],
+    "spatial_boundaries": [
+      {
+        "beat_id": "S1",
+        "start_facing": {
+          "C01": "C02",
+          "C02": "桌面"
+        },
+        "end_facing": {
+          "C01": "C02",
+          "C02": "桌面"
+        }
+      },
+      {
+        "beat_id": "S2",
+        "start_facing": {
+          "C01": "C02",
+          "C02": "桌面"
+        },
+        "end_facing": {
+          "C01": "C02",
+          "C02": "桌面"
+        }
+      }
+    ],
+    "spatial_checks": [],
+    "group_operation_checks": [
+      {
+        "path": "beats.0.groups.0.operations.0",
+        "group_id": "G_SLIDE_NEAR",
+        "preconditions_satisfied_at": "group_start",
+        "effects_committed_at": "group_end"
+      },
+      {
+        "path": "beats.1.groups.0.operations.0",
+        "group_id": "G_GAZE",
+        "preconditions_satisfied_at": "group_start",
+        "effects_committed_at": "group_end"
+      },
+      {
+        "path": "beats.1.groups.2.operations.0",
+        "group_id": "G_SLIDE_BACK",
+        "preconditions_satisfied_at": "group_start",
+        "effects_committed_at": "group_end"
+      }
+    ]
+  },
+  "performance_checks": [
+    {
+      "requirement_id": "R1",
+      "start": 4.25,
+      "end": 6.25,
+      "relation": "after",
+      "subject": "C01",
+      "mechanical_check": "passed"
+    }
+  ],
+  "source_reference_coverage_checked": true,
+  "actual_schedule_payload_order_checked": true,
+  "physical_state_checked": true,
+  "declared_performance_windows_checked": true,
+  "execution_timing_source": "local_duration_and_actual_schedule_only",
+  "narrative_estimates_are_actual_execution_windows": false,
+  "source_action_semantics_verified": false,
+  "source_reaction_duration_semantics_verified": false,
+  "face_readability_verified": false,
+  "semantic_approval": false,
+  "production_ready": false,
+  "automatic_media_submit": false,
+  "source_narrative_beat_count": 1,
+  "execution_shot_count": 2,
+  "total_duration_seconds": 8,
+  "limitations": [
+    "source correspondence of natural-language actions to typed operations requires full review",
+    "identical scheduler payloads obtain identities from the checked program source binding, not remote event IDs",
+    "cross-shot only after windows; no splitting a source step or line; max two dialogues per shot",
+    "compiler tail time is recorded and excluded from bound reaction windows"
+  ]
+}

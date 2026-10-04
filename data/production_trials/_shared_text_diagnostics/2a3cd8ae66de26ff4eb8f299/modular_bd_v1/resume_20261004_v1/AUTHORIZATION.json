@@ -1,0 +1,35 @@
+{
+  "schema": "authorized_creative_continuation/v1",
+  "authorization": "用户2026-10-04明确恢复：继续吧先不设token预算。后续文本调用暂不设总token硬上限；旧49次490913以及原500000历史记录完整承接，不重置账本。保持MiniMax创作、DeepSeek少量文本复审；不含媒体调用或发布。",
+  "authorized_at": "2026-10-04T15:20:01.286785+00:00",
+  "starting_spend": {
+    "calls_started": 49,
+    "reported_tokens": 490913,
+    "legacy_max_total_tokens": 500000,
+    "original_parent_run": "D:\\IT\\ai_douyin\\data\\production_trials\\boundary_live_action_reference_v15_20261001\\round_01",
+    "prior_evidence_sha256": {
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\CALL_LEDGER.json": "1203f77ea01dedd225e17145d781df24c825028782bc3d37293bf8954efbf49c",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\RESULT.json": "a986c5064325337a68dc8b2435efc631afe8b455e21aba4c5373a34b80ef431e",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\AUTHORIZATION.json": "b19b2c212ad6ebf5bf7984be7885ffe16e4f17ce276919276b6282f680899bf8",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\ORIGINAL_CONTEXT.json": "64d4911c66b7cab6d67463d119dca93cff9eff1258ac9c37193f9359949ac07a",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\TEXT_STAGE_STOP_v1.json": "19551f50f8858757aa4ead34d56e890bf336a8c010911b7b72fce61874c469f2",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\call_043_draft_v1.json": "4be4be08b679a0825940b0686e0f9e5e1e325c69f3e8b7aa6154abe39edaf6bc",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\call_044_script_review_v1.json": "fe96f7f978aabb0e12dacc1c8d257fa0474dbe25262c9fb3b57c670da80e8b7f",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\call_045_draft_v2.json": "76dce6ef8121b19ed5c9721e0e9d6497690d2ba9a54637ab40fd7c3b3b8930b8",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\call_046_linear_draft_v3.json": "e91290ad82b3b1acb1e350013d8d79a150dadb1b99d0ebfa2137be0003815ce3",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\call_047_linear_script_review_v4.json": "c84580ea8cbf82ee4e9ee77ffe0ec6961d9840a328eedc04c9eec9693ba755fa",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\call_048_linear_draft_v5.json": "70e350f76d4f6f19ea6f591e9006d989d1a9c7ffdc88e12453eb8ec9eb7a3ead",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\call_049_linear_script_review_v6.json": "7b48039ab0af310827cb1d38f85148eef17f802df7816893fee467c602672b1f"
+    },
+    "last_rejection": {
+      "ordinal": 49,
+      "code": "RESPONSE_TRUNCATED",
+      "known_usage": 17941,
+      "followup": "new bound output protocol and complete fresh script; no retry of call49"
+    }
+  },
+  "max_total_tokens": null,
+  "old_budget_reset": false,
+  "old_governance_migrated": false,
+  "media_calls_authorized": false
+}

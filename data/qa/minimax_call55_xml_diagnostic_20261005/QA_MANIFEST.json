@@ -1,0 +1,19 @@
+{
+  "schema": "readonly_diagnostic_qa/v1",
+  "paid_calls": 0,
+  "offline_assertions": 16,
+  "all_assertions_passed": true,
+  "historical_inputs_unchanged": true,
+  "input_sha256": {
+    "data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v2\\call_055_story_plan_r3.json": "0d5cc7afd814a9771e1870637fabf76e56051e1872e2d62ba8d64bb108600c9e",
+    "data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v2\\source_at_dispatch\\src\\content_factory\\creative_workflow_roles.py": "2ff230ecd4f524ff4ad181d16a97a4e1aff95bfa63d919bb8173d021b07615df",
+    "data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v2\\source_at_dispatch\\scripts\\creative_resume_dispatch_v1.py": "b09d758ce560bc457991a6a96eafad4ab4658976df8abed085398a3451442865",
+    "data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v2\\source_at_dispatch\\scripts\\run_creative_resume_v2.py": "fc61c3a656c8fe41af6c349d59d48df63e4c15685093ba7890d98a1729970f09",
+    "data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v2\\source_at_dispatch\\scripts\\creative_deepseek_tool_client_v1.py": "acb0efff538b5ff9a4d890794f69c5bef5513606311dd579f9f3e92650022451"
+  },
+  "artifacts": {
+    "DIAGNOSTIC.json": "402b7eb474b20ffb46361162dfd3e42d51f81342a1e4831ad814c4b6056bfae8",
+    "PRIMARY_SOURCES.json": "a18bcc2a48589a55698f6c632ec343e46dc4a3243b3f6c85aca432a09079b9f7"
+  },
+  "notes": "No full native XML stream or HTTP body capture; arguments observed via preserved SDK snapshot. No frozen source/receipt/ledger mutation."
+}

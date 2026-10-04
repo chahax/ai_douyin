@@ -1,0 +1,116 @@
+# 文本流程续行（2026-10-04）
+
+用户明确恢复并授权“继续吧先不设token预算”。本次后续文本暂不设总token硬限；原49次/490913 tokens与500000历史上限不重置。MiniMax-M3负责完整稿、整片方向和局部表演，DeepSeek-flash少量全文审查，不含媒体或发布。Codex额度监控继续，未来新的reset_to_100停止新派发。
+
+## 已完成的离线修复
+
+- step_index_physical_adapter_v4 将原steps按源路径逐镜绑定，程序派生对白槽位，回读实际排程并检查持物、位置、座位、朝向、反应窗口和下游失效；修正face投影的合法结果误拒。源忠实与情绪质量仍需全文复审。
+- compact_review_transport_v8 保持全部审查行、六项检查、issue、reason和逐字证据，只用固定列及[path,quote]减少重复键。47离线无损回放证明字节下降，未证明实际模型token或费用下降。截断、非法类型、错hash、对象/数组证据继续拒绝。
+- 独立续行dispatch_v1固定原输出，缓存复用重新本地验收；已知响应拒绝可在显式新版本纠正后继续，未知结果/未知用量阻止新派发。共享原派发锁、不自动重试、旧冻结记录不回写。
+- 完整失败稿可作为生成模型下一份完整新稿的参考，但不可进导演；批准必须严格bool并引用当前真实叶子证据，决策逐review回执不可变保存。
+
+[相关回归记录](../data/qa/creative_resume_v1_20261004/REGRESSION.txt)：16个测试文件316项通过，另7个subtests通过，真实模型调用0。新workflow联合入口与完整返修分支的独立回归另行记录。
+
+## 续行合同
+
+完整新稿 → 有效全文审查与助手逐字证据复核 → 整片方向及所有原步骤分镜 → 按编译首态逐镜生成局部typed operations → 确定性全片编译 → 有效全文联合复审 → 完整剧本、可读导演表演表、资产定义及制作交接。
+
+实际选图尚未发生。文本交接后先少量审美样板由用户确认，再生成/复用资产并把实际图片回传导演；不能把静态资产定义标成选图完成。本轮不调用媒体。
+
+新增入口`scripts/run_creative_resume_v1.py`，新授权、源码快照、回执及承接账本另存原modular_bd_v1下的`resume_20261004_v1`。原v17/v23与旧模块冻结绑定保持。当前仅离线验证完成，真实完整创作验收待续行，不构成创作质量通过。
+
+
+## 真实接口回执与显式第二入口
+
+第一续行入口新增3次：50 MiniMax正常tool_calls/11018tokens，全文出现$text字段及beats层孤立action，Schema拒绝；51 MiniMax完整13拍118秒新稿，格式有效/11382tokens，但原文工位重复返回、包从椅背跳到肩上、纸堆跨桌与持杯双手动作缺前提，尚未采用；52 DeepSeek纯正文/17908tokens、finish_reason=length，截断被接口拒绝，且partial存在coverage字典及错误根路径，不能采用或拼接。
+
+现累计52次、531221 reported tokens，未知预留0，旧49/490913与历史500000记录完整保留，续行总上限未设置。50/51 MiniMax未复现长分析，不能据此声称历史服务端故障查明。
+
+最新用户取消Codex余额检测，改为30分钟创作流程进度核对，已更新AGENTS、监控状态及原heartbeat；不再主动调用get_usage_limits。
+
+显式第二入口`scripts/run_creative_resume_v2.py`承接52/531221，尚待冻结及实际测试。增加故事大方向→完整新稿分工，不携带旧失败微操作模板；新普通DeepSeek命名工具客户端保持原模型/endpoint、thinking disabled与无重试，不启用strict/beta，不声称服务强制Schema保障。官方能力见[工具调用](https://api-docs.deepseek.com/guides/tool_calls/)及[对话接口](https://api-docs.deepseek.com/api/create-chat-completion/)。本地仍完整展开v8→v7并通过v9对应原拍/实际执行来源检查。脚本复审输出上限20000、联合复审24000为单次输出控制，不是总token预算。
+
+第一入口和所有旧源码、回执不修改；第二入口另存授权、源码与承接账本。最终制作计划会显示源步骤、组标识及程序尾保持，尾余量不计入反应窗口。尚无可采用完整文本交付。
+
+
+## 第53–55次方向返修与传输隔离（2026-10-05）
+
+用户已确认当前完整主线符合目标并要求继续。执行仍以整片关系、选择和观众感受为先；符合主线不代表现有方向或完整稿已通过创作验收。以下记录补充上文各入口准备阶段的历史状态。
+
+显式第二入口已经执行三次MiniMax-M3完整方向请求，均保持原模型、endpoint、thinking disabled、temperature 0.4以及无自动重试：
+
+- 第53次8413 reported tokens：工具结构有效，但方向一面声明拒绝会使林屿独自加班，一面又保证他今晚准时收工，缺少造成代价变化的事件。三张仅写“对账/改明细/收尾”的便利贴，也不能直接证明过去跨次替同事加班。格式通过，语义未批准。
+- 第54次8161 reported tokens：工具结构有效，但正文引入未登记的手机、键盘/电脑、茶水间以及林屿外套和挎包。便签颜色/工作词和上周五对账台词仍未明确兑现过去不止一次替林屿加班，情绪弧还残留“合上电脑、拎起外套”，与登记来源和实际结尾不符。格式通过，语义未批准。
+- 第55次10600 reported tokens：接口以tool_calls正常结束，completion为2763/4096、reasoning_content为null；不是length截断。工具参数2548字符，包含四层viewer_emotional_arc数组、字面</item>、E4缺字段与根字段外溢，causal_events仅有E1–E4而root item为E8。本地拒绝为MODULE_SCHEMA_INVALID/state_contract，未采用、未补回或拼接。合同不锁事件数或连续ID，因此E5–E7未出现是实际形状观察，不能断言服务曾正确生成八项后又丢弃。
+
+累计为55次、558395 reported tokens，未知预留0；原49次/490913与历史500000上限完整保留，续行总token上限仍未设置。这三次的宏观内容与工具结构问题，和旧任务“长分析耗尽输出”的服务端原因分别记录；旧原因仍未知。本次没有显示长reasoning耗尽输出，不能用正常tool结束或关闭thinking来声称旧故障已经查明。
+
+[第55次分层诊断与16项离线断言](../data/qa/minimax_call55_xml_diagnostic_20261005/DIAGNOSTIC.json)及[官方来源审计](../data/qa/minimax_call55_xml_diagnostic_20261005/PRIMARY_SOURCES.json)说明：SDK snapshot的function.arguments、保存正文与直接JSON解析结果完全一致，冻结客户端没有本地XML转换。MiniMax官方公开模板确实递归使用XML item表示数组，官方Verifier另行校验嵌套结构；但当前没有该次原生XML流或托管解析器版本，无法确定生成和服务解析各自责任。相似GitHub issue的后续复现条件不一致，不援用其失败率或根因猜测。
+
+下一候选为[单字符串完整JSON文档运输](../scripts/creative_json_document_transport_v1.py)、[显式派发控制器v2](../scripts/creative_resume_dispatch_v2.py)及[workflow v3](../scripts/run_creative_resume_v3.py)：外层工具只含payload_json字符串，内层仍保留完整创作数据并严格验原合同；保持MiniMax模型与endpoint，不改用其他模型，不修补第55次失败内容。它用于隔离嵌套工具参数运输，当前仅完成离线验证，尚未生产验证；不能称服务Schema强制保障或创作质量通过。已执行第53–55次的workflow v2及其冻结回执保持原样。
+
+Codex余额查询已按用户要求取消；30分钟监控只核对实际创作进度，不再调用get_usage_limits。当前尚无已批准的整片方向、有效完整新稿全文复审、整片导演/局部表演编译及制作交接。媒体调用0，实际选图与人工审片尚未开始，本次不含媒体或发布。
+
+
+## 第56次单字符串实测：内部JSON转义失败（2026-10-05）
+
+[第56次完整方向r4原始回执](../data/production_trials/_shared_text_diagnostics/2a3cd8ae66de26ff4eb8f299/modular_bd_v1/resume_20261005_v3/call_056_story_plan_r4.json)已保存：MiniMax-M3仍以tool_calls正常结束，prompt 8031、completion 2182、total 10213 reported tokens。累计56次、568608 reported tokens，未知预留0；无自动重试、自动修复或失败稿采用，旧账本及冻结源码保持。
+
+外层工具参数确为唯一payload_json字符串，本次没有第55次字面</item>残片或外层nested数组/root item外溢，说明单字符串方案在本次请求中实现了容器层隔离。但字符串内部的完整JSON，在叙述“难说话的人”等内容时使用了未转义ASCII双引号；严格解析在pos127报Expecting ',' delimiter，记为interface_rejected/JSON_DOCUMENT_INNER_INVALID_JSON，整稿不得进语义批准或下游导演。因此单字符串已经做过真实接口测试，结果仍失败，不能称XML问题已修复或完整方向通过；内部JSON尚不可解析，也不能据此宣称全部故事字段或因果正确。
+
+本轮离线回归340项测试及7个subtests通过，只证明本地合同、门禁和驱动验收行为；没有把离线通过解释为模型输出或创作质量通过。下一步仍由MiniMax提交完整新方向r5：反馈采用第54次来源/宏观内容及第56次JSON转义的已验证故障，不把第54次完整失败正文作为动作模板；内部对白和叙述可使用中文引号减少嵌套转义负担，原完整数据和本地JSON/原合同校验保持。不能本地替换引号、回填字段或拼接第56次稿后放行。
+
+当前仍在整片方向确认与运输隔离阶段，长分析服务端原因未知。用户确认主线继续的授权保持，文本总token硬限未设置；30分钟仅核对创作进度，不查询Codex额度。媒体调用0，无选图、视频生成或发布。
+
+
+## 第57次传输有效、内容未通过；第58次回执待语义复核（2026-10-05）
+
+第57次完整方向r5使用同一MiniMax-M3及单字符串运输，prompt 6099、completion 1773、total 7872 reported tokens，形成57次/576480的已保存检查点。外层唯一payload_json、内层完整JSON、原方向合同及原字符串派生document SHA均核验有效，没有自动修复；仅这一实际回执成功，不能据此保证长期运输稳定。语义仍未批准，不能进完整剧本或下游导演。
+
+[独立第57次语义检查](../data/production_trials/_shared_text_diagnostics/2a3cd8ae66de26ff4eb8f299/modular_bd_v1/resume_20261005_v3/SEMANTIC_REVIEW_call57.json)保留21处真实叶子逐字证据：E02台词讲上月重新打对账单、去年底帮改结算明细，证明跨时段帮忙，却未说明当时是替林屿加班；emotional_turn直接称“加班史”不能替代观众实际证据。E01/E02/E04及结尾继续用未登记的键盘/屏幕；E03实际去茶水间、拿纸杯、用红笔圈数字，超出当前办公室元素与7项道具登记。asset_ids枚举全部有效，不代表正文新增对象已经登记。
+
+E06同一签字笔新增“第一行红字批注”存在墨色来源未说明风险，但不是已证实的硬物理矛盾：P07只写“黑色细头签字笔，金属笔夹”，没有独立墨色属性，黑色笔身不能直接等同黑墨；P05原有红笔批注也不自动登记当前新增红字的工具。确定来源故障是E03实际使用未登记红笔。已发第58次反馈对此说得过满，故新增[操作澄清](../data/production_trials/_shared_text_diagnostics/2a3cd8ae66de26ff4eb8f299/modular_bd_v1/resume_20261005_v3/OPERATOR_CLARIFICATION_after_call57.json)，不修改原反馈或已派发request。第58次若保守避免新增红字可继续核对；不凭笔身颜色作硬性失败判断。
+
+方向的“默认递笔/请求→她不接笔、说明先走→他收笔自己做→她出门”具有可用因果骨架，但真实加班历史和登记来源须由模型完整新稿解决。6个事件、时长浮动与结尾不和解本身不是故障；不手工补台词、动作、墨色或拼接旧稿。
+
+更新进度时第58次完整r6回执也已保存：工具/内层合同有效、total 7963 reported tokens，累计实际58次/584443。其正文语义待单独复核，尚未采用；此处只读取状态和已知用量，没有把格式有效写成创作通过。原57/58回执未修改。
+
+媒体调用仍为0，尚无已批准完整文本交付；历史长分析服务端原因未知。30分钟仅核对创作进度，不查询Codex余额，续行不设总token硬限的用户授权保持。
+
+
+## 第60次整片方向采用，第61次完整新稿时长拒绝（2026-10-05）
+
+第59次完整方向r7共7973 reported tokens：正常tool_calls，但内部JSON末尾不完整，严格解析于pos3657拒绝，未采用或补闭合符号。第60次完整方向r8共9555 reported tokens，内外JSON和方向合同有效，形成60次/601971的检查点。
+
+[第60次实际参考与语义核对](../data/production_trials/_shared_text_diagnostics/2a3cd8ae66de26ff4eb8f299/modular_bd_v1/resume_20261005_v3/REQUEST_REFERENCE_AND_SEMANTIC_VERIFICATION_call60.json)绑定实际request SHA，确认完整R01参考包、brief和静态资产与原输入全等，不以旧失败剧本作模板。原文已修正屏幕/衣装来源，拒绝前台词写明“熬到十一点”和另一次“周末过来”，明确跨次替林屿加班；拒绝后收回纸笔并独自核对工作，关系以当晚实际行动回应，没有把它外推为以后完全和解。
+
+[整片方向采用决定](../data/production_trials/_shared_text_diagnostics/2a3cd8ae66de26ff4eb8f299/modular_bd_v1/resume_20261005_v3/STORY_PLAN_DECISION_call60.json)逐字引用真实叶子并绑定当前plan SHA，approved_for_complete_script=true、media_approval=false。采用范围仅是允许按这份整片方向生成完整新剧本，不是完整制作质量批准；对白顺序、逐拍表演、反应窗口、确定性编译及全文复审仍需后续实际完成。
+
+第61次draft_s3按已采用方向派发完整新剧本请求，保留请求身份292d5b3eda0462585e6f765bc1fdfd93df68e22f10fcc6353be7b33d48bf3895、原token_reservation=24215和输出上限6500。最初在途时用量未知；更新前[实际第61次回执](../data/production_trials/_shared_text_diagnostics/2a3cd8ae66de26ff4eb8f299/modular_bd_v1/resume_20261005_v3/call_061_draft_s3.json)已返回，provider response_id为0711b9069e56ac17a3c0159b65e067b0，prompt6926、completion1207、total8133 reported tokens。它不是pending或token0：本地判contract_rejected，B02对白约62计时单位，却只安排11秒，无法自然说完并保留动作反应。未采用、无自动重试。
+
+当前累计实际61次/610104 reported tokens。读取现有账本全部6个新增回执，均有真实用量，当前pending和未知用量列表为空；这次零值来自已完成回执核对，不是清空或重置未知预留。第61次历史预留24215原样保留，已知账单8133另记。若后续请求在途，继续记录原请求ID、预留及未知用量，不能记作免费或派发新请求替代它。
+
+阶段已从整片方向确认进入“已采用第60次方向→完整新剧本生成/时长验收返修”。第61次回执的旧generic validation/既有bounded repair建议字段不能授权手工改正文；内容返修仍由MiniMax提交完整新稿并全文验收，不回填时长、动作或拼接旧稿。有效完整剧本全文复审、整片导演表演和制作交接尚未完成。
+
+历史长分析服务端原因及第55次XML边界责任仍未知；单字符串已有个案有效，也有56/59真实JSON失败，不能称长期保障。媒体调用0，30分钟仅核对创作进度，不查询Codex额度；旧冻结记录、调用账本和历史预算不修改。
+
+
+## 2026-10-05：第62次停在估时验收，继续修合同分工
+
+第62次MiniMax完整新稿内外JSON有效，但B02含77计时单位且只给16秒，被既有正文校验拒绝；本次10722 reported tokens，累计62次/620826，全部用量已知，无自动重试或预算重置。未把此稿作为最终交付，也未全文审查通过。
+
+新增离线工作有两项：一是P03三张便利贴的独立成员身份与同桌面slide操作，保留原manifest/源正文和三成员映射，不允许用整组移位或hold藏移动；二是新剧本合同不再要求创作模型粗估每拍秒数，兼容接口的程序预算明确不是实际排时。实际时长、对白前中后反应窗口及最终全部源动作仍由local安排和确定性编译/全文联合审查验收。新模块尚未冻结或接生产，不改旧源码/回执；此处记录工作方向，不表示新合同已通过。
+
+
+## 2026-10-05：正文与实际排时分离、独立道具成员离线验收
+
+新增独立续行v4候选，不修改v3或更早已冻结源码、回执、授权和账本。正文合同linear3仅要求完整事件、刺激与steps顺序；原模型稿不含duration_seconds。程序提供单独绑定raw SHA的暂定预算供旧接口兼容，其中动作/停顿/反应未实测、实际窗口为null、actual_windows_verified=false；全文正文审查仍查刺激→对白→反应顺序，dialogue_timing必须not_applicable。本阶段只能批准正文进入导演安排。实际时长来自局部duration与真实schedule，最终联合审查必须有实际对白、反应与源动作证据，不能拿程序预算放行。
+
+原P03三张便签作为集合保留；显式声明P03_Y/P03_P/P03_B及其原色/词来源、原owner和原manifest SHA，物理链使用三独立成员。新slide仅允许无持有成员在同一个已声明桌面变更位置；跨桌、持有中滑动、用集合ID或hold藏移动均拒绝。完整原manifest和有效清单在context里共同绑定，不修改历史7资产输入。导演、局部、编译和全文审查使用新独立模块；旧visual严格接口仅在派生副本中删除surface_ids，其物理状态/原操作/来源仍完整。
+
+[联合回归](../data/qa/creative_resume_v4_20261005/REGRESSION.txt)499项及14个subtests通过，包含缺工具/截断/未知结果/预算继承旧门禁以及本次全部新合同。初次workflow测试发现父方向继承范围过宽，已将候选限定为冻结call60 story_plan_r8；最新失败仍停止，不退回旧方向。无真实服务调用，生产目录未准备，不能称模型输出或创作质量通过。独立表演夹具仅证明黄色便签推近/收回、粉蓝未变和实际窗口来源，不是正式作品。
+
+下一步待独立源码核对后冻结新144文件绑定，继承62次/620826 reported tokens、无未知预留及本轮不设总token硬限授权，再由MiniMax提交完整无时长新稿。旧第62次不会被本地删时长后采用；正文来源问题仍由生成模型全文解决，并经DeepSeek全文审查。媒体调用0，不查询Codex余额。
+
+
+独立源码审计另发现入口仍用旧validate_script按任意6秒预算验物理步骤，已在未冻结v4中移除该旧时间门，结构/身份/原steps投影继续硬验、语义留完整复审；新反例保留旧校验对同一11步骤稿的误拒证据。补充联合回归500项及14个subtests通过，见REGRESSION_AFTER_SOURCE_AUDIT；独立审计未发现剩余源码阻断。用户指出需要真正核对内容，已展示当前样片故事和目标情绪并询问；答复前不派发新稿，继续离线整理与备份。当前仍62次/620826，媒体0。

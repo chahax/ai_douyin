@@ -1,0 +1,50 @@
+{
+  "schema": "json_document_transport_actual56_readonly_replay/v1",
+  "source_receipt": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v3\\call_056_story_plan_r4.json",
+  "source_receipt_sha256": "b597e2ab64e57b6dddf051158c35c7b0ada7fa7ca134bc336879425ff216df27",
+  "source_status": "interface_rejected",
+  "response_text_sha256": "34a49c1151f6ac346a609abf667e7f26f857600bef0bd48d7c9124efd6ada32f",
+  "payload_json_sha256": "9a8e1c6eabe0625df409ad82de3c514d4efd9e6340d12d59b83dd25548ba39aa",
+  "sdk_arguments_equal_response_text": true,
+  "output_equal_parsed_outer": true,
+  "outer_contract_type": "payload_json:string",
+  "inner_parse_error": {
+    "message": "Expecting ',' delimiter",
+    "pos": 127,
+    "line": 1,
+    "column": 128,
+    "nearby_original_text": "的不是时间，而是怕拒绝会让原本亲近的同事关系出现裂缝——她不想做那个\"难说话的人\"。选择把票根那张纸放在自己前面的代价是：她必须让林屿今晚独",
+    "previous_character": "\"",
+    "previous_character_codepoint": 34,
+    "character_before_quote": "个",
+    "character_at_error": "难"
+  },
+  "local_failure_classification": {
+    "code": "JSON_DOCUMENT_INNER_INVALID_JSON",
+    "failure_kind": "interface",
+    "path": "127"
+  },
+  "document_output_present": false,
+  "schema_validation_reached": false,
+  "reported_usage": {
+    "prompt_tokens": 8031,
+    "completion_tokens": 2182,
+    "total_tokens": 10213
+  },
+  "finish_reason": "tool_calls",
+  "response_id": "0711b3c0dd176ed619242c33250dfa53",
+  "source_repaired": false,
+  "source_fields_combined": false,
+  "new_model_calls": 0,
+  "media_calls": 0,
+  "source_unchanged": true,
+  "server_root_cause_established": false,
+  "semantic_approval": false,
+  "next_request_assessment": {
+    "route": "complete fresh r5, same frozen transport/model/schema",
+    "feedback": "verified 54/56 faults only; no complete old54 plan",
+    "quote_rule": "Chinese quotation marks for prose/dialogue citations; ASCII quotes for JSON syntax",
+    "reason": "addresses the observed inner-string syntax fault and reduces feedback context without changing content contract",
+    "guarantee": "none; must pass strict full parse, inner schema, source checks and semantic review"
+  }
+}

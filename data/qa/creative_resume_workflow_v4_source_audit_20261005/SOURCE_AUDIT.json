@@ -1,0 +1,79 @@
+{
+  "schema": "creative_resume_workflow_v4_independent_source_audit/v1",
+  "audit_date": "2026-10-05",
+  "scope": "offline source review and simulated requests only; no production dispatch",
+  "provider_calls": 0,
+  "media_calls": 0,
+  "quota_queries": 0,
+  "frozen_records_modified": false,
+  "result": "no remaining blocking source defect found after removal of legacy timed script validation",
+  "source_sha256": {
+    "scripts/run_creative_resume_v4.py": "27455ad6a29bd481c345dbb34f2532e857b5020006a172a9da154d885ba36d4d",
+    "scripts/creative_joint_source_binding_v10.py": "8438a7b6d6f9ce8ae8dc41fcc5f6403c322f513edaef43e244e3250b22c37344",
+    "scripts/creative_review_wire_v10.py": "dafcde7a0f6e35729c87a85245482cc5c08f177785b7e9ef7708ff230f8cb50d",
+    "scripts/creative_linear_script_v3.py": "15a54a667262e4188b270a43454630ccc488c964776d258ae5716d11f5ee771e",
+    "scripts/step_index_physical_adapter_v5.py": "550cfd9f99b058b53e24ce65a2b6bbff5f17de3baef89fe8d1cd478b35223755",
+    "tests/test_creative_resume_workflow_v4.py": "ac5b8bb6950ed3ac2970ce26827c3c39187cefde0529963d6532752662734064"
+  },
+  "parent_evidence_sha256": {
+    "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v3\\CALL_LEDGER.json": "f51d370aa964bcc4be969f07dd7cc77b78a27355fe13e571acbd432a1075003d",
+    "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v3\\STORY_PLAN_DECISION_call60.json": "4d0444c24fd679616b4c00b2124be35edfa4d7dd87adba715b68559694c60cff",
+    "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v3\\REQUEST_REFERENCE_AND_SEMANTIC_VERIFICATION_call60.json": "100384f1771656927f0d5a8463052651404004492a062efca215a4a602e9c2c6"
+  },
+  "resolved_blocker": {
+    "location": "scripts/run_creative_resume_v4.py derive",
+    "verified_before_fix": "legacy validate_script rejected an accepted untimed narrative source solely against its program-generated six-second placeholder",
+    "counterexample_action": "方澄起身，走到柜旁，打开柜门，拿起纸袋，关上柜门，转身，走到桌边，放下纸袋，拿起清单，拨齐清单，压平边角。",
+    "physical_marker_count": 11,
+    "preliminary_budget_seconds": 6,
+    "actual_windows_verified": false,
+    "legacy_error": "NEW1 约有 11 个连续物理步骤，但扣除对白后只剩约 6.0 秒；需删减动作或延长节拍",
+    "current_fix": "derive accepts only linear3 source shape, identity and faithful playback-order projection; narrative semantics still require full review",
+    "regression": "test_untimed_source_with_eleven_actions_does_not_inherit_six_second_quality_gate",
+    "counterexample_is_creative_quality_approval": false
+  },
+  "verified_contracts": [
+    {
+      "area": "complete model-authored revision",
+      "evidence": "draft sends complete original brief/manifest/reference and adopted direction; previous_script is empty, rejected micro-operation drafts are retained but not spliced or converted into delivery"
+    },
+    {
+      "area": "timing responsibility",
+      "evidence": "new raw source contains no durations; separate SHA-bound preliminary proof declares unmeasured actions and actual_windows_verified=false; physical5 execution uses local durations and actual scheduler only"
+    },
+    {
+      "area": "review responsibility",
+      "evidence": "script timing audits source stimulus/dialogue/reaction sequence; script dialogue_timing must be N/A before actual local scheduling; joint10 requires actual mapped dialogue and timing windows and previous-shot/current-shot continuity evidence"
+    },
+    {
+      "area": "reference input",
+      "evidence": "offline captured writer, direction, local and full-review user JSON retain complete original reference_pack; local_input.context is a deep copy of the full director context, not reference metadata alone"
+    },
+    {
+      "area": "parent binding",
+      "evidence": "v4 requires known parent 62 calls/620826 tokens; binds parent evidence SHA; only exact parent call60/story_plan_r8 can inherit its decision; a newer failed plan cannot fall back"
+    },
+    {
+      "area": "complete review and handoff",
+      "evidence": "full joint context recompiles original steps and all current locals before review; no unresolved issues/story_preserved=false may finalize; raw source, readable script and full director/performance plan are exported together; images remain unselected and media remains unapproved"
+    },
+    {
+      "area": "P03 declaration",
+      "evidence": "component registry preserves complete original manifest and original appearance while declaring separate production members; these declarations are not selected-image validation"
+    }
+  ],
+  "verification": {
+    "command": ".\\.venv\\Scripts\\python.exe -X utf8 -m pytest -p no:cacheprovider -q tests/test_creative_resume_workflow_v4.py",
+    "passed": 30,
+    "failed": 0,
+    "elapsed_seconds": 4.95
+  },
+  "limits": [
+    "Offline gates do not prove actual new model output quality, actual performance/readability or video aesthetics.",
+    "Ordinary named tools and local strict acceptance do not establish a service-side schema guarantee.",
+    "The previous MiniMax long-analysis service-side cause remains unknown; this audit does not diagnose it.",
+    "P03 member pairing is an explicit production declaration; actual selected images still need human selection and director feedback.",
+    "The 11-marker counterexample is not an approval of action density or a claim that the actions fit six seconds.",
+    "Actual model output must pass the new full-script, actual local schedule, deterministic compilation and complete joint-review gates before text handoff."
+  ]
+}

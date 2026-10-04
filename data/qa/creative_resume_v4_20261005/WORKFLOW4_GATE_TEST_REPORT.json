@@ -1,0 +1,49 @@
+{
+  "schema": "offline_workflow4_gate_test_report/v1",
+  "recorded_at_utc": "2026-10-04T17:41:55.144164+00:00",
+  "test_file": "tests/test_creative_resume_workflow_v4.py",
+  "command": ".venv/Scripts/python.exe -m pytest tests/test_creative_resume_workflow_v4.py -q -p no:cacheprovider",
+  "first_result": {
+    "passed": 23,
+    "failed": 3,
+    "verified_fault": "adopted_story_plan inherited fallback accepted non60 parent decisions",
+    "failed_parameters": [
+      53,
+      61,
+      62
+    ]
+  },
+  "final_result": {
+    "passed": 29,
+    "failed": 0,
+    "pytest_seconds": 5.45
+  },
+  "root_fix_verified": {
+    "inherited_plan_ordinal": 60,
+    "inherited_plan_label": "story_plan_r8",
+    "latest_failed_plan_no_fallback": true,
+    "non60_or_wrong_label_parent_decision_rejected": true
+  },
+  "checked_boundaries": [
+    "actual parent 62 calls / 620826 tokens inherited; historical 49 / 490913 and 500000 original cap preserved",
+    "no production root prepare; parent ledger unchanged; inherited decision hash guard",
+    "complete R01 / brief / original assets and adopted direction in writer messages; failed drafts absent",
+    "raw v3 script has no model duration fields; preliminary proof explicitly not actual windows",
+    "director context full component bundle / original manifest / effective members / canonical surfaces",
+    "local input recomputed prefix: yellow changed, pink and blue unchanged",
+    "joint10 preflight recomputes real compile and accepts untimed raw source",
+    "script source-order timing cannot be N/A; delivery pass from preliminary budget rejected",
+    "joint actual dialogue requires real text/window evidence; actual timing cannot rely on preliminary budget alone",
+    "ordinary array review wire rejects dictionary coverage row",
+    "full textual deliverable retains raw steps and slide operations; no media/image/creative-quality approval"
+  ],
+  "observed_test_file_sha256": "e3d14bb3b3914fb976f82b4b94ccc25d44328c2bbd9389cc10bd23825b4ed9e9",
+  "production_provider_calls": 0,
+  "media_calls": 0,
+  "quota_queries": 0,
+  "production_roots_prepared": false,
+  "frozen_source_or_receipts_modified": false,
+  "creative_quality_passed": false,
+  "media_approval": false,
+  "limitation": "offline fabricated review evidence tests gate behavior only, not actual model output or finished artwork"
+}

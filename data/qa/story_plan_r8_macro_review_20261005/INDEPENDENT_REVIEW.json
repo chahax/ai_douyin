@@ -1,0 +1,44 @@
+{
+  "schema": "independent_story_plan_macro_review/v1",
+  "receipt_path": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v3\\call_060_story_plan_r8.json",
+  "receipt_sha256": "961746fd6f88926ea25f3d36f6aa1c7ab8f7b26547859902968f57b98c94446f",
+  "request_sha256": "27dcf3a84c0325af4bfdc584c1481e135a5b9ca0174a8a2b9bcd48915c4d213b",
+  "source_binding_sha256": "883c00b7e08943dd60228ca3632c4ee4b87ba784706fbda26f9c8e05e5cb9c4f",
+  "response_id": "0711b7b0f18aae0f4f0823e2ffe118de",
+  "payload_sha256": "23f0d2a592d53621e9a3a024699cfa09a7487091d73be1c319929fb30662f687",
+  "document_sha256": "ca2a8b594b5fd30289967b2a31a2ff847776082b7363bc5565f672432675c234",
+  "checks": {
+    "sdk_original_equal": true,
+    "outer_equal": true,
+    "inner_schema_replay_equal": true,
+    "manifest_unchanged": true,
+    "complete_reference_pack_unchanged": true,
+    "original_relationship_pressure_retained": true,
+    "six_events": true
+  },
+  "macro_verdict": "acceptable_for_complete_new_script_generation",
+  "new_core_causal_faults": [],
+  "evidence_paths": [
+    "document_output.causal_events.1.visible_event",
+    "document_output.causal_events.2.visible_event",
+    "document_output.causal_events.3.visible_event",
+    "document_output.causal_events.4.visible_event",
+    "document_output.causal_events.5.visible_event",
+    "document_output.ending_action"
+  ],
+  "observed": "Two explicit previous overtime occasions precede default delegation and refusal for a booked seven-o-clock movie. He reclaims the pen and note, does paper checks himself; she leaves. No screen appears. Cardigan is worn; tan shirt, landscape client sheet, portrait settlement sheet, black pen and existing red annotations match manifest.",
+  "downstream_requirements": [
+    "Make fear of relationship cooling visible in complete-script performance and actual events.",
+    "Ending proves his reclaiming tonight's task and her leaving, not permanent reconciliation or guaranteed future behavior.",
+    "Use a complete model-authored new script and full review; do not patch or splice the original plan."
+  ],
+  "boundaries": {
+    "full_script_approved": false,
+    "creative_quality_passed": false,
+    "physical_state_or_duration_reviewed": false,
+    "final_handoff_approved": false,
+    "model_calls": 0,
+    "frozen_sources_or_original_receipts_changed": false,
+    "service_root_cause_established": false
+  }
+}

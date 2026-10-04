@@ -1,0 +1,440 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "context_sha256",
+    "raw_linear_script_sha256",
+    "emotional_arc",
+    "causal_chain",
+    "ending_intent",
+    "beats",
+    "initial_state",
+    "spatial_contract"
+  ],
+  "properties": {
+    "schema": {
+      "enum": [
+        "step_index_physical_direction_offline_v5"
+      ]
+    },
+    "context_sha256": {
+      "enum": [
+        "2c59f6d410723e915f5963aab7e5eb7edb28b6f7fe0982bd127aee1227046592"
+      ]
+    },
+    "raw_linear_script_sha256": {
+      "enum": [
+        "9c7aa6582bacde0397d791aae18a85f369edc5c53b059da01431ca1606f9263c"
+      ]
+    },
+    "emotional_arc": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causal_chain": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "ending_intent": {
+      "type": "string",
+      "minLength": 1
+    },
+    "beats": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "beat_id",
+          "shots"
+        ],
+        "properties": {
+          "beat_id": {
+            "enum": [
+              "B1"
+            ]
+          },
+          "shots": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "shot_id",
+                "source_step_refs",
+                "new_information",
+                "observation_object",
+                "camera",
+                "cut_reason",
+                "purpose",
+                "composition",
+                "dialogue_mode",
+                "performance_requirements"
+              ],
+              "properties": {
+                "shot_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "source_step_refs": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "raw_linear_script.beats.0.steps.0",
+                      "raw_linear_script.beats.0.steps.1",
+                      "raw_linear_script.beats.0.steps.2",
+                      "raw_linear_script.beats.0.steps.3"
+                    ]
+                  }
+                },
+                "new_information": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "observation_object": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "camera": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "cut_reason": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "purpose": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "composition": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "dialogue_mode": {
+                  "enum": [
+                    "画内对白",
+                    "画外对白",
+                    "混合对白",
+                    "无对白"
+                  ]
+                },
+                "performance_requirements": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "id",
+                      "subject",
+                      "stimulus_ref",
+                      "reaction_ref",
+                      "relation",
+                      "minimum_seconds"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "subject": {
+                        "enum": [
+                          "C01",
+                          "C02"
+                        ]
+                      },
+                      "stimulus_ref": {
+                        "type": "string",
+                        "enum": [
+                          "raw_linear_script.beats.0.steps.0",
+                          "raw_linear_script.beats.0.steps.1",
+                          "raw_linear_script.beats.0.steps.2",
+                          "raw_linear_script.beats.0.steps.3"
+                        ]
+                      },
+                      "reaction_ref": {
+                        "type": "string",
+                        "enum": [
+                          "raw_linear_script.beats.0.steps.0",
+                          "raw_linear_script.beats.0.steps.1",
+                          "raw_linear_script.beats.0.steps.2",
+                          "raw_linear_script.beats.0.steps.3"
+                        ]
+                      },
+                      "relation": {
+                        "enum": [
+                          "before",
+                          "during",
+                          "after"
+                        ]
+                      },
+                      "minimum_seconds": {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "initial_state": {
+      "type": "object",
+      "properties": {
+        "C01": {
+          "type": "object",
+          "properties": {
+            "posture": {
+              "type": "string",
+              "enum": [
+                "standing",
+                "sitting",
+                "kneeling",
+                "lying",
+                "other"
+              ]
+            },
+            "position": {
+              "type": "string"
+            },
+            "gaze": {
+              "type": "string"
+            },
+            "affect": {
+              "type": "string"
+            },
+            "facing": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          },
+          "required": [
+            "posture",
+            "position",
+            "gaze",
+            "affect",
+            "facing"
+          ],
+          "additionalProperties": false
+        },
+        "C02": {
+          "type": "object",
+          "properties": {
+            "posture": {
+              "type": "string",
+              "enum": [
+                "standing",
+                "sitting",
+                "kneeling",
+                "lying",
+                "other"
+              ]
+            },
+            "position": {
+              "type": "string"
+            },
+            "gaze": {
+              "type": "string"
+            },
+            "affect": {
+              "type": "string"
+            },
+            "facing": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          },
+          "required": [
+            "posture",
+            "position",
+            "gaze",
+            "affect",
+            "facing"
+          ],
+          "additionalProperties": false
+        },
+        "P01": {
+          "type": "object",
+          "properties": {
+            "holder": {
+              "type": "string",
+              "enum": [
+                "C01",
+                "C02",
+                "none"
+              ]
+            },
+            "location": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "holder",
+            "location"
+          ],
+          "additionalProperties": false
+        },
+        "P02": {
+          "type": "object",
+          "properties": {
+            "holder": {
+              "type": "string",
+              "enum": [
+                "C01",
+                "C02",
+                "none"
+              ]
+            },
+            "location": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "holder",
+            "location"
+          ],
+          "additionalProperties": false
+        },
+        "P03_Y": {
+          "type": "object",
+          "properties": {
+            "holder": {
+              "type": "string",
+              "enum": [
+                "C01",
+                "C02",
+                "none"
+              ]
+            },
+            "location": {
+              "type": "string",
+              "description": "holder=none时必须为surface:<已登记支持面ID>:<zone>；手持时为实际手持位置。归属不等于持有。"
+            }
+          },
+          "required": [
+            "holder",
+            "location"
+          ],
+          "additionalProperties": false
+        },
+        "P03_P": {
+          "type": "object",
+          "properties": {
+            "holder": {
+              "type": "string",
+              "enum": [
+                "C01",
+                "C02",
+                "none"
+              ]
+            },
+            "location": {
+              "type": "string",
+              "description": "holder=none时必须为surface:<已登记支持面ID>:<zone>；手持时为实际手持位置。归属不等于持有。"
+            }
+          },
+          "required": [
+            "holder",
+            "location"
+          ],
+          "additionalProperties": false
+        },
+        "P03_B": {
+          "type": "object",
+          "properties": {
+            "holder": {
+              "type": "string",
+              "enum": [
+                "C01",
+                "C02",
+                "none"
+              ]
+            },
+            "location": {
+              "type": "string",
+              "description": "holder=none时必须为surface:<已登记支持面ID>:<zone>；手持时为实际手持位置。归属不等于持有。"
+            }
+          },
+          "required": [
+            "holder",
+            "location"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "C01",
+        "C02",
+        "P01",
+        "P02",
+        "P03_Y",
+        "P03_P",
+        "P03_B"
+      ],
+      "additionalProperties": false
+    },
+    "spatial_contract": {
+      "type": "object",
+      "properties": {
+        "seats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "seat_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "access_positions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "required_facing": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1
+              }
+            },
+            "required": [
+              "seat_id",
+              "access_positions",
+              "required_facing"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "seats"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "description": "原raw_linear_script.steps是唯一播放顺序，event仅为摘要，不作为动作源。整片情绪、因果、结尾方向独立填写；每拍shots数组只分配镜头。source_step_refs填写raw_linear_script.beats.N.steps.M完整路径，每镜是本拍连续步骤区间，全部镜依次恰好覆盖原步骤一次，不拆步骤、不复制、不跨拍重排，不改原text或speaker。动作组action_ref只绑定kind=action的原步骤；反应也仍为原action，可标semantic_role=reaction。对白只引用原dialogue步骤，不重新输出台词。本合同只验证源覆盖与先后，物理动作、反应时长、状态及成片感染力仍待后续编译和全文审查。物理初态在首步骤之前；owner不是holder。局部每action一个unit，可包含多个相继组；每action组至少一个operations，或明确hold且operations=[]。反应仍绑定原action_ref。不要填写script_slot或切点，程序按原steps中的对白位置生成；不能新增、重说或改原对白。单镜最多两句完整对白，关键动作对白并行及跨镜during尚不支持，不改原稿绕过。slide是沿支持面移动，value=surface:支持面ID:zone；holder须none，不能跨面或伪装take/place/hold。复合道具仅用显式registry展开的成员ID，不能用集合ID冒充某一张；未动成员保持原态。状态和时间编译成功仍须全文源/操作审查，不能宣称语义或成片通过。"
+}

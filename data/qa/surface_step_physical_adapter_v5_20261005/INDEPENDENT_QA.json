@@ -1,0 +1,52 @@
+{
+  "schema": "surface_step_adapter_independent_qa/v1",
+  "fixture_only": true,
+  "model_calls": 0,
+  "contract_version": "step_index_physical_adapter_offline_v5",
+  "full_old_v4_regression_retained": true,
+  "test_result": {
+    "command": "python -m pytest tests/test_step_index_physical_adapter_v5.py -q -p no:cacheprovider",
+    "passed": 42,
+    "subtests_passed": 7,
+    "failures": 0
+  },
+  "code_sha256": {
+    "scripts/creative_surface_action_core_v1.py": "8dc473c1271743364f473768099ddc0a97716f564ba3ddae1e5a53e55cf50d9f",
+    "scripts/creative_surface_action_v1.py": "e42dcd35c0b9b26224f7ec0686a8d50d05fad276460f9ffe60c21ab14bf5d938",
+    "scripts/step_index_physical_adapter_v5.py": "550cfd9f99b058b53e24ce65a2b6bbff5f17de3baef89fe8d1cd478b35223755",
+    "scripts/creative_component_registry_v1.py": "3d8bb4a1a7b6f073316bc782b12efef6d22f9f37df54a2fa105dd47cc5bf3390",
+    "scripts/creative_surface_state_v1.py": "6fdbf4595d93b379c2fd821fddb70ecda13e87fc111f97cfbfa4abb594d8cb76",
+    "scripts/creative_surface_state_bridge_v1.py": "819614617afb1acc08a62ba5dd22b4084ec3802a1945e16b29fbf8cd5c090a59",
+    "scripts/creative_linear_script_v3.py": "15a54a667262e4188b270a43454630ccc488c964776d258ae5716d11f5ee771e"
+  },
+  "original_raw_unchanged": true,
+  "untimed_original_source": true,
+  "execution_duration_source": "local_duration_and_actual_schedule_only",
+  "narrative_estimates_are_actual_windows": false,
+  "yellow_start": {
+    "holder": "none",
+    "location": "surface:E02:lin_center"
+  },
+  "yellow_middle": {
+    "holder": "none",
+    "location": "surface:E02:near_fang"
+  },
+  "yellow_end": {
+    "holder": "none",
+    "location": "surface:E02:lin_center"
+  },
+  "pink_blue_unchanged": true,
+  "raw_slide_equals_actual_scheduled_slide": true,
+  "slide_source_refs": [
+    "raw_linear_script.beats.0.steps.0",
+    "raw_linear_script.beats.0.steps.3"
+  ],
+  "cross_shot_boundary_equal": true,
+  "physical_state_checked": true,
+  "actual_schedule_payload_checked": true,
+  "declared_reaction_windows_checked": true,
+  "source_semantics_verified": false,
+  "creative_quality_passed": false,
+  "production_ready": false,
+  "original_frozen_files_modified": false
+}

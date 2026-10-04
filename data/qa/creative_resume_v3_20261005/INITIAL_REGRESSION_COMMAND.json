@@ -1,0 +1,27 @@
+{
+  "command": [
+    "D:\\IT\\ai_douyin\\.venv\\Scripts\\python.exe",
+    "-m",
+    "pytest",
+    "tests/test_creative_story_direction_contract_v1.py",
+    "tests/test_creative_joint_source_binding_v9.py",
+    "tests/test_creative_deepseek_tool_client_v1.py",
+    "tests/test_creative_resume_dispatch_v1.py",
+    "tests/test_step_index_physical_adapter_v4.py",
+    "tests/test_creative_compact_review_transport_v8.py",
+    "tests/test_creative_response_contract.py",
+    "tests/test_run_creative_resume_v1.py",
+    "tests/test_creative_resume_v2.py",
+    "tests/test_creative_json_document_transport_v1.py",
+    "tests/test_creative_resume_dispatch_v2.py",
+    "tests/test_creative_resume_workflow_v3.py",
+    "-q",
+    "--tb=short",
+    "--basetemp",
+    ".codex_staging/resume_v3_regression_20261005_0038",
+    "-p",
+    "no:cacheprovider"
+  ],
+  "exit_code": 1,
+  "actual_model_calls": 0
+}

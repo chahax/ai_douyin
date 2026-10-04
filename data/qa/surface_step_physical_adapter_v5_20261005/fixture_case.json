@@ -1,0 +1,592 @@
+{
+  "context": {
+    "fixture_only": true,
+    "raw_linear_script": {
+      "title": "单拍多镜顺序夹具",
+      "premise": "拒绝后各自承担",
+      "selected_candidate_id": "FIXTURE",
+      "beats": [
+        {
+          "id": "B1",
+          "event": "仅摘要，不用于生成动作",
+          "trigger": "听后反应承接选择",
+          "steps": [
+            {
+              "kind": "action",
+              "speaker": "",
+              "text": "乙沿桌面把浅黄对账便签推近甲，浅粉和浅蓝不动。"
+            },
+            {
+              "kind": "dialogue",
+              "speaker": "甲",
+              "text": "这次你自己做。"
+            },
+            {
+              "kind": "action",
+              "speaker": "",
+              "text": "甲抬眼看乙，并保持两秒。"
+            },
+            {
+              "kind": "action",
+              "speaker": "",
+              "text": "乙沿同一桌面把浅黄便签收回自己面前，浅粉和浅蓝不动。"
+            }
+          ]
+        }
+      ]
+    },
+    "static_visual_manifest": {
+      "schema": "static_visual_manifest_v1",
+      "render": {
+        "style_option_id": "S01",
+        "visual_medium": "二维手绘动画",
+        "palette": "灰蓝米白",
+        "light_source": "右上暖灯"
+      },
+      "characters": [
+        {
+          "id": "C01",
+          "name": "甲",
+          "age_group": "成年",
+          "hair": "短发",
+          "clothing": "通勤衬衣",
+          "body_shape": "成年体型"
+        },
+        {
+          "id": "C02",
+          "name": "乙",
+          "age_group": "成年",
+          "hair": "短发",
+          "clothing": "通勤衬衣",
+          "body_shape": "成年体型"
+        }
+      ],
+      "props": [
+        {
+          "id": "P01",
+          "name": "杯子",
+          "appearance": "白色杯子",
+          "owner_id": "C02"
+        },
+        {
+          "id": "P02",
+          "name": "笔",
+          "appearance": "黑色笔",
+          "owner_id": "C02"
+        },
+        {
+          "id": "P03_Y",
+          "name": "浅黄对账便利贴",
+          "appearance": "正方形小纸片，浅黄底，深灰手写短词（对账）",
+          "owner_id": "C01"
+        },
+        {
+          "id": "P03_P",
+          "name": "浅粉改明细便利贴",
+          "appearance": "正方形小纸片，浅粉底，深灰手写短词（改明细）",
+          "owner_id": "C01"
+        },
+        {
+          "id": "P03_B",
+          "name": "浅蓝收尾便利贴",
+          "appearance": "正方形小纸片，浅蓝底，深灰手写短词（收尾）",
+          "owner_id": "C01"
+        }
+      ],
+      "scene": {
+        "name": "办公室",
+        "elements": [
+          {
+            "id": "E01",
+            "name": "桌子",
+            "appearance": "浅木桌面"
+          },
+          {
+            "id": "E02",
+            "name": "林屿桌",
+            "appearance": "浅木桌面"
+          },
+          {
+            "id": "E03",
+            "name": "椅子",
+            "appearance": "黑色办公椅"
+          }
+        ],
+        "relations": [
+          {
+            "subject": "E02",
+            "relation": "behind",
+            "reference": "E01"
+          }
+        ]
+      },
+      "surface_ids": [
+        "E01",
+        "E02"
+      ]
+    },
+    "references": [
+      {
+        "id": "R01",
+        "text": "离线夹具：对白后先观察承受者，再推进下一行动。"
+      }
+    ],
+    "selected_assets": [],
+    "component_registry": {
+      "schema": "creative_component_registry_v1",
+      "original_manifest": {
+        "schema": "static_visual_manifest_v1",
+        "render": {
+          "style_option_id": "S01",
+          "visual_medium": "二维手绘动画",
+          "palette": "灰蓝米白",
+          "light_source": "右上暖灯"
+        },
+        "characters": [
+          {
+            "id": "C01",
+            "name": "甲",
+            "age_group": "成年",
+            "hair": "短发",
+            "clothing": "通勤衬衣",
+            "body_shape": "成年体型"
+          },
+          {
+            "id": "C02",
+            "name": "乙",
+            "age_group": "成年",
+            "hair": "短发",
+            "clothing": "通勤衬衣",
+            "body_shape": "成年体型"
+          }
+        ],
+        "props": [
+          {
+            "id": "P01",
+            "name": "杯子",
+            "appearance": "白色杯子",
+            "owner_id": "C02"
+          },
+          {
+            "id": "P02",
+            "name": "笔",
+            "appearance": "黑色笔",
+            "owner_id": "C02"
+          },
+          {
+            "id": "P03",
+            "name": "善后便利贴三张",
+            "appearance": "正方形小纸片，分别为浅黄、浅粉、浅蓝底，深灰手写短词（对账/改明细/收尾）",
+            "owner_id": "C01"
+          }
+        ],
+        "scene": {
+          "name": "办公室",
+          "elements": [
+            {
+              "id": "E01",
+              "name": "桌子",
+              "appearance": "浅木桌面"
+            },
+            {
+              "id": "E02",
+              "name": "林屿桌",
+              "appearance": "浅木桌面"
+            },
+            {
+              "id": "E03",
+              "name": "椅子",
+              "appearance": "黑色办公椅"
+            }
+          ],
+          "relations": [
+            {
+              "subject": "E02",
+              "relation": "behind",
+              "reference": "E01"
+            }
+          ]
+        }
+      },
+      "original_manifest_sha256": "87d125f76987b93afd3e927f6639e9c357f8d3641fd24f256675e05853c8e935",
+      "component_declarations": [
+        {
+          "source_prop_id": "P03",
+          "source_count": 3,
+          "source_count_evidence": "三张",
+          "members": [
+            {
+              "id": "P03_Y",
+              "name": "浅黄对账便利贴",
+              "appearance": "正方形小纸片，浅黄底，深灰手写短词（对账）",
+              "owner_id": "C01",
+              "source_evidence": [
+                "浅黄",
+                "对账"
+              ]
+            },
+            {
+              "id": "P03_P",
+              "name": "浅粉改明细便利贴",
+              "appearance": "正方形小纸片，浅粉底，深灰手写短词（改明细）",
+              "owner_id": "C01",
+              "source_evidence": [
+                "浅粉",
+                "改明细"
+              ]
+            },
+            {
+              "id": "P03_B",
+              "name": "浅蓝收尾便利贴",
+              "appearance": "正方形小纸片，浅蓝底，深灰手写短词（收尾）",
+              "owner_id": "C01",
+              "source_evidence": [
+                "浅蓝",
+                "收尾"
+              ]
+            }
+          ]
+        }
+      ],
+      "component_declarations_sha256": "28e40b3c6b934de208b4f273a872ed8f4e2c18073a83817a24c69df3f62ebb60",
+      "component_collections": {
+        "P03": {
+          "member_ids": [
+            "P03_Y",
+            "P03_P",
+            "P03_B"
+          ],
+          "source_count": 3,
+          "source_count_evidence": "三张",
+          "source_prop_sha256": "4dc52efb61d4b181265fab5bdc393ada8ed5d2f16a4f9d58d2b25d1874e156f7"
+        }
+      },
+      "member_source_map": {
+        "P03_Y": {
+          "source_prop_id": "P03",
+          "source_prop_sha256": "4dc52efb61d4b181265fab5bdc393ada8ed5d2f16a4f9d58d2b25d1874e156f7",
+          "source_evidence": [
+            "浅黄",
+            "对账"
+          ]
+        },
+        "P03_P": {
+          "source_prop_id": "P03",
+          "source_prop_sha256": "4dc52efb61d4b181265fab5bdc393ada8ed5d2f16a4f9d58d2b25d1874e156f7",
+          "source_evidence": [
+            "浅粉",
+            "改明细"
+          ]
+        },
+        "P03_B": {
+          "source_prop_id": "P03",
+          "source_prop_sha256": "4dc52efb61d4b181265fab5bdc393ada8ed5d2f16a4f9d58d2b25d1874e156f7",
+          "source_evidence": [
+            "浅蓝",
+            "收尾"
+          ]
+        }
+      },
+      "effective_manifest": {
+        "schema": "static_visual_manifest_v1",
+        "render": {
+          "style_option_id": "S01",
+          "visual_medium": "二维手绘动画",
+          "palette": "灰蓝米白",
+          "light_source": "右上暖灯"
+        },
+        "characters": [
+          {
+            "id": "C01",
+            "name": "甲",
+            "age_group": "成年",
+            "hair": "短发",
+            "clothing": "通勤衬衣",
+            "body_shape": "成年体型"
+          },
+          {
+            "id": "C02",
+            "name": "乙",
+            "age_group": "成年",
+            "hair": "短发",
+            "clothing": "通勤衬衣",
+            "body_shape": "成年体型"
+          }
+        ],
+        "props": [
+          {
+            "id": "P01",
+            "name": "杯子",
+            "appearance": "白色杯子",
+            "owner_id": "C02"
+          },
+          {
+            "id": "P02",
+            "name": "笔",
+            "appearance": "黑色笔",
+            "owner_id": "C02"
+          },
+          {
+            "id": "P03_Y",
+            "name": "浅黄对账便利贴",
+            "appearance": "正方形小纸片，浅黄底，深灰手写短词（对账）",
+            "owner_id": "C01"
+          },
+          {
+            "id": "P03_P",
+            "name": "浅粉改明细便利贴",
+            "appearance": "正方形小纸片，浅粉底，深灰手写短词（改明细）",
+            "owner_id": "C01"
+          },
+          {
+            "id": "P03_B",
+            "name": "浅蓝收尾便利贴",
+            "appearance": "正方形小纸片，浅蓝底，深灰手写短词（收尾）",
+            "owner_id": "C01"
+          }
+        ],
+        "scene": {
+          "name": "办公室",
+          "elements": [
+            {
+              "id": "E01",
+              "name": "桌子",
+              "appearance": "浅木桌面"
+            },
+            {
+              "id": "E02",
+              "name": "林屿桌",
+              "appearance": "浅木桌面"
+            },
+            {
+              "id": "E03",
+              "name": "椅子",
+              "appearance": "黑色办公椅"
+            }
+          ],
+          "relations": [
+            {
+              "subject": "E02",
+              "relation": "behind",
+              "reference": "E01"
+            }
+          ]
+        },
+        "surface_ids": [
+          "E01",
+          "E02"
+        ]
+      },
+      "effective_manifest_sha256": "2ecfadb5ab4412b10d59c3fc2bfa0f44185eb070e6dca0307332115b3582b6c0",
+      "semantic_approval": false,
+      "production_ready": false
+    }
+  },
+  "direction": {
+    "schema": "step_index_physical_direction_offline_v5",
+    "context_sha256": "2c59f6d410723e915f5963aab7e5eb7edb28b6f7fe0982bd127aee1227046592",
+    "raw_linear_script_sha256": "9c7aa6582bacde0397d791aae18a85f369edc5c53b059da01431ca1606f9263c",
+    "emotional_arc": "明确边界后由双方承受",
+    "causal_chain": [
+      "对白后先见反应",
+      "反应后再见行动"
+    ],
+    "ending_intent": "把变化落在具体行动上",
+    "beats": [
+      {
+        "beat_id": "B1",
+        "shots": [
+          {
+            "shot_id": "S1",
+            "source_step_refs": [
+              "raw_linear_script.beats.0.steps.0",
+              "raw_linear_script.beats.0.steps.1"
+            ],
+            "new_information": "选择被说清",
+            "observation_object": "乙",
+            "camera": "中景",
+            "cut_reason": "对白完成后看承受者",
+            "purpose": "选择被说清",
+            "composition": "双人行动与回应可读",
+            "dialogue_mode": "画内对白",
+            "performance_requirements": []
+          },
+          {
+            "shot_id": "S2",
+            "source_step_refs": [
+              "raw_linear_script.beats.0.steps.2",
+              "raw_linear_script.beats.0.steps.3"
+            ],
+            "new_information": "双方开始承受结果",
+            "observation_object": "甲后转乙",
+            "camera": "连续观察",
+            "cut_reason": "新的实际行动完成",
+            "purpose": "双方开始承受结果",
+            "composition": "双人行动与回应可读",
+            "dialogue_mode": "无对白",
+            "performance_requirements": [
+              {
+                "id": "R1",
+                "subject": "C01",
+                "stimulus_ref": "raw_linear_script.beats.0.steps.1",
+                "reaction_ref": "raw_linear_script.beats.0.steps.2",
+                "relation": "after",
+                "minimum_seconds": 2
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "initial_state": {
+      "C01": {
+        "posture": "standing",
+        "position": "桌左",
+        "gaze": "桌面",
+        "affect": "平静",
+        "facing": "C02"
+      },
+      "C02": {
+        "posture": "standing",
+        "position": "桌右",
+        "gaze": "C01",
+        "affect": "平静",
+        "facing": "桌面"
+      },
+      "P01": {
+        "holder": "none",
+        "location": "surface:E02:cup_corner"
+      },
+      "P02": {
+        "holder": "none",
+        "location": "surface:E02:pen_corner"
+      },
+      "P03_Y": {
+        "holder": "none",
+        "location": "surface:E02:lin_center"
+      },
+      "P03_P": {
+        "holder": "none",
+        "location": "surface:E02:lin_center"
+      },
+      "P03_B": {
+        "holder": "none",
+        "location": "surface:E02:lin_center"
+      }
+    },
+    "spatial_contract": {
+      "seats": []
+    }
+  },
+  "locals": [
+    {
+      "schema": "step_index_physical_local_offline_v5",
+      "shot_id": "S1",
+      "input_sha256": "d695b411a5dffaf92bbc01fa96540199d180135c83a0d3b6d69f9d0e21a8938b",
+      "duration_seconds": 4,
+      "dialogue_performance": "甲完整说出原句，关键动作与对白依次进行",
+      "step_units": [
+        {
+          "source_step_ref": "raw_linear_script.beats.0.steps.0",
+          "dialogue_ref": null,
+          "groups": [
+            {
+              "id": "G_SLIDE_NEAR",
+              "action_ref": "raw_linear_script.beats.0.steps.0",
+              "semantic_role": "action",
+              "kind": "action",
+              "duration_seconds": 1,
+              "hold_subject": "",
+              "performance": "浅黄便签沿林屿桌面推向方澄，粉蓝不动",
+              "operations": [
+                {
+                  "kind": "slide",
+                  "actor": "C02",
+                  "target": "P03_Y",
+                  "value": "surface:E02:near_fang"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "source_step_ref": "raw_linear_script.beats.0.steps.1",
+          "groups": [],
+          "dialogue_ref": "raw_linear_script.beats.0.steps.1"
+        }
+      ],
+      "performance_windows": []
+    },
+    {
+      "schema": "step_index_physical_local_offline_v5",
+      "shot_id": "S2",
+      "input_sha256": "27a5dc6000be919b48d1d8c8bd3a942269cbe1741d499d123ef21f5c40463003",
+      "duration_seconds": 4,
+      "dialogue_performance": "乙完整说出原句，语速和声画仍待后续审查",
+      "step_units": [
+        {
+          "source_step_ref": "raw_linear_script.beats.0.steps.2",
+          "dialogue_ref": null,
+          "groups": [
+            {
+              "id": "G_GAZE",
+              "action_ref": "raw_linear_script.beats.0.steps.2",
+              "semantic_role": "reaction",
+              "kind": "action",
+              "duration_seconds": 0.25,
+              "hold_subject": "",
+              "performance": "按原步骤自然完成，具体感染力待审",
+              "operations": [
+                {
+                  "kind": "gaze",
+                  "actor": "C01",
+                  "target": "",
+                  "value": "C02"
+                }
+              ]
+            },
+            {
+              "id": "G_HOLD",
+              "action_ref": "raw_linear_script.beats.0.steps.2",
+              "semantic_role": "reaction",
+              "kind": "hold",
+              "duration_seconds": 2,
+              "hold_subject": "C01",
+              "performance": "按原步骤自然完成，具体感染力待审",
+              "operations": []
+            }
+          ]
+        },
+        {
+          "source_step_ref": "raw_linear_script.beats.0.steps.3",
+          "dialogue_ref": null,
+          "groups": [
+            {
+              "id": "G_SLIDE_BACK",
+              "action_ref": "raw_linear_script.beats.0.steps.3",
+              "semantic_role": "action",
+              "kind": "action",
+              "duration_seconds": 1,
+              "hold_subject": "",
+              "performance": "浅黄便签沿原桌面滑回林屿面前，粉蓝不动",
+              "operations": [
+                {
+                  "kind": "slide",
+                  "actor": "C02",
+                  "target": "P03_Y",
+                  "value": "surface:E02:lin_center"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "performance_windows": [
+        {
+          "requirement_id": "R1",
+          "anchor": "G_HOLD"
+        }
+      ]
+    }
+  ]
+}

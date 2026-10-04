@@ -1,0 +1,20 @@
+........................................................................ [ 21%]
+................................................................. [ 40%]
+........................................................................ [ 61%]
+........................................................................ [ 82%]
+.................................................F.........              [100%]
+================================== FAILURES ===================================
+___________ test_records_merge_parent_history_without_rewriting_it ____________
+tests\test_creative_resume_workflow_v3.py:271: in test_records_merge_parent_history_without_rewriting_it
+    assert resume.records() == history + [child]
+           ^^^^^^^^^^^^^^^^
+scripts\run_creative_resume_v3.py:93: in records
+    return previous_run.records()+[stage_record_view(control.read(ROOT/c['receipt'])) for c in control.read(r.ledger)['calls']]
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts\run_creative_resume_v3.py:83: in stage_record_view
+    if value['status']=='contract_valid' and value['request'].get('output_transport')==document_transport.VERSION:
+                                             ^^^^^^^^^^^^^^^^
+E   KeyError: 'request'
+=========================== short test summary info ===========================
+FAILED tests/test_creative_resume_workflow_v3.py::test_records_merge_parent_history_without_rewriting_it
+1 failed, 339 passed, 7 subtests passed in 8.99s

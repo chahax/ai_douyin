@@ -1,0 +1,12 @@
+{
+  "actual_model_calls": 0,
+  "preview_sha256": "98715b3d75ce658ff90dd953bc6b34f585d3369b8a6a25181e729257d7884989",
+  "full_reference_identical": true,
+  "full_static_identical": true,
+  "full_brief_identical": true,
+  "old_duration_in_schema": false,
+  "model": "MiniMax-M3",
+  "timing": "no model duration; actual local later",
+  "original_response62_sha256": "62e370c4034fe06372160ece01966a1813b0ac04b23af3b38a1619c00db3e18f",
+  "feedback_sha256": "1aca4bd25b28462b39af96333bf4503d4f8d5f1082e6deb588dabe4cf47e814a"
+}

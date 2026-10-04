@@ -1,0 +1,35 @@
+{
+  "schema": "authorized_creative_continuation/v2",
+  "authorization": "用户2026-10-04明确恢复：继续吧先不设token预算。后续文本调用暂不设总token硬上限；旧49次490913以及原500000历史记录完整承接，不重置账本。保持MiniMax创作、DeepSeek少量文本复审；不含媒体调用或发布。",
+  "authorized_at": "2026-10-04T16:36:55.257101+00:00",
+  "starting_spend": {
+    "calls_started": 55,
+    "reported_tokens": 558395,
+    "legacy_max_total_tokens": 500000,
+    "historical_legacy_calls": 49,
+    "historical_legacy_reported_tokens": 490913,
+    "original_parent_run": "D:\\IT\\ai_douyin\\data\\production_trials\\boundary_live_action_reference_v15_20261001\\round_01",
+    "prior_evidence_sha256": {
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v2\\CALL_LEDGER.json": "140d05a17ed59553df06e90f7b9dded5bb2cbc34530ebf0e6361a573705fb2b6",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v2\\AUTHORIZATION.json": "1a4203b2cd35874991576811cae5d1b4808c7d134e627673e1f66cf16c7a7ead",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v2\\RESULT.json": "5b3c0bb43d3a4b14aab113ce11ed57d3aa39b265b38a1c9ce0003c6d3928529b",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v2\\FEEDBACK_after_call54.json": "dd6a58b2a140053e34915e60c77631b21073f1900e9dd5b6aee98c42fd1a74f7",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v2\\REQUEST_REFERENCE_VERIFICATION_call53.json": "7bff0ce5f8c38cc4d5ef91f8276fa175e329a69c562fb7c4bef24a8b34227bc3",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v2\\call_053_story_plan_r1.json": "60647e3ed808b501b4802b294565c1d7874c1b1ca8d50f93996627f05614fa20",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v2\\call_054_story_plan_r2.json": "e71e34d88c4ef601951b4cc5aabf17f48a789aa34e800ed3e4bc28dba6891353",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v2\\call_055_story_plan_r3.json": "0d5cc7afd814a9771e1870637fabf76e56051e1872e2d62ba8d64bb108600c9e"
+    },
+    "prior_aggregate_limit": null,
+    "operator_extension": "single-string JSON document transport for MiniMax; strict original wire plus full inner schema; no model switch or repair",
+    "last_rejection": {
+      "ordinal": 55,
+      "code": "MODULE_SCHEMA_INVALID",
+      "known_usage": 10600,
+      "response_not_retried": true
+    }
+  },
+  "max_total_tokens": null,
+  "old_budget_reset": false,
+  "old_governance_migrated": false,
+  "media_calls_authorized": false
+}

@@ -1,0 +1,77 @@
+{
+  "schema": "primary_source_audit/v1",
+  "accessed_date": "2026-10-05",
+  "sources": [
+    {
+      "id": "minimax_hf_template",
+      "authority": "MiniMaxAI official model repository",
+      "url": "https://huggingface.co/MiniMaxAI/MiniMax-M3/blob/3a41b311ffa5719cef48fed3974ccf2cc03733ea/chat_template.jinja",
+      "pinned_revision": "3a41b311ffa5719cef48fed3974ccf2cc03733ea",
+      "locations": [
+        "to_xml macro (source lines 19–35; web lines 269–285)",
+        "tool instructions (source lines 119–138; web lines 371–390)",
+        "assistant arguments rendering (source lines 173–186; web lines 425–437)"
+      ],
+      "verified": "官方模板把对象字段和数组元素递归展开成带命名空间的XML；数组元素用item标签。工具定义仍以JSON Schema提供。",
+      "limit": "这份公开模板不能证明call55托管服务使用同一修订，也不提供该次请求原始native输出。"
+    },
+    {
+      "id": "minimax_provider_verifier_helpers",
+      "authority": "MiniMax-AI official verification repository",
+      "url": "https://github.com/MiniMax-AI/MiniMax-Provider-Verifier/blob/main/m3_format_check/helpers.py",
+      "locations": [
+        "get_tool_calls lines 977–1003",
+        "_validate_schema lines 1065–1138",
+        "assert_tool_called lines 1173–1190"
+      ],
+      "verified": "工具arguments按JSON解析后另验类型、required及嵌套items。它是接口验证器，不是托管服务的XML解析器。",
+      "limit": "没有运行官方用例，也没有调用任何服务；验证器仅支持JSON Schema子集，不能替代本项目完整校验。"
+    },
+    {
+      "id": "minimax_provider_verifier_nested_tests",
+      "authority": "MiniMax-AI official verification repository",
+      "url": "https://github.com/MiniMax-AI/MiniMax-Provider-Verifier/blob/main/m3_format_check/m3_text_tests.py",
+      "locations": [
+        "14_05 lines 1638–1664",
+        "14_06 lines 1665–1678",
+        "14_07 lines 1679–1787",
+        "14_09 lines 1880–1958"
+      ],
+      "verified": "官方用例检查nested数组的成员完整性、4层嵌套、oneOf分支数组类型和额外字段，不把工具触发当作schema通过。",
+      "limit": "14_07顶层oneOf和14_09无properties对象的条件均不同于call55；不能直接当该次根因证据。"
+    },
+    {
+      "id": "sglang_m3_parser",
+      "authority": "SGLang official repository (deployment implementation)",
+      "url": "https://github.com/sgl-project/sglang/blob/main/python/sglang/srt/function_call/minimax_m3.py",
+      "locations": [
+        "_get_child_schema/_get_array_item_schema lines 334–373",
+        "_parse_parameter lines 445–486"
+      ],
+      "verified": "该公开实现利用请求schema、item标签和栈解析XML容器，再序列化为OpenAI工具arguments；闭合标签不匹配可报错。",
+      "limit": "源码main可变；未运行或部署它。没有证据证明MiniMax托管端使用SGLang或此解析器版本。"
+    },
+    {
+      "id": "vllm_m3_parser",
+      "authority": "vLLM official repository (deployment implementation)",
+      "url": "https://github.com/vllm-project/vllm/blob/main/rust/src/parser/src/tool/minimax_m3.rs",
+      "locations": [
+        "format explanation lines 43–85",
+        "apply_event lines 113–121"
+      ],
+      "verified": "公开实现明确MiniMax M3原生命名空间XML格式，并经schema相关转换生成JSON arguments。",
+      "limit": "源码main可变；未运行或部署它。不能把该实现的行为或问题归到call55托管端。"
+    },
+    {
+      "id": "minimax_issue29",
+      "authority": "User report in official MiniMax repository; not maintainer-confirmed root cause",
+      "url": "https://github.com/MiniMax-AI/MiniMax-M3/issues/29",
+      "locations": [
+        "initial observation",
+        "2026-07-28 revised experiment"
+      ],
+      "verified": "报告有相似root item和丢数组成员外观；更新把其复现条件限为item*元素属性与提示词交互。",
+      "limit": "call55没有item*命名属性，条件不一致；报告者的频率和机制猜测不能用于本项目归因或失败率。"
+    }
+  ]
+}

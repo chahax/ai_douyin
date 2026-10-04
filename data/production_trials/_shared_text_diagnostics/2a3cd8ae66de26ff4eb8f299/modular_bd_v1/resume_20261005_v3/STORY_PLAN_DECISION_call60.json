@@ -1,0 +1,38 @@
+{
+  "schema": "story_direction_decision/v1",
+  "plan_sha256": "ca2a8b594b5fd30289967b2a31a2ff847776082b7363bc5565f672432675c234",
+  "approved_for_complete_script": true,
+  "assistant_source_verification": [
+    {
+      "path": "causal_events.1.visible_event",
+      "quote": "熬到十一点重新打的吧，去年底那批结算明细也是你周末过来帮我顺过一遍",
+      "finding": "实际对白明确两次不同过往加班，在拒绝前成立，不依赖便利贴或背景推断。"
+    },
+    {
+      "path": "causal_events.3.visible_event",
+      "quote": "今晚不行，七点我有一场早就买好票的电影，得先走",
+      "finding": "离开目标具体，拒绝明确，停顿与小声可由下一阶段表演兑现担心关系变冷。"
+    },
+    {
+      "path": "causal_events.4.visible_event",
+      "quote": "只是把笔收回到自己手边，把浅黄便利贴挪回自己面前",
+      "finding": "对方回应由实际承担任务行为体现，没有用客套或立刻和解替代。"
+    },
+    {
+      "path": "causal_events.5.visible_event",
+      "quote": "开始一笔一行对着纸面核对修改",
+      "finding": "回应真实落实为独自工作，场景为已定义纸质明细和签字笔，无新增屏幕/keyboard。"
+    },
+    {
+      "path": "causal_events.0.visible_event",
+      "quote": "方澄穿着灰蓝色薄针织开衫坐在自己工位前",
+      "finding": "人物保留静态衣装、场景和道具登记，已核对全方向实体。"
+    },
+    {
+      "path": "ending_action",
+      "quote": "他没再喊她",
+      "finding": "结尾仅证明当晚接回任务与她敢走，不把一次回应外推为以后完全和解。"
+    }
+  ],
+  "media_approval": false
+}

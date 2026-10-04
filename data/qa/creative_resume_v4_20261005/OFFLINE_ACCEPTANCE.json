@@ -1,0 +1,642 @@
+{
+  "schema": "creative_resume_v4_offline_acceptance/v1",
+  "regression": "499 passed, 14 subtests passed",
+  "actual_model_calls": 0,
+  "parent_inherited": {
+    "calls_started": 62,
+    "reported_tokens": 620826,
+    "legacy_max_total_tokens": 500000,
+    "historical_legacy_calls": 49,
+    "historical_legacy_reported_tokens": 490913,
+    "original_parent_run": "D:\\IT\\ai_douyin\\data\\production_trials\\boundary_live_action_reference_v15_20261001\\round_01",
+    "prior_evidence_sha256": {
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v3\\CALL_LEDGER.json": "f51d370aa964bcc4be969f07dd7cc77b78a27355fe13e571acbd432a1075003d",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v3\\AUTHORIZATION.json": "dfcd737902abccc4dfbee86d0dc87cbbd36ed0d5d91b9991a1ec17b089eebd10",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v3\\RESULT.json": "4d2699465fa91df0789ec92c3647ffa110520273389aab9281ad53d5fd0ab14a",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v3\\STORY_PLAN_DECISION_call60.json": "4d0444c24fd679616b4c00b2124be35edfa4d7dd87adba715b68559694c60cff",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v3\\REQUEST_REFERENCE_AND_SEMANTIC_VERIFICATION_call60.json": "100384f1771656927f0d5a8463052651404004492a062efca215a4a602e9c2c6",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v3\\call_056_story_plan_r4.json": "b597e2ab64e57b6dddf051158c35c7b0ada7fa7ca134bc336879425ff216df27",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v3\\call_057_story_plan_r5.json": "603139e4bb7d63921516d978499f74f7386b0b6064a9a51875ed58ad80885075",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v3\\call_058_story_plan_r6.json": "53f5ef8dd49c1b6ccc513a1284e32499273ac425d09ecb6ccef612fdd8cac746",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v3\\call_059_story_plan_r7.json": "dbb13a518c70e4d692ae3f9dd4053755708d425b95eb51cdbd1af5a3e9fedeb5",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v3\\call_060_story_plan_r8.json": "961746fd6f88926ea25f3d36f6aa1c7ab8f7b26547859902968f57b98c94446f",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v3\\call_061_draft_s3.json": "5c5a1f5c2e8dd9bd29fbbca73c56780eef28ee87029a924d49b0647fec3b9f24",
+      "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v3\\call_062_draft_s4.json": "62e370c4034fe06372160ece01966a1813b0ac04b23af3b38a1619c00db3e18f"
+    },
+    "prior_aggregate_limit": null,
+    "operator_extension": "script without model timing; separately declared preliminary budget; explicit original prop members plus same-surface slide; exact full joint binding",
+    "last_rejection": {
+      "ordinal": 62,
+      "code": "DIALOGUE_BUDGET_TOO_SHORT",
+      "known_usage": 10722,
+      "response_not_retried": true
+    }
+  },
+  "candidate_source_manifest": {
+    "scripts/run_creative_resume_v4.py": "e94ea9c5819d52be95d3365566167ba7b4c7c8ebf75162d0d358c57f4415ff95",
+    "scripts/creative_linear_script_v3.py": "15a54a667262e4188b270a43454630ccc488c964776d258ae5716d11f5ee771e",
+    "scripts/creative_component_registry_v1.py": "3d8bb4a1a7b6f073316bc782b12efef6d22f9f37df54a2fa105dd47cc5bf3390",
+    "scripts/creative_surface_state_v1.py": "6fdbf4595d93b379c2fd821fddb70ecda13e87fc111f97cfbfa4abb594d8cb76",
+    "scripts/creative_surface_state_bridge_v1.py": "819614617afb1acc08a62ba5dd22b4084ec3802a1945e16b29fbf8cd5c090a59",
+    "scripts/creative_surface_action_core_v1.py": "8dc473c1271743364f473768099ddc0a97716f564ba3ddae1e5a53e55cf50d9f",
+    "scripts/creative_surface_action_v1.py": "e42dcd35c0b9b26224f7ec0686a8d50d05fad276460f9ffe60c21ab14bf5d938",
+    "scripts/step_index_physical_adapter_v5.py": "550cfd9f99b058b53e24ce65a2b6bbff5f17de3baef89fe8d1cd478b35223755",
+    "scripts/creative_joint_source_binding_v10.py": "8438a7b6d6f9ce8ae8dc41fcc5f6403c322f513edaef43e244e3250b22c37344",
+    "scripts/creative_review_wire_v10.py": "dafcde7a0f6e35729c87a85245482cc5c08f177785b7e9ef7708ff230f8cb50d",
+    "scripts/run_creative_resume_v3.py": "55ec001e88b2c1e31e6bb22a9e96034041b9684272df61974269993c11536f8a",
+    "scripts/creative_resume_dispatch_v2.py": "d7a6c1bb5a914d3408dfd860f95d03c6c1ab781bd7b37d052ecadabf7bfb86e8",
+    "scripts/creative_json_document_transport_v1.py": "ebf2a5c24142b088c855974dd58bab525e8187d3de993098a2868299cada5c99",
+    "scripts/run_creative_resume_v2.py": "fc61c3a656c8fe41af6c349d59d48df63e4c15685093ba7890d98a1729970f09",
+    "scripts/creative_joint_source_binding_v9.py": "f4bdb82d835173d77d57c7126415ea7aea7ebd097b6f0fabe9eb25fa69038285",
+    "scripts/creative_story_direction_contract_v1.py": "dae0d0e3c12690ca2f125d4b957260ad22510bd4b68231204577a38239757f23",
+    "scripts/creative_review_wire_v9.py": "d81fd73001f116e774ad599489f8cbe6045311016a2d5a739e0c74a70c9ff38e",
+    "scripts/creative_deepseek_tool_client_v1.py": "acb0efff538b5ff9a4d890794f69c5bef5513606311dd579f9f3e92650022451",
+    "scripts/run_creative_resume_v1.py": "5968d394cacfc29114cfce6a6ab3ba2123d7bd14d416935ff4ca9e399be68924",
+    "scripts/creative_resume_dispatch_v1.py": "b09d758ce560bc457991a6a96eafad4ab4658976df8abed085398a3451442865",
+    "scripts/creative_linear_script_v2.py": "cdce92447fbdc7a8296aeb44123160141f2188d2aec3a9c0950eea0b27a66bfe",
+    "scripts/step_index_physical_adapter_v4.py": "774871c7e750734106bcc4537e3117b7ea0c546fdeeb0394fbdbfd2d45254f5e",
+    "scripts/modular_step_shot_contract_v3.py": "8e631f2f3d2e13a52974c703c558cc8b469552333b92160adb022c4c155670a3",
+    "scripts/creative_compact_review_transport_v8.py": "2f48cfef220f23c1ed73645f9db5dd9858c57e6f407012282d444aafc5dec5c7",
+    "scripts/creative_script_review_sources_v7.py": "38e12d97b5e7f533208ed94756b5c1bfa76c429c89aa0ae18a0f34399a363d1f",
+    "scripts/review_linear_script_probe_v6.py": "7f6e64838a881b416c4d511fbba62bdd218b6124041e3f06f0b3b7ab2fec42d9",
+    "scripts/prepare_minimax_rule_probe.py": "7f09f48e44eb4a52b31aeeeaac5ba6f4167fa3422078bb44ea3844fdc8e8db52",
+    "scripts/run_minimax_rule_probe.py": "eccf42f2a22fa376dd950d946a31db78070f3082375f50876ae8fa1b3617827c",
+    "scripts/run_modular_bd_probe.py": "10c3420498ea57d40748a9a789992ba758b02211cbfd97945f54329353ca0d61",
+    "src/content_factory/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/content_factory/analysis_prompt_pack.py": "bf34992d70a9c5c37b098514f3bb3ec1c1ae2cbb7202fb2ccd3c22f9aa2ad6e0",
+    "src/content_factory/ark_opening_frame.py": "980445c261a2a47d446ae4f5686801e2a7d726549de1819a8ebb55a3971376fb",
+    "src/content_factory/audio_mixer.py": "0250ceb4e547ba06f2b74c6c05f213f1ff39c66d73f608d92c43ec8ff11328e6",
+    "src/content_factory/book_processor.py": "ecefb9ca3f489341f344fa8e00fdeed27b54108232de66bbe5b82dfb0c36c0e3",
+    "src/content_factory/compact_execution.py": "c7e230d0a8a77e98fe79d26719b7040bcea8862eb33e8f43f25b25fd76cdd995",
+    "src/content_factory/conversation_direction.py": "e87c0dc38956490d82a46f32dab0d304a03096cd1fdee6768b33304fe77419bf",
+    "src/content_factory/creative_action_plan_v1.py": "cfc455b9f2da0deb39791baf808547fc9f904613a58396fe52114962489bfda1",
+    "src/content_factory/creative_action_plan_v2.py": "851e430af9f2fb55a4649b445f8c92f6a3924209db548f7bab2d34a23002d658",
+    "src/content_factory/creative_brief.py": "22e83b70eead1d4d10b93e4cf8b6fb00bbe1d6e3e94275edfddd9ae9495c23c1",
+    "src/content_factory/creative_calibration.py": "f2dd6e23bf5f1ef1d8c822173889da502021fd586bad0b3292bd5feb457f4198",
+    "src/content_factory/creative_delivery.py": "1525ba5b9a9ff78eba439169ed9f4100eeeba1dbf30df879cf939f2ad5d24896",
+    "src/content_factory/creative_diagnostic_spend.py": "49b79065f9d9d8a63cb77c4707d342a6342ca42b74a3af7fc0a1335c55250d99",
+    "src/content_factory/creative_dialogue_normalization.py": "e19783b6cf316fcc86593784d70784e0a053edd9febc5b8a66fc9edc09522ee4",
+    "src/content_factory/creative_direction_source_schema.py": "727b80b883bc54c0c9110143ca6dac6e352f74c7b708f31539dcdba13932d0f4",
+    "src/content_factory/creative_evaluation.py": "14e152c68a7e026d474e736c502f9ca8a53cc69b8cead8e478d5af3514ef4090",
+    "src/content_factory/creative_event_recovery.py": "78f8788c3e16552a12804c95e323fb861c1c4d05299ba185a8f3bd61fa8f4904",
+    "src/content_factory/creative_event_script.py": "510cc0c37306f6f627c19f1d078afc95365ca6753f06e92d527dd1e39ec8fdfc",
+    "src/content_factory/creative_execution_control.py": "3f87a53d24d5c6504a46d98cdfe8e8e85675820215615b269bb565cd1e4c4267",
+    "src/content_factory/creative_focused_review_stage.py": "b1348c1834b186aef96f1cdb5df386a91cde13e80a46f0884e8e6717a0d06691",
+    "src/content_factory/creative_full_script_revision.py": "127b43ba1b43ae14bd8e72eff0449c13ef64c186bb1833ac88c81d9e7d00bf0b",
+    "src/content_factory/creative_governed_runtime.py": "68304c1bde596777c2cf421cbe7ab4820fdbd272623fba39182cf8a0b0cd972e",
+    "src/content_factory/creative_media_capability.py": "f7fa343538ed775984cfd074008ed641599f55708088397cd106b357b695df76",
+    "src/content_factory/creative_media_workbench.py": "e4a9a942c1bfdab272f0543c0b5df498e939c436c89c73b65e10546b52fe7aaa",
+    "src/content_factory/creative_modular_contract.py": "c0f7179aa72b4774a37d855dd48c58ad856bff9928f52e484c1e10b6397362e4",
+    "src/content_factory/creative_modular_tool_export.py": "7bfb3b80a606d45859184d9803a826cc95c5b6b3209ffdc18f7198e6a4770564",
+    "src/content_factory/creative_narrative_focus.py": "b73c43fb64633c16e4abb294e4d21eb4f9d41329e35142ae2e15b60c56e089e6",
+    "src/content_factory/creative_narrative_transfer.py": "8022b3c6c9aefc703ef7f1fe972c1f666eccb1dc7ac6caf7da06d908baf8da11",
+    "src/content_factory/creative_original_director.py": "bb8393f5226fec08d40fd45ccbd99ab9aa199ea4b1c06e55079b7da6bb99cd00",
+    "src/content_factory/creative_original_prompt.py": "a15a66b5b030c39be92783cc5eec310e9cd7cfe381831b6d17409d752d33cb6a",
+    "src/content_factory/creative_plan_patch.py": "9c6145db169ab40bf07c653de30afcf0735e63a2854b0513710180053df7c1de",
+    "src/content_factory/creative_quality_evidence.py": "ae28a6dcdaf886a9362b5b7914976ca8f1be05fa7a008fa303696ffd32c16eaf",
+    "src/content_factory/creative_reference_expression.py": "8bd192af8e29bea967744396ee32b01a6ff375cd603cb6f4e8096c159dfbb7e0",
+    "src/content_factory/creative_response_contract.py": "7ceebff4c237ecab2cadf88f2abacf9c46ad700cea87c930eaccf088d61a4163",
+    "src/content_factory/creative_review_evidence_catalog.py": "c1bede6df21c72a5042765280a54786bc3f03b7bba8edad6e926b782685e3aed",
+    "src/content_factory/creative_review_evidence_ids.py": "8ee16a20165ae5e6a9a90adbddc2a1af024fbba8b79c359bb1b8e82cb6e823f9",
+    "src/content_factory/creative_review_gate.py": "e8c99f7a668ad49ac726177e23a453ae2d90f934a065fec2effcac119c40a86f",
+    "src/content_factory/creative_review_packet.py": "3a190b106277fb4c4b5216bf6fc2440256383c7af588d4ea6063b2a33ea241ca",
+    "src/content_factory/creative_review_resolution.py": "a394f7bf6103524b81dd4b3548dad4db7a1783b794c2ab7af654f552819dedae",
+    "src/content_factory/creative_review_v3.py": "21b4b47ee2b018eaaa4aa696d729ce9eb163d73615b033407cd3044f60f490aa",
+    "src/content_factory/creative_review_v4.py": "50ccff5a30e85e6955a97f5ef81ff4d005ec7a801ba02357c2056309ea89d8cb",
+    "src/content_factory/creative_review_v5.py": "f34a661d8308f67070512d4838abe87c4b7a5f6de2d4e751960e1d20bc6d84fc",
+    "src/content_factory/creative_review_v6.py": "371d0dd43216aadf0ec920a95daaa6461d5c4465450d7b10368102b7ac803a3d",
+    "src/content_factory/creative_rule_registry.py": "95a1dac7650006c2ab200bb2646e95f5add27046eda02140cc66e8d7d3e49fac",
+    "src/content_factory/creative_script_patches.py": "4c2563bdc03c77c2f52fed0c2c501657506176bf8e9a961021a816be0e72e486",
+    "src/content_factory/creative_seedance_segments.py": "04641b4ddce8b38494502ba2664ea18a6d8a5dfe70f2b6c9b2f937832ea025ca",
+    "src/content_factory/creative_segment_execution.py": "d49b233801dfd3b9d623994a9ca388aff25c6f0d7c7e4d698f1c80cb3a1839a5",
+    "src/content_factory/creative_segmented_director.py": "95deff4ff207c9076138ee988ea76e5e97af97d29731bcb81a888559d96f81a2",
+    "src/content_factory/creative_stage_contracts.py": "aab0b606513ad9c1edb68b6749c90dddd3ecd4f1c09af3958147586100da6311",
+    "src/content_factory/creative_stage_debug.py": "085eac2a57fd62653366e703b8d1bd55d76810eae12301a9931a60661cec6089",
+    "src/content_factory/creative_stage_runtime.py": "40ca83dd97b0b7bbf25483004093477e094601bc374d29a5238c685a63f34ece",
+    "src/content_factory/creative_state_plan_binding.py": "b8bf8ec912e15bb1adc900c5f10a12b026bb934cded10e2eba7cb08f003e9a68",
+    "src/content_factory/creative_state_plan_guidance.py": "4d9e8431dab633e9e4604009e76e9420a9b9945039264bd2a712913fcd1c5b93",
+    "src/content_factory/creative_state_plan_v2.py": "98e089b56744a04521e4fff6d197f0a479326c0b874761014eb5c166873d62e9",
+    "src/content_factory/creative_state_plan_v3.py": "e4ed6e33084f3ba5be49190ec9f170a391126ba5341ecd0988dbfdc904c0044d",
+    "src/content_factory/creative_state_plan_v6.py": "1cc460eaecf0d71ec05a0b2e6bc1a35a3a7f650ec15ec2b99d8520aee97704bb",
+    "src/content_factory/creative_state_store.py": "801e87b56ab1e0e041bd04dfc3c5cafcc3e211578ff18f533c01062baf860f72",
+    "src/content_factory/creative_static_visual_manifest.py": "cd8d6e443c295a77f1eeeda77fde6abe2740eeae1bca2894f59cf92dab1b9742",
+    "src/content_factory/creative_workflow.py": "ab3f41e37dc46f74d7e4646cea611f30e20688a1e31b59b3948d94ca55908c5c",
+    "src/content_factory/creative_workflow_contract.py": "b91df553261252944f704514f2db5f95b7c18c66fe236ae504d98c335836aa36",
+    "src/content_factory/creative_workflow_inputs.py": "1d296a9dba36212bf7c1f2eff7bca470acd05dd2b434e19ed96f96b813f2704a",
+    "src/content_factory/creative_workflow_roles.py": "2ff230ecd4f524ff4ad181d16a97a4e1aff95bfa63d919bb8173d021b07615df",
+    "src/content_factory/creative_writer_prompt_pack.py": "706c842622ad60610465a18797d051d742d32b84cc548a8e46e28085b800d26b",
+    "src/content_factory/deterministic_camera.py": "fdafb8cdb03daa6caffe02b38a6413aae096df701c88288ba7b7a2ca51e9cb9c",
+    "src/content_factory/deterministic_motion.py": "46620133dd3818d6e33a9f5231652132342a84e91c8d649b8b538636a637ad1a",
+    "src/content_factory/dialogue_generator.py": "da298eb1d1e538b7e9fb3215698d5fdf647c451ae35992927fb84ffd500aa8a3",
+    "src/content_factory/director_json.py": "b6b303988ccf2d4706cbcc516d0af5c8114a75b5ae6e2443cfe1125e532c2374",
+    "src/content_factory/director_pipeline.py": "a610d20b46bf8323a7d3fb49ccc34b884634dbbaa91562275569738157589e8f",
+    "src/content_factory/dreamina_cli.py": "1baca484221dfe17d19018c26972d7644e9de9e8c97de79e2137595e63cdbccf",
+    "src/content_factory/emotional_focus.py": "47660c459f75f7ca1d9f21bd8fbfa8e054f719031a1f9f274d0153c7807760ad",
+    "src/content_factory/execution_grounding.py": "8033f111210989d9d943a5885b8939a8bec6da8b967af2ca523970eb3d6871f1",
+    "src/content_factory/keyframe_relight.py": "0433fddb7b873c6f876effd047af52dd46ad7eeee81c09d3af83c539fc7ab174",
+    "src/content_factory/media_review_policy.py": "fea26ce29e71a4a918dc3c61f7a46d95e913081589ed81f6afe8862f0b8e8661",
+    "src/content_factory/novel_schemas.py": "775b8eb8ad54d2d613a5524265b2628cec949a1423bc494bc1e0459cb3d7cdf7",
+    "src/content_factory/novel_splitter.py": "a55a4f3267abc834105289dfdbbbd63b178352cad58b30e5b5712a5c51e87957",
+    "src/content_factory/novel_visual_direction.py": "4a6042aff3150abf5575b203d60726a45d5ba1e7cc1ea3ba40a4673b8c09e3c9",
+    "src/content_factory/opening_frame_plan.py": "f998690dc3cfb7b85620aaf4d505a1899863df49fae60a4b0495aef3c9eb59e9",
+    "src/content_factory/performance_revision_gate.py": "285e1798c5858ed527a842ae33f8d858e8c005a66086edb418583bf6cbe7423d",
+    "src/content_factory/presenter_pipeline.py": "76a08a01c724ac3953714ef62464e157972edd9e34a98f7b1759896288d4004d",
+    "src/content_factory/reusable_production.py": "148ffdd038b3283d300a095684a48989c9ece31a14c5e38e265346aab29ef374",
+    "src/content_factory/reviewed_storyboard_direction.py": "7c9db6c17d76bd5e7921be2e36878b6085d2ba0a2533bd9b2a75bae2b29f89f8",
+    "src/content_factory/script_generator.py": "aaa34e63ed6cc1c5eebc879bf31ca2a31a9a0a72d66d8c8467d7e44548befc15",
+    "src/content_factory/script_video_review.py": "d8d79204e3bf07e1a721a13c69d2301489f23f91ffe2e083cf27aece22ff55a1",
+    "src/content_factory/seedance_client.py": "d94b131334b3eb20f0607b46550959e7b95e63f2f887e6c7e2306023ee34994d",
+    "src/content_factory/seedance_frames.py": "61439c8e2dfa14ad4a3907e0994005c61b7633691f2d8892c4a5e985a19fd6b4",
+    "src/content_factory/seedance_models.py": "80cb3824b78a948a32901f52804d52d6fb1f705f669865fc64e2860d9df53ce6",
+    "src/content_factory/story_video.py": "929317b525dca2a9ae81bd088fde1cf694a7569681ce58ee07c3f861a321b9e9",
+    "src/content_factory/triple_panel.py": "d0573bef2cdc3653f9035cfbb7cde32ec34160460239edde468d2547ca9faf35",
+    "src/content_factory/tts_engine.py": "b19d557df0356d2a6a9289add467e217090d3387aff6a6ea96a414ff036bfd6c",
+    "src/content_factory/video_agent_pack.py": "402117efd3d630d4cecc22c398d16638f72acccaac82d0b861b3b5d91207d77f",
+    "src/content_factory/video_appearance_lock.py": "19eecfa9a01f328587cd068e18294d43a5ae80d94b904c93ba2d7f8181096907",
+    "src/content_factory/video_audio_mux.py": "50da0a5e120f38b22b9579e179634d290ab3f9bdc6b7d64a5983077a426c00a0",
+    "src/content_factory/video_campaign.py": "44941d6bf8023a2fdb102537f45ecb6058485566560df09071c7e64f9750052e",
+    "src/content_factory/video_candidate_benchmark.py": "1517cdb5f4607f8b5210acf5b15f81477dfb3f7f87b145cdd643e58de966fb4a",
+    "src/content_factory/video_composer.py": "7b37737e2abf8f22c07d5098d283c83f8613e8bfd760a3026f19b4d272aa4ae1",
+    "src/content_factory/video_control_gate.py": "dd9fec64dc149dcffd2703b78d02c76aa7b6edf0d5d3c65a3dfc1659a51d5dc6",
+    "src/content_factory/video_control_plan.py": "8862b57d5cbcd7a4e6cff11763595dcf33859fc746360b6d3cb1339cb3d2d11e",
+    "src/content_factory/video_control_policy.py": "d2998739eed89b697559d38178ccb402ea2816bfaa2f35bf744b617929a61809",
+    "src/content_factory/video_enhancer.py": "f10e88ac27a518895af5888c17ce4ff44fff802d7e2422c502e67639c5b690d6",
+    "src/content_factory/video_lighting_gate.py": "799ad2961f0095212ffd15c30e67a55561d95973f6a8b19fcc3bd795f9ff3dd5",
+    "src/content_factory/video_mask.py": "301604577c5560f0127d6fbacf14107a03633d60bcaf99f6b51a80eaa3198245",
+    "src/content_factory/video_provider_failure.py": "55a4cc7e7972708e999e1954042ddd600f11a1229db92abfd33377b9b9982330",
+    "src/content_factory/video_quality.py": "2e45e4654aaceaf0b6c8a1de5e74aab0f37d2e91169e6ceac135dace81e4040e",
+    "src/content_factory/video_quality_gate.py": "289af51d0cff4b9aae8a5fdabf9150406b4cb23f33fed1b69f5143b1037b010f",
+    "src/content_factory/video_recipe.py": "c97fb5894d59e6f91a56be80cd1a718ccafa2b01415f56d02ac3448922b14294",
+    "src/content_factory/video_recovery.py": "49eb1c9f03afbc9aa93c59f4ff1e4b38bac34b7e553a869dd1f2f568119b2542",
+    "src/content_factory/video_review_packet.py": "944a483c64bb60328ca54da6b8b7979614f5b380c73396863828dced0f1e4e4e",
+    "src/content_factory/video_script_refiner.py": "f9c30709216fe0340d09138dd7ebf7b3d5c1725434adffbecfc2fe68460a6f8d",
+    "src/content_factory/video_smoothness.py": "abbc466e010fbb174088ec7fe3ec5843e6c1166c91f0dcfc42515a1812b2fcea",
+    "src/content_factory/video_style_gate.py": "6fc8d983c18434e0ce4062c6c7af4dfde3582fa1e7289667198ce90bfd94b70c",
+    "src/content_factory/video_temporal_repair.py": "13a5c35f5ee805bff1fdcdcb4bb1c44ef63d5e80dc46206d5ec76f15b3dc1d51",
+    "src/content_factory/video_tool_inventory.py": "0188d21b4a564c91d0bfe495da42c3fddb3892aecc4ed895710053fc938a3683",
+    "src/content_factory/wisdom_extractor.py": "61ca0c85d9bb5ff56c76d4fcc6c77d9d8bd390b3db463c9208e5232842943fa3",
+    "src/content_factory/wisdom_extractor_rag.py": "c7f866c18844041241253d54f98d3357ae25d7f8312203f108dc8105f6063d9b",
+    "src/shared/config.py": "9146bf90d524dfb3a73f199131cfca99beda8d342085c92251d8a86ab49bc166"
+  },
+  "component_registry": {
+    "schema": "creative_component_registry_v1",
+    "original_manifest": {
+      "schema": "static_visual_manifest_v2",
+      "render": {
+        "style_option_id": "S01",
+        "visual_medium": "写实真人实拍质感的AI短片，自然皮肤纹理与生活化布光",
+        "palette": "傍晚办公室暖调，浅木色桌面、米白墙、暖灰窗帘透橙黄夕光、人物服装为低饱和的灰蓝与米驼",
+        "light_source": "临窗自然夕光为主，从办公桌侧面斜入，室内顶灯为辅补光，形成柔和侧光与轻微暖色阴影"
+      },
+      "characters": [
+        {
+          "id": "C01",
+          "name": "方澄",
+          "age_group": "成年",
+          "hair": "黑色齐肩直发，自然中分",
+          "clothing": "灰蓝色薄针织开衫，内搭白色圆领T恤，下着深灰色直筒长裤",
+          "body_shape": "中等偏瘦，肩线柔和"
+        },
+        {
+          "id": "C02",
+          "name": "林屿",
+          "age_group": "成年",
+          "hair": "深栗色短碎发，稍长刘海",
+          "clothing": "米驼色棉质衬衫，袖口挽至前臂，下着深藏蓝休闲长裤",
+          "body_shape": "中等身高，肩宽略宽于方澄"
+        }
+      ],
+      "props": [
+        {
+          "id": "P01",
+          "name": "挎包",
+          "appearance": "软皮小号斜挎包，米灰色金属扣，单层翻盖",
+          "owner_id": "C01"
+        },
+        {
+          "id": "P02",
+          "name": "院线电影票根",
+          "appearance": "竖版窄长纸片，米白底深红字，右侧带撕齿虚线，今晚院线开场时间与座位号可读",
+          "owner_id": "C01"
+        },
+        {
+          "id": "P03",
+          "name": "善后便利贴三张",
+          "appearance": "正方形小纸片，分别为浅黄、浅粉、浅蓝底，深灰手写短词（对账/改明细/收尾）",
+          "owner_id": "C01"
+        },
+        {
+          "id": "P04",
+          "name": "咖啡杯",
+          "appearance": "白色陶瓷马克杯，杯身外侧无图案，杯口微宽",
+          "owner_id": "C02"
+        },
+        {
+          "id": "P05",
+          "name": "客户明细单",
+          "appearance": "A4横版打印表格纸，浅灰线条格，黑字数字，红笔批注",
+          "owner_id": "C02"
+        },
+        {
+          "id": "P06",
+          "name": "结算单",
+          "appearance": "A4纵版表格纸，右上角有彩色公司logo条，浅蓝表头",
+          "owner_id": "C02"
+        },
+        {
+          "id": "P07",
+          "name": "签字笔",
+          "appearance": "黑色细头签字笔，金属笔夹",
+          "owner_id": "C02"
+        }
+      ],
+      "scene": {
+        "name": "傍晚办公室",
+        "elements": [
+          {
+            "id": "E01",
+            "name": "方澄工位桌",
+            "appearance": "浅木色长方形办公桌，金属细腿，桌面靠近窗户一侧"
+          },
+          {
+            "id": "E02",
+            "name": "林屿工位桌",
+            "appearance": "浅木色长方形办公桌，与方澄桌同款，平行摆放，靠近室内一侧"
+          },
+          {
+            "id": "E03",
+            "name": "抽屉柜",
+            "appearance": "浅木色三斗文件柜，贴墙放置，黑色拉手"
+          },
+          {
+            "id": "E04",
+            "name": "办公室门",
+            "appearance": "木纹平板门，米灰色，下半部带金属横拉把手，位于房间远端侧墙"
+          },
+          {
+            "id": "E05",
+            "name": "窗户",
+            "appearance": "宽幅铝合金推拉窗，米灰色半透明卷帘半垂，窗框占据外侧整面墙"
+          },
+          {
+            "id": "E06",
+            "name": "顶灯",
+            "appearance": "白色圆形吸顶灯，暖白光，位于房间正中天花板"
+          },
+          {
+            "id": "E07",
+            "name": "地面",
+            "appearance": "浅灰色PVC地板，哑光"
+          },
+          {
+            "id": "E08",
+            "name": "墙面",
+            "appearance": "米白色乳胶漆墙面，干净无装饰"
+          },
+          {
+            "id": "E09",
+            "name": "办公椅（方澄）",
+            "appearance": "黑色网面靠背转椅，灰色塑料五星脚"
+          },
+          {
+            "id": "E10",
+            "name": "办公椅（林屿）",
+            "appearance": "黑色网面靠背转椅，灰色塑料五星脚，与方澄椅同款"
+          }
+        ],
+        "relations": [
+          {
+            "subject": "E02",
+            "relation": "right_of",
+            "reference": "E01"
+          },
+          {
+            "subject": "E01",
+            "relation": "next_to",
+            "reference": "E05"
+          },
+          {
+            "subject": "E02",
+            "relation": "next_to",
+            "reference": "E01"
+          },
+          {
+            "subject": "E03",
+            "relation": "behind",
+            "reference": "E02"
+          },
+          {
+            "subject": "E04",
+            "relation": "behind",
+            "reference": "E01"
+          },
+          {
+            "subject": "E06",
+            "relation": "above",
+            "reference": "E01"
+          },
+          {
+            "subject": "E07",
+            "relation": "below",
+            "reference": "E01"
+          },
+          {
+            "subject": "E08",
+            "relation": "behind",
+            "reference": "E05"
+          },
+          {
+            "subject": "E09",
+            "relation": "next_to",
+            "reference": "E01"
+          },
+          {
+            "subject": "E10",
+            "relation": "next_to",
+            "reference": "E02"
+          }
+        ]
+      }
+    },
+    "original_manifest_sha256": "7e5ad17743bce4e285673636980238471825686d832bc2787a43cfa1bec5f977",
+    "component_declarations": [
+      {
+        "source_prop_id": "P03",
+        "source_count": 3,
+        "source_count_evidence": "三张",
+        "members": [
+          {
+            "id": "P03_Y",
+            "name": "浅黄对账便利贴",
+            "appearance": "正方形小纸片，浅黄底，深灰手写短词（对账）",
+            "owner_id": "C01",
+            "source_evidence": [
+              "浅黄",
+              "对账"
+            ]
+          },
+          {
+            "id": "P03_P",
+            "name": "浅粉改明细便利贴",
+            "appearance": "正方形小纸片，浅粉底，深灰手写短词（改明细）",
+            "owner_id": "C01",
+            "source_evidence": [
+              "浅粉",
+              "改明细"
+            ]
+          },
+          {
+            "id": "P03_B",
+            "name": "浅蓝收尾便利贴",
+            "appearance": "正方形小纸片，浅蓝底，深灰手写短词（收尾）",
+            "owner_id": "C01",
+            "source_evidence": [
+              "浅蓝",
+              "收尾"
+            ]
+          }
+        ]
+      }
+    ],
+    "component_declarations_sha256": "28e40b3c6b934de208b4f273a872ed8f4e2c18073a83817a24c69df3f62ebb60",
+    "component_collections": {
+      "P03": {
+        "member_ids": [
+          "P03_Y",
+          "P03_P",
+          "P03_B"
+        ],
+        "source_count": 3,
+        "source_count_evidence": "三张",
+        "source_prop_sha256": "4dc52efb61d4b181265fab5bdc393ada8ed5d2f16a4f9d58d2b25d1874e156f7"
+      }
+    },
+    "member_source_map": {
+      "P03_Y": {
+        "source_prop_id": "P03",
+        "source_prop_sha256": "4dc52efb61d4b181265fab5bdc393ada8ed5d2f16a4f9d58d2b25d1874e156f7",
+        "source_evidence": [
+          "浅黄",
+          "对账"
+        ]
+      },
+      "P03_P": {
+        "source_prop_id": "P03",
+        "source_prop_sha256": "4dc52efb61d4b181265fab5bdc393ada8ed5d2f16a4f9d58d2b25d1874e156f7",
+        "source_evidence": [
+          "浅粉",
+          "改明细"
+        ]
+      },
+      "P03_B": {
+        "source_prop_id": "P03",
+        "source_prop_sha256": "4dc52efb61d4b181265fab5bdc393ada8ed5d2f16a4f9d58d2b25d1874e156f7",
+        "source_evidence": [
+          "浅蓝",
+          "收尾"
+        ]
+      }
+    },
+    "effective_manifest": {
+      "schema": "static_visual_manifest_v2",
+      "render": {
+        "style_option_id": "S01",
+        "visual_medium": "写实真人实拍质感的AI短片，自然皮肤纹理与生活化布光",
+        "palette": "傍晚办公室暖调，浅木色桌面、米白墙、暖灰窗帘透橙黄夕光、人物服装为低饱和的灰蓝与米驼",
+        "light_source": "临窗自然夕光为主，从办公桌侧面斜入，室内顶灯为辅补光，形成柔和侧光与轻微暖色阴影"
+      },
+      "characters": [
+        {
+          "id": "C01",
+          "name": "方澄",
+          "age_group": "成年",
+          "hair": "黑色齐肩直发，自然中分",
+          "clothing": "灰蓝色薄针织开衫，内搭白色圆领T恤，下着深灰色直筒长裤",
+          "body_shape": "中等偏瘦，肩线柔和"
+        },
+        {
+          "id": "C02",
+          "name": "林屿",
+          "age_group": "成年",
+          "hair": "深栗色短碎发，稍长刘海",
+          "clothing": "米驼色棉质衬衫，袖口挽至前臂，下着深藏蓝休闲长裤",
+          "body_shape": "中等身高，肩宽略宽于方澄"
+        }
+      ],
+      "props": [
+        {
+          "id": "P01",
+          "name": "挎包",
+          "appearance": "软皮小号斜挎包，米灰色金属扣，单层翻盖",
+          "owner_id": "C01"
+        },
+        {
+          "id": "P02",
+          "name": "院线电影票根",
+          "appearance": "竖版窄长纸片，米白底深红字，右侧带撕齿虚线，今晚院线开场时间与座位号可读",
+          "owner_id": "C01"
+        },
+        {
+          "id": "P03_Y",
+          "name": "浅黄对账便利贴",
+          "appearance": "正方形小纸片，浅黄底，深灰手写短词（对账）",
+          "owner_id": "C01"
+        },
+        {
+          "id": "P03_P",
+          "name": "浅粉改明细便利贴",
+          "appearance": "正方形小纸片，浅粉底，深灰手写短词（改明细）",
+          "owner_id": "C01"
+        },
+        {
+          "id": "P03_B",
+          "name": "浅蓝收尾便利贴",
+          "appearance": "正方形小纸片，浅蓝底，深灰手写短词（收尾）",
+          "owner_id": "C01"
+        },
+        {
+          "id": "P04",
+          "name": "咖啡杯",
+          "appearance": "白色陶瓷马克杯，杯身外侧无图案，杯口微宽",
+          "owner_id": "C02"
+        },
+        {
+          "id": "P05",
+          "name": "客户明细单",
+          "appearance": "A4横版打印表格纸，浅灰线条格，黑字数字，红笔批注",
+          "owner_id": "C02"
+        },
+        {
+          "id": "P06",
+          "name": "结算单",
+          "appearance": "A4纵版表格纸，右上角有彩色公司logo条，浅蓝表头",
+          "owner_id": "C02"
+        },
+        {
+          "id": "P07",
+          "name": "签字笔",
+          "appearance": "黑色细头签字笔，金属笔夹",
+          "owner_id": "C02"
+        }
+      ],
+      "scene": {
+        "name": "傍晚办公室",
+        "elements": [
+          {
+            "id": "E01",
+            "name": "方澄工位桌",
+            "appearance": "浅木色长方形办公桌，金属细腿，桌面靠近窗户一侧"
+          },
+          {
+            "id": "E02",
+            "name": "林屿工位桌",
+            "appearance": "浅木色长方形办公桌，与方澄桌同款，平行摆放，靠近室内一侧"
+          },
+          {
+            "id": "E03",
+            "name": "抽屉柜",
+            "appearance": "浅木色三斗文件柜，贴墙放置，黑色拉手"
+          },
+          {
+            "id": "E04",
+            "name": "办公室门",
+            "appearance": "木纹平板门，米灰色，下半部带金属横拉把手，位于房间远端侧墙"
+          },
+          {
+            "id": "E05",
+            "name": "窗户",
+            "appearance": "宽幅铝合金推拉窗，米灰色半透明卷帘半垂，窗框占据外侧整面墙"
+          },
+          {
+            "id": "E06",
+            "name": "顶灯",
+            "appearance": "白色圆形吸顶灯，暖白光，位于房间正中天花板"
+          },
+          {
+            "id": "E07",
+            "name": "地面",
+            "appearance": "浅灰色PVC地板，哑光"
+          },
+          {
+            "id": "E08",
+            "name": "墙面",
+            "appearance": "米白色乳胶漆墙面，干净无装饰"
+          },
+          {
+            "id": "E09",
+            "name": "办公椅（方澄）",
+            "appearance": "黑色网面靠背转椅，灰色塑料五星脚"
+          },
+          {
+            "id": "E10",
+            "name": "办公椅（林屿）",
+            "appearance": "黑色网面靠背转椅，灰色塑料五星脚，与方澄椅同款"
+          }
+        ],
+        "relations": [
+          {
+            "subject": "E02",
+            "relation": "right_of",
+            "reference": "E01"
+          },
+          {
+            "subject": "E01",
+            "relation": "next_to",
+            "reference": "E05"
+          },
+          {
+            "subject": "E02",
+            "relation": "next_to",
+            "reference": "E01"
+          },
+          {
+            "subject": "E03",
+            "relation": "behind",
+            "reference": "E02"
+          },
+          {
+            "subject": "E04",
+            "relation": "behind",
+            "reference": "E01"
+          },
+          {
+            "subject": "E06",
+            "relation": "above",
+            "reference": "E01"
+          },
+          {
+            "subject": "E07",
+            "relation": "below",
+            "reference": "E01"
+          },
+          {
+            "subject": "E08",
+            "relation": "behind",
+            "reference": "E05"
+          },
+          {
+            "subject": "E09",
+            "relation": "next_to",
+            "reference": "E01"
+          },
+          {
+            "subject": "E10",
+            "relation": "next_to",
+            "reference": "E02"
+          }
+        ]
+      },
+      "surface_ids": [
+        "E01",
+        "E02"
+      ]
+    },
+    "effective_manifest_sha256": "a4f3f2510f19538875b221e6d37eadd9c94c23299e6eeb12e0b583ef17b6481a",
+    "semantic_approval": false,
+    "production_ready": false
+  },
+  "production_root_prepared": false,
+  "production_quality_passed": false,
+  "original_source_and_receipts_modified": false,
+  "pending_independent_review": true
+}

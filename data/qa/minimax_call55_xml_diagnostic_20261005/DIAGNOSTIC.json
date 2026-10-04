@@ -1,0 +1,178 @@
+{
+  "schema": "minimax_call55_xml_diagnostic/v1",
+  "created_at": "2026-10-04T16:27:01.714942+00:00",
+  "scope": "readonly existing receipt plus public primary-source inspection; new QA only",
+  "paid_model_calls": 0,
+  "provider_requests": 0,
+  "official_verifier_executed": false,
+  "source_receipt": "data/production_trials/_shared_text_diagnostics/2a3cd8ae66de26ff4eb8f299/modular_bd_v1/resume_20261004_v2/call_055_story_plan_r3.json",
+  "source_receipt_sha256": "0d5cc7afd814a9771e1870637fabf76e56051e1872e2d62ba8d64bb108600c9e",
+  "source_binding_sha256": "15d6e731170e1baced02bdabf783982b8996ef5923548dd2fb807d599b31be73",
+  "sdk_version_current_observed": "2.37.0",
+  "request_parameters": {
+    "max_completion_tokens": 4096,
+    "temperature": 0.4,
+    "thinking": "disabled"
+  },
+  "metadata": {
+    "role": "writer",
+    "provider": "minimax",
+    "requested_model": "MiniMax-M3",
+    "response_model": "MiniMax-M3",
+    "response_id": "0711ac695f7333c89e20722bf58fb3b0",
+    "finish_reason": "tool_calls",
+    "thinking_mode": "disabled",
+    "output_mode": "tool_call",
+    "prompt_tokens": 7837,
+    "completion_tokens": 2763,
+    "total_tokens": 10600
+  },
+  "measurements": {
+    "arguments_chars": 2548,
+    "arguments_utf8_bytes": 6038,
+    "arguments_sha256": "c6e339f27231efa87be71e282f09baa1482ce4b61e0b1982c870372688ea8a0a",
+    "assistant_content_chars": 351,
+    "reasoning_content": null,
+    "top_keys": [
+      "title",
+      "relationship_pressure",
+      "viewer_emotional_arc",
+      "causal_events",
+      "new_information",
+      "emotional_turn",
+      "result",
+      "item",
+      "ending_action",
+      "asset_ids"
+    ],
+    "causal_events_ids": [
+      "E1",
+      "E2",
+      "E3",
+      "E4"
+    ],
+    "root_item_id": "E8",
+    "schema_errors_count": 6
+  },
+  "checks": {
+    "exact_response_text_equals_sdk_arguments": true,
+    "exact_output_equals_json_loads_arguments": true,
+    "named_single_tool": true,
+    "tool_finish_not_length": true,
+    "thinking_disabled_and_no_reasoning_field_text": true,
+    "within_reported_completion_cap": true,
+    "literal_close_item_in_arguments": true,
+    "schema_rejection_reproduced": true,
+    "no_named_item_properties": true,
+    "local_arguments_direct_assignment": true,
+    "ordinary_sdk_create_not_parse": true,
+    "writer_delegate_unchanged": true,
+    "dispatch_strict_json_only": true,
+    "failure_category_preserved": true,
+    "automatic_retry_false": true,
+    "semantic_approval_not_adopted": true
+  },
+  "schema_errors": [
+    {
+      "path": [
+        "causal_events",
+        3
+      ],
+      "validator": "required",
+      "message": "'new_information' is a required property"
+    },
+    {
+      "path": [
+        "causal_events",
+        3
+      ],
+      "validator": "required",
+      "message": "'emotional_turn' is a required property"
+    },
+    {
+      "path": [
+        "causal_events",
+        3
+      ],
+      "validator": "required",
+      "message": "'result' is a required property"
+    },
+    {
+      "path": [
+        "viewer_emotional_arc",
+        0
+      ],
+      "validator": "type",
+      "message": "[[['看到林屿把结算单和明细单都收回自己面前、把签字笔放回她手里让她走，观众才感到这段关系落到了新的地面上，没有被口号缝合。</item>']]] is not of type 'string'"
+    },
+    {
+      "path": [
+        "viewer_emotional_arc"
+      ],
+      "validator": "minItems",
+      "message": "[[[['看到林屿把结算单和明细单都收回自己面前、把签字笔放回她手里让她走，观众才感到这段关系落到了新的地面上，没有被口号缝合。</item>']]]] is too short"
+    },
+    {
+      "path": [],
+      "validator": "additionalProperties",
+      "message": "Additional properties are not allowed ('emotional_turn', 'item', 'new_information', 'result' were unexpected)"
+    }
+  ],
+  "verified_findings": [
+    {
+      "layer": "interface",
+      "finding": "单个具名工具以tool_calls结束，completion2763低于请求4096；回执没有length截断信号。它仅证明接口有结果，不证明结构完整。"
+    },
+    {
+      "layer": "state_contract",
+      "finding": "viewer_emotional_arc应为字符串数组，实为4层数组；内容末端有字面</item>。E4缺new_information/emotional_turn/result，三字段外溢到根；根另有item=E8。"
+    },
+    {
+      "layer": "completeness",
+      "finding": "实际causal_events里只有E1–E4，另一个事件在root item=E8；E5–E7未在结构化事件中出现。schema未规定固定事件数或连续ID，不能只凭编号断言预期八项一定已生成。"
+    },
+    {
+      "layer": "client",
+      "finding": "SDK snapshot.function.arguments、response_text逐字全等；output等于直接json.loads。冻结客户端读取字符串并返回，派发器只严格JSON解析；没有本地XML转型、数组回填或拼接。"
+    },
+    {
+      "layer": "creative",
+      "finding": "assistant content的351字说明准确概括多次替同事加班和未登记道具反馈，但没有提交完整正确因果事件。摘要正确不能证明被丢弃的规划曾正确生成。"
+    },
+    {
+      "layer": "governance",
+      "finding": "本地已拒绝为state_contract/MODULE_SCHEMA_INVALID，未采用semantic_approval，automatic_retry=false；本诊断未修改回执、旧预算或冻结源码。"
+    }
+  ],
+  "inferences_and_unknowns": [
+    {
+      "finding": "字面XML残片、额外item与官方原生XML数组格式相吻合，因此XML生成或解析边界值得隔离测试。",
+      "status": "plausible; not demonstrated root cause"
+    },
+    {
+      "finding": "当前证据无法分辨模型原生生成错误、服务XML解析错误、其他上游后处理；没有native XML/token流、原始HTTP响应体或托管parser版本。",
+      "status": "unknown"
+    },
+    {
+      "finding": "本次thinking disabled且reasoning_content=null，没有长分析耗尽输出证据，不能据此解释旧任务的长分析服务端原因。",
+      "status": "unknown historical root cause"
+    },
+    {
+      "finding": "公开issue29的更新条件不同；不能援用其15–35%统计、命名修复或根因猜测解释本次。",
+      "status": "not transferable"
+    }
+  ],
+  "candidate_isolation": {
+    "proposal": "保持当前模型、endpoint及完整创作输入，外层工具只含payload_json字符串；内层完整JSON严格解析并验原合同。",
+    "expected_benefit": "减少工具协议对nested对象/数组边界的解释，形成明确运输实验。",
+    "limits": "尚未证明可规避问题，不构成服务schema强制保证、历史服务根因结论或内容质量通过。禁止修复、解包或采用55失败稿；下一次须完整新稿。"
+  },
+  "primary_sources": "PRIMARY_SOURCES.json",
+  "input_hashes": {
+    "data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v2\\call_055_story_plan_r3.json": "0d5cc7afd814a9771e1870637fabf76e56051e1872e2d62ba8d64bb108600c9e",
+    "data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v2\\source_at_dispatch\\src\\content_factory\\creative_workflow_roles.py": "2ff230ecd4f524ff4ad181d16a97a4e1aff95bfa63d919bb8173d021b07615df",
+    "data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v2\\source_at_dispatch\\scripts\\creative_resume_dispatch_v1.py": "b09d758ce560bc457991a6a96eafad4ab4658976df8abed085398a3451442865",
+    "data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v2\\source_at_dispatch\\scripts\\run_creative_resume_v2.py": "fc61c3a656c8fe41af6c349d59d48df63e4c15685093ba7890d98a1729970f09",
+    "data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261004_v2\\source_at_dispatch\\scripts\\creative_deepseek_tool_client_v1.py": "acb0efff538b5ff9a4d890794f69c5bef5513606311dd579f9f3e92650022451"
+  }
+}

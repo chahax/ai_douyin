@@ -1,0 +1,30 @@
+{
+  "schema": "source_semantics_diagnostic/v1",
+  "call": 51,
+  "script_sha256": "7923dc4aae72d576dfa65b6661f822526bd6b73c94fcfab93c569f3444395711",
+  "adopted": false,
+  "verified_findings": [
+    {
+      "path": "raw_linear_script.beats.1.steps.0.text",
+      "quote": "走回并排相邻、靠窗一侧的自己工位，在黑色网面靠背转椅上坐下",
+      "finding": "B2已经坐回自己工位；B4又递向坐在该工位的她，却随后重复走回同一工位。"
+    },
+    {
+      "path": "raw_linear_script.beats.5.steps.1.text",
+      "quote": "她把挎包带从肩上放下",
+      "finding": "B3包明确在椅背，期间没有包带上肩的源步骤。"
+    },
+    {
+      "path": "raw_linear_script.beats.3.steps.1.text",
+      "quote": "把明细单放在自己桌边靠抽屉柜一侧",
+      "finding": "P05被递给方澄并落在方澄桌边，B9却在林屿桌上写同叠，B13还从方澄桌取回；无转移前提。"
+    },
+    {
+      "path": "raw_linear_script.beats.6.steps.0.text",
+      "quote": "方澄双手抬到挎包翻盖处",
+      "finding": "前文持杯未明确落点，双手合包前持物状态缺证据；不强制新增独立放杯镜头，可删无作用物件与操作。"
+    }
+  ],
+  "future_action": "先重新规划完整故事因果与情绪，再由模型提交完整新稿并全文复审。不能局部补动作掩盖。",
+  "review_call52": "finish_reason=length，原稿保留，不拼接、不采用partial issues/story_preserved。"
+}

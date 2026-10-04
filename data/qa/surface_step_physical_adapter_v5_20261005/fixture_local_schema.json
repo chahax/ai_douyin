@@ -1,0 +1,190 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "shot_id",
+    "input_sha256",
+    "duration_seconds",
+    "dialogue_performance",
+    "step_units",
+    "performance_windows"
+  ],
+  "properties": {
+    "schema": {
+      "enum": [
+        "step_index_physical_local_offline_v5"
+      ]
+    },
+    "shot_id": {
+      "enum": [
+        "S1"
+      ]
+    },
+    "input_sha256": {
+      "enum": [
+        "d695b411a5dffaf92bbc01fa96540199d180135c83a0d3b6d69f9d0e21a8938b"
+      ]
+    },
+    "duration_seconds": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "dialogue_performance": {
+      "type": "string",
+      "minLength": 1
+    },
+    "step_units": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_step_ref",
+          "groups",
+          "dialogue_ref"
+        ],
+        "properties": {
+          "source_step_ref": {
+            "type": "string",
+            "enum": [
+              "raw_linear_script.beats.0.steps.0",
+              "raw_linear_script.beats.0.steps.1"
+            ]
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "action",
+                    "hold"
+                  ]
+                },
+                "duration_seconds": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "hold_subject": {
+                  "type": "string",
+                  "enum": [
+                    "",
+                    "C01",
+                    "C02"
+                  ]
+                },
+                "performance": {
+                  "type": "string",
+                  "description": "该动作组内表演；during组不得重演已说完对白。物理变化必须写operations，不得删除必要动作以修结构"
+                },
+                "operations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "enum": [
+                          "move",
+                          "gaze",
+                          "affect",
+                          "sit",
+                          "stand",
+                          "take",
+                          "place",
+                          "pass",
+                          "slide",
+                          "face"
+                        ]
+                      },
+                      "actor": {
+                        "type": "string",
+                        "enum": [
+                          "C01",
+                          "C02"
+                        ]
+                      },
+                      "target": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "move/sit/stand为动作后具体位置；take为手持位置；place为落点；pass为接收人物；gaze/face为目标；affect为表情"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "actor",
+                      "target",
+                      "value"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "action_ref": {
+                  "type": "string",
+                  "enum": [
+                    "raw_linear_script.beats.0.steps.0"
+                  ]
+                },
+                "semantic_role": {
+                  "enum": [
+                    "action",
+                    "reaction"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "kind",
+                "duration_seconds",
+                "hold_subject",
+                "performance",
+                "operations",
+                "action_ref",
+                "semantic_role"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "dialogue_ref": {
+            "enum": [
+              null,
+              "raw_linear_script.beats.0.steps.1"
+            ]
+          }
+        }
+      }
+    },
+    "performance_windows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "requirement_id",
+          "anchor"
+        ],
+        "properties": {
+          "requirement_id": {
+            "enum": []
+          },
+          "anchor": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  },
+  "description": "原raw_linear_script.steps是唯一播放顺序，event仅为摘要，不作为动作源。整片情绪、因果、结尾方向独立填写；每拍shots数组只分配镜头。source_step_refs填写raw_linear_script.beats.N.steps.M完整路径，每镜是本拍连续步骤区间，全部镜依次恰好覆盖原步骤一次，不拆步骤、不复制、不跨拍重排，不改原text或speaker。动作组action_ref只绑定kind=action的原步骤；反应也仍为原action，可标semantic_role=reaction。对白只引用原dialogue步骤，不重新输出台词。本合同只验证源覆盖与先后，物理动作、反应时长、状态及成片感染力仍待后续编译和全文审查。物理初态在首步骤之前；owner不是holder。局部每action一个unit，可包含多个相继组；每action组至少一个operations，或明确hold且operations=[]。反应仍绑定原action_ref。不要填写script_slot或切点，程序按原steps中的对白位置生成；不能新增、重说或改原对白。单镜最多两句完整对白，关键动作对白并行及跨镜during尚不支持，不改原稿绕过。slide是沿支持面移动，value=surface:支持面ID:zone；holder须none，不能跨面或伪装take/place/hold。复合道具仅用显式registry展开的成员ID，不能用集合ID冒充某一张；未动成员保持原态。状态和时间编译成功仍须全文源/操作审查，不能宣称语义或成片通过。"
+}

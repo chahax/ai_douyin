@@ -1,0 +1,11 @@
+{
+  "scope": "complete_new_script_after_verified_whole_story_direction",
+  "requirements": [
+    "把relationship_pressure中的关系变冷顾虑落到开口前和听到回应后的可见表演，不靠梗概说明。",
+    "结尾只呈现当晚他接回任务与她离开，不能替观众宣告未来从此完全和解。",
+    "依static_visual_manifest创作纸质核对场景，全片穿既定衣装，只有源定义中的对象；不必用全部资产。",
+    "steps严格是播放顺序；对白正文只有说出的话，口型/脸部反应留对白表演，关键道具操作的前提和先后在正文成立。",
+    "重要对白前、中、后的反应留充足实际时间，时长浮动，不挤进45到60秒。"
+  ],
+  "inner_document_serialization": "单payload_json完整内部文档。正文引用中文引号“”/「」，JSON边界标准ASCII双引号，完整beats/steps全部提交，不能分析或patch。"
+}
