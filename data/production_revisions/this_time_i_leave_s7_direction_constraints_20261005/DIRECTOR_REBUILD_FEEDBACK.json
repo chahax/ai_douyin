@@ -1,0 +1,48 @@
+{
+  "prior_known_call": 166,
+  "response_result_known": true,
+  "whole_new_direction_required": true,
+  "verified_faults": [
+    {
+      "type": "unsupported_window",
+      "evidence": "R_B01_S1_C01及多条普通action被写成during",
+      "correction_contract": "during只能同一完整对白；普通action自引用before/after也无可满足正时长窗口。按新Schema为重要前后反应选择实际先后不同源，普通动作不机械填performance_requirements。"
+    },
+    {
+      "type": "source_initial_state",
+      "evidence": "initial_state.P03_Y/P03_P/P03_B holder=C01，但原B01/B03是桌角一叠，林屿之后从桌角取",
+      "source_ref": "raw_linear_script.beats.2.steps.0",
+      "requirement": "初始三张holder=none，实际支持面为方澄桌E01；owner_id不变"
+    },
+    {
+      "type": "source_initial_state",
+      "evidence": "initial_state.P05 holder=C02，但源B01开始明细单在他桌面，之后推向两人之间",
+      "source_ref": "raw_linear_script.beats.0.steps.1",
+      "requirement": "初态明细单holder=none，支持面林屿桌E02；不能把后续推单提前为手持"
+    },
+    {
+      "type": "unnecessary_cuts",
+      "evidence": "B03摊清单念词和递笔/B06看包收笔被多拆；切镜理由泛称需要看清",
+      "requirement": "每拍优先一个完整观察镜，只有改变观察主体或确有新增信息才切，约10镜并非硬数量；机位不要一镜内文字写多个切点。"
+    }
+  ],
+  "creative_targets": "完整源顺序不改；便利贴清单动作5–6秒目标由局部实际验证；拒绝两句C01可读近景，第二句后林屿C02反应hold不少于2秒；门外C01看票呼气有可读1–2秒，不回头，不加同事。不要为普通动作全部加最短hold窗。",
+  "window_examples_from_actual_source": [
+    {
+      "subject": "C02",
+      "stimulus_ref": "raw_linear_script.beats.4.steps.1",
+      "reaction_ref": "raw_linear_script.beats.5.steps.0",
+      "relation": "after",
+      "meaning": "真正听到这次我先走之后的反应"
+    },
+    {
+      "subject": "C01",
+      "stimulus_ref": "raw_linear_script.beats.7.steps.1",
+      "reaction_ref": "raw_linear_script.beats.8.steps.0",
+      "relation": "after",
+      "meaning": "真正出门之后看票呼气"
+    }
+  ],
+  "source_images": [],
+  "automatic_retry": false
+}

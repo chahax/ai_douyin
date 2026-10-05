@@ -1,0 +1,10 @@
+{
+  "schema": "creative_call_evidence/v1",
+  "sequence": 3,
+  "identity_sha256": "966c7aee29af5c6306e4a81b55d6cc6efbc2085eb05e68cfb91d3e4f96870b88",
+  "at_utc": "2026-10-05T14:08:20.394343+00:00",
+  "phase": "dispatch_attempt_started",
+  "details": {
+    "meaning": "SDK method about to be called; not a server acknowledgement"
+  }
+}

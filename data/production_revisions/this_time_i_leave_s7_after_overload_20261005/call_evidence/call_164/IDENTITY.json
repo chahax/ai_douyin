@@ -1,0 +1,12 @@
+{
+  "schema": "creative_call_evidence/v1",
+  "identity": {
+    "ordinal": 164,
+    "label": "script_review_s7_r3",
+    "request_sha256": "0f41bd880291b121a4b94bd9b324e04ee4b8bbba1d873ffc9bcf4526af838c89",
+    "source_binding_sha256": "2ad5d7a678cbeb389e22aec1be49d3aa796b29dc638eb8fcb2425349c9615572",
+    "role": "director",
+    "model": "deepseek-flash"
+  },
+  "identity_sha256": "df8bf0b49c409408b2fc6248dfecbbada6b8dd430a3082b8efc4a1cf1b24a2d3"
+}

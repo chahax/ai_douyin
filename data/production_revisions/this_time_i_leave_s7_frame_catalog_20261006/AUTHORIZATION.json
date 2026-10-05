@@ -1,0 +1,20 @@
+{
+  "schema": "authorized_creative_continuation/v3",
+  "authorization": "用户2026-10-04明确恢复：继续吧先不设token预算。后续文本调用暂不设总token硬上限；旧49次490913以及原500000历史记录完整承接，不重置账本。保持MiniMax创作、DeepSeek少量文本复审；不含媒体调用或发布。",
+  "authorized_at": "2026-10-05T16:13:49.773383+00:00",
+  "starting_spend": {
+    "calls_started": 178,
+    "reported_tokens": 3332776,
+    "calls_with_known_usage": 176,
+    "unknown_token_reservations": 93117,
+    "pending_ordinals": [
+      70,
+      160
+    ],
+    "parent_anchor_sha256": "2b720e38db5b87f069328c62bbaf4877dd92f2ad4bba372499e0c521b90153ff"
+  },
+  "max_total_tokens": null,
+  "old_budget_reset": false,
+  "old_governance_migrated": false,
+  "media_calls_authorized": false
+}

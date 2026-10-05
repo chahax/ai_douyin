@@ -1,0 +1,7 @@
+{
+  "scope": "necessary complete S7 script review with explicit source comparison schema",
+  "automatic_retry": false,
+  "aggregate_text_token_cap": null,
+  "media_calls": 0,
+  "old_budget_reset": false
+}

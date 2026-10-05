@@ -1,0 +1,146 @@
+C:\Users\c\AppData\Roaming\Python\Python314\site-packages\requests\__init__.py:113: RequestsDependencyWarning: urllib3 (2.6.3) or chardet (7.4.3)/charset_normalizer (3.4.4) doesn't match a supported version!
+  warnings.warn(
+.F                                                                       [100%]
+================================== FAILURES ===================================
+_____ test_real167_missing_fields_rejected_and_reaction_cannot_cross_beat _____
+
+self = Resource(contents={'type': 'object', 'additionalProperties': False, 'required': ['shot_id', 'source_step_refs', 'new_i...ipt.beats.4.steps.0', 'raw_linear_script.beats.4.steps.1']}}}]}}}}, _specification=<Specification name='draft2020-12'>)
+pointer = '/$defs/PerformanceRequirement'
+resolver = Resolver(_base_uri='', _registry=<Registry (21 resources, 1 uncrawled)>)
+
+    def pointer(self, pointer: str, resolver: Resolver[D]) -> Resolved[D]:
+        """
+        Resolve the given JSON pointer.
+    
+        Raises:
+    
+            `exceptions.PointerToNowhere`
+    
+                if the pointer points to a location not present in the document
+    
+        """
+        if not pointer:
+            return Resolved(contents=self.contents, resolver=resolver)
+    
+        contents = self.contents
+        segments: list[int | str] = []
+        for segment in unquote(pointer[1:]).split("/"):
+            if isinstance(contents, Sequence):
+                segment = int(segment)
+            else:
+                segment = segment.replace("~1", "/").replace("~0", "~")
+            try:
+>               contents = contents[segment]  # type: ignore[reportUnknownArgumentType]
+                           ^^^^^^^^^^^^^^^^^
+E               KeyError: '$defs'
+
+C:\Users\c\AppData\Roaming\Python\Python314\site-packages\referencing\_core.py:276: KeyError
+
+The above exception was the direct cause of the following exception:
+
+self = Draft202012Validator(schema={'$ref': '#/$defs/Perf...ceRequirement'}, format_checker=None)
+ref = '#/$defs/PerformanceRequirement'
+instance = {'id': 'B05_PR01', 'subject': 'C02', 'stimulus_ref': 'raw_linear_script.beats.4.steps.1', 'reaction_ref': 'raw_linear_script.beats.5.steps.0', ...}
+
+    def _validate_reference(self, ref, instance):
+        if self._ref_resolver is None:
+            try:
+>               resolved = self._resolver.lookup(ref)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+C:\Users\c\AppData\Roaming\Python\Python314\site-packages\jsonschema\validators.py:462: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\c\AppData\Roaming\Python\Python314\site-packages\referencing\_core.py:690: in lookup
+    return retrieved.value.pointer(pointer=fragment, resolver=resolver)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = Resource(contents={'type': 'object', 'additionalProperties': False, 'required': ['shot_id', 'source_step_refs', 'new_i...ipt.beats.4.steps.0', 'raw_linear_script.beats.4.steps.1']}}}]}}}}, _specification=<Specification name='draft2020-12'>)
+pointer = '/$defs/PerformanceRequirement'
+resolver = Resolver(_base_uri='', _registry=<Registry (21 resources, 1 uncrawled)>)
+
+    def pointer(self, pointer: str, resolver: Resolver[D]) -> Resolved[D]:
+        """
+        Resolve the given JSON pointer.
+    
+        Raises:
+    
+            `exceptions.PointerToNowhere`
+    
+                if the pointer points to a location not present in the document
+    
+        """
+        if not pointer:
+            return Resolved(contents=self.contents, resolver=resolver)
+    
+        contents = self.contents
+        segments: list[int | str] = []
+        for segment in unquote(pointer[1:]).split("/"):
+            if isinstance(contents, Sequence):
+                segment = int(segment)
+            else:
+                segment = segment.replace("~1", "/").replace("~0", "~")
+            try:
+                contents = contents[segment]  # type: ignore[reportUnknownArgumentType]
+            except LookupError as lookup_error:
+                error = exceptions.PointerToNowhere(ref=pointer, resource=self)
+>               raise error from lookup_error
+E               referencing.exceptions.PointerToNowhere: '/$defs/PerformanceRequirement' does not exist within {'type': 'object', 'additionalProperties': False, 'required': ['shot_id', 'source_step_refs', 'new_information', 'observation_object', 'camera', 'cut_reason', 'purpose', 'composition', 'dialogue_mode', 'performance_requirements'], 'properties': {'shot_id': {'type': 'string', 'minLength': 1}, 'source_step_refs': {'type': 'array', 'minItems': 1, 'uniqueItems': True, 'items': {'enum': ['raw_linear_script.beats.4.steps.0', 'raw_linear_script.beats.4.steps.1']}}, 'new_information': {'type': 'string', 'minLength': 1}, 'observation_object': {'type': 'string', 'minLength': 1}, 'camera': {'type': 'string', 'minLength': 1}, 'cut_reason': {'type': 'string', 'minLength': 1}, 'purpose': {'type': 'string', 'minLength': 1}, 'composition': {'type': 'string', 'minLength': 1}, 'dialogue_mode': {'enum': ['画内对白', '画外对白', '混合对白', '无对白']}, 'performance_requirements': {'type': 'array', 'items': {'allOf': [{'$ref': '#/$defs/PerformanceRequirement'}, {'properties': {'reaction_ref': {'enum': ['raw_linear_script.beats.4.steps.0', 'raw_linear_script.beats.4.steps.1']}}}]}}}}
+
+C:\Users\c\AppData\Roaming\Python\Python314\site-packages\referencing\_core.py:279: PointerToNowhere
+
+The above exception was the direct cause of the following exception:
+
+    def test_real167_missing_fields_rejected_and_reaction_cannot_cross_beat():
+        ctx=r.context();rec=r.control.read(r.previous.ROOT/'call_167_direction_s7_r1.json')
+        raw=json.loads(rec['output']['payload_json'])
+        with pytest.raises(ValidationError):Draft202012Validator(r.direction_schema(ctx)).validate(raw)
+        row=r.direction_schema(ctx)['properties']['beats']['prefixItems'][4]
+        shot=raw['beats'][4]['shots'][0]
+>       with pytest.raises(ValidationError):Draft202012Validator(row['properties']['shots']['items']).validate(shot)
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_creative_s7_director_v22.py:24: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\c\AppData\Roaming\Python\Python314\site-packages\jsonschema\validators.py:449: in validate
+    for error in self.iter_errors(*args, **kwargs):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\c\AppData\Roaming\Python\Python314\site-packages\jsonschema\validators.py:383: in iter_errors
+    for error in errors:
+                 ^^^^^^
+C:\Users\c\AppData\Roaming\Python\Python314\site-packages\jsonschema\_keywords.py:296: in properties
+    yield from validator.descend(
+C:\Users\c\AppData\Roaming\Python\Python314\site-packages\jsonschema\validators.py:431: in descend
+    for error in errors:
+                 ^^^^^^
+C:\Users\c\AppData\Roaming\Python\Python314\site-packages\jsonschema\_keywords.py:78: in items
+    yield from validator.descend(
+C:\Users\c\AppData\Roaming\Python\Python314\site-packages\jsonschema\validators.py:431: in descend
+    for error in errors:
+                 ^^^^^^
+C:\Users\c\AppData\Roaming\Python\Python314\site-packages\jsonschema\_keywords.py:334: in allOf
+    yield from validator.descend(instance, subschema, schema_path=index)
+C:\Users\c\AppData\Roaming\Python\Python314\site-packages\jsonschema\validators.py:431: in descend
+    for error in errors:
+                 ^^^^^^
+C:\Users\c\AppData\Roaming\Python\Python314\site-packages\jsonschema\_keywords.py:275: in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = Draft202012Validator(schema={'$ref': '#/$defs/Perf...ceRequirement'}, format_checker=None)
+ref = '#/$defs/PerformanceRequirement'
+instance = {'id': 'B05_PR01', 'subject': 'C02', 'stimulus_ref': 'raw_linear_script.beats.4.steps.1', 'reaction_ref': 'raw_linear_script.beats.5.steps.0', ...}
+
+    def _validate_reference(self, ref, instance):
+        if self._ref_resolver is None:
+            try:
+                resolved = self._resolver.lookup(ref)
+            except referencing.exceptions.Unresolvable as err:
+>               raise exceptions._WrappedReferencingError(err) from err
+E               jsonschema.exceptions._WrappedReferencingError: PointerToNowhere: '/$defs/PerformanceRequirement' does not exist within {'type': 'object', 'additionalProperties': False, 'required': ['shot_id', 'source_step_refs', 'new_information', 'observation_object', 'camera', 'cut_reason', 'purpose', 'composition', 'dialogue_mode', 'performance_requirements'], 'properties': {'shot_id': {'type': 'string', 'minLength': 1}, 'source_step_refs': {'type': 'array', 'minItems': 1, 'uniqueItems': True, 'items': {'enum': ['raw_linear_script.beats.4.steps.0', 'raw_linear_script.beats.4.steps.1']}}, 'new_information': {'type': 'string', 'minLength': 1}, 'observation_object': {'type': 'string', 'minLength': 1}, 'camera': {'type': 'string', 'minLength': 1}, 'cut_reason': {'type': 'string', 'minLength': 1}, 'purpose': {'type': 'string', 'minLength': 1}, 'composition': {'type': 'string', 'minLength': 1}, 'dialogue_mode': {'enum': ['画内对白', '画外对白', '混合对白', '无对白']}, 'performance_requirements': {'type': 'array', 'items': {'allOf': [{'$ref': '#/$defs/PerformanceRequirement'}, {'properties': {'reaction_ref': {'enum': ['raw_linear_script.beats.4.steps.0', 'raw_linear_script.beats.4.steps.1']}}}]}}}}
+
+C:\Users\c\AppData\Roaming\Python\Python314\site-packages\jsonschema\validators.py:464: _WrappedReferencingError
+=========================== short test summary info ===========================
+FAILED tests/test_creative_s7_director_v22.py::test_real167_missing_fields_rejected_and_reaction_cannot_cross_beat
+1 failed, 1 passed in 10.75s

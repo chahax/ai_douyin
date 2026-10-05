@@ -1,0 +1,12 @@
+{
+  "schema": "creative_call_evidence/v1",
+  "identity": {
+    "ordinal": 184,
+    "label": "film_s7_r2",
+    "request_sha256": "5c408be1d4f565482fb4611b9e24bde1ce080d0dcfc621e77b292b4789e2a549",
+    "source_binding_sha256": "9bab21030f1fa9128cfeae4065d276ddc49bb343a3212c2de002679a8f117f28",
+    "role": "writer",
+    "model": "MiniMax-M3"
+  },
+  "identity_sha256": "1ed31c8b4fe8b762cb5a99d8ab1fa44324631334a0b1fa2f86ca533ec12f6e21"
+}

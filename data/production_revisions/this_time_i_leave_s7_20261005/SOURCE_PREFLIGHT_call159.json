@@ -1,0 +1,30 @@
+{
+  "schema": "s7_source_preflight/v1",
+  "ordinal": 159,
+  "raw_script_sha256": "f44a65a6e5fc4f94b30bb950565d6746b3d0c985e41a31a99f5849a5983c8f77",
+  "approved_for_full_review": false,
+  "quality_approval": false,
+  "verified_source_issues": [
+    {
+      "path": "beats.1.steps.0.text",
+      "quote": "上个月那张客户对账单是你帮我熬到十一点重新打的，去年底那批结算明细也是你周末过来帮我顺过一遍，今晚这份我对到一半，你顺手帮我收了。",
+      "finding": "仍有两段日期、重打及顺过一遍细述，与要求收紧旧账长句不符。保留长期善后信息，但本句明显缩为约25–35个中文字，不把两段说明分成更多对白。"
+    },
+    {
+      "path": "beats.2.steps.2.text",
+      "quote": "林屿把黑色签字笔从自己桌沿拿起来，反手握在手里，笔尖搁在自己面前那张结算单边沿。",
+      "finding": "笔从拿起就直接留在林屿自己桌面；没有递向方澄，B04却称收回。用户未要求删递笔；应恢复原本持笔递向她并持续右手握持等待，而非搁下松手。"
+    },
+    {
+      "path": "beats.4.steps.0.text",
+      "quote": "今晚不行，七点我有一场早就买好票的电影，得先走。",
+      "finding": "拒绝本身没有标题句。‘这次我先走。’应在此处拒绝理由之后轻声坚定补充；形成同一拒绝表达。门口无需再说同一句，减少告别重复。"
+    },
+    {
+      "path": "beats.5.steps.0.text",
+      "quote": "林屿握笔的手在结算单边沿停住，没收回，也没移向那张客户明细单。他看了一眼方澄椅背上挂着的米灰色挎包，又看回自己面前摊着的浅黄便利贴和那张A4横版客户明细单，没接她的话。",
+      "finding": "恢复实际递笔前提后，应写她拒绝→他愣住→看包/回看明细→同一手收回仍握的笔/接回工作→自己改；不能提前自己收笔消掉边界转移。"
+    }
+  ],
+  "reason": "schema success is not narrative acceptance; no manual script edits"
+}

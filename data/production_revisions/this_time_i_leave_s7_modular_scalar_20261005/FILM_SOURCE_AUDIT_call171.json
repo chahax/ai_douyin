@@ -1,0 +1,46 @@
+{
+  "call171_contract_valid_but_source_not_adopted": true,
+  "complete_new_film_required": true,
+  "source_audit": [
+    {
+      "field": "B02_camera/B02_composition",
+      "quote": "以林屿为主的过肩略侧近景，方澄以后景虚化出背影与桌角电影票边缘，保持临窗夕光与顶灯辅补的暖调侧光。",
+      "verified_issue": "同源拍含林屿完整对白+方澄目光从红批移票，但让方澄后景虚化背影看不到关键反应，观察对象与摄影互相冲突",
+      "source_ref": "raw_linear_script.beats.1.steps.1",
+      "correction": "十镜策略本拍同一镜，采用可见两人脸部与方澄眼神的同框机位/构图，反应不能在虚化背影里；不隐藏切镜。"
+    },
+    {
+      "field": "B03_camera/B03_dialogue_mode/B03_purpose",
+      "quote": "把默认她会接下的姿态推到镜头的最靠近过肩略俯拍林屿桌面区域，三张便利贴呈一组水平可见于直方队列、签字笔停在桌沿、笔尖方向可读，临窗夕光与顶灯辅补使纸面颜色与字迹清晰。",
+      "verified_issue": "用途句残缺重复机位，直方队列不清楚；纸笔近景未见嘴却写画内对白，不利于下游声画说明",
+      "correction": "用途清晰写默认她接手和递笔刺激；三张一次整体摊开；若桌面手部近景不见嘴，明确画外对白且声源仍林屿，不新增画外叙述。"
+    },
+    {
+      "field": "B04_cut_reason/B05_cut_reason/B06_cut_reason",
+      "quote": "把两句对白与拒绝发生的表情集中在一镜，让观众完整听到\"理由\"与\"这次我先走\"两句作为一个拒绝单元；按导演要求拒绝两句不同镜，此镜只承载方澄开口拒绝的瞬间，林屿的反应另起一镜。",
+      "verified_issue": "已有唯一SH05覆盖两句原对白，却理由写拒绝两句不同镜/避免同镜，直接矛盾",
+      "correction": "两句完整拒绝必须SH05同一镜，林屿听到后的反应才SH06另镜；全文不要自相矛盾。"
+    },
+    {
+      "field": "B08_cut_reason",
+      "quote": "从林屿埋头工作的近景切到方澄起身离开的移动镜头，让她争取自己时间的可见出口清晰成立；推门动作完整呈现，包与票的左右分工同时可读。",
+      "verified_issue": "方澄从初态就是standing，这里写起身有重复站起风险",
+      "source_ref": "raw_linear_script.beats.0.steps.0",
+      "correction": "描述她取包取票、走门离开，不安排起身/再次站起。"
+    },
+    {
+      "field": "causal_chain/B06_observation_object/B10_cut_reason",
+      "quote": "笔的方向与归属的转移由他自己完成",
+      "verified_issue": "笔P07原本属于林屿，递出时仍他右手握着，方澄未接；产权或实际持有者没有从方澄转给林屿",
+      "correction": "变化是笔尖方向、收回的姿态和他接回自己的工作责任，不能写物权/持有者转移。"
+    },
+    {
+      "field": "B01_composition/B03_composition",
+      "verified_issue": "构图若当镜首参考，不能把镜内后续推完纸/摊完贴的位置预先当成首态",
+      "correction": "描述镜头覆盖范围与观察对象，明确镜内变化起止；初态由下一模块维护，不抢填未来完成状态。"
+    }
+  ],
+  "retained_content": "仍S7全原文十拍各镜，不改台词/动作、不加同事、不移标题句、不把门外呼气变和解；R01借表达机制。所有字段完整新写，不能只返六个问题字段或patch。",
+  "actual_windows_still_pending": true,
+  "media_calls": 0
+}

@@ -1,0 +1,33 @@
+{
+  "schema": "creative_call_evidence/v1",
+  "sequence": 7,
+  "identity_sha256": "5141fbf590982067f1b6c68980793c2be5290db46cffe86ff8f0a161ef691c25",
+  "at_utc": "2026-10-05T13:41:49.087052+00:00",
+  "phase": "response_rejected",
+  "details": {
+    "code": "HTTP_ERROR_RESPONSE",
+    "metadata": {
+      "http_status_code": 529,
+      "http_request_id": null,
+      "safe_response_headers": {
+        "trace-id": "0712db385d4ca464a724f8d276a0706a",
+        "content-type": "application/json; charset=utf-8",
+        "date": "Mon, 05 Oct 2026 13:41:50 GMT"
+      },
+      "role": "writer",
+      "provider": "minimax",
+      "requested_model": "MiniMax-M3",
+      "response_model": "",
+      "response_id": "",
+      "finish_reason": "",
+      "thinking_mode": "disabled",
+      "output_mode": "unusable_response",
+      "transport_version": "creative_evidenced_role_clients/v1",
+      "strict_mode": false,
+      "server_schema_guarantee": false,
+      "response_body_complete": true,
+      "raw_body_sha256": "6426ab3b7cd68683e7c274434f16f777cdc097f706957ee6e0f1c482c2a0134a",
+      "response_fault_code": "HTTP_ERROR_RESPONSE"
+    }
+  }
+}

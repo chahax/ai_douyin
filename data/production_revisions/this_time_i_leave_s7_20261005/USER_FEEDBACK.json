@@ -1,0 +1,39 @@
+{
+  "schema": "user_creative_feedback/v1",
+  "source": "current user message",
+  "parent": "S6 call67 / director77 / full_review158 / 91.442857s",
+  "quality_confirmation": false,
+  "issues": [
+    {
+      "id": "NOTE_REPETITION",
+      "user_statement": "第3镜的便利贴动作堆得太长。27.61秒到35.91秒，8.3秒只把三张便利贴依次揭起、摊平、念词；可以压缩到5–6秒，把省出的时间留给拒绝或离开。"
+    },
+    {
+      "id": "MEMORABLE_CHOICE",
+      "user_statement": "拒绝后轻轻补充‘这次我先走’，呼应标题，不道歉、不找补。"
+    },
+    {
+      "id": "VISIBLE_RELEASE",
+      "user_statement": "门外停下，看一眼手里的票，轻轻呼一口气；不和解、不煽情、不回头，让观众知道她去赴自己的约。"
+    },
+    {
+      "id": "OPTIONAL_COLLEAGUE",
+      "user_statement": "职场横向参照仍缺席；不是必须，可用门边同事抬头看她手里票的一眼。"
+    }
+  ],
+  "implementation_choice": {
+    "keep_two_characters": true,
+    "reason": "本轮优先聚焦她争取自己时间的可见释放，不新增资产或转移情绪观察主体。第四项明确为可选，作为未采用建议保存。",
+    "tighten_old_account_dialogue": true,
+    "reason_long_dialogue": "第二镜仍21.614秒；保留长期善后的证据但让完整新稿自然压缩这句，实际时长留导演和局部表演。"
+  },
+  "requirements": [
+    "完整模型新稿；剧情仍是惯常加班的协作关系、明确拒绝、他自己接回工作、她赴电影约。",
+    "三张便利贴允许作为一组拿起摊开，只呈现信息而不逐张揭起压角；不得让旁人替她做新工作。",
+    "拒绝后保留一个选择姿态：‘这次我先走’；不追加道歉、承诺下次帮忙或补偿。",
+    "出门后在门外看手中电影票并轻呼气，不回头、不对男方求认同；情绪释放留在她身上。",
+    "林屿确实自己做并承担原难度，但不加惩罚、消息奖励、老板加薪或突然威胁。",
+    "当前仅两名已绑定人物；笔从桌沿拿取后明确持续持有，纸面位置和包票/推门手部前提应由正文成立。",
+    "不写实际秒数或承诺热度；保留所有完整参考，仅借表达机制，不照搬剧情。"
+  ]
+}

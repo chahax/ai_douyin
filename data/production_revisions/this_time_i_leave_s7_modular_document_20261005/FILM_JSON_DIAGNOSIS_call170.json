@@ -1,0 +1,10 @@
+{
+  "prior_call": 170,
+  "known_complete_response": true,
+  "fault": "完整工具payload内层JSON非法，不能去围栏或拼接；13729输入+2989输出=16718 tokens",
+  "next_contract": "模型只填写扁平标量；程序映射固定十个源拍到十镜及模型完整字段，不生成或改写创作正文，不拼失败稿",
+  "scope_limit": "本次每完整源拍一镜，若需要有意义拆镜则先完整修订分配合同；不能camera内隐藏多镜",
+  "reported_through170": 3213148,
+  "unknown_reservations_preserved": 93117,
+  "automatic_retry": false
+}

@@ -1,0 +1,36 @@
+{
+  "162": "完整工具参数不是合法JSON",
+  "163": "合法JSON但十一项缺本拍对照证据",
+  "164": "前两项改善，但B08连续性缺紧邻B07正文引用",
+  "contract_gap": "v6/v7来源关系未充分表达于工具Schema",
+  "next": "独立v20结构约束+全文复审，不回填旧review",
+  "spend": {
+    "schema": "authorized_creative_continuation/v3",
+    "new_calls": 4,
+    "effective_calls_started": 164,
+    "new_reported_tokens": 127051,
+    "effective_reported_tokens": 3051253,
+    "unknown_token_reservations": 93117,
+    "max_total_tokens": null,
+    "unbounded_aggregate_text_authorized": true,
+    "old_budget_reset": false,
+    "old_governance_migrated": false,
+    "media_calls": 0,
+    "semantic_approval": false,
+    "calls_with_known_usage": 162,
+    "new_unknown_token_reservations": 0,
+    "inherited_unknown_token_reservations": 93117,
+    "inherited_pending_ordinals": [
+      70,
+      160
+    ],
+    "unknown_outcome_ordinals": [
+      70
+    ],
+    "unknown_usage_ordinals": [
+      70,
+      160
+    ],
+    "old_call70_resolved": false
+  }
+}

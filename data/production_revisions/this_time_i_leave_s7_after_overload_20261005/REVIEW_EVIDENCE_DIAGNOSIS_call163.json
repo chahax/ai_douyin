@@ -1,0 +1,409 @@
+{
+  "prior_call": 163,
+  "failure_category": "review_evidence_comparison_missing",
+  "exact_validation_error": "v6缺少对照证据: [{\"check_path\": \"coverage.0.checks.assets.evidence_refs\", \"missing_source_prefixes\": [\"script.beats.0.\"]}, {\"check_path\": \"coverage.1.checks.assets.evidence_refs\", \"missing_source_prefixes\": [\"script.beats.1.\"]}, {\"check_path\": \"coverage.2.checks.assets.evidence_refs\", \"missing_source_prefixes\": [\"script.beats.2.\"]}, {\"check_path\": \"coverage.3.checks.assets.evidence_refs\", \"missing_source_prefixes\": [\"script.beats.3.\"]}, {\"check_path\": \"coverage.4.checks.continuity.evidence_refs\", \"missing_source_prefixes\": [\"script.beats.4.\"]}, {\"check_path\": \"coverage.4.checks.assets.evidence_refs\", \"missing_source_prefixes\": [\"script.beats.4.\"]}, {\"check_path\": \"coverage.5.checks.assets.evidence_refs\", \"missing_source_prefixes\": [\"script.beats.5.\"]}, {\"check_path\": \"coverage.6.checks.assets.evidence_refs\", \"missing_source_prefixes\": [\"script.beats.6.\"]}, {\"check_path\": \"coverage.7.checks.assets.evidence_refs\", \"missing_source_prefixes\": [\"script.beats.7.\"]}, {\"check_path\": \"coverage.8.checks.assets.evidence_refs\", \"missing_source_prefixes\": [\"script.beats.8.\"]}, {\"check_path\": \"coverage.9.checks.assets.evidence_refs\", \"missing_source_prefixes\": [\"script.beats.9.\"]}]",
+  "source_pair_requirements": "每一个pass/fail检查必须至少引用一条本拍script.beats.I.真实叶子证据。assets也必须同时引用本拍正文和静态资产定义，不能仅给资产定义；continuity应引用当前拍和对应前态来源，B05必须包含B05原文。not_applicable仍按原合同。目录ID仅选真实支持理由的叶子，不能机械填满。",
+  "current_source_navigation": [
+    {
+      "beat": "B01",
+      "mandatory_current_source_prefix": "script.beats.0.",
+      "actual_current_source_ID_options": [
+        {
+          "id": "E27f74c04b3a9-0019",
+          "path": "script.beats.0.after",
+          "excerpt": "（无新增动作）"
+        },
+        {
+          "id": "E27f74c04b3a9-0020",
+          "path": "script.beats.0.before",
+          "excerpt": "方澄穿着灰蓝色薄针织开衫站在自己浅木色工位前，米灰色挎包已经挂上椅背，米白底深红字的院线电影票压"
+        },
+        {
+          "id": "E27f74c04b3a9-0021",
+          "path": "script.beats.0.duration_seconds",
+          "excerpt": "6"
+        },
+        {
+          "id": "E27f74c04b3a9-0022",
+          "path": "script.beats.0.during",
+          "excerpt": "（无新增动作）"
+        },
+        {
+          "id": "E27f74c04b3a9-0023",
+          "path": "script.beats.0.event",
+          "excerpt": "傍晚办公室，方澄工位上挎包已挂、电影票压在桌角；林屿把自己桌面的客户明细推向两人之间。"
+        },
+        {
+          "id": "E27f74c04b3a9-0024",
+          "path": "script.beats.0.trigger",
+          "excerpt": "开场让观众同时看见她为自己留出的时间和被他默认接过去的活。"
+        }
+      ]
+    },
+    {
+      "beat": "B02",
+      "mandatory_current_source_prefix": "script.beats.1.",
+      "actual_current_source_ID_options": [
+        {
+          "id": "E27f74c04b3a9-0025",
+          "path": "script.beats.1.after",
+          "excerpt": "方澄的目光从他桌上的红笔批注，移到自己桌角压着的电影票，没接话。"
+        },
+        {
+          "id": "E27f74c04b3a9-0026",
+          "path": "script.beats.1.before",
+          "excerpt": "（无新增动作）"
+        },
+        {
+          "id": "E27f74c04b3a9-0027",
+          "path": "script.beats.1.dialogue.0.speaker",
+          "excerpt": "林屿"
+        },
+        {
+          "id": "E27f74c04b3a9-0028",
+          "path": "script.beats.1.dialogue.0.text",
+          "excerpt": "上月那张对账是你帮我熬到十一点重打的，今晚这份也对到一半了，你顺手帮我收了吧。"
+        },
+        {
+          "id": "E27f74c04b3a9-0029",
+          "path": "script.beats.1.duration_seconds",
+          "excerpt": "17"
+        },
+        {
+          "id": "E27f74c04b3a9-0030",
+          "path": "script.beats.1.during",
+          "excerpt": "（无新增动作）"
+        },
+        {
+          "id": "E27f74c04b3a9-0031",
+          "path": "script.beats.1.event",
+          "excerpt": "林屿没抬头，随口把过去她替他熬过的加班摊到台面，默认她今晚也接手。"
+        },
+        {
+          "id": "E27f74c04b3a9-0032",
+          "path": "script.beats.1.trigger",
+          "excerpt": "让观众听见她不止一次替他收尾，今晚他仍默认她接手。"
+        }
+      ]
+    },
+    {
+      "beat": "B03",
+      "mandatory_current_source_prefix": "script.beats.2.",
+      "actual_current_source_ID_options": [
+        {
+          "id": "E27f74c04b3a9-0033",
+          "path": "script.beats.2.after",
+          "excerpt": "林屿把黑色签字笔从自己桌沿拿起来，反手握在右手里，笔尖朝方澄那一侧搁在桌沿停住，等她接。"
+        },
+        {
+          "id": "E27f74c04b3a9-0034",
+          "path": "script.beats.2.before",
+          "excerpt": "林屿侧身从方澄桌角拿起那一小叠便利贴，把浅黄、浅粉、浅蓝三张一并摊开在自己面前的桌面上，指尖压住"
+        },
+        {
+          "id": "E27f74c04b3a9-0035",
+          "path": "script.beats.2.dialogue.0.speaker",
+          "excerpt": "林屿"
+        },
+        {
+          "id": "E27f74c04b3a9-0036",
+          "path": "script.beats.2.dialogue.0.text",
+          "excerpt": "对账，改明细，收尾。"
+        },
+        {
+          "id": "E27f74c04b3a9-0037",
+          "path": "script.beats.2.duration_seconds",
+          "excerpt": "8"
+        },
+        {
+          "id": "E27f74c04b3a9-0038",
+          "path": "script.beats.2.during",
+          "excerpt": "（无新增动作）"
+        },
+        {
+          "id": "E27f74c04b3a9-0039",
+          "path": "script.beats.2.event",
+          "excerpt": "林屿侧身从她桌角拿起那一小叠便利贴，把浅黄、浅粉、浅蓝三张一并摊开在自己面前桌面上，指尖压住浅黄"
+        },
+        {
+          "id": "E27f74c04b3a9-0040",
+          "path": "script.beats.2.trigger",
+          "excerpt": "把善后固定事项摊成清单，并把笔递向方澄，明确默认她会接下。"
+        }
+      ]
+    },
+    {
+      "beat": "B04",
+      "mandatory_current_source_prefix": "script.beats.3.",
+      "actual_current_source_ID_options": [
+        {
+          "id": "E27f74c04b3a9-0041",
+          "path": "script.beats.3.after",
+          "excerpt": "（无新增动作）"
+        },
+        {
+          "id": "E27f74c04b3a9-0042",
+          "path": "script.beats.3.before",
+          "excerpt": "方澄低头看了一眼停在自己面前、笔尖朝向自己的签字笔，没伸手拿，目光顺着那只握笔停住的手抬向林屿的"
+        },
+        {
+          "id": "E27f74c04b3a9-0043",
+          "path": "script.beats.3.duration_seconds",
+          "excerpt": "6"
+        },
+        {
+          "id": "E27f74c04b3a9-0044",
+          "path": "script.beats.3.during",
+          "excerpt": "（无新增动作）"
+        },
+        {
+          "id": "E27f74c04b3a9-0045",
+          "path": "script.beats.3.event",
+          "excerpt": "方澄看着被递到自己面前的那支笔，没有伸手去接，抬眼看林屿。"
+        },
+        {
+          "id": "E27f74c04b3a9-0046",
+          "path": "script.beats.3.trigger",
+          "excerpt": "让她承担开口说不之前的可见犹豫。"
+        }
+      ]
+    },
+    {
+      "beat": "B05",
+      "mandatory_current_source_prefix": "script.beats.4.",
+      "actual_current_source_ID_options": [
+        {
+          "id": "E27f74c04b3a9-0047",
+          "path": "script.beats.4.after",
+          "excerpt": "（无新增动作）"
+        },
+        {
+          "id": "E27f74c04b3a9-0048",
+          "path": "script.beats.4.before",
+          "excerpt": "（无新增动作）"
+        },
+        {
+          "id": "E27f74c04b3a9-0049",
+          "path": "script.beats.4.dialogue.0.speaker",
+          "excerpt": "方澄"
+        },
+        {
+          "id": "E27f74c04b3a9-0050",
+          "path": "script.beats.4.dialogue.0.text",
+          "excerpt": "今晚不行，七点我有一场早就买好票的电影。"
+        },
+        {
+          "id": "E27f74c04b3a9-0051",
+          "path": "script.beats.4.dialogue.1.speaker",
+          "excerpt": "方澄"
+        },
+        {
+          "id": "E27f74c04b3a9-0052",
+          "path": "script.beats.4.dialogue.1.text",
+          "excerpt": "这次我先走。"
+        },
+        {
+          "id": "E27f74c04b3a9-0053",
+          "path": "script.beats.4.duration_seconds",
+          "excerpt": "13"
+        },
+        {
+          "id": "E27f74c04b3a9-0054",
+          "path": "script.beats.4.during",
+          "excerpt": "（无新增动作）"
+        },
+        {
+          "id": "E27f74c04b3a9-0055",
+          "path": "script.beats.4.event",
+          "excerpt": "方澄开口拒绝，给出今晚不能帮忙的明确理由，再轻声补一句不道歉、不找补的话把今晚留给自己。"
+        },
+        {
+          "id": "E27f74c04b3a9-0056",
+          "path": "script.beats.4.trigger",
+          "excerpt": "拒绝必须站得住，并交出一个不可打折的理由；用一句被记住的姿态把今晚留给自己。"
+        }
+      ]
+    },
+    {
+      "beat": "B06",
+      "mandatory_current_source_prefix": "script.beats.5.",
+      "actual_current_source_ID_options": [
+        {
+          "id": "E27f74c04b3a9-0057",
+          "path": "script.beats.5.after",
+          "excerpt": "（无新增动作）"
+        },
+        {
+          "id": "E27f74c04b3a9-0058",
+          "path": "script.beats.5.before",
+          "excerpt": "林屿握笔的右手在桌沿停住，笔尖仍朝方澄那一侧。他看了一眼方澄椅背上挂着的米灰色挎包，又看回自己面"
+        },
+        {
+          "id": "E27f74c04b3a9-0059",
+          "path": "script.beats.5.duration_seconds",
+          "excerpt": "6"
+        },
+        {
+          "id": "E27f74c04b3a9-0060",
+          "path": "script.beats.5.during",
+          "excerpt": "（无新增动作）"
+        },
+        {
+          "id": "E27f74c04b3a9-0061",
+          "path": "script.beats.5.event",
+          "excerpt": "林屿握笔的右手还停在那支笔尖朝方澄的签字笔上，愣了一下，看一眼她椅背上的挎包，又看回自己面前的便"
+        },
+        {
+          "id": "E27f74c04b3a9-0062",
+          "path": "script.beats.5.trigger",
+          "excerpt": "第一次被明确拒绝，必须面对，不会再假装这件事；同一只手把笔收归自己，边界的转移由他自己完成。"
+        }
+      ]
+    },
+    {
+      "beat": "B07",
+      "mandatory_current_source_prefix": "script.beats.6.",
+      "actual_current_source_ID_options": [
+        {
+          "id": "E27f74c04b3a9-0063",
+          "path": "script.beats.6.after",
+          "excerpt": "（无新增动作）"
+        },
+        {
+          "id": "E27f74c04b3a9-0064",
+          "path": "script.beats.6.before",
+          "excerpt": "林屿重新低头看向那张A4横版客户明细单，用右手那支签字笔在第一处红笔批注旁落字改了一笔，写到第二"
+        },
+        {
+          "id": "E27f74c04b3a9-0065",
+          "path": "script.beats.6.duration_seconds",
+          "excerpt": "6"
+        },
+        {
+          "id": "E27f74c04b3a9-0066",
+          "path": "script.beats.6.during",
+          "excerpt": "（无新增动作）"
+        },
+        {
+          "id": "E27f74c04b3a9-0067",
+          "path": "script.beats.6.event",
+          "excerpt": "林屿转回桌前，用签字笔在客户明细单的红笔批注旁落字，自己一行一行对下去。"
+        },
+        {
+          "id": "E27f74c04b3a9-0068",
+          "path": "script.beats.6.trigger",
+          "excerpt": "他必须用具体行动回应，不是泛写停停顿顿，而是遇到一处具体对不上的项，反复比对结算单。"
+        }
+      ]
+    },
+    {
+      "beat": "B08",
+      "mandatory_current_source_prefix": "script.beats.7.",
+      "actual_current_source_ID_options": [
+        {
+          "id": "E27f74c04b3a9-0069",
+          "path": "script.beats.7.after",
+          "excerpt": "（无新增动作）"
+        },
+        {
+          "id": "E27f74c04b3a9-0070",
+          "path": "script.beats.7.before",
+          "excerpt": "方澄左手从椅背上取下米灰色挎包挎到左肩上，右手拿起桌角那张米白底深红字的院线电影票，朝办公室门方"
+        },
+        {
+          "id": "E27f74c04b3a9-0071",
+          "path": "script.beats.7.duration_seconds",
+          "excerpt": "6"
+        },
+        {
+          "id": "E27f74c04b3a9-0072",
+          "path": "script.beats.7.during",
+          "excerpt": "（无新增动作）"
+        },
+        {
+          "id": "E27f74c04b3a9-0073",
+          "path": "script.beats.7.event",
+          "excerpt": "方澄左手从椅背上取下挎包挎到肩上，右手拿起桌角那张电影票，朝办公室门方向走去。"
+        },
+        {
+          "id": "E27f74c04b3a9-0074",
+          "path": "script.beats.7.trigger",
+          "excerpt": "让她第一次真正把今晚留给自己，给观众她去赴约的清晰出口；包与票由左右两只手分别处理，不互相干扰。"
+        }
+      ]
+    },
+    {
+      "beat": "B09",
+      "mandatory_current_source_prefix": "script.beats.8.",
+      "actual_current_source_ID_options": [
+        {
+          "id": "E27f74c04b3a9-0075",
+          "path": "script.beats.8.after",
+          "excerpt": "（无新增动作）"
+        },
+        {
+          "id": "E27f74c04b3a9-0076",
+          "path": "script.beats.8.before",
+          "excerpt": "方澄站在办公室门外走廊上，右手捏着那张米白底深红字的院线电影票，低头看了一眼票面，轻轻呼出一口气"
+        },
+        {
+          "id": "E27f74c04b3a9-0077",
+          "path": "script.beats.8.duration_seconds",
+          "excerpt": "6"
+        },
+        {
+          "id": "E27f74c04b3a9-0078",
+          "path": "script.beats.8.during",
+          "excerpt": "（无新增动作）"
+        },
+        {
+          "id": "E27f74c04b3a9-0079",
+          "path": "script.beats.8.event",
+          "excerpt": "方澄在办公室门外的走廊上停一步，低头看一眼手里的电影票，轻轻呼出一口气。"
+        },
+        {
+          "id": "E27f74c04b3a9-0080",
+          "path": "script.beats.8.trigger",
+          "excerpt": "让她争取到自己时间的释放留在她身上，不和解、不煽情、不回头。"
+        }
+      ]
+    },
+    {
+      "beat": "B10",
+      "mandatory_current_source_prefix": "script.beats.9.",
+      "actual_current_source_ID_options": [
+        {
+          "id": "E27f74c04b3a9-0081",
+          "path": "script.beats.9.after",
+          "excerpt": "（无新增动作）"
+        },
+        {
+          "id": "E27f74c04b3a9-0082",
+          "path": "script.beats.9.before",
+          "excerpt": "林屿仍坐在工位前，没抬头去喊她，右手里那支黑色签字笔继续在那张A4横版客户明细单的红笔批注旁一行"
+        },
+        {
+          "id": "E27f74c04b3a9-0083",
+          "path": "script.beats.9.duration_seconds",
+          "excerpt": "6"
+        },
+        {
+          "id": "E27f74c04b3a9-0084",
+          "path": "script.beats.9.during",
+          "excerpt": "（无新增动作）"
+        },
+        {
+          "id": "E27f74c04b3a9-0085",
+          "path": "script.beats.9.event",
+          "excerpt": "林屿独自坐在工位前，没有喊她，继续用右手那支笔在明细单上对照结算单一行一行改下去。"
+        },
+        {
+          "id": "E27f74c04b3a9-0086",
+          "path": "script.beats.9.trigger",
+          "excerpt": "关系没有崩，他自己收自己的尾；不再回头看门，她的时间已经被他认下。"
+        }
+      ]
+    }
+  ],
+  "instruction": "重新完整核对十拍、反馈、跨拍拿笔和包票状态。输出完整工具JSON并选足双方证据，不手工补证，不改变剧本。真实问题列issues，无实际秒数不记表演通过。"
+}

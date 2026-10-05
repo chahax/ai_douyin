@@ -1,0 +1,3149 @@
+{
+  "schema": "authorized_creative_continuation/v3",
+  "ordinal": 164,
+  "label": "script_review_s7_r3",
+  "request": {
+    "role": "director",
+    "model": "deepseek-flash",
+    "messages": [
+      {
+        "role": "system",
+        "content": "你是DeepSeek独立文字审核员，只审核完整剧本；不代写、不评分，不宣称图片、声音、口型或媒体通过。\n仅返回JSON，顶层恰为schema、context_sha256、story_preserved(bool)、issues(array)、suggestions(array)、calibration_focus(array)、coverage(array)。有必修issues则story_preserved=false，否则true。\nissues项：id、owner(writer/director)、location(现有B编号)、severity(blocking/major)、rule、evidence、contradiction、impact、proposal、evidence_refs。只列有真实正文证据的硬约束或叙事/制作错误，同根因合并；不凭“可能/风险”或主观动作数量发明禁令。审美放suggestions项location/proposal/reason。\ncoverage逐一覆盖全部正文行且各一次。每行固定七列：[id,requirements,timing,continuity,dialogue_timing,first_frame,assets]；每项固定四列：[status,reason,evidence_refs,issue_ids]。status仅pass/fail/not_applicable，reason保留具体理由。fail关联已列issues；其他issue_ids=[]；每issue至少有一个fail关联。禁止省行、省项或补默认结论。\nevidence_refs每项严格为[path,quote]二元数组（issues内也相同）；path输入点分到真实字符串/数字叶子，quote必要逐字片段，不引用数组/对象。每条issue引用当前正文。每个pass/fail至少引用本拍真实正文；有前拍的连续性同时引用前拍真实正文。资产对照不能只引全局ID。缺证据不能标pass或冒称不适用。\nrequirements：逐条核对creative_brief、人物关系、主题转折、结尾主动者、道具数量。实际可拍正文优先于premise/event/trigger摘要；多次替同事加班需拒绝前自然对白或可见后果兑现。必须检查。\ntiming：真实播放顺序before→首句dialogue→during→次句dialogue→after；空槽无新增动作。摘要不是实际刺激。区分预期压力与已听请求后的反应，核对刺激→听到→反应→回应。反应可合法跨拍，不强制重说或塞回同拍，重要表演在正文明确。必须检查。\ncontinuity：核对前拍末与本拍首人物位置、视线、姿态、持物者、落点、布局；有前拍引用双方。owner≠holder，摘要未在动作正文兑现不能当已发生。真正重置已完成动作才是矛盾，合理步行省略和自然小动作不自动失败；首拍核对内部初态。必须检查。\ndialogue_timing：有对白列字数、可用秒数、必要串行动作与反应窗口。中文字1、拉丁词2，5单位/秒执行上限；不同人物并行不重复扣时。低于上限有反应空间不能凭偏紧/未声明语速报必修；明确停顿须核对。无对白可not_applicable。\nfirst_frame：本次剧本可not_applicable，实际分镜首态仍待后续动作前状态核查。assets核对当前人物/道具/画风/服装/布局与manifest；剧本可not_applicable，不假定图片已选定、复用成功或被导演看过。\n叙事拍可多镜；镜头拆分与确定秒数留后续导演/局部表演，不能把一拍多观察本身当错。尚无state_plan/production_design时不虚构已完成或把待后续的文件列缺失；若给计划仍须与正文对照，程序通过不是正确答案。关键表演可读性和明确停顿须查；未证实问题不变新硬条件。\ncalibration_focus仅列后续媒体验证项。没有issues/suggestions时相应数组为空，自己独立核查，不复制旧结论。\nschema逐字填写\"creative_compact_review_transport/v8\"；context_sha256逐字填写\"27f74c04b3a915641b5dcc53c71167606251124b9d28dd93ec6b0270219da9fd\"。\n输入context必须完整阅读全文；固定列仅为传输表示，不能缩小审核范围。没有证据目录或ID代替原文。\n本次使用submit_creative_json提交一次完整结果。唯一输出合同是工具Schema及下列无损v8结构；不返回分析。coverage每行是七列普通数组，六检查也都是四列数组，绝不输出{id,checks}。仅结构示例，示例编号/占位词不可写入真实结果：[\"实际正文编号\",[\"pass|fail|not_applicable\",\"具体核对理由\",[[\"输入完整点分叶子路径\",\"逐字引用\"]],[\"仅fail的已列真实issue_id\"]],[\"pass|fail|not_applicable\",\"具体核对理由\",[[\"输入完整点分叶子路径\",\"逐字引用\"]],[\"仅fail的已列真实issue_id\"]],[\"pass|fail|not_applicable\",\"具体核对理由\",[[\"输入完整点分叶子路径\",\"逐字引用\"]],[\"仅fail的已列真实issue_id\"]],[\"pass|fail|not_applicable\",\"具体核对理由\",[[\"输入完整点分叶子路径\",\"逐字引用\"]],[\"仅fail的已列真实issue_id\"]],[\"pass|fail|not_applicable\",\"具体核对理由\",[[\"输入完整点分叶子路径\",\"逐字引用\"]],[\"仅fail的已列真实issue_id\"]],[\"pass|fail|not_applicable\",\"具体核对理由\",[[\"输入完整点分叶子路径\",\"逐字引用\"]],[\"仅fail的已列真实issue_id\"]]]\n实际必须一次覆盖全部编号：[\"B01\", \"B02\", \"B03\", \"B04\", \"B05\", \"B06\", \"B07\", \"B08\", \"B09\", \"B10\"]。实际叶子示例根前缀script.beats.0.before或shots.shots.0.start_state；不能写beats[0]、省略script根或引数组对象。无对白检查可not_applicable且evidence_refs=[]，不能引用dialogue数组。其他需哪些正文/前拍/执行证据按审查规则。证据只引用实际相关逐字短片段，reason写核对理由，勿复述全部原稿，不删真实issue或默认通过以节省输出。\n本阶段script的duration_seconds由程序给出初步预算，仅用于旧接口形状；尚无局部表演及真实执行窗口。timing/dialogue_timing可核对对白文字下界与先后，但不得把预算当实际表演通过，不编造秒点证据。timing检查继续逐拍审刺激→对白→反应的源顺序，不能not_applicable；没有真实执行窗口时dialogue_timing应not_applicable，reason说明尚未局部编排、evidence_refs=[]、issue_ids=[]。不得把程序预算写成实际语速/反应窗口通过。实际对白前中后窗口及源动作兑现须在后续整片联合审查重新全文核对；本次只批准正文进入导演安排。\n本次唯一证据外观：每项只写下面目录ID字符串，不写path/quote；schema为script_review_source_ids/v18。ID选择完整真实叶子，程序查表展开，全部旧业务验收保持。全文独立核对反馈落实、拿笔保持/纸面位置、门外动作先后、无新增同事及无补偿。对白开口之后要有听者反应；正文初步预算不是实际窗口。真实问题必须报告，不能为通过删问题。"
+      },
+      {
+        "role": "user",
+        "content": "{\"script\":{\"title\":\"这次我先走\",\"premise\":\"方澄今晚七点有一场早就买好票的院线电影，是她为自己留出来的时间；林屿习以为常地把临收尾的客户明细推过来，潜台词是她会答应。方澄必须开口说不，让林屿亲耳听见一个明确的不，并承担关系可能变冷的结果；林屿随后用具体行动回应，她再离开办公室，独自赴约。\",\"selected_candidate_id\":\"C01\",\"duration_seconds\":80,\"beats\":[{\"id\":\"B01\",\"duration_seconds\":6,\"event\":\"傍晚办公室，方澄工位上挎包已挂、电影票压在桌角；林屿把自己桌面的客户明细推向两人之间。\",\"trigger\":\"开场让观众同时看见她为自己留出的时间和被他默认接过去的活。\",\"before\":\"方澄穿着灰蓝色薄针织开衫站在自己浅木色工位前，米灰色挎包已经挂上椅背，米白底深红字的院线电影票压在桌角自己伸手就能够到的位置。\\n林屿穿着米驼色棉质衬衫坐在她右边的工位，没抬头，把自己桌上那份A4横版客户明细单往两人之间的方向推了推，那张A4纵版结算单仍摊在自己桌角，白色陶瓷咖啡杯放在一旁。\",\"during\":\"（无新增动作）\",\"after\":\"（无新增动作）\",\"dialogue\":[]},{\"id\":\"B02\",\"duration_seconds\":17,\"event\":\"林屿没抬头，随口把过去她替他熬过的加班摊到台面，默认她今晚也接手。\",\"trigger\":\"让观众听见她不止一次替他收尾，今晚他仍默认她接手。\",\"before\":\"（无新增动作）\",\"during\":\"（无新增动作）\",\"after\":\"方澄的目光从他桌上的红笔批注，移到自己桌角压着的电影票，没接话。\",\"dialogue\":[{\"speaker\":\"林屿\",\"text\":\"上月那张对账是你帮我熬到十一点重打的，今晚这份也对到一半了，你顺手帮我收了吧。\"}]},{\"id\":\"B03\",\"duration_seconds\":8,\"event\":\"林屿侧身从她桌角拿起那一小叠便利贴，把浅黄、浅粉、浅蓝三张一并摊开在自己面前桌面上，指尖压住浅黄那张边角；接着把黑色签字笔从自己桌沿拿起来握在右手里，笔尖朝向方澄那一侧停在桌沿，等她接。\",\"trigger\":\"把善后固定事项摊成清单，并把笔递向方澄，明确默认她会接下。\",\"before\":\"林屿侧身从方澄桌角拿起那一小叠便利贴，把浅黄、浅粉、浅蓝三张一并摊开在自己面前的桌面上，指尖压住浅黄那张边角。\",\"during\":\"（无新增动作）\",\"after\":\"林屿把黑色签字笔从自己桌沿拿起来，反手握在右手里，笔尖朝方澄那一侧搁在桌沿停住，等她接。\",\"dialogue\":[{\"speaker\":\"林屿\",\"text\":\"对账，改明细，收尾。\"}]},{\"id\":\"B04\",\"duration_seconds\":6,\"event\":\"方澄看着被递到自己面前的那支笔，没有伸手去接，抬眼看林屿。\",\"trigger\":\"让她承担开口说不之前的可见犹豫。\",\"before\":\"方澄低头看了一眼停在自己面前、笔尖朝向自己的签字笔，没伸手拿，目光顺着那只握笔停住的手抬向林屿的眼睛。\",\"during\":\"（无新增动作）\",\"after\":\"（无新增动作）\",\"dialogue\":[]},{\"id\":\"B05\",\"duration_seconds\":13,\"event\":\"方澄开口拒绝，给出今晚不能帮忙的明确理由，再轻声补一句不道歉、不找补的话把今晚留给自己。\",\"trigger\":\"拒绝必须站得住，并交出一个不可打折的理由；用一句被记住的姿态把今晚留给自己。\",\"before\":\"（无新增动作）\",\"during\":\"（无新增动作）\",\"after\":\"（无新增动作）\",\"dialogue\":[{\"speaker\":\"方澄\",\"text\":\"今晚不行，七点我有一场早就买好票的电影。\"},{\"speaker\":\"方澄\",\"text\":\"这次我先走。\"}]},{\"id\":\"B06\",\"duration_seconds\":6,\"event\":\"林屿握笔的右手还停在那支笔尖朝方澄的签字笔上，愣了一下，看一眼她椅背上的挎包，又看回自己面前的便利贴和明细单，把那支笔收回自己右手边。\",\"trigger\":\"第一次被明确拒绝，必须面对，不会再假装这件事；同一只手把笔收归自己，边界的转移由他自己完成。\",\"before\":\"林屿握笔的右手在桌沿停住，笔尖仍朝方澄那一侧。他看了一眼方澄椅背上挂着的米灰色挎包，又看回自己面前摊着的浅黄便利贴和那张A4横版客户明细单，没接她的话。\\n林屿把右手那支笔尖朝外的签字笔收回自己面前，搁在那张结算单边沿，笔尖不再指向方澄。\",\"during\":\"（无新增动作）\",\"after\":\"（无新增动作）\",\"dialogue\":[]},{\"id\":\"B07\",\"duration_seconds\":6,\"event\":\"林屿转回桌前，用签字笔在客户明细单的红笔批注旁落字，自己一行一行对下去。\",\"trigger\":\"他必须用具体行动回应，不是泛写停停顿顿，而是遇到一处具体对不上的项，反复比对结算单。\",\"before\":\"林屿重新低头看向那张A4横版客户明细单，用右手那支签字笔在第一处红笔批注旁落字改了一笔，写到第二行数字时停住，把那张A4纵版结算单从桌角拉到明细单旁边对齐，比对后又用笔尖在明细单第二行点了一下，把那个数字划掉重写，写完一笔停一下，再对向结算单继续往下改。\",\"during\":\"（无新增动作）\",\"after\":\"（无新增动作）\",\"dialogue\":[]},{\"id\":\"B08\",\"duration_seconds\":6,\"event\":\"方澄左手从椅背上取下挎包挎到肩上，右手拿起桌角那张电影票，朝办公室门方向走去。\",\"trigger\":\"让她第一次真正把今晚留给自己，给观众她去赴约的清晰出口；包与票由左右两只手分别处理，不互相干扰。\",\"before\":\"方澄左手从椅背上取下米灰色挎包挎到左肩上，右手拿起桌角那张米白底深红字的院线电影票，朝办公室门方向走出两步。\\n方澄空出左手推开那扇米灰色木纹平板门，走出办公室。\",\"during\":\"（无新增动作）\",\"after\":\"（无新增动作）\",\"dialogue\":[]},{\"id\":\"B09\",\"duration_seconds\":6,\"event\":\"方澄在办公室门外的走廊上停一步，低头看一眼手里的电影票，轻轻呼出一口气。\",\"trigger\":\"让她争取到自己时间的释放留在她身上，不和解、不煽情、不回头。\",\"before\":\"方澄站在办公室门外走廊上，右手捏着那张米白底深红字的院线电影票，低头看了一眼票面，轻轻呼出一口气。\",\"during\":\"（无新增动作）\",\"after\":\"（无新增动作）\",\"dialogue\":[]},{\"id\":\"B10\",\"duration_seconds\":6,\"event\":\"林屿独自坐在工位前，没有喊她，继续用右手那支笔在明细单上对照结算单一行一行改下去。\",\"trigger\":\"关系没有崩，他自己收自己的尾；不再回头看门，她的时间已经被他认下。\",\"before\":\"林屿仍坐在工位前，没抬头去喊她，右手里那支黑色签字笔继续在那张A4横版客户明细单的红笔批注旁一行一行改下去，每写一笔就把笔尖挪向旁边那张结算单比对一次，白色陶瓷咖啡杯没动，那张浅黄便利贴压在他左手边的桌面。\",\"during\":\"（无新增动作）\",\"after\":\"（无新增动作）\",\"dialogue\":[]}]},\"creative_brief\":{\"schema\":\"creative_brief/v1\",\"theme\":\"总替同事收尾的人，第一次把自己的时间放在前面\",\"duration_seconds\":[45,60],\"delegated_fields\":[],\"duration_policy\":\"flexible\",\"audience\":\"喜欢生活情绪短片的成年观众\",\"relationships\":\"方澄与同事林屿；林屿已习惯她会答应，方澄担心拒绝会伤及两人的关系。\",\"audience_emotion\":\"先看懂她为什么难拒绝，再替她的选择紧张，最后感到关系发生了真实变化。\",\"visual_style\":\"写实真人实拍质感的AI短片，成年普通人外貌，真实皮肤纹理、自然光与生活化服装，克制自然表演，关键反应使用可读近景。\",\"turn\":\"对方原本把她的帮忙视为理所当然；她明确拒绝后，对方必须面对这一点，再通过具体行动回应。\",\"ending\":\"以新的行动兑现边界及关系变化；不预先规定两人必须和解，不用主题口号收尾。\",\"constraints\":[\"观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。\",\"她想离开和担心拒绝的原因要在实际事件中成立。\",\"关键反应的构图和窗口必须写入最终视频提示词。\",\"剧情先按完整故事创作，再拆成生成段；不能为固定八秒切段编造操作。\"],\"avoid\":[\"用一次开本子或摸包代替习惯性的付出历史\",\"靠陪家人看病等新事故替代原本的关系矛盾\",\"强行争吵、突然完美理解、鸡汤总结\",\"为了沿用动画尾帧而改回手绘风格\"]},\"static_visual_manifest\":{\"schema\":\"static_visual_manifest_v2\",\"render\":{\"style_option_id\":\"S01\",\"visual_medium\":\"写实真人实拍质感的AI短片，自然皮肤纹理与生活化布光\",\"palette\":\"傍晚办公室暖调，浅木色桌面、米白墙、暖灰窗帘透橙黄夕光、人物服装为低饱和的灰蓝与米驼\",\"light_source\":\"临窗自然夕光为主，从办公桌侧面斜入，室内顶灯为辅补光，形成柔和侧光与轻微暖色阴影\"},\"characters\":[{\"id\":\"C01\",\"name\":\"方澄\",\"age_group\":\"成年\",\"hair\":\"黑色齐肩直发，自然中分\",\"clothing\":\"灰蓝色薄针织开衫，内搭白色圆领T恤，下着深灰色直筒长裤\",\"body_shape\":\"中等偏瘦，肩线柔和\"},{\"id\":\"C02\",\"name\":\"林屿\",\"age_group\":\"成年\",\"hair\":\"深栗色短碎发，稍长刘海\",\"clothing\":\"米驼色棉质衬衫，袖口挽至前臂，下着深藏蓝休闲长裤\",\"body_shape\":\"中等身高，肩宽略宽于方澄\"}],\"props\":[{\"id\":\"P01\",\"name\":\"挎包\",\"appearance\":\"软皮小号斜挎包，米灰色金属扣，单层翻盖\",\"owner_id\":\"C01\"},{\"id\":\"P02\",\"name\":\"院线电影票根\",\"appearance\":\"竖版窄长纸片，米白底深红字，右侧带撕齿虚线，今晚院线开场时间与座位号可读\",\"owner_id\":\"C01\"},{\"id\":\"P03\",\"name\":\"善后便利贴三张\",\"appearance\":\"正方形小纸片，分别为浅黄、浅粉、浅蓝底，深灰手写短词（对账/改明细/收尾）\",\"owner_id\":\"C01\"},{\"id\":\"P04\",\"name\":\"咖啡杯\",\"appearance\":\"白色陶瓷马克杯，杯身外侧无图案，杯口微宽\",\"owner_id\":\"C02\"},{\"id\":\"P05\",\"name\":\"客户明细单\",\"appearance\":\"A4横版打印表格纸，浅灰线条格，黑字数字，红笔批注\",\"owner_id\":\"C02\"},{\"id\":\"P06\",\"name\":\"结算单\",\"appearance\":\"A4纵版表格纸，右上角有彩色公司logo条，浅蓝表头\",\"owner_id\":\"C02\"},{\"id\":\"P07\",\"name\":\"签字笔\",\"appearance\":\"黑色细头签字笔，金属笔夹\",\"owner_id\":\"C02\"}],\"scene\":{\"name\":\"傍晚办公室\",\"elements\":[{\"id\":\"E01\",\"name\":\"方澄工位桌\",\"appearance\":\"浅木色长方形办公桌，金属细腿，桌面靠近窗户一侧\"},{\"id\":\"E02\",\"name\":\"林屿工位桌\",\"appearance\":\"浅木色长方形办公桌，与方澄桌同款，平行摆放，靠近室内一侧\"},{\"id\":\"E03\",\"name\":\"抽屉柜\",\"appearance\":\"浅木色三斗文件柜，贴墙放置，黑色拉手\"},{\"id\":\"E04\",\"name\":\"办公室门\",\"appearance\":\"木纹平板门，米灰色，下半部带金属横拉把手，位于房间远端侧墙\"},{\"id\":\"E05\",\"name\":\"窗户\",\"appearance\":\"宽幅铝合金推拉窗，米灰色半透明卷帘半垂，窗框占据外侧整面墙\"},{\"id\":\"E06\",\"name\":\"顶灯\",\"appearance\":\"白色圆形吸顶灯，暖白光，位于房间正中天花板\"},{\"id\":\"E07\",\"name\":\"地面\",\"appearance\":\"浅灰色PVC地板，哑光\"},{\"id\":\"E08\",\"name\":\"墙面\",\"appearance\":\"米白色乳胶漆墙面，干净无装饰\"},{\"id\":\"E09\",\"name\":\"办公椅（方澄）\",\"appearance\":\"黑色网面靠背转椅，灰色塑料五星脚\"},{\"id\":\"E10\",\"name\":\"办公椅（林屿）\",\"appearance\":\"黑色网面靠背转椅，灰色塑料五星脚，与方澄椅同款\"}],\"relations\":[{\"subject\":\"E02\",\"relation\":\"right_of\",\"reference\":\"E01\"},{\"subject\":\"E01\",\"relation\":\"next_to\",\"reference\":\"E05\"},{\"subject\":\"E02\",\"relation\":\"next_to\",\"reference\":\"E01\"},{\"subject\":\"E03\",\"relation\":\"behind\",\"reference\":\"E02\"},{\"subject\":\"E04\",\"relation\":\"behind\",\"reference\":\"E01\"},{\"subject\":\"E06\",\"relation\":\"above\",\"reference\":\"E01\"},{\"subject\":\"E07\",\"relation\":\"below\",\"reference\":\"E01\"},{\"subject\":\"E08\",\"relation\":\"behind\",\"reference\":\"E05\"},{\"subject\":\"E09\",\"relation\":\"next_to\",\"reference\":\"E01\"},{\"subject\":\"E10\",\"relation\":\"next_to\",\"reference\":\"E02\"}]}},\"material_ref\":{\"source_driver\":\"original\",\"title\":\"这次我先走·参考表达生产\",\"creative_focus\":\"参考时长（可浮动）45—60秒。创作简报：{\\\"audience\\\": \\\"喜欢生活情绪短片的成年观众\\\", \\\"audience_emotion\\\": \\\"先看懂她为什么难拒绝，再替她的选择紧张，最后感到关系发生了真实变化。\\\", \\\"avoid\\\": [\\\"用一次开本子或摸包代替习惯性的付出历史\\\", \\\"靠陪家人看病等新事故替代原本的关系矛盾\\\", \\\"强行争吵、突然完美理解、鸡汤总结\\\", \\\"为了沿用动画尾帧而改回手绘风格\\\"], \\\"constraints\\\": [\\\"观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。\\\", \\\"她想离开和担心拒绝的原因要在实际事件中成立。\\\", \\\"关键反应的构图和窗口必须写入最终视频提示词。\\\", \\\"剧情先按完整故事创作，再拆成生成段；不能为固定八秒切段编造操作。\\\"], \\\"delegated_fields\\\": [], \\\"duration_policy\\\": \\\"flexible\\\", \\\"duration_seconds\\\": [45, 60], \\\"ending\\\": \\\"以新的行动兑现边界及关系变化；不预先规定两人必须和解，不用主题口号收尾。\\\", \\\"relationships\\\": \\\"方澄与同事林屿；林屿已习惯她会答应，方澄担心拒绝会伤及两人的关系。\\\", \\\"schema\\\": \\\"creative_brief/v1\\\", \\\"theme\\\": \\\"总替同事收尾的人，第一次把自己的时间放在前面\\\", \\\"turn\\\": \\\"对方原本把她的帮忙视为理所当然；她明确拒绝后，对方必须面对这一点，再通过具体行动回应。\\\", \\\"visual_style\\\": \\\"写实真人实拍质感的AI短片，成年普通人外貌，真实皮肤纹理、自然光与生活化服装，克制自然表演，关键反应使用可读近景。\\\"}。优先完整表达情绪、事件和画面；按实际对白、刺激与反应安排秒数，总长可随内容浮动，不为靠近参考范围删掉必要表演或增加填充动作。画风仍按简报；明确的局部时序要求仍生效。\",\"material_sha256\":\"b0f5dfe7dce0f300af26a517b56edae479868626faad80b595921812262d8575\",\"source_sha256\":\"e0f61a360a00f25759eec6f521f6b83af9775100fd886066a3b85bf59d16aa82\",\"reference_sha256\":\"bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1\"},\"reference_pack\":[{\"id\":\"R01\",\"path\":\"D:\\\\IT\\\\ai_douyin\\\\data\\\\reference_reviews\\\\reusable_expression_20261001\\\\EXPRESSION_REFERENCE.md\",\"text\":\"# 已有参考片与教学分析：可复用表达参考\\n\\n用途：借鉴叙事、情绪和摄影表达机制；不是本次剧情来源或硬验收模板。用户当前主题、人物、真人画风、浮动时长和人工视频审核要求优先。不要照搬诈骗、老人、玄关或旧项目专用动作，也不要把所有参考技巧机械塞进短片。\\n\\n## 核心判断\\n\\n参考片用“虚假的关心—真实的付出—伤害—再次渴望关心”组织情绪。最有效的是末尾老人从愤怒到接电话后微笑的变化。画面中每个人在做有目的的事情，表情随具体刺激改变；不靠人物站定后用台词解释全部心理。\\n\\n## 时间轴证据\\n\\n| 时间 | 实际可见内容 | 导演作用 |\\n| --- | --- | --- |\\n| 0–5 秒 | 女生在霓虹街头看手机、展示转账、互相说笑 | 立即交代欺骗关系，让观众比受骗者知道得多 |\\n| 8–18 秒 | 多部手机；男子催促；女子开门进屋、靠近桌子 | 道具解释工作方式，进门动作建立人物和场景联系 |\\n| 20–31 秒 | 女子前景逐一回复手机；男子后景吃东西 | 同一画面有主次行动；她表演关心与身后人的冷漠形成反差 |\\n| 33.5–39 秒 | 老人独坐、看手机、转账界面、对手机讲话 | 将套路切到具体承受者，观众看到真实关切 |\\n| 48–50 秒 | 男子看收款消息，前倾、睁大眼、笑容扩大 | 收款触发贪婪，动作和情绪有因果 |\\n| 50.5–58 秒 | 叫醒女子，递泡面，拿手机催拍，手机取景画面 | 困倦被利用为卖惨素材；道具推动事件 |\\n| 63–78 秒 | 购买金饰、美容、购物、聚餐、泳池炫耀 | 场景变化用于交代骗款去向；不能直接照搬为家庭戏的装饰 |\\n| 77.5–85 秒 | 求还钱消息；泳池跳水切到夜间落水；岸边手机显示消息遭拒 | 剪辑把享乐与受害者绝望并置。人物身份及死亡结果不能仅凭这些帧完全确认 |\\n| 85.5–93 秒 | 抓捕、控制嫌疑人、手机取证 | 交代诈骗被查处，推进结局 |\\n| 93.5–103.5 秒 | 老人看新闻皱眉，随后接电话；字幕“吴叔叔在干嘛”“怎么不理我”，老人逐渐微笑 | 同一人的前后反应完成主题：愤怒没有消除对关心的渴望；来电者身份并未明确 |\\n\\n\\n## 二、四课分别带来的启发\\n\\n下列是基于转写与抽帧的简要归纳，时间用于回看定位，不是逐字引文。\\n\\n1. [0基础，带你做出你人生第一个AI视频](https://www.bilibili.com/video/BV1Z28P6HEGa/)：约3:00–6:10和7:35–9:05，展示剧本先转调度，再转模型提示与角色引用。对本项目的启发是把“镜头观察谁、人物做什么、空间如何呈现”与接口提示编译分层。作者关于一致性的强保证只是演示者判断，不能替代本项目实测。\\n2. [用“抄袭”思维做出AI视频](https://www.bilibili.com/video/BV1sPhE63ERj/)：约5:30–10:10分析构图、色光、参考图与公开工程；约15:45–18:55将已选资产回传给Agent，再校正调度。应学表达机制、记录自己的可复现试验。其首尾帧批评针对示例跳帧，不能据此取消用户当前接续门槛。\\n3. [AI视频究竟怎么学](https://www.bilibili.com/video/BV19fYf6kEnU/)：约8:30–13:10的咖啡店重做显示语音、杯子比例、相似景别切换和情绪出错，随后人工重写调度、局部返修、剪辑。可复用流程必须容纳明确的创作判断和失败处理，不能承诺一键首发全对。\\n4. [如何做出“电影级”AI视频](https://www.bilibili.com/video/BV1uGYE6XEB4/)：约1:00–3:40对比角色参考，约7:30–11:10讨论场景资产。可迁移的是减少身份参考里的杂乱背景、强阴影及不合适表情，同时让场景图服务真实动线。具体模型、4K和版式属于其示例设置，不作为普遍成功保证。\\n\\n教程展示过不同模型／平台及人工选片，不能把其效果直接归因于某段万能提示，也不能推定其接口与项目Mini端能力一致。样片的实际制作模型、提示词、废片率和后期投入未知。\\n\\n## 三、目标样片好在哪里\\n\\n| 观察窗口 | 实际画面与叙事作用 | 可迁移机制 |\\n| --- | --- | --- |\\n| 0–6秒 | 街头女子看手机、同伴交流，随后进入多手机的工作环境 | 开头给具体反差和疑问 |\\n| 20–30秒 | 女子前景回复手机，男子后景吃东西 | 同镜有主次行动，前后景共同传递信息 |\\n| 33–48秒 | 老人、转账界面、男子收款反应交替 | 道具证明信息，近景呈现信息对人的影响 |\\n| 63–78秒 | 消费、购物、聚餐、泳池环境变化 | 用场景变化交代后果与生活反差 |\\n| 93–104秒 | 老人看新闻皱眉，接电话后逐渐放松微笑 | 用刺激后的可见变化完成主题、留下余味 |\\n\\n关键不是表情数量或单张画面的精细度，而是观众的信息、人物的选择和摄影观察对象一起变化。末尾来电者身份不能只凭这些帧确定。目标样片和项目最新片同为720×1280；提高输出分辨率不能单独解决目前的内容差距。\\n\\n\\n### 每镜以观众收到什么为核心\\n\\n明确注意对象、新信息、刺激、反应前后差别、切镜理由、必须可见的证据。每段只传当前相关人物和状态。让对白方式、反应窗口、资产引用和状态由同一权威中间表示编译到最终请求，避免多层重复改写。\"}],\"reference_expression_rule\":\"reference_pack来自已获取的同类视频和教学表达分析。学习信息递进、刺激与反应、具体行动、观察主体及结尾余味；选与当前需求相关的机制，不照搬参考人物、对白、剧情、时长或画风。创作简报优先，不把参考偏好当硬禁令；未观察本次媒体不得宣称表演成功。\",\"user_content_feedback\":{\"schema\":\"user_creative_feedback/v1\",\"source\":\"current user message\",\"parent\":\"S6 call67 / director77 / full_review158 / 91.442857s\",\"quality_confirmation\":false,\"issues\":[{\"id\":\"NOTE_REPETITION\",\"user_statement\":\"第3镜的便利贴动作堆得太长。27.61秒到35.91秒，8.3秒只把三张便利贴依次揭起、摊平、念词；可以压缩到5–6秒，把省出的时间留给拒绝或离开。\"},{\"id\":\"MEMORABLE_CHOICE\",\"user_statement\":\"拒绝后轻轻补充‘这次我先走’，呼应标题，不道歉、不找补。\"},{\"id\":\"VISIBLE_RELEASE\",\"user_statement\":\"门外停下，看一眼手里的票，轻轻呼一口气；不和解、不煽情、不回头，让观众知道她去赴自己的约。\"},{\"id\":\"OPTIONAL_COLLEAGUE\",\"user_statement\":\"职场横向参照仍缺席；不是必须，可用门边同事抬头看她手里票的一眼。\"}],\"implementation_choice\":{\"keep_two_characters\":true,\"reason\":\"本轮优先聚焦她争取自己时间的可见释放，不新增资产或转移情绪观察主体。第四项明确为可选，作为未采用建议保存。\",\"tighten_old_account_dialogue\":true,\"reason_long_dialogue\":\"第二镜仍21.614秒；保留长期善后的证据但让完整新稿自然压缩这句，实际时长留导演和局部表演。\"},\"requirements\":[\"完整模型新稿；剧情仍是惯常加班的协作关系、明确拒绝、他自己接回工作、她赴电影约。\",\"三张便利贴允许作为一组拿起摊开，只呈现信息而不逐张揭起压角；不得让旁人替她做新工作。\",\"拒绝后保留一个选择姿态：‘这次我先走’；不追加道歉、承诺下次帮忙或补偿。\",\"出门后在门外看手中电影票并轻呼气，不回头、不对男方求认同；情绪释放留在她身上。\",\"林屿确实自己做并承担原难度，但不加惩罚、消息奖励、老板加薪或突然威胁。\",\"当前仅两名已绑定人物；笔从桌沿拿取后明确持续持有，纸面位置和包票/推门手部前提应由正文成立。\",\"不写实际秒数或承诺热度；保留所有完整参考，仅借表达机制，不照搬剧情。\"]},\"raw_linear_script\":{\"title\":\"这次我先走\",\"premise\":\"方澄今晚七点有一场早就买好票的院线电影，是她为自己留出来的时间；林屿习以为常地把临收尾的客户明细推过来，潜台词是她会答应。方澄必须开口说不，让林屿亲耳听见一个明确的不，并承担关系可能变冷的结果；林屿随后用具体行动回应，她再离开办公室，独自赴约。\",\"selected_candidate_id\":\"C01\",\"beats\":[{\"id\":\"B01\",\"event\":\"傍晚办公室，方澄工位上挎包已挂、电影票压在桌角；林屿把自己桌面的客户明细推向两人之间。\",\"trigger\":\"开场让观众同时看见她为自己留出的时间和被他默认接过去的活。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"方澄穿着灰蓝色薄针织开衫站在自己浅木色工位前，米灰色挎包已经挂上椅背，米白底深红字的院线电影票压在桌角自己伸手就能够到的位置。\"},{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"林屿穿着米驼色棉质衬衫坐在她右边的工位，没抬头，把自己桌上那份A4横版客户明细单往两人之间的方向推了推，那张A4纵版结算单仍摊在自己桌角，白色陶瓷咖啡杯放在一旁。\"}]},{\"id\":\"B02\",\"event\":\"林屿没抬头，随口把过去她替他熬过的加班摊到台面，默认她今晚也接手。\",\"trigger\":\"让观众听见她不止一次替他收尾，今晚他仍默认她接手。\",\"steps\":[{\"kind\":\"dialogue\",\"speaker\":\"林屿\",\"text\":\"上月那张对账是你帮我熬到十一点重打的，今晚这份也对到一半了，你顺手帮我收了吧。\"},{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"方澄的目光从他桌上的红笔批注，移到自己桌角压着的电影票，没接话。\"}]},{\"id\":\"B03\",\"event\":\"林屿侧身从她桌角拿起那一小叠便利贴，把浅黄、浅粉、浅蓝三张一并摊开在自己面前桌面上，指尖压住浅黄那张边角；接着把黑色签字笔从自己桌沿拿起来握在右手里，笔尖朝向方澄那一侧停在桌沿，等她接。\",\"trigger\":\"把善后固定事项摊成清单，并把笔递向方澄，明确默认她会接下。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"林屿侧身从方澄桌角拿起那一小叠便利贴，把浅黄、浅粉、浅蓝三张一并摊开在自己面前的桌面上，指尖压住浅黄那张边角。\"},{\"kind\":\"dialogue\",\"speaker\":\"林屿\",\"text\":\"对账，改明细，收尾。\"},{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"林屿把黑色签字笔从自己桌沿拿起来，反手握在右手里，笔尖朝方澄那一侧搁在桌沿停住，等她接。\"}]},{\"id\":\"B04\",\"event\":\"方澄看着被递到自己面前的那支笔，没有伸手去接，抬眼看林屿。\",\"trigger\":\"让她承担开口说不之前的可见犹豫。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"方澄低头看了一眼停在自己面前、笔尖朝向自己的签字笔，没伸手拿，目光顺着那只握笔停住的手抬向林屿的眼睛。\"}]},{\"id\":\"B05\",\"event\":\"方澄开口拒绝，给出今晚不能帮忙的明确理由，再轻声补一句不道歉、不找补的话把今晚留给自己。\",\"trigger\":\"拒绝必须站得住，并交出一个不可打折的理由；用一句被记住的姿态把今晚留给自己。\",\"steps\":[{\"kind\":\"dialogue\",\"speaker\":\"方澄\",\"text\":\"今晚不行，七点我有一场早就买好票的电影。\"},{\"kind\":\"dialogue\",\"speaker\":\"方澄\",\"text\":\"这次我先走。\"}]},{\"id\":\"B06\",\"event\":\"林屿握笔的右手还停在那支笔尖朝方澄的签字笔上，愣了一下，看一眼她椅背上的挎包，又看回自己面前的便利贴和明细单，把那支笔收回自己右手边。\",\"trigger\":\"第一次被明确拒绝，必须面对，不会再假装这件事；同一只手把笔收归自己，边界的转移由他自己完成。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"林屿握笔的右手在桌沿停住，笔尖仍朝方澄那一侧。他看了一眼方澄椅背上挂着的米灰色挎包，又看回自己面前摊着的浅黄便利贴和那张A4横版客户明细单，没接她的话。\"},{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"林屿把右手那支笔尖朝外的签字笔收回自己面前，搁在那张结算单边沿，笔尖不再指向方澄。\"}]},{\"id\":\"B07\",\"event\":\"林屿转回桌前，用签字笔在客户明细单的红笔批注旁落字，自己一行一行对下去。\",\"trigger\":\"他必须用具体行动回应，不是泛写停停顿顿，而是遇到一处具体对不上的项，反复比对结算单。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"林屿重新低头看向那张A4横版客户明细单，用右手那支签字笔在第一处红笔批注旁落字改了一笔，写到第二行数字时停住，把那张A4纵版结算单从桌角拉到明细单旁边对齐，比对后又用笔尖在明细单第二行点了一下，把那个数字划掉重写，写完一笔停一下，再对向结算单继续往下改。\"}]},{\"id\":\"B08\",\"event\":\"方澄左手从椅背上取下挎包挎到肩上，右手拿起桌角那张电影票，朝办公室门方向走去。\",\"trigger\":\"让她第一次真正把今晚留给自己，给观众她去赴约的清晰出口；包与票由左右两只手分别处理，不互相干扰。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"方澄左手从椅背上取下米灰色挎包挎到左肩上，右手拿起桌角那张米白底深红字的院线电影票，朝办公室门方向走出两步。\"},{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"方澄空出左手推开那扇米灰色木纹平板门，走出办公室。\"}]},{\"id\":\"B09\",\"event\":\"方澄在办公室门外的走廊上停一步，低头看一眼手里的电影票，轻轻呼出一口气。\",\"trigger\":\"让她争取到自己时间的释放留在她身上，不和解、不煽情、不回头。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"方澄站在办公室门外走廊上，右手捏着那张米白底深红字的院线电影票，低头看了一眼票面，轻轻呼出一口气。\"}]},{\"id\":\"B10\",\"event\":\"林屿独自坐在工位前，没有喊她，继续用右手那支笔在明细单上对照结算单一行一行改下去。\",\"trigger\":\"关系没有崩，他自己收自己的尾；不再回头看门，她的时间已经被他认下。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"林屿仍坐在工位前，没抬头去喊她，右手里那支黑色签字笔继续在那张A4横版客户明细单的红笔批注旁一行一行改下去，每写一笔就把笔尖挪向旁边那张结算单比对一次，白色陶瓷咖啡杯没动，那张浅黄便利贴压在他左手边的桌面。\"}]}]},\"script_revision_source\":{\"ordinal\":161,\"raw_sha256\":\"465b12b846c5a14581e069d62f0068b0b27d2cb224231f6e7c08eed88301f1f3\",\"complete_model_authored\":true,\"protocol\":\"complete_linear_script_v3\"},\"script_timing_status\":\"preliminary_budget_not_actual\",\"script_preliminary_timing\":{\"schema\":\"complete_linear_script_v3\",\"raw_sha256\":\"465b12b846c5a14581e069d62f0068b0b27d2cb224231f6e7c08eed88301f1f3\",\"timing_status\":\"preliminary_budget_not_actual\",\"by_beat_id\":{\"B01\":{\"budget_seconds\":6,\"speech_units\":0,\"speech_floor_seconds\":0.0,\"provisional_speech_budget_seconds\":0.0,\"provisional_non_dialogue_allowance_seconds\":6.0,\"action_step_count\":2,\"action_duration_seconds\":null,\"pause_duration_seconds\":null,\"actual_dialogue_window_seconds\":null,\"actual_reaction_window_seconds\":null,\"timing_status\":\"preliminary_budget_not_actual\",\"actual_windows_verified\":false,\"allowance_basis\":\"fixed arbitrary compatibility placeholder; actions/pauses/reactions unmeasured\"},\"B02\":{\"budget_seconds\":17,\"speech_units\":36,\"speech_floor_seconds\":8.0,\"provisional_speech_budget_seconds\":10.285714285714286,\"provisional_non_dialogue_allowance_seconds\":6.0,\"action_step_count\":1,\"action_duration_seconds\":null,\"pause_duration_seconds\":null,\"actual_dialogue_window_seconds\":null,\"actual_reaction_window_seconds\":null,\"timing_status\":\"preliminary_budget_not_actual\",\"actual_windows_verified\":false,\"allowance_basis\":\"fixed arbitrary compatibility placeholder; actions/pauses/reactions unmeasured\"},\"B03\":{\"budget_seconds\":8,\"speech_units\":7,\"speech_floor_seconds\":1.5555555555555556,\"provisional_speech_budget_seconds\":2.0,\"provisional_non_dialogue_allowance_seconds\":6.0,\"action_step_count\":2,\"action_duration_seconds\":null,\"pause_duration_seconds\":null,\"actual_dialogue_window_seconds\":null,\"actual_reaction_window_seconds\":null,\"timing_status\":\"preliminary_budget_not_actual\",\"actual_windows_verified\":false,\"allowance_basis\":\"fixed arbitrary compatibility placeholder; actions/pauses/reactions unmeasured\"},\"B04\":{\"budget_seconds\":6,\"speech_units\":0,\"speech_floor_seconds\":0.0,\"provisional_speech_budget_seconds\":0.0,\"provisional_non_dialogue_allowance_seconds\":6.0,\"action_step_count\":1,\"action_duration_seconds\":null,\"pause_duration_seconds\":null,\"actual_dialogue_window_seconds\":null,\"actual_reaction_window_seconds\":null,\"timing_status\":\"preliminary_budget_not_actual\",\"actual_windows_verified\":false,\"allowance_basis\":\"fixed arbitrary compatibility placeholder; actions/pauses/reactions unmeasured\"},\"B05\":{\"budget_seconds\":13,\"speech_units\":23,\"speech_floor_seconds\":5.111111111111111,\"provisional_speech_budget_seconds\":6.571428571428571,\"provisional_non_dialogue_allowance_seconds\":6.0,\"action_step_count\":0,\"action_duration_seconds\":null,\"pause_duration_seconds\":null,\"actual_dialogue_window_seconds\":null,\"actual_reaction_window_seconds\":null,\"timing_status\":\"preliminary_budget_not_actual\",\"actual_windows_verified\":false,\"allowance_basis\":\"fixed arbitrary compatibility placeholder; actions/pauses/reactions unmeasured\"},\"B06\":{\"budget_seconds\":6,\"speech_units\":0,\"speech_floor_seconds\":0.0,\"provisional_speech_budget_seconds\":0.0,\"provisional_non_dialogue_allowance_seconds\":6.0,\"action_step_count\":2,\"action_duration_seconds\":null,\"pause_duration_seconds\":null,\"actual_dialogue_window_seconds\":null,\"actual_reaction_window_seconds\":null,\"timing_status\":\"preliminary_budget_not_actual\",\"actual_windows_verified\":false,\"allowance_basis\":\"fixed arbitrary compatibility placeholder; actions/pauses/reactions unmeasured\"},\"B07\":{\"budget_seconds\":6,\"speech_units\":0,\"speech_floor_seconds\":0.0,\"provisional_speech_budget_seconds\":0.0,\"provisional_non_dialogue_allowance_seconds\":6.0,\"action_step_count\":1,\"action_duration_seconds\":null,\"pause_duration_seconds\":null,\"actual_dialogue_window_seconds\":null,\"actual_reaction_window_seconds\":null,\"timing_status\":\"preliminary_budget_not_actual\",\"actual_windows_verified\":false,\"allowance_basis\":\"fixed arbitrary compatibility placeholder; actions/pauses/reactions unmeasured\"},\"B08\":{\"budget_seconds\":6,\"speech_units\":0,\"speech_floor_seconds\":0.0,\"provisional_speech_budget_seconds\":0.0,\"provisional_non_dialogue_allowance_seconds\":6.0,\"action_step_count\":2,\"action_duration_seconds\":null,\"pause_duration_seconds\":null,\"actual_dialogue_window_seconds\":null,\"actual_reaction_window_seconds\":null,\"timing_status\":\"preliminary_budget_not_actual\",\"actual_windows_verified\":false,\"allowance_basis\":\"fixed arbitrary compatibility placeholder; actions/pauses/reactions unmeasured\"},\"B09\":{\"budget_seconds\":6,\"speech_units\":0,\"speech_floor_seconds\":0.0,\"provisional_speech_budget_seconds\":0.0,\"provisional_non_dialogue_allowance_seconds\":6.0,\"action_step_count\":1,\"action_duration_seconds\":null,\"pause_duration_seconds\":null,\"actual_dialogue_window_seconds\":null,\"actual_reaction_window_seconds\":null,\"timing_status\":\"preliminary_budget_not_actual\",\"actual_windows_verified\":false,\"allowance_basis\":\"fixed arbitrary compatibility placeholder; actions/pauses/reactions unmeasured\"},\"B10\":{\"budget_seconds\":6,\"speech_units\":0,\"speech_floor_seconds\":0.0,\"provisional_speech_budget_seconds\":0.0,\"provisional_non_dialogue_allowance_seconds\":6.0,\"action_step_count\":1,\"action_duration_seconds\":null,\"pause_duration_seconds\":null,\"actual_dialogue_window_seconds\":null,\"actual_reaction_window_seconds\":null,\"timing_status\":\"preliminary_budget_not_actual\",\"actual_windows_verified\":false,\"allowance_basis\":\"fixed arbitrary compatibility placeholder; actions/pauses/reactions unmeasured\"}},\"estimated_total_budget_seconds\":80,\"speech_floor_units_per_second\":4.5,\"provisional_speech_budget_units_per_second\":3.5,\"actual_windows_verified\":false,\"action_timing_verified\":false,\"semantic_approval\":false,\"production_ready\":false,\"required_next_stage\":\"local_model_actual_schedule_then_deterministic_compile_and_full_joint_review\"}}"
+      },
+      {
+        "role": "user",
+        "content": "{\"source_directory\":[{\"id\":\"E27f74c04b3a9-0001\",\"path\":\"creative_brief.audience\",\"excerpt\":\"喜欢生活情绪短片的成年观众\"},{\"id\":\"E27f74c04b3a9-0002\",\"path\":\"creative_brief.audience_emotion\",\"excerpt\":\"先看懂她为什么难拒绝，再替她的选择紧张，最后感到关系发生了真实变化。\"},{\"id\":\"E27f74c04b3a9-0003\",\"path\":\"creative_brief.avoid.0\",\"excerpt\":\"用一次开本子或摸包代替习惯性的付出历史\"},{\"id\":\"E27f74c04b3a9-0004\",\"path\":\"creative_brief.avoid.1\",\"excerpt\":\"靠陪家人看病等新事故替代原本的关系矛盾\"},{\"id\":\"E27f74c04b3a9-0005\",\"path\":\"creative_brief.avoid.2\",\"excerpt\":\"强行争吵、突然完美理解、鸡汤总结\"},{\"id\":\"E27f74c04b3a9-0006\",\"path\":\"creative_brief.avoid.3\",\"excerpt\":\"为了沿用动画尾帧而改回手绘风格\"},{\"id\":\"E27f74c04b3a9-0007\",\"path\":\"creative_brief.constraints.0\",\"excerpt\":\"观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。\"},{\"id\":\"E27f74c04b3a9-0008\",\"path\":\"creative_brief.constraints.1\",\"excerpt\":\"她想离开和担心拒绝的原因要在实际事件中成立。\"},{\"id\":\"E27f74c04b3a9-0009\",\"path\":\"creative_brief.constraints.2\",\"excerpt\":\"关键反应的构图和窗口必须写入最终视频提示词。\"},{\"id\":\"E27f74c04b3a9-0010\",\"path\":\"creative_brief.constraints.3\",\"excerpt\":\"剧情先按完整故事创作，再拆成生成段；不能为固定八秒切段编造操作。\"},{\"id\":\"E27f74c04b3a9-0011\",\"path\":\"creative_brief.duration_policy\",\"excerpt\":\"flexible\"},{\"id\":\"E27f74c04b3a9-0012\",\"path\":\"creative_brief.duration_seconds.0\",\"excerpt\":\"45\"},{\"id\":\"E27f74c04b3a9-0013\",\"path\":\"creative_brief.duration_seconds.1\",\"excerpt\":\"60\"},{\"id\":\"E27f74c04b3a9-0014\",\"path\":\"creative_brief.ending\",\"excerpt\":\"以新的行动兑现边界及关系变化；不预先规定两人必须和解，不用主题口号收尾。\"},{\"id\":\"E27f74c04b3a9-0015\",\"path\":\"creative_brief.relationships\",\"excerpt\":\"方澄与同事林屿；林屿已习惯她会答应，方澄担心拒绝会伤及两人的关系。\"},{\"id\":\"E27f74c04b3a9-0016\",\"path\":\"creative_brief.theme\",\"excerpt\":\"总替同事收尾的人，第一次把自己的时间放在前面\"},{\"id\":\"E27f74c04b3a9-0017\",\"path\":\"creative_brief.turn\",\"excerpt\":\"对方原本把她的帮忙视为理所当然；她明确拒绝后，对方必须面对这一点，再通过具体行动回应。\"},{\"id\":\"E27f74c04b3a9-0018\",\"path\":\"creative_brief.visual_style\",\"excerpt\":\"写实真人实拍质感的AI短片，成年普通人外貌，真实皮肤纹理、自然光与生活化服装，克制自然表演，关键反应使用可读近景。\"},{\"id\":\"E27f74c04b3a9-0019\",\"path\":\"script.beats.0.after\",\"excerpt\":\"（无新增动作）\"},{\"id\":\"E27f74c04b3a9-0020\",\"path\":\"script.beats.0.before\",\"excerpt\":\"方澄穿着灰蓝色薄针织开衫站在自己浅木色工位前，米灰色挎包已经挂上椅背，米白底深红字的院线电影票压在桌角自己伸手就能够到的位置。\\n\"},{\"id\":\"E27f74c04b3a9-0021\",\"path\":\"script.beats.0.duration_seconds\",\"excerpt\":\"6\"},{\"id\":\"E27f74c04b3a9-0022\",\"path\":\"script.beats.0.during\",\"excerpt\":\"（无新增动作）\"},{\"id\":\"E27f74c04b3a9-0023\",\"path\":\"script.beats.0.event\",\"excerpt\":\"傍晚办公室，方澄工位上挎包已挂、电影票压在桌角；林屿把自己桌面的客户明细推向两人之间。\"},{\"id\":\"E27f74c04b3a9-0024\",\"path\":\"script.beats.0.trigger\",\"excerpt\":\"开场让观众同时看见她为自己留出的时间和被他默认接过去的活。\"},{\"id\":\"E27f74c04b3a9-0025\",\"path\":\"script.beats.1.after\",\"excerpt\":\"方澄的目光从他桌上的红笔批注，移到自己桌角压着的电影票，没接话。\"},{\"id\":\"E27f74c04b3a9-0026\",\"path\":\"script.beats.1.before\",\"excerpt\":\"（无新增动作）\"},{\"id\":\"E27f74c04b3a9-0027\",\"path\":\"script.beats.1.dialogue.0.speaker\",\"excerpt\":\"林屿\"},{\"id\":\"E27f74c04b3a9-0028\",\"path\":\"script.beats.1.dialogue.0.text\",\"excerpt\":\"上月那张对账是你帮我熬到十一点重打的，今晚这份也对到一半了，你顺手帮我收了吧。\"},{\"id\":\"E27f74c04b3a9-0029\",\"path\":\"script.beats.1.duration_seconds\",\"excerpt\":\"17\"},{\"id\":\"E27f74c04b3a9-0030\",\"path\":\"script.beats.1.during\",\"excerpt\":\"（无新增动作）\"},{\"id\":\"E27f74c04b3a9-0031\",\"path\":\"script.beats.1.event\",\"excerpt\":\"林屿没抬头，随口把过去她替他熬过的加班摊到台面，默认她今晚也接手。\"},{\"id\":\"E27f74c04b3a9-0032\",\"path\":\"script.beats.1.trigger\",\"excerpt\":\"让观众听见她不止一次替他收尾，今晚他仍默认她接手。\"},{\"id\":\"E27f74c04b3a9-0033\",\"path\":\"script.beats.2.after\",\"excerpt\":\"林屿把黑色签字笔从自己桌沿拿起来，反手握在右手里，笔尖朝方澄那一侧搁在桌沿停住，等她接。\"},{\"id\":\"E27f74c04b3a9-0034\",\"path\":\"script.beats.2.before\",\"excerpt\":\"林屿侧身从方澄桌角拿起那一小叠便利贴，把浅黄、浅粉、浅蓝三张一并摊开在自己面前的桌面上，指尖压住浅黄那张边角。\"},{\"id\":\"E27f74c04b3a9-0035\",\"path\":\"script.beats.2.dialogue.0.speaker\",\"excerpt\":\"林屿\"},{\"id\":\"E27f74c04b3a9-0036\",\"path\":\"script.beats.2.dialogue.0.text\",\"excerpt\":\"对账，改明细，收尾。\"},{\"id\":\"E27f74c04b3a9-0037\",\"path\":\"script.beats.2.duration_seconds\",\"excerpt\":\"8\"},{\"id\":\"E27f74c04b3a9-0038\",\"path\":\"script.beats.2.during\",\"excerpt\":\"（无新增动作）\"},{\"id\":\"E27f74c04b3a9-0039\",\"path\":\"script.beats.2.event\",\"excerpt\":\"林屿侧身从她桌角拿起那一小叠便利贴，把浅黄、浅粉、浅蓝三张一并摊开在自己面前桌面上，指尖压住浅黄那张边角；接着把黑色签字笔从自己\"},{\"id\":\"E27f74c04b3a9-0040\",\"path\":\"script.beats.2.trigger\",\"excerpt\":\"把善后固定事项摊成清单，并把笔递向方澄，明确默认她会接下。\"},{\"id\":\"E27f74c04b3a9-0041\",\"path\":\"script.beats.3.after\",\"excerpt\":\"（无新增动作）\"},{\"id\":\"E27f74c04b3a9-0042\",\"path\":\"script.beats.3.before\",\"excerpt\":\"方澄低头看了一眼停在自己面前、笔尖朝向自己的签字笔，没伸手拿，目光顺着那只握笔停住的手抬向林屿的眼睛。\"},{\"id\":\"E27f74c04b3a9-0043\",\"path\":\"script.beats.3.duration_seconds\",\"excerpt\":\"6\"},{\"id\":\"E27f74c04b3a9-0044\",\"path\":\"script.beats.3.during\",\"excerpt\":\"（无新增动作）\"},{\"id\":\"E27f74c04b3a9-0045\",\"path\":\"script.beats.3.event\",\"excerpt\":\"方澄看着被递到自己面前的那支笔，没有伸手去接，抬眼看林屿。\"},{\"id\":\"E27f74c04b3a9-0046\",\"path\":\"script.beats.3.trigger\",\"excerpt\":\"让她承担开口说不之前的可见犹豫。\"},{\"id\":\"E27f74c04b3a9-0047\",\"path\":\"script.beats.4.after\",\"excerpt\":\"（无新增动作）\"},{\"id\":\"E27f74c04b3a9-0048\",\"path\":\"script.beats.4.before\",\"excerpt\":\"（无新增动作）\"},{\"id\":\"E27f74c04b3a9-0049\",\"path\":\"script.beats.4.dialogue.0.speaker\",\"excerpt\":\"方澄\"},{\"id\":\"E27f74c04b3a9-0050\",\"path\":\"script.beats.4.dialogue.0.text\",\"excerpt\":\"今晚不行，七点我有一场早就买好票的电影。\"},{\"id\":\"E27f74c04b3a9-0051\",\"path\":\"script.beats.4.dialogue.1.speaker\",\"excerpt\":\"方澄\"},{\"id\":\"E27f74c04b3a9-0052\",\"path\":\"script.beats.4.dialogue.1.text\",\"excerpt\":\"这次我先走。\"},{\"id\":\"E27f74c04b3a9-0053\",\"path\":\"script.beats.4.duration_seconds\",\"excerpt\":\"13\"},{\"id\":\"E27f74c04b3a9-0054\",\"path\":\"script.beats.4.during\",\"excerpt\":\"（无新增动作）\"},{\"id\":\"E27f74c04b3a9-0055\",\"path\":\"script.beats.4.event\",\"excerpt\":\"方澄开口拒绝，给出今晚不能帮忙的明确理由，再轻声补一句不道歉、不找补的话把今晚留给自己。\"},{\"id\":\"E27f74c04b3a9-0056\",\"path\":\"script.beats.4.trigger\",\"excerpt\":\"拒绝必须站得住，并交出一个不可打折的理由；用一句被记住的姿态把今晚留给自己。\"},{\"id\":\"E27f74c04b3a9-0057\",\"path\":\"script.beats.5.after\",\"excerpt\":\"（无新增动作）\"},{\"id\":\"E27f74c04b3a9-0058\",\"path\":\"script.beats.5.before\",\"excerpt\":\"林屿握笔的右手在桌沿停住，笔尖仍朝方澄那一侧。他看了一眼方澄椅背上挂着的米灰色挎包，又看回自己面前摊着的浅黄便利贴和那张A4横版\"},{\"id\":\"E27f74c04b3a9-0059\",\"path\":\"script.beats.5.duration_seconds\",\"excerpt\":\"6\"},{\"id\":\"E27f74c04b3a9-0060\",\"path\":\"script.beats.5.during\",\"excerpt\":\"（无新增动作）\"},{\"id\":\"E27f74c04b3a9-0061\",\"path\":\"script.beats.5.event\",\"excerpt\":\"林屿握笔的右手还停在那支笔尖朝方澄的签字笔上，愣了一下，看一眼她椅背上的挎包，又看回自己面前的便利贴和明细单，把那支笔收回自己右\"},{\"id\":\"E27f74c04b3a9-0062\",\"path\":\"script.beats.5.trigger\",\"excerpt\":\"第一次被明确拒绝，必须面对，不会再假装这件事；同一只手把笔收归自己，边界的转移由他自己完成。\"},{\"id\":\"E27f74c04b3a9-0063\",\"path\":\"script.beats.6.after\",\"excerpt\":\"（无新增动作）\"},{\"id\":\"E27f74c04b3a9-0064\",\"path\":\"script.beats.6.before\",\"excerpt\":\"林屿重新低头看向那张A4横版客户明细单，用右手那支签字笔在第一处红笔批注旁落字改了一笔，写到第二行数字时停住，把那张A4纵版结算\"},{\"id\":\"E27f74c04b3a9-0065\",\"path\":\"script.beats.6.duration_seconds\",\"excerpt\":\"6\"},{\"id\":\"E27f74c04b3a9-0066\",\"path\":\"script.beats.6.during\",\"excerpt\":\"（无新增动作）\"},{\"id\":\"E27f74c04b3a9-0067\",\"path\":\"script.beats.6.event\",\"excerpt\":\"林屿转回桌前，用签字笔在客户明细单的红笔批注旁落字，自己一行一行对下去。\"},{\"id\":\"E27f74c04b3a9-0068\",\"path\":\"script.beats.6.trigger\",\"excerpt\":\"他必须用具体行动回应，不是泛写停停顿顿，而是遇到一处具体对不上的项，反复比对结算单。\"},{\"id\":\"E27f74c04b3a9-0069\",\"path\":\"script.beats.7.after\",\"excerpt\":\"（无新增动作）\"},{\"id\":\"E27f74c04b3a9-0070\",\"path\":\"script.beats.7.before\",\"excerpt\":\"方澄左手从椅背上取下米灰色挎包挎到左肩上，右手拿起桌角那张米白底深红字的院线电影票，朝办公室门方向走出两步。\\n方澄空出左手推开那\"},{\"id\":\"E27f74c04b3a9-0071\",\"path\":\"script.beats.7.duration_seconds\",\"excerpt\":\"6\"},{\"id\":\"E27f74c04b3a9-0072\",\"path\":\"script.beats.7.during\",\"excerpt\":\"（无新增动作）\"},{\"id\":\"E27f74c04b3a9-0073\",\"path\":\"script.beats.7.event\",\"excerpt\":\"方澄左手从椅背上取下挎包挎到肩上，右手拿起桌角那张电影票，朝办公室门方向走去。\"},{\"id\":\"E27f74c04b3a9-0074\",\"path\":\"script.beats.7.trigger\",\"excerpt\":\"让她第一次真正把今晚留给自己，给观众她去赴约的清晰出口；包与票由左右两只手分别处理，不互相干扰。\"},{\"id\":\"E27f74c04b3a9-0075\",\"path\":\"script.beats.8.after\",\"excerpt\":\"（无新增动作）\"},{\"id\":\"E27f74c04b3a9-0076\",\"path\":\"script.beats.8.before\",\"excerpt\":\"方澄站在办公室门外走廊上，右手捏着那张米白底深红字的院线电影票，低头看了一眼票面，轻轻呼出一口气。\"},{\"id\":\"E27f74c04b3a9-0077\",\"path\":\"script.beats.8.duration_seconds\",\"excerpt\":\"6\"},{\"id\":\"E27f74c04b3a9-0078\",\"path\":\"script.beats.8.during\",\"excerpt\":\"（无新增动作）\"},{\"id\":\"E27f74c04b3a9-0079\",\"path\":\"script.beats.8.event\",\"excerpt\":\"方澄在办公室门外的走廊上停一步，低头看一眼手里的电影票，轻轻呼出一口气。\"},{\"id\":\"E27f74c04b3a9-0080\",\"path\":\"script.beats.8.trigger\",\"excerpt\":\"让她争取到自己时间的释放留在她身上，不和解、不煽情、不回头。\"},{\"id\":\"E27f74c04b3a9-0081\",\"path\":\"script.beats.9.after\",\"excerpt\":\"（无新增动作）\"},{\"id\":\"E27f74c04b3a9-0082\",\"path\":\"script.beats.9.before\",\"excerpt\":\"林屿仍坐在工位前，没抬头去喊她，右手里那支黑色签字笔继续在那张A4横版客户明细单的红笔批注旁一行一行改下去，每写一笔就把笔尖挪向\"},{\"id\":\"E27f74c04b3a9-0083\",\"path\":\"script.beats.9.duration_seconds\",\"excerpt\":\"6\"},{\"id\":\"E27f74c04b3a9-0084\",\"path\":\"script.beats.9.during\",\"excerpt\":\"（无新增动作）\"},{\"id\":\"E27f74c04b3a9-0085\",\"path\":\"script.beats.9.event\",\"excerpt\":\"林屿独自坐在工位前，没有喊她，继续用右手那支笔在明细单上对照结算单一行一行改下去。\"},{\"id\":\"E27f74c04b3a9-0086\",\"path\":\"script.beats.9.trigger\",\"excerpt\":\"关系没有崩，他自己收自己的尾；不再回头看门，她的时间已经被他认下。\"},{\"id\":\"E27f74c04b3a9-0087\",\"path\":\"script.duration_seconds\",\"excerpt\":\"80\"},{\"id\":\"E27f74c04b3a9-0088\",\"path\":\"script.premise\",\"excerpt\":\"方澄今晚七点有一场早就买好票的院线电影，是她为自己留出来的时间；林屿习以为常地把临收尾的客户明细推过来，潜台词是她会答应。方澄必\"},{\"id\":\"E27f74c04b3a9-0089\",\"path\":\"script.title\",\"excerpt\":\"这次我先走\"},{\"id\":\"E27f74c04b3a9-0090\",\"path\":\"static_visual_manifest.characters.0.age_group\",\"excerpt\":\"成年\"},{\"id\":\"E27f74c04b3a9-0091\",\"path\":\"static_visual_manifest.characters.0.body_shape\",\"excerpt\":\"中等偏瘦，肩线柔和\"},{\"id\":\"E27f74c04b3a9-0092\",\"path\":\"static_visual_manifest.characters.0.clothing\",\"excerpt\":\"灰蓝色薄针织开衫，内搭白色圆领T恤，下着深灰色直筒长裤\"},{\"id\":\"E27f74c04b3a9-0093\",\"path\":\"static_visual_manifest.characters.0.hair\",\"excerpt\":\"黑色齐肩直发，自然中分\"},{\"id\":\"E27f74c04b3a9-0094\",\"path\":\"static_visual_manifest.characters.0.name\",\"excerpt\":\"方澄\"},{\"id\":\"E27f74c04b3a9-0095\",\"path\":\"static_visual_manifest.characters.1.age_group\",\"excerpt\":\"成年\"},{\"id\":\"E27f74c04b3a9-0096\",\"path\":\"static_visual_manifest.characters.1.body_shape\",\"excerpt\":\"中等身高，肩宽略宽于方澄\"},{\"id\":\"E27f74c04b3a9-0097\",\"path\":\"static_visual_manifest.characters.1.clothing\",\"excerpt\":\"米驼色棉质衬衫，袖口挽至前臂，下着深藏蓝休闲长裤\"},{\"id\":\"E27f74c04b3a9-0098\",\"path\":\"static_visual_manifest.characters.1.hair\",\"excerpt\":\"深栗色短碎发，稍长刘海\"},{\"id\":\"E27f74c04b3a9-0099\",\"path\":\"static_visual_manifest.characters.1.name\",\"excerpt\":\"林屿\"},{\"id\":\"E27f74c04b3a9-0100\",\"path\":\"static_visual_manifest.props.0.appearance\",\"excerpt\":\"软皮小号斜挎包，米灰色金属扣，单层翻盖\"},{\"id\":\"E27f74c04b3a9-0101\",\"path\":\"static_visual_manifest.props.0.name\",\"excerpt\":\"挎包\"},{\"id\":\"E27f74c04b3a9-0102\",\"path\":\"static_visual_manifest.props.0.owner_id\",\"excerpt\":\"C01\"},{\"id\":\"E27f74c04b3a9-0103\",\"path\":\"static_visual_manifest.props.1.appearance\",\"excerpt\":\"竖版窄长纸片，米白底深红字，右侧带撕齿虚线，今晚院线开场时间与座位号可读\"},{\"id\":\"E27f74c04b3a9-0104\",\"path\":\"static_visual_manifest.props.1.name\",\"excerpt\":\"院线电影票根\"},{\"id\":\"E27f74c04b3a9-0105\",\"path\":\"static_visual_manifest.props.1.owner_id\",\"excerpt\":\"C01\"},{\"id\":\"E27f74c04b3a9-0106\",\"path\":\"static_visual_manifest.props.2.appearance\",\"excerpt\":\"正方形小纸片，分别为浅黄、浅粉、浅蓝底，深灰手写短词（对账/改明细/收尾）\"},{\"id\":\"E27f74c04b3a9-0107\",\"path\":\"static_visual_manifest.props.2.name\",\"excerpt\":\"善后便利贴三张\"},{\"id\":\"E27f74c04b3a9-0108\",\"path\":\"static_visual_manifest.props.2.owner_id\",\"excerpt\":\"C01\"},{\"id\":\"E27f74c04b3a9-0109\",\"path\":\"static_visual_manifest.props.3.appearance\",\"excerpt\":\"白色陶瓷马克杯，杯身外侧无图案，杯口微宽\"},{\"id\":\"E27f74c04b3a9-0110\",\"path\":\"static_visual_manifest.props.3.name\",\"excerpt\":\"咖啡杯\"},{\"id\":\"E27f74c04b3a9-0111\",\"path\":\"static_visual_manifest.props.3.owner_id\",\"excerpt\":\"C02\"},{\"id\":\"E27f74c04b3a9-0112\",\"path\":\"static_visual_manifest.props.4.appearance\",\"excerpt\":\"A4横版打印表格纸，浅灰线条格，黑字数字，红笔批注\"},{\"id\":\"E27f74c04b3a9-0113\",\"path\":\"static_visual_manifest.props.4.name\",\"excerpt\":\"客户明细单\"},{\"id\":\"E27f74c04b3a9-0114\",\"path\":\"static_visual_manifest.props.4.owner_id\",\"excerpt\":\"C02\"},{\"id\":\"E27f74c04b3a9-0115\",\"path\":\"static_visual_manifest.props.5.appearance\",\"excerpt\":\"A4纵版表格纸，右上角有彩色公司logo条，浅蓝表头\"},{\"id\":\"E27f74c04b3a9-0116\",\"path\":\"static_visual_manifest.props.5.name\",\"excerpt\":\"结算单\"},{\"id\":\"E27f74c04b3a9-0117\",\"path\":\"static_visual_manifest.props.5.owner_id\",\"excerpt\":\"C02\"},{\"id\":\"E27f74c04b3a9-0118\",\"path\":\"static_visual_manifest.props.6.appearance\",\"excerpt\":\"黑色细头签字笔，金属笔夹\"},{\"id\":\"E27f74c04b3a9-0119\",\"path\":\"static_visual_manifest.props.6.name\",\"excerpt\":\"签字笔\"},{\"id\":\"E27f74c04b3a9-0120\",\"path\":\"static_visual_manifest.props.6.owner_id\",\"excerpt\":\"C02\"},{\"id\":\"E27f74c04b3a9-0121\",\"path\":\"static_visual_manifest.render.light_source\",\"excerpt\":\"临窗自然夕光为主，从办公桌侧面斜入，室内顶灯为辅补光，形成柔和侧光与轻微暖色阴影\"},{\"id\":\"E27f74c04b3a9-0122\",\"path\":\"static_visual_manifest.render.palette\",\"excerpt\":\"傍晚办公室暖调，浅木色桌面、米白墙、暖灰窗帘透橙黄夕光、人物服装为低饱和的灰蓝与米驼\"},{\"id\":\"E27f74c04b3a9-0123\",\"path\":\"static_visual_manifest.render.visual_medium\",\"excerpt\":\"写实真人实拍质感的AI短片，自然皮肤纹理与生活化布光\"},{\"id\":\"E27f74c04b3a9-0124\",\"path\":\"static_visual_manifest.scene.elements.0.appearance\",\"excerpt\":\"浅木色长方形办公桌，金属细腿，桌面靠近窗户一侧\"},{\"id\":\"E27f74c04b3a9-0125\",\"path\":\"static_visual_manifest.scene.elements.0.name\",\"excerpt\":\"方澄工位桌\"},{\"id\":\"E27f74c04b3a9-0126\",\"path\":\"static_visual_manifest.scene.elements.1.appearance\",\"excerpt\":\"浅木色长方形办公桌，与方澄桌同款，平行摆放，靠近室内一侧\"},{\"id\":\"E27f74c04b3a9-0127\",\"path\":\"static_visual_manifest.scene.elements.1.name\",\"excerpt\":\"林屿工位桌\"},{\"id\":\"E27f74c04b3a9-0128\",\"path\":\"static_visual_manifest.scene.elements.2.appearance\",\"excerpt\":\"浅木色三斗文件柜，贴墙放置，黑色拉手\"},{\"id\":\"E27f74c04b3a9-0129\",\"path\":\"static_visual_manifest.scene.elements.2.name\",\"excerpt\":\"抽屉柜\"},{\"id\":\"E27f74c04b3a9-0130\",\"path\":\"static_visual_manifest.scene.elements.3.appearance\",\"excerpt\":\"木纹平板门，米灰色，下半部带金属横拉把手，位于房间远端侧墙\"},{\"id\":\"E27f74c04b3a9-0131\",\"path\":\"static_visual_manifest.scene.elements.3.name\",\"excerpt\":\"办公室门\"},{\"id\":\"E27f74c04b3a9-0132\",\"path\":\"static_visual_manifest.scene.elements.4.appearance\",\"excerpt\":\"宽幅铝合金推拉窗，米灰色半透明卷帘半垂，窗框占据外侧整面墙\"},{\"id\":\"E27f74c04b3a9-0133\",\"path\":\"static_visual_manifest.scene.elements.4.name\",\"excerpt\":\"窗户\"},{\"id\":\"E27f74c04b3a9-0134\",\"path\":\"static_visual_manifest.scene.elements.5.appearance\",\"excerpt\":\"白色圆形吸顶灯，暖白光，位于房间正中天花板\"},{\"id\":\"E27f74c04b3a9-0135\",\"path\":\"static_visual_manifest.scene.elements.5.name\",\"excerpt\":\"顶灯\"},{\"id\":\"E27f74c04b3a9-0136\",\"path\":\"static_visual_manifest.scene.elements.6.appearance\",\"excerpt\":\"浅灰色PVC地板，哑光\"},{\"id\":\"E27f74c04b3a9-0137\",\"path\":\"static_visual_manifest.scene.elements.6.name\",\"excerpt\":\"地面\"},{\"id\":\"E27f74c04b3a9-0138\",\"path\":\"static_visual_manifest.scene.elements.7.appearance\",\"excerpt\":\"米白色乳胶漆墙面，干净无装饰\"},{\"id\":\"E27f74c04b3a9-0139\",\"path\":\"static_visual_manifest.scene.elements.7.name\",\"excerpt\":\"墙面\"},{\"id\":\"E27f74c04b3a9-0140\",\"path\":\"static_visual_manifest.scene.elements.8.appearance\",\"excerpt\":\"黑色网面靠背转椅，灰色塑料五星脚\"},{\"id\":\"E27f74c04b3a9-0141\",\"path\":\"static_visual_manifest.scene.elements.8.name\",\"excerpt\":\"办公椅（方澄）\"},{\"id\":\"E27f74c04b3a9-0142\",\"path\":\"static_visual_manifest.scene.elements.9.appearance\",\"excerpt\":\"黑色网面靠背转椅，灰色塑料五星脚，与方澄椅同款\"},{\"id\":\"E27f74c04b3a9-0143\",\"path\":\"static_visual_manifest.scene.elements.9.name\",\"excerpt\":\"办公椅（林屿）\"},{\"id\":\"E27f74c04b3a9-0144\",\"path\":\"static_visual_manifest.scene.name\",\"excerpt\":\"傍晚办公室\"},{\"id\":\"E27f74c04b3a9-0145\",\"path\":\"static_visual_manifest.scene.relations.0.reference\",\"excerpt\":\"E01\"},{\"id\":\"E27f74c04b3a9-0146\",\"path\":\"static_visual_manifest.scene.relations.0.relation\",\"excerpt\":\"right_of\"},{\"id\":\"E27f74c04b3a9-0147\",\"path\":\"static_visual_manifest.scene.relations.0.subject\",\"excerpt\":\"E02\"},{\"id\":\"E27f74c04b3a9-0148\",\"path\":\"static_visual_manifest.scene.relations.1.reference\",\"excerpt\":\"E05\"},{\"id\":\"E27f74c04b3a9-0149\",\"path\":\"static_visual_manifest.scene.relations.1.relation\",\"excerpt\":\"next_to\"},{\"id\":\"E27f74c04b3a9-0150\",\"path\":\"static_visual_manifest.scene.relations.1.subject\",\"excerpt\":\"E01\"},{\"id\":\"E27f74c04b3a9-0151\",\"path\":\"static_visual_manifest.scene.relations.2.reference\",\"excerpt\":\"E01\"},{\"id\":\"E27f74c04b3a9-0152\",\"path\":\"static_visual_manifest.scene.relations.2.relation\",\"excerpt\":\"next_to\"},{\"id\":\"E27f74c04b3a9-0153\",\"path\":\"static_visual_manifest.scene.relations.2.subject\",\"excerpt\":\"E02\"},{\"id\":\"E27f74c04b3a9-0154\",\"path\":\"static_visual_manifest.scene.relations.3.reference\",\"excerpt\":\"E02\"},{\"id\":\"E27f74c04b3a9-0155\",\"path\":\"static_visual_manifest.scene.relations.3.relation\",\"excerpt\":\"behind\"},{\"id\":\"E27f74c04b3a9-0156\",\"path\":\"static_visual_manifest.scene.relations.3.subject\",\"excerpt\":\"E03\"},{\"id\":\"E27f74c04b3a9-0157\",\"path\":\"static_visual_manifest.scene.relations.4.reference\",\"excerpt\":\"E01\"},{\"id\":\"E27f74c04b3a9-0158\",\"path\":\"static_visual_manifest.scene.relations.4.relation\",\"excerpt\":\"behind\"},{\"id\":\"E27f74c04b3a9-0159\",\"path\":\"static_visual_manifest.scene.relations.4.subject\",\"excerpt\":\"E04\"},{\"id\":\"E27f74c04b3a9-0160\",\"path\":\"static_visual_manifest.scene.relations.5.reference\",\"excerpt\":\"E01\"},{\"id\":\"E27f74c04b3a9-0161\",\"path\":\"static_visual_manifest.scene.relations.5.relation\",\"excerpt\":\"above\"},{\"id\":\"E27f74c04b3a9-0162\",\"path\":\"static_visual_manifest.scene.relations.5.subject\",\"excerpt\":\"E06\"},{\"id\":\"E27f74c04b3a9-0163\",\"path\":\"static_visual_manifest.scene.relations.6.reference\",\"excerpt\":\"E01\"},{\"id\":\"E27f74c04b3a9-0164\",\"path\":\"static_visual_manifest.scene.relations.6.relation\",\"excerpt\":\"below\"},{\"id\":\"E27f74c04b3a9-0165\",\"path\":\"static_visual_manifest.scene.relations.6.subject\",\"excerpt\":\"E07\"},{\"id\":\"E27f74c04b3a9-0166\",\"path\":\"static_visual_manifest.scene.relations.7.reference\",\"excerpt\":\"E05\"},{\"id\":\"E27f74c04b3a9-0167\",\"path\":\"static_visual_manifest.scene.relations.7.relation\",\"excerpt\":\"behind\"},{\"id\":\"E27f74c04b3a9-0168\",\"path\":\"static_visual_manifest.scene.relations.7.subject\",\"excerpt\":\"E08\"},{\"id\":\"E27f74c04b3a9-0169\",\"path\":\"static_visual_manifest.scene.relations.8.reference\",\"excerpt\":\"E01\"},{\"id\":\"E27f74c04b3a9-0170\",\"path\":\"static_visual_manifest.scene.relations.8.relation\",\"excerpt\":\"next_to\"},{\"id\":\"E27f74c04b3a9-0171\",\"path\":\"static_visual_manifest.scene.relations.8.subject\",\"excerpt\":\"E09\"},{\"id\":\"E27f74c04b3a9-0172\",\"path\":\"static_visual_manifest.scene.relations.9.reference\",\"excerpt\":\"E02\"},{\"id\":\"E27f74c04b3a9-0173\",\"path\":\"static_visual_manifest.scene.relations.9.relation\",\"excerpt\":\"next_to\"},{\"id\":\"E27f74c04b3a9-0174\",\"path\":\"static_visual_manifest.scene.relations.9.subject\",\"excerpt\":\"E10\"}]}"
+      },
+      {
+        "role": "user",
+        "content": "{\"prior_invalid_review\": {\"prior_call\": 163, \"failure_category\": \"review_evidence_comparison_missing\", \"exact_validation_error\": \"v6缺少对照证据: [{\\\"check_path\\\": \\\"coverage.0.checks.assets.evidence_refs\\\", \\\"missing_source_prefixes\\\": [\\\"script.beats.0.\\\"]}, {\\\"check_path\\\": \\\"coverage.1.checks.assets.evidence_refs\\\", \\\"missing_source_prefixes\\\": [\\\"script.beats.1.\\\"]}, {\\\"check_path\\\": \\\"coverage.2.checks.assets.evidence_refs\\\", \\\"missing_source_prefixes\\\": [\\\"script.beats.2.\\\"]}, {\\\"check_path\\\": \\\"coverage.3.checks.assets.evidence_refs\\\", \\\"missing_source_prefixes\\\": [\\\"script.beats.3.\\\"]}, {\\\"check_path\\\": \\\"coverage.4.checks.continuity.evidence_refs\\\", \\\"missing_source_prefixes\\\": [\\\"script.beats.4.\\\"]}, {\\\"check_path\\\": \\\"coverage.4.checks.assets.evidence_refs\\\", \\\"missing_source_prefixes\\\": [\\\"script.beats.4.\\\"]}, {\\\"check_path\\\": \\\"coverage.5.checks.assets.evidence_refs\\\", \\\"missing_source_prefixes\\\": [\\\"script.beats.5.\\\"]}, {\\\"check_path\\\": \\\"coverage.6.checks.assets.evidence_refs\\\", \\\"missing_source_prefixes\\\": [\\\"script.beats.6.\\\"]}, {\\\"check_path\\\": \\\"coverage.7.checks.assets.evidence_refs\\\", \\\"missing_source_prefixes\\\": [\\\"script.beats.7.\\\"]}, {\\\"check_path\\\": \\\"coverage.8.checks.assets.evidence_refs\\\", \\\"missing_source_prefixes\\\": [\\\"script.beats.8.\\\"]}, {\\\"check_path\\\": \\\"coverage.9.checks.assets.evidence_refs\\\", \\\"missing_source_prefixes\\\": [\\\"script.beats.9.\\\"]}]\", \"source_pair_requirements\": \"每一个pass/fail检查必须至少引用一条本拍script.beats.I.真实叶子证据。assets也必须同时引用本拍正文和静态资产定义，不能仅给资产定义；continuity应引用当前拍和对应前态来源，B05必须包含B05原文。not_applicable仍按原合同。目录ID仅选真实支持理由的叶子，不能机械填满。\", \"current_source_navigation\": [{\"beat\": \"B01\", \"mandatory_current_source_prefix\": \"script.beats.0.\", \"actual_current_source_ID_options\": [{\"id\": \"E27f74c04b3a9-0019\", \"path\": \"script.beats.0.after\", \"excerpt\": \"（无新增动作）\"}, {\"id\": \"E27f74c04b3a9-0020\", \"path\": \"script.beats.0.before\", \"excerpt\": \"方澄穿着灰蓝色薄针织开衫站在自己浅木色工位前，米灰色挎包已经挂上椅背，米白底深红字的院线电影票压\"}, {\"id\": \"E27f74c04b3a9-0021\", \"path\": \"script.beats.0.duration_seconds\", \"excerpt\": \"6\"}, {\"id\": \"E27f74c04b3a9-0022\", \"path\": \"script.beats.0.during\", \"excerpt\": \"（无新增动作）\"}, {\"id\": \"E27f74c04b3a9-0023\", \"path\": \"script.beats.0.event\", \"excerpt\": \"傍晚办公室，方澄工位上挎包已挂、电影票压在桌角；林屿把自己桌面的客户明细推向两人之间。\"}, {\"id\": \"E27f74c04b3a9-0024\", \"path\": \"script.beats.0.trigger\", \"excerpt\": \"开场让观众同时看见她为自己留出的时间和被他默认接过去的活。\"}]}, {\"beat\": \"B02\", \"mandatory_current_source_prefix\": \"script.beats.1.\", \"actual_current_source_ID_options\": [{\"id\": \"E27f74c04b3a9-0025\", \"path\": \"script.beats.1.after\", \"excerpt\": \"方澄的目光从他桌上的红笔批注，移到自己桌角压着的电影票，没接话。\"}, {\"id\": \"E27f74c04b3a9-0026\", \"path\": \"script.beats.1.before\", \"excerpt\": \"（无新增动作）\"}, {\"id\": \"E27f74c04b3a9-0027\", \"path\": \"script.beats.1.dialogue.0.speaker\", \"excerpt\": \"林屿\"}, {\"id\": \"E27f74c04b3a9-0028\", \"path\": \"script.beats.1.dialogue.0.text\", \"excerpt\": \"上月那张对账是你帮我熬到十一点重打的，今晚这份也对到一半了，你顺手帮我收了吧。\"}, {\"id\": \"E27f74c04b3a9-0029\", \"path\": \"script.beats.1.duration_seconds\", \"excerpt\": \"17\"}, {\"id\": \"E27f74c04b3a9-0030\", \"path\": \"script.beats.1.during\", \"excerpt\": \"（无新增动作）\"}, {\"id\": \"E27f74c04b3a9-0031\", \"path\": \"script.beats.1.event\", \"excerpt\": \"林屿没抬头，随口把过去她替他熬过的加班摊到台面，默认她今晚也接手。\"}, {\"id\": \"E27f74c04b3a9-0032\", \"path\": \"script.beats.1.trigger\", \"excerpt\": \"让观众听见她不止一次替他收尾，今晚他仍默认她接手。\"}]}, {\"beat\": \"B03\", \"mandatory_current_source_prefix\": \"script.beats.2.\", \"actual_current_source_ID_options\": [{\"id\": \"E27f74c04b3a9-0033\", \"path\": \"script.beats.2.after\", \"excerpt\": \"林屿把黑色签字笔从自己桌沿拿起来，反手握在右手里，笔尖朝方澄那一侧搁在桌沿停住，等她接。\"}, {\"id\": \"E27f74c04b3a9-0034\", \"path\": \"script.beats.2.before\", \"excerpt\": \"林屿侧身从方澄桌角拿起那一小叠便利贴，把浅黄、浅粉、浅蓝三张一并摊开在自己面前的桌面上，指尖压住\"}, {\"id\": \"E27f74c04b3a9-0035\", \"path\": \"script.beats.2.dialogue.0.speaker\", \"excerpt\": \"林屿\"}, {\"id\": \"E27f74c04b3a9-0036\", \"path\": \"script.beats.2.dialogue.0.text\", \"excerpt\": \"对账，改明细，收尾。\"}, {\"id\": \"E27f74c04b3a9-0037\", \"path\": \"script.beats.2.duration_seconds\", \"excerpt\": \"8\"}, {\"id\": \"E27f74c04b3a9-0038\", \"path\": \"script.beats.2.during\", \"excerpt\": \"（无新增动作）\"}, {\"id\": \"E27f74c04b3a9-0039\", \"path\": \"script.beats.2.event\", \"excerpt\": \"林屿侧身从她桌角拿起那一小叠便利贴，把浅黄、浅粉、浅蓝三张一并摊开在自己面前桌面上，指尖压住浅黄\"}, {\"id\": \"E27f74c04b3a9-0040\", \"path\": \"script.beats.2.trigger\", \"excerpt\": \"把善后固定事项摊成清单，并把笔递向方澄，明确默认她会接下。\"}]}, {\"beat\": \"B04\", \"mandatory_current_source_prefix\": \"script.beats.3.\", \"actual_current_source_ID_options\": [{\"id\": \"E27f74c04b3a9-0041\", \"path\": \"script.beats.3.after\", \"excerpt\": \"（无新增动作）\"}, {\"id\": \"E27f74c04b3a9-0042\", \"path\": \"script.beats.3.before\", \"excerpt\": \"方澄低头看了一眼停在自己面前、笔尖朝向自己的签字笔，没伸手拿，目光顺着那只握笔停住的手抬向林屿的\"}, {\"id\": \"E27f74c04b3a9-0043\", \"path\": \"script.beats.3.duration_seconds\", \"excerpt\": \"6\"}, {\"id\": \"E27f74c04b3a9-0044\", \"path\": \"script.beats.3.during\", \"excerpt\": \"（无新增动作）\"}, {\"id\": \"E27f74c04b3a9-0045\", \"path\": \"script.beats.3.event\", \"excerpt\": \"方澄看着被递到自己面前的那支笔，没有伸手去接，抬眼看林屿。\"}, {\"id\": \"E27f74c04b3a9-0046\", \"path\": \"script.beats.3.trigger\", \"excerpt\": \"让她承担开口说不之前的可见犹豫。\"}]}, {\"beat\": \"B05\", \"mandatory_current_source_prefix\": \"script.beats.4.\", \"actual_current_source_ID_options\": [{\"id\": \"E27f74c04b3a9-0047\", \"path\": \"script.beats.4.after\", \"excerpt\": \"（无新增动作）\"}, {\"id\": \"E27f74c04b3a9-0048\", \"path\": \"script.beats.4.before\", \"excerpt\": \"（无新增动作）\"}, {\"id\": \"E27f74c04b3a9-0049\", \"path\": \"script.beats.4.dialogue.0.speaker\", \"excerpt\": \"方澄\"}, {\"id\": \"E27f74c04b3a9-0050\", \"path\": \"script.beats.4.dialogue.0.text\", \"excerpt\": \"今晚不行，七点我有一场早就买好票的电影。\"}, {\"id\": \"E27f74c04b3a9-0051\", \"path\": \"script.beats.4.dialogue.1.speaker\", \"excerpt\": \"方澄\"}, {\"id\": \"E27f74c04b3a9-0052\", \"path\": \"script.beats.4.dialogue.1.text\", \"excerpt\": \"这次我先走。\"}, {\"id\": \"E27f74c04b3a9-0053\", \"path\": \"script.beats.4.duration_seconds\", \"excerpt\": \"13\"}, {\"id\": \"E27f74c04b3a9-0054\", \"path\": \"script.beats.4.during\", \"excerpt\": \"（无新增动作）\"}, {\"id\": \"E27f74c04b3a9-0055\", \"path\": \"script.beats.4.event\", \"excerpt\": \"方澄开口拒绝，给出今晚不能帮忙的明确理由，再轻声补一句不道歉、不找补的话把今晚留给自己。\"}, {\"id\": \"E27f74c04b3a9-0056\", \"path\": \"script.beats.4.trigger\", \"excerpt\": \"拒绝必须站得住，并交出一个不可打折的理由；用一句被记住的姿态把今晚留给自己。\"}]}, {\"beat\": \"B06\", \"mandatory_current_source_prefix\": \"script.beats.5.\", \"actual_current_source_ID_options\": [{\"id\": \"E27f74c04b3a9-0057\", \"path\": \"script.beats.5.after\", \"excerpt\": \"（无新增动作）\"}, {\"id\": \"E27f74c04b3a9-0058\", \"path\": \"script.beats.5.before\", \"excerpt\": \"林屿握笔的右手在桌沿停住，笔尖仍朝方澄那一侧。他看了一眼方澄椅背上挂着的米灰色挎包，又看回自己面\"}, {\"id\": \"E27f74c04b3a9-0059\", \"path\": \"script.beats.5.duration_seconds\", \"excerpt\": \"6\"}, {\"id\": \"E27f74c04b3a9-0060\", \"path\": \"script.beats.5.during\", \"excerpt\": \"（无新增动作）\"}, {\"id\": \"E27f74c04b3a9-0061\", \"path\": \"script.beats.5.event\", \"excerpt\": \"林屿握笔的右手还停在那支笔尖朝方澄的签字笔上，愣了一下，看一眼她椅背上的挎包，又看回自己面前的便\"}, {\"id\": \"E27f74c04b3a9-0062\", \"path\": \"script.beats.5.trigger\", \"excerpt\": \"第一次被明确拒绝，必须面对，不会再假装这件事；同一只手把笔收归自己，边界的转移由他自己完成。\"}]}, {\"beat\": \"B07\", \"mandatory_current_source_prefix\": \"script.beats.6.\", \"actual_current_source_ID_options\": [{\"id\": \"E27f74c04b3a9-0063\", \"path\": \"script.beats.6.after\", \"excerpt\": \"（无新增动作）\"}, {\"id\": \"E27f74c04b3a9-0064\", \"path\": \"script.beats.6.before\", \"excerpt\": \"林屿重新低头看向那张A4横版客户明细单，用右手那支签字笔在第一处红笔批注旁落字改了一笔，写到第二\"}, {\"id\": \"E27f74c04b3a9-0065\", \"path\": \"script.beats.6.duration_seconds\", \"excerpt\": \"6\"}, {\"id\": \"E27f74c04b3a9-0066\", \"path\": \"script.beats.6.during\", \"excerpt\": \"（无新增动作）\"}, {\"id\": \"E27f74c04b3a9-0067\", \"path\": \"script.beats.6.event\", \"excerpt\": \"林屿转回桌前，用签字笔在客户明细单的红笔批注旁落字，自己一行一行对下去。\"}, {\"id\": \"E27f74c04b3a9-0068\", \"path\": \"script.beats.6.trigger\", \"excerpt\": \"他必须用具体行动回应，不是泛写停停顿顿，而是遇到一处具体对不上的项，反复比对结算单。\"}]}, {\"beat\": \"B08\", \"mandatory_current_source_prefix\": \"script.beats.7.\", \"actual_current_source_ID_options\": [{\"id\": \"E27f74c04b3a9-0069\", \"path\": \"script.beats.7.after\", \"excerpt\": \"（无新增动作）\"}, {\"id\": \"E27f74c04b3a9-0070\", \"path\": \"script.beats.7.before\", \"excerpt\": \"方澄左手从椅背上取下米灰色挎包挎到左肩上，右手拿起桌角那张米白底深红字的院线电影票，朝办公室门方\"}, {\"id\": \"E27f74c04b3a9-0071\", \"path\": \"script.beats.7.duration_seconds\", \"excerpt\": \"6\"}, {\"id\": \"E27f74c04b3a9-0072\", \"path\": \"script.beats.7.during\", \"excerpt\": \"（无新增动作）\"}, {\"id\": \"E27f74c04b3a9-0073\", \"path\": \"script.beats.7.event\", \"excerpt\": \"方澄左手从椅背上取下挎包挎到肩上，右手拿起桌角那张电影票，朝办公室门方向走去。\"}, {\"id\": \"E27f74c04b3a9-0074\", \"path\": \"script.beats.7.trigger\", \"excerpt\": \"让她第一次真正把今晚留给自己，给观众她去赴约的清晰出口；包与票由左右两只手分别处理，不互相干扰。\"}]}, {\"beat\": \"B09\", \"mandatory_current_source_prefix\": \"script.beats.8.\", \"actual_current_source_ID_options\": [{\"id\": \"E27f74c04b3a9-0075\", \"path\": \"script.beats.8.after\", \"excerpt\": \"（无新增动作）\"}, {\"id\": \"E27f74c04b3a9-0076\", \"path\": \"script.beats.8.before\", \"excerpt\": \"方澄站在办公室门外走廊上，右手捏着那张米白底深红字的院线电影票，低头看了一眼票面，轻轻呼出一口气\"}, {\"id\": \"E27f74c04b3a9-0077\", \"path\": \"script.beats.8.duration_seconds\", \"excerpt\": \"6\"}, {\"id\": \"E27f74c04b3a9-0078\", \"path\": \"script.beats.8.during\", \"excerpt\": \"（无新增动作）\"}, {\"id\": \"E27f74c04b3a9-0079\", \"path\": \"script.beats.8.event\", \"excerpt\": \"方澄在办公室门外的走廊上停一步，低头看一眼手里的电影票，轻轻呼出一口气。\"}, {\"id\": \"E27f74c04b3a9-0080\", \"path\": \"script.beats.8.trigger\", \"excerpt\": \"让她争取到自己时间的释放留在她身上，不和解、不煽情、不回头。\"}]}, {\"beat\": \"B10\", \"mandatory_current_source_prefix\": \"script.beats.9.\", \"actual_current_source_ID_options\": [{\"id\": \"E27f74c04b3a9-0081\", \"path\": \"script.beats.9.after\", \"excerpt\": \"（无新增动作）\"}, {\"id\": \"E27f74c04b3a9-0082\", \"path\": \"script.beats.9.before\", \"excerpt\": \"林屿仍坐在工位前，没抬头去喊她，右手里那支黑色签字笔继续在那张A4横版客户明细单的红笔批注旁一行\"}, {\"id\": \"E27f74c04b3a9-0083\", \"path\": \"script.beats.9.duration_seconds\", \"excerpt\": \"6\"}, {\"id\": \"E27f74c04b3a9-0084\", \"path\": \"script.beats.9.during\", \"excerpt\": \"（无新增动作）\"}, {\"id\": \"E27f74c04b3a9-0085\", \"path\": \"script.beats.9.event\", \"excerpt\": \"林屿独自坐在工位前，没有喊她，继续用右手那支笔在明细单上对照结算单一行一行改下去。\"}, {\"id\": \"E27f74c04b3a9-0086\", \"path\": \"script.beats.9.trigger\", \"excerpt\": \"关系没有崩，他自己收自己的尾；不再回头看门，她的时间已经被他认下。\"}]}], \"instruction\": \"重新完整核对十拍、反馈、跨拍拿笔和包票状态。输出完整工具JSON并选足双方证据，不手工补证，不改变剧本。真实问题列issues，无实际秒数不记表演通过。\"}, \"request\": \"独立全文重审并交完整响应；不本地改旧响应。\"}"
+      }
+    ],
+    "structured_schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "context_sha256",
+        "story_preserved",
+        "issues",
+        "suggestions",
+        "calibration_focus",
+        "coverage"
+      ],
+      "properties": {
+        "schema": {
+          "const": "script_review_source_ids/v18"
+        },
+        "context_sha256": {
+          "type": "string",
+          "enum": [
+            "27f74c04b3a915641b5dcc53c71167606251124b9d28dd93ec6b0270219da9fd"
+          ]
+        },
+        "story_preserved": {
+          "type": "boolean"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "contradiction",
+              "evidence",
+              "id",
+              "impact",
+              "location",
+              "owner",
+              "proposal",
+              "rule",
+              "severity",
+              "evidence_refs"
+            ],
+            "properties": {
+              "contradiction": {
+                "type": "string"
+              },
+              "evidence": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "impact": {
+                "type": "string"
+              },
+              "location": {
+                "type": "string"
+              },
+              "owner": {
+                "type": "string",
+                "enum": [
+                  "writer",
+                  "director"
+                ]
+              },
+              "proposal": {
+                "type": "string"
+              },
+              "rule": {
+                "type": "string"
+              },
+              "severity": {
+                "type": "string",
+                "enum": [
+                  "blocking",
+                  "major"
+                ]
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/EvidenceID"
+                },
+                "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+              }
+            }
+          }
+        },
+        "suggestions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "location",
+              "proposal",
+              "reason"
+            ],
+            "properties": {
+              "location": {
+                "type": "string"
+              },
+              "proposal": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "calibration_focus": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "coverage": {
+          "type": "array",
+          "minItems": 10,
+          "maxItems": 10,
+          "prefixItems": [
+            {
+              "type": "array",
+              "minItems": 7,
+              "maxItems": 7,
+              "prefixItems": [
+                {
+                  "const": "B01"
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                }
+              ],
+              "items": false
+            },
+            {
+              "type": "array",
+              "minItems": 7,
+              "maxItems": 7,
+              "prefixItems": [
+                {
+                  "const": "B02"
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                }
+              ],
+              "items": false
+            },
+            {
+              "type": "array",
+              "minItems": 7,
+              "maxItems": 7,
+              "prefixItems": [
+                {
+                  "const": "B03"
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                }
+              ],
+              "items": false
+            },
+            {
+              "type": "array",
+              "minItems": 7,
+              "maxItems": 7,
+              "prefixItems": [
+                {
+                  "const": "B04"
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                }
+              ],
+              "items": false
+            },
+            {
+              "type": "array",
+              "minItems": 7,
+              "maxItems": 7,
+              "prefixItems": [
+                {
+                  "const": "B05"
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                }
+              ],
+              "items": false
+            },
+            {
+              "type": "array",
+              "minItems": 7,
+              "maxItems": 7,
+              "prefixItems": [
+                {
+                  "const": "B06"
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                }
+              ],
+              "items": false
+            },
+            {
+              "type": "array",
+              "minItems": 7,
+              "maxItems": 7,
+              "prefixItems": [
+                {
+                  "const": "B07"
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                }
+              ],
+              "items": false
+            },
+            {
+              "type": "array",
+              "minItems": 7,
+              "maxItems": 7,
+              "prefixItems": [
+                {
+                  "const": "B08"
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                }
+              ],
+              "items": false
+            },
+            {
+              "type": "array",
+              "minItems": 7,
+              "maxItems": 7,
+              "prefixItems": [
+                {
+                  "const": "B09"
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                }
+              ],
+              "items": false
+            },
+            {
+              "type": "array",
+              "minItems": 7,
+              "maxItems": 7,
+              "prefixItems": [
+                {
+                  "const": "B10"
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                },
+                {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "prefixItems": [
+                    {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/EvidenceID"
+                      },
+                      "description": "Every quote is a NONEMPTY STRING, including numeric source values: [\"execution_bindings.0.start\",\"0.0\"], never an unquoted number. Reference actual scalar leaves only."
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  ],
+                  "items": false
+                }
+              ],
+              "items": false
+            }
+          ],
+          "items": false
+        }
+      },
+      "$defs": {
+        "EvidenceID": {
+          "type": "string",
+          "enum": [
+            "E27f74c04b3a9-0001",
+            "E27f74c04b3a9-0002",
+            "E27f74c04b3a9-0003",
+            "E27f74c04b3a9-0004",
+            "E27f74c04b3a9-0005",
+            "E27f74c04b3a9-0006",
+            "E27f74c04b3a9-0007",
+            "E27f74c04b3a9-0008",
+            "E27f74c04b3a9-0009",
+            "E27f74c04b3a9-0010",
+            "E27f74c04b3a9-0011",
+            "E27f74c04b3a9-0012",
+            "E27f74c04b3a9-0013",
+            "E27f74c04b3a9-0014",
+            "E27f74c04b3a9-0015",
+            "E27f74c04b3a9-0016",
+            "E27f74c04b3a9-0017",
+            "E27f74c04b3a9-0018",
+            "E27f74c04b3a9-0019",
+            "E27f74c04b3a9-0020",
+            "E27f74c04b3a9-0021",
+            "E27f74c04b3a9-0022",
+            "E27f74c04b3a9-0023",
+            "E27f74c04b3a9-0024",
+            "E27f74c04b3a9-0025",
+            "E27f74c04b3a9-0026",
+            "E27f74c04b3a9-0027",
+            "E27f74c04b3a9-0028",
+            "E27f74c04b3a9-0029",
+            "E27f74c04b3a9-0030",
+            "E27f74c04b3a9-0031",
+            "E27f74c04b3a9-0032",
+            "E27f74c04b3a9-0033",
+            "E27f74c04b3a9-0034",
+            "E27f74c04b3a9-0035",
+            "E27f74c04b3a9-0036",
+            "E27f74c04b3a9-0037",
+            "E27f74c04b3a9-0038",
+            "E27f74c04b3a9-0039",
+            "E27f74c04b3a9-0040",
+            "E27f74c04b3a9-0041",
+            "E27f74c04b3a9-0042",
+            "E27f74c04b3a9-0043",
+            "E27f74c04b3a9-0044",
+            "E27f74c04b3a9-0045",
+            "E27f74c04b3a9-0046",
+            "E27f74c04b3a9-0047",
+            "E27f74c04b3a9-0048",
+            "E27f74c04b3a9-0049",
+            "E27f74c04b3a9-0050",
+            "E27f74c04b3a9-0051",
+            "E27f74c04b3a9-0052",
+            "E27f74c04b3a9-0053",
+            "E27f74c04b3a9-0054",
+            "E27f74c04b3a9-0055",
+            "E27f74c04b3a9-0056",
+            "E27f74c04b3a9-0057",
+            "E27f74c04b3a9-0058",
+            "E27f74c04b3a9-0059",
+            "E27f74c04b3a9-0060",
+            "E27f74c04b3a9-0061",
+            "E27f74c04b3a9-0062",
+            "E27f74c04b3a9-0063",
+            "E27f74c04b3a9-0064",
+            "E27f74c04b3a9-0065",
+            "E27f74c04b3a9-0066",
+            "E27f74c04b3a9-0067",
+            "E27f74c04b3a9-0068",
+            "E27f74c04b3a9-0069",
+            "E27f74c04b3a9-0070",
+            "E27f74c04b3a9-0071",
+            "E27f74c04b3a9-0072",
+            "E27f74c04b3a9-0073",
+            "E27f74c04b3a9-0074",
+            "E27f74c04b3a9-0075",
+            "E27f74c04b3a9-0076",
+            "E27f74c04b3a9-0077",
+            "E27f74c04b3a9-0078",
+            "E27f74c04b3a9-0079",
+            "E27f74c04b3a9-0080",
+            "E27f74c04b3a9-0081",
+            "E27f74c04b3a9-0082",
+            "E27f74c04b3a9-0083",
+            "E27f74c04b3a9-0084",
+            "E27f74c04b3a9-0085",
+            "E27f74c04b3a9-0086",
+            "E27f74c04b3a9-0087",
+            "E27f74c04b3a9-0088",
+            "E27f74c04b3a9-0089",
+            "E27f74c04b3a9-0090",
+            "E27f74c04b3a9-0091",
+            "E27f74c04b3a9-0092",
+            "E27f74c04b3a9-0093",
+            "E27f74c04b3a9-0094",
+            "E27f74c04b3a9-0095",
+            "E27f74c04b3a9-0096",
+            "E27f74c04b3a9-0097",
+            "E27f74c04b3a9-0098",
+            "E27f74c04b3a9-0099",
+            "E27f74c04b3a9-0100",
+            "E27f74c04b3a9-0101",
+            "E27f74c04b3a9-0102",
+            "E27f74c04b3a9-0103",
+            "E27f74c04b3a9-0104",
+            "E27f74c04b3a9-0105",
+            "E27f74c04b3a9-0106",
+            "E27f74c04b3a9-0107",
+            "E27f74c04b3a9-0108",
+            "E27f74c04b3a9-0109",
+            "E27f74c04b3a9-0110",
+            "E27f74c04b3a9-0111",
+            "E27f74c04b3a9-0112",
+            "E27f74c04b3a9-0113",
+            "E27f74c04b3a9-0114",
+            "E27f74c04b3a9-0115",
+            "E27f74c04b3a9-0116",
+            "E27f74c04b3a9-0117",
+            "E27f74c04b3a9-0118",
+            "E27f74c04b3a9-0119",
+            "E27f74c04b3a9-0120",
+            "E27f74c04b3a9-0121",
+            "E27f74c04b3a9-0122",
+            "E27f74c04b3a9-0123",
+            "E27f74c04b3a9-0124",
+            "E27f74c04b3a9-0125",
+            "E27f74c04b3a9-0126",
+            "E27f74c04b3a9-0127",
+            "E27f74c04b3a9-0128",
+            "E27f74c04b3a9-0129",
+            "E27f74c04b3a9-0130",
+            "E27f74c04b3a9-0131",
+            "E27f74c04b3a9-0132",
+            "E27f74c04b3a9-0133",
+            "E27f74c04b3a9-0134",
+            "E27f74c04b3a9-0135",
+            "E27f74c04b3a9-0136",
+            "E27f74c04b3a9-0137",
+            "E27f74c04b3a9-0138",
+            "E27f74c04b3a9-0139",
+            "E27f74c04b3a9-0140",
+            "E27f74c04b3a9-0141",
+            "E27f74c04b3a9-0142",
+            "E27f74c04b3a9-0143",
+            "E27f74c04b3a9-0144",
+            "E27f74c04b3a9-0145",
+            "E27f74c04b3a9-0146",
+            "E27f74c04b3a9-0147",
+            "E27f74c04b3a9-0148",
+            "E27f74c04b3a9-0149",
+            "E27f74c04b3a9-0150",
+            "E27f74c04b3a9-0151",
+            "E27f74c04b3a9-0152",
+            "E27f74c04b3a9-0153",
+            "E27f74c04b3a9-0154",
+            "E27f74c04b3a9-0155",
+            "E27f74c04b3a9-0156",
+            "E27f74c04b3a9-0157",
+            "E27f74c04b3a9-0158",
+            "E27f74c04b3a9-0159",
+            "E27f74c04b3a9-0160",
+            "E27f74c04b3a9-0161",
+            "E27f74c04b3a9-0162",
+            "E27f74c04b3a9-0163",
+            "E27f74c04b3a9-0164",
+            "E27f74c04b3a9-0165",
+            "E27f74c04b3a9-0166",
+            "E27f74c04b3a9-0167",
+            "E27f74c04b3a9-0168",
+            "E27f74c04b3a9-0169",
+            "E27f74c04b3a9-0170",
+            "E27f74c04b3a9-0171",
+            "E27f74c04b3a9-0172",
+            "E27f74c04b3a9-0173",
+            "E27f74c04b3a9-0174"
+          ]
+        }
+      }
+    },
+    "parameters": {
+      "max_completion_tokens": 20000,
+      "temperature": 0.4,
+      "thinking": "disabled"
+    },
+    "input_provenance": {
+      "review_context_sha256": "27f74c04b3a915641b5dcc53c71167606251124b9d28dd93ec6b0270219da9fd",
+      "script_sha256": "465b12b846c5a14581e069d62f0068b0b27d2cb224231f6e7c08eed88301f1f3",
+      "reference_pack_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+      "full_reference_pack_in_messages": true,
+      "evidence_catalog_sha256": "e63bfb07cdea176179245008ccbddcb9336262cfc55fd5435f342140b4210065"
+    },
+    "operator_version": "s7_complete_content_revision/v18_known_overload"
+  },
+  "request_sha256": "0f41bd880291b121a4b94bd9b324e04ee4b8bbba1d873ffc9bcf4526af838c89",
+  "source_binding_sha256": "2ad5d7a678cbeb389e22aec1be49d3aa796b29dc638eb8fcb2425349c9615572",
+  "status": "contract_rejected",
+  "started_at": "2026-10-05T14:12:37.592065+00:00",
+  "token_reservation": 114455,
+  "automatic_retry": false,
+  "semantic_approval": false,
+  "response_metadata": {
+    "http_status_code": 200,
+    "http_request_id": null,
+    "safe_response_headers": {
+      "content-type": "application/json",
+      "date": "Mon, 05 Oct 2026 14:12:40 GMT"
+    },
+    "role": "director",
+    "provider": "deepseek",
+    "requested_model": "deepseek-flash",
+    "response_model": "deepseek-flash",
+    "response_id": "42d560a4-3bed-4303-a15c-f3f8ea0fe0a4",
+    "finish_reason": "tool_calls",
+    "thinking_mode": "disabled",
+    "output_mode": "tool_call",
+    "transport_version": "creative_evidenced_role_clients/v1",
+    "strict_mode": false,
+    "server_schema_guarantee": false,
+    "response_body_complete": true,
+    "raw_body_sha256": "cb89d16f05b3238dcd62fe879cfd5c97dcfb354b6927b05512deb46680046921",
+    "prompt_tokens": 36438,
+    "completion_tokens": 4830,
+    "total_tokens": 41268,
+    "usage_source": "original_provider_response"
+  },
+  "response_text": "{\"schema\": \"script_review_source_ids/v18\", \"context_sha256\": \"27f74c04b3a915641b5dcc53c71167606251124b9d28dd93ec6b0270219da9fd\", \"story_preserved\": true, \"issues\": [], \"suggestions\": [{\"location\": \"B03\", \"proposal\": \"若后续局部编排发现8秒仍偏紧，可把三张便利贴的摊开压缩为一次拿起摊平，只保留浅黄那张被指尖压住的可见信息，把省出的时间留给B05拒绝后的反应窗口。\", \"reason\": \"用户反馈NOTE_REPETITION指出第3镜便利贴动作偏长；当前正文已改为“一并摊开”而非逐张揭起，属可再压缩的审美优化，不构成硬约束违反。\"}, {\"location\": \"B09\", \"proposal\": \"门外停步的呼气可考虑用可读近景呈现票面与呼吸起伏，构图与窗口写入最终视频提示词。\", \"reason\": \"creative_brief.constraints.2要求关键反应的构图和窗口必须写入最终视频提示词；本阶段正文已成立，具体构图留后续分镜。\"}, {\"location\": \"B10\", \"proposal\": \"结尾可保留林屿不回头、不喊她的克制处理，避免加入消息或和解台词。\", \"reason\": \"creative_brief.ending要求以新的行动兑现边界，不预先规定和解、不用主题口号收尾；当前正文已符合，提示后续不要回退。\"}], \"calibration_focus\": [\"B02林屿36字对白在17秒预算内的实际语速与方澄“移目光到票、没接话”的反应窗口是否成立\", \"B03林屿“对账，改明细，收尾”7字与便利贴摊开、拿笔递向方澄的串行执行是否在8秒内可读\", \"B05方澄两句拒绝对白（23字）后的林屿听到—愣住—收笔反应是否跨拍成立且不被压缩\", \"B06林屿从笔尖朝方澄到收回笔尖不再指向方澄的同一只手动作连续性\", \"B07林屿比对结算单、划掉重写第二行数字的具体对账动作是否可读\", \"B08方澄左手取包挎肩、右手拿票、左手推门的左右手分工与门体开关连续性\", \"B09门外停步看票呼气的释放是否留在方澄身上且不回头\", \"B10林屿持续持笔、结算单与浅黄便利贴纸面位置是否与B07/B06一致\"], \"coverage\": [[\"B01\", [\"pass\", \"开场正文同时给出方澄为自己留出的时间（挎包已挂、电影票压在伸手可及处）与林屿默认推来的活（客户明细推向两人之间），符合creative_brief.theme与constraints.0的可见前提；道具数量与manifest一致：挎包1、电影票1、客户明细单1、结算单1、咖啡杯1。\", [\"E27f74c04b3a9-0020\", \"E27f74c04b3a9-0023\"], []], [\"pass\", \"本拍无对白，播放顺序为before两段动作陈述，during/after均为“（无新增动作）”，无空槽新增动作。\", [\"E27f74c04b3a9-0022\", \"E27f74c04b3a9-0019\"], []], [\"pass\", \"首拍内部初态自洽：方澄站在自己工位前、挎包挂椅背、票压桌角；林屿坐在她右边工位、结算单摊自己桌角、咖啡杯在旁，与manifest布局关系（E02 right_of E01）一致。\", [\"E27f74c04b3a9-0020\", \"E27f74c04b3a9-0126\"], []], [\"not_applicable\", \"本拍dialogue为空数组，无对白可核字数、秒数与串行窗口。\", [], []], [\"not_applicable\", \"本阶段为剧本，尚无实际分镜首帧；首态核查留后续动作前状态确认。\", [], []], [\"pass\", \"人物与道具对照manifest：方澄灰蓝色薄针织开衫、米灰色挎包、米白底深红字电影票；林屿米驼色棉质衬衫、A4横版客户明细单、A4纵版结算单、白色陶瓷咖啡杯，均与静态资产定义一致。\", [\"E27f74c04b3a9-0020\", \"E27f74c04b3a9-0092\", \"E27f74c04b3a9-0100\", \"E27f74c04b3a9-0103\", \"E27f74c04b3a9-0112\", \"E27f74c04b3a9-0115\"], []]], [\"B02\", [\"pass\", \"林屿对白“上月那张对账是你帮我熬到十一点重打的”以自然对白兑现她过去不止一次替他加班的付出历史，满足constraints.0；方澄“没接话”承担拒绝前的犹豫，符合constraints.1。\", [\"E27f74c04b3a9-0028\", \"E27f74c04b3a9-0025\"], []], [\"pass\", \"顺序为林屿先说出过去加班与今晚请求，方澄随后移目光到票、没接话；刺激→听到→反应链条在正文成立。\", [\"E27f74c04b3a9-0028\", \"E27f74c04b3a9-0025\"], []], [\"pass\", \"承接B01末态：林屿仍在工位未抬头，方澄仍在工位前；方澄目光从林屿桌上红笔批注移到自己桌角压着的电影票，与B01票压桌角位置一致。\", [\"E27f74c04b3a9-0025\", \"E27f74c04b3a9-0020\"], []], [\"not_applicable\", \"本阶段尚无局部编排与真实执行窗口，对白字数下界与先后已在timing核对，实际语速与反应窗口留后续整片联合审查。\", [], []], [\"not_applicable\", \"本阶段为剧本，尚无实际分镜首帧。\", [], []], [\"pass\", \"本拍人物与道具沿用manifest：林屿米驼色棉质衬衫、客户明细单红笔批注、方澄电影票米白底深红字，均与静态资产定义一致。\", [\"E27f74c04b3a9-0025\", \"E27f74c04b3a9-0097\", \"E27f74c04b3a9-0112\", \"E27f74c04b3a9-0103\"], []]], [\"B03\", [\"pass\", \"林屿从方澄桌角拿起便利贴一并摊开、指尖压住浅黄边角，再拿起签字笔笔尖朝方澄停住等她接，兑现“默认她会接下”的turn前提；便利贴三张为C01所有，正文未让旁人替她做新工作，符合user requirements。\", [\"E27f74c04b3a9-0034\", \"E27f74c04b3a9-0033\", \"E27f74c04b3a9-0107\"], []], [\"pass\", \"顺序为林屿先摊开便利贴，再说“对账，改明细，收尾”，最后拿起笔递向方澄；刺激与回应先后成立。\", [\"E27f74c04b3a9-0034\", \"E27f74c04b3a9-0036\", \"E27f74c04b3a9-0033\"], []], [\"pass\", \"承接B02末态：林屿仍在工位可侧身从方澄桌角取便利贴，方澄仍在工位前；便利贴原在方澄桌角，与B01/B02布局不冲突。\", [\"E27f74c04b3a9-0034\", \"E27f74c04b3a9-0025\"], []], [\"not_applicable\", \"本阶段尚无局部编排与真实执行窗口，实际语速与递笔反应窗口留后续整片联合审查。\", [], []], [\"not_applicable\", \"本阶段为剧本，尚无实际分镜首帧。\", [], []], [\"pass\", \"便利贴三张（浅黄、浅粉、浅蓝）与签字笔黑色细头金属笔夹均与manifest一致，owner分别为C01与C02，正文取用关系成立。\", [\"E27f74c04b3a9-0034\", \"E27f74c04b3a9-0106\", \"E27f74c04b3a9-0118\"], []]], [\"B04\", [\"pass\", \"方澄低头看笔尖朝向自己的签字笔、没伸手拿、目光抬向林屿眼睛，兑现拒绝前的可见犹豫，符合constraints.1。\", [\"E27f74c04b3a9-0042\"], []], [\"pass\", \"顺序为方澄先看笔、不接，再抬眼看林屿；无对白，刺激为B03递笔，反应在本拍成立。\", [\"E27f74c04b3a9-0042\", \"E27f74c04b3a9-0033\"], []], [\"pass\", \"承接B03末态：林屿右手握笔、笔尖朝方澄停在桌沿，方澄低头看笔后抬眼；持笔者仍为林屿，姿态与视线衔接一致。\", [\"E27f74c04b3a9-0042\", \"E27f74c04b3a9-0033\"], []], [\"not_applicable\", \"本拍无对白，无字数与语速窗口可核。\", [], []], [\"not_applicable\", \"本阶段为剧本，尚无实际分镜首帧。\", [], []], [\"pass\", \"签字笔与方澄、林屿服装沿用manifest：笔为黑色细头金属笔夹，方澄灰蓝色薄针织开衫，均与静态资产定义一致。\", [\"E27f74c04b3a9-0042\", \"E27f74c04b3a9-0118\", \"E27f74c04b3a9-0092\"], []]], [\"B05\", [\"pass\", \"方澄两句对白给出不可打折的理由（七点早买好票的电影）并以“这次我先走”把今晚留给自己，不道歉、不找补、不承诺下次帮忙，符合user requirements与creative_brief.turn。\", [\"E27f74c04b3a9-0050\", \"E27f74c04b3a9-0052\"], []], [\"pass\", \"顺序为方澄先拒绝并给理由，再补“这次我先走”；刺激为B03/B04递笔与犹豫，回应在本拍成立。\", [\"E27f74c04b3a9-0050\", \"E27f74c04b3a9-0052\", \"E27f74c04b3a9-0042\"], []], [\"pass\", \"承接B04末态：方澄已抬眼看林屿、未接笔，本拍开口拒绝；林屿仍持笔在桌沿，位置与持物状态衔接一致。\", [\"E27f74c04b3a9-0050\", \"E27f74c04b3a9-0042\"], []], [\"not_applicable\", \"本阶段尚无局部编排与真实执行窗口，对白字数下界与先后已在timing核对，实际语速与听者反应窗口留后续整片联合审查。\", [], []], [\"not_applicable\", \"本阶段为剧本，尚无实际分镜首帧。\", [], []], [\"pass\", \"本拍对白涉及的电影票与manifest一致：米白底深红字、竖版窄长纸片、今晚院线开场时间可读，与方澄C01所有关系成立。\", [\"E27f74c04b3a9-0050\", \"E27f74c04b3a9-0103\"], []]], [\"B06\", [\"pass\", \"林屿握笔右手停在桌沿、愣一下、看挎包、看回便利贴与明细单，再把笔收回自己面前、笔尖不再指向方澄，兑现“对方必须面对拒绝并由他自己完成边界转移”，符合creative_brief.turn。\", [\"E27f74c04b3a9-0058\", \"E27f74c04b3a9-0061\"], []], [\"pass\", \"顺序为林屿先停住愣住，再依次看挎包与桌面物件，最后收回笔；刺激为B05方澄拒绝，反应在本拍成立且不重说对白。\", [\"E27f74c04b3a9-0058\", \"E27f74c04b3a9-0052\"], []], [\"pass\", \"承接B05末态：林屿右手仍握笔、笔尖朝方澄，本拍同一只手把笔收回搁在结算单边沿；持笔者与笔尖朝向变化连续，方澄挎包仍在椅背与B01一致。\", [\"E27f74c04b3a9-0058\", \"E27f74c04b3a9-0050\"], []], [\"not_applicable\", \"本拍无对白，无字数与语速窗口可核。\", [], []], [\"not_applicable\", \"本阶段为剧本，尚无实际分镜首帧。\", [], []], [\"pass\", \"挎包、便利贴、客户明细单、结算单、签字笔均与manifest一致：米灰色挎包挂方澄椅背，浅黄便利贴与A4横版明细单在林屿面前，笔为黑色细头金属笔夹。\", [\"E27f74c04b3a9-0058\", \"E27f74c04b3a9-0100\", \"E27f74c04b3a9-0106\", \"E27f74c04b3a9-0112\", \"E27f74c04b3a9-0118\"], []]], [\"B07\", [\"pass\", \"林屿用签字笔在红笔批注旁落字、遇第二行数字对不上时拉结算单比对、划掉重写，兑现“用具体行动回应”而非泛写停顿，符合creative_brief.turn与ending。\", [\"E27f74c04b3a9-0064\"], []], [\"pass\", \"顺序为林屿先低头落字改一笔，再停住拉结算单比对，再划掉重写继续往下改；无对白，动作链自洽。\", [\"E27f74c04b3a9-0064\"], []], [\"pass\", \"承接B06末态：笔已收回林屿右手边搁在结算单边沿，本拍他重新低头用右手那支笔落字，并把结算单从桌角拉到明细单旁对齐；持笔者与纸面位置衔接一致。\", [\"E27f74c04b3a9-0064\", \"E27f74c04b3a9-0061\"], []], [\"not_applicable\", \"本拍无对白，无字数与语速窗口可核。\", [], []], [\"not_applicable\", \"本阶段为剧本，尚无实际分镜首帧。\", [], []], [\"pass\", \"客户明细单（A4横版、浅灰线条格、黑字数字、红笔批注）与结算单（A4纵版、浅蓝表头）及签字笔均与manifest一致。\", [\"E27f74c04b3a9-0064\", \"E27f74c04b3a9-0112\", \"E27f74c04b3a9-0115\", \"E27f74c04b3a9-0118\"], []]], [\"B08\", [\"pass\", \"方澄左手从椅背取挎包挎左肩、右手拿桌角电影票、空出左手推门走出，包与票由左右手分别处理，兑现她去赴约的清晰出口，符合user requirements。\", [\"E27f74c04b3a9-0070\", \"E27f74c04b3a9-0073\"], []], [\"pass\", \"顺序为方澄先取包挎肩、再右手拿票、走出两步，再左手推门走出；无对白，动作先后成立。\", [\"E27f74c04b3a9-0070\"], []], [\"pass\", \"承接B01/B06挎包挂椅背、票压方澄桌角的布局：本拍从椅背取包、从桌角拿票，位置与持物状态衔接一致；林屿仍在工位继续对账不冲突。\", [\"E27f74c04b3a9-0070\", \"E27f74c04b3a9-0058\"], []], [\"not_applicable\", \"本拍无对白，无字数与语速窗口可核。\", [], []], [\"not_applicable\", \"本阶段为剧本，尚无实际分镜首帧。\", [], []], [\"pass\", \"挎包（米灰色金属扣软皮小号）与电影票（米白底深红字竖版窄长）及办公室门（米灰色木纹平板门）均与manifest一致，owner关系成立。\", [\"E27f74c04b3a9-0070\", \"E27f74c04b3a9-0100\", \"E27f74c04b3a9-0103\", \"E27f74c04b3a9-0130\"], []]], [\"B09\", [\"pass\", \"方澄在门外走廊停步、低头看票、轻轻呼气，释放留在她身上，不和解、不煽情、不回头，符合user requirements与creative_brief.ending。\", [\"E27f74c04b3a9-0076\"], []], [\"pass\", \"顺序为方澄先站定门外，再低头看票面，再呼气；无对白，动作先后成立。\", [\"E27f74c04b3a9-0076\"], []], [\"pass\", \"承接B08末态：方澄已推门走出、右手持票，本拍站在门外走廊右手捏票，位置与持物状态衔接一致。\", [\"E27f74c04b3a9-0076\", \"E27f74c04b3a9-0070\"], []], [\"not_applicable\", \"本拍无对白，无字数与语速窗口可核。\", [], []], [\"not_applicable\", \"本阶段为剧本，尚无实际分镜首帧。\", [], []], [\"pass\", \"电影票米白底深红字与manifest一致，方澄服装沿用灰蓝色薄针织开衫，均与静态资产定义一致。\", [\"E27f74c04b3a9-0076\", \"E27f74c04b3a9-0103\", \"E27f74c04b3a9-0092\"], []]], [\"B10\", [\"pass\", \"林屿独自坐在工位前、没抬头喊她、继续用右手笔在明细单上对照结算单一行一行改，兑现“他自己收自己的尾、关系没有崩”，符合creative_brief.ending与user requirements不加惩罚或奖励。\", [\"E27f74c04b3a9-0082\", \"E27f74c04b3a9-0085\"], []], [\"pass\", \"顺序为林屿保持坐姿、不喊不回头，继续落笔并每写一笔挪笔尖比对结算单；无对白，动作链自洽。\", [\"E27f74c04b3a9-0082\"], []], [\"pass\", \"承接B07末态：林屿右手持笔、结算单已被拉到明细单旁，本拍继续对照结算单改明细单；浅黄便利贴压在他左手边桌面，与B03/B06便利贴位置衔接一致。\", [\"E27f74c04b3a9-0082\", \"E27f74c04b3a9-0064\"], []], [\"not_applicable\", \"本拍无对白，无字数与语速窗口可核。\", [], []], [\"not_applicable\", \"本阶段为剧本，尚无实际分镜首帧。\", [], []], [\"pass\", \"签字笔（黑色细头金属笔夹）、客户明细单、结算单、浅黄便利贴、白色陶瓷咖啡杯均与manifest一致，owner与位置关系成立。\", [\"E27f74c04b3a9-0082\", \"E27f74c04b3a9-0118\", \"E27f74c04b3a9-0112\", \"E27f74c04b3a9-0115\", \"E27f74c04b3a9-0106\", \"E27f74c04b3a9-0109\"], []]]]}",
+  "response_payload": {
+    "id": "42d560a4-3bed-4303-a15c-f3f8ea0fe0a4",
+    "object": "chat.completion",
+    "created": 1791209560,
+    "model": "deepseek-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "tool_calls": [
+            {
+              "index": 0,
+              "id": "call_00_iBcj0noqF7hXE7A5ms5v3130",
+              "type": "function",
+              "function": {
+                "name": "submit_creative_json",
+                "arguments": "{\"schema\": \"script_review_source_ids/v18\", \"context_sha256\": \"27f74c04b3a915641b5dcc53c71167606251124b9d28dd93ec6b0270219da9fd\", \"story_preserved\": true, \"issues\": [], \"suggestions\": [{\"location\": \"B03\", \"proposal\": \"若后续局部编排发现8秒仍偏紧，可把三张便利贴的摊开压缩为一次拿起摊平，只保留浅黄那张被指尖压住的可见信息，把省出的时间留给B05拒绝后的反应窗口。\", \"reason\": \"用户反馈NOTE_REPETITION指出第3镜便利贴动作偏长；当前正文已改为“一并摊开”而非逐张揭起，属可再压缩的审美优化，不构成硬约束违反。\"}, {\"location\": \"B09\", \"proposal\": \"门外停步的呼气可考虑用可读近景呈现票面与呼吸起伏，构图与窗口写入最终视频提示词。\", \"reason\": \"creative_brief.constraints.2要求关键反应的构图和窗口必须写入最终视频提示词；本阶段正文已成立，具体构图留后续分镜。\"}, {\"location\": \"B10\", \"proposal\": \"结尾可保留林屿不回头、不喊她的克制处理，避免加入消息或和解台词。\", \"reason\": \"creative_brief.ending要求以新的行动兑现边界，不预先规定和解、不用主题口号收尾；当前正文已符合，提示后续不要回退。\"}], \"calibration_focus\": [\"B02林屿36字对白在17秒预算内的实际语速与方澄“移目光到票、没接话”的反应窗口是否成立\", \"B03林屿“对账，改明细，收尾”7字与便利贴摊开、拿笔递向方澄的串行执行是否在8秒内可读\", \"B05方澄两句拒绝对白（23字）后的林屿听到—愣住—收笔反应是否跨拍成立且不被压缩\", \"B06林屿从笔尖朝方澄到收回笔尖不再指向方澄的同一只手动作连续性\", \"B07林屿比对结算单、划掉重写第二行数字的具体对账动作是否可读\", \"B08方澄左手取包挎肩、右手拿票、左手推门的左右手分工与门体开关连续性\", \"B09门外停步看票呼气的释放是否留在方澄身上且不回头\", \"B10林屿持续持笔、结算单与浅黄便利贴纸面位置是否与B07/B06一致\"], \"coverage\": [[\"B01\", [\"pass\", \"开场正文同时给出方澄为自己留出的时间（挎包已挂、电影票压在伸手可及处）与林屿默认推来的活（客户明细推向两人之间），符合creative_brief.theme与constraints.0的可见前提；道具数量与manifest一致：挎包1、电影票1、客户明细单1、结算单1、咖啡杯1。\", [\"E27f74c04b3a9-0020\", \"E27f74c04b3a9-0023\"], []], [\"pass\", \"本拍无对白，播放顺序为before两段动作陈述，during/after均为“（无新增动作）”，无空槽新增动作。\", [\"E27f74c04b3a9-0022\", \"E27f74c04b3a9-0019\"], []], [\"pass\", \"首拍内部初态自洽：方澄站在自己工位前、挎包挂椅背、票压桌角；林屿坐在她右边工位、结算单摊自己桌角、咖啡杯在旁，与manifest布局关系（E02 right_of E01）一致。\", [\"E27f74c04b3a9-0020\", \"E27f74c04b3a9-0126\"], []], [\"not_applicable\", \"本拍dialogue为空数组，无对白可核字数、秒数与串行窗口。\", [], []], [\"not_applicable\", \"本阶段为剧本，尚无实际分镜首帧；首态核查留后续动作前状态确认。\", [], []], [\"pass\", \"人物与道具对照manifest：方澄灰蓝色薄针织开衫、米灰色挎包、米白底深红字电影票；林屿米驼色棉质衬衫、A4横版客户明细单、A4纵版结算单、白色陶瓷咖啡杯，均与静态资产定义一致。\", [\"E27f74c04b3a9-0020\", \"E27f74c04b3a9-0092\", \"E27f74c04b3a9-0100\", \"E27f74c04b3a9-0103\", \"E27f74c04b3a9-0112\", \"E27f74c04b3a9-0115\"], []]], [\"B02\", [\"pass\", \"林屿对白“上月那张对账是你帮我熬到十一点重打的”以自然对白兑现她过去不止一次替他加班的付出历史，满足constraints.0；方澄“没接话”承担拒绝前的犹豫，符合constraints.1。\", [\"E27f74c04b3a9-0028\", \"E27f74c04b3a9-0025\"], []], [\"pass\", \"顺序为林屿先说出过去加班与今晚请求，方澄随后移目光到票、没接话；刺激→听到→反应链条在正文成立。\", [\"E27f74c04b3a9-0028\", \"E27f74c04b3a9-0025\"], []], [\"pass\", \"承接B01末态：林屿仍在工位未抬头，方澄仍在工位前；方澄目光从林屿桌上红笔批注移到自己桌角压着的电影票，与B01票压桌角位置一致。\", [\"E27f74c04b3a9-0025\", \"E27f74c04b3a9-0020\"], []], [\"not_applicable\", \"本阶段尚无局部编排与真实执行窗口，对白字数下界与先后已在timing核对，实际语速与反应窗口留后续整片联合审查。\", [], []], [\"not_applicable\", \"本阶段为剧本，尚无实际分镜首帧。\", [], []], [\"pass\", \"本拍人物与道具沿用manifest：林屿米驼色棉质衬衫、客户明细单红笔批注、方澄电影票米白底深红字，均与静态资产定义一致。\", [\"E27f74c04b3a9-0025\", \"E27f74c04b3a9-0097\", \"E27f74c04b3a9-0112\", \"E27f74c04b3a9-0103\"], []]], [\"B03\", [\"pass\", \"林屿从方澄桌角拿起便利贴一并摊开、指尖压住浅黄边角，再拿起签字笔笔尖朝方澄停住等她接，兑现“默认她会接下”的turn前提；便利贴三张为C01所有，正文未让旁人替她做新工作，符合user requirements。\", [\"E27f74c04b3a9-0034\", \"E27f74c04b3a9-0033\", \"E27f74c04b3a9-0107\"], []], [\"pass\", \"顺序为林屿先摊开便利贴，再说“对账，改明细，收尾”，最后拿起笔递向方澄；刺激与回应先后成立。\", [\"E27f74c04b3a9-0034\", \"E27f74c04b3a9-0036\", \"E27f74c04b3a9-0033\"], []], [\"pass\", \"承接B02末态：林屿仍在工位可侧身从方澄桌角取便利贴，方澄仍在工位前；便利贴原在方澄桌角，与B01/B02布局不冲突。\", [\"E27f74c04b3a9-0034\", \"E27f74c04b3a9-0025\"], []], [\"not_applicable\", \"本阶段尚无局部编排与真实执行窗口，实际语速与递笔反应窗口留后续整片联合审查。\", [], []], [\"not_applicable\", \"本阶段为剧本，尚无实际分镜首帧。\", [], []], [\"pass\", \"便利贴三张（浅黄、浅粉、浅蓝）与签字笔黑色细头金属笔夹均与manifest一致，owner分别为C01与C02，正文取用关系成立。\", [\"E27f74c04b3a9-0034\", \"E27f74c04b3a9-0106\", \"E27f74c04b3a9-0118\"], []]], [\"B04\", [\"pass\", \"方澄低头看笔尖朝向自己的签字笔、没伸手拿、目光抬向林屿眼睛，兑现拒绝前的可见犹豫，符合constraints.1。\", [\"E27f74c04b3a9-0042\"], []], [\"pass\", \"顺序为方澄先看笔、不接，再抬眼看林屿；无对白，刺激为B03递笔，反应在本拍成立。\", [\"E27f74c04b3a9-0042\", \"E27f74c04b3a9-0033\"], []], [\"pass\", \"承接B03末态：林屿右手握笔、笔尖朝方澄停在桌沿，方澄低头看笔后抬眼；持笔者仍为林屿，姿态与视线衔接一致。\", [\"E27f74c04b3a9-0042\", \"E27f74c04b3a9-0033\"], []], [\"not_applicable\", \"本拍无对白，无字数与语速窗口可核。\", [], []], [\"not_applicable\", \"本阶段为剧本，尚无实际分镜首帧。\", [], []], [\"pass\", \"签字笔与方澄、林屿服装沿用manifest：笔为黑色细头金属笔夹，方澄灰蓝色薄针织开衫，均与静态资产定义一致。\", [\"E27f74c04b3a9-0042\", \"E27f74c04b3a9-0118\", \"E27f74c04b3a9-0092\"], []]], [\"B05\", [\"pass\", \"方澄两句对白给出不可打折的理由（七点早买好票的电影）并以“这次我先走”把今晚留给自己，不道歉、不找补、不承诺下次帮忙，符合user requirements与creative_brief.turn。\", [\"E27f74c04b3a9-0050\", \"E27f74c04b3a9-0052\"], []], [\"pass\", \"顺序为方澄先拒绝并给理由，再补“这次我先走”；刺激为B03/B04递笔与犹豫，回应在本拍成立。\", [\"E27f74c04b3a9-0050\", \"E27f74c04b3a9-0052\", \"E27f74c04b3a9-0042\"], []], [\"pass\", \"承接B04末态：方澄已抬眼看林屿、未接笔，本拍开口拒绝；林屿仍持笔在桌沿，位置与持物状态衔接一致。\", [\"E27f74c04b3a9-0050\", \"E27f74c04b3a9-0042\"], []], [\"not_applicable\", \"本阶段尚无局部编排与真实执行窗口，对白字数下界与先后已在timing核对，实际语速与听者反应窗口留后续整片联合审查。\", [], []], [\"not_applicable\", \"本阶段为剧本，尚无实际分镜首帧。\", [], []], [\"pass\", \"本拍对白涉及的电影票与manifest一致：米白底深红字、竖版窄长纸片、今晚院线开场时间可读，与方澄C01所有关系成立。\", [\"E27f74c04b3a9-0050\", \"E27f74c04b3a9-0103\"], []]], [\"B06\", [\"pass\", \"林屿握笔右手停在桌沿、愣一下、看挎包、看回便利贴与明细单，再把笔收回自己面前、笔尖不再指向方澄，兑现“对方必须面对拒绝并由他自己完成边界转移”，符合creative_brief.turn。\", [\"E27f74c04b3a9-0058\", \"E27f74c04b3a9-0061\"], []], [\"pass\", \"顺序为林屿先停住愣住，再依次看挎包与桌面物件，最后收回笔；刺激为B05方澄拒绝，反应在本拍成立且不重说对白。\", [\"E27f74c04b3a9-0058\", \"E27f74c04b3a9-0052\"], []], [\"pass\", \"承接B05末态：林屿右手仍握笔、笔尖朝方澄，本拍同一只手把笔收回搁在结算单边沿；持笔者与笔尖朝向变化连续，方澄挎包仍在椅背与B01一致。\", [\"E27f74c04b3a9-0058\", \"E27f74c04b3a9-0050\"], []], [\"not_applicable\", \"本拍无对白，无字数与语速窗口可核。\", [], []], [\"not_applicable\", \"本阶段为剧本，尚无实际分镜首帧。\", [], []], [\"pass\", \"挎包、便利贴、客户明细单、结算单、签字笔均与manifest一致：米灰色挎包挂方澄椅背，浅黄便利贴与A4横版明细单在林屿面前，笔为黑色细头金属笔夹。\", [\"E27f74c04b3a9-0058\", \"E27f74c04b3a9-0100\", \"E27f74c04b3a9-0106\", \"E27f74c04b3a9-0112\", \"E27f74c04b3a9-0118\"], []]], [\"B07\", [\"pass\", \"林屿用签字笔在红笔批注旁落字、遇第二行数字对不上时拉结算单比对、划掉重写，兑现“用具体行动回应”而非泛写停顿，符合creative_brief.turn与ending。\", [\"E27f74c04b3a9-0064\"], []], [\"pass\", \"顺序为林屿先低头落字改一笔，再停住拉结算单比对，再划掉重写继续往下改；无对白，动作链自洽。\", [\"E27f74c04b3a9-0064\"], []], [\"pass\", \"承接B06末态：笔已收回林屿右手边搁在结算单边沿，本拍他重新低头用右手那支笔落字，并把结算单从桌角拉到明细单旁对齐；持笔者与纸面位置衔接一致。\", [\"E27f74c04b3a9-0064\", \"E27f74c04b3a9-0061\"], []], [\"not_applicable\", \"本拍无对白，无字数与语速窗口可核。\", [], []], [\"not_applicable\", \"本阶段为剧本，尚无实际分镜首帧。\", [], []], [\"pass\", \"客户明细单（A4横版、浅灰线条格、黑字数字、红笔批注）与结算单（A4纵版、浅蓝表头）及签字笔均与manifest一致。\", [\"E27f74c04b3a9-0064\", \"E27f74c04b3a9-0112\", \"E27f74c04b3a9-0115\", \"E27f74c04b3a9-0118\"], []]], [\"B08\", [\"pass\", \"方澄左手从椅背取挎包挎左肩、右手拿桌角电影票、空出左手推门走出，包与票由左右手分别处理，兑现她去赴约的清晰出口，符合user requirements。\", [\"E27f74c04b3a9-0070\", \"E27f74c04b3a9-0073\"], []], [\"pass\", \"顺序为方澄先取包挎肩、再右手拿票、走出两步，再左手推门走出；无对白，动作先后成立。\", [\"E27f74c04b3a9-0070\"], []], [\"pass\", \"承接B01/B06挎包挂椅背、票压方澄桌角的布局：本拍从椅背取包、从桌角拿票，位置与持物状态衔接一致；林屿仍在工位继续对账不冲突。\", [\"E27f74c04b3a9-0070\", \"E27f74c04b3a9-0058\"], []], [\"not_applicable\", \"本拍无对白，无字数与语速窗口可核。\", [], []], [\"not_applicable\", \"本阶段为剧本，尚无实际分镜首帧。\", [], []], [\"pass\", \"挎包（米灰色金属扣软皮小号）与电影票（米白底深红字竖版窄长）及办公室门（米灰色木纹平板门）均与manifest一致，owner关系成立。\", [\"E27f74c04b3a9-0070\", \"E27f74c04b3a9-0100\", \"E27f74c04b3a9-0103\", \"E27f74c04b3a9-0130\"], []]], [\"B09\", [\"pass\", \"方澄在门外走廊停步、低头看票、轻轻呼气，释放留在她身上，不和解、不煽情、不回头，符合user requirements与creative_brief.ending。\", [\"E27f74c04b3a9-0076\"], []], [\"pass\", \"顺序为方澄先站定门外，再低头看票面，再呼气；无对白，动作先后成立。\", [\"E27f74c04b3a9-0076\"], []], [\"pass\", \"承接B08末态：方澄已推门走出、右手持票，本拍站在门外走廊右手捏票，位置与持物状态衔接一致。\", [\"E27f74c04b3a9-0076\", \"E27f74c04b3a9-0070\"], []], [\"not_applicable\", \"本拍无对白，无字数与语速窗口可核。\", [], []], [\"not_applicable\", \"本阶段为剧本，尚无实际分镜首帧。\", [], []], [\"pass\", \"电影票米白底深红字与manifest一致，方澄服装沿用灰蓝色薄针织开衫，均与静态资产定义一致。\", [\"E27f74c04b3a9-0076\", \"E27f74c04b3a9-0103\", \"E27f74c04b3a9-0092\"], []]], [\"B10\", [\"pass\", \"林屿独自坐在工位前、没抬头喊她、继续用右手笔在明细单上对照结算单一行一行改，兑现“他自己收自己的尾、关系没有崩”，符合creative_brief.ending与user requirements不加惩罚或奖励。\", [\"E27f74c04b3a9-0082\", \"E27f74c04b3a9-0085\"], []], [\"pass\", \"顺序为林屿保持坐姿、不喊不回头，继续落笔并每写一笔挪笔尖比对结算单；无对白，动作链自洽。\", [\"E27f74c04b3a9-0082\"], []], [\"pass\", \"承接B07末态：林屿右手持笔、结算单已被拉到明细单旁，本拍继续对照结算单改明细单；浅黄便利贴压在他左手边桌面，与B03/B06便利贴位置衔接一致。\", [\"E27f74c04b3a9-0082\", \"E27f74c04b3a9-0064\"], []], [\"not_applicable\", \"本拍无对白，无字数与语速窗口可核。\", [], []], [\"not_applicable\", \"本阶段为剧本，尚无实际分镜首帧。\", [], []], [\"pass\", \"签字笔（黑色细头金属笔夹）、客户明细单、结算单、浅黄便利贴、白色陶瓷咖啡杯均与manifest一致，owner与位置关系成立。\", [\"E27f74c04b3a9-0082\", \"E27f74c04b3a9-0118\", \"E27f74c04b3a9-0112\", \"E27f74c04b3a9-0115\", \"E27f74c04b3a9-0106\", \"E27f74c04b3a9-0109\"], []]]]}"
+              }
+            }
+          ]
+        },
+        "logprobs": null,
+        "finish_reason": "tool_calls"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 36438,
+      "completion_tokens": 4830,
+      "total_tokens": 41268,
+      "prompt_tokens_details": {
+        "cached_tokens": 31872
+      },
+      "prompt_cache_hit_tokens": 31872,
+      "prompt_cache_miss_tokens": 4566
+    },
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669"
+  },
+  "completed_at": "2026-10-05T14:12:59.173285+00:00",
+  "output": {
+    "schema": "script_review_source_ids/v18",
+    "context_sha256": "27f74c04b3a915641b5dcc53c71167606251124b9d28dd93ec6b0270219da9fd",
+    "story_preserved": true,
+    "issues": [],
+    "suggestions": [
+      {
+        "location": "B03",
+        "proposal": "若后续局部编排发现8秒仍偏紧，可把三张便利贴的摊开压缩为一次拿起摊平，只保留浅黄那张被指尖压住的可见信息，把省出的时间留给B05拒绝后的反应窗口。",
+        "reason": "用户反馈NOTE_REPETITION指出第3镜便利贴动作偏长；当前正文已改为“一并摊开”而非逐张揭起，属可再压缩的审美优化，不构成硬约束违反。"
+      },
+      {
+        "location": "B09",
+        "proposal": "门外停步的呼气可考虑用可读近景呈现票面与呼吸起伏，构图与窗口写入最终视频提示词。",
+        "reason": "creative_brief.constraints.2要求关键反应的构图和窗口必须写入最终视频提示词；本阶段正文已成立，具体构图留后续分镜。"
+      },
+      {
+        "location": "B10",
+        "proposal": "结尾可保留林屿不回头、不喊她的克制处理，避免加入消息或和解台词。",
+        "reason": "creative_brief.ending要求以新的行动兑现边界，不预先规定和解、不用主题口号收尾；当前正文已符合，提示后续不要回退。"
+      }
+    ],
+    "calibration_focus": [
+      "B02林屿36字对白在17秒预算内的实际语速与方澄“移目光到票、没接话”的反应窗口是否成立",
+      "B03林屿“对账，改明细，收尾”7字与便利贴摊开、拿笔递向方澄的串行执行是否在8秒内可读",
+      "B05方澄两句拒绝对白（23字）后的林屿听到—愣住—收笔反应是否跨拍成立且不被压缩",
+      "B06林屿从笔尖朝方澄到收回笔尖不再指向方澄的同一只手动作连续性",
+      "B07林屿比对结算单、划掉重写第二行数字的具体对账动作是否可读",
+      "B08方澄左手取包挎肩、右手拿票、左手推门的左右手分工与门体开关连续性",
+      "B09门外停步看票呼气的释放是否留在方澄身上且不回头",
+      "B10林屿持续持笔、结算单与浅黄便利贴纸面位置是否与B07/B06一致"
+    ],
+    "coverage": [
+      [
+        "B01",
+        [
+          "pass",
+          "开场正文同时给出方澄为自己留出的时间（挎包已挂、电影票压在伸手可及处）与林屿默认推来的活（客户明细推向两人之间），符合creative_brief.theme与constraints.0的可见前提；道具数量与manifest一致：挎包1、电影票1、客户明细单1、结算单1、咖啡杯1。",
+          [
+            "E27f74c04b3a9-0020",
+            "E27f74c04b3a9-0023"
+          ],
+          []
+        ],
+        [
+          "pass",
+          "本拍无对白，播放顺序为before两段动作陈述，during/after均为“（无新增动作）”，无空槽新增动作。",
+          [
+            "E27f74c04b3a9-0022",
+            "E27f74c04b3a9-0019"
+          ],
+          []
+        ],
+        [
+          "pass",
+          "首拍内部初态自洽：方澄站在自己工位前、挎包挂椅背、票压桌角；林屿坐在她右边工位、结算单摊自己桌角、咖啡杯在旁，与manifest布局关系（E02 right_of E01）一致。",
+          [
+            "E27f74c04b3a9-0020",
+            "E27f74c04b3a9-0126"
+          ],
+          []
+        ],
+        [
+          "not_applicable",
+          "本拍dialogue为空数组，无对白可核字数、秒数与串行窗口。",
+          [],
+          []
+        ],
+        [
+          "not_applicable",
+          "本阶段为剧本，尚无实际分镜首帧；首态核查留后续动作前状态确认。",
+          [],
+          []
+        ],
+        [
+          "pass",
+          "人物与道具对照manifest：方澄灰蓝色薄针织开衫、米灰色挎包、米白底深红字电影票；林屿米驼色棉质衬衫、A4横版客户明细单、A4纵版结算单、白色陶瓷咖啡杯，均与静态资产定义一致。",
+          [
+            "E27f74c04b3a9-0020",
+            "E27f74c04b3a9-0092",
+            "E27f74c04b3a9-0100",
+            "E27f74c04b3a9-0103",
+            "E27f74c04b3a9-0112",
+            "E27f74c04b3a9-0115"
+          ],
+          []
+        ]
+      ],
+      [
+        "B02",
+        [
+          "pass",
+          "林屿对白“上月那张对账是你帮我熬到十一点重打的”以自然对白兑现她过去不止一次替他加班的付出历史，满足constraints.0；方澄“没接话”承担拒绝前的犹豫，符合constraints.1。",
+          [
+            "E27f74c04b3a9-0028",
+            "E27f74c04b3a9-0025"
+          ],
+          []
+        ],
+        [
+          "pass",
+          "顺序为林屿先说出过去加班与今晚请求，方澄随后移目光到票、没接话；刺激→听到→反应链条在正文成立。",
+          [
+            "E27f74c04b3a9-0028",
+            "E27f74c04b3a9-0025"
+          ],
+          []
+        ],
+        [
+          "pass",
+          "承接B01末态：林屿仍在工位未抬头，方澄仍在工位前；方澄目光从林屿桌上红笔批注移到自己桌角压着的电影票，与B01票压桌角位置一致。",
+          [
+            "E27f74c04b3a9-0025",
+            "E27f74c04b3a9-0020"
+          ],
+          []
+        ],
+        [
+          "not_applicable",
+          "本阶段尚无局部编排与真实执行窗口，对白字数下界与先后已在timing核对，实际语速与反应窗口留后续整片联合审查。",
+          [],
+          []
+        ],
+        [
+          "not_applicable",
+          "本阶段为剧本，尚无实际分镜首帧。",
+          [],
+          []
+        ],
+        [
+          "pass",
+          "本拍人物与道具沿用manifest：林屿米驼色棉质衬衫、客户明细单红笔批注、方澄电影票米白底深红字，均与静态资产定义一致。",
+          [
+            "E27f74c04b3a9-0025",
+            "E27f74c04b3a9-0097",
+            "E27f74c04b3a9-0112",
+            "E27f74c04b3a9-0103"
+          ],
+          []
+        ]
+      ],
+      [
+        "B03",
+        [
+          "pass",
+          "林屿从方澄桌角拿起便利贴一并摊开、指尖压住浅黄边角，再拿起签字笔笔尖朝方澄停住等她接，兑现“默认她会接下”的turn前提；便利贴三张为C01所有，正文未让旁人替她做新工作，符合user requirements。",
+          [
+            "E27f74c04b3a9-0034",
+            "E27f74c04b3a9-0033",
+            "E27f74c04b3a9-0107"
+          ],
+          []
+        ],
+        [
+          "pass",
+          "顺序为林屿先摊开便利贴，再说“对账，改明细，收尾”，最后拿起笔递向方澄；刺激与回应先后成立。",
+          [
+            "E27f74c04b3a9-0034",
+            "E27f74c04b3a9-0036",
+            "E27f74c04b3a9-0033"
+          ],
+          []
+        ],
+        [
+          "pass",
+          "承接B02末态：林屿仍在工位可侧身从方澄桌角取便利贴，方澄仍在工位前；便利贴原在方澄桌角，与B01/B02布局不冲突。",
+          [
+            "E27f74c04b3a9-0034",
+            "E27f74c04b3a9-0025"
+          ],
+          []
+        ],
+        [
+          "not_applicable",
+          "本阶段尚无局部编排与真实执行窗口，实际语速与递笔反应窗口留后续整片联合审查。",
+          [],
+          []
+        ],
+        [
+          "not_applicable",
+          "本阶段为剧本，尚无实际分镜首帧。",
+          [],
+          []
+        ],
+        [
+          "pass",
+          "便利贴三张（浅黄、浅粉、浅蓝）与签字笔黑色细头金属笔夹均与manifest一致，owner分别为C01与C02，正文取用关系成立。",
+          [
+            "E27f74c04b3a9-0034",
+            "E27f74c04b3a9-0106",
+            "E27f74c04b3a9-0118"
+          ],
+          []
+        ]
+      ],
+      [
+        "B04",
+        [
+          "pass",
+          "方澄低头看笔尖朝向自己的签字笔、没伸手拿、目光抬向林屿眼睛，兑现拒绝前的可见犹豫，符合constraints.1。",
+          [
+            "E27f74c04b3a9-0042"
+          ],
+          []
+        ],
+        [
+          "pass",
+          "顺序为方澄先看笔、不接，再抬眼看林屿；无对白，刺激为B03递笔，反应在本拍成立。",
+          [
+            "E27f74c04b3a9-0042",
+            "E27f74c04b3a9-0033"
+          ],
+          []
+        ],
+        [
+          "pass",
+          "承接B03末态：林屿右手握笔、笔尖朝方澄停在桌沿，方澄低头看笔后抬眼；持笔者仍为林屿，姿态与视线衔接一致。",
+          [
+            "E27f74c04b3a9-0042",
+            "E27f74c04b3a9-0033"
+          ],
+          []
+        ],
+        [
+          "not_applicable",
+          "本拍无对白，无字数与语速窗口可核。",
+          [],
+          []
+        ],
+        [
+          "not_applicable",
+          "本阶段为剧本，尚无实际分镜首帧。",
+          [],
+          []
+        ],
+        [
+          "pass",
+          "签字笔与方澄、林屿服装沿用manifest：笔为黑色细头金属笔夹，方澄灰蓝色薄针织开衫，均与静态资产定义一致。",
+          [
+            "E27f74c04b3a9-0042",
+            "E27f74c04b3a9-0118",
+            "E27f74c04b3a9-0092"
+          ],
+          []
+        ]
+      ],
+      [
+        "B05",
+        [
+          "pass",
+          "方澄两句对白给出不可打折的理由（七点早买好票的电影）并以“这次我先走”把今晚留给自己，不道歉、不找补、不承诺下次帮忙，符合user requirements与creative_brief.turn。",
+          [
+            "E27f74c04b3a9-0050",
+            "E27f74c04b3a9-0052"
+          ],
+          []
+        ],
+        [
+          "pass",
+          "顺序为方澄先拒绝并给理由，再补“这次我先走”；刺激为B03/B04递笔与犹豫，回应在本拍成立。",
+          [
+            "E27f74c04b3a9-0050",
+            "E27f74c04b3a9-0052",
+            "E27f74c04b3a9-0042"
+          ],
+          []
+        ],
+        [
+          "pass",
+          "承接B04末态：方澄已抬眼看林屿、未接笔，本拍开口拒绝；林屿仍持笔在桌沿，位置与持物状态衔接一致。",
+          [
+            "E27f74c04b3a9-0050",
+            "E27f74c04b3a9-0042"
+          ],
+          []
+        ],
+        [
+          "not_applicable",
+          "本阶段尚无局部编排与真实执行窗口，对白字数下界与先后已在timing核对，实际语速与听者反应窗口留后续整片联合审查。",
+          [],
+          []
+        ],
+        [
+          "not_applicable",
+          "本阶段为剧本，尚无实际分镜首帧。",
+          [],
+          []
+        ],
+        [
+          "pass",
+          "本拍对白涉及的电影票与manifest一致：米白底深红字、竖版窄长纸片、今晚院线开场时间可读，与方澄C01所有关系成立。",
+          [
+            "E27f74c04b3a9-0050",
+            "E27f74c04b3a9-0103"
+          ],
+          []
+        ]
+      ],
+      [
+        "B06",
+        [
+          "pass",
+          "林屿握笔右手停在桌沿、愣一下、看挎包、看回便利贴与明细单，再把笔收回自己面前、笔尖不再指向方澄，兑现“对方必须面对拒绝并由他自己完成边界转移”，符合creative_brief.turn。",
+          [
+            "E27f74c04b3a9-0058",
+            "E27f74c04b3a9-0061"
+          ],
+          []
+        ],
+        [
+          "pass",
+          "顺序为林屿先停住愣住，再依次看挎包与桌面物件，最后收回笔；刺激为B05方澄拒绝，反应在本拍成立且不重说对白。",
+          [
+            "E27f74c04b3a9-0058",
+            "E27f74c04b3a9-0052"
+          ],
+          []
+        ],
+        [
+          "pass",
+          "承接B05末态：林屿右手仍握笔、笔尖朝方澄，本拍同一只手把笔收回搁在结算单边沿；持笔者与笔尖朝向变化连续，方澄挎包仍在椅背与B01一致。",
+          [
+            "E27f74c04b3a9-0058",
+            "E27f74c04b3a9-0050"
+          ],
+          []
+        ],
+        [
+          "not_applicable",
+          "本拍无对白，无字数与语速窗口可核。",
+          [],
+          []
+        ],
+        [
+          "not_applicable",
+          "本阶段为剧本，尚无实际分镜首帧。",
+          [],
+          []
+        ],
+        [
+          "pass",
+          "挎包、便利贴、客户明细单、结算单、签字笔均与manifest一致：米灰色挎包挂方澄椅背，浅黄便利贴与A4横版明细单在林屿面前，笔为黑色细头金属笔夹。",
+          [
+            "E27f74c04b3a9-0058",
+            "E27f74c04b3a9-0100",
+            "E27f74c04b3a9-0106",
+            "E27f74c04b3a9-0112",
+            "E27f74c04b3a9-0118"
+          ],
+          []
+        ]
+      ],
+      [
+        "B07",
+        [
+          "pass",
+          "林屿用签字笔在红笔批注旁落字、遇第二行数字对不上时拉结算单比对、划掉重写，兑现“用具体行动回应”而非泛写停顿，符合creative_brief.turn与ending。",
+          [
+            "E27f74c04b3a9-0064"
+          ],
+          []
+        ],
+        [
+          "pass",
+          "顺序为林屿先低头落字改一笔，再停住拉结算单比对，再划掉重写继续往下改；无对白，动作链自洽。",
+          [
+            "E27f74c04b3a9-0064"
+          ],
+          []
+        ],
+        [
+          "pass",
+          "承接B06末态：笔已收回林屿右手边搁在结算单边沿，本拍他重新低头用右手那支笔落字，并把结算单从桌角拉到明细单旁对齐；持笔者与纸面位置衔接一致。",
+          [
+            "E27f74c04b3a9-0064",
+            "E27f74c04b3a9-0061"
+          ],
+          []
+        ],
+        [
+          "not_applicable",
+          "本拍无对白，无字数与语速窗口可核。",
+          [],
+          []
+        ],
+        [
+          "not_applicable",
+          "本阶段为剧本，尚无实际分镜首帧。",
+          [],
+          []
+        ],
+        [
+          "pass",
+          "客户明细单（A4横版、浅灰线条格、黑字数字、红笔批注）与结算单（A4纵版、浅蓝表头）及签字笔均与manifest一致。",
+          [
+            "E27f74c04b3a9-0064",
+            "E27f74c04b3a9-0112",
+            "E27f74c04b3a9-0115",
+            "E27f74c04b3a9-0118"
+          ],
+          []
+        ]
+      ],
+      [
+        "B08",
+        [
+          "pass",
+          "方澄左手从椅背取挎包挎左肩、右手拿桌角电影票、空出左手推门走出，包与票由左右手分别处理，兑现她去赴约的清晰出口，符合user requirements。",
+          [
+            "E27f74c04b3a9-0070",
+            "E27f74c04b3a9-0073"
+          ],
+          []
+        ],
+        [
+          "pass",
+          "顺序为方澄先取包挎肩、再右手拿票、走出两步，再左手推门走出；无对白，动作先后成立。",
+          [
+            "E27f74c04b3a9-0070"
+          ],
+          []
+        ],
+        [
+          "pass",
+          "承接B01/B06挎包挂椅背、票压方澄桌角的布局：本拍从椅背取包、从桌角拿票，位置与持物状态衔接一致；林屿仍在工位继续对账不冲突。",
+          [
+            "E27f74c04b3a9-0070",
+            "E27f74c04b3a9-0058"
+          ],
+          []
+        ],
+        [
+          "not_applicable",
+          "本拍无对白，无字数与语速窗口可核。",
+          [],
+          []
+        ],
+        [
+          "not_applicable",
+          "本阶段为剧本，尚无实际分镜首帧。",
+          [],
+          []
+        ],
+        [
+          "pass",
+          "挎包（米灰色金属扣软皮小号）与电影票（米白底深红字竖版窄长）及办公室门（米灰色木纹平板门）均与manifest一致，owner关系成立。",
+          [
+            "E27f74c04b3a9-0070",
+            "E27f74c04b3a9-0100",
+            "E27f74c04b3a9-0103",
+            "E27f74c04b3a9-0130"
+          ],
+          []
+        ]
+      ],
+      [
+        "B09",
+        [
+          "pass",
+          "方澄在门外走廊停步、低头看票、轻轻呼气，释放留在她身上，不和解、不煽情、不回头，符合user requirements与creative_brief.ending。",
+          [
+            "E27f74c04b3a9-0076"
+          ],
+          []
+        ],
+        [
+          "pass",
+          "顺序为方澄先站定门外，再低头看票面，再呼气；无对白，动作先后成立。",
+          [
+            "E27f74c04b3a9-0076"
+          ],
+          []
+        ],
+        [
+          "pass",
+          "承接B08末态：方澄已推门走出、右手持票，本拍站在门外走廊右手捏票，位置与持物状态衔接一致。",
+          [
+            "E27f74c04b3a9-0076",
+            "E27f74c04b3a9-0070"
+          ],
+          []
+        ],
+        [
+          "not_applicable",
+          "本拍无对白，无字数与语速窗口可核。",
+          [],
+          []
+        ],
+        [
+          "not_applicable",
+          "本阶段为剧本，尚无实际分镜首帧。",
+          [],
+          []
+        ],
+        [
+          "pass",
+          "电影票米白底深红字与manifest一致，方澄服装沿用灰蓝色薄针织开衫，均与静态资产定义一致。",
+          [
+            "E27f74c04b3a9-0076",
+            "E27f74c04b3a9-0103",
+            "E27f74c04b3a9-0092"
+          ],
+          []
+        ]
+      ],
+      [
+        "B10",
+        [
+          "pass",
+          "林屿独自坐在工位前、没抬头喊她、继续用右手笔在明细单上对照结算单一行一行改，兑现“他自己收自己的尾、关系没有崩”，符合creative_brief.ending与user requirements不加惩罚或奖励。",
+          [
+            "E27f74c04b3a9-0082",
+            "E27f74c04b3a9-0085"
+          ],
+          []
+        ],
+        [
+          "pass",
+          "顺序为林屿保持坐姿、不喊不回头，继续落笔并每写一笔挪笔尖比对结算单；无对白，动作链自洽。",
+          [
+            "E27f74c04b3a9-0082"
+          ],
+          []
+        ],
+        [
+          "pass",
+          "承接B07末态：林屿右手持笔、结算单已被拉到明细单旁，本拍继续对照结算单改明细单；浅黄便利贴压在他左手边桌面，与B03/B06便利贴位置衔接一致。",
+          [
+            "E27f74c04b3a9-0082",
+            "E27f74c04b3a9-0064"
+          ],
+          []
+        ],
+        [
+          "not_applicable",
+          "本拍无对白，无字数与语速窗口可核。",
+          [],
+          []
+        ],
+        [
+          "not_applicable",
+          "本阶段为剧本，尚无实际分镜首帧。",
+          [],
+          []
+        ],
+        [
+          "pass",
+          "签字笔（黑色细头金属笔夹）、客户明细单、结算单、浅黄便利贴、白色陶瓷咖啡杯均与manifest一致，owner与位置关系成立。",
+          [
+            "E27f74c04b3a9-0082",
+            "E27f74c04b3a9-0118",
+            "E27f74c04b3a9-0112",
+            "E27f74c04b3a9-0115",
+            "E27f74c04b3a9-0106",
+            "E27f74c04b3a9-0109"
+          ],
+          []
+        ]
+      ]
+    ]
+  },
+  "failure": {
+    "schema": "creative_failure/v1",
+    "code": "v7剧本连续性缺少前后拍正文证据",
+    "category": "validation",
+    "next_action": "existing_bounded_contract_repair",
+    "response_received": true,
+    "automatic_retry": false,
+    "blocks_handoff": true
+  },
+  "validation_error": {
+    "message": "v7剧本连续性缺少前后拍正文证据: coverage.7.checks.continuity.evidence_refs 缺少script.beats.6.",
+    "detail": {}
+  },
+  "call_evidence": {
+    "directory": "call_evidence\\call_164",
+    "identity_sha256": "df8bf0b49c409408b2fc6248dfecbbada6b8dd430a3082b8efc4a1cf1b24a2d3"
+  }
+}

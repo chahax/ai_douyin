@@ -1,0 +1,30 @@
+{
+  "prior_call": 162,
+  "known_complete_response": true,
+  "fault_category": "invalid_tool_json",
+  "json_error": "Expecting property name enclosed in double quotes: line 1 column 1583 (char 1582)",
+  "secondary_visible_fault": "evidence_refs写成[id,quote]两项数组，当前Schema要求每项仅ID字符串",
+  "required_exact_shape_example": {
+    "coverage_row": [
+      "B01",
+      [
+        "pass",
+        "核对理由",
+        [
+          "E实际目录ID"
+        ],
+        []
+      ],
+      [
+        "not_applicable",
+        "无对应项",
+        [],
+        []
+      ]
+    ],
+    "evidence_refs": [
+      "E实际目录ID"
+    ]
+  },
+  "instruction": "按实际工具Schema完成全部10拍每项coverage。JSON字符串内引号正确转义，括号和逗号合法。每个证据引用只使用目录ID字符串；不输出引文或[path,quote]，不改原剧本内容，不根据上次建议代写台词。全片重新核对，包括搁笔后持有状态和门外场景，真实问题必须报告。"
+}

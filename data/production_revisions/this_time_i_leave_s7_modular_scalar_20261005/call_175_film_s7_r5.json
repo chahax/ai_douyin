@@ -1,0 +1,622 @@
+{
+  "schema": "authorized_creative_continuation/v3",
+  "ordinal": 175,
+  "label": "film_s7_r5",
+  "request": {
+    "role": "writer",
+    "model": "MiniMax-M3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "用指定工具交一次完整扁平对象，所有创作值为字符串。字段B01_camera等只放根级，绝不beats/shots/item数组，绝不payload_json内再写JSON。本次仅整片情绪、因果、结尾和十镜新增信息/观察对象/构图/摄影/切镜理由/对白模式。全部字段完整，原S7台词和动作不改、参考R01表达机制不照搬剧情。无初态、操作、秒数或窗口字段。前三项反馈已在剧本，导演让便利贴信息整体可见、拒绝两句同镜、林屿真正听到后的反应及门外看票呼气可读，仍两个人。"
+      },
+      {
+        "role": "user",
+        "content": "{\"context\":{\"creative_brief\":{\"schema\":\"creative_brief/v1\",\"theme\":\"总替同事收尾的人，第一次把自己的时间放在前面\",\"duration_seconds\":[45,60],\"delegated_fields\":[],\"duration_policy\":\"flexible\",\"audience\":\"喜欢生活情绪短片的成年观众\",\"relationships\":\"方澄与同事林屿；林屿已习惯她会答应，方澄担心拒绝会伤及两人的关系。\",\"audience_emotion\":\"先看懂她为什么难拒绝，再替她的选择紧张，最后感到关系发生了真实变化。\",\"visual_style\":\"写实真人实拍质感的AI短片，成年普通人外貌，真实皮肤纹理、自然光与生活化服装，克制自然表演，关键反应使用可读近景。\",\"turn\":\"对方原本把她的帮忙视为理所当然；她明确拒绝后，对方必须面对这一点，再通过具体行动回应。\",\"ending\":\"以新的行动兑现边界及关系变化；不预先规定两人必须和解，不用主题口号收尾。\",\"constraints\":[\"观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。\",\"她想离开和担心拒绝的原因要在实际事件中成立。\",\"关键反应的构图和窗口必须写入最终视频提示词。\",\"剧情先按完整故事创作，再拆成生成段；不能为固定八秒切段编造操作。\"],\"avoid\":[\"用一次开本子或摸包代替习惯性的付出历史\",\"靠陪家人看病等新事故替代原本的关系矛盾\",\"强行争吵、突然完美理解、鸡汤总结\",\"为了沿用动画尾帧而改回手绘风格\"]},\"static_visual_manifest\":{\"schema\":\"static_visual_manifest_v2\",\"render\":{\"style_option_id\":\"S01\",\"visual_medium\":\"写实真人实拍质感的AI短片，自然皮肤纹理与生活化布光\",\"palette\":\"傍晚办公室暖调，浅木色桌面、米白墙、暖灰窗帘透橙黄夕光、人物服装为低饱和的灰蓝与米驼\",\"light_source\":\"临窗自然夕光为主，从办公桌侧面斜入，室内顶灯为辅补光，形成柔和侧光与轻微暖色阴影\"},\"characters\":[{\"id\":\"C01\",\"name\":\"方澄\",\"age_group\":\"成年\",\"hair\":\"黑色齐肩直发，自然中分\",\"clothing\":\"灰蓝色薄针织开衫，内搭白色圆领T恤，下着深灰色直筒长裤\",\"body_shape\":\"中等偏瘦，肩线柔和\"},{\"id\":\"C02\",\"name\":\"林屿\",\"age_group\":\"成年\",\"hair\":\"深栗色短碎发，稍长刘海\",\"clothing\":\"米驼色棉质衬衫，袖口挽至前臂，下着深藏蓝休闲长裤\",\"body_shape\":\"中等身高，肩宽略宽于方澄\"}],\"props\":[{\"id\":\"P01\",\"name\":\"挎包\",\"appearance\":\"软皮小号斜挎包，米灰色金属扣，单层翻盖\",\"owner_id\":\"C01\"},{\"id\":\"P02\",\"name\":\"院线电影票根\",\"appearance\":\"竖版窄长纸片，米白底深红字，右侧带撕齿虚线，今晚院线开场时间与座位号可读\",\"owner_id\":\"C01\"},{\"id\":\"P03_Y\",\"name\":\"浅黄对账便利贴\",\"appearance\":\"正方形小纸片，浅黄底，深灰手写短词（对账）\",\"owner_id\":\"C01\"},{\"id\":\"P03_P\",\"name\":\"浅粉改明细便利贴\",\"appearance\":\"正方形小纸片，浅粉底，深灰手写短词（改明细）\",\"owner_id\":\"C01\"},{\"id\":\"P03_B\",\"name\":\"浅蓝收尾便利贴\",\"appearance\":\"正方形小纸片，浅蓝底，深灰手写短词（收尾）\",\"owner_id\":\"C01\"},{\"id\":\"P04\",\"name\":\"咖啡杯\",\"appearance\":\"白色陶瓷马克杯，杯身外侧无图案，杯口微宽\",\"owner_id\":\"C02\"},{\"id\":\"P05\",\"name\":\"客户明细单\",\"appearance\":\"A4横版打印表格纸，浅灰线条格，黑字数字，红笔批注\",\"owner_id\":\"C02\"},{\"id\":\"P06\",\"name\":\"结算单\",\"appearance\":\"A4纵版表格纸，右上角有彩色公司logo条，浅蓝表头\",\"owner_id\":\"C02\"},{\"id\":\"P07\",\"name\":\"签字笔\",\"appearance\":\"黑色细头签字笔，金属笔夹\",\"owner_id\":\"C02\"}],\"scene\":{\"name\":\"傍晚办公室\",\"elements\":[{\"id\":\"E01\",\"name\":\"方澄工位桌\",\"appearance\":\"浅木色长方形办公桌，金属细腿，桌面靠近窗户一侧\"},{\"id\":\"E02\",\"name\":\"林屿工位桌\",\"appearance\":\"浅木色长方形办公桌，与方澄桌同款，平行摆放，靠近室内一侧\"},{\"id\":\"E03\",\"name\":\"抽屉柜\",\"appearance\":\"浅木色三斗文件柜，贴墙放置，黑色拉手\"},{\"id\":\"E04\",\"name\":\"办公室门\",\"appearance\":\"木纹平板门，米灰色，下半部带金属横拉把手，位于房间远端侧墙\"},{\"id\":\"E05\",\"name\":\"窗户\",\"appearance\":\"宽幅铝合金推拉窗，米灰色半透明卷帘半垂，窗框占据外侧整面墙\"},{\"id\":\"E06\",\"name\":\"顶灯\",\"appearance\":\"白色圆形吸顶灯，暖白光，位于房间正中天花板\"},{\"id\":\"E07\",\"name\":\"地面\",\"appearance\":\"浅灰色PVC地板，哑光\"},{\"id\":\"E08\",\"name\":\"墙面\",\"appearance\":\"米白色乳胶漆墙面，干净无装饰\"},{\"id\":\"E09\",\"name\":\"办公椅（方澄）\",\"appearance\":\"黑色网面靠背转椅，灰色塑料五星脚\"},{\"id\":\"E10\",\"name\":\"办公椅（林屿）\",\"appearance\":\"黑色网面靠背转椅，灰色塑料五星脚，与方澄椅同款\"}],\"relations\":[{\"subject\":\"E02\",\"relation\":\"right_of\",\"reference\":\"E01\"},{\"subject\":\"E01\",\"relation\":\"next_to\",\"reference\":\"E05\"},{\"subject\":\"E02\",\"relation\":\"next_to\",\"reference\":\"E01\"},{\"subject\":\"E03\",\"relation\":\"behind\",\"reference\":\"E02\"},{\"subject\":\"E04\",\"relation\":\"behind\",\"reference\":\"E01\"},{\"subject\":\"E06\",\"relation\":\"above\",\"reference\":\"E01\"},{\"subject\":\"E07\",\"relation\":\"below\",\"reference\":\"E01\"},{\"subject\":\"E08\",\"relation\":\"behind\",\"reference\":\"E05\"},{\"subject\":\"E09\",\"relation\":\"next_to\",\"reference\":\"E01\"},{\"subject\":\"E10\",\"relation\":\"next_to\",\"reference\":\"E02\"}]},\"surface_ids\":[\"E01\",\"E02\"]},\"material_ref\":{\"source_driver\":\"original\",\"title\":\"这次我先走·参考表达生产\",\"creative_focus\":\"参考时长（可浮动）45—60秒。创作简报：{\\\"audience\\\": \\\"喜欢生活情绪短片的成年观众\\\", \\\"audience_emotion\\\": \\\"先看懂她为什么难拒绝，再替她的选择紧张，最后感到关系发生了真实变化。\\\", \\\"avoid\\\": [\\\"用一次开本子或摸包代替习惯性的付出历史\\\", \\\"靠陪家人看病等新事故替代原本的关系矛盾\\\", \\\"强行争吵、突然完美理解、鸡汤总结\\\", \\\"为了沿用动画尾帧而改回手绘风格\\\"], \\\"constraints\\\": [\\\"观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。\\\", \\\"她想离开和担心拒绝的原因要在实际事件中成立。\\\", \\\"关键反应的构图和窗口必须写入最终视频提示词。\\\", \\\"剧情先按完整故事创作，再拆成生成段；不能为固定八秒切段编造操作。\\\"], \\\"delegated_fields\\\": [], \\\"duration_policy\\\": \\\"flexible\\\", \\\"duration_seconds\\\": [45, 60], \\\"ending\\\": \\\"以新的行动兑现边界及关系变化；不预先规定两人必须和解，不用主题口号收尾。\\\", \\\"relationships\\\": \\\"方澄与同事林屿；林屿已习惯她会答应，方澄担心拒绝会伤及两人的关系。\\\", \\\"schema\\\": \\\"creative_brief/v1\\\", \\\"theme\\\": \\\"总替同事收尾的人，第一次把自己的时间放在前面\\\", \\\"turn\\\": \\\"对方原本把她的帮忙视为理所当然；她明确拒绝后，对方必须面对这一点，再通过具体行动回应。\\\", \\\"visual_style\\\": \\\"写实真人实拍质感的AI短片，成年普通人外貌，真实皮肤纹理、自然光与生活化服装，克制自然表演，关键反应使用可读近景。\\\"}。优先完整表达情绪、事件和画面；按实际对白、刺激与反应安排秒数，总长可随内容浮动，不为靠近参考范围删掉必要表演或增加填充动作。画风仍按简报；明确的局部时序要求仍生效。\",\"material_sha256\":\"b0f5dfe7dce0f300af26a517b56edae479868626faad80b595921812262d8575\",\"source_sha256\":\"e0f61a360a00f25759eec6f521f6b83af9775100fd886066a3b85bf59d16aa82\",\"reference_sha256\":\"bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1\"},\"reference_pack\":[{\"id\":\"R01\",\"path\":\"D:\\\\IT\\\\ai_douyin\\\\data\\\\reference_reviews\\\\reusable_expression_20261001\\\\EXPRESSION_REFERENCE.md\",\"text\":\"# 已有参考片与教学分析：可复用表达参考\\n\\n用途：借鉴叙事、情绪和摄影表达机制；不是本次剧情来源或硬验收模板。用户当前主题、人物、真人画风、浮动时长和人工视频审核要求优先。不要照搬诈骗、老人、玄关或旧项目专用动作，也不要把所有参考技巧机械塞进短片。\\n\\n## 核心判断\\n\\n参考片用“虚假的关心—真实的付出—伤害—再次渴望关心”组织情绪。最有效的是末尾老人从愤怒到接电话后微笑的变化。画面中每个人在做有目的的事情，表情随具体刺激改变；不靠人物站定后用台词解释全部心理。\\n\\n## 时间轴证据\\n\\n| 时间 | 实际可见内容 | 导演作用 |\\n| --- | --- | --- |\\n| 0–5 秒 | 女生在霓虹街头看手机、展示转账、互相说笑 | 立即交代欺骗关系，让观众比受骗者知道得多 |\\n| 8–18 秒 | 多部手机；男子催促；女子开门进屋、靠近桌子 | 道具解释工作方式，进门动作建立人物和场景联系 |\\n| 20–31 秒 | 女子前景逐一回复手机；男子后景吃东西 | 同一画面有主次行动；她表演关心与身后人的冷漠形成反差 |\\n| 33.5–39 秒 | 老人独坐、看手机、转账界面、对手机讲话 | 将套路切到具体承受者，观众看到真实关切 |\\n| 48–50 秒 | 男子看收款消息，前倾、睁大眼、笑容扩大 | 收款触发贪婪，动作和情绪有因果 |\\n| 50.5–58 秒 | 叫醒女子，递泡面，拿手机催拍，手机取景画面 | 困倦被利用为卖惨素材；道具推动事件 |\\n| 63–78 秒 | 购买金饰、美容、购物、聚餐、泳池炫耀 | 场景变化用于交代骗款去向；不能直接照搬为家庭戏的装饰 |\\n| 77.5–85 秒 | 求还钱消息；泳池跳水切到夜间落水；岸边手机显示消息遭拒 | 剪辑把享乐与受害者绝望并置。人物身份及死亡结果不能仅凭这些帧完全确认 |\\n| 85.5–93 秒 | 抓捕、控制嫌疑人、手机取证 | 交代诈骗被查处，推进结局 |\\n| 93.5–103.5 秒 | 老人看新闻皱眉，随后接电话；字幕“吴叔叔在干嘛”“怎么不理我”，老人逐渐微笑 | 同一人的前后反应完成主题：愤怒没有消除对关心的渴望；来电者身份并未明确 |\\n\\n\\n## 二、四课分别带来的启发\\n\\n下列是基于转写与抽帧的简要归纳，时间用于回看定位，不是逐字引文。\\n\\n1. [0基础，带你做出你人生第一个AI视频](https://www.bilibili.com/video/BV1Z28P6HEGa/)：约3:00–6:10和7:35–9:05，展示剧本先转调度，再转模型提示与角色引用。对本项目的启发是把“镜头观察谁、人物做什么、空间如何呈现”与接口提示编译分层。作者关于一致性的强保证只是演示者判断，不能替代本项目实测。\\n2. [用“抄袭”思维做出AI视频](https://www.bilibili.com/video/BV1sPhE63ERj/)：约5:30–10:10分析构图、色光、参考图与公开工程；约15:45–18:55将已选资产回传给Agent，再校正调度。应学表达机制、记录自己的可复现试验。其首尾帧批评针对示例跳帧，不能据此取消用户当前接续门槛。\\n3. [AI视频究竟怎么学](https://www.bilibili.com/video/BV19fYf6kEnU/)：约8:30–13:10的咖啡店重做显示语音、杯子比例、相似景别切换和情绪出错，随后人工重写调度、局部返修、剪辑。可复用流程必须容纳明确的创作判断和失败处理，不能承诺一键首发全对。\\n4. [如何做出“电影级”AI视频](https://www.bilibili.com/video/BV1uGYE6XEB4/)：约1:00–3:40对比角色参考，约7:30–11:10讨论场景资产。可迁移的是减少身份参考里的杂乱背景、强阴影及不合适表情，同时让场景图服务真实动线。具体模型、4K和版式属于其示例设置，不作为普遍成功保证。\\n\\n教程展示过不同模型／平台及人工选片，不能把其效果直接归因于某段万能提示，也不能推定其接口与项目Mini端能力一致。样片的实际制作模型、提示词、废片率和后期投入未知。\\n\\n## 三、目标样片好在哪里\\n\\n| 观察窗口 | 实际画面与叙事作用 | 可迁移机制 |\\n| --- | --- | --- |\\n| 0–6秒 | 街头女子看手机、同伴交流，随后进入多手机的工作环境 | 开头给具体反差和疑问 |\\n| 20–30秒 | 女子前景回复手机，男子后景吃东西 | 同镜有主次行动，前后景共同传递信息 |\\n| 33–48秒 | 老人、转账界面、男子收款反应交替 | 道具证明信息，近景呈现信息对人的影响 |\\n| 63–78秒 | 消费、购物、聚餐、泳池环境变化 | 用场景变化交代后果与生活反差 |\\n| 93–104秒 | 老人看新闻皱眉，接电话后逐渐放松微笑 | 用刺激后的可见变化完成主题、留下余味 |\\n\\n关键不是表情数量或单张画面的精细度，而是观众的信息、人物的选择和摄影观察对象一起变化。末尾来电者身份不能只凭这些帧确定。目标样片和项目最新片同为720×1280；提高输出分辨率不能单独解决目前的内容差距。\\n\\n\\n### 每镜以观众收到什么为核心\\n\\n明确注意对象、新信息、刺激、反应前后差别、切镜理由、必须可见的证据。每段只传当前相关人物和状态。让对白方式、反应窗口、资产引用和状态由同一权威中间表示编译到最终请求，避免多层重复改写。\"}],\"reference_expression_rule\":\"reference_pack来自已获取的同类视频和教学表达分析。学习信息递进、刺激与反应、具体行动、观察主体及结尾余味；选与当前需求相关的机制，不照搬参考人物、对白、剧情、时长或画风。创作简报优先，不把参考偏好当硬禁令；未观察本次媒体不得宣称表演成功。\",\"raw_linear_script\":{\"title\":\"这次我先走\",\"premise\":\"方澄今晚七点有一场早就买好票的院线电影，是她为自己留出来的时间；林屿习以为常地把临收尾的客户明细推过来，潜台词是她会答应。方澄必须开口说不，让林屿亲耳听见一个明确的不，并承担关系可能变冷的结果；林屿随后用具体行动回应，她再离开办公室，独自赴约。\",\"selected_candidate_id\":\"C01\",\"beats\":[{\"id\":\"B01\",\"event\":\"傍晚办公室，方澄工位上挎包已挂、电影票压在桌角；林屿把自己桌面的客户明细推向两人之间。\",\"trigger\":\"开场让观众同时看见她为自己留出的时间和被他默认接过去的活。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"方澄穿着灰蓝色薄针织开衫站在自己浅木色工位前，米灰色挎包已经挂上椅背，米白底深红字的院线电影票压在桌角自己伸手就能够到的位置。\"},{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"林屿穿着米驼色棉质衬衫坐在她右边的工位，没抬头，把自己桌上那份A4横版客户明细单往两人之间的方向推了推，那张A4纵版结算单仍摊在自己桌角，白色陶瓷咖啡杯放在一旁。\"}]},{\"id\":\"B02\",\"event\":\"林屿没抬头，随口把过去她替他熬过的加班摊到台面，默认她今晚也接手。\",\"trigger\":\"让观众听见她不止一次替他收尾，今晚他仍默认她接手。\",\"steps\":[{\"kind\":\"dialogue\",\"speaker\":\"林屿\",\"text\":\"上月那张对账是你帮我熬到十一点重打的，今晚这份也对到一半了，你顺手帮我收了吧。\"},{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"方澄的目光从他桌上的红笔批注，移到自己桌角压着的电影票，没接话。\"}]},{\"id\":\"B03\",\"event\":\"林屿侧身从她桌角拿起那一小叠便利贴，把浅黄、浅粉、浅蓝三张一并摊开在自己面前桌面上，指尖压住浅黄那张边角；接着把黑色签字笔从自己桌沿拿起来握在右手里，笔尖朝向方澄那一侧停在桌沿，等她接。\",\"trigger\":\"把善后固定事项摊成清单，并把笔递向方澄，明确默认她会接下。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"林屿侧身从方澄桌角拿起那一小叠便利贴，把浅黄、浅粉、浅蓝三张一并摊开在自己面前的桌面上，指尖压住浅黄那张边角。\"},{\"kind\":\"dialogue\",\"speaker\":\"林屿\",\"text\":\"对账，改明细，收尾。\"},{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"林屿把黑色签字笔从自己桌沿拿起来，反手握在右手里，笔尖朝方澄那一侧搁在桌沿停住，等她接。\"}]},{\"id\":\"B04\",\"event\":\"方澄看着被递到自己面前的那支笔，没有伸手去接，抬眼看林屿。\",\"trigger\":\"让她承担开口说不之前的可见犹豫。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"方澄低头看了一眼停在自己面前、笔尖朝向自己的签字笔，没伸手拿，目光顺着那只握笔停住的手抬向林屿的眼睛。\"}]},{\"id\":\"B05\",\"event\":\"方澄开口拒绝，给出今晚不能帮忙的明确理由，再轻声补一句不道歉、不找补的话把今晚留给自己。\",\"trigger\":\"拒绝必须站得住，并交出一个不可打折的理由；用一句被记住的姿态把今晚留给自己。\",\"steps\":[{\"kind\":\"dialogue\",\"speaker\":\"方澄\",\"text\":\"今晚不行，七点我有一场早就买好票的电影。\"},{\"kind\":\"dialogue\",\"speaker\":\"方澄\",\"text\":\"这次我先走。\"}]},{\"id\":\"B06\",\"event\":\"林屿握笔的右手还停在那支笔尖朝方澄的签字笔上，愣了一下，看一眼她椅背上的挎包，又看回自己面前的便利贴和明细单，把那支笔收回自己右手边。\",\"trigger\":\"第一次被明确拒绝，必须面对，不会再假装这件事；同一只手把笔收归自己，边界的转移由他自己完成。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"林屿握笔的右手在桌沿停住，笔尖仍朝方澄那一侧。他看了一眼方澄椅背上挂着的米灰色挎包，又看回自己面前摊着的浅黄便利贴和那张A4横版客户明细单，没接她的话。\"},{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"林屿把右手那支笔尖朝外的签字笔收回自己面前，搁在那张结算单边沿，笔尖不再指向方澄。\"}]},{\"id\":\"B07\",\"event\":\"林屿转回桌前，用签字笔在客户明细单的红笔批注旁落字，自己一行一行对下去。\",\"trigger\":\"他必须用具体行动回应，不是泛写停停顿顿，而是遇到一处具体对不上的项，反复比对结算单。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"林屿重新低头看向那张A4横版客户明细单，用右手那支签字笔在第一处红笔批注旁落字改了一笔，写到第二行数字时停住，把那张A4纵版结算单从桌角拉到明细单旁边对齐，比对后又用笔尖在明细单第二行点了一下，把那个数字划掉重写，写完一笔停一下，再对向结算单继续往下改。\"}]},{\"id\":\"B08\",\"event\":\"方澄左手从椅背上取下挎包挎到肩上，右手拿起桌角那张电影票，朝办公室门方向走去。\",\"trigger\":\"让她第一次真正把今晚留给自己，给观众她去赴约的清晰出口；包与票由左右两只手分别处理，不互相干扰。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"方澄左手从椅背上取下米灰色挎包挎到左肩上，右手拿起桌角那张米白底深红字的院线电影票，朝办公室门方向走出两步。\"},{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"方澄空出左手推开那扇米灰色木纹平板门，走出办公室。\"}]},{\"id\":\"B09\",\"event\":\"方澄在办公室门外的走廊上停一步，低头看一眼手里的电影票，轻轻呼出一口气。\",\"trigger\":\"让她争取到自己时间的释放留在她身上，不和解、不煽情、不回头。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"方澄站在办公室门外走廊上，右手捏着那张米白底深红字的院线电影票，低头看了一眼票面，轻轻呼出一口气。\"}]},{\"id\":\"B10\",\"event\":\"林屿独自坐在工位前，没有喊她，继续用右手那支笔在明细单上对照结算单一行一行改下去。\",\"trigger\":\"关系没有崩，他自己收自己的尾；不再回头看门，她的时间已经被他认下。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"林屿仍坐在工位前，没抬头去喊她，右手里那支黑色签字笔继续在那张A4横版客户明细单的红笔批注旁一行一行改下去，每写一笔就把笔尖挪向旁边那张结算单比对一次，白色陶瓷咖啡杯没动，那张浅黄便利贴压在他左手边的桌面。\"}]}]},\"component_registry\":{\"schema\":\"creative_component_registry_v1\",\"original_manifest\":{\"schema\":\"static_visual_manifest_v2\",\"render\":{\"style_option_id\":\"S01\",\"visual_medium\":\"写实真人实拍质感的AI短片，自然皮肤纹理与生活化布光\",\"palette\":\"傍晚办公室暖调，浅木色桌面、米白墙、暖灰窗帘透橙黄夕光、人物服装为低饱和的灰蓝与米驼\",\"light_source\":\"临窗自然夕光为主，从办公桌侧面斜入，室内顶灯为辅补光，形成柔和侧光与轻微暖色阴影\"},\"characters\":[{\"id\":\"C01\",\"name\":\"方澄\",\"age_group\":\"成年\",\"hair\":\"黑色齐肩直发，自然中分\",\"clothing\":\"灰蓝色薄针织开衫，内搭白色圆领T恤，下着深灰色直筒长裤\",\"body_shape\":\"中等偏瘦，肩线柔和\"},{\"id\":\"C02\",\"name\":\"林屿\",\"age_group\":\"成年\",\"hair\":\"深栗色短碎发，稍长刘海\",\"clothing\":\"米驼色棉质衬衫，袖口挽至前臂，下着深藏蓝休闲长裤\",\"body_shape\":\"中等身高，肩宽略宽于方澄\"}],\"props\":[{\"id\":\"P01\",\"name\":\"挎包\",\"appearance\":\"软皮小号斜挎包，米灰色金属扣，单层翻盖\",\"owner_id\":\"C01\"},{\"id\":\"P02\",\"name\":\"院线电影票根\",\"appearance\":\"竖版窄长纸片，米白底深红字，右侧带撕齿虚线，今晚院线开场时间与座位号可读\",\"owner_id\":\"C01\"},{\"id\":\"P03\",\"name\":\"善后便利贴三张\",\"appearance\":\"正方形小纸片，分别为浅黄、浅粉、浅蓝底，深灰手写短词（对账/改明细/收尾）\",\"owner_id\":\"C01\"},{\"id\":\"P04\",\"name\":\"咖啡杯\",\"appearance\":\"白色陶瓷马克杯，杯身外侧无图案，杯口微宽\",\"owner_id\":\"C02\"},{\"id\":\"P05\",\"name\":\"客户明细单\",\"appearance\":\"A4横版打印表格纸，浅灰线条格，黑字数字，红笔批注\",\"owner_id\":\"C02\"},{\"id\":\"P06\",\"name\":\"结算单\",\"appearance\":\"A4纵版表格纸，右上角有彩色公司logo条，浅蓝表头\",\"owner_id\":\"C02\"},{\"id\":\"P07\",\"name\":\"签字笔\",\"appearance\":\"黑色细头签字笔，金属笔夹\",\"owner_id\":\"C02\"}],\"scene\":{\"name\":\"傍晚办公室\",\"elements\":[{\"id\":\"E01\",\"name\":\"方澄工位桌\",\"appearance\":\"浅木色长方形办公桌，金属细腿，桌面靠近窗户一侧\"},{\"id\":\"E02\",\"name\":\"林屿工位桌\",\"appearance\":\"浅木色长方形办公桌，与方澄桌同款，平行摆放，靠近室内一侧\"},{\"id\":\"E03\",\"name\":\"抽屉柜\",\"appearance\":\"浅木色三斗文件柜，贴墙放置，黑色拉手\"},{\"id\":\"E04\",\"name\":\"办公室门\",\"appearance\":\"木纹平板门，米灰色，下半部带金属横拉把手，位于房间远端侧墙\"},{\"id\":\"E05\",\"name\":\"窗户\",\"appearance\":\"宽幅铝合金推拉窗，米灰色半透明卷帘半垂，窗框占据外侧整面墙\"},{\"id\":\"E06\",\"name\":\"顶灯\",\"appearance\":\"白色圆形吸顶灯，暖白光，位于房间正中天花板\"},{\"id\":\"E07\",\"name\":\"地面\",\"appearance\":\"浅灰色PVC地板，哑光\"},{\"id\":\"E08\",\"name\":\"墙面\",\"appearance\":\"米白色乳胶漆墙面，干净无装饰\"},{\"id\":\"E09\",\"name\":\"办公椅（方澄）\",\"appearance\":\"黑色网面靠背转椅，灰色塑料五星脚\"},{\"id\":\"E10\",\"name\":\"办公椅（林屿）\",\"appearance\":\"黑色网面靠背转椅，灰色塑料五星脚，与方澄椅同款\"}],\"relations\":[{\"subject\":\"E02\",\"relation\":\"right_of\",\"reference\":\"E01\"},{\"subject\":\"E01\",\"relation\":\"next_to\",\"reference\":\"E05\"},{\"subject\":\"E02\",\"relation\":\"next_to\",\"reference\":\"E01\"},{\"subject\":\"E03\",\"relation\":\"behind\",\"reference\":\"E02\"},{\"subject\":\"E04\",\"relation\":\"behind\",\"reference\":\"E01\"},{\"subject\":\"E06\",\"relation\":\"above\",\"reference\":\"E01\"},{\"subject\":\"E07\",\"relation\":\"below\",\"reference\":\"E01\"},{\"subject\":\"E08\",\"relation\":\"behind\",\"reference\":\"E05\"},{\"subject\":\"E09\",\"relation\":\"next_to\",\"reference\":\"E01\"},{\"subject\":\"E10\",\"relation\":\"next_to\",\"reference\":\"E02\"}]}},\"original_manifest_sha256\":\"7e5ad17743bce4e285673636980238471825686d832bc2787a43cfa1bec5f977\",\"component_declarations\":[{\"source_prop_id\":\"P03\",\"source_count\":3,\"source_count_evidence\":\"三张\",\"members\":[{\"id\":\"P03_Y\",\"name\":\"浅黄对账便利贴\",\"appearance\":\"正方形小纸片，浅黄底，深灰手写短词（对账）\",\"owner_id\":\"C01\",\"source_evidence\":[\"浅黄\",\"对账\"]},{\"id\":\"P03_P\",\"name\":\"浅粉改明细便利贴\",\"appearance\":\"正方形小纸片，浅粉底，深灰手写短词（改明细）\",\"owner_id\":\"C01\",\"source_evidence\":[\"浅粉\",\"改明细\"]},{\"id\":\"P03_B\",\"name\":\"浅蓝收尾便利贴\",\"appearance\":\"正方形小纸片，浅蓝底，深灰手写短词（收尾）\",\"owner_id\":\"C01\",\"source_evidence\":[\"浅蓝\",\"收尾\"]}]}],\"component_declarations_sha256\":\"28e40b3c6b934de208b4f273a872ed8f4e2c18073a83817a24c69df3f62ebb60\",\"component_collections\":{\"P03\":{\"member_ids\":[\"P03_Y\",\"P03_P\",\"P03_B\"],\"source_count\":3,\"source_count_evidence\":\"三张\",\"source_prop_sha256\":\"4dc52efb61d4b181265fab5bdc393ada8ed5d2f16a4f9d58d2b25d1874e156f7\"}},\"member_source_map\":{\"P03_Y\":{\"source_prop_id\":\"P03\",\"source_prop_sha256\":\"4dc52efb61d4b181265fab5bdc393ada8ed5d2f16a4f9d58d2b25d1874e156f7\",\"source_evidence\":[\"浅黄\",\"对账\"]},\"P03_P\":{\"source_prop_id\":\"P03\",\"source_prop_sha256\":\"4dc52efb61d4b181265fab5bdc393ada8ed5d2f16a4f9d58d2b25d1874e156f7\",\"source_evidence\":[\"浅粉\",\"改明细\"]},\"P03_B\":{\"source_prop_id\":\"P03\",\"source_prop_sha256\":\"4dc52efb61d4b181265fab5bdc393ada8ed5d2f16a4f9d58d2b25d1874e156f7\",\"source_evidence\":[\"浅蓝\",\"收尾\"]}},\"effective_manifest\":{\"schema\":\"static_visual_manifest_v2\",\"render\":{\"style_option_id\":\"S01\",\"visual_medium\":\"写实真人实拍质感的AI短片，自然皮肤纹理与生活化布光\",\"palette\":\"傍晚办公室暖调，浅木色桌面、米白墙、暖灰窗帘透橙黄夕光、人物服装为低饱和的灰蓝与米驼\",\"light_source\":\"临窗自然夕光为主，从办公桌侧面斜入，室内顶灯为辅补光，形成柔和侧光与轻微暖色阴影\"},\"characters\":[{\"id\":\"C01\",\"name\":\"方澄\",\"age_group\":\"成年\",\"hair\":\"黑色齐肩直发，自然中分\",\"clothing\":\"灰蓝色薄针织开衫，内搭白色圆领T恤，下着深灰色直筒长裤\",\"body_shape\":\"中等偏瘦，肩线柔和\"},{\"id\":\"C02\",\"name\":\"林屿\",\"age_group\":\"成年\",\"hair\":\"深栗色短碎发，稍长刘海\",\"clothing\":\"米驼色棉质衬衫，袖口挽至前臂，下着深藏蓝休闲长裤\",\"body_shape\":\"中等身高，肩宽略宽于方澄\"}],\"props\":[{\"id\":\"P01\",\"name\":\"挎包\",\"appearance\":\"软皮小号斜挎包，米灰色金属扣，单层翻盖\",\"owner_id\":\"C01\"},{\"id\":\"P02\",\"name\":\"院线电影票根\",\"appearance\":\"竖版窄长纸片，米白底深红字，右侧带撕齿虚线，今晚院线开场时间与座位号可读\",\"owner_id\":\"C01\"},{\"id\":\"P03_Y\",\"name\":\"浅黄对账便利贴\",\"appearance\":\"正方形小纸片，浅黄底，深灰手写短词（对账）\",\"owner_id\":\"C01\"},{\"id\":\"P03_P\",\"name\":\"浅粉改明细便利贴\",\"appearance\":\"正方形小纸片，浅粉底，深灰手写短词（改明细）\",\"owner_id\":\"C01\"},{\"id\":\"P03_B\",\"name\":\"浅蓝收尾便利贴\",\"appearance\":\"正方形小纸片，浅蓝底，深灰手写短词（收尾）\",\"owner_id\":\"C01\"},{\"id\":\"P04\",\"name\":\"咖啡杯\",\"appearance\":\"白色陶瓷马克杯，杯身外侧无图案，杯口微宽\",\"owner_id\":\"C02\"},{\"id\":\"P05\",\"name\":\"客户明细单\",\"appearance\":\"A4横版打印表格纸，浅灰线条格，黑字数字，红笔批注\",\"owner_id\":\"C02\"},{\"id\":\"P06\",\"name\":\"结算单\",\"appearance\":\"A4纵版表格纸，右上角有彩色公司logo条，浅蓝表头\",\"owner_id\":\"C02\"},{\"id\":\"P07\",\"name\":\"签字笔\",\"appearance\":\"黑色细头签字笔，金属笔夹\",\"owner_id\":\"C02\"}],\"scene\":{\"name\":\"傍晚办公室\",\"elements\":[{\"id\":\"E01\",\"name\":\"方澄工位桌\",\"appearance\":\"浅木色长方形办公桌，金属细腿，桌面靠近窗户一侧\"},{\"id\":\"E02\",\"name\":\"林屿工位桌\",\"appearance\":\"浅木色长方形办公桌，与方澄桌同款，平行摆放，靠近室内一侧\"},{\"id\":\"E03\",\"name\":\"抽屉柜\",\"appearance\":\"浅木色三斗文件柜，贴墙放置，黑色拉手\"},{\"id\":\"E04\",\"name\":\"办公室门\",\"appearance\":\"木纹平板门，米灰色，下半部带金属横拉把手，位于房间远端侧墙\"},{\"id\":\"E05\",\"name\":\"窗户\",\"appearance\":\"宽幅铝合金推拉窗，米灰色半透明卷帘半垂，窗框占据外侧整面墙\"},{\"id\":\"E06\",\"name\":\"顶灯\",\"appearance\":\"白色圆形吸顶灯，暖白光，位于房间正中天花板\"},{\"id\":\"E07\",\"name\":\"地面\",\"appearance\":\"浅灰色PVC地板，哑光\"},{\"id\":\"E08\",\"name\":\"墙面\",\"appearance\":\"米白色乳胶漆墙面，干净无装饰\"},{\"id\":\"E09\",\"name\":\"办公椅（方澄）\",\"appearance\":\"黑色网面靠背转椅，灰色塑料五星脚\"},{\"id\":\"E10\",\"name\":\"办公椅（林屿）\",\"appearance\":\"黑色网面靠背转椅，灰色塑料五星脚，与方澄椅同款\"}],\"relations\":[{\"subject\":\"E02\",\"relation\":\"right_of\",\"reference\":\"E01\"},{\"subject\":\"E01\",\"relation\":\"next_to\",\"reference\":\"E05\"},{\"subject\":\"E02\",\"relation\":\"next_to\",\"reference\":\"E01\"},{\"subject\":\"E03\",\"relation\":\"behind\",\"reference\":\"E02\"},{\"subject\":\"E04\",\"relation\":\"behind\",\"reference\":\"E01\"},{\"subject\":\"E06\",\"relation\":\"above\",\"reference\":\"E01\"},{\"subject\":\"E07\",\"relation\":\"below\",\"reference\":\"E01\"},{\"subject\":\"E08\",\"relation\":\"behind\",\"reference\":\"E05\"},{\"subject\":\"E09\",\"relation\":\"next_to\",\"reference\":\"E01\"},{\"subject\":\"E10\",\"relation\":\"next_to\",\"reference\":\"E02\"}]},\"surface_ids\":[\"E01\",\"E02\"]},\"effective_manifest_sha256\":\"a4f3f2510f19538875b221e6d37eadd9c94c23299e6eeb12e0b583ef17b6481a\",\"semantic_approval\":false,\"production_ready\":false},\"linear_script_protocol\":\"complete_linear_script_v3\",\"script_timing_status\":\"preliminary_budget_not_actual\",\"user_content_feedback\":{\"schema\":\"user_creative_feedback/v1\",\"source\":\"current user message\",\"parent\":\"S6 call67 / director77 / full_review158 / 91.442857s\",\"quality_confirmation\":false,\"issues\":[{\"id\":\"NOTE_REPETITION\",\"user_statement\":\"第3镜的便利贴动作堆得太长。27.61秒到35.91秒，8.3秒只把三张便利贴依次揭起、摊平、念词；可以压缩到5–6秒，把省出的时间留给拒绝或离开。\"},{\"id\":\"MEMORABLE_CHOICE\",\"user_statement\":\"拒绝后轻轻补充‘这次我先走’，呼应标题，不道歉、不找补。\"},{\"id\":\"VISIBLE_RELEASE\",\"user_statement\":\"门外停下，看一眼手里的票，轻轻呼一口气；不和解、不煽情、不回头，让观众知道她去赴自己的约。\"},{\"id\":\"OPTIONAL_COLLEAGUE\",\"user_statement\":\"职场横向参照仍缺席；不是必须，可用门边同事抬头看她手里票的一眼。\"}],\"implementation_choice\":{\"keep_two_characters\":true,\"reason\":\"本轮优先聚焦她争取自己时间的可见释放，不新增资产或转移情绪观察主体。第四项明确为可选，作为未采用建议保存。\",\"tighten_old_account_dialogue\":true,\"reason_long_dialogue\":\"第二镜仍21.614秒；保留长期善后的证据但让完整新稿自然压缩这句，实际时长留导演和局部表演。\"},\"requirements\":[\"完整模型新稿；剧情仍是惯常加班的协作关系、明确拒绝、他自己接回工作、她赴电影约。\",\"三张便利贴允许作为一组拿起摊开，只呈现信息而不逐张揭起压角；不得让旁人替她做新工作。\",\"拒绝后保留一个选择姿态：‘这次我先走’；不追加道歉、承诺下次帮忙或补偿。\",\"出门后在门外看手中电影票并轻呼气，不回头、不对男方求认同；情绪释放留在她身上。\",\"林屿确实自己做并承担原难度，但不加惩罚、消息奖励、老板加薪或突然威胁。\",\"当前仅两名已绑定人物；笔从桌沿拿取后明确持续持有，纸面位置和包票/推门手部前提应由正文成立。\",\"不写实际秒数或承诺热度；保留所有完整参考，仅借表达机制，不照搬剧情。\"]},\"production_responsibility\":{\"whole_film_direction\":\"情绪、因果、每镜新增信息/观察主体/切镜理由/必要反应要求；不细排秒数\",\"local_events\":\"只负责正文合法有用事件与首态前提；临时预检秒数不是表演\",\"local_performance\":\"完整各slot表演与真实秒数，不改事件、不删对白\",\"compiler\":\"确定性投影、跨镜状态、真实排时和窗口\",\"editorial_intent\":\"便利贴信息整体呈现，避免反复揭起压角；拒绝现场标题句，门外看票轻呼气，仍两人；不照搬参考剧情、不加补偿或奖惩\",\"timing_targets_not_yet_verified\":{\"three_notes_and_list_seconds\":\"5–6秒目标，实际由局部表演检验\",\"doorway_release_seconds\":\"1–2秒可读目标，不能生硬定为一秒\"}}},\"source_catalog\":[{\"ref\":\"raw_linear_script.beats.0.steps.0\",\"beat_id\":\"B01\",\"beat_index\":0,\"step_index\":0,\"kind\":\"action\"},{\"ref\":\"raw_linear_script.beats.0.steps.1\",\"beat_id\":\"B01\",\"beat_index\":0,\"step_index\":1,\"kind\":\"action\"},{\"ref\":\"raw_linear_script.beats.1.steps.0\",\"beat_id\":\"B02\",\"beat_index\":1,\"step_index\":0,\"kind\":\"dialogue\"},{\"ref\":\"raw_linear_script.beats.1.steps.1\",\"beat_id\":\"B02\",\"beat_index\":1,\"step_index\":1,\"kind\":\"action\"},{\"ref\":\"raw_linear_script.beats.2.steps.0\",\"beat_id\":\"B03\",\"beat_index\":2,\"step_index\":0,\"kind\":\"action\"},{\"ref\":\"raw_linear_script.beats.2.steps.1\",\"beat_id\":\"B03\",\"beat_index\":2,\"step_index\":1,\"kind\":\"dialogue\"},{\"ref\":\"raw_linear_script.beats.2.steps.2\",\"beat_id\":\"B03\",\"beat_index\":2,\"step_index\":2,\"kind\":\"action\"},{\"ref\":\"raw_linear_script.beats.3.steps.0\",\"beat_id\":\"B04\",\"beat_index\":3,\"step_index\":0,\"kind\":\"action\"},{\"ref\":\"raw_linear_script.beats.4.steps.0\",\"beat_id\":\"B05\",\"beat_index\":4,\"step_index\":0,\"kind\":\"dialogue\"},{\"ref\":\"raw_linear_script.beats.4.steps.1\",\"beat_id\":\"B05\",\"beat_index\":4,\"step_index\":1,\"kind\":\"dialogue\"},{\"ref\":\"raw_linear_script.beats.5.steps.0\",\"beat_id\":\"B06\",\"beat_index\":5,\"step_index\":0,\"kind\":\"action\"},{\"ref\":\"raw_linear_script.beats.5.steps.1\",\"beat_id\":\"B06\",\"beat_index\":5,\"step_index\":1,\"kind\":\"action\"},{\"ref\":\"raw_linear_script.beats.6.steps.0\",\"beat_id\":\"B07\",\"beat_index\":6,\"step_index\":0,\"kind\":\"action\"},{\"ref\":\"raw_linear_script.beats.7.steps.0\",\"beat_id\":\"B08\",\"beat_index\":7,\"step_index\":0,\"kind\":\"action\"},{\"ref\":\"raw_linear_script.beats.7.steps.1\",\"beat_id\":\"B08\",\"beat_index\":7,\"step_index\":1,\"kind\":\"action\"},{\"ref\":\"raw_linear_script.beats.8.steps.0\",\"beat_id\":\"B09\",\"beat_index\":8,\"step_index\":0,\"kind\":\"action\"},{\"ref\":\"raw_linear_script.beats.9.steps.0\",\"beat_id\":\"B10\",\"beat_index\":9,\"step_index\":0,\"kind\":\"action\"}],\"output_fields\":[\"schema\",\"emotional_arc\",\"causal_chain\",\"ending_intent\",\"B01_new_information\",\"B01_observation_object\",\"B01_camera\",\"B01_cut_reason\",\"B01_purpose\",\"B01_composition\",\"B01_dialogue_mode\",\"B02_new_information\",\"B02_observation_object\",\"B02_camera\",\"B02_cut_reason\",\"B02_purpose\",\"B02_composition\",\"B02_dialogue_mode\",\"B03_new_information\",\"B03_observation_object\",\"B03_camera\",\"B03_cut_reason\",\"B03_purpose\",\"B03_composition\",\"B03_dialogue_mode\",\"B04_new_information\",\"B04_observation_object\",\"B04_camera\",\"B04_cut_reason\",\"B04_purpose\",\"B04_composition\",\"B04_dialogue_mode\",\"B05_new_information\",\"B05_observation_object\",\"B05_camera\",\"B05_cut_reason\",\"B05_purpose\",\"B05_composition\",\"B05_dialogue_mode\",\"B06_new_information\",\"B06_observation_object\",\"B06_camera\",\"B06_cut_reason\",\"B06_purpose\",\"B06_composition\",\"B06_dialogue_mode\",\"B07_new_information\",\"B07_observation_object\",\"B07_camera\",\"B07_cut_reason\",\"B07_purpose\",\"B07_composition\",\"B07_dialogue_mode\",\"B08_new_information\",\"B08_observation_object\",\"B08_camera\",\"B08_cut_reason\",\"B08_purpose\",\"B08_composition\",\"B08_dialogue_mode\",\"B09_new_information\",\"B09_observation_object\",\"B09_camera\",\"B09_cut_reason\",\"B09_purpose\",\"B09_composition\",\"B09_dialogue_mode\",\"B10_new_information\",\"B10_observation_object\",\"B10_camera\",\"B10_cut_reason\",\"B10_purpose\",\"B10_composition\",\"B10_dialogue_mode\"],\"verified_feedback\":{\"complete_rewrite\":\"提交完整74字段全新导演稿，不附解释，尽量每字段30字内，所有要求同时保留。\",\"required_consistency\":[\"结尾仅原文开门离开、门外看票呼气、他继续工作；删除未发生关门。\",\"SH02固定两人中景，林屿嘴与方澄眼神都清晰。\",\"SH03桌面手部近景，整组摊贴，画外原清单对白，笔保持林屿右手朝她，不三次揭压。\",\"SH04脸清晰为主，下方笔陪体，目光从笔抬向林屿，犹豫可读。\",\"SH05固定方澄脸部近景，两句完整拒绝同镜。SH06随后固定林屿面部中近景，必须包含脸眼停顿及看包回看纸，右手在下沿收笔；不只拍手包纸，不改变所有权。\",\"SH07仅一次拉结算单，此后只笔尖比对改数。\",\"SH08原站姿取左肩包与右手票，平视轻跟至门并左手推门离开，一镜不起身。\",\"SH09前侧脸右手票轻呼气同框，门外赴约释放，不背影不回头不和解。SH10他不抬头喊她继续工作，杯不动。\"],\"source_audit174\":[\"SH06_camera和composition只写右手/包/纸，看不到必须可读的林屿脸和愣住反应。\",\"ending_intent添加未发生的关门动作。\"],\"instruction\":\"严格完整S7原动作台词/R01机制，仍两人，每完整拍一镜；不增操作。\"},\"source_allocation_policy\":\"本次十个完整叙事拍各一个镜头单元，程序按原拍完整steps分配SH01..SH10，不拆原action或句子。导演填写各拍创作字段，不能在camera里偷偷切成多镜。需要改变该策略时完整修订合同，不本地补剪。\"}"
+      }
+    ],
+    "structured_schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "emotional_arc",
+        "causal_chain",
+        "ending_intent",
+        "B01_new_information",
+        "B01_observation_object",
+        "B01_camera",
+        "B01_cut_reason",
+        "B01_purpose",
+        "B01_composition",
+        "B01_dialogue_mode",
+        "B02_new_information",
+        "B02_observation_object",
+        "B02_camera",
+        "B02_cut_reason",
+        "B02_purpose",
+        "B02_composition",
+        "B02_dialogue_mode",
+        "B03_new_information",
+        "B03_observation_object",
+        "B03_camera",
+        "B03_cut_reason",
+        "B03_purpose",
+        "B03_composition",
+        "B03_dialogue_mode",
+        "B04_new_information",
+        "B04_observation_object",
+        "B04_camera",
+        "B04_cut_reason",
+        "B04_purpose",
+        "B04_composition",
+        "B04_dialogue_mode",
+        "B05_new_information",
+        "B05_observation_object",
+        "B05_camera",
+        "B05_cut_reason",
+        "B05_purpose",
+        "B05_composition",
+        "B05_dialogue_mode",
+        "B06_new_information",
+        "B06_observation_object",
+        "B06_camera",
+        "B06_cut_reason",
+        "B06_purpose",
+        "B06_composition",
+        "B06_dialogue_mode",
+        "B07_new_information",
+        "B07_observation_object",
+        "B07_camera",
+        "B07_cut_reason",
+        "B07_purpose",
+        "B07_composition",
+        "B07_dialogue_mode",
+        "B08_new_information",
+        "B08_observation_object",
+        "B08_camera",
+        "B08_cut_reason",
+        "B08_purpose",
+        "B08_composition",
+        "B08_dialogue_mode",
+        "B09_new_information",
+        "B09_observation_object",
+        "B09_camera",
+        "B09_cut_reason",
+        "B09_purpose",
+        "B09_composition",
+        "B09_dialogue_mode",
+        "B10_new_information",
+        "B10_observation_object",
+        "B10_camera",
+        "B10_cut_reason",
+        "B10_purpose",
+        "B10_composition",
+        "B10_dialogue_mode"
+      ],
+      "properties": {
+        "schema": {
+          "const": "s7_film_scalars/v26"
+        },
+        "emotional_arc": {
+          "type": "string",
+          "minLength": 1
+        },
+        "causal_chain": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ending_intent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B01_new_information": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B01_observation_object": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B01_camera": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B01_cut_reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B01_purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B01_composition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B01_dialogue_mode": {
+          "enum": [
+            "画内对白",
+            "画外对白",
+            "混合对白",
+            "无对白"
+          ]
+        },
+        "B02_new_information": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B02_observation_object": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B02_camera": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B02_cut_reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B02_purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B02_composition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B02_dialogue_mode": {
+          "enum": [
+            "画内对白",
+            "画外对白",
+            "混合对白",
+            "无对白"
+          ]
+        },
+        "B03_new_information": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B03_observation_object": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B03_camera": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B03_cut_reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B03_purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B03_composition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B03_dialogue_mode": {
+          "enum": [
+            "画内对白",
+            "画外对白",
+            "混合对白",
+            "无对白"
+          ]
+        },
+        "B04_new_information": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B04_observation_object": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B04_camera": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B04_cut_reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B04_purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B04_composition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B04_dialogue_mode": {
+          "enum": [
+            "画内对白",
+            "画外对白",
+            "混合对白",
+            "无对白"
+          ]
+        },
+        "B05_new_information": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B05_observation_object": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B05_camera": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B05_cut_reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B05_purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B05_composition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B05_dialogue_mode": {
+          "enum": [
+            "画内对白",
+            "画外对白",
+            "混合对白",
+            "无对白"
+          ]
+        },
+        "B06_new_information": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B06_observation_object": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B06_camera": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B06_cut_reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B06_purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B06_composition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B06_dialogue_mode": {
+          "enum": [
+            "画内对白",
+            "画外对白",
+            "混合对白",
+            "无对白"
+          ]
+        },
+        "B07_new_information": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B07_observation_object": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B07_camera": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B07_cut_reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B07_purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B07_composition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B07_dialogue_mode": {
+          "enum": [
+            "画内对白",
+            "画外对白",
+            "混合对白",
+            "无对白"
+          ]
+        },
+        "B08_new_information": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B08_observation_object": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B08_camera": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B08_cut_reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B08_purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B08_composition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B08_dialogue_mode": {
+          "enum": [
+            "画内对白",
+            "画外对白",
+            "混合对白",
+            "无对白"
+          ]
+        },
+        "B09_new_information": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B09_observation_object": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B09_camera": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B09_cut_reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B09_purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B09_composition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B09_dialogue_mode": {
+          "enum": [
+            "画内对白",
+            "画外对白",
+            "混合对白",
+            "无对白"
+          ]
+        },
+        "B10_new_information": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B10_observation_object": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B10_camera": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B10_cut_reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B10_purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B10_composition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "B10_dialogue_mode": {
+          "enum": [
+            "画内对白",
+            "画外对白",
+            "混合对白",
+            "无对白"
+          ]
+        }
+      }
+    },
+    "parameters": {
+      "max_completion_tokens": 6000,
+      "temperature": 0.4,
+      "thinking": "disabled"
+    },
+    "input_provenance": {
+      "stage": "whole_film_editorial_scalars",
+      "raw_script_sha256": "465b12b846c5a14581e069d62f0068b0b27d2cb224231f6e7c08eed88301f1f3",
+      "full_reference_pack_in_messages": true,
+      "source_allocation_policy": "one complete source beat per shot for this S7 trial",
+      "scalar_only_model_output": true,
+      "deterministic_projection_no_text_rewrite": true,
+      "native_object_tool_schema": true,
+      "server_strict_decoding_claimed": false
+    },
+    "operator_version": "s7_three_module_direction/v26_scalar"
+  },
+  "request_sha256": "cc29c8325c72c3b7394242641655c2b27bc60d49441d6fc03183aded0bb9fa96",
+  "source_binding_sha256": "7eadad858778b5c2b865a47dcd2db61f6f0162df13dcfdb6627614a7a7aa03ef",
+  "status": "contract_valid",
+  "started_at": "2026-10-05T15:56:09.884908+00:00",
+  "token_reservation": 38718,
+  "automatic_retry": false,
+  "semantic_approval": false,
+  "response_metadata": {
+    "http_status_code": 200,
+    "http_request_id": null,
+    "safe_response_headers": {
+      "trace-id": "0712fb9b7383b8d0b2a59931c6f2cc6b",
+      "content-type": "application/json; charset=utf-8",
+      "date": "Mon, 05 Oct 2026 15:56:53 GMT"
+    },
+    "role": "writer",
+    "provider": "minimax",
+    "requested_model": "MiniMax-M3",
+    "response_model": "MiniMax-M3",
+    "response_id": "0712fb9b7383b8d0b2a59931c6f2cc6b",
+    "finish_reason": "tool_calls",
+    "thinking_mode": "disabled",
+    "output_mode": "tool_call",
+    "transport_version": "creative_evidenced_role_clients/v1",
+    "strict_mode": false,
+    "server_schema_guarantee": false,
+    "response_body_complete": true,
+    "raw_body_sha256": "e632e01affc1081ff65a020798978044fa40ef38fe0397b4c59b0abc079ed5f6",
+    "prompt_tokens": 12278,
+    "completion_tokens": 2959,
+    "total_tokens": 15237,
+    "usage_source": "original_provider_response",
+    "provider_status_code": 0
+  },
+  "response_text": "{\"schema\":\"s7_film_scalars/v26\",\"emotional_arc\":\"傍晚办公室从惯常协作的松弛，到摊开清单的默认期待，再被一句拒绝骤然压住；林屿愣住后独自收笔改单的安静；方澄在门外看票呼气后独自去赴约的释放。\",\"causal_chain\":\"林屿过去多次由方澄替他熬到深夜收尾已养成惯性→他默认今晚她也会接手，把明细推来、把笔递向她→她看着笔尖朝向自己，没接，抬眼说出今晚七点有早就买好票的电影→他第一次被明确拒绝，愣住→他把笔收回自己那一侧→转回明细独自逐行比对改写→她取包拿票推门离开→他在原位继续改，关系用行动落定。\",\"ending_intent\":\"她争取到自己留给自己的时间，独自去赴那场早就买好票的电影；他没回头喊她，自己逐行收尾。关系以可见行动换了新边界，不和解也不崩，留白给观众自己去想。\",\"B01_new_information\":\"观众第一次同时看到方澄为自己留好的电影票和她椅背上已挂好的挎包，以及林屿主动把客户明细单推向两人之间。\",\"B01_observation_object\":\"两人工位之间的桌面：方澄桌角的电影票、椅背上的挎包，和林屿推过来的客户明细单与结算单。\",\"B01_camera\":\"固定两人中景，机位在方澄身后偏左，平视高度，浅景深，把两张工位、桌角票根和推来的纸面同时收入画面。\",\"B01_cut_reason\":\"建立空间、两人工位关系和她为自己留出的时间与他默认接过去的活，让观众在拒绝发生前同时看见两边。\",\"B01_purpose\":\"开场让观众一眼读懂：她今晚有事，他也照旧在推活。\",\"B01_composition\":\"方澄在画面左侧中前景，林屿在右侧，两人桌面占据下半幅；她椅背的包和她桌角的票形成前景证据，他推过来的纸面落在两人之间。\",\"B01_dialogue_mode\":\"无对白\",\"B02_new_information\":\"林屿第一次开口，把上月她替他熬到十一点重打对账、这份也只对一半的事实摊到台面，默认她今晚也会顺手帮他收。\",\"B02_observation_object\":\"林屿说话时的嘴和低垂侧脸，方澄从红笔批注移向自己桌角票根的目光。\",\"B02_camera\":\"固定两人中景不变，机位同上一镜，让观众在同一空间里听见这句默认。\",\"B02_cut_reason\":\"观众必须在这句对白里听见她不止一次替他熬过夜、也听见他今晚仍默认她接手，而不是靠旁白补。\",\"B02_purpose\":\"用一句画内自然对白兑现\\\"过去不止一次\\\"的可见证据，把习惯性的付出历史摆到台面。\",\"B02_composition\":\"画面保持上镜构图，林屿微低侧脸在右前景，方澄在左前景，目光从纸面移向她桌角票根的方向。\",\"B02_dialogue_mode\":\"画内对白\",\"B03_new_information\":\"林屿从她桌角拿起三张便利贴一组摊开在自己面前，写着对账/改明细/收尾的三项善后清单整体可见；他右手把签字笔握起，笔尖朝向她搁在桌沿等她接。\",\"B03_observation_object\":\"林屿面前桌面上整组摊开的三张便利贴和黑色签字笔。\",\"B03_camera\":\"切到桌面手部近景，机位在桌沿外侧俯视浅角，焦点锁定笔、纸和手指。\",\"B03_cut_reason\":\"用一组切近镜头把善后固定事项和递笔的默认一起落到画面里，让观众看见清单整体可见、笔尖朝向明确等待。\",\"B03_purpose\":\"把善后变成可见清单，并把笔递向她，把\\\"默认她会接\\\"压成画面证据；便利贴信息整体呈现，不逐张揭起压角。\",\"B03_composition\":\"画面下方正中摊开浅黄、浅粉、浅蓝三张便利贴，他右手握笔停在她一侧桌沿，笔尖朝向她那边，画面上方留出她未来回应的空间。\",\"B03_dialogue_mode\":\"画外对白\",\"B04_new_information\":\"方澄没接那支笔，目光从笔尖沿那只握笔停住的手，抬向林屿的眼睛。\",\"B04_observation_object\":\"方澄的脸、眼和犹豫眼神，以及下方桌沿那支笔尖朝向自己的签字笔。\",\"B04_camera\":\"切到方澄面部中近景，机位正对她，平视略仰，景深浅，下沿留出那支停住的签字笔作为前景陪体。\",\"B04_cut_reason\":\"把她拒绝前那一瞬的犹豫单独切出来给观众看见，必须是脸清晰、目光从笔移到眼睛。\",\"B04_purpose\":\"让观众在她开口说不之前先读到犹豫，让拒绝有重量而不是随口一句。\",\"B04_composition\":\"方澄的脸占据画面上半幅，眼神从前下方的笔尖沿着那只停住的手抬向画面右侧外的林屿眼睛；下方桌沿那支签字笔留在画面内作证据。\",\"B04_dialogue_mode\":\"无对白\",\"B05_new_information\":\"方澄用今晚七点有早就买好票的电影作为不可打折的理由，再补一句\\\"这次我先走\\\"把今晚留给自己，不道歉、不找补。\",\"B05_observation_object\":\"方澄说两句话时的面部和眼神变化。\",\"B05_camera\":\"固定方澄面部近景不变，平视，与上一镜同机位同景别，两句完整拒绝同镜完成。\",\"B05_cut_reason\":\"拒绝两句必须同镜读完，让观众清楚听见她给了一个真实理由和一句选择姿态，中间不被打断。\",\"B05_purpose\":\"让拒绝站得住脚：一个真实理由加一句把今晚留给自己、不补偿的姿态。\",\"B05_composition\":\"方澄的脸在画面正中，眼神从下方笔尖抬起来定住，嘴唇在两句话间有微小闭合和再张开。\",\"B05_dialogue_mode\":\"画内对白\",\"B06_new_information\":\"林屿愣住，看一眼她椅背上的挎包，又看回摊在面前的便利贴和明细单；同一只握笔的右手把那支笔尖朝外的签字笔收回自己这一侧，搁在结算单边沿。\",\"B06_observation_object\":\"林屿的脸、眼、看包到回看纸的视线，以及他右手收回签字笔的动作。\",\"B06_camera\":\"切到林屿面部中近景，机位正对他，平视略仰，必须能看到他脸、眼和愣住反应，以及右手收回签字笔的下沿动作。\",\"B06_cut_reason\":\"第一次被明确拒绝必须让观众看到他的脸和愣住一瞬，并被一笔单独的收回笔的动作拍出边界的转移。\",\"B06_purpose\":\"他必须面对这个明确的不，并由同一只手把笔收归自己——边界的转移由他自己完成。\",\"B06_composition\":\"林屿的脸占据画面上半幅，看包往画面左侧、回头看纸回到正中两个视线转折清楚；下沿可见他把笔收回搁在结算单边沿，笔尖不再指向她。\",\"B06_dialogue_mode\":\"无对白\",\"B07_new_information\":\"林屿转回桌前，用笔在明细单红笔批注旁落字改数、对照结算单逐行改下去，他确实在做那件她过去替他做的活。\",\"B07_observation_object\":\"林屿右手签字笔在纸面上的落字、点数字和把数字划掉重写的动作，以及旁边那张结算单。\",\"B07_camera\":\"切回桌面手部近景，机位同SH03，焦点从摊开的便利贴移到明细单与结算单对齐处。\",\"B07_cut_reason\":\"他必须用具体行动回应——遇到具体对不上的项、反复比对——而不是只低头停顿。\",\"B07_purpose\":\"让观众看见这件事由他自己做、且他做得到，承担原本属于他的那份难度。\",\"B07_composition\":\"画面下方正中明细单与结算单并排，他右手落笔改字、笔尖点数字再划掉重写，每写一笔把笔尖挪向结算单比对一次。\",\"B07_dialogue_mode\":\"无对白\",\"B08_new_information\":\"方澄左手取下挎包挎上左肩、右手拿起桌角电影票，朝办公室门走出两步，空出左手推开米灰色木纹平板门走出去。\",\"B08_observation_object\":\"方澄站姿取左肩包、右手票、平视轻跟至门、左手推门离开的全过程。\",\"B08_camera\":\"平视轻跟的连续长镜头，机位从她侧后跟到门边，不切换。\",\"B08_cut_reason\":\"让她争取到自己时间的动作由一镜完成，不在起身取包或推门之间插入任何切镜，让观众跟住她离开的全过程。\",\"B08_purpose\":\"让她第一次真正把今晚留给自己，给观众她独自去赴约的清晰出口。\",\"B08_composition\":\"方澄在画面正中偏左，取包、拿票、迈步、推门走出都在同一镜头里完成，门开方向成为画面右侧外的出口。\",\"B08_dialogue_mode\":\"无对白\",\"B09_new_information\":\"方澄在门外走廊上低头看一眼手中电影票，轻轻呼出一口气。\",\"B09_observation_object\":\"方澄前侧脸、右手捏着的电影票，以及那轻轻的一口气。\",\"B09_camera\":\"切到前侧脸和右手电影票的同框近景，机位平视略仰，景深浅，背景走廊虚化。\",\"B09_cut_reason\":\"把争取到自己时间的释放留在她身上这一单独动作切出来给观众看见，不回头、不背影、不和解。\",\"B09_purpose\":\"让观众读到她争取到时间的释放，知道她去赴自己的约。\",\"B09_composition\":\"画面左侧她前侧脸、右侧她右手捏着的电影票清晰可读，嘴唇微动吐出那口气，背景走廊虚化。\",\"B09_dialogue_mode\":\"无对白\",\"B10_new_information\":\"林屿仍坐在工位前，没有抬头喊她，右手那支签字笔继续在明细单红笔批注旁一行一行改下去，咖啡杯没动，浅黄便利贴压在他左手边桌面。\",\"B10_observation_object\":\"林屿右手签字笔在明细单与结算单之间逐行改写的桌面，以及他没抬头的状态。\",\"B10_camera\":\"切回桌面与林屿右手近景，机位同SH07，焦点落在笔尖落字与结算单比对上。\",\"B10_cut_reason\":\"用他没抬头、继续工作的安静收尾，给观众确认关系没有崩、她争取的时间被他认下。\",\"B10_purpose\":\"关系用行动兑现边界：他自己收自己的尾，不再回头看门，她的时间被他认下。\",\"B10_composition\":\"画面下方正中明细单与结算单并排，他右手落笔改字、每写一笔挪向结算单比对一次，画面左侧浅黄便利贴压住，杯未动。\",\"B10_dialogue_mode\":\"无对白\"}",
+  "response_payload": {
+    "id": "0712fb9b7383b8d0b2a59931c6f2cc6b",
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "message": {
+          "content": "I'll submit the complete structured creative JSON for all 10 shots with full fields, following the verified feedback requirements strictly.",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "id": "call_01a10cc8412870629e1e9407",
+              "type": "function",
+              "function": {
+                "name": "submit_creative_json",
+                "arguments": "{\"schema\":\"s7_film_scalars/v26\",\"emotional_arc\":\"傍晚办公室从惯常协作的松弛，到摊开清单的默认期待，再被一句拒绝骤然压住；林屿愣住后独自收笔改单的安静；方澄在门外看票呼气后独自去赴约的释放。\",\"causal_chain\":\"林屿过去多次由方澄替他熬到深夜收尾已养成惯性→他默认今晚她也会接手，把明细推来、把笔递向她→她看着笔尖朝向自己，没接，抬眼说出今晚七点有早就买好票的电影→他第一次被明确拒绝，愣住→他把笔收回自己那一侧→转回明细独自逐行比对改写→她取包拿票推门离开→他在原位继续改，关系用行动落定。\",\"ending_intent\":\"她争取到自己留给自己的时间，独自去赴那场早就买好票的电影；他没回头喊她，自己逐行收尾。关系以可见行动换了新边界，不和解也不崩，留白给观众自己去想。\",\"B01_new_information\":\"观众第一次同时看到方澄为自己留好的电影票和她椅背上已挂好的挎包，以及林屿主动把客户明细单推向两人之间。\",\"B01_observation_object\":\"两人工位之间的桌面：方澄桌角的电影票、椅背上的挎包，和林屿推过来的客户明细单与结算单。\",\"B01_camera\":\"固定两人中景，机位在方澄身后偏左，平视高度，浅景深，把两张工位、桌角票根和推来的纸面同时收入画面。\",\"B01_cut_reason\":\"建立空间、两人工位关系和她为自己留出的时间与他默认接过去的活，让观众在拒绝发生前同时看见两边。\",\"B01_purpose\":\"开场让观众一眼读懂：她今晚有事，他也照旧在推活。\",\"B01_composition\":\"方澄在画面左侧中前景，林屿在右侧，两人桌面占据下半幅；她椅背的包和她桌角的票形成前景证据，他推过来的纸面落在两人之间。\",\"B01_dialogue_mode\":\"无对白\",\"B02_new_information\":\"林屿第一次开口，把上月她替他熬到十一点重打对账、这份也只对一半的事实摊到台面，默认她今晚也会顺手帮他收。\",\"B02_observation_object\":\"林屿说话时的嘴和低垂侧脸，方澄从红笔批注移向自己桌角票根的目光。\",\"B02_camera\":\"固定两人中景不变，机位同上一镜，让观众在同一空间里听见这句默认。\",\"B02_cut_reason\":\"观众必须在这句对白里听见她不止一次替他熬过夜、也听见他今晚仍默认她接手，而不是靠旁白补。\",\"B02_purpose\":\"用一句画内自然对白兑现\\\"过去不止一次\\\"的可见证据，把习惯性的付出历史摆到台面。\",\"B02_composition\":\"画面保持上镜构图，林屿微低侧脸在右前景，方澄在左前景，目光从纸面移向她桌角票根的方向。\",\"B02_dialogue_mode\":\"画内对白\",\"B03_new_information\":\"林屿从她桌角拿起三张便利贴一组摊开在自己面前，写着对账/改明细/收尾的三项善后清单整体可见；他右手把签字笔握起，笔尖朝向她搁在桌沿等她接。\",\"B03_observation_object\":\"林屿面前桌面上整组摊开的三张便利贴和黑色签字笔。\",\"B03_camera\":\"切到桌面手部近景，机位在桌沿外侧俯视浅角，焦点锁定笔、纸和手指。\",\"B03_cut_reason\":\"用一组切近镜头把善后固定事项和递笔的默认一起落到画面里，让观众看见清单整体可见、笔尖朝向明确等待。\",\"B03_purpose\":\"把善后变成可见清单，并把笔递向她，把\\\"默认她会接\\\"压成画面证据；便利贴信息整体呈现，不逐张揭起压角。\",\"B03_composition\":\"画面下方正中摊开浅黄、浅粉、浅蓝三张便利贴，他右手握笔停在她一侧桌沿，笔尖朝向她那边，画面上方留出她未来回应的空间。\",\"B03_dialogue_mode\":\"画外对白\",\"B04_new_information\":\"方澄没接那支笔，目光从笔尖沿那只握笔停住的手，抬向林屿的眼睛。\",\"B04_observation_object\":\"方澄的脸、眼和犹豫眼神，以及下方桌沿那支笔尖朝向自己的签字笔。\",\"B04_camera\":\"切到方澄面部中近景，机位正对她，平视略仰，景深浅，下沿留出那支停住的签字笔作为前景陪体。\",\"B04_cut_reason\":\"把她拒绝前那一瞬的犹豫单独切出来给观众看见，必须是脸清晰、目光从笔移到眼睛。\",\"B04_purpose\":\"让观众在她开口说不之前先读到犹豫，让拒绝有重量而不是随口一句。\",\"B04_composition\":\"方澄的脸占据画面上半幅，眼神从前下方的笔尖沿着那只停住的手抬向画面右侧外的林屿眼睛；下方桌沿那支签字笔留在画面内作证据。\",\"B04_dialogue_mode\":\"无对白\",\"B05_new_information\":\"方澄用今晚七点有早就买好票的电影作为不可打折的理由，再补一句\\\"这次我先走\\\"把今晚留给自己，不道歉、不找补。\",\"B05_observation_object\":\"方澄说两句话时的面部和眼神变化。\",\"B05_camera\":\"固定方澄面部近景不变，平视，与上一镜同机位同景别，两句完整拒绝同镜完成。\",\"B05_cut_reason\":\"拒绝两句必须同镜读完，让观众清楚听见她给了一个真实理由和一句选择姿态，中间不被打断。\",\"B05_purpose\":\"让拒绝站得住脚：一个真实理由加一句把今晚留给自己、不补偿的姿态。\",\"B05_composition\":\"方澄的脸在画面正中，眼神从下方笔尖抬起来定住，嘴唇在两句话间有微小闭合和再张开。\",\"B05_dialogue_mode\":\"画内对白\",\"B06_new_information\":\"林屿愣住，看一眼她椅背上的挎包，又看回摊在面前的便利贴和明细单；同一只握笔的右手把那支笔尖朝外的签字笔收回自己这一侧，搁在结算单边沿。\",\"B06_observation_object\":\"林屿的脸、眼、看包到回看纸的视线，以及他右手收回签字笔的动作。\",\"B06_camera\":\"切到林屿面部中近景，机位正对他，平视略仰，必须能看到他脸、眼和愣住反应，以及右手收回签字笔的下沿动作。\",\"B06_cut_reason\":\"第一次被明确拒绝必须让观众看到他的脸和愣住一瞬，并被一笔单独的收回笔的动作拍出边界的转移。\",\"B06_purpose\":\"他必须面对这个明确的不，并由同一只手把笔收归自己——边界的转移由他自己完成。\",\"B06_composition\":\"林屿的脸占据画面上半幅，看包往画面左侧、回头看纸回到正中两个视线转折清楚；下沿可见他把笔收回搁在结算单边沿，笔尖不再指向她。\",\"B06_dialogue_mode\":\"无对白\",\"B07_new_information\":\"林屿转回桌前，用笔在明细单红笔批注旁落字改数、对照结算单逐行改下去，他确实在做那件她过去替他做的活。\",\"B07_observation_object\":\"林屿右手签字笔在纸面上的落字、点数字和把数字划掉重写的动作，以及旁边那张结算单。\",\"B07_camera\":\"切回桌面手部近景，机位同SH03，焦点从摊开的便利贴移到明细单与结算单对齐处。\",\"B07_cut_reason\":\"他必须用具体行动回应——遇到具体对不上的项、反复比对——而不是只低头停顿。\",\"B07_purpose\":\"让观众看见这件事由他自己做、且他做得到，承担原本属于他的那份难度。\",\"B07_composition\":\"画面下方正中明细单与结算单并排，他右手落笔改字、笔尖点数字再划掉重写，每写一笔把笔尖挪向结算单比对一次。\",\"B07_dialogue_mode\":\"无对白\",\"B08_new_information\":\"方澄左手取下挎包挎上左肩、右手拿起桌角电影票，朝办公室门走出两步，空出左手推开米灰色木纹平板门走出去。\",\"B08_observation_object\":\"方澄站姿取左肩包、右手票、平视轻跟至门、左手推门离开的全过程。\",\"B08_camera\":\"平视轻跟的连续长镜头，机位从她侧后跟到门边，不切换。\",\"B08_cut_reason\":\"让她争取到自己时间的动作由一镜完成，不在起身取包或推门之间插入任何切镜，让观众跟住她离开的全过程。\",\"B08_purpose\":\"让她第一次真正把今晚留给自己，给观众她独自去赴约的清晰出口。\",\"B08_composition\":\"方澄在画面正中偏左，取包、拿票、迈步、推门走出都在同一镜头里完成，门开方向成为画面右侧外的出口。\",\"B08_dialogue_mode\":\"无对白\",\"B09_new_information\":\"方澄在门外走廊上低头看一眼手中电影票，轻轻呼出一口气。\",\"B09_observation_object\":\"方澄前侧脸、右手捏着的电影票，以及那轻轻的一口气。\",\"B09_camera\":\"切到前侧脸和右手电影票的同框近景，机位平视略仰，景深浅，背景走廊虚化。\",\"B09_cut_reason\":\"把争取到自己时间的释放留在她身上这一单独动作切出来给观众看见，不回头、不背影、不和解。\",\"B09_purpose\":\"让观众读到她争取到时间的释放，知道她去赴自己的约。\",\"B09_composition\":\"画面左侧她前侧脸、右侧她右手捏着的电影票清晰可读，嘴唇微动吐出那口气，背景走廊虚化。\",\"B09_dialogue_mode\":\"无对白\",\"B10_new_information\":\"林屿仍坐在工位前，没有抬头喊她，右手那支签字笔继续在明细单红笔批注旁一行一行改下去，咖啡杯没动，浅黄便利贴压在他左手边桌面。\",\"B10_observation_object\":\"林屿右手签字笔在明细单与结算单之间逐行改写的桌面，以及他没抬头的状态。\",\"B10_camera\":\"切回桌面与林屿右手近景，机位同SH07，焦点落在笔尖落字与结算单比对上。\",\"B10_cut_reason\":\"用他没抬头、继续工作的安静收尾，给观众确认关系没有崩、她争取的时间被他认下。\",\"B10_purpose\":\"关系用行动兑现边界：他自己收自己的尾，不再回头看门，她的时间被他认下。\",\"B10_composition\":\"画面下方正中明细单与结算单并排，他右手落笔改字、每写一笔挪向结算单比对一次，画面左侧浅黄便利贴压住，杯未动。\",\"B10_dialogue_mode\":\"无对白\"}"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1791215771,
+    "model": "MiniMax-M3",
+    "object": "chat.completion",
+    "usage": {
+      "total_tokens": 15237,
+      "total_characters": 0,
+      "prompt_tokens": 12278,
+      "completion_tokens": 2959,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      }
+    },
+    "input_sensitive": false,
+    "output_sensitive": false,
+    "input_sensitive_type": 0,
+    "output_sensitive_type": 0,
+    "output_sensitive_int": 0,
+    "service_tier": "standard",
+    "base_resp": {
+      "status_code": 0,
+      "status_msg": ""
+    }
+  },
+  "completed_at": "2026-10-05T15:56:53.440534+00:00",
+  "output": {
+    "schema": "s7_film_scalars/v26",
+    "emotional_arc": "傍晚办公室从惯常协作的松弛，到摊开清单的默认期待，再被一句拒绝骤然压住；林屿愣住后独自收笔改单的安静；方澄在门外看票呼气后独自去赴约的释放。",
+    "causal_chain": "林屿过去多次由方澄替他熬到深夜收尾已养成惯性→他默认今晚她也会接手，把明细推来、把笔递向她→她看着笔尖朝向自己，没接，抬眼说出今晚七点有早就买好票的电影→他第一次被明确拒绝，愣住→他把笔收回自己那一侧→转回明细独自逐行比对改写→她取包拿票推门离开→他在原位继续改，关系用行动落定。",
+    "ending_intent": "她争取到自己留给自己的时间，独自去赴那场早就买好票的电影；他没回头喊她，自己逐行收尾。关系以可见行动换了新边界，不和解也不崩，留白给观众自己去想。",
+    "B01_new_information": "观众第一次同时看到方澄为自己留好的电影票和她椅背上已挂好的挎包，以及林屿主动把客户明细单推向两人之间。",
+    "B01_observation_object": "两人工位之间的桌面：方澄桌角的电影票、椅背上的挎包，和林屿推过来的客户明细单与结算单。",
+    "B01_camera": "固定两人中景，机位在方澄身后偏左，平视高度，浅景深，把两张工位、桌角票根和推来的纸面同时收入画面。",
+    "B01_cut_reason": "建立空间、两人工位关系和她为自己留出的时间与他默认接过去的活，让观众在拒绝发生前同时看见两边。",
+    "B01_purpose": "开场让观众一眼读懂：她今晚有事，他也照旧在推活。",
+    "B01_composition": "方澄在画面左侧中前景，林屿在右侧，两人桌面占据下半幅；她椅背的包和她桌角的票形成前景证据，他推过来的纸面落在两人之间。",
+    "B01_dialogue_mode": "无对白",
+    "B02_new_information": "林屿第一次开口，把上月她替他熬到十一点重打对账、这份也只对一半的事实摊到台面，默认她今晚也会顺手帮他收。",
+    "B02_observation_object": "林屿说话时的嘴和低垂侧脸，方澄从红笔批注移向自己桌角票根的目光。",
+    "B02_camera": "固定两人中景不变，机位同上一镜，让观众在同一空间里听见这句默认。",
+    "B02_cut_reason": "观众必须在这句对白里听见她不止一次替他熬过夜、也听见他今晚仍默认她接手，而不是靠旁白补。",
+    "B02_purpose": "用一句画内自然对白兑现\"过去不止一次\"的可见证据，把习惯性的付出历史摆到台面。",
+    "B02_composition": "画面保持上镜构图，林屿微低侧脸在右前景，方澄在左前景，目光从纸面移向她桌角票根的方向。",
+    "B02_dialogue_mode": "画内对白",
+    "B03_new_information": "林屿从她桌角拿起三张便利贴一组摊开在自己面前，写着对账/改明细/收尾的三项善后清单整体可见；他右手把签字笔握起，笔尖朝向她搁在桌沿等她接。",
+    "B03_observation_object": "林屿面前桌面上整组摊开的三张便利贴和黑色签字笔。",
+    "B03_camera": "切到桌面手部近景，机位在桌沿外侧俯视浅角，焦点锁定笔、纸和手指。",
+    "B03_cut_reason": "用一组切近镜头把善后固定事项和递笔的默认一起落到画面里，让观众看见清单整体可见、笔尖朝向明确等待。",
+    "B03_purpose": "把善后变成可见清单，并把笔递向她，把\"默认她会接\"压成画面证据；便利贴信息整体呈现，不逐张揭起压角。",
+    "B03_composition": "画面下方正中摊开浅黄、浅粉、浅蓝三张便利贴，他右手握笔停在她一侧桌沿，笔尖朝向她那边，画面上方留出她未来回应的空间。",
+    "B03_dialogue_mode": "画外对白",
+    "B04_new_information": "方澄没接那支笔，目光从笔尖沿那只握笔停住的手，抬向林屿的眼睛。",
+    "B04_observation_object": "方澄的脸、眼和犹豫眼神，以及下方桌沿那支笔尖朝向自己的签字笔。",
+    "B04_camera": "切到方澄面部中近景，机位正对她，平视略仰，景深浅，下沿留出那支停住的签字笔作为前景陪体。",
+    "B04_cut_reason": "把她拒绝前那一瞬的犹豫单独切出来给观众看见，必须是脸清晰、目光从笔移到眼睛。",
+    "B04_purpose": "让观众在她开口说不之前先读到犹豫，让拒绝有重量而不是随口一句。",
+    "B04_composition": "方澄的脸占据画面上半幅，眼神从前下方的笔尖沿着那只停住的手抬向画面右侧外的林屿眼睛；下方桌沿那支签字笔留在画面内作证据。",
+    "B04_dialogue_mode": "无对白",
+    "B05_new_information": "方澄用今晚七点有早就买好票的电影作为不可打折的理由，再补一句\"这次我先走\"把今晚留给自己，不道歉、不找补。",
+    "B05_observation_object": "方澄说两句话时的面部和眼神变化。",
+    "B05_camera": "固定方澄面部近景不变，平视，与上一镜同机位同景别，两句完整拒绝同镜完成。",
+    "B05_cut_reason": "拒绝两句必须同镜读完，让观众清楚听见她给了一个真实理由和一句选择姿态，中间不被打断。",
+    "B05_purpose": "让拒绝站得住脚：一个真实理由加一句把今晚留给自己、不补偿的姿态。",
+    "B05_composition": "方澄的脸在画面正中，眼神从下方笔尖抬起来定住，嘴唇在两句话间有微小闭合和再张开。",
+    "B05_dialogue_mode": "画内对白",
+    "B06_new_information": "林屿愣住，看一眼她椅背上的挎包，又看回摊在面前的便利贴和明细单；同一只握笔的右手把那支笔尖朝外的签字笔收回自己这一侧，搁在结算单边沿。",
+    "B06_observation_object": "林屿的脸、眼、看包到回看纸的视线，以及他右手收回签字笔的动作。",
+    "B06_camera": "切到林屿面部中近景，机位正对他，平视略仰，必须能看到他脸、眼和愣住反应，以及右手收回签字笔的下沿动作。",
+    "B06_cut_reason": "第一次被明确拒绝必须让观众看到他的脸和愣住一瞬，并被一笔单独的收回笔的动作拍出边界的转移。",
+    "B06_purpose": "他必须面对这个明确的不，并由同一只手把笔收归自己——边界的转移由他自己完成。",
+    "B06_composition": "林屿的脸占据画面上半幅，看包往画面左侧、回头看纸回到正中两个视线转折清楚；下沿可见他把笔收回搁在结算单边沿，笔尖不再指向她。",
+    "B06_dialogue_mode": "无对白",
+    "B07_new_information": "林屿转回桌前，用笔在明细单红笔批注旁落字改数、对照结算单逐行改下去，他确实在做那件她过去替他做的活。",
+    "B07_observation_object": "林屿右手签字笔在纸面上的落字、点数字和把数字划掉重写的动作，以及旁边那张结算单。",
+    "B07_camera": "切回桌面手部近景，机位同SH03，焦点从摊开的便利贴移到明细单与结算单对齐处。",
+    "B07_cut_reason": "他必须用具体行动回应——遇到具体对不上的项、反复比对——而不是只低头停顿。",
+    "B07_purpose": "让观众看见这件事由他自己做、且他做得到，承担原本属于他的那份难度。",
+    "B07_composition": "画面下方正中明细单与结算单并排，他右手落笔改字、笔尖点数字再划掉重写，每写一笔把笔尖挪向结算单比对一次。",
+    "B07_dialogue_mode": "无对白",
+    "B08_new_information": "方澄左手取下挎包挎上左肩、右手拿起桌角电影票，朝办公室门走出两步，空出左手推开米灰色木纹平板门走出去。",
+    "B08_observation_object": "方澄站姿取左肩包、右手票、平视轻跟至门、左手推门离开的全过程。",
+    "B08_camera": "平视轻跟的连续长镜头，机位从她侧后跟到门边，不切换。",
+    "B08_cut_reason": "让她争取到自己时间的动作由一镜完成，不在起身取包或推门之间插入任何切镜，让观众跟住她离开的全过程。",
+    "B08_purpose": "让她第一次真正把今晚留给自己，给观众她独自去赴约的清晰出口。",
+    "B08_composition": "方澄在画面正中偏左，取包、拿票、迈步、推门走出都在同一镜头里完成，门开方向成为画面右侧外的出口。",
+    "B08_dialogue_mode": "无对白",
+    "B09_new_information": "方澄在门外走廊上低头看一眼手中电影票，轻轻呼出一口气。",
+    "B09_observation_object": "方澄前侧脸、右手捏着的电影票，以及那轻轻的一口气。",
+    "B09_camera": "切到前侧脸和右手电影票的同框近景，机位平视略仰，景深浅，背景走廊虚化。",
+    "B09_cut_reason": "把争取到自己时间的释放留在她身上这一单独动作切出来给观众看见，不回头、不背影、不和解。",
+    "B09_purpose": "让观众读到她争取到时间的释放，知道她去赴自己的约。",
+    "B09_composition": "画面左侧她前侧脸、右侧她右手捏着的电影票清晰可读，嘴唇微动吐出那口气，背景走廊虚化。",
+    "B09_dialogue_mode": "无对白",
+    "B10_new_information": "林屿仍坐在工位前，没有抬头喊她，右手那支签字笔继续在明细单红笔批注旁一行一行改下去，咖啡杯没动，浅黄便利贴压在他左手边桌面。",
+    "B10_observation_object": "林屿右手签字笔在明细单与结算单之间逐行改写的桌面，以及他没抬头的状态。",
+    "B10_camera": "切回桌面与林屿右手近景，机位同SH07，焦点落在笔尖落字与结算单比对上。",
+    "B10_cut_reason": "用他没抬头、继续工作的安静收尾，给观众确认关系没有崩、她争取的时间被他认下。",
+    "B10_purpose": "关系用行动兑现边界：他自己收自己的尾，不再回头看门，她的时间被他认下。",
+    "B10_composition": "画面下方正中明细单与结算单并排，他右手落笔改字、每写一笔挪向结算单比对一次，画面左侧浅黄便利贴压住，杯未动。",
+    "B10_dialogue_mode": "无对白"
+  },
+  "validation": {
+    "whole_source_coverage_valid": true,
+    "shots": 10,
+    "physical_state_not_generated_here": true,
+    "actual_windows_available": false,
+    "semantic_approval": false,
+    "deterministic_source_projection": true,
+    "actor_text_manually_patched": false
+  },
+  "call_evidence": {
+    "directory": "call_evidence\\call_175",
+    "identity_sha256": "c5fae4a1ee6baa10cf92a27a9e1e054fc6247499bc2d525f6263ffc119bf4b1b"
+  }
+}

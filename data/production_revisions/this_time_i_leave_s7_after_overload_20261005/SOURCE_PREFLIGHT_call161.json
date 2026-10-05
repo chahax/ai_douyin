@@ -1,0 +1,19 @@
+{
+  "schema": "s7_source_preflight/v1",
+  "ordinal": 161,
+  "raw_script_sha256": "465b12b846c5a14581e069d62f0068b0b27d2cb224231f6e7c08eed88301f1f3",
+  "approved_for_full_review": true,
+  "quality_approval": false,
+  "findings": [
+    "三张便利贴改为一组拿取摊开，不逐张压角。",
+    "第二镜保留一次熬到十一点的证据，移除另一次周末叙述；实际排时尚未生成。",
+    "这次我先走处于拒绝现场B05第二句，门口不重复告别。",
+    "递笔→未接→拒绝→收回→自己做的因果恢复。",
+    "门外看票轻呼气，仍两名角色，左右手包/票/推门已由正文明确。"
+  ],
+  "review_focus": [
+    "B06收笔后搁在结算单边沿，与B07/B10同右手用笔的持有连续性需全文核对，不以所有权代替持有。",
+    "B09门外空间与资产定义关系，不能将程序初步预算当实际窗口。"
+  ],
+  "old160_billing_reservation_retained": 29107
+}

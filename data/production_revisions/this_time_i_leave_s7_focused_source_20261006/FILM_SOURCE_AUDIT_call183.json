@@ -1,0 +1,5 @@
+{
+  "original183_fault": "B05写dual_front|fang_face两种机位，B10写lin_table_medium|documents_close两种机位，都变成五栏。每拍必须只选一个ID，不输出备选ID、模式、镜头数组或额外栏。B05只准fang_face；B10本稿选择lin_table_medium。",
+  "complete_rewrite": "整稿14字段、十个四栏字符串完整重新生成，不补两行、不在程序删备选。其余183故事因果和原动作一致性保持，不放旧反馈回输入。",
+  "source_policy": "全片仍两人，整组便利贴，拒绝现场两句同镜，林屿听后脸眼反应及同只右手收笔，他自己对账；方澄原站姿取包票左手开门，门外看票呼气；无笔所有权变化、起身、关门或新道具。短句清晰，每行四栏恰三根ASCII |。"
+}

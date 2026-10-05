@@ -1,0 +1,16 @@
+{
+  "prior_call": 167,
+  "known_complete_response": true,
+  "transport_fault": "内嵌JSON在B03/B06漏purpose与composition、B09漏composition、C02初态漏affect；不是输出截断（3065输出，finish=tool_calls，cap8000）",
+  "source_faults": [
+    "B02第一镜的反应来源实际在第二镜，要求应随reaction所在镜",
+    "B05拒绝镜错误声明下一拍B06的反应；只在B06反应所在镜声明对应after窗口",
+    "包原在E09椅背，不能写surface:E01:椅背挂钩",
+    "上轮已纠正便利贴/明细桌面无人手持，保持正确初态"
+  ],
+  "request": "提交完整新导演对象；所有镜保留purpose/composition/dialogue_mode/performance_requirements所有必填字段，即使某项数组为空；不用payload_json单字符串。先填整片情绪与因果，再按原十拍分镜。保持前次正确的便签/明细无人持有；重复反应要求按reaction归属镜唯一声明。",
+  "targets": "B03整体清单加递笔局部实际压5–6秒；B04拒绝前犹豫可读；B05两句同镜C01可读近景，不删题句；B06听完题句之后C02反应至少2秒；B09出门之后C01看票轻呼气可读1.5–2秒。重要对白during可绑定本句同ref，其余只选择真正必要的前后反应窗。普通动作不自引用最短反应窗。",
+  "models_unchanged": true,
+  "no_creative_quality_approval": true,
+  "no_media": true
+}

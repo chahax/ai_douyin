@@ -1,0 +1,11 @@
+{
+  "scope": "one explicit manual continuation after known HTTP529 overload; retain uncertain billing; then necessary full script review",
+  "user_existing_authorization": "行minmax额度直接使用不用申请",
+  "aggregate_text_token_cap": null,
+  "automatic_retry": false,
+  "old_call70_resend": false,
+  "old_budget_reset": false,
+  "user_quality_approval": false,
+  "manual_known_overload_ordinal": 160,
+  "max_replacement_drafts": 1
+}

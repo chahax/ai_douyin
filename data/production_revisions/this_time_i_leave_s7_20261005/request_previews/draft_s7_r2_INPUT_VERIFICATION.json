@@ -1,0 +1,7 @@
+{
+  "full_original_reference_pack_verified_in_actual_request": true,
+  "feedback_sha256": "cfd3e024295bca6d9acfca503d9f265e16115a7986f376c16bbb070dbf695ba4",
+  "no_old_response_resend": true,
+  "old_unknown_reservation_preserved": 64010,
+  "automatic_retry": false
+}

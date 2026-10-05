@@ -1,0 +1,73 @@
+{
+  "schema": "s7_script_review_comparisons/v20",
+  "status": "reviewed_complete_script_awaiting_new_director_and_actual_performance",
+  "script_sha256": "465b12b846c5a14581e069d62f0068b0b27d2cb224231f6e7c08eed88301f1f3",
+  "review_ordinal": 165,
+  "assistant_source_evidence": [
+    {
+      "path": "raw_linear_script.beats.1.steps.0.text",
+      "quote": "上月那张对账是你帮我熬到十一点重打的",
+      "finding": "保留习惯性善后证据，删去旧稿周末重复例子；对白实际时长待排"
+    },
+    {
+      "path": "raw_linear_script.beats.2.steps.0.text",
+      "quote": "三张一并摊开",
+      "finding": "三张整体呈现，未三次揭起/摊平/压角；5–6秒尚待实际表演"
+    },
+    {
+      "path": "raw_linear_script.beats.2.steps.2.text",
+      "quote": "反手握在右手里",
+      "finding": "正文保留递笔刺激，后续局部须明确持笔持续及笔尖方向"
+    },
+    {
+      "path": "raw_linear_script.beats.4.steps.1.text",
+      "quote": "这次我先走。",
+      "finding": "标题句在拒绝现场，未移到门口重复告别，不加入补偿"
+    },
+    {
+      "path": "raw_linear_script.beats.7.steps.0.text",
+      "quote": "左手从椅背上取下米灰色挎包挎到左肩上",
+      "finding": "正文左右手分工，为空左手推门给出前提"
+    },
+    {
+      "path": "raw_linear_script.beats.8.steps.0.text",
+      "quote": "低头看了一眼票面，轻轻呼出一口气",
+      "finding": "离开后释放落在她身上，不回头；新增门外空间待导演/资产合同"
+    },
+    {
+      "path": "raw_linear_script.beats.9.steps.0.text",
+      "quote": "没抬头去喊她",
+      "finding": "林屿继续自己改单，不添加消息奖励或和解"
+    }
+  ],
+  "user_quality_confirmation": null,
+  "creative_quality_passed": false,
+  "old_s6_handoff_invalid_for_s7": true,
+  "old_s6_preserved": true,
+  "new_director_required": true,
+  "actual_performance_windows_available": false,
+  "media_calls": 0,
+  "cost_ledger": {
+    "schema": "authorized_creative_continuation/v3",
+    "new_calls": 1,
+    "effective_calls_started": 165,
+    "new_reported_tokens": 59481,
+    "effective_reported_tokens": 3110734,
+    "unknown_token_reservations": 93117,
+    "max_total_tokens": null,
+    "unbounded_aggregate_text_authorized": true,
+    "old_budget_reset": false,
+    "old_governance_migrated": false,
+    "media_calls": 0,
+    "semantic_approval": false,
+    "calls_with_known_usage": 163,
+    "new_unknown_token_reservations": 0,
+    "unknown_outcome_ordinals": [
+      70
+    ],
+    "unknown_usage_ordinals": [
+      70,
+      160
+    ]
+  }
+}

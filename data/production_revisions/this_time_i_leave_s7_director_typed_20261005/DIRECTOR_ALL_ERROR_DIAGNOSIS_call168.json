@@ -1,0 +1,22 @@
+{
+  "prior_calls": [
+    166,
+    167,
+    168
+  ],
+  "all_known_responses": true,
+  "reported_tokens_through168": 3177942,
+  "unknown_billing_reservations": 93117,
+  "diagnosed168": "完整工具响应仍有全部最短秒数写成字符串、7处普通动作during、初态P05提前推到两人之间；对象工具不保证服务遵守Schema。",
+  "reason_for_modular_split": "whole plan still carried editorial+full physical world state+typed timing cross-references, making one output overloaded; reduce scope instead of continuing monolithic prompts",
+  "new_module_contracts": [
+    "complete whole film editorial plan",
+    "complete opening physical state",
+    "complete critical source window requirements"
+  ],
+  "complete_new_model_documents_required": true,
+  "old_failed_direction_not_adopted": true,
+  "no_script_patching": true,
+  "old_budget_reset": false,
+  "media_calls": 0
+}
