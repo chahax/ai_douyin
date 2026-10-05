@@ -1,0 +1,23 @@
+{
+  "approved_for_performance_text": true,
+  "plan_sha256": "f11ebef1ae7e9cf3e18230127eab0b76eb161e1dee00851560be80cafe335a58",
+  "evidence": [
+    {
+      "path": "actions.0.events.0.intent",
+      "quote": "方澄已站在工位前，挎包挂在椅背、电影票压在桌角，建立为自己留出时间的可见状态",
+      "finding": "开场只建立已站和原物件状态，没有重复起身/取物。"
+    },
+    {
+      "path": "actions.1.events.0.intent",
+      "quote": "林屿没抬头，把A4横版客户明细单沿桌面滑向两人之间一侧，仍停在林屿桌面上",
+      "finding": "低头原推单一次，仍在林屿自己桌支持面。"
+    },
+    {
+      "path": "actions.1.events.0.operation.value",
+      "quote": "surface:E02:near_E01_edge",
+      "finding": "客户明细滑到E02靠方澄一边，未伪造道具交接或离桌。"
+    }
+  ],
+  "actual_timing_verified": false,
+  "human_quality_approval": false
+}

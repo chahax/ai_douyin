@@ -1,0 +1,621 @@
+{
+  "schema": "authorized_creative_continuation/v3",
+  "ordinal": 206,
+  "label": "plan_s7_d1_p001_r1",
+  "request": {
+    "role": "writer",
+    "model": "MiniMax-M3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "先只提交当前镜全部原action的完整状态事件计划，不写秒数或表演长文。每action source_step_ref/events；每event恰intent/subject/operation/satisfies。operation是null、恰kind/actor/target/value对象，或同叠三色便利贴恰三项的同步数组。普通事件最多一个变化；同叠三张take同事件，place在后续另一事件；全部操作读取事件开始态。intent简短说明原步骤中的可见事件，不能一句藏多个道具转移；三色便利贴成员P03_Y/P03_P/P03_B齐全、同actor同kind，整叠同步取，再整体展开同步放；不用三次揭压。取时同持有位置，放时同支持面可不同位置。face/gaze值在value,target空；take/place/slide目标是道具ID，value非空真实持有位置或surface:支持面ID:区域。move为人物整体移动，不是手移动。只记录真实原动作，不做未来镜，对白由后续程序插原句，不能在事件中说话。反应保持事件operation=null且正确人物，仅绑定当前要求ID。 情绪不写affect状态操作，写在自然表演里。"
+      },
+      {
+        "role": "user",
+        "content": "{\"read_only_complete_context_and_direction\":{\"schema\":\"step_index_physical_input_offline_v5\",\"protocol\":\"step_index_physical_adapter_offline_v5\",\"context\":{\"creative_brief\":{\"schema\":\"creative_brief/v1\",\"theme\":\"总替同事收尾的人，第一次把自己的时间放在前面\",\"duration_seconds\":[45,60],\"delegated_fields\":[],\"duration_policy\":\"flexible\",\"audience\":\"喜欢生活情绪短片的成年观众\",\"relationships\":\"方澄与同事林屿；林屿已习惯她会答应，方澄担心拒绝会伤及两人的关系。\",\"audience_emotion\":\"先看懂她为什么难拒绝，再替她的选择紧张，最后感到关系发生了真实变化。\",\"visual_style\":\"写实真人实拍质感的AI短片，成年普通人外貌，真实皮肤纹理、自然光与生活化服装，克制自然表演，关键反应使用可读近景。\",\"turn\":\"对方原本把她的帮忙视为理所当然；她明确拒绝后，对方必须面对这一点，再通过具体行动回应。\",\"ending\":\"以新的行动兑现边界及关系变化；不预先规定两人必须和解，不用主题口号收尾。\",\"constraints\":[\"观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。\",\"她想离开和担心拒绝的原因要在实际事件中成立。\",\"关键反应的构图和窗口必须写入最终视频提示词。\",\"剧情先按完整故事创作，再拆成生成段；不能为固定八秒切段编造操作。\"],\"avoid\":[\"用一次开本子或摸包代替习惯性的付出历史\",\"靠陪家人看病等新事故替代原本的关系矛盾\",\"强行争吵、突然完美理解、鸡汤总结\",\"为了沿用动画尾帧而改回手绘风格\"]},\"static_visual_manifest\":{\"schema\":\"static_visual_manifest_v2\",\"render\":{\"style_option_id\":\"S01\",\"visual_medium\":\"写实真人实拍质感的AI短片，自然皮肤纹理与生活化布光\",\"palette\":\"傍晚办公室暖调，浅木色桌面、米白墙、暖灰窗帘透橙黄夕光、人物服装为低饱和的灰蓝与米驼\",\"light_source\":\"临窗自然夕光为主，从办公桌侧面斜入，室内顶灯为辅补光，形成柔和侧光与轻微暖色阴影\"},\"characters\":[{\"id\":\"C01\",\"name\":\"方澄\",\"age_group\":\"成年\",\"hair\":\"黑色齐肩直发，自然中分\",\"clothing\":\"灰蓝色薄针织开衫，内搭白色圆领T恤，下着深灰色直筒长裤\",\"body_shape\":\"中等偏瘦，肩线柔和\"},{\"id\":\"C02\",\"name\":\"林屿\",\"age_group\":\"成年\",\"hair\":\"深栗色短碎发，稍长刘海\",\"clothing\":\"米驼色棉质衬衫，袖口挽至前臂，下着深藏蓝休闲长裤\",\"body_shape\":\"中等身高，肩宽略宽于方澄\"}],\"props\":[{\"id\":\"P01\",\"name\":\"挎包\",\"appearance\":\"软皮小号斜挎包，米灰色金属扣，单层翻盖\",\"owner_id\":\"C01\"},{\"id\":\"P02\",\"name\":\"院线电影票根\",\"appearance\":\"竖版窄长纸片，米白底深红字，右侧带撕齿虚线，今晚院线开场时间与座位号可读\",\"owner_id\":\"C01\"},{\"id\":\"P03_Y\",\"name\":\"浅黄对账便利贴\",\"appearance\":\"正方形小纸片，浅黄底，深灰手写短词（对账）\",\"owner_id\":\"C01\"},{\"id\":\"P03_P\",\"name\":\"浅粉改明细便利贴\",\"appearance\":\"正方形小纸片，浅粉底，深灰手写短词（改明细）\",\"owner_id\":\"C01\"},{\"id\":\"P03_B\",\"name\":\"浅蓝收尾便利贴\",\"appearance\":\"正方形小纸片，浅蓝底，深灰手写短词（收尾）\",\"owner_id\":\"C01\"},{\"id\":\"P04\",\"name\":\"咖啡杯\",\"appearance\":\"白色陶瓷马克杯，杯身外侧无图案，杯口微宽\",\"owner_id\":\"C02\"},{\"id\":\"P05\",\"name\":\"客户明细单\",\"appearance\":\"A4横版打印表格纸，浅灰线条格，黑字数字，红笔批注\",\"owner_id\":\"C02\"},{\"id\":\"P06\",\"name\":\"结算单\",\"appearance\":\"A4纵版表格纸，右上角有彩色公司logo条，浅蓝表头\",\"owner_id\":\"C02\"},{\"id\":\"P07\",\"name\":\"签字笔\",\"appearance\":\"黑色细头签字笔，金属笔夹\",\"owner_id\":\"C02\"}],\"scene\":{\"name\":\"傍晚办公室\",\"elements\":[{\"id\":\"E01\",\"name\":\"方澄工位桌\",\"appearance\":\"浅木色长方形办公桌，金属细腿，桌面靠近窗户一侧\"},{\"id\":\"E02\",\"name\":\"林屿工位桌\",\"appearance\":\"浅木色长方形办公桌，与方澄桌同款，平行摆放，靠近室内一侧\"},{\"id\":\"E03\",\"name\":\"抽屉柜\",\"appearance\":\"浅木色三斗文件柜，贴墙放置，黑色拉手\"},{\"id\":\"E04\",\"name\":\"办公室门\",\"appearance\":\"木纹平板门，米灰色，下半部带金属横拉把手，位于房间远端侧墙\"},{\"id\":\"E05\",\"name\":\"窗户\",\"appearance\":\"宽幅铝合金推拉窗，米灰色半透明卷帘半垂，窗框占据外侧整面墙\"},{\"id\":\"E06\",\"name\":\"顶灯\",\"appearance\":\"白色圆形吸顶灯，暖白光，位于房间正中天花板\"},{\"id\":\"E07\",\"name\":\"地面\",\"appearance\":\"浅灰色PVC地板，哑光\"},{\"id\":\"E08\",\"name\":\"墙面\",\"appearance\":\"米白色乳胶漆墙面，干净无装饰\"},{\"id\":\"E09\",\"name\":\"办公椅（方澄）\",\"appearance\":\"黑色网面靠背转椅，灰色塑料五星脚\"},{\"id\":\"E10\",\"name\":\"办公椅（林屿）\",\"appearance\":\"黑色网面靠背转椅，灰色塑料五星脚，与方澄椅同款\"}],\"relations\":[{\"subject\":\"E02\",\"relation\":\"right_of\",\"reference\":\"E01\"},{\"subject\":\"E01\",\"relation\":\"next_to\",\"reference\":\"E05\"},{\"subject\":\"E02\",\"relation\":\"next_to\",\"reference\":\"E01\"},{\"subject\":\"E03\",\"relation\":\"behind\",\"reference\":\"E02\"},{\"subject\":\"E04\",\"relation\":\"behind\",\"reference\":\"E01\"},{\"subject\":\"E06\",\"relation\":\"above\",\"reference\":\"E01\"},{\"subject\":\"E07\",\"relation\":\"below\",\"reference\":\"E01\"},{\"subject\":\"E08\",\"relation\":\"behind\",\"reference\":\"E05\"},{\"subject\":\"E09\",\"relation\":\"next_to\",\"reference\":\"E01\"},{\"subject\":\"E10\",\"relation\":\"next_to\",\"reference\":\"E02\"}]},\"surface_ids\":[\"E01\",\"E02\"]},\"material_ref\":{\"source_driver\":\"original\",\"title\":\"这次我先走·参考表达生产\",\"creative_focus\":\"参考时长（可浮动）45—60秒。创作简报：{\\\"audience\\\": \\\"喜欢生活情绪短片的成年观众\\\", \\\"audience_emotion\\\": \\\"先看懂她为什么难拒绝，再替她的选择紧张，最后感到关系发生了真实变化。\\\", \\\"avoid\\\": [\\\"用一次开本子或摸包代替习惯性的付出历史\\\", \\\"靠陪家人看病等新事故替代原本的关系矛盾\\\", \\\"强行争吵、突然完美理解、鸡汤总结\\\", \\\"为了沿用动画尾帧而改回手绘风格\\\"], \\\"constraints\\\": [\\\"观众在拒绝发生前，必须通过自然对白或可见后果知道她过去不止一次替同事加班；只写人物背景不算兑现。\\\", \\\"她想离开和担心拒绝的原因要在实际事件中成立。\\\", \\\"关键反应的构图和窗口必须写入最终视频提示词。\\\", \\\"剧情先按完整故事创作，再拆成生成段；不能为固定八秒切段编造操作。\\\"], \\\"delegated_fields\\\": [], \\\"duration_policy\\\": \\\"flexible\\\", \\\"duration_seconds\\\": [45, 60], \\\"ending\\\": \\\"以新的行动兑现边界及关系变化；不预先规定两人必须和解，不用主题口号收尾。\\\", \\\"relationships\\\": \\\"方澄与同事林屿；林屿已习惯她会答应，方澄担心拒绝会伤及两人的关系。\\\", \\\"schema\\\": \\\"creative_brief/v1\\\", \\\"theme\\\": \\\"总替同事收尾的人，第一次把自己的时间放在前面\\\", \\\"turn\\\": \\\"对方原本把她的帮忙视为理所当然；她明确拒绝后，对方必须面对这一点，再通过具体行动回应。\\\", \\\"visual_style\\\": \\\"写实真人实拍质感的AI短片，成年普通人外貌，真实皮肤纹理、自然光与生活化服装，克制自然表演，关键反应使用可读近景。\\\"}。优先完整表达情绪、事件和画面；按实际对白、刺激与反应安排秒数，总长可随内容浮动，不为靠近参考范围删掉必要表演或增加填充动作。画风仍按简报；明确的局部时序要求仍生效。\",\"material_sha256\":\"b0f5dfe7dce0f300af26a517b56edae479868626faad80b595921812262d8575\",\"source_sha256\":\"e0f61a360a00f25759eec6f521f6b83af9775100fd886066a3b85bf59d16aa82\",\"reference_sha256\":\"bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1\"},\"reference_pack\":[{\"id\":\"R01\",\"path\":\"D:\\\\IT\\\\ai_douyin\\\\data\\\\reference_reviews\\\\reusable_expression_20261001\\\\EXPRESSION_REFERENCE.md\",\"text\":\"# 已有参考片与教学分析：可复用表达参考\\n\\n用途：借鉴叙事、情绪和摄影表达机制；不是本次剧情来源或硬验收模板。用户当前主题、人物、真人画风、浮动时长和人工视频审核要求优先。不要照搬诈骗、老人、玄关或旧项目专用动作，也不要把所有参考技巧机械塞进短片。\\n\\n## 核心判断\\n\\n参考片用“虚假的关心—真实的付出—伤害—再次渴望关心”组织情绪。最有效的是末尾老人从愤怒到接电话后微笑的变化。画面中每个人在做有目的的事情，表情随具体刺激改变；不靠人物站定后用台词解释全部心理。\\n\\n## 时间轴证据\\n\\n| 时间 | 实际可见内容 | 导演作用 |\\n| --- | --- | --- |\\n| 0–5 秒 | 女生在霓虹街头看手机、展示转账、互相说笑 | 立即交代欺骗关系，让观众比受骗者知道得多 |\\n| 8–18 秒 | 多部手机；男子催促；女子开门进屋、靠近桌子 | 道具解释工作方式，进门动作建立人物和场景联系 |\\n| 20–31 秒 | 女子前景逐一回复手机；男子后景吃东西 | 同一画面有主次行动；她表演关心与身后人的冷漠形成反差 |\\n| 33.5–39 秒 | 老人独坐、看手机、转账界面、对手机讲话 | 将套路切到具体承受者，观众看到真实关切 |\\n| 48–50 秒 | 男子看收款消息，前倾、睁大眼、笑容扩大 | 收款触发贪婪，动作和情绪有因果 |\\n| 50.5–58 秒 | 叫醒女子，递泡面，拿手机催拍，手机取景画面 | 困倦被利用为卖惨素材；道具推动事件 |\\n| 63–78 秒 | 购买金饰、美容、购物、聚餐、泳池炫耀 | 场景变化用于交代骗款去向；不能直接照搬为家庭戏的装饰 |\\n| 77.5–85 秒 | 求还钱消息；泳池跳水切到夜间落水；岸边手机显示消息遭拒 | 剪辑把享乐与受害者绝望并置。人物身份及死亡结果不能仅凭这些帧完全确认 |\\n| 85.5–93 秒 | 抓捕、控制嫌疑人、手机取证 | 交代诈骗被查处，推进结局 |\\n| 93.5–103.5 秒 | 老人看新闻皱眉，随后接电话；字幕“吴叔叔在干嘛”“怎么不理我”，老人逐渐微笑 | 同一人的前后反应完成主题：愤怒没有消除对关心的渴望；来电者身份并未明确 |\\n\\n\\n## 二、四课分别带来的启发\\n\\n下列是基于转写与抽帧的简要归纳，时间用于回看定位，不是逐字引文。\\n\\n1. [0基础，带你做出你人生第一个AI视频](https://www.bilibili.com/video/BV1Z28P6HEGa/)：约3:00–6:10和7:35–9:05，展示剧本先转调度，再转模型提示与角色引用。对本项目的启发是把“镜头观察谁、人物做什么、空间如何呈现”与接口提示编译分层。作者关于一致性的强保证只是演示者判断，不能替代本项目实测。\\n2. [用“抄袭”思维做出AI视频](https://www.bilibili.com/video/BV1sPhE63ERj/)：约5:30–10:10分析构图、色光、参考图与公开工程；约15:45–18:55将已选资产回传给Agent，再校正调度。应学表达机制、记录自己的可复现试验。其首尾帧批评针对示例跳帧，不能据此取消用户当前接续门槛。\\n3. [AI视频究竟怎么学](https://www.bilibili.com/video/BV19fYf6kEnU/)：约8:30–13:10的咖啡店重做显示语音、杯子比例、相似景别切换和情绪出错，随后人工重写调度、局部返修、剪辑。可复用流程必须容纳明确的创作判断和失败处理，不能承诺一键首发全对。\\n4. [如何做出“电影级”AI视频](https://www.bilibili.com/video/BV1uGYE6XEB4/)：约1:00–3:40对比角色参考，约7:30–11:10讨论场景资产。可迁移的是减少身份参考里的杂乱背景、强阴影及不合适表情，同时让场景图服务真实动线。具体模型、4K和版式属于其示例设置，不作为普遍成功保证。\\n\\n教程展示过不同模型／平台及人工选片，不能把其效果直接归因于某段万能提示，也不能推定其接口与项目Mini端能力一致。样片的实际制作模型、提示词、废片率和后期投入未知。\\n\\n## 三、目标样片好在哪里\\n\\n| 观察窗口 | 实际画面与叙事作用 | 可迁移机制 |\\n| --- | --- | --- |\\n| 0–6秒 | 街头女子看手机、同伴交流，随后进入多手机的工作环境 | 开头给具体反差和疑问 |\\n| 20–30秒 | 女子前景回复手机，男子后景吃东西 | 同镜有主次行动，前后景共同传递信息 |\\n| 33–48秒 | 老人、转账界面、男子收款反应交替 | 道具证明信息，近景呈现信息对人的影响 |\\n| 63–78秒 | 消费、购物、聚餐、泳池环境变化 | 用场景变化交代后果与生活反差 |\\n| 93–104秒 | 老人看新闻皱眉，接电话后逐渐放松微笑 | 用刺激后的可见变化完成主题、留下余味 |\\n\\n关键不是表情数量或单张画面的精细度，而是观众的信息、人物的选择和摄影观察对象一起变化。末尾来电者身份不能只凭这些帧确定。目标样片和项目最新片同为720×1280；提高输出分辨率不能单独解决目前的内容差距。\\n\\n\\n### 每镜以观众收到什么为核心\\n\\n明确注意对象、新信息、刺激、反应前后差别、切镜理由、必须可见的证据。每段只传当前相关人物和状态。让对白方式、反应窗口、资产引用和状态由同一权威中间表示编译到最终请求，避免多层重复改写。\"}],\"reference_expression_rule\":\"reference_pack来自已获取的同类视频和教学表达分析。学习信息递进、刺激与反应、具体行动、观察主体及结尾余味；选与当前需求相关的机制，不照搬参考人物、对白、剧情、时长或画风。创作简报优先，不把参考偏好当硬禁令；未观察本次媒体不得宣称表演成功。\",\"raw_linear_script\":{\"title\":\"这次我先走\",\"premise\":\"方澄今晚七点有一场早就买好票的院线电影，是她为自己留出来的时间；林屿习以为常地把临收尾的客户明细推过来，潜台词是她会答应。方澄必须开口说不，让林屿亲耳听见一个明确的不，并承担关系可能变冷的结果；林屿随后用具体行动回应，她再离开办公室，独自赴约。\",\"selected_candidate_id\":\"C01\",\"beats\":[{\"id\":\"B01\",\"event\":\"傍晚办公室，方澄工位上挎包已挂、电影票压在桌角；林屿把自己桌面的客户明细推向两人之间。\",\"trigger\":\"开场让观众同时看见她为自己留出的时间和被他默认接过去的活。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"方澄穿着灰蓝色薄针织开衫站在自己浅木色工位前，米灰色挎包已经挂上椅背，米白底深红字的院线电影票压在桌角自己伸手就能够到的位置。\"},{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"林屿穿着米驼色棉质衬衫坐在她右边的工位，没抬头，把自己桌上那份A4横版客户明细单往两人之间的方向推了推，那张A4纵版结算单仍摊在自己桌角，白色陶瓷咖啡杯放在一旁。\"}]},{\"id\":\"B02\",\"event\":\"林屿没抬头，随口把过去她替他熬过的加班摊到台面，默认她今晚也接手。\",\"trigger\":\"让观众听见她不止一次替他收尾，今晚他仍默认她接手。\",\"steps\":[{\"kind\":\"dialogue\",\"speaker\":\"林屿\",\"text\":\"上月那张对账是你帮我熬到十一点重打的，今晚这份也对到一半了，你顺手帮我收了吧。\"},{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"方澄的目光从他桌上的红笔批注，移到自己桌角压着的电影票，没接话。\"}]},{\"id\":\"B03\",\"event\":\"林屿侧身从她桌角拿起那一小叠便利贴，把浅黄、浅粉、浅蓝三张一并摊开在自己面前桌面上，指尖压住浅黄那张边角；接着把黑色签字笔从自己桌沿拿起来握在右手里，笔尖朝向方澄那一侧停在桌沿，等她接。\",\"trigger\":\"把善后固定事项摊成清单，并把笔递向方澄，明确默认她会接下。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"林屿侧身从方澄桌角拿起那一小叠便利贴，把浅黄、浅粉、浅蓝三张一并摊开在自己面前的桌面上，指尖压住浅黄那张边角。\"},{\"kind\":\"dialogue\",\"speaker\":\"林屿\",\"text\":\"对账，改明细，收尾。\"},{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"林屿把黑色签字笔从自己桌沿拿起来，反手握在右手里，笔尖朝方澄那一侧搁在桌沿停住，等她接。\"}]},{\"id\":\"B04\",\"event\":\"方澄看着被递到自己面前的那支笔，没有伸手去接，抬眼看林屿。\",\"trigger\":\"让她承担开口说不之前的可见犹豫。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"方澄低头看了一眼停在自己面前、笔尖朝向自己的签字笔，没伸手拿，目光顺着那只握笔停住的手抬向林屿的眼睛。\"}]},{\"id\":\"B05\",\"event\":\"方澄开口拒绝，给出今晚不能帮忙的明确理由，再轻声补一句不道歉、不找补的话把今晚留给自己。\",\"trigger\":\"拒绝必须站得住，并交出一个不可打折的理由；用一句被记住的姿态把今晚留给自己。\",\"steps\":[{\"kind\":\"dialogue\",\"speaker\":\"方澄\",\"text\":\"今晚不行，七点我有一场早就买好票的电影。\"},{\"kind\":\"dialogue\",\"speaker\":\"方澄\",\"text\":\"这次我先走。\"}]},{\"id\":\"B06\",\"event\":\"林屿握笔的右手还停在那支笔尖朝方澄的签字笔上，愣了一下，看一眼她椅背上的挎包，又看回自己面前的便利贴和明细单，把那支笔收回自己右手边。\",\"trigger\":\"第一次被明确拒绝，必须面对，不会再假装这件事；同一只手把笔收归自己，边界的转移由他自己完成。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"林屿握笔的右手在桌沿停住，笔尖仍朝方澄那一侧。他看了一眼方澄椅背上挂着的米灰色挎包，又看回自己面前摊着的浅黄便利贴和那张A4横版客户明细单，没接她的话。\"},{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"林屿把右手那支笔尖朝外的签字笔收回自己面前，搁在那张结算单边沿，笔尖不再指向方澄。\"}]},{\"id\":\"B07\",\"event\":\"林屿转回桌前，用签字笔在客户明细单的红笔批注旁落字，自己一行一行对下去。\",\"trigger\":\"他必须用具体行动回应，不是泛写停停顿顿，而是遇到一处具体对不上的项，反复比对结算单。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"林屿重新低头看向那张A4横版客户明细单，用右手那支签字笔在第一处红笔批注旁落字改了一笔，写到第二行数字时停住，把那张A4纵版结算单从桌角拉到明细单旁边对齐，比对后又用笔尖在明细单第二行点了一下，把那个数字划掉重写，写完一笔停一下，再对向结算单继续往下改。\"}]},{\"id\":\"B08\",\"event\":\"方澄左手从椅背上取下挎包挎到肩上，右手拿起桌角那张电影票，朝办公室门方向走去。\",\"trigger\":\"让她第一次真正把今晚留给自己，给观众她去赴约的清晰出口；包与票由左右两只手分别处理，不互相干扰。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"方澄左手从椅背上取下米灰色挎包挎到左肩上，右手拿起桌角那张米白底深红字的院线电影票，朝办公室门方向走出两步。\"},{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"方澄空出左手推开那扇米灰色木纹平板门，走出办公室。\"}]},{\"id\":\"B09\",\"event\":\"方澄在办公室门外的走廊上停一步，低头看一眼手里的电影票，轻轻呼出一口气。\",\"trigger\":\"让她争取到自己时间的释放留在她身上，不和解、不煽情、不回头。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"方澄站在办公室门外走廊上，右手捏着那张米白底深红字的院线电影票，低头看了一眼票面，轻轻呼出一口气。\"}]},{\"id\":\"B10\",\"event\":\"林屿独自坐在工位前，没有喊她，继续用右手那支笔在明细单上对照结算单一行一行改下去。\",\"trigger\":\"关系没有崩，他自己收自己的尾；不再回头看门，她的时间已经被他认下。\",\"steps\":[{\"kind\":\"action\",\"speaker\":\"\",\"text\":\"林屿仍坐在工位前，没抬头去喊她，右手里那支黑色签字笔继续在那张A4横版客户明细单的红笔批注旁一行一行改下去，每写一笔就把笔尖挪向旁边那张结算单比对一次，白色陶瓷咖啡杯没动，那张浅黄便利贴压在他左手边的桌面。\"}]}]},\"component_registry\":{\"schema\":\"creative_component_registry_v1\",\"original_manifest\":{\"schema\":\"static_visual_manifest_v2\",\"render\":{\"style_option_id\":\"S01\",\"visual_medium\":\"写实真人实拍质感的AI短片，自然皮肤纹理与生活化布光\",\"palette\":\"傍晚办公室暖调，浅木色桌面、米白墙、暖灰窗帘透橙黄夕光、人物服装为低饱和的灰蓝与米驼\",\"light_source\":\"临窗自然夕光为主，从办公桌侧面斜入，室内顶灯为辅补光，形成柔和侧光与轻微暖色阴影\"},\"characters\":[{\"id\":\"C01\",\"name\":\"方澄\",\"age_group\":\"成年\",\"hair\":\"黑色齐肩直发，自然中分\",\"clothing\":\"灰蓝色薄针织开衫，内搭白色圆领T恤，下着深灰色直筒长裤\",\"body_shape\":\"中等偏瘦，肩线柔和\"},{\"id\":\"C02\",\"name\":\"林屿\",\"age_group\":\"成年\",\"hair\":\"深栗色短碎发，稍长刘海\",\"clothing\":\"米驼色棉质衬衫，袖口挽至前臂，下着深藏蓝休闲长裤\",\"body_shape\":\"中等身高，肩宽略宽于方澄\"}],\"props\":[{\"id\":\"P01\",\"name\":\"挎包\",\"appearance\":\"软皮小号斜挎包，米灰色金属扣，单层翻盖\",\"owner_id\":\"C01\"},{\"id\":\"P02\",\"name\":\"院线电影票根\",\"appearance\":\"竖版窄长纸片，米白底深红字，右侧带撕齿虚线，今晚院线开场时间与座位号可读\",\"owner_id\":\"C01\"},{\"id\":\"P03\",\"name\":\"善后便利贴三张\",\"appearance\":\"正方形小纸片，分别为浅黄、浅粉、浅蓝底，深灰手写短词（对账/改明细/收尾）\",\"owner_id\":\"C01\"},{\"id\":\"P04\",\"name\":\"咖啡杯\",\"appearance\":\"白色陶瓷马克杯，杯身外侧无图案，杯口微宽\",\"owner_id\":\"C02\"},{\"id\":\"P05\",\"name\":\"客户明细单\",\"appearance\":\"A4横版打印表格纸，浅灰线条格，黑字数字，红笔批注\",\"owner_id\":\"C02\"},{\"id\":\"P06\",\"name\":\"结算单\",\"appearance\":\"A4纵版表格纸，右上角有彩色公司logo条，浅蓝表头\",\"owner_id\":\"C02\"},{\"id\":\"P07\",\"name\":\"签字笔\",\"appearance\":\"黑色细头签字笔，金属笔夹\",\"owner_id\":\"C02\"}],\"scene\":{\"name\":\"傍晚办公室\",\"elements\":[{\"id\":\"E01\",\"name\":\"方澄工位桌\",\"appearance\":\"浅木色长方形办公桌，金属细腿，桌面靠近窗户一侧\"},{\"id\":\"E02\",\"name\":\"林屿工位桌\",\"appearance\":\"浅木色长方形办公桌，与方澄桌同款，平行摆放，靠近室内一侧\"},{\"id\":\"E03\",\"name\":\"抽屉柜\",\"appearance\":\"浅木色三斗文件柜，贴墙放置，黑色拉手\"},{\"id\":\"E04\",\"name\":\"办公室门\",\"appearance\":\"木纹平板门，米灰色，下半部带金属横拉把手，位于房间远端侧墙\"},{\"id\":\"E05\",\"name\":\"窗户\",\"appearance\":\"宽幅铝合金推拉窗，米灰色半透明卷帘半垂，窗框占据外侧整面墙\"},{\"id\":\"E06\",\"name\":\"顶灯\",\"appearance\":\"白色圆形吸顶灯，暖白光，位于房间正中天花板\"},{\"id\":\"E07\",\"name\":\"地面\",\"appearance\":\"浅灰色PVC地板，哑光\"},{\"id\":\"E08\",\"name\":\"墙面\",\"appearance\":\"米白色乳胶漆墙面，干净无装饰\"},{\"id\":\"E09\",\"name\":\"办公椅（方澄）\",\"appearance\":\"黑色网面靠背转椅，灰色塑料五星脚\"},{\"id\":\"E10\",\"name\":\"办公椅（林屿）\",\"appearance\":\"黑色网面靠背转椅，灰色塑料五星脚，与方澄椅同款\"}],\"relations\":[{\"subject\":\"E02\",\"relation\":\"right_of\",\"reference\":\"E01\"},{\"subject\":\"E01\",\"relation\":\"next_to\",\"reference\":\"E05\"},{\"subject\":\"E02\",\"relation\":\"next_to\",\"reference\":\"E01\"},{\"subject\":\"E03\",\"relation\":\"behind\",\"reference\":\"E02\"},{\"subject\":\"E04\",\"relation\":\"behind\",\"reference\":\"E01\"},{\"subject\":\"E06\",\"relation\":\"above\",\"reference\":\"E01\"},{\"subject\":\"E07\",\"relation\":\"below\",\"reference\":\"E01\"},{\"subject\":\"E08\",\"relation\":\"behind\",\"reference\":\"E05\"},{\"subject\":\"E09\",\"relation\":\"next_to\",\"reference\":\"E01\"},{\"subject\":\"E10\",\"relation\":\"next_to\",\"reference\":\"E02\"}]}},\"original_manifest_sha256\":\"7e5ad17743bce4e285673636980238471825686d832bc2787a43cfa1bec5f977\",\"component_declarations\":[{\"source_prop_id\":\"P03\",\"source_count\":3,\"source_count_evidence\":\"三张\",\"members\":[{\"id\":\"P03_Y\",\"name\":\"浅黄对账便利贴\",\"appearance\":\"正方形小纸片，浅黄底，深灰手写短词（对账）\",\"owner_id\":\"C01\",\"source_evidence\":[\"浅黄\",\"对账\"]},{\"id\":\"P03_P\",\"name\":\"浅粉改明细便利贴\",\"appearance\":\"正方形小纸片，浅粉底，深灰手写短词（改明细）\",\"owner_id\":\"C01\",\"source_evidence\":[\"浅粉\",\"改明细\"]},{\"id\":\"P03_B\",\"name\":\"浅蓝收尾便利贴\",\"appearance\":\"正方形小纸片，浅蓝底，深灰手写短词（收尾）\",\"owner_id\":\"C01\",\"source_evidence\":[\"浅蓝\",\"收尾\"]}]}],\"component_declarations_sha256\":\"28e40b3c6b934de208b4f273a872ed8f4e2c18073a83817a24c69df3f62ebb60\",\"component_collections\":{\"P03\":{\"member_ids\":[\"P03_Y\",\"P03_P\",\"P03_B\"],\"source_count\":3,\"source_count_evidence\":\"三张\",\"source_prop_sha256\":\"4dc52efb61d4b181265fab5bdc393ada8ed5d2f16a4f9d58d2b25d1874e156f7\"}},\"member_source_map\":{\"P03_Y\":{\"source_prop_id\":\"P03\",\"source_prop_sha256\":\"4dc52efb61d4b181265fab5bdc393ada8ed5d2f16a4f9d58d2b25d1874e156f7\",\"source_evidence\":[\"浅黄\",\"对账\"]},\"P03_P\":{\"source_prop_id\":\"P03\",\"source_prop_sha256\":\"4dc52efb61d4b181265fab5bdc393ada8ed5d2f16a4f9d58d2b25d1874e156f7\",\"source_evidence\":[\"浅粉\",\"改明细\"]},\"P03_B\":{\"source_prop_id\":\"P03\",\"source_prop_sha256\":\"4dc52efb61d4b181265fab5bdc393ada8ed5d2f16a4f9d58d2b25d1874e156f7\",\"source_evidence\":[\"浅蓝\",\"收尾\"]}},\"effective_manifest\":{\"schema\":\"static_visual_manifest_v2\",\"render\":{\"style_option_id\":\"S01\",\"visual_medium\":\"写实真人实拍质感的AI短片，自然皮肤纹理与生活化布光\",\"palette\":\"傍晚办公室暖调，浅木色桌面、米白墙、暖灰窗帘透橙黄夕光、人物服装为低饱和的灰蓝与米驼\",\"light_source\":\"临窗自然夕光为主，从办公桌侧面斜入，室内顶灯为辅补光，形成柔和侧光与轻微暖色阴影\"},\"characters\":[{\"id\":\"C01\",\"name\":\"方澄\",\"age_group\":\"成年\",\"hair\":\"黑色齐肩直发，自然中分\",\"clothing\":\"灰蓝色薄针织开衫，内搭白色圆领T恤，下着深灰色直筒长裤\",\"body_shape\":\"中等偏瘦，肩线柔和\"},{\"id\":\"C02\",\"name\":\"林屿\",\"age_group\":\"成年\",\"hair\":\"深栗色短碎发，稍长刘海\",\"clothing\":\"米驼色棉质衬衫，袖口挽至前臂，下着深藏蓝休闲长裤\",\"body_shape\":\"中等身高，肩宽略宽于方澄\"}],\"props\":[{\"id\":\"P01\",\"name\":\"挎包\",\"appearance\":\"软皮小号斜挎包，米灰色金属扣，单层翻盖\",\"owner_id\":\"C01\"},{\"id\":\"P02\",\"name\":\"院线电影票根\",\"appearance\":\"竖版窄长纸片，米白底深红字，右侧带撕齿虚线，今晚院线开场时间与座位号可读\",\"owner_id\":\"C01\"},{\"id\":\"P03_Y\",\"name\":\"浅黄对账便利贴\",\"appearance\":\"正方形小纸片，浅黄底，深灰手写短词（对账）\",\"owner_id\":\"C01\"},{\"id\":\"P03_P\",\"name\":\"浅粉改明细便利贴\",\"appearance\":\"正方形小纸片，浅粉底，深灰手写短词（改明细）\",\"owner_id\":\"C01\"},{\"id\":\"P03_B\",\"name\":\"浅蓝收尾便利贴\",\"appearance\":\"正方形小纸片，浅蓝底，深灰手写短词（收尾）\",\"owner_id\":\"C01\"},{\"id\":\"P04\",\"name\":\"咖啡杯\",\"appearance\":\"白色陶瓷马克杯，杯身外侧无图案，杯口微宽\",\"owner_id\":\"C02\"},{\"id\":\"P05\",\"name\":\"客户明细单\",\"appearance\":\"A4横版打印表格纸，浅灰线条格，黑字数字，红笔批注\",\"owner_id\":\"C02\"},{\"id\":\"P06\",\"name\":\"结算单\",\"appearance\":\"A4纵版表格纸，右上角有彩色公司logo条，浅蓝表头\",\"owner_id\":\"C02\"},{\"id\":\"P07\",\"name\":\"签字笔\",\"appearance\":\"黑色细头签字笔，金属笔夹\",\"owner_id\":\"C02\"}],\"scene\":{\"name\":\"傍晚办公室\",\"elements\":[{\"id\":\"E01\",\"name\":\"方澄工位桌\",\"appearance\":\"浅木色长方形办公桌，金属细腿，桌面靠近窗户一侧\"},{\"id\":\"E02\",\"name\":\"林屿工位桌\",\"appearance\":\"浅木色长方形办公桌，与方澄桌同款，平行摆放，靠近室内一侧\"},{\"id\":\"E03\",\"name\":\"抽屉柜\",\"appearance\":\"浅木色三斗文件柜，贴墙放置，黑色拉手\"},{\"id\":\"E04\",\"name\":\"办公室门\",\"appearance\":\"木纹平板门，米灰色，下半部带金属横拉把手，位于房间远端侧墙\"},{\"id\":\"E05\",\"name\":\"窗户\",\"appearance\":\"宽幅铝合金推拉窗，米灰色半透明卷帘半垂，窗框占据外侧整面墙\"},{\"id\":\"E06\",\"name\":\"顶灯\",\"appearance\":\"白色圆形吸顶灯，暖白光，位于房间正中天花板\"},{\"id\":\"E07\",\"name\":\"地面\",\"appearance\":\"浅灰色PVC地板，哑光\"},{\"id\":\"E08\",\"name\":\"墙面\",\"appearance\":\"米白色乳胶漆墙面，干净无装饰\"},{\"id\":\"E09\",\"name\":\"办公椅（方澄）\",\"appearance\":\"黑色网面靠背转椅，灰色塑料五星脚\"},{\"id\":\"E10\",\"name\":\"办公椅（林屿）\",\"appearance\":\"黑色网面靠背转椅，灰色塑料五星脚，与方澄椅同款\"}],\"relations\":[{\"subject\":\"E02\",\"relation\":\"right_of\",\"reference\":\"E01\"},{\"subject\":\"E01\",\"relation\":\"next_to\",\"reference\":\"E05\"},{\"subject\":\"E02\",\"relation\":\"next_to\",\"reference\":\"E01\"},{\"subject\":\"E03\",\"relation\":\"behind\",\"reference\":\"E02\"},{\"subject\":\"E04\",\"relation\":\"behind\",\"reference\":\"E01\"},{\"subject\":\"E06\",\"relation\":\"above\",\"reference\":\"E01\"},{\"subject\":\"E07\",\"relation\":\"below\",\"reference\":\"E01\"},{\"subject\":\"E08\",\"relation\":\"behind\",\"reference\":\"E05\"},{\"subject\":\"E09\",\"relation\":\"next_to\",\"reference\":\"E01\"},{\"subject\":\"E10\",\"relation\":\"next_to\",\"reference\":\"E02\"}]},\"surface_ids\":[\"E01\",\"E02\"]},\"effective_manifest_sha256\":\"a4f3f2510f19538875b221e6d37eadd9c94c23299e6eeb12e0b583ef17b6481a\",\"semantic_approval\":false,\"production_ready\":false},\"linear_script_protocol\":\"complete_linear_script_v3\",\"script_timing_status\":\"preliminary_budget_not_actual\",\"user_content_feedback\":{\"schema\":\"user_creative_feedback/v1\",\"source\":\"current user message\",\"parent\":\"S6 call67 / director77 / full_review158 / 91.442857s\",\"quality_confirmation\":false,\"issues\":[{\"id\":\"NOTE_REPETITION\",\"user_statement\":\"第3镜的便利贴动作堆得太长。27.61秒到35.91秒，8.3秒只把三张便利贴依次揭起、摊平、念词；可以压缩到5–6秒，把省出的时间留给拒绝或离开。\"},{\"id\":\"MEMORABLE_CHOICE\",\"user_statement\":\"拒绝后轻轻补充‘这次我先走’，呼应标题，不道歉、不找补。\"},{\"id\":\"VISIBLE_RELEASE\",\"user_statement\":\"门外停下，看一眼手里的票，轻轻呼一口气；不和解、不煽情、不回头，让观众知道她去赴自己的约。\"},{\"id\":\"OPTIONAL_COLLEAGUE\",\"user_statement\":\"职场横向参照仍缺席；不是必须，可用门边同事抬头看她手里票的一眼。\"}],\"implementation_choice\":{\"keep_two_characters\":true,\"reason\":\"本轮优先聚焦她争取自己时间的可见释放，不新增资产或转移情绪观察主体。第四项明确为可选，作为未采用建议保存。\",\"tighten_old_account_dialogue\":true,\"reason_long_dialogue\":\"第二镜仍21.614秒；保留长期善后的证据但让完整新稿自然压缩这句，实际时长留导演和局部表演。\"},\"requirements\":[\"完整模型新稿；剧情仍是惯常加班的协作关系、明确拒绝、他自己接回工作、她赴电影约。\",\"三张便利贴允许作为一组拿起摊开，只呈现信息而不逐张揭起压角；不得让旁人替她做新工作。\",\"拒绝后保留一个选择姿态：‘这次我先走’；不追加道歉、承诺下次帮忙或补偿。\",\"出门后在门外看手中电影票并轻呼气，不回头、不对男方求认同；情绪释放留在她身上。\",\"林屿确实自己做并承担原难度，但不加惩罚、消息奖励、老板加薪或突然威胁。\",\"当前仅两名已绑定人物；笔从桌沿拿取后明确持续持有，纸面位置和包票/推门手部前提应由正文成立。\",\"不写实际秒数或承诺热度；保留所有完整参考，仅借表达机制，不照搬剧情。\"]},\"production_responsibility\":{\"whole_film_direction\":\"情绪、因果、每镜新增信息/观察主体/切镜理由/必要反应要求；不细排秒数\",\"local_events\":\"只负责正文合法有用事件与首态前提；临时预检秒数不是表演\",\"local_performance\":\"完整各slot表演与真实秒数，不改事件、不删对白\",\"compiler\":\"确定性投影、跨镜状态、真实排时和窗口\",\"editorial_intent\":\"便利贴信息整体呈现，避免反复揭起压角；拒绝现场标题句，门外看票轻呼气，仍两人；不照搬参考剧情、不加补偿或奖惩\",\"timing_targets_not_yet_verified\":{\"three_notes_and_list_seconds\":\"5–6秒目标，实际由局部表演检验\",\"doorway_release_seconds\":\"1–2秒可读目标，不能生硬定为一秒\"}}},\"direction\":{\"schema\":\"step_index_physical_direction_offline_v5\",\"context_sha256\":\"710718c98f13c0bd3de5d49a8bd8b3e06a132b0743e5aa24a6982fc40984847e\",\"raw_linear_script_sha256\":\"465b12b846c5a14581e069d62f0068b0b27d2cb224231f6e7c08eed88301f1f3\",\"emotional_arc\":\"从默认接手的压力，到方澄拒绝时的稳与边界，再到林屿不太熟练但自己承担下来，方澄门外看票轻呼气——情绪落点是各自收回自己的事，没有崩，也没有谁赢谁输。\",\"causal_chain\":[\"林屿把收尾的活默认推给方澄（用清单和递笔坐实），方澄拒绝并给出不可打折的理由，林屿被迫自己收回那支笔并亲手对账，方澄由此拿回今晚去看电影。\"],\"ending_intent\":\"关系没有因为一次拒绝而崩：她守住了留给自己的一晚，他用自己的手把这件事接了过去——两个人各自把今晚收回自己手里。\",\"beats\":[{\"beat_id\":\"B01\",\"shots\":[{\"shot_id\":\"SH01\",\"source_step_refs\":[\"raw_linear_script.beats.0.steps.0\",\"raw_linear_script.beats.0.steps.1\"],\"new_information\":\"让观众同时看见她为自己留出的时间和他默认她会接过去的活，建立今晚谁的时间被默认让位的张力。\",\"purpose\":\"让观众同时看见她为自己留出的时间和他默认她会接过去的活，建立今晚谁的时间被默认让位的张力。\",\"observation_object\":\"方澄工位上挂着的挎包、桌角压着的电影票，以及林屿刚推向两人之间的客户明细单。\",\"camera\":\"从两人工位前侧拍固定中景，深景深，交代空间与桌面物件；不设定动作完成后的初态\",\"composition\":\"两人工位与脸部、当前桌面物件同框，保留人物实际站坐高度差\",\"cut_reason\":\"开场交代空间与两人桌面物件的对照；当观众看清挎包已挂、电影票压在桌角、而明细单正被推向她一侧时，下一拍切到林屿开口把过去帮忙摊成今晚的默认要求。\",\"dialogue_mode\":\"无对白\",\"performance_requirements\":[]}]},{\"beat_id\":\"B02\",\"shots\":[{\"shot_id\":\"SH02\",\"source_step_refs\":[\"raw_linear_script.beats.1.steps.0\",\"raw_linear_script.beats.1.steps.1\"],\"new_information\":\"把过去她替他收尾的加班摊到台面，坐实他今晚仍把活默认推给她；她听见却没接话，红批与电影票在同一视线里对照，观众读出她今晚不会按老样子接手。\",\"purpose\":\"把过去她替他收尾的加班摊到台面，坐实他今晚仍把活默认推给她；她听见却没接话，红批与电影票在同一视线里对照，观众读出她今晚不会按老样子接手。\",\"observation_object\":\"说话者林屿完整开口与未抬头的姿态，以及方澄听他说完后目光从红笔批注移到电影票却没开口的反应。\",\"camera\":\"从工位前侧拍固定双人中近景，保持两人面部、眼睛和嘴同时清晰；不从背后拍\",\"composition\":\"两人半侧脸同框，桌面位于下沿，避免前实后虚遮蔽听者\",\"cut_reason\":\"读清林屿完整摊出旧账的潜台词和方澄听见后没接话的对位反应后，转到B03他摊开便利贴与递笔，把默认她接手的姿态再往前推一步。\",\"dialogue_mode\":\"画内对白\",\"performance_requirements\":[]}]},{\"beat_id\":\"B03\",\"shots\":[{\"shot_id\":\"SH03\",\"source_step_refs\":[\"raw_linear_script.beats.2.steps.0\",\"raw_linear_script.beats.2.steps.1\",\"raw_linear_script.beats.2.steps.2\"],\"new_information\":\"把善后三件事摊成清单递到面前，并用握笔的手势默认她会接下，把今晚本属于她的时间再次压成他这边的活。\",\"purpose\":\"把善后三件事摊成清单递到面前，并用握笔的手势默认她会接下，把今晚本属于她的时间再次压成他这边的活。\",\"observation_object\":\"林屿侧身取便利贴、摊开三色便利贴并压角、反握笔尖朝向方澄停在桌沿等候的那只右手与面前摊开的浅黄、浅粉、浅蓝三张便利贴。\",\"camera\":\"桌面斜俯近景，手与当前源道具清晰，嘴不入画；拍完整原动作，不额外切镜\",\"composition\":\"三色便利贴及握笔手在桌面近景可读，不改变当前持有、朝向或支持面\",\"cut_reason\":\"递笔已停住、便利贴摊齐、等待她接的瞬间，切到下一镜看她不接，承接B04她抬眼犹豫。\",\"dialogue_mode\":\"画外对白\",\"performance_requirements\":[]}]},{\"beat_id\":\"B04\",\"shots\":[{\"shot_id\":\"SH04\",\"source_step_refs\":[\"raw_linear_script.beats.3.steps.0\"],\"new_information\":\"她不接笔，抬头看他，这一犹豫把拒绝前的压力留在了眼睛里。\",\"purpose\":\"她不接笔，抬头看他，这一犹豫把拒绝前的压力留在了眼睛里。\",\"observation_object\":\"方澄抬起、准备开口的眼睛。\",\"camera\":\"前侧方澄面部中近景，眼区清晰，递向她的笔在画面下沿作陪体\",\"composition\":\"方澄脸部为主，笔及握笔手在下沿，不遮挡她从笔抬眼的目光\",\"cut_reason\":\"等她抬眼对上林屿的目光，看完这一次不接的犹豫再交拒绝。\",\"dialogue_mode\":\"无对白\",\"performance_requirements\":[{\"id\":\"W_SH04_1\",\"subject\":\"C01\",\"stimulus_ref\":\"raw_linear_script.beats.2.steps.2\",\"reaction_ref\":\"raw_linear_script.beats.3.steps.0\",\"relation\":\"after\",\"minimum_seconds\":2.0}]}]},{\"beat_id\":\"B05\",\"shots\":[{\"shot_id\":\"SH05\",\"source_step_refs\":[\"raw_linear_script.beats.4.steps.0\",\"raw_linear_script.beats.4.steps.1\"],\"new_information\":\"方澄亲口给出不可打折的理由，并把今晚留给自己；这是拒绝站住的瞬间，观众第一次明确听见她开口说不。\",\"purpose\":\"方澄亲口给出不可打折的理由，并把今晚留给自己；这是拒绝站住的瞬间，观众第一次明确听见她开口说不。\",\"observation_object\":\"方澄的眼睛和嘴，两句原对白的画内完整呈现，不在句间切走。\",\"camera\":\"前侧方澄面部近景，固定镜头完整容纳两句原对白，不在句间切镜\",\"composition\":\"方澄眼睛和嘴为中心，背景弱化但不改变人物或道具状态\",\"cut_reason\":\"把整个拒绝交在方澄一镜里完整读完，不在两句之间切去林屿；切镜必须等两句全部说完后，才交给B06林屿面对被拒绝的反应。\",\"dialogue_mode\":\"画内对白\",\"performance_requirements\":[{\"id\":\"W_SH05_1\",\"subject\":\"C01\",\"stimulus_ref\":\"raw_linear_script.beats.4.steps.0\",\"reaction_ref\":\"raw_linear_script.beats.4.steps.0\",\"relation\":\"during\",\"minimum_seconds\":2.0},{\"id\":\"W_SH05_2\",\"subject\":\"C01\",\"stimulus_ref\":\"raw_linear_script.beats.4.steps.1\",\"reaction_ref\":\"raw_linear_script.beats.4.steps.1\",\"relation\":\"during\",\"minimum_seconds\":1.5}]}]},{\"beat_id\":\"B06\",\"shots\":[{\"shot_id\":\"SH06\",\"source_step_refs\":[\"raw_linear_script.beats.5.steps.0\",\"raw_linear_script.beats.5.steps.1\"],\"new_information\":\"方澄已明确拒绝并交出今晚留给自己的理由。林屿第一次在桌面手势上被顶回来，被迫自己面对这份收尾。镜头要把他的停顿、看包、回看便利贴和明细、再把笔收回自己面前这一连串边界转移，一次读清：不再假装这件事，也没替自己开脱，下一镜就由他自己亲手对下去。\",\"purpose\":\"方澄已明确拒绝并交出今晚留给自己的理由。林屿第一次在桌面手势上被顶回来，被迫自己面对这份收尾。镜头要把他的停顿、看包、回看便利贴和明细、再把笔收回自己面前这一连串边界转移，一次读清：不再假装这件事，也没替自己开脱，下一镜就由他自己亲手对下去。\",\"observation_object\":\"林屿的脸、眼睛和持笔右手同时可读。前侧中近景框住他面部与眼区，下沿保留桌面持笔手与三张便利贴和明细、结算单的边沿。\",\"camera\":\"前侧林屿面部中近景，脸和眼清晰，持笔右手在画面下沿可读\",\"composition\":\"林屿面部停顿及看包回看纸的眼区为主，下沿保留原收笔动作\",\"cut_reason\":\"切在林屿听完拒绝之后的脸眼停顿、视线从方澄椅背挎包回到自己便利贴与明细、再把笔收回结算单边沿的整段反应已读清之后。下一镜才转B07他自己对照结算单一行行改账，此时边界已经由他自己收回去，不留手部或背影的半截状态。\",\"dialogue_mode\":\"无对白\",\"performance_requirements\":[{\"id\":\"W_SH06_1\",\"subject\":\"C02\",\"stimulus_ref\":\"raw_linear_script.beats.4.steps.1\",\"reaction_ref\":\"raw_linear_script.beats.5.steps.0\",\"relation\":\"after\",\"minimum_seconds\":2.0}]}]},{\"beat_id\":\"B07\",\"shots\":[{\"shot_id\":\"SH07\",\"source_step_refs\":[\"raw_linear_script.beats.6.steps.0\"],\"new_information\":\"让他自己接手对账的难处被观众看见。\",\"purpose\":\"让他自己接手对账的难处被观众看见。\",\"observation_object\":\"右手笔尖、明细单红批数字、结算单两边与纸的比对位置。\",\"camera\":\"桌面斜俯近景，完整容纳明细单、结算单及林屿右手黑色签字笔\",\"composition\":\"两份单据与右手笔同时可读；只跟随原文实际比对动作，不新增纸张反复移动\",\"cut_reason\":\"他自己把对不上的项改清后，转B08方澄拿包与票出门。\",\"dialogue_mode\":\"无对白\",\"performance_requirements\":[]}]},{\"beat_id\":\"B08\",\"shots\":[{\"shot_id\":\"SH08\",\"source_step_refs\":[\"raw_linear_script.beats.7.steps.0\",\"raw_linear_script.beats.7.steps.1\"],\"new_information\":\"方澄把留给自己的一晚真正从工位取走：挎包上肩、电影票离桌、推门离开办公室，把时间交给自己，观众看到她赴约的清晰出口。\",\"purpose\":\"方澄把留给自己的一晚真正从工位取走：挎包上肩、电影票离桌、推门离开办公室，把时间交给自己，观众看到她赴约的清晰出口。\",\"observation_object\":\"方澄的左手取包佩戴左肩、右手拿票、空出的左手推门走出的整套执行\",\"camera\":\"方澄前侧平视中景，轻跟从工位到门外的完整原动作；不添加起坐或关门\",\"composition\":\"保留左肩挎包、右手电影票与自由左手推门的原分工，单镜连续，不重设初态\",\"cut_reason\":\"等她已走出办公室门后再切，下一镜直接接她在走廊外低头看票呼气，不在门内多停一拍。\",\"dialogue_mode\":\"无对白\",\"performance_requirements\":[]}]},{\"beat_id\":\"B09\",\"shots\":[{\"shot_id\":\"SH09\",\"source_step_refs\":[\"raw_linear_script.beats.8.steps.0\"],\"new_information\":\"方澄已经在走廊里争取到自己的一晚：她右手捏着电影票，低头看票面后轻轻呼出一口气，这是她为自己赴约的可见回报，不是回头、不是和解、也不是再被任何活叫回去。\",\"purpose\":\"方澄已经在走廊里争取到自己的一晚：她右手捏着电影票，低头看票面后轻轻呼出一口气，这是她为自己赴约的可见回报，不是回头、不是和解、也不是再被任何活叫回去。\",\"observation_object\":\"方澄脸、目光向下的眼、右手那张米白底深红字电影票和轻呼气的口鼻，三者要在同一镜里同时被观众读清。\",\"camera\":\"走廊前侧三分之二面部中近景，面部、右手电影票与轻呼气同框清楚可读\",\"composition\":\"面部和持票手同时入画，背景走廊弱化；不拍纯背影、不新增回头或对话\",\"cut_reason\":\"B09的看票和轻呼气已经把她争取到自己时间的释放交代清楚，下一切到B10林屿继续自己一行一行对账，由各自承担收束本镜，不再加回头、对话或别的动作。\",\"dialogue_mode\":\"无对白\",\"performance_requirements\":[{\"id\":\"W_SH09_1\",\"subject\":\"C01\",\"stimulus_ref\":\"raw_linear_script.beats.7.steps.1\",\"reaction_ref\":\"raw_linear_script.beats.8.steps.0\",\"relation\":\"after\",\"minimum_seconds\":2.0}]}]},{\"beat_id\":\"B10\",\"shots\":[{\"shot_id\":\"SH10\",\"source_step_refs\":[\"raw_linear_script.beats.9.steps.0\"],\"new_information\":\"林屿独自低头对账，一个人把手里的事收回自己手里，方澄那晚留给了自己，这一段落定。\",\"purpose\":\"林屿独自低头对账，一个人把手里的事收回自己手里，方澄那晚留给了自己，这一段落定。\",\"observation_object\":\"林屿的右手、签字笔与两份单据的对账动作，附带桌面杯与浅黄便利贴作背景。\",\"camera\":\"林屿工位前侧中近景，侧脸、右手黑色签字笔及两份单据同框\",\"composition\":\"保持工作者与当前桌面物件同框，杯和便利贴作背景，不新增物件或动作\",\"cut_reason\":\"看见他一个人收下这件事，对账落到具体动作上，全片在此处自然结束。\",\"dialogue_mode\":\"无对白\",\"performance_requirements\":[]}]}],\"initial_state\":{\"C01\":{\"posture\":\"standing\",\"position\":\"standing_at_E01\",\"gaze\":\"down_at_E01_desk\",\"affect\":\"neutral\",\"facing\":\"toward_E01\"},\"C02\":{\"posture\":\"sitting\",\"position\":\"sitting_at_E02\",\"gaze\":\"down_at_E02_desk\",\"affect\":\"neutral\",\"facing\":\"toward_E02\"},\"P01\":{\"holder\":\"none\",\"location\":\"surface:E09:backrest\"},\"P02\":{\"holder\":\"none\",\"location\":\"surface:E01:corner\"},\"P03_Y\":{\"holder\":\"none\",\"location\":\"surface:E01:corner\"},\"P03_P\":{\"holder\":\"none\",\"location\":\"surface:E01:corner\"},\"P03_B\":{\"holder\":\"none\",\"location\":\"surface:E01:corner\"},\"P04\":{\"holder\":\"none\",\"location\":\"surface:E02:near_edge\"},\"P05\":{\"holder\":\"none\",\"location\":\"surface:E02:center\"},\"P06\":{\"holder\":\"none\",\"location\":\"surface:E02:corner\"},\"P07\":{\"holder\":\"none\",\"location\":\"surface:E02:edge\"}},\"spatial_contract\":{\"seats\":[{\"seat_id\":\"E09\",\"access_positions\":[\"standing_at_E01\",\"sitting_at_E01\"],\"required_facing\":\"toward_E01\"},{\"seat_id\":\"E10\",\"access_positions\":[\"sitting_at_E02\"],\"required_facing\":\"toward_E02\"}]}},\"shot_id\":\"SH01\",\"start_state\":{\"C01\":{\"posture\":\"standing\",\"position\":\"standing_at_E01\",\"gaze\":\"down_at_E01_desk\",\"affect\":\"neutral\",\"facing\":\"toward_E01\"},\"C02\":{\"posture\":\"sitting\",\"position\":\"sitting_at_E02\",\"gaze\":\"down_at_E02_desk\",\"affect\":\"neutral\",\"facing\":\"toward_E02\"},\"P01\":{\"holder\":\"none\",\"location\":\"surface:E09:backrest\"},\"P02\":{\"holder\":\"none\",\"location\":\"surface:E01:corner\"},\"P03_Y\":{\"holder\":\"none\",\"location\":\"surface:E01:corner\"},\"P03_P\":{\"holder\":\"none\",\"location\":\"surface:E01:corner\"},\"P03_B\":{\"holder\":\"none\",\"location\":\"surface:E01:corner\"},\"P04\":{\"holder\":\"none\",\"location\":\"surface:E02:near_edge\"},\"P05\":{\"holder\":\"none\",\"location\":\"surface:E02:center\"},\"P06\":{\"holder\":\"none\",\"location\":\"surface:E02:corner\"},\"P07\":{\"holder\":\"none\",\"location\":\"surface:E02:edge\"}},\"previous_local_sha256\":[],\"future_shot_ids\":[\"SH02\",\"SH03\",\"SH04\",\"SH05\",\"SH06\",\"SH07\",\"SH08\",\"SH09\",\"SH10\"]},\"current_only\":{\"current_shot\":{\"shot_id\":\"SH01\",\"source_step_refs\":[\"raw_linear_script.beats.0.steps.0\",\"raw_linear_script.beats.0.steps.1\"],\"new_information\":\"让观众同时看见她为自己留出的时间和他默认她会接过去的活，建立今晚谁的时间被默认让位的张力。\",\"purpose\":\"让观众同时看见她为自己留出的时间和他默认她会接过去的活，建立今晚谁的时间被默认让位的张力。\",\"observation_object\":\"方澄工位上挂着的挎包、桌角压着的电影票，以及林屿刚推向两人之间的客户明细单。\",\"camera\":\"从两人工位前侧拍固定中景，深景深，交代空间与桌面物件；不设定动作完成后的初态\",\"composition\":\"两人工位与脸部、当前桌面物件同框，保留人物实际站坐高度差\",\"cut_reason\":\"开场交代空间与两人桌面物件的对照；当观众看清挎包已挂、电影票压在桌角、而明细单正被推向她一侧时，下一拍切到林屿开口把过去帮忙摊成今晚的默认要求。\",\"dialogue_mode\":\"无对白\",\"performance_requirements\":[]},\"ordered_complete_current_steps\":[{\"source_step_ref\":\"raw_linear_script.beats.0.steps.0\",\"kind\":\"action\",\"speaker\":\"\",\"text\":\"方澄穿着灰蓝色薄针织开衫站在自己浅木色工位前，米灰色挎包已经挂上椅背，米白底深红字的院线电影票压在桌角自己伸手就能够到的位置。\"},{\"source_step_ref\":\"raw_linear_script.beats.0.steps.1\",\"kind\":\"action\",\"speaker\":\"\",\"text\":\"林屿穿着米驼色棉质衬衫坐在她右边的工位，没抬头，把自己桌上那份A4横版客户明细单往两人之间的方向推了推，那张A4纵版结算单仍摊在自己桌角，白色陶瓷咖啡杯放在一旁。\"}],\"actual_start_state\":{\"C01\":{\"posture\":\"standing\",\"position\":\"standing_at_E01\",\"gaze\":\"down_at_E01_desk\",\"affect\":\"neutral\",\"facing\":\"toward_E01\"},\"C02\":{\"posture\":\"sitting\",\"position\":\"sitting_at_E02\",\"gaze\":\"down_at_E02_desk\",\"affect\":\"neutral\",\"facing\":\"toward_E02\"},\"P01\":{\"holder\":\"none\",\"location\":\"surface:E09:backrest\"},\"P02\":{\"holder\":\"none\",\"location\":\"surface:E01:corner\"},\"P03_Y\":{\"holder\":\"none\",\"location\":\"surface:E01:corner\"},\"P03_P\":{\"holder\":\"none\",\"location\":\"surface:E01:corner\"},\"P03_B\":{\"holder\":\"none\",\"location\":\"surface:E01:corner\"},\"P04\":{\"holder\":\"none\",\"location\":\"surface:E02:near_edge\"},\"P05\":{\"holder\":\"none\",\"location\":\"surface:E02:center\"},\"P06\":{\"holder\":\"none\",\"location\":\"surface:E02:corner\"},\"P07\":{\"holder\":\"none\",\"location\":\"surface:E02:edge\"}}},\"verified_faults\":\"当前SH01仅完整原S01静态建立和S02推明细。S01方澄已站、包挂椅背、票在桌角，只读这些事实，operation=null不重复stand或take。S02林屿在自己E02桌面把P05向两人之间推，可用一个slide操作到surface:E02:near_E01_edge；不移出支持面，不增加端杯、拿笔、抬头。无对白，无情绪affect操作。\",\"task\":\"提交上述当前镜完整新事件计划，所有原动作完整、有明确真实状态；禁止拼接旧失败稿。\"}"
+      },
+      {
+        "role": "system",
+        "content": "本次仅升级工具输出传输，原创作/审查任务和完整输入继续适用。此前要求直接输出内部字段的格式说明由本传输协议替代：只调用submit_creative_json，参数恰为payload_json一个字符串。该字符串是完整内部JSON对象的原文，按用户提供的inner_document_schema完整填写，数组仍为JSON数组；不要item包装、XML数组、代码围栏、patch或丢弃字段。JSON字符串中的引号和换行按JSON转义。思考或正文分析不能代替完整工具文档，不能仅返回摘要。"
+      },
+      {
+        "role": "user",
+        "content": "{\"transport\":\"creative_json_document_transport/v1\",\"tool_name\":\"submit_creative_json\",\"inner_document_schema\":{\"type\":\"object\",\"properties\":{\"actions\":{\"type\":\"array\",\"minItems\":2,\"maxItems\":2,\"prefixItems\":[{\"type\":\"object\",\"properties\":{\"source_step_ref\":{\"const\":\"raw_linear_script.beats.0.steps.0\"},\"events\":{\"type\":\"array\",\"minItems\":1,\"items\":{\"type\":\"object\",\"properties\":{\"intent\":{\"type\":\"string\",\"minLength\":1},\"subject\":{\"enum\":[\"C01\",\"C02\"]},\"operation\":{\"anyOf\":[{\"type\":\"null\"},{\"type\":\"object\",\"properties\":{\"kind\":{\"enum\":[\"move\",\"gaze\",\"stand\",\"face\"]},\"actor\":{\"enum\":[\"C01\",\"C02\"]},\"target\":{\"const\":\"\"},\"value\":{\"type\":\"string\",\"minLength\":1}},\"required\":[\"kind\",\"actor\",\"target\",\"value\"],\"additionalProperties\":false},{\"type\":\"object\",\"properties\":{\"kind\":{\"enum\":[\"take\",\"place\",\"pass\",\"slide\"]},\"actor\":{\"enum\":[\"C01\",\"C02\"]},\"target\":{\"enum\":[\"P01\",\"P02\",\"P03_Y\",\"P03_P\",\"P03_B\",\"P04\",\"P05\",\"P06\",\"P07\"]},\"value\":{\"type\":\"string\",\"minLength\":1}},\"required\":[\"kind\",\"actor\",\"target\",\"value\"],\"additionalProperties\":false},{\"type\":\"object\",\"properties\":{\"kind\":{\"enum\":[\"sit\"]},\"actor\":{\"enum\":[\"C01\",\"C02\"]},\"target\":{\"type\":\"string\",\"minLength\":1},\"value\":{\"type\":\"string\",\"minLength\":1}},\"required\":[\"kind\",\"actor\",\"target\",\"value\"],\"additionalProperties\":false},{\"type\":\"array\",\"minItems\":3,\"maxItems\":3,\"items\":{\"type\":\"object\",\"properties\":{\"kind\":{\"enum\":[\"take\",\"place\"]},\"actor\":{\"enum\":[\"C01\",\"C02\"]},\"target\":{\"enum\":[\"P03_B\",\"P03_P\",\"P03_Y\"]},\"value\":{\"type\":\"string\",\"minLength\":1}},\"required\":[\"kind\",\"actor\",\"target\",\"value\"],\"additionalProperties\":false}}]},\"satisfies\":{\"type\":\"array\",\"uniqueItems\":true,\"maxItems\":0,\"items\":{\"type\":\"string\"}}},\"required\":[\"intent\",\"subject\",\"operation\",\"satisfies\"],\"additionalProperties\":false}}},\"required\":[\"source_step_ref\",\"events\"],\"additionalProperties\":false},{\"type\":\"object\",\"properties\":{\"source_step_ref\":{\"const\":\"raw_linear_script.beats.0.steps.1\"},\"events\":{\"type\":\"array\",\"minItems\":1,\"items\":{\"type\":\"object\",\"properties\":{\"intent\":{\"type\":\"string\",\"minLength\":1},\"subject\":{\"enum\":[\"C01\",\"C02\"]},\"operation\":{\"anyOf\":[{\"type\":\"null\"},{\"type\":\"object\",\"properties\":{\"kind\":{\"enum\":[\"move\",\"gaze\",\"stand\",\"face\"]},\"actor\":{\"enum\":[\"C01\",\"C02\"]},\"target\":{\"const\":\"\"},\"value\":{\"type\":\"string\",\"minLength\":1}},\"required\":[\"kind\",\"actor\",\"target\",\"value\"],\"additionalProperties\":false},{\"type\":\"object\",\"properties\":{\"kind\":{\"enum\":[\"take\",\"place\",\"pass\",\"slide\"]},\"actor\":{\"enum\":[\"C01\",\"C02\"]},\"target\":{\"enum\":[\"P01\",\"P02\",\"P03_Y\",\"P03_P\",\"P03_B\",\"P04\",\"P05\",\"P06\",\"P07\"]},\"value\":{\"type\":\"string\",\"minLength\":1}},\"required\":[\"kind\",\"actor\",\"target\",\"value\"],\"additionalProperties\":false},{\"type\":\"object\",\"properties\":{\"kind\":{\"enum\":[\"sit\"]},\"actor\":{\"enum\":[\"C01\",\"C02\"]},\"target\":{\"type\":\"string\",\"minLength\":1},\"value\":{\"type\":\"string\",\"minLength\":1}},\"required\":[\"kind\",\"actor\",\"target\",\"value\"],\"additionalProperties\":false},{\"type\":\"array\",\"minItems\":3,\"maxItems\":3,\"items\":{\"type\":\"object\",\"properties\":{\"kind\":{\"enum\":[\"take\",\"place\"]},\"actor\":{\"enum\":[\"C01\",\"C02\"]},\"target\":{\"enum\":[\"P03_B\",\"P03_P\",\"P03_Y\"]},\"value\":{\"type\":\"string\",\"minLength\":1}},\"required\":[\"kind\",\"actor\",\"target\",\"value\"],\"additionalProperties\":false}}]},\"satisfies\":{\"type\":\"array\",\"uniqueItems\":true,\"maxItems\":0,\"items\":{\"type\":\"string\"}}},\"required\":[\"intent\",\"subject\",\"operation\",\"satisfies\"],\"additionalProperties\":false}}},\"required\":[\"source_step_ref\",\"events\"],\"additionalProperties\":false}],\"items\":false}},\"required\":[\"actions\"],\"additionalProperties\":false}}"
+      }
+    ],
+    "structured_schema": {
+      "title": "submit_creative_json",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_json"
+      ],
+      "properties": {
+        "payload_json": {
+          "type": "string",
+          "minLength": 2,
+          "description": "完整内部JSON对象原文，严格按用户inner_document_schema；仅此一个字符串字段"
+        }
+      }
+    },
+    "parameters": {
+      "max_completion_tokens": 3000,
+      "temperature": 0.4,
+      "thinking": "disabled"
+    },
+    "input_provenance": {
+      "raw_script_sha256": "465b12b846c5a14581e069d62f0068b0b27d2cb224231f6e7c08eed88301f1f3",
+      "reference_pack_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+      "local_input_sha256": "a355b6ed9d773bebef96330092b9376ff29d8df31c2f91f20302798156e61ecf",
+      "current_shot": "SH01",
+      "window_policy_sha256": "44c604fdb72814a17ca3da0621653d65977f701ccfa624074ee4457f4a254ef7",
+      "stage": "model_authored_atomic_events"
+    },
+    "operator_version": "s7_explicit_window_policy_then_model_performance/v33",
+    "inner_document_schema": {
+      "type": "object",
+      "properties": {
+        "actions": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "prefixItems": [
+            {
+              "type": "object",
+              "properties": {
+                "source_step_ref": {
+                  "const": "raw_linear_script.beats.0.steps.0"
+                },
+                "events": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "intent": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "subject": {
+                        "enum": [
+                          "C01",
+                          "C02"
+                        ]
+                      },
+                      "operation": {
+                        "anyOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "enum": [
+                                  "move",
+                                  "gaze",
+                                  "stand",
+                                  "face"
+                                ]
+                              },
+                              "actor": {
+                                "enum": [
+                                  "C01",
+                                  "C02"
+                                ]
+                              },
+                              "target": {
+                                "const": ""
+                              },
+                              "value": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "actor",
+                              "target",
+                              "value"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "enum": [
+                                  "take",
+                                  "place",
+                                  "pass",
+                                  "slide"
+                                ]
+                              },
+                              "actor": {
+                                "enum": [
+                                  "C01",
+                                  "C02"
+                                ]
+                              },
+                              "target": {
+                                "enum": [
+                                  "P01",
+                                  "P02",
+                                  "P03_Y",
+                                  "P03_P",
+                                  "P03_B",
+                                  "P04",
+                                  "P05",
+                                  "P06",
+                                  "P07"
+                                ]
+                              },
+                              "value": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "actor",
+                              "target",
+                              "value"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "enum": [
+                                  "sit"
+                                ]
+                              },
+                              "actor": {
+                                "enum": [
+                                  "C01",
+                                  "C02"
+                                ]
+                              },
+                              "target": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "value": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "actor",
+                              "target",
+                              "value"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "array",
+                            "minItems": 3,
+                            "maxItems": 3,
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "kind": {
+                                  "enum": [
+                                    "take",
+                                    "place"
+                                  ]
+                                },
+                                "actor": {
+                                  "enum": [
+                                    "C01",
+                                    "C02"
+                                  ]
+                                },
+                                "target": {
+                                  "enum": [
+                                    "P03_B",
+                                    "P03_P",
+                                    "P03_Y"
+                                  ]
+                                },
+                                "value": {
+                                  "type": "string",
+                                  "minLength": 1
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "actor",
+                                "target",
+                                "value"
+                              ],
+                              "additionalProperties": false
+                            }
+                          }
+                        ]
+                      },
+                      "satisfies": {
+                        "type": "array",
+                        "uniqueItems": true,
+                        "maxItems": 0,
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "required": [
+                      "intent",
+                      "subject",
+                      "operation",
+                      "satisfies"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "source_step_ref",
+                "events"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "source_step_ref": {
+                  "const": "raw_linear_script.beats.0.steps.1"
+                },
+                "events": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "intent": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "subject": {
+                        "enum": [
+                          "C01",
+                          "C02"
+                        ]
+                      },
+                      "operation": {
+                        "anyOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "enum": [
+                                  "move",
+                                  "gaze",
+                                  "stand",
+                                  "face"
+                                ]
+                              },
+                              "actor": {
+                                "enum": [
+                                  "C01",
+                                  "C02"
+                                ]
+                              },
+                              "target": {
+                                "const": ""
+                              },
+                              "value": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "actor",
+                              "target",
+                              "value"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "enum": [
+                                  "take",
+                                  "place",
+                                  "pass",
+                                  "slide"
+                                ]
+                              },
+                              "actor": {
+                                "enum": [
+                                  "C01",
+                                  "C02"
+                                ]
+                              },
+                              "target": {
+                                "enum": [
+                                  "P01",
+                                  "P02",
+                                  "P03_Y",
+                                  "P03_P",
+                                  "P03_B",
+                                  "P04",
+                                  "P05",
+                                  "P06",
+                                  "P07"
+                                ]
+                              },
+                              "value": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "actor",
+                              "target",
+                              "value"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "enum": [
+                                  "sit"
+                                ]
+                              },
+                              "actor": {
+                                "enum": [
+                                  "C01",
+                                  "C02"
+                                ]
+                              },
+                              "target": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "value": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "actor",
+                              "target",
+                              "value"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "array",
+                            "minItems": 3,
+                            "maxItems": 3,
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "kind": {
+                                  "enum": [
+                                    "take",
+                                    "place"
+                                  ]
+                                },
+                                "actor": {
+                                  "enum": [
+                                    "C01",
+                                    "C02"
+                                  ]
+                                },
+                                "target": {
+                                  "enum": [
+                                    "P03_B",
+                                    "P03_P",
+                                    "P03_Y"
+                                  ]
+                                },
+                                "value": {
+                                  "type": "string",
+                                  "minLength": 1
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "actor",
+                                "target",
+                                "value"
+                              ],
+                              "additionalProperties": false
+                            }
+                          }
+                        ]
+                      },
+                      "satisfies": {
+                        "type": "array",
+                        "uniqueItems": true,
+                        "maxItems": 0,
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "required": [
+                      "intent",
+                      "subject",
+                      "operation",
+                      "satisfies"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "source_step_ref",
+                "events"
+              ],
+              "additionalProperties": false
+            }
+          ],
+          "items": false
+        }
+      },
+      "required": [
+        "actions"
+      ],
+      "additionalProperties": false
+    },
+    "output_transport": "creative_json_document_transport/v1"
+  },
+  "request_sha256": "f301d7fdd3f3bc34d759ce06c88aededb8ea6bd8bd29a54e69fb78a3263896a6",
+  "source_binding_sha256": "52fe5cfc74525975ec7dbc3a356b71a52fb842b746c46b3f2b7a884caa0fe175",
+  "status": "contract_valid",
+  "started_at": "2026-10-05T17:30:32.569049+00:00",
+  "token_reservation": 46706,
+  "automatic_retry": false,
+  "semantic_approval": false,
+  "response_metadata": {
+    "http_status_code": 200,
+    "http_request_id": null,
+    "safe_response_headers": {
+      "trace-id": "071311bb9d4fca2316c2793f2152154d",
+      "content-type": "application/json; charset=utf-8",
+      "date": "Mon, 05 Oct 2026 17:30:38 GMT"
+    },
+    "role": "writer",
+    "provider": "minimax",
+    "requested_model": "MiniMax-M3",
+    "response_model": "MiniMax-M3",
+    "response_id": "071311bb9d4fca2316c2793f2152154d",
+    "finish_reason": "tool_calls",
+    "thinking_mode": "disabled",
+    "output_mode": "tool_call",
+    "transport_version": "creative_evidenced_role_clients/v1",
+    "strict_mode": false,
+    "server_schema_guarantee": false,
+    "response_body_complete": true,
+    "raw_body_sha256": "4ef9d7fdf91a46448830924fe9edd945cd8f39ff8f1f9a1a5b3577f1468d9498",
+    "prompt_tokens": 14590,
+    "completion_tokens": 201,
+    "total_tokens": 14791,
+    "usage_source": "original_provider_response",
+    "provider_status_code": 0
+  },
+  "response_text": "{\"payload_json\":\"{\\\"actions\\\":[{\\\"source_step_ref\\\":\\\"raw_linear_script.beats.0.steps.0\\\",\\\"events\\\":[{\\\"intent\\\":\\\"方澄已站在工位前，挎包挂在椅背、电影票压在桌角，建立为自己留出时间的可见状态\\\",\\\"subject\\\":\\\"C01\\\",\\\"operation\\\":null,\\\"satisfies\\\":[]}]},{\\\"source_step_ref\\\":\\\"raw_linear_script.beats.0.steps.1\\\",\\\"events\\\":[{\\\"intent\\\":\\\"林屿没抬头，把A4横版客户明细单沿桌面滑向两人之间一侧，仍停在林屿桌面上\\\",\\\"subject\\\":\\\"C02\\\",\\\"operation\\\":{\\\"kind\\\":\\\"slide\\\",\\\"actor\\\":\\\"C02\\\",\\\"target\\\":\\\"P05\\\",\\\"value\\\":\\\"surface:E02:near_E01_edge\\\"},\\\"satisfies\\\":[]}]}]}\"}",
+  "response_payload": {
+    "id": "071311bb9d4fca2316c2793f2152154d",
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "message": {
+          "content": "I'll create the complete internal JSON object for this shot's event plan, following the strict schema requirements.",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "id": "call_01a10d1e163a76338433a8ce",
+              "type": "function",
+              "function": {
+                "name": "submit_creative_json",
+                "arguments": "{\"payload_json\":\"{\\\"actions\\\":[{\\\"source_step_ref\\\":\\\"raw_linear_script.beats.0.steps.0\\\",\\\"events\\\":[{\\\"intent\\\":\\\"方澄已站在工位前，挎包挂在椅背、电影票压在桌角，建立为自己留出时间的可见状态\\\",\\\"subject\\\":\\\"C01\\\",\\\"operation\\\":null,\\\"satisfies\\\":[]}]},{\\\"source_step_ref\\\":\\\"raw_linear_script.beats.0.steps.1\\\",\\\"events\\\":[{\\\"intent\\\":\\\"林屿没抬头，把A4横版客户明细单沿桌面滑向两人之间一侧，仍停在林屿桌面上\\\",\\\"subject\\\":\\\"C02\\\",\\\"operation\\\":{\\\"kind\\\":\\\"slide\\\",\\\"actor\\\":\\\"C02\\\",\\\"target\\\":\\\"P05\\\",\\\"value\\\":\\\"surface:E02:near_E01_edge\\\"},\\\"satisfies\\\":[]}]}]}\"}"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1791221435,
+    "model": "MiniMax-M3",
+    "object": "chat.completion",
+    "usage": {
+      "total_tokens": 14791,
+      "total_characters": 0,
+      "prompt_tokens": 14590,
+      "completion_tokens": 201,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      }
+    },
+    "input_sensitive": false,
+    "output_sensitive": false,
+    "input_sensitive_type": 0,
+    "output_sensitive_type": 0,
+    "output_sensitive_int": 0,
+    "service_tier": "standard",
+    "base_resp": {
+      "status_code": 0,
+      "status_msg": ""
+    }
+  },
+  "completed_at": "2026-10-05T17:30:38.536834+00:00",
+  "output": {
+    "payload_json": "{\"actions\":[{\"source_step_ref\":\"raw_linear_script.beats.0.steps.0\",\"events\":[{\"intent\":\"方澄已站在工位前，挎包挂在椅背、电影票压在桌角，建立为自己留出时间的可见状态\",\"subject\":\"C01\",\"operation\":null,\"satisfies\":[]}]},{\"source_step_ref\":\"raw_linear_script.beats.0.steps.1\",\"events\":[{\"intent\":\"林屿没抬头，把A4横版客户明细单沿桌面滑向两人之间一侧，仍停在林屿桌面上\",\"subject\":\"C02\",\"operation\":{\"kind\":\"slide\",\"actor\":\"C02\",\"target\":\"P05\",\"value\":\"surface:E02:near_E01_edge\"},\"satisfies\":[]}]}]}"
+  },
+  "document_output": {
+    "actions": [
+      {
+        "source_step_ref": "raw_linear_script.beats.0.steps.0",
+        "events": [
+          {
+            "intent": "方澄已站在工位前，挎包挂在椅背、电影票压在桌角，建立为自己留出时间的可见状态",
+            "subject": "C01",
+            "operation": null,
+            "satisfies": []
+          }
+        ]
+      },
+      {
+        "source_step_ref": "raw_linear_script.beats.0.steps.1",
+        "events": [
+          {
+            "intent": "林屿没抬头，把A4横版客户明细单沿桌面滑向两人之间一侧，仍停在林屿桌面上",
+            "subject": "C02",
+            "operation": {
+              "kind": "slide",
+              "actor": "C02",
+              "target": "P05",
+              "value": "surface:E02:near_E01_edge"
+            },
+            "satisfies": []
+          }
+        ]
+      }
+    ]
+  },
+  "document_transport_validation": {
+    "schema": "creative_json_document_transport/v1",
+    "payload_sha256": "735025a918049d32bb7c3a3024a959254af218c23150b6a22c0f321f1e062591",
+    "document_sha256": "f11ebef1ae7e9cf3e18230127eab0b76eb161e1dee00851560be80cafe335a58",
+    "metadata": {
+      "tool_name": "submit_creative_json",
+      "payload_json_sha256": "735025a918049d32bb7c3a3024a959254af218c23150b6a22c0f321f1e062591",
+      "payload_utf8_bytes": 566,
+      "outer_argument_sha256": "c2a4b709818d1217ce4b07ff6e58c2830e84b958fa1a2b1d091bafb2ea381450",
+      "outer_duplicate_keys_verified": true,
+      "inner_duplicate_keys_verified": true,
+      "inner_schema_validated": true,
+      "inner_object_is_derived": true,
+      "source_string_modified": false,
+      "automatic_repair": false,
+      "semantic_approval": false
+    },
+    "original_wire_output_preserved": true,
+    "model_document_repaired": false
+  },
+  "validation": {
+    "planning_physical_preflight": true,
+    "not_actual_performance": true,
+    "semantic_approval": false,
+    "unsupported_affect_rejected_before_performance": true
+  },
+  "call_evidence": {
+    "directory": "call_evidence\\call_206",
+    "identity_sha256": "f231c838f73f679dc5a5e148fea2c7829f8c0b95a90fcd473bfa8c8fc676eb6c"
+  }
+}

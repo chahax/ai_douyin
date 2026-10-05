@@ -1,0 +1,36 @@
+{
+  "schema": "creative_call_evidence/v1",
+  "sequence": 7,
+  "identity_sha256": "66bd601fe116b8e1182dc62811de540476140bd68be58f926e94060efdfac877",
+  "at_utc": "2026-10-05T20:01:38.199093+00:00",
+  "phase": "result_ready",
+  "details": {
+    "metadata": {
+      "http_status_code": 200,
+      "http_request_id": null,
+      "safe_response_headers": {
+        "trace-id": "071335200cc0a2a9b8f26306b218eb2f",
+        "content-type": "application/json; charset=utf-8",
+        "date": "Mon, 05 Oct 2026 20:01:38 GMT"
+      },
+      "role": "writer",
+      "provider": "minimax",
+      "requested_model": "MiniMax-M3",
+      "response_model": "MiniMax-M3",
+      "response_id": "071335200cc0a2a9b8f26306b218eb2f",
+      "finish_reason": "stop",
+      "thinking_mode": "disabled",
+      "output_mode": "content",
+      "transport_version": "creative_evidenced_role_clients/v1",
+      "strict_mode": false,
+      "server_schema_guarantee": false,
+      "response_body_complete": true,
+      "raw_body_sha256": "0facadc2466e41898fcff0e68f6fc9afff58463f98c5fe4f67433e602dc4e31b",
+      "prompt_tokens": 1505,
+      "completion_tokens": 117,
+      "total_tokens": 1622,
+      "usage_source": "original_provider_response",
+      "provider_status_code": 0
+    }
+  }
+}

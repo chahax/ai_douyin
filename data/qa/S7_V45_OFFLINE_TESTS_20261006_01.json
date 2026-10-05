@@ -1,0 +1,8 @@
+{
+  "tests": 3,
+  "duration_seconds": 21.94,
+  "provider_calls": 0,
+  "real_complete264_syntax_accepted_business_rejected": true,
+  "reason_change_rejected": true,
+  "reference_only_change_preserves_conclusions": true
+}

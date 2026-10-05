@@ -1,0 +1,27 @@
+{
+  "approved_for_film_assembly": true,
+  "module_sha256": "f622be5bfa36f1fcda643b92e12c18a34f9fcc90afdc4aa33be07c8647ef153c",
+  "evidence": [
+    {
+      "path": "new_information_and_purpose",
+      "quote": "让他自己接手对账的难处被观众看见。",
+      "finding": "由具体对账困难证明自己承担，未增加剧情。"
+    },
+    {
+      "path": "observation_object",
+      "quote": "右手笔尖、明细单红批数字、结算单两边与纸的比对位置。",
+      "finding": "观察原笔、红批数字和两纸位置，无反复拉纸。"
+    },
+    {
+      "path": "frame_id",
+      "quote": "documents_close",
+      "finding": "桌面近景承载实际比对与重写。"
+    },
+    {
+      "path": "cut_reason",
+      "quote": "他自己把对不上的项改清后，转B08方澄拿包与票出门。",
+      "finding": "困难处理读清后转原B08拿包票出门。"
+    }
+  ],
+  "human_quality_approval": false
+}

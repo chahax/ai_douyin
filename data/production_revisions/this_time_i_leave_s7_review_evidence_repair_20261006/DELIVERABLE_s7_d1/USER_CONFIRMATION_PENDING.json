@@ -1,0 +1,13 @@
+{
+  "schema": "text_handoff_human_confirmation_pending/v1",
+  "status": "awaiting_user_content_and_aesthetic_confirmation",
+  "readable_artifact": "D:\\IT\\ai_douyin\\data\\production_revisions\\this_time_i_leave_s7_review_evidence_repair_20261006\\DELIVERABLE_s7_d1\\CREATIVE_REVIEW_COPY_READABLE.md",
+  "readable_sha256": "8b64d40dcd954a1471304ee362b6d88912b1598f192af396da084d51a667a310",
+  "script_sha256": "465b12b846c5a14581e069d62f0068b0b27d2cb224231f6e7c08eed88301f1f3",
+  "compiled_sha256": "2e3000780980237efb1599eef81a4acd5fe211aa13e764296036f3ad21bc8af8",
+  "user_statement": null,
+  "user_decision": null,
+  "confirmation_received": false,
+  "media_approval": false,
+  "record_actual_statement_and_scope_after_reply": true
+}

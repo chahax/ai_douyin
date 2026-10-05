@@ -1,0 +1,24 @@
+{
+  "approved_for_next_local_text": true,
+  "derived_local_sha256": "c034c563c142c19999a193c97363c856f0103ac6a91207cf44da01c1a2eb4908",
+  "evidence": [
+    {
+      "path": "performances.0.performance",
+      "quote": "方澄站在走廊里，挎包斜挂在左肩，右手在腰部高度捏着那张米白底深红字的院线电影票，肩膀微沉。她先微微低头，目光顺着右手落到票面上，睫毛轻压，停留片刻把票上的开场时间与座位号看清楚，嘴角没有动，安静地把票再捏稳一些。",
+      "finding": "门外看原右手电影票；未重新拿票，也没有新增同事。"
+    },
+    {
+      "path": "performances.1.performance",
+      "quote": "看完票后她轻轻把气从鼻腔呼出，嘴唇微启，肩线顺势松下来一点，眼睛没有抬向镜头，也没有回头看办公室门，整个人停在走廊这一格至少两秒，把属于自己的这一晚接住。",
+      "finding": "看票后轻轻呼气、肩线松下来并停留，未回头和解。"
+    },
+    {
+      "path": "performances.1.seconds",
+      "quote": "2.2",
+      "finding": "2.2秒达到声明的2秒门外释放要求；仅为文本排时。"
+    }
+  ],
+  "human_quality_approval": false,
+  "scalar_model_document_sha256": "13b984dc7dc1b4c2623fec16c2492ca69ef10cf4864641c70c81b2f6f26ff4ef",
+  "all_seconds_and_performance_from_original_model": true
+}

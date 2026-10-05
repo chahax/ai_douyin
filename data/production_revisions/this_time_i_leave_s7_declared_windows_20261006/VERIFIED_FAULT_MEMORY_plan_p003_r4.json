@@ -1,0 +1,54 @@
+{
+  "schema": "verified_local_fault_memory/v1",
+  "active_binding": {
+    "raw_script_sha256": "465b12b846c5a14581e069d62f0068b0b27d2cb224231f6e7c08eed88301f1f3",
+    "local_input_sha256": "2272668b5ca74ec3564c809000aa2da8eef2a5b0c1fe38244371924ad6e4fd38",
+    "current_shot": "SH03"
+  },
+  "precedence": "Earlier verified constraints remain active unless explicitly corrected by a later source audit. Submit one complete new draft; never splice earlier outputs.",
+  "history": [
+    {
+      "ordinal": 213,
+      "request_sha256": "2ec3b0136b38cf2fcc5fcd33f4161f9746349e96a910343d0627e9507fdf8344",
+      "known_status": "contract_valid",
+      "verified_feedback_inputs": [
+        {
+          "current_source": "仅S05整叠三贴、原S06列词对白、S07右手反握签字笔停等；全镜后续目标5–6秒，避免机械追加操作。",
+          "complete_plan": "S05若需侧身只一次face C02朝E01；P03_Y/P03_P/P03_B同事件同步take同一持有位置，下一事件同步place到E02同支持面，浅黄从此在E02左前侧，粉蓝旁边铺开；一次指尖压黄角为null表演不另取纸。S07一次take P07右手（统一持有位置写右手），下一null可表演反握笔尖朝方澄停住等待，不用放下再取；不加gaze/affect或未知物件。所有原action完整，两组take/place不混进同事件。对白只由程序插原列词，intent不念词。"
+        }
+      ]
+    },
+    {
+      "ordinal": 214,
+      "request_sha256": "61c9d6f58736cd1c7724c24efde5703375643f4227a0c7945e91e125eae677ed",
+      "known_status": "contract_rejected",
+      "verified_feedback_inputs": [
+        {
+          "previous_call": 213,
+          "verified_issue": "S05第一个take事件的intent已写摊开，后续又place重复；完整计划漏了原侧身的朝向变化和一次压浅黄角。",
+          "complete_new_plan": "完整S05和S07动作计划新稿，S05四个连续事件：1 face C02 toward_E01只侧身；2 take三色同步到同一right_hand，只取整叠不摊；3 place三色同步E02支持面，黄left_front、粉center、蓝right，只摊；4 operation=null、subject C02一次指尖压浅黄边角，不动纸。S07两个事件：take P07 right_hand，再null反握笔尖朝方澄停在桌沿等接。各intent仅本事件，普通事件一个变化；不要把side/take/place/press写在一个intent。无gaze、affect或原之外操作，列词对白程序完整插入。"
+        }
+      ]
+    },
+    {
+      "ordinal": 215,
+      "request_sha256": "c016a518f3fc8f785cbb5ad813ba00b5fafef0e33c6642452dfd64bfe1358080",
+      "known_status": "contract_valid",
+      "verified_feedback_inputs": [
+        {
+          "previous_call": 214,
+          "verified_schema_fault": "actions.1.events.0.operation把take P07和face两项写成数组；普通操作必须单对象或null，数组只允许恰三张便利贴同种操作。前面已经侧身，不要在拿笔时再face。",
+          "complete_new_plan": "S05与S07全部完整重交，不复用前稿字段。S05四事件：face单对象、三色同步take数组、三色同步place数组、一次压黄角null。S07必须两个事件：第一个operation只take P07 actor C02 target P07 value right_hand，intent仅拿笔；第二个operation null，intent反握笔尖朝方澄桌沿停住等接。两个subject C02和satisfies[]。不能把拿笔/反握/等待或新face合为一个带数组事件。"
+        }
+      ]
+    }
+  ],
+  "current_verified_feedback": {
+    "previous_call": 215,
+    "verified_remaining_issues": "第215次仍缺明确face侧身操作；三贴全放center会使最后原稿黄贴左侧需要额外搬运。没有采用。",
+    "complete_new_plan": "本原S05必须四个有序事件：face单对象C02 toward_E01；take三色同步数组同right_hand；place三色同步数组E02黄left_front/粉center/蓝right；一次指尖压黄角null。S07必须take P07 right_hand单对象，下一null反握笔尖向方澄停等。完整S05与S07六事件全部新交，intent仅当前事件，不藏先后转移，不拼接前稿，原列词对白程序插入。"
+  },
+  "automatic_retry": false,
+  "model_output_manually_patched": false,
+  "input_memory_builder_sha256": "689413bb61fe1d642ff728a4a3564d8a51a3287864d301b098918c29ef744f63"
+}

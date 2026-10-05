@@ -1,0 +1,49 @@
+{
+  "approved_for_local_text": true,
+  "direction_sha256": "b92b2169978bb84788517a2a1e3ec5100e472d04e3cd816d03e6a1bdf9715614",
+  "window_policy_sha256": "44c604fdb72814a17ca3da0621653d65977f701ccfa624074ee4457f4a254ef7",
+  "evidence": [
+    {
+      "path": "emotional_arc",
+      "quote": "从默认接手的压力，到方澄拒绝时的稳与边界，再到林屿不太熟练但自己承担下来，方澄门外看票轻呼气——情绪落点是各自收回自己的事，没有崩，也没有谁赢谁输。",
+      "finding": "整片概要187完整新稿，压力→稳拒绝→各自承担，未加关门。"
+    },
+    {
+      "path": "initial_state.C02.position",
+      "quote": "sitting_at_E02",
+      "finding": "林屿自己E02工位坐姿，与E10访问位置一致。"
+    },
+    {
+      "path": "initial_state.C02.facing",
+      "quote": "toward_E02",
+      "finding": "朝自己工作桌E02，眼睛状态单独记录。"
+    },
+    {
+      "path": "initial_state.P07.holder",
+      "quote": "none",
+      "finding": "笔尚在桌沿无人持，归属不等于持有。"
+    },
+    {
+      "path": "beats.2.shots.0.observation_object",
+      "quote": "林屿侧身取便利贴、摊开三色便利贴并压角、反握笔尖朝向方澄停在桌沿等候的那只右手与面前摊开的浅黄、浅粉、浅蓝三张便利贴。",
+      "finding": "整叠取/整体摊开一次压角，不三次揭压。"
+    },
+    {
+      "path": "beats.4.shots.0.cut_reason",
+      "quote": "把整个拒绝交在方澄一镜里完整读完，不在两句之间切去林屿；切镜必须等两句全部说完后，才交给B06林屿面对被拒绝的反应。",
+      "finding": "两句原拒绝完整画内后才切林屿。"
+    },
+    {
+      "path": "beats.5.shots.0.performance_requirements.0.stimulus_ref",
+      "quote": "raw_linear_script.beats.4.steps.1",
+      "finding": "林屿在完整题句之后才反应，最低2秒是明确制作约束。"
+    },
+    {
+      "path": "beats.8.shots.0.camera",
+      "quote": "走廊前侧三分之二面部中近景，面部、右手电影票与轻呼气同框清楚可读",
+      "finding": "门外脸、票和呼气同框可读。"
+    }
+  ],
+  "minimum_windows_author": "explicit production constraint",
+  "human_quality_approval": false
+}

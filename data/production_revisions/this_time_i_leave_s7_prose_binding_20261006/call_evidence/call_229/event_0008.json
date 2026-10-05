@@ -1,0 +1,12 @@
+{
+  "schema": "creative_call_evidence/v1",
+  "sequence": 8,
+  "identity_sha256": "93b500dbe33bd1363a06b3714e447f8ef2266c66d87858a98ec905712fde1bc4",
+  "at_utc": "2026-10-05T18:43:29.722582+00:00",
+  "phase": "prose_projected",
+  "details": {
+    "contract": "dialogue_prose/v1",
+    "exact_original_string": true,
+    "no_content_fallback": true
+  }
+}

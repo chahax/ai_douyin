@@ -1,0 +1,27 @@
+{
+  "approved_for_film_assembly": true,
+  "module_sha256": "f3e6330596e98487ee0ea48e70c470dd4dfa57838392863c524f5ed36e8ecd87",
+  "evidence": [
+    {
+      "path": "new_information_and_purpose",
+      "quote": "她不接笔，抬头看他，这一犹豫把拒绝前的压力留在了眼睛里。",
+      "finding": "原稿的不接与抬眼作为拒绝前压力，没有接笔或提前说话。"
+    },
+    {
+      "path": "observation_object",
+      "quote": "方澄抬起、准备开口的眼睛。",
+      "finding": "方澄眼睛可读，刺激对象递笔由下沿机位保留。"
+    },
+    {
+      "path": "frame_id",
+      "quote": "fang_face_pen",
+      "finding": "正面脸部兼笔的机位符合关键反应可读性。"
+    },
+    {
+      "path": "cut_reason",
+      "quote": "等她抬眼对上林屿的目光，看完这一次不接的犹豫再交拒绝。",
+      "finding": "抬眼与不接读清后才到完整拒绝。"
+    }
+  ],
+  "human_quality_approval": false
+}

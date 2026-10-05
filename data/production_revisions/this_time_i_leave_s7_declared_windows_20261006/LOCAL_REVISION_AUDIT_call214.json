@@ -1,0 +1,12 @@
+{
+  "ordinal": 214,
+  "interface_or_contract_status": "contract_rejected",
+  "source_accepted": false,
+  "adopted": false,
+  "issues": [
+    "普通take P07错误提交take/face两项混合数组"
+  ],
+  "automatic_retry": false,
+  "full_new_response_required": true,
+  "service_root_cause_proven": false
+}

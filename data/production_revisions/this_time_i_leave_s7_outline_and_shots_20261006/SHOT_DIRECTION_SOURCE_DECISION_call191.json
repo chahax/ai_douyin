@@ -1,0 +1,27 @@
+{
+  "approved_for_film_assembly": true,
+  "module_sha256": "1aaf197655dbef7607005686a3a30a83722804e7b0c780ccd876dfc7b6d6cf04",
+  "evidence": [
+    {
+      "path": "new_information_and_purpose",
+      "quote": "把过去她替他收尾的加班摊到台面，坐实他今晚仍把活默认推给她；她听见却没接话，红批与电影票在同一视线里对照，观众读出她今晚不会按老样子接手。",
+      "finding": "过去帮忙被延伸成今晚默认，红批/票对照表达压力。"
+    },
+    {
+      "path": "observation_object",
+      "quote": "说话者林屿完整开口与未抬头的姿态，以及方澄听他说完后目光从红笔批注移到电影票却没开口的反应。",
+      "finding": "原句完整、林屿没抬头及方澄无声视线，不新增动作。"
+    },
+    {
+      "path": "frame_id",
+      "quote": "dual_front",
+      "finding": "正面双人机位同时看说话人和原反应。"
+    },
+    {
+      "path": "cut_reason",
+      "quote": "读清林屿完整摊出旧账的潜台词和方澄听见后没接话的对位反应后，转到B03他摊开便利贴与递笔，把默认她接手的姿态再往前推一步。",
+      "finding": "原对白与反应读清后进入清单递笔，因果顺序正确。"
+    }
+  ],
+  "human_quality_approval": false
+}

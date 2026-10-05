@@ -1,0 +1,12 @@
+{
+  "ordinal": 218,
+  "interface_or_contract_status": "interface_rejected",
+  "source_accepted": false,
+  "adopted": false,
+  "issues": [
+    "完整响应缺工具结果，已知接口失败，不是未知结果"
+  ],
+  "automatic_retry": false,
+  "full_new_response_required": true,
+  "service_root_cause_proven": false
+}

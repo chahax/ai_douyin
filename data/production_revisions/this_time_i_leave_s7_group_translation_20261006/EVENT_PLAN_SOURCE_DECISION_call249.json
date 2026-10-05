@@ -1,0 +1,53 @@
+{
+  "approved_for_performance_text": true,
+  "plan_sha256": "71f4d2fe67cd21fcd30f1ae3c9e6506b982c28e0099fc145a703d610eb6a35ac",
+  "evidence": [
+    {
+      "path": "actions.0.events.0.intent",
+      "quote": "看向原明细单",
+      "finding": "原观察工作区明细单。"
+    },
+    {
+      "path": "actions.0.events.1.intent",
+      "quote": "原右手持笔在第一处红批旁落字改一笔",
+      "finding": "第一处原批注只改一笔，已持笔不重拿。"
+    },
+    {
+      "path": "actions.0.events.2.intent",
+      "quote": "原右手持笔写到第二行数字停住",
+      "finding": "第二行不对停住在核对之前。"
+    },
+    {
+      "path": "actions.0.events.3.intent",
+      "quote": "拉齐原结算单到明细单旁",
+      "finding": "原结算单只拉齐一次。"
+    },
+    {
+      "path": "actions.0.events.4.intent",
+      "quote": "对向原结算单比对",
+      "finding": "对核发生在点笔和改写之前。"
+    },
+    {
+      "path": "actions.0.events.5.intent",
+      "quote": "原右手笔尖点明细单第二行一下",
+      "finding": "同一原工作动作的笔尖点，hold无新增取放。"
+    },
+    {
+      "path": "actions.0.events.6.intent",
+      "quote": "原右手笔尖划掉第二行数字并重写",
+      "finding": "核对后才划掉并重写。"
+    },
+    {
+      "path": "actions.0.events.9.intent",
+      "quote": "回到原明细单下方",
+      "finding": "末段返回明细单观察目标，尾态与继续改写一致。"
+    },
+    {
+      "path": "actions.0.events.10.intent",
+      "quote": "原右手持笔继续往下改",
+      "finding": "原角色继续承担，无新剧情或台词。"
+    }
+  ],
+  "actual_timing_verified": false,
+  "human_quality_approval": false
+}

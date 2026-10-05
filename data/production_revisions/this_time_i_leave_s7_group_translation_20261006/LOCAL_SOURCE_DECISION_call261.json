@@ -1,0 +1,34 @@
+{
+  "approved_for_next_local_text": true,
+  "derived_local_sha256": "ee29d127c915093d0283e6bde3a6f1187332ef57eafcacd9ea0528c04b255195",
+  "evidence": [
+    {
+      "path": "performances.0.performance",
+      "quote": "右手黑色签字笔落在A4横版客户明细单第一处红笔批注旁的数字上，笔尖触纸，手腕平稳向右拖出短短一横笔画，写完一笔即停笔。",
+      "finding": "原右手持笔在红批旁落字，未重新拿笔。"
+    },
+    {
+      "path": "performances.1.performance",
+      "quote": "右手手腕微微抬起，将签字笔笔尖从明细单上挪开，平移移向右侧摊开的A4纵版结算单方向，笔尖悬停在结算单对应数字上方一厘米处。",
+      "finding": "持笔手腕移笔尖去既有结算单，非道具转移。"
+    },
+    {
+      "path": "performances.2.performance",
+      "quote": "视线从明细单抬向旁边那张结算单上的对应数字，眉心微收，目光停留比对，目光在数字与表头之间小幅扫一次。",
+      "finding": "原结算单比对，与下一slot回明细单形成顺序。"
+    },
+    {
+      "path": "performances.3.performance",
+      "quote": "视线从结算单回到明细单下一行数字处，笔尖同步从结算单上方移回明细单下一行位置，悬停找点。",
+      "finding": "回明细单下一行后继续核改。"
+    },
+    {
+      "path": "performances.5.performance",
+      "quote": "右手手腕继续以同一节奏在明细单上一行一行往下改，笔尖每落一处便停一下，目光始终落在纸面与结算单之间切换，白色陶瓷咖啡杯未动，浅黄便利贴压在左手边桌面原位未动，身体保持前倾低头的坐姿。",
+      "finding": "继续原两张相邻纸面的核对循环；杯、浅黄便利贴和坐姿保持。"
+    }
+  ],
+  "human_quality_approval": false,
+  "scalar_model_document_sha256": "d92f9c88815e375e3edc494afe8371e154e948e160579323a39a827669205042",
+  "all_seconds_and_performance_from_original_model": true
+}

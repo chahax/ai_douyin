@@ -1,0 +1,27 @@
+{
+  "approved_for_film_assembly": true,
+  "module_sha256": "90bfee956f5852f6af481c316909bb38d8819408236a435e0efff05dbc677dd9",
+  "evidence": [
+    {
+      "path": "new_information_and_purpose",
+      "quote": "让观众同时看见她为自己留出的时间和他默认她会接过去的活，建立今晚谁的时间被默认让位的张力。",
+      "finding": "私人电影安排与默认委托的压力明确，委托主体是他默认她接手。"
+    },
+    {
+      "path": "observation_object",
+      "quote": "方澄工位上挂着的挎包、桌角压着的电影票，以及林屿刚推向两人之间的客户明细单。",
+      "finding": "仅原B01已挂包、票与推来的客户明细。"
+    },
+    {
+      "path": "frame_id",
+      "quote": "office_wide",
+      "finding": "两人工位中景能同时建立原站坐位置与物件冲突。"
+    },
+    {
+      "path": "cut_reason",
+      "quote": "开场交代空间与两人桌面物件的对照；当观众看清挎包已挂、电影票压在桌角、而明细单正被推向她一侧时，下一拍切到林屿开口把过去帮忙摊成今晚的默认要求。",
+      "finding": "冲突看清后转入B02明说默认要求，新增信息驱动切镜。"
+    }
+  ],
+  "human_quality_approval": false
+}

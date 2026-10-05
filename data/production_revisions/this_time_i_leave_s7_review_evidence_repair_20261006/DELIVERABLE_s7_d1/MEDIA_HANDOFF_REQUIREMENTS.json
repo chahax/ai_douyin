@@ -1,0 +1,103 @@
+{
+  "schema": "text_handoff_media_requirements/v1",
+  "text_handoff_sha256": "be73da1bf7b81c191864cdc0d8d1ed4474d641a4a26e6f1caa05ac51883b6eed",
+  "shot_timings": [
+    {
+      "shot": "SH01",
+      "start": 0,
+      "end": 2.9,
+      "duration": 2.9,
+      "integer_provider_seconds": 3,
+      "configured_seedance_2_0_max15_exceeded": false,
+      "below_configured_min4": true
+    },
+    {
+      "shot": "SH02",
+      "start": 2.9,
+      "end": 15.885714285714286,
+      "duration": 12.985714285714286,
+      "integer_provider_seconds": 13,
+      "configured_seedance_2_0_max15_exceeded": false,
+      "below_configured_min4": false
+    },
+    {
+      "shot": "SH03",
+      "start": 15.885714285714286,
+      "end": 21.185714285714287,
+      "duration": 5.3,
+      "integer_provider_seconds": 6,
+      "configured_seedance_2_0_max15_exceeded": false,
+      "below_configured_min4": false
+    },
+    {
+      "shot": "SH04",
+      "start": 21.185714285714287,
+      "end": 24.485714285714288,
+      "duration": 3.3000000000000003,
+      "integer_provider_seconds": 4,
+      "configured_seedance_2_0_max15_exceeded": false,
+      "below_configured_min4": true
+    },
+    {
+      "shot": "SH05",
+      "start": 24.485714285714288,
+      "end": 31.65714285714286,
+      "duration": 7.171428571428572,
+      "integer_provider_seconds": 8,
+      "configured_seedance_2_0_max15_exceeded": false,
+      "below_configured_min4": false
+    },
+    {
+      "shot": "SH06",
+      "start": 31.65714285714286,
+      "end": 38.05714285714286,
+      "duration": 6.4,
+      "integer_provider_seconds": 7,
+      "configured_seedance_2_0_max15_exceeded": false,
+      "below_configured_min4": false
+    },
+    {
+      "shot": "SH07",
+      "start": 38.05714285714286,
+      "end": 46.35714285714286,
+      "duration": 8.3,
+      "integer_provider_seconds": 9,
+      "configured_seedance_2_0_max15_exceeded": false,
+      "below_configured_min4": false
+    },
+    {
+      "shot": "SH08",
+      "start": 46.35714285714286,
+      "end": 53.557142857142864,
+      "duration": 7.2,
+      "integer_provider_seconds": 8,
+      "configured_seedance_2_0_max15_exceeded": false,
+      "below_configured_min4": false
+    },
+    {
+      "shot": "SH09",
+      "start": 53.557142857142864,
+      "end": 57.25714285714287,
+      "duration": 3.7,
+      "integer_provider_seconds": 4,
+      "configured_seedance_2_0_max15_exceeded": false,
+      "below_configured_min4": true
+    },
+    {
+      "shot": "SH10",
+      "start": 57.25714285714287,
+      "end": 62.25714285714287,
+      "duration": 5.0,
+      "integer_provider_seconds": 5,
+      "configured_seedance_2_0_max15_exceeded": false,
+      "below_configured_min4": false
+    }
+  ],
+  "actual_selected_images": [],
+  "selected_images_returned_to_director": false,
+  "duration_capability_status": "pending_media_plan_validation",
+  "user_content_confirmation": null,
+  "user_aesthetic_confirmation": null,
+  "media_calls": 0,
+  "no_automatic_media_dispatch": true
+}

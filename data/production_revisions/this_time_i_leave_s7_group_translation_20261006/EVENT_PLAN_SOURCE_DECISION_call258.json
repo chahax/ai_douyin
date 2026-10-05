@@ -1,0 +1,18 @@
+{
+  "approved_for_performance_text": true,
+  "plan_sha256": "dc70f2edc11d11e820fe6de3b98ab4e66326e13f7cd859fc3d0ebb36f71d5df4",
+  "evidence": [
+    {
+      "path": "actions.0.events.0.operation.value",
+      "quote": "at_P02_in_right_hand",
+      "finding": "由真实门外起态看已在右手的票，没有重复拿票。"
+    },
+    {
+      "path": "actions.0.events.1.intent",
+      "quote": "看票后轻轻呼气并停一下",
+      "finding": "原S16轻轻呼气并停一下，承担门外释放窗口。"
+    }
+  ],
+  "actual_timing_verified": false,
+  "human_quality_approval": false
+}

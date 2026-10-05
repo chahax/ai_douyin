@@ -1,0 +1,28 @@
+{
+  "approved_for_performance_text": true,
+  "plan_sha256": "60a79005aa5d5536003ab0b137634bb298ed50f00b100df0cd66f50e782c7f28",
+  "evidence": [
+    {
+      "path": "actions.0.events.0.operation.value",
+      "quote": "at_P07",
+      "finding": "看原P07，补齐原S08低头看笔，不把初态P02重复成新动作。"
+    },
+    {
+      "path": "actions.0.events.1.operation.value",
+      "quote": "at_C02_eyes",
+      "finding": "沿握笔手抬眼到林屿，与原S08一致。"
+    },
+    {
+      "path": "actions.0.events.2.intent",
+      "quote": "方澄不伸手、不开口，眼睛保持对上林屿的目光，把拒绝前的犹豫留在眼神里",
+      "finding": "不接不说，对视保持，承接下一镜拒绝。"
+    },
+    {
+      "path": "actions.0.events.2.satisfies.0",
+      "quote": "W_SH04_1",
+      "finding": "正确满足拒绝前W_SH04_1，实际表演需至少2秒。"
+    }
+  ],
+  "actual_timing_verified": false,
+  "human_quality_approval": false
+}

@@ -1,0 +1,11 @@
+{
+  "ordinal": 203,
+  "source_accepted_for_critical_window_planning": true,
+  "initial_state_sha256": "9a8fe15016f0fa3b1cb6566424d574551d181b3d105aadcee7d5f927a164fcae",
+  "findings": [
+    "首动作之前两人原站坐，位置和座位访问一致",
+    "身体朝向与座位一致，目光单独记录",
+    "包票三贴和纸杯笔所有holder=none，不提前取拿或推单"
+  ],
+  "human_quality_approval": false
+}

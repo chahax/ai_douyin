@@ -1,0 +1,16 @@
+{
+  "test": "tests/test_creative_joint_timing_binding_v12.py",
+  "passed": 6,
+  "duration_seconds": 14.65,
+  "provider_calls": 0,
+  "original_v41_sources_modified": false,
+  "original_director_hash_changed": false,
+  "checks": [
+    "original local preflight failure reproduced",
+    "full ten-shot authenticated timing transition accepted without mutation",
+    "two invalid transitions rejected",
+    "changed source rejected",
+    "changed execution window rejected"
+  ],
+  "creative_quality_passed": false
+}

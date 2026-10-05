@@ -1,0 +1,30 @@
+{
+  "approved_for_performance_text": true,
+  "plan_sha256": "7d357b0ef1f85ba71c5ccebb6671b0c34f4b3950f5b21d2af7b4a3d4e9dcd570",
+  "evidence": [
+    {
+      "path": "raw_linear_script.beats.4.steps.0.text",
+      "quote": "今晚不行，七点我有一场早就买好票的电影。",
+      "finding": "本镜完整原对白；没有原action，不为填字段新增动作。"
+    },
+    {
+      "path": "raw_linear_script.beats.4.steps.1.text",
+      "quote": "这次我先走。",
+      "finding": "本镜完整原对白；没有原action，不为填字段新增动作。"
+    }
+  ],
+  "evidence_source": "actual original context leaves, not fabricated leaves of empty plan",
+  "zero_action_source_proof": {
+    "submitted_actions": [],
+    "original_action_source_refs": [],
+    "original_dialogue_refs": [
+      "raw_linear_script.beats.4.steps.0",
+      "raw_linear_script.beats.4.steps.1"
+    ],
+    "local_input_sha256": "15c347e64403a95c02551c1823af9e1c2fd13e064a2f74478ae1074ba534df6c"
+  },
+  "actual_timing_verified": false,
+  "human_quality_approval": false,
+  "model_output_manually_patched": false,
+  "source_decision_helper_sha256": "c39be0363d4fec5c05f2a2f79ef451f53bf2876f8927fcfaaa9ed0e7716fe149"
+}

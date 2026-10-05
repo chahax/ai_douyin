@@ -1,0 +1,44 @@
+{
+  "approved_for_next_local_text": true,
+  "derived_local_sha256": "acf768d7e360bd05c6f3dbad4a0778b9607dd4af5e3d575b405a340314681348",
+  "evidence": [
+    {
+      "path": "dialogue_performance",
+      "quote": "林屿随口列清单的低声：语气平直不加重，尾音稍顿成词点，三字节奏均匀带一点理所应当的笃定，不带请求意味；音量偏低，像在自己桌前念出三件待办，气息稳不叹气。",
+      "finding": "原列词的默认委托语气；台词由程序完整插原文，未换成新句。"
+    },
+    {
+      "path": "performances.0.performance",
+      "quote": "林屿坐着将脸和上身微微转向左侧方澄工位方向，目光由原下垂顺势离开桌面前方。",
+      "finding": "已坐着侧身向方澄，原S05侧身成立。"
+    },
+    {
+      "path": "performances.1.performance",
+      "quote": "林屿右手自方澄桌角一次轻轻捏起浅黄、浅粉、浅蓝三张叠在一起的便利贴。",
+      "finding": "三色整叠一次取，不三次揭。"
+    },
+    {
+      "path": "performances.2.performance",
+      "quote": "林屿右手将三张便利贴整叠轻放在自己桌面上，浅黄在前左、浅粉居中、浅蓝在右并排摊开，纸张彼此贴近。",
+      "finding": "一次整体摊开，黄左前粉中蓝右，未来黄贴左侧状态由此持续。"
+    },
+    {
+      "path": "performances.3.performance",
+      "quote": "林屿右手指尖压住浅黄便利贴的右下边角不动，纸张保持摊平不被掀起。",
+      "finding": "一次指尖压角，纸未移动、无写字。"
+    },
+    {
+      "path": "performances.4.performance",
+      "quote": "林屿右手松开便利贴边角，从自己桌沿自然拿起那支黑色签字笔握在右手掌中。",
+      "finding": "原右手拿笔，无新道具与假释放。"
+    },
+    {
+      "path": "performances.5.performance",
+      "quote": "林屿右手反手将签字笔笔尖朝向方澄那一侧搁在自己桌沿停住，手指轻持笔身不松不推，安静等她来接。",
+      "finding": "右手仍持笔，反握笔尖朝方澄停等；六个动作秒数共3秒，加完整对白2.3秒共5.3秒。"
+    }
+  ],
+  "human_quality_approval": false,
+  "scalar_model_document_sha256": "b5008139cbad81a46ebfa4ca8ec8d5899d8a07b89d6a8625e5ddf1ff2271c213",
+  "all_seconds_and_performance_from_original_model": true
+}

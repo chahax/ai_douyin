@@ -1,0 +1,29 @@
+{
+  "approved_for_next_local_text": true,
+  "derived_local_sha256": "71d65d8b5af461e23b32d5cf551dc0a79e9996e1b41074995aa11aee90bcda24",
+  "evidence": [
+    {
+      "path": "performances.0.performance",
+      "quote": "右手持黑色签字笔落在客户明细单下一处红笔批注旁，原位接续写下一笔，手腕稳，不抬眼。",
+      "finding": "从下一处红批接续，未回已经处理的第一处。"
+    },
+    {
+      "path": "performances.2.performance",
+      "quote": "目光顺着笔尖方向略向右侧那张结算单看，对准那一行数字停住比对，面部保持原抿唇专注相，不抬眼去门口。",
+      "finding": "依次看原结算单数字比对。"
+    },
+    {
+      "path": "performances.3.performance",
+      "quote": "视线从结算单回到正下方那张客户明细单的下一行数字上，停在该行起点，握笔姿态不变。",
+      "finding": "回明细单的下一行，握笔姿态保持。"
+    },
+    {
+      "path": "performances.5.performance",
+      "quote": "这一笔收住，手腕再带笔尖小幅向右挪向结算单继续比对，眼仍低垂，白色陶瓷咖啡杯与左侧浅黄便利贴原位不动。",
+      "finding": "最后原持笔手腕继续比对，不重拉纸，不移动杯与贴。"
+    }
+  ],
+  "human_quality_approval": false,
+  "scalar_model_document_sha256": "ce6ded372ec5385e2ba3cd3eccdaaead853331b0faeecb09ea063afe041449a5",
+  "all_seconds_and_performance_from_original_model": true
+}

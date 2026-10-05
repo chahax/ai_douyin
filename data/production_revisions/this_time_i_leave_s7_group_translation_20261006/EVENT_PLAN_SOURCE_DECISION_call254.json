@@ -1,0 +1,48 @@
+{
+  "approved_for_performance_text": true,
+  "plan_sha256": "646c5b0e675b00586597cd92fea2164d996d2a42758414370f1193a0c4259e4e",
+  "evidence": [
+    {
+      "path": "actions.0.events.0.operation.target",
+      "quote": "P01",
+      "finding": "纯机械状态对应原左手取挎包，P01正确；意图栏占位未作创作产物。"
+    },
+    {
+      "path": "actions.0.events.0.operation.value",
+      "quote": "worn_on_left_shoulder",
+      "finding": "包佩戴左肩，左手可继续推门。"
+    },
+    {
+      "path": "actions.0.events.1.operation.value",
+      "quote": "right_hand",
+      "finding": "原票右手持有，不换手。"
+    },
+    {
+      "path": "actions.0.events.2.operation.value",
+      "quote": "along_E08_to_corridor_exit",
+      "finding": "主视线从林屿转向出门路线。"
+    },
+    {
+      "path": "actions.0.events.3.operation.value",
+      "quote": "toward_corridor_exit",
+      "finding": "身体朝走廊出口。"
+    },
+    {
+      "path": "actions.0.events.4.operation.value",
+      "quote": "standing_at_E08_inside",
+      "finding": "先到门内再推门。"
+    },
+    {
+      "path": "actions.1.events.0.subject",
+      "quote": "C01",
+      "finding": "推门非道具取放；原动作主体C01，完整表演由后续模型重写。"
+    },
+    {
+      "path": "actions.1.events.1.operation.value",
+      "quote": "standing_in_corridor_outside_E08",
+      "finding": "原第二动作真正走出，供后镜after释放窗口。"
+    }
+  ],
+  "actual_timing_verified": false,
+  "human_quality_approval": false
+}

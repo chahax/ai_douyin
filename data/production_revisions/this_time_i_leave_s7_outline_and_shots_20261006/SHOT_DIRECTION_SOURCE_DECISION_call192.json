@@ -1,0 +1,27 @@
+{
+  "approved_for_film_assembly": true,
+  "module_sha256": "e1acb45ca17c69dc7da839a1fa1a92fde323fa8db463523472acc9c08eb01301",
+  "evidence": [
+    {
+      "path": "new_information_and_purpose",
+      "quote": "把善后三件事摊成清单递到面前，并用握笔的手势默认她会接下，把今晚本属于她的时间再次压成他这边的活。",
+      "finding": "清单与递笔把默认委托具体化；实际便利贴支持面仍按原稿林屿桌前，不作新递贴操作。"
+    },
+    {
+      "path": "observation_object",
+      "quote": "林屿侧身取便利贴、摊开三色便利贴并压角、反握笔尖朝向方澄停在桌沿等候的那只右手与面前摊开的浅黄、浅粉、浅蓝三张便利贴。",
+      "finding": "观察取叠、整体摊贴一次压角及右手反握笔停住，未要求三次揭压。"
+    },
+    {
+      "path": "frame_id",
+      "quote": "table_hands",
+      "finding": "桌面手部镜承载原手势与画外原对白。"
+    },
+    {
+      "path": "cut_reason",
+      "quote": "递笔已停住、便利贴摊齐、等待她接的瞬间，切到下一镜看她不接，承接B04她抬眼犹豫。",
+      "finding": "在等她接笔时切到不接与抬眼，原时序和刺激反应承接成立；犹豫仅情绪理解不加状态操作。"
+    }
+  ],
+  "human_quality_approval": false
+}

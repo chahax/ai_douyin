@@ -1,0 +1,23 @@
+{
+  "ordinal": 186,
+  "contract_status": "valid",
+  "source_accepted": false,
+  "adopted": false,
+  "issues": [
+    {
+      "field": "emotional_arc",
+      "quote": "门关上之后",
+      "reason": "原S7推门走出，没有关门动作。"
+    },
+    {
+      "field": "causal_chain",
+      "reason": "原稿未说明上月也经由同样的清单递笔链。"
+    },
+    {
+      "field": "ending_intent",
+      "reason": "她用各自手里的事主体指代不清。"
+    }
+  ],
+  "replacement": "complete new outline call187, not manual patch",
+  "creative_quality_passed": false
+}

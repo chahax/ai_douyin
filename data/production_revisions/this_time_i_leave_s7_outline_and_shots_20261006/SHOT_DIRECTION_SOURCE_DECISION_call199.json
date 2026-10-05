@@ -1,0 +1,27 @@
+{
+  "approved_for_film_assembly": true,
+  "module_sha256": "e4d294a6a13ff35d72a5628d4f8eb8c2b1c4b40308003309f26afd2d3ff1238f",
+  "evidence": [
+    {
+      "path": "new_information_and_purpose",
+      "quote": "方澄把留给自己的一晚真正从工位取走：挎包上肩、电影票离桌、推门离开办公室，把时间交给自己，观众看到她赴约的清晰出口。",
+      "finding": "包票出门将私人安排落实，没有加入未来动作。"
+    },
+    {
+      "path": "observation_object",
+      "quote": "方澄的左手取包佩戴左肩、右手拿票、空出的左手推门走出的整套执行",
+      "finding": "左手包佩戴左肩、右手票、空左手推门，原手部前提成立。"
+    },
+    {
+      "path": "frame_id",
+      "quote": "follow_fang",
+      "finding": "前侧跟随能读她行动，并衔接门外正面。"
+    },
+    {
+      "path": "cut_reason",
+      "quote": "等她已走出办公室门后再切，下一镜直接接她在走廊外低头看票呼气，不在门内多停一拍。",
+      "finding": "出门后转走廊看票，不在门内堆操作。"
+    }
+  ],
+  "human_quality_approval": false
+}

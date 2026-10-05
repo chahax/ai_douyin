@@ -1,0 +1,23 @@
+{
+  "approved_for_performance_text": true,
+  "plan_sha256": "0238042aea8133db844f7b12789070c611fd7787f9fd7fb92ae9bd3cf83d3137",
+  "evidence": [
+    {
+      "path": "actions.0.events.0.operation.value",
+      "quote": "at_P05_red_mark",
+      "finding": "从当前桌面低垂目光移至原红笔批注，必要起点有明确状态。"
+    },
+    {
+      "path": "actions.0.events.1.operation.value",
+      "quote": "at_P02",
+      "finding": "然后移至原电影票，原红批→票顺序成立。"
+    },
+    {
+      "path": "actions.0.events.1.intent",
+      "quote": "方澄的目光从红笔批注移向自己桌角压着的电影票",
+      "finding": "原无声反应，没有新增取物/身体转向。"
+    }
+  ],
+  "actual_timing_verified": false,
+  "human_quality_approval": false
+}

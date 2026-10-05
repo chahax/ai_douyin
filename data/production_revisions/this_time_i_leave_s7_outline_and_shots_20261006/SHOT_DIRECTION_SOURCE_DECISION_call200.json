@@ -1,0 +1,27 @@
+{
+  "approved_for_film_assembly": true,
+  "module_sha256": "8e5f5b9abd8bbc0eee9b0aa36ff286ff9c1696b855f0f8bc2000835f1211b678",
+  "evidence": [
+    {
+      "path": "new_information_and_purpose",
+      "quote": "方澄已经在走廊里争取到自己的一晚：她右手捏着电影票，低头看票面后轻轻呼出一口气，这是她为自己赴约的可见回报，不是回头、不是和解、也不是再被任何活叫回去。",
+      "finding": "门外看票呼气构成可见奖励，没有新增消息或和解。"
+    },
+    {
+      "path": "observation_object",
+      "quote": "方澄脸、目光向下的眼、右手那张米白底深红字电影票和轻呼气的口鼻，三者要在同一镜里同时被观众读清。",
+      "finding": "脸、眼、右手票、呼气可同镜读清，非纯背影。"
+    },
+    {
+      "path": "frame_id",
+      "quote": "corridor_face_ticket",
+      "finding": "走廊前侧3/4脸票机位满足新增情绪出口。"
+    },
+    {
+      "path": "cut_reason",
+      "quote": "B09的看票和轻呼气已经把她争取到自己时间的释放交代清楚，下一切到B10林屿继续自己一行一行对账，由各自承担收束本镜，不再加回头、对话或别的动作。",
+      "finding": "完整看票/呼气后回到他对账，双方各自承担收束。"
+    }
+  ],
+  "human_quality_approval": false
+}

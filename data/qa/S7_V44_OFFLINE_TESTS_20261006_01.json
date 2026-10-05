@@ -1,0 +1,12 @@
+{
+  "test": "tests/test_creative_shared_dialogue_scope_v44.py",
+  "passed": 4,
+  "duration_seconds": 17.46,
+  "provider_calls": 0,
+  "shared_whole_model_paragraph_once": true,
+  "two_dialogue_windows_preserved": true,
+  "full_ten_shot_preflight": true,
+  "compressed_ids_exact_membership": true,
+  "source_mutation_rejected": true,
+  "model_actions_manually_modified": false
+}

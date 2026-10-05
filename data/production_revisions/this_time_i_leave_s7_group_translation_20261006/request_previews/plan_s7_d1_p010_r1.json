@@ -1,0 +1,32 @@
+{
+  "role": "writer",
+  "model": "MiniMax-M3",
+  "messages": [
+    {
+      "role": "system",
+      "content": "atomic_event_group_lines/v2。你只翻译已经确定的当前原动作，不创作剧情、不考虑审美，不添加动作或台词。输出七列事件行：group|subject|kind|target|value|satisfies|intent。group只能填下列原动作组标签A/B等，保持原组顺序，不写事件索引或数字；每行七列。事件序号由编译器按行顺序生成。kind只有hold/gaze/face/move/stand/sit/take/place/pass/slide。hold的target/value都是-；gaze/face/move的target为-、value为实际目标或位置；道具操作target道具ID、value实际位置。satisfies无窗口为-，有窗口填要求ID；人物ID也就是操作者。写字/呼吸/握着笔的手腕动作hold，不站起/重拿笔。所有原action完整、状态变化各一行，不能藏于hold。不要JSON、工具调用、表格标题、围栏、编号解释。 情绪只写自然表演，不使用affect状态操作。"
+    },
+    {
+      "role": "user",
+      "content": "{\"role\":\"mechanical_state_translation_only\",\"current_complete_source\":{\"current_shot\":{\"shot_id\":\"SH10\",\"source_step_refs\":[\"raw_linear_script.beats.9.steps.0\"],\"new_information\":\"林屿独自低头对账，一个人把手里的事收回自己手里，方澄那晚留给了自己，这一段落定。\",\"purpose\":\"林屿独自低头对账，一个人把手里的事收回自己手里，方澄那晚留给了自己，这一段落定。\",\"observation_object\":\"林屿的右手、签字笔与两份单据的对账动作，附带桌面杯与浅黄便利贴作背景。\",\"camera\":\"林屿工位前侧中近景，侧脸、右手黑色签字笔及两份单据同框\",\"composition\":\"保持工作者与当前桌面物件同框，杯和便利贴作背景，不新增物件或动作\",\"cut_reason\":\"看见他一个人收下这件事，对账落到具体动作上，全片在此处自然结束。\",\"dialogue_mode\":\"无对白\",\"performance_requirements\":[]},\"ordered_complete_current_steps\":[{\"source_step_ref\":\"raw_linear_script.beats.9.steps.0\",\"kind\":\"action\",\"speaker\":\"\",\"text\":\"林屿仍坐在工位前，没抬头去喊她，右手里那支黑色签字笔继续在那张A4横版客户明细单的红笔批注旁一行一行改下去，每写一笔就把笔尖挪向旁边那张结算单比对一次，白色陶瓷咖啡杯没动，那张浅黄便利贴压在他左手边的桌面。\"}],\"actual_start_state\":{\"C01\":{\"affect\":\"neutral\",\"facing\":\"toward_corridor_exit\",\"gaze\":\"at_P02_in_right_hand\",\"position\":\"standing_in_corridor_outside_E08\",\"posture\":\"standing\"},\"C02\":{\"affect\":\"neutral\",\"facing\":\"toward_E01\",\"gaze\":\"at_E02_P05\",\"position\":\"sitting_at_E02\",\"posture\":\"sitting\"},\"P01\":{\"holder\":\"C01\",\"location\":\"worn_on_left_shoulder\"},\"P02\":{\"holder\":\"C01\",\"location\":\"right_hand\"},\"P03_Y\":{\"holder\":\"none\",\"location\":\"surface:E02:left_front\"},\"P03_P\":{\"holder\":\"none\",\"location\":\"surface:E02:center\"},\"P03_B\":{\"holder\":\"none\",\"location\":\"surface:E02:right\"},\"P04\":{\"holder\":\"none\",\"location\":\"surface:E02:near_edge\"},\"P05\":{\"holder\":\"none\",\"location\":\"surface:E02:near_E01_edge\"},\"P06\":{\"holder\":\"none\",\"location\":\"surface:E02:beside_P05\"},\"P07\":{\"holder\":\"C02\",\"location\":\"right_hand\"}}},\"spatial_contract\":{\"seats\":[{\"seat_id\":\"E09\",\"access_positions\":[\"standing_at_E01\",\"sitting_at_E01\"],\"required_facing\":\"toward_E01\"},{\"seat_id\":\"E10\",\"access_positions\":[\"sitting_at_E02\"],\"required_facing\":\"toward_E02\"}]},\"registered_characters\":[{\"id\":\"C01\",\"name\":\"方澄\"},{\"id\":\"C02\",\"name\":\"林屿\"}],\"registered_prop_ids\":[\"P01\",\"P02\",\"P03_Y\",\"P03_P\",\"P03_B\",\"P04\",\"P05\",\"P06\",\"P07\"],\"source_binding\":{\"raw_script_sha256\":\"465b12b846c5a14581e069d62f0068b0b27d2cb224231f6e7c08eed88301f1f3\",\"raw_source_full_creative_stages\":161,\"complete_direction_source_consumed_R01\":187,\"reference_pack_sha256\":\"bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1\"},\"verified_faults\":{\"current_source\":\"仅C02，既有坐姿/右手持笔，P06已经在P05旁，浅黄便利贴已在E02左前。按完整原S17继续写明细、每写一笔比对旁边结算单；不再拉纸或移动便利贴、不拿笔、不抬头追她。\",\"event_format_examples\":[\"A|C02|hold|-|-|-|右手原笔在明细单红批旁继续逐项写\",\"A|C02|gaze|-|at_E02_P06|-|看旁边原结算单比对\",\"A|C02|hold|-|-|-|原持笔手腕将笔尖挪向结算单比对\",\"A|C02|gaze|-|at_E02_P05|-|视线回原明细单下一项\",\"A|C02|hold|-|-|-|继续落笔核改下一项\"],\"windows\":\"本镜无新声明窗口，无台词、杯子不动。完整新计划不能照抄示例后另加事件。\"},\"original_action_groups\":[{\"label\":\"A\",\"source_step_ref\":\"raw_linear_script.beats.9.steps.0\",\"original_text\":\"林屿仍坐在工位前，没抬头去喊她，右手里那支黑色签字笔继续在那张A4横版客户明细单的红笔批注旁一行一行改下去，每写一笔就把笔尖挪向旁边那张结算单比对一次，白色陶瓷咖啡杯没动，那张浅黄便利贴压在他左手边的桌面。\"}],\"format_examples_only\":[\"A|C02|gaze|-|at_E02_P05|-|看向原明细单\",\"A|C02|hold|-|-|-|原右手持笔落字\",\"A|C02|slide|P06|surface:E02:beside_P05|-|拉齐原结算单\"]}"
+    }
+  ],
+  "structured_schema": null,
+  "parameters": {
+    "max_completion_tokens": 1800,
+    "temperature": 0.4,
+    "thinking": "disabled"
+  },
+  "input_provenance": {
+    "raw_script_sha256": "465b12b846c5a14581e069d62f0068b0b27d2cb224231f6e7c08eed88301f1f3",
+    "reference_pack_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+    "local_input_sha256": "2530e11e5f4b2addd978bddd9e0b43edce13e68c2bc12b2cad915a1bdae78784",
+    "current_shot": "SH10",
+    "stage": "mechanical_current_action_translation",
+    "native_object_tool_schema": true,
+    "server_strict_decoding_claimed": false,
+    "reference_consumed_by_creative_upstream": true
+  },
+  "operator_version": "s7_grouped_translation_program_event_indices/v41",
+  "output_contract": "atomic_event_group_lines/v2"
+}

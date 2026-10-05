@@ -1,0 +1,53 @@
+{
+  "approved_for_performance_text": true,
+  "plan_sha256": "6ea567171dd093f5582f6b9f1865fca18df19ba6354f54dd663215b8ec5c48c3",
+  "evidence": [
+    {
+      "path": "actions.0.events.0.intent",
+      "quote": "目光落向客户明细单第一处红笔批注",
+      "finding": "回看自身明细单，原观察对象明确。"
+    },
+    {
+      "path": "actions.0.events.1.intent",
+      "quote": "右手在明细单第一处红笔批注旁落字改一笔",
+      "finding": "原右手已持笔落第一处批注，无重拿。"
+    },
+    {
+      "path": "actions.0.events.2.intent",
+      "quote": "笔尖停在明细单第二行数字处不写",
+      "finding": "第二行停笔发生在核对前，形成困难。"
+    },
+    {
+      "path": "actions.0.events.3.intent",
+      "quote": "把结算单从桌角拉到明细单旁对齐",
+      "finding": "P06只一次拉齐到P05旁，非人物移动。"
+    },
+    {
+      "path": "actions.0.events.4.intent",
+      "quote": "目光移向结算单核对第二行数字",
+      "finding": "先看P06核对数字。"
+    },
+    {
+      "path": "actions.0.events.5.intent",
+      "quote": "目光回到明细单第二行",
+      "finding": "核对后回P05。"
+    },
+    {
+      "path": "actions.0.events.6.intent",
+      "quote": "笔尖在明细单第二行点一下并把那个数字划掉重写",
+      "finding": "核对之后才点、划掉并重写，因果正确。"
+    },
+    {
+      "path": "actions.0.events.8.intent",
+      "quote": "目光移向结算单继续往下比对",
+      "finding": "写完停，再对单据，承担工作继续。"
+    },
+    {
+      "path": "actions.0.events.9.intent",
+      "quote": "右手沿明细单往下继续改",
+      "finding": "原角色林屿继续改明细，不新台词或后镜。"
+    }
+  ],
+  "actual_timing_verified": false,
+  "human_quality_approval": false
+}

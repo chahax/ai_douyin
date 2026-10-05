@@ -1,0 +1,10 @@
+{
+  "observed_command": "pytest.main with repository scripts path and no cacheprovider",
+  "result": "8 passed in 10.18s",
+  "model_calls": 0,
+  "creative_quality_passed": false,
+  "successful_tool_output_chunk": "f6dc78",
+  "source_sha256": "2fae6afc280d2e1c8ddff29e5eb38ef2f7810583d019650e2d192427d7c2a18d",
+  "test_sha256": "5e507d9a064cde3343fbf51a44a34ee7c2ac3ca6bea95b8c7e53f66776e7f966",
+  "initial_collection_failure": "global site-packages/scripts shadowed repository package; corrected invocation without changing tested semantics"
+}

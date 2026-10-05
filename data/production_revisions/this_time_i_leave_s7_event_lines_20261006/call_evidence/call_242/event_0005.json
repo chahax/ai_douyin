@@ -1,0 +1,12 @@
+{
+  "schema": "creative_call_evidence/v1",
+  "sequence": 5,
+  "identity_sha256": "12f481c763a979585cedf55f721c7ea2dbce68a58479578a11191f24983a0528",
+  "at_utc": "2026-10-05T19:12:22.346209+00:00",
+  "phase": "response_body_saved",
+  "details": {
+    "stored_sha256": "2fc97cc7a561d9ede4357870c7fa20d87b81b4cdd19128ab94900b3bc3285cde",
+    "body_complete": true,
+    "credential_redacted": false
+  }
+}

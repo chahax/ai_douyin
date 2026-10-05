@@ -1,0 +1,29 @@
+{
+  "approved_for_next_local_text": true,
+  "derived_local_sha256": "26cb05c11aa4b56933ffe11a095f940a51b9c8da43f64c0114784c056c07c2de",
+  "evidence": [
+    {
+      "path": "performances.0.performance",
+      "quote": "方澄左手从椅背取下米灰色挎包，自然挎上左肩，左手松开挎包带落回身侧，动作平稳不急。",
+      "finding": "左手取包上左肩后松手，保持原站立状态。"
+    },
+    {
+      "path": "performances.1.performance",
+      "quote": "方澄右手从桌角拿起那张米白底深红字的院线电影票，指尖捏住票沿握稳，目光不在票面上停留。",
+      "finding": "原电影票由右手取起；与既有米白底深红字资产一致。"
+    },
+    {
+      "path": "performances.5.performance",
+      "quote": "方澄空出的左手抬起，掌心轻推那扇米灰色木纹平板门，门向前打开让出通道，推力自然不过猛，右手电影票保持不动。",
+      "finding": "本slot完成空闲左手推门，下一slot才跨门。"
+    },
+    {
+      "path": "performances.6.performance",
+      "quote": "方澄左脚先跨出门槛走入走廊，挎包左肩、票在右手，保持走出方向，不回头看室内，不在门口停留呼气。",
+      "finding": "真正走到门外，尚未提前呼气或回头。"
+    }
+  ],
+  "human_quality_approval": false,
+  "scalar_model_document_sha256": "987d89ce327d8f6799740b00247c0f3bf5c9651976bb6b75c7402cc103b247d1",
+  "all_seconds_and_performance_from_original_model": true
+}

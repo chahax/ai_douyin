@@ -1,0 +1,151 @@
+{
+  "schema": "authorized_creative_continuation/v3",
+  "ordinal": 258,
+  "label": "plan_s7_d1_p009_r1",
+  "request": {
+    "role": "writer",
+    "model": "MiniMax-M3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "atomic_event_group_lines/v2。你只翻译已经确定的当前原动作，不创作剧情、不考虑审美，不添加动作或台词。输出七列事件行：group|subject|kind|target|value|satisfies|intent。group只能填下列原动作组标签A/B等，保持原组顺序，不写事件索引或数字；每行七列。事件序号由编译器按行顺序生成。kind只有hold/gaze/face/move/stand/sit/take/place/pass/slide。hold的target/value都是-；gaze/face/move的target为-、value为实际目标或位置；道具操作target道具ID、value实际位置。satisfies无窗口为-，有窗口填要求ID；人物ID也就是操作者。写字/呼吸/握着笔的手腕动作hold，不站起/重拿笔。所有原action完整、状态变化各一行，不能藏于hold。不要JSON、工具调用、表格标题、围栏、编号解释。 情绪只写自然表演，不使用affect状态操作。"
+      },
+      {
+        "role": "user",
+        "content": "{\"role\":\"mechanical_state_translation_only\",\"current_complete_source\":{\"current_shot\":{\"shot_id\":\"SH09\",\"source_step_refs\":[\"raw_linear_script.beats.8.steps.0\"],\"new_information\":\"方澄已经在走廊里争取到自己的一晚：她右手捏着电影票，低头看票面后轻轻呼出一口气，这是她为自己赴约的可见回报，不是回头、不是和解、也不是再被任何活叫回去。\",\"purpose\":\"方澄已经在走廊里争取到自己的一晚：她右手捏着电影票，低头看票面后轻轻呼出一口气，这是她为自己赴约的可见回报，不是回头、不是和解、也不是再被任何活叫回去。\",\"observation_object\":\"方澄脸、目光向下的眼、右手那张米白底深红字电影票和轻呼气的口鼻，三者要在同一镜里同时被观众读清。\",\"camera\":\"走廊前侧三分之二面部中近景，面部、右手电影票与轻呼气同框清楚可读\",\"composition\":\"面部和持票手同时入画，背景走廊弱化；不拍纯背影、不新增回头或对话\",\"cut_reason\":\"B09的看票和轻呼气已经把她争取到自己时间的释放交代清楚，下一切到B10林屿继续自己一行一行对账，由各自承担收束本镜，不再加回头、对话或别的动作。\",\"dialogue_mode\":\"无对白\",\"performance_requirements\":[{\"id\":\"W_SH09_1\",\"subject\":\"C01\",\"stimulus_ref\":\"raw_linear_script.beats.7.steps.1\",\"reaction_ref\":\"raw_linear_script.beats.8.steps.0\",\"relation\":\"after\",\"minimum_seconds\":2.0}]},\"ordered_complete_current_steps\":[{\"source_step_ref\":\"raw_linear_script.beats.8.steps.0\",\"kind\":\"action\",\"speaker\":\"\",\"text\":\"方澄站在办公室门外走廊上，右手捏着那张米白底深红字的院线电影票，低头看了一眼票面，轻轻呼出一口气。\"}],\"actual_start_state\":{\"C01\":{\"affect\":\"neutral\",\"facing\":\"toward_corridor_exit\",\"gaze\":\"along_E08_to_corridor_exit\",\"position\":\"standing_in_corridor_outside_E08\",\"posture\":\"standing\"},\"C02\":{\"affect\":\"neutral\",\"facing\":\"toward_E01\",\"gaze\":\"at_E02_P05\",\"position\":\"sitting_at_E02\",\"posture\":\"sitting\"},\"P01\":{\"holder\":\"C01\",\"location\":\"worn_on_left_shoulder\"},\"P02\":{\"holder\":\"C01\",\"location\":\"right_hand\"},\"P03_Y\":{\"holder\":\"none\",\"location\":\"surface:E02:left_front\"},\"P03_P\":{\"holder\":\"none\",\"location\":\"surface:E02:center\"},\"P03_B\":{\"holder\":\"none\",\"location\":\"surface:E02:right\"},\"P04\":{\"holder\":\"none\",\"location\":\"surface:E02:near_edge\"},\"P05\":{\"holder\":\"none\",\"location\":\"surface:E02:near_E01_edge\"},\"P06\":{\"holder\":\"none\",\"location\":\"surface:E02:beside_P05\"},\"P07\":{\"holder\":\"C02\",\"location\":\"right_hand\"}}},\"spatial_contract\":{\"seats\":[{\"seat_id\":\"E09\",\"access_positions\":[\"standing_at_E01\",\"sitting_at_E01\"],\"required_facing\":\"toward_E01\"},{\"seat_id\":\"E10\",\"access_positions\":[\"sitting_at_E02\"],\"required_facing\":\"toward_E02\"}]},\"registered_characters\":[{\"id\":\"C01\",\"name\":\"方澄\"},{\"id\":\"C02\",\"name\":\"林屿\"}],\"registered_prop_ids\":[\"P01\",\"P02\",\"P03_Y\",\"P03_P\",\"P03_B\",\"P04\",\"P05\",\"P06\",\"P07\"],\"source_binding\":{\"raw_script_sha256\":\"465b12b846c5a14581e069d62f0068b0b27d2cb224231f6e7c08eed88301f1f3\",\"raw_source_full_creative_stages\":161,\"complete_direction_source_consumed_R01\":187,\"reference_pack_sha256\":\"bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1\"},\"verified_faults\":{\"current_original_only\":\"本镜只C01；C02格式例子不进入剧情。C01已站门外，包左肩、票右手，不能新拿票、回头、关门、消息或加同事。\",\"exact_events\":[\"A|C01|gaze|-|at_P02_in_right_hand|-|低头看一眼已经握在右手的原电影票\",\"A|C01|hold|-|-|W_SH09_1|看票后轻轻呼一口气并停一下\"],\"release\":\"完整原S16的门外释放，W_SH09_1在真实出门S15后满足；实际秒数另由完整表演模型提交。\"},\"original_action_groups\":[{\"label\":\"A\",\"source_step_ref\":\"raw_linear_script.beats.8.steps.0\",\"original_text\":\"方澄站在办公室门外走廊上，右手捏着那张米白底深红字的院线电影票，低头看了一眼票面，轻轻呼出一口气。\"}],\"format_examples_only\":[\"A|C02|gaze|-|at_E02_P05|-|看向原明细单\",\"A|C02|hold|-|-|-|原右手持笔落字\",\"A|C02|slide|P06|surface:E02:beside_P05|-|拉齐原结算单\"]}"
+      }
+    ],
+    "structured_schema": null,
+    "parameters": {
+      "max_completion_tokens": 1800,
+      "temperature": 0.4,
+      "thinking": "disabled"
+    },
+    "input_provenance": {
+      "raw_script_sha256": "465b12b846c5a14581e069d62f0068b0b27d2cb224231f6e7c08eed88301f1f3",
+      "reference_pack_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+      "local_input_sha256": "70dc632e973c04ecc0c51cb059c6dcf51b6775d93ce583b286c5e2a3ab8622bc",
+      "current_shot": "SH09",
+      "stage": "mechanical_current_action_translation",
+      "native_object_tool_schema": true,
+      "server_strict_decoding_claimed": false,
+      "reference_consumed_by_creative_upstream": true
+    },
+    "operator_version": "s7_grouped_translation_program_event_indices/v41",
+    "output_contract": "atomic_event_group_lines/v2"
+  },
+  "request_sha256": "277685a894a3bdff19d64829f898a61d3b0a332c2cc316beff302ffd5d45ddf7",
+  "source_binding_sha256": "c1ef59de79440ee3cbaa29f7db70694d91c278fded3816c34a062a5ccd0e7d95",
+  "status": "contract_valid",
+  "started_at": "2026-10-05T19:59:33.769711+00:00",
+  "token_reservation": 7543,
+  "automatic_retry": false,
+  "semantic_approval": false,
+  "response_metadata": {
+    "http_status_code": 200,
+    "http_request_id": null,
+    "safe_response_headers": {
+      "trace-id": "071334a734cb72cda6e0bee838443a70",
+      "content-type": "application/json; charset=utf-8",
+      "date": "Mon, 05 Oct 2026 19:59:36 GMT"
+    },
+    "role": "writer",
+    "provider": "minimax",
+    "requested_model": "MiniMax-M3",
+    "response_model": "MiniMax-M3",
+    "response_id": "071334a734cb72cda6e0bee838443a70",
+    "finish_reason": "stop",
+    "thinking_mode": "disabled",
+    "output_mode": "content",
+    "transport_version": "creative_evidenced_role_clients/v1",
+    "strict_mode": false,
+    "server_schema_guarantee": false,
+    "response_body_complete": true,
+    "raw_body_sha256": "da63e99cfe1f78104893b3fa249acc5edd72c894fead99f23727e0d06506799f",
+    "prompt_tokens": 1503,
+    "completion_tokens": 43,
+    "total_tokens": 1546,
+    "usage_source": "original_provider_response",
+    "provider_status_code": 0,
+    "local_projection": "atomic_event_group_lines/v2",
+    "original_model_event_lines_preserved": true
+  },
+  "response_text": "{\"event_lines\": \"A|C01|gaze|-|at_P02_in_right_hand|-|低头看右手原电影票\\nA|C01|hold|-|-|W_SH09_1|看票后轻轻呼气并停一下\"}",
+  "response_payload": {
+    "id": "071334a734cb72cda6e0bee838443a70",
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "A|C01|gaze|-|at_P02_in_right_hand|-|低头看右手原电影票\nA|C01|hold|-|-|W_SH09_1|看票后轻轻呼气并停一下",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1791230375,
+    "model": "MiniMax-M3",
+    "object": "chat.completion",
+    "usage": {
+      "total_tokens": 1546,
+      "total_characters": 0,
+      "prompt_tokens": 1503,
+      "completion_tokens": 43,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      }
+    },
+    "input_sensitive": false,
+    "output_sensitive": false,
+    "input_sensitive_type": 0,
+    "output_sensitive_type": 0,
+    "output_sensitive_int": 0,
+    "service_tier": "standard",
+    "base_resp": {
+      "status_code": 0,
+      "status_msg": ""
+    }
+  },
+  "completed_at": "2026-10-05T19:59:36.674034+00:00",
+  "output": {
+    "event_lines": "A|C01|gaze|-|at_P02_in_right_hand|-|低头看右手原电影票\nA|C01|hold|-|-|W_SH09_1|看票后轻轻呼气并停一下"
+  },
+  "validation": {
+    "planning_physical_preflight": true,
+    "not_actual_performance": true,
+    "semantic_approval": false,
+    "canonical_event_plan": {
+      "actions": [
+        {
+          "source_step_ref": "raw_linear_script.beats.8.steps.0",
+          "events": [
+            {
+              "intent": "低头看右手原电影票",
+              "subject": "C01",
+              "operation": {
+                "kind": "gaze",
+                "actor": "C01",
+                "target": "",
+                "value": "at_P02_in_right_hand"
+              },
+              "satisfies": []
+            },
+            {
+              "intent": "看票后轻轻呼气并停一下",
+              "subject": "C01",
+              "operation": null,
+              "satisfies": [
+                "W_SH09_1"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "original_event_lines_sha256": "711f05c2c3b590d24d73aa5b5511e8a9b40f0a6391e5846d0b3aa6a12dfd7d1d"
+  },
+  "call_evidence": {
+    "directory": "call_evidence\\call_258",
+    "identity_sha256": "be646f4848193dad6e4b25ed24e47111c5054c1325c730706cb03eaa50e3b204"
+  }
+}

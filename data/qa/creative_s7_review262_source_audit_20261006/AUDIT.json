@@ -1,0 +1,58 @@
+{
+  "schema": "complete_review_source_audit/v1",
+  "original_review_ordinal": 262,
+  "review_status": "rejected_schema_and_business_protocol",
+  "automatic_retry": false,
+  "original_review_modified": false,
+  "generation_model_complete_replacement_ordinal": 263,
+  "findings": [
+    {
+      "id": "ISS-01",
+      "classification": "review_inference_not_verified_fault",
+      "reason": "画外对白已声明且原执行说话人林屿；嘴不入画不等于无源。"
+    },
+    {
+      "id": "ISS-02",
+      "classification": "verified_shared_scope_projection_ambiguity",
+      "fix": "原完整共用表演只显示一次，各原对白窗口引用，动作与秒数不改。"
+    },
+    {
+      "id": "ISS-03",
+      "classification": "review_added_requirement",
+      "reason": "看票1.5秒和呼气2.2秒已连续排入全文；声明窗口只约束后者，未删除前者。"
+    },
+    {
+      "id": "ISS-04",
+      "classification": "duplicate_of_real_sh10_progress_fault",
+      "fix": "完整263新表演接续下一处；SH07未手改。"
+    },
+    {
+      "id": "ISS-05",
+      "classification": "factually_incorrect_review_claim",
+      "reason": "实际SH02一段林屿对白加两段不同方澄视线，未重复。"
+    },
+    {
+      "id": "ISS-06",
+      "classification": "self_contradictory_review_issue",
+      "reason": "原contradiction明确说无矛盾，不构成major。"
+    },
+    {
+      "id": "ISS-07",
+      "classification": "source_interpretation_requires_independent_review",
+      "reason": "完整表演手指不离笔身，笔尖抵边。搁是否必然放手不能只凭截字。"
+    },
+    {
+      "id": "ISS-08",
+      "classification": "known_scene_state_model_limit",
+      "reason": "当前编译器只人物/道具，门开合未建模。推门已在实际表演，不增加关门或编造门状态通过。"
+    },
+    {
+      "id": "ISS-09",
+      "classification": "verified_content_fault",
+      "fix": "MiniMax完整263替换261，后续完整复审失效重做。"
+    }
+  ],
+  "creative_quality_passed": false,
+  "user_quality_confirmation": null,
+  "media_calls": 0
+}

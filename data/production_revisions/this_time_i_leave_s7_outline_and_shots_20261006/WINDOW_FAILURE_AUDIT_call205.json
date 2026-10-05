@@ -1,0 +1,27 @@
+{
+  "ordinal": 205,
+  "status": "interface_rejected",
+  "failure": {
+    "schema": "creative_failure/v1",
+    "code": "REQUIRED_TOOL_MISSING",
+    "category": "interface",
+    "next_action": "diagnose_original_received_response",
+    "response_received": true,
+    "automatic_retry": false,
+    "blocks_handoff": true,
+    "provider_outcome_known": true,
+    "cause_code": "REQUIRED_TOOL_MISSING",
+    "http_status_code": 200,
+    "http_request_id": null,
+    "cause_type": null
+  },
+  "validation_error": null,
+  "complete_response": true,
+  "finish_reason": "tool_calls",
+  "completion_tokens": 265,
+  "total_tokens": 13887,
+  "adopted": false,
+  "automatic_retry": false,
+  "service_root_cause_proven": false,
+  "replacement": "explicit locally compiled source-bound production constraints; not model-authored"
+}

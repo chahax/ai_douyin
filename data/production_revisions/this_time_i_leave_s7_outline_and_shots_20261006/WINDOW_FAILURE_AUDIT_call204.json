@@ -1,0 +1,25 @@
+{
+  "ordinal": 204,
+  "status": "contract_rejected",
+  "failure": {
+    "schema": "creative_failure/v1",
+    "code": "MODULE_SCHEMA_INVALID",
+    "category": "state_contract",
+    "next_action": "complete_new_response_then_full_validation",
+    "response_received": true,
+    "automatic_retry": false,
+    "blocks_handoff": true
+  },
+  "validation_error": {
+    "message": "Additional properties are not allowed ('/SH01_w1' was unexpected)",
+    "path": []
+  },
+  "complete_response": true,
+  "finish_reason": "tool_calls",
+  "completion_tokens": 2400,
+  "total_tokens": 15932,
+  "adopted": false,
+  "automatic_retry": false,
+  "service_root_cause_proven": false,
+  "replacement": "explicit locally compiled source-bound production constraints; not model-authored"
+}

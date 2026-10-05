@@ -1,0 +1,27 @@
+{
+  "approved_for_next_local_text": true,
+  "derived_local_sha256": "d234776c7a45fc47593ee680bae4b458e178d8832ded3ba8af28a9882a22c1c5",
+  "evidence": [
+    {
+      "path": "performances.0.seconds",
+      "quote": "1.4",
+      "finding": "1.4秒建立原状态，与下一事件合计2.9秒。"
+    },
+    {
+      "path": "performances.0.performance",
+      "quote": "方澄站在自己浅木色工位前，灰蓝薄针织开衫垂落，白色圆领T恤领口微露。目光低垂落在桌面上，米灰色挎包已挂在椅背、电影票压在自己伸手就能够到的桌角，无视线巡看，双手自然垂于桌面边缘，身体保持安静站姿，不抬手、不取物。",
+      "finding": "维持已有站姿和桌面低垂目光，没有巡看、拿包票；服装与静态人物定义一致。"
+    },
+    {
+      "path": "performances.1.seconds",
+      "quote": "1.5",
+      "finding": "1.5秒一次原推单，开场简洁。"
+    },
+    {
+      "path": "performances.1.performance",
+      "quote": "林屿坐在右侧工位，米驼色棉质衬衫袖口已挽至前臂，没抬头，右手贴着桌面轻推A4横版客户明细单，让它沿浅木色表面往两人之间的方向滑出约一掌距离，自己手收回原位。明细单仍停在林屿桌沿靠近方澄工位的那一侧，A4纵版结算单继续摊在他自己桌角，白色陶瓷咖啡杯放在近侧，签字笔仍搁在自己桌沿。",
+      "finding": "P05沿原E02桌面推到靠E01一侧，仍无人持，其他物件未动。"
+    }
+  ],
+  "human_quality_approval": false
+}

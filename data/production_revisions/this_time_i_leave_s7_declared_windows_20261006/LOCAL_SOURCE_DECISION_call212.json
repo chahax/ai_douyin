@@ -1,0 +1,27 @@
+{
+  "approved_for_next_local_text": true,
+  "derived_local_sha256": "ca0e6e1da2a518efcafbde07a15be8ab705b639ea994b8258c446dd0829a4a01",
+  "evidence": [
+    {
+      "path": "dialogue_performance",
+      "quote": "林屿坐在方澄右侧工位，仍低着头朝自己桌面客户明细单，语气随口、不抬眼，嘴角微松，下唇先抿再松，像把一句已经默认会应的事平着说出来；眼区基本不动，视线压在纸面红笔批注上方，说到\"重打的\"轻顿一拍，\"你顺手帮我收了吧\"末尾气息略轻收，话尾不在等回应。",
+      "finding": "完整原句的随口默认语气、没抬头，没有夹带清单递笔。"
+    },
+    {
+      "path": "performances.0.performance",
+      "quote": "方澄原本低垂的目光沿桌面平移，视线落在右侧林屿桌面客户明细单的红笔批注上，眼睛微收，眨眼一次，嘴唇合拢、不张嘴，呼吸浅而匀，脸上是听着的神色，没有要接话的动作。",
+      "finding": "当前低垂目光到原P05红批，物件指向明确。"
+    },
+    {
+      "path": "performances.1.performance",
+      "quote": "方澄目光从红笔批注收回，再斜向自己桌角那张米白底深红字的院线电影票停住，眼里一闪轻而定的东西又沉下去，眉心微收不到蹙，唇线抿平，下颌轻压，没接话，也没把手伸向那张票。",
+      "finding": "原红批到电影票、没接话，未看笔或取物。"
+    },
+    {
+      "path": "performances.1.seconds",
+      "quote": "1.2",
+      "finding": "两个视线事件各1.2秒，共2.4秒；对白独立按完整原文编译。"
+    }
+  ],
+  "human_quality_approval": false
+}

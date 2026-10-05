@@ -1,0 +1,19 @@
+{
+  "checked_at_utc": "2026-10-05T18:33:51.491152+00:00",
+  "verified": {
+    "call226": "complete HTTP response; stop; no tool_calls; REQUIRED_TOOL_MISSING; usage7283",
+    "client": "explicit named tool_choice, native one-string schema, max_retries0, M3 thinking disabled, max_completion_tokens3000",
+    "official": "Chat Completions tools and M3 disabled supported; no tool_choice or strict schema guarantee documented on inspected pages"
+  },
+  "unknown": [
+    "why server returned content instead of requested function",
+    "original long-analysis server cause"
+  ],
+  "source_pages": [
+    "https://platform.minimax.io/docs/api-reference/text-chat-openai",
+    "https://platform.minimax.io/docs/guides/text-m3-function-call"
+  ],
+  "old_response_adopted": false,
+  "automatic_retry": false,
+  "frozen_code_modified": false
+}

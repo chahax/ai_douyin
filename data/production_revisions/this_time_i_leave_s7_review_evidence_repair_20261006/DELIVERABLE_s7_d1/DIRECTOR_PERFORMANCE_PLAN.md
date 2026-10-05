@@ -1,0 +1,257 @@
+# 这次我先走：整片导演与表演安排
+
+实际编译时长：62.26秒；10镜。
+
+本文件是文本制作安排；实际样板与资产尚待人工选定并回传导演，视频须逐段人工审查。
+
+## 整片方向
+
+从默认接手的压力，到方澄拒绝时的稳与边界，再到林屿不太熟练但自己承担下来，方澄门外看票轻呼气——情绪落点是各自收回自己的事，没有崩，也没有谁赢谁输。
+
+关系没有因为一次拒绝而崩：她守住了留给自己的一晚，他用自己的手把这件事接了过去——两个人各自把今晚收回自己手里。
+
+因果链：["林屿把收尾的活默认推给方澄（用清单和递笔坐实），方澄拒绝并给出不可打折的理由，林屿被迫自己收回那支笔并亲手对账，方澄由此拿回今晚去看电影。"]
+
+## SH01（0.00–2.90秒）
+
+新增信息：让观众同时看见她为自己留出的时间和他默认她会接过去的活，建立今晚谁的时间被默认让位的张力。
+
+观察对象：方澄工位上挂着的挎包、桌角压着的电影票，以及林屿刚推向两人之间的客户明细单。
+
+画面与机位：两人工位与脸部、当前桌面物件同框，保留人物实际站坐高度差；从两人工位前侧拍固定中景，深景深，交代空间与桌面物件；不设定动作完成后的初态
+
+切镜理由：开场交代空间与两人桌面物件的对照；当观众看清挎包已挂、电影票压在桌角、而明细单正被推向她一侧时，下一拍切到林屿开口把过去帮忙摊成今晚的默认要求。
+
+刺激与反应要求：[]
+
+首态：{"C01(方澄)": {"facing": "toward_E01", "gaze": "down_at_E01_desk", "position": "standing_at_E01", "posture": "standing"}, "C02(林屿)": {"facing": "toward_E02", "gaze": "down_at_E02_desk", "position": "sitting_at_E02", "posture": "sitting"}, "P01(挎包)": {"holder": "none", "location": "surface:E09:backrest"}, "P02(院线电影票根)": {"holder": "none", "location": "surface:E01:corner"}, "P03_B(浅蓝收尾便利贴)": {"holder": "none", "location": "surface:E01:corner"}, "P03_P(浅粉改明细便利贴)": {"holder": "none", "location": "surface:E01:corner"}, "P03_Y(浅黄对账便利贴)": {"holder": "none", "location": "surface:E01:corner"}, "P04(咖啡杯)": {"holder": "none", "location": "surface:E02:near_edge"}, "P05(客户明细单)": {"holder": "none", "location": "surface:E02:center"}, "P06(结算单)": {"holder": "none", "location": "surface:E02:corner"}, "P07(签字笔)": {"holder": "none", "location": "surface:E02:edge"}}
+
+| 全片时间 | 原文与表演 | 实际操作 |
+| --- | --- | --- |
+| 0.00–1.40秒 | raw_linear_script.beats.0.steps.0 / SH01-A00-G00 / group / 方澄穿着灰蓝色薄针织开衫站在自己浅木色工位前，米灰色挎包已经挂上椅背，米白底深红字的院线电影票压在桌角自己伸手就能够到的位置。 / 方澄站在自己浅木色工位前，灰蓝薄针织开衫垂落，白色圆领T恤领口微露。目光低垂落在桌面上，米灰色挎包已挂在椅背、电影票压在自己伸手就能够到的桌角，无视线巡看，双手自然垂于桌面边缘，身体保持安静站姿，不抬手、不取物。 | [] |
+| 1.40–2.90秒 | raw_linear_script.beats.0.steps.1 / SH01-A01-G00 / group / 林屿穿着米驼色棉质衬衫坐在她右边的工位，没抬头，把自己桌上那份A4横版客户明细单往两人之间的方向推了推，那张A4纵版结算单仍摊在自己桌角，白色陶瓷咖啡杯放在一旁。 / 林屿坐在右侧工位，米驼色棉质衬衫袖口已挽至前臂，没抬头，右手贴着桌面轻推A4横版客户明细单，让它沿浅木色表面往两人之间的方向滑出约一掌距离，自己手收回原位。明细单仍停在林屿桌沿靠近方澄工位的那一侧，A4纵版结算单继续摊在他自己桌角，白色陶瓷咖啡杯放在近侧，签字笔仍搁在自己桌沿。 | [{"kind": "slide", "actor": "C02", "target": "P05", "value": "surface:E02:near_E01_edge"}] |
+
+尾态：{"C01(方澄)": {"facing": "toward_E01", "gaze": "down_at_E01_desk", "position": "standing_at_E01", "posture": "standing"}, "C02(林屿)": {"facing": "toward_E02", "gaze": "down_at_E02_desk", "position": "sitting_at_E02", "posture": "sitting"}, "P01(挎包)": {"holder": "none", "location": "surface:E09:backrest"}, "P02(院线电影票根)": {"holder": "none", "location": "surface:E01:corner"}, "P03_B(浅蓝收尾便利贴)": {"holder": "none", "location": "surface:E01:corner"}, "P03_P(浅粉改明细便利贴)": {"holder": "none", "location": "surface:E01:corner"}, "P03_Y(浅黄对账便利贴)": {"holder": "none", "location": "surface:E01:corner"}, "P04(咖啡杯)": {"holder": "none", "location": "surface:E02:near_edge"}, "P05(客户明细单)": {"holder": "none", "location": "surface:E02:near_E01_edge"}, "P06(结算单)": {"holder": "none", "location": "surface:E02:corner"}, "P07(签字笔)": {"holder": "none", "location": "surface:E02:edge"}}
+
+## SH02（2.90–15.89秒）
+
+新增信息：把过去她替他收尾的加班摊到台面，坐实他今晚仍把活默认推给她；她听见却没接话，红批与电影票在同一视线里对照，观众读出她今晚不会按老样子接手。
+
+观察对象：说话者林屿完整开口与未抬头的姿态，以及方澄听他说完后目光从红笔批注移到电影票却没开口的反应。
+
+画面与机位：两人半侧脸同框，桌面位于下沿，避免前实后虚遮蔽听者；从工位前侧拍固定双人中近景，保持两人面部、眼睛和嘴同时清晰；不从背后拍
+
+切镜理由：读清林屿完整摊出旧账的潜台词和方澄听见后没接话的对位反应后，转到B03他摊开便利贴与递笔，把默认她接手的姿态再往前推一步。
+
+刺激与反应要求：[]
+
+首态：{"C01(方澄)": {"facing": "toward_E01", "gaze": "down_at_E01_desk", "position": "standing_at_E01", "posture": "standing"}, "C02(林屿)": {"facing": "toward_E02", "gaze": "down_at_E02_desk", "position": "sitting_at_E02", "posture": "sitting"}, "P01(挎包)": {"holder": "none", "location": "surface:E09:backrest"}, "P02(院线电影票根)": {"holder": "none", "location": "surface:E01:corner"}, "P03_B(浅蓝收尾便利贴)": {"holder": "none", "location": "surface:E01:corner"}, "P03_P(浅粉改明细便利贴)": {"holder": "none", "location": "surface:E01:corner"}, "P03_Y(浅黄对账便利贴)": {"holder": "none", "location": "surface:E01:corner"}, "P04(咖啡杯)": {"holder": "none", "location": "surface:E02:near_edge"}, "P05(客户明细单)": {"holder": "none", "location": "surface:E02:near_E01_edge"}, "P06(结算单)": {"holder": "none", "location": "surface:E02:corner"}, "P07(签字笔)": {"holder": "none", "location": "surface:E02:edge"}}
+
+| 全片时间 | 原文与表演 | 实际操作 |
+| --- | --- | --- |
+| 2.90–13.49秒 | raw_linear_script.beats.1.steps.0 / dialogue_0 / dialogue / 林屿：上月那张对账是你帮我熬到十一点重打的，今晚这份也对到一半了，你顺手帮我收了吧。 / 林屿坐在方澄右侧工位，仍低着头朝自己桌面客户明细单，语气随口、不抬眼，嘴角微松，下唇先抿再松，像把一句已经默认会应的事平着说出来；眼区基本不动，视线压在纸面红笔批注上方，说到"重打的"轻顿一拍，"你顺手帮我收了吧"末尾气息略轻收，话尾不在等回应。 | [] |
+| 13.49–14.69秒 | raw_linear_script.beats.1.steps.1 / SH02-A01-G00 / group / 方澄的目光从他桌上的红笔批注，移到自己桌角压着的电影票，没接话。 / 方澄原本低垂的目光沿桌面平移，视线落在右侧林屿桌面客户明细单的红笔批注上，眼睛微收，眨眼一次，嘴唇合拢、不张嘴，呼吸浅而匀，脸上是听着的神色，没有要接话的动作。 | [{"kind": "gaze", "actor": "C01", "target": "", "value": "at_P05_red_mark"}] |
+| 14.69–15.89秒 | raw_linear_script.beats.1.steps.1 / SH02-A01-G01 / group / 同一原步骤续行（不重演动作） / 方澄目光从红笔批注收回，再斜向自己桌角那张米白底深红字的院线电影票停住，眼里一闪轻而定的东西又沉下去，眉心微收不到蹙，唇线抿平，下颌轻压，没接话，也没把手伸向那张票。 | [{"kind": "gaze", "actor": "C01", "target": "", "value": "at_P02"}] |
+
+尾态：{"C01(方澄)": {"facing": "toward_E01", "gaze": "at_P02", "position": "standing_at_E01", "posture": "standing"}, "C02(林屿)": {"facing": "toward_E02", "gaze": "down_at_E02_desk", "position": "sitting_at_E02", "posture": "sitting"}, "P01(挎包)": {"holder": "none", "location": "surface:E09:backrest"}, "P02(院线电影票根)": {"holder": "none", "location": "surface:E01:corner"}, "P03_B(浅蓝收尾便利贴)": {"holder": "none", "location": "surface:E01:corner"}, "P03_P(浅粉改明细便利贴)": {"holder": "none", "location": "surface:E01:corner"}, "P03_Y(浅黄对账便利贴)": {"holder": "none", "location": "surface:E01:corner"}, "P04(咖啡杯)": {"holder": "none", "location": "surface:E02:near_edge"}, "P05(客户明细单)": {"holder": "none", "location": "surface:E02:near_E01_edge"}, "P06(结算单)": {"holder": "none", "location": "surface:E02:corner"}, "P07(签字笔)": {"holder": "none", "location": "surface:E02:edge"}}
+
+## SH03（15.89–21.19秒）
+
+新增信息：把善后三件事摊成清单递到面前，并用握笔的手势默认她会接下，把今晚本属于她的时间再次压成他这边的活。
+
+观察对象：林屿侧身取便利贴、摊开三色便利贴并压角、反握笔尖朝向方澄停在桌沿等候的那只右手与面前摊开的浅黄、浅粉、浅蓝三张便利贴。
+
+画面与机位：三色便利贴及握笔手在桌面近景可读，不改变当前持有、朝向或支持面；桌面斜俯近景，手与当前源道具清晰，嘴不入画；拍完整原动作，不额外切镜
+
+切镜理由：递笔已停住、便利贴摊齐、等待她接的瞬间，切到下一镜看她不接，承接B04她抬眼犹豫。
+
+刺激与反应要求：[]
+
+首态：{"C01(方澄)": {"facing": "toward_E01", "gaze": "at_P02", "position": "standing_at_E01", "posture": "standing"}, "C02(林屿)": {"facing": "toward_E02", "gaze": "down_at_E02_desk", "position": "sitting_at_E02", "posture": "sitting"}, "P01(挎包)": {"holder": "none", "location": "surface:E09:backrest"}, "P02(院线电影票根)": {"holder": "none", "location": "surface:E01:corner"}, "P03_B(浅蓝收尾便利贴)": {"holder": "none", "location": "surface:E01:corner"}, "P03_P(浅粉改明细便利贴)": {"holder": "none", "location": "surface:E01:corner"}, "P03_Y(浅黄对账便利贴)": {"holder": "none", "location": "surface:E01:corner"}, "P04(咖啡杯)": {"holder": "none", "location": "surface:E02:near_edge"}, "P05(客户明细单)": {"holder": "none", "location": "surface:E02:near_E01_edge"}, "P06(结算单)": {"holder": "none", "location": "surface:E02:corner"}, "P07(签字笔)": {"holder": "none", "location": "surface:E02:edge"}}
+
+| 全片时间 | 原文与表演 | 实际操作 |
+| --- | --- | --- |
+| 15.89–16.29秒 | raw_linear_script.beats.2.steps.0 / SH03-A00-G00 / group / 林屿侧身从方澄桌角拿起那一小叠便利贴，把浅黄、浅粉、浅蓝三张一并摊开在自己面前的桌面上，指尖压住浅黄那张边角。 / 林屿坐着将脸和上身微微转向左侧方澄工位方向，目光由原下垂顺势离开桌面前方。；程序派生身体朝向：[{"kind": "face", "actor": "C02", "target": "", "value": "toward_E01"}] | [{"kind": "face", "actor": "C02", "target": "", "value": "toward_E01"}] |
+| 16.29–16.89秒 | raw_linear_script.beats.2.steps.0 / SH03-A00-G01 / group / 同一原步骤续行（不重演动作） / 林屿右手自方澄桌角一次轻轻捏起浅黄、浅粉、浅蓝三张叠在一起的便利贴。 | [{"kind": "take", "actor": "C02", "target": "P03_Y", "value": "right_hand"}, {"kind": "take", "actor": "C02", "target": "P03_P", "value": "right_hand"}, {"kind": "take", "actor": "C02", "target": "P03_B", "value": "right_hand"}] |
+| 16.89–17.49秒 | raw_linear_script.beats.2.steps.0 / SH03-A00-G02 / group / 同一原步骤续行（不重演动作） / 林屿右手将三张便利贴整叠轻放在自己桌面上，浅黄在前左、浅粉居中、浅蓝在右并排摊开，纸张彼此贴近。 | [{"kind": "place", "actor": "C02", "target": "P03_Y", "value": "surface:E02:left_front"}, {"kind": "place", "actor": "C02", "target": "P03_P", "value": "surface:E02:center"}, {"kind": "place", "actor": "C02", "target": "P03_B", "value": "surface:E02:right"}] |
+| 17.49–17.69秒 | raw_linear_script.beats.2.steps.0 / SH03-A00-G03 / group / 同一原步骤续行（不重演动作） / 林屿右手指尖压住浅黄便利贴的右下边角不动，纸张保持摊平不被掀起。 | [] |
+| 17.69–19.99秒 | raw_linear_script.beats.2.steps.1 / dialogue_0 / dialogue / 林屿：对账，改明细，收尾。 / 林屿随口列清单的低声：语气平直不加重，尾音稍顿成词点，三字节奏均匀带一点理所应当的笃定，不带请求意味；音量偏低，像在自己桌前念出三件待办，气息稳不叹气。 | [] |
+| 19.99–20.49秒 | raw_linear_script.beats.2.steps.2 / SH03-A02-G00 / group / 林屿把黑色签字笔从自己桌沿拿起来，反手握在右手里，笔尖朝方澄那一侧搁在桌沿停住，等她接。 / 林屿右手松开便利贴边角，从自己桌沿自然拿起那支黑色签字笔握在右手掌中。 | [{"kind": "take", "actor": "C02", "target": "P07", "value": "right_hand"}] |
+| 20.49–21.19秒 | raw_linear_script.beats.2.steps.2 / SH03-A02-G01 / group / 同一原步骤续行（不重演动作） / 林屿右手反手将签字笔笔尖朝向方澄那一侧搁在自己桌沿停住，手指轻持笔身不松不推，安静等她来接。 | [] |
+
+尾态：{"C01(方澄)": {"facing": "toward_E01", "gaze": "at_P02", "position": "standing_at_E01", "posture": "standing"}, "C02(林屿)": {"facing": "toward_E01", "gaze": "down_at_E02_desk", "position": "sitting_at_E02", "posture": "sitting"}, "P01(挎包)": {"holder": "none", "location": "surface:E09:backrest"}, "P02(院线电影票根)": {"holder": "none", "location": "surface:E01:corner"}, "P03_B(浅蓝收尾便利贴)": {"holder": "none", "location": "surface:E02:right"}, "P03_P(浅粉改明细便利贴)": {"holder": "none", "location": "surface:E02:center"}, "P03_Y(浅黄对账便利贴)": {"holder": "none", "location": "surface:E02:left_front"}, "P04(咖啡杯)": {"holder": "none", "location": "surface:E02:near_edge"}, "P05(客户明细单)": {"holder": "none", "location": "surface:E02:near_E01_edge"}, "P06(结算单)": {"holder": "none", "location": "surface:E02:corner"}, "P07(签字笔)": {"holder": "C02", "location": "right_hand"}}
+
+## SH04（21.19–24.49秒）
+
+新增信息：她不接笔，抬头看他，这一犹豫把拒绝前的压力留在了眼睛里。
+
+观察对象：方澄抬起、准备开口的眼睛。
+
+画面与机位：方澄脸部为主，笔及握笔手在下沿，不遮挡她从笔抬眼的目光；前侧方澄面部中近景，眼区清晰，递向她的笔在画面下沿作陪体
+
+切镜理由：等她抬眼对上林屿的目光，看完这一次不接的犹豫再交拒绝。
+
+刺激与反应要求：[{"id": "W_SH04_1", "subject": "C01", "stimulus_ref": "raw_linear_script.beats.2.steps.2", "reaction_ref": "raw_linear_script.beats.3.steps.0", "relation": "after", "minimum_seconds": 2.0}]
+
+首态：{"C01(方澄)": {"facing": "toward_E01", "gaze": "at_P02", "position": "standing_at_E01", "posture": "standing"}, "C02(林屿)": {"facing": "toward_E01", "gaze": "down_at_E02_desk", "position": "sitting_at_E02", "posture": "sitting"}, "P01(挎包)": {"holder": "none", "location": "surface:E09:backrest"}, "P02(院线电影票根)": {"holder": "none", "location": "surface:E01:corner"}, "P03_B(浅蓝收尾便利贴)": {"holder": "none", "location": "surface:E02:right"}, "P03_P(浅粉改明细便利贴)": {"holder": "none", "location": "surface:E02:center"}, "P03_Y(浅黄对账便利贴)": {"holder": "none", "location": "surface:E02:left_front"}, "P04(咖啡杯)": {"holder": "none", "location": "surface:E02:near_edge"}, "P05(客户明细单)": {"holder": "none", "location": "surface:E02:near_E01_edge"}, "P06(结算单)": {"holder": "none", "location": "surface:E02:corner"}, "P07(签字笔)": {"holder": "C02", "location": "right_hand"}}
+
+| 全片时间 | 原文与表演 | 实际操作 |
+| --- | --- | --- |
+| 21.19–21.69秒 | raw_linear_script.beats.3.steps.0 / SH04-A00-G00 / group / 方澄低头看了一眼停在自己面前、笔尖朝向自己的签字笔，没伸手拿，目光顺着那只握笔停住的手抬向林屿的眼睛。 / 方澄目光落在林屿右手握着的黑色签字笔上，笔尖仍朝向自己这一侧，她没伸手，指尖微收了一下又松开。 | [{"kind": "gaze", "actor": "C01", "target": "", "value": "at_P07"}] |
+| 21.69–22.29秒 | raw_linear_script.beats.3.steps.0 / SH04-A00-G01 / group / 同一原步骤续行（不重演动作） / 她的视线顺着那只握笔停住的手腕往上抬，慢慢对上了林屿的眼睛，下颌没有动。 | [{"kind": "gaze", "actor": "C01", "target": "", "value": "at_C02_eyes"}] |
+| 22.29–24.49秒 | raw_linear_script.beats.3.steps.0 / SH04-A00-G02 / group / 同一原步骤续行（不重演动作） / 她就这样看着他，嘴唇轻轻抿了一下又松开，呼吸比刚才浅一点，眼睛里那种被默认接活的压力慢慢被自己按下去。 | [] |
+
+尾态：{"C01(方澄)": {"facing": "toward_E01", "gaze": "at_C02_eyes", "position": "standing_at_E01", "posture": "standing"}, "C02(林屿)": {"facing": "toward_E01", "gaze": "down_at_E02_desk", "position": "sitting_at_E02", "posture": "sitting"}, "P01(挎包)": {"holder": "none", "location": "surface:E09:backrest"}, "P02(院线电影票根)": {"holder": "none", "location": "surface:E01:corner"}, "P03_B(浅蓝收尾便利贴)": {"holder": "none", "location": "surface:E02:right"}, "P03_P(浅粉改明细便利贴)": {"holder": "none", "location": "surface:E02:center"}, "P03_Y(浅黄对账便利贴)": {"holder": "none", "location": "surface:E02:left_front"}, "P04(咖啡杯)": {"holder": "none", "location": "surface:E02:near_edge"}, "P05(客户明细单)": {"holder": "none", "location": "surface:E02:near_E01_edge"}, "P06(结算单)": {"holder": "none", "location": "surface:E02:corner"}, "P07(签字笔)": {"holder": "C02", "location": "right_hand"}}
+
+## SH05（24.49–31.66秒）
+
+新增信息：方澄亲口给出不可打折的理由，并把今晚留给自己；这是拒绝站住的瞬间，观众第一次明确听见她开口说不。
+
+观察对象：方澄的眼睛和嘴，两句原对白的画内完整呈现，不在句间切走。
+
+画面与机位：方澄眼睛和嘴为中心，背景弱化但不改变人物或道具状态；前侧方澄面部近景，固定镜头完整容纳两句原对白，不在句间切镜
+
+切镜理由：把整个拒绝交在方澄一镜里完整读完，不在两句之间切去林屿；切镜必须等两句全部说完后，才交给B06林屿面对被拒绝的反应。
+
+刺激与反应要求：[{"id": "W_SH05_1", "subject": "C01", "stimulus_ref": "raw_linear_script.beats.4.steps.0", "reaction_ref": "raw_linear_script.beats.4.steps.0", "relation": "during", "minimum_seconds": 2.0}, {"id": "W_SH05_2", "subject": "C01", "stimulus_ref": "raw_linear_script.beats.4.steps.1", "reaction_ref": "raw_linear_script.beats.4.steps.1", "relation": "during", "minimum_seconds": 1.5}]
+
+首态：{"C01(方澄)": {"facing": "toward_E01", "gaze": "at_C02_eyes", "position": "standing_at_E01", "posture": "standing"}, "C02(林屿)": {"facing": "toward_E01", "gaze": "down_at_E02_desk", "position": "sitting_at_E02", "posture": "sitting"}, "P01(挎包)": {"holder": "none", "location": "surface:E09:backrest"}, "P02(院线电影票根)": {"holder": "none", "location": "surface:E01:corner"}, "P03_B(浅蓝收尾便利贴)": {"holder": "none", "location": "surface:E02:right"}, "P03_P(浅粉改明细便利贴)": {"holder": "none", "location": "surface:E02:center"}, "P03_Y(浅黄对账便利贴)": {"holder": "none", "location": "surface:E02:left_front"}, "P04(咖啡杯)": {"holder": "none", "location": "surface:E02:near_edge"}, "P05(客户明细单)": {"holder": "none", "location": "surface:E02:near_E01_edge"}, "P06(结算单)": {"holder": "none", "location": "surface:E02:corner"}, "P07(签字笔)": {"holder": "C02", "location": "right_hand"}}
+
+| 全片时间 | 原文与表演 | 实际操作 |
+| --- | --- | --- |
+| 24.49–29.93秒 | raw_linear_script.beats.4.steps.0 / dialogue_0 / dialogue / 方澄：今晚不行，七点我有一场早就买好票的电影。 / 方澄的目光稳稳落在林屿眼睛上，没有躲，也没有多余的动作。她微微吸了一口气，让气息自然沉下来，然后开口，嗓音不高不低，平稳而确定——"今晚不行，七点我有一场早就买好票的电影。"说到"电影"两个字时，嘴唇轻轻合拢，尾音干净地收住，不留余地，也没有解释的余地。气息从胸腔自然过渡，她没有刻意换气，只是让呼吸在句与句之间轻轻续上。停了一拍，视线依旧没有移开，第二句话比第一句轻了一档，却更加明确——"这次我先走。"嘴唇的动作幅度更小，几乎只是轻轻一碰，但每个字都听得清，说完，嘴自然闭上，目光仍稳稳留在林屿脸上，没有抬眼去确认他的反应，也没有低下去找台阶。整张脸是平静的，没有歉意，没有笑意，也没有歉疚的软化，只是把今晚留给了自己。 | [] |
+| 29.93–31.66秒 | raw_linear_script.beats.4.steps.1 / dialogue_1 / dialogue / 方澄：这次我先走。 / 方澄的目光稳稳落在林屿眼睛上，没有躲，也没有多余的动作。她微微吸了一口气，让气息自然沉下来，然后开口，嗓音不高不低，平稳而确定——"今晚不行，七点我有一场早就买好票的电影。"说到"电影"两个字时，嘴唇轻轻合拢，尾音干净地收住，不留余地，也没有解释的余地。气息从胸腔自然过渡，她没有刻意换气，只是让呼吸在句与句之间轻轻续上。停了一拍，视线依旧没有移开，第二句话比第一句轻了一档，却更加明确——"这次我先走。"嘴唇的动作幅度更小，几乎只是轻轻一碰，但每个字都听得清，说完，嘴自然闭上，目光仍稳稳留在林屿脸上，没有抬眼去确认他的反应，也没有低下去找台阶。整张脸是平静的，没有歉意，没有笑意，也没有歉疚的软化，只是把今晚留给了自己。 | [] |
+
+尾态：{"C01(方澄)": {"facing": "toward_E01", "gaze": "at_C02_eyes", "position": "standing_at_E01", "posture": "standing"}, "C02(林屿)": {"facing": "toward_E01", "gaze": "down_at_E02_desk", "position": "sitting_at_E02", "posture": "sitting"}, "P01(挎包)": {"holder": "none", "location": "surface:E09:backrest"}, "P02(院线电影票根)": {"holder": "none", "location": "surface:E01:corner"}, "P03_B(浅蓝收尾便利贴)": {"holder": "none", "location": "surface:E02:right"}, "P03_P(浅粉改明细便利贴)": {"holder": "none", "location": "surface:E02:center"}, "P03_Y(浅黄对账便利贴)": {"holder": "none", "location": "surface:E02:left_front"}, "P04(咖啡杯)": {"holder": "none", "location": "surface:E02:near_edge"}, "P05(客户明细单)": {"holder": "none", "location": "surface:E02:near_E01_edge"}, "P06(结算单)": {"holder": "none", "location": "surface:E02:corner"}, "P07(签字笔)": {"holder": "C02", "location": "right_hand"}}
+
+## SH06（31.66–38.06秒）
+
+新增信息：方澄已明确拒绝并交出今晚留给自己的理由。林屿第一次在桌面手势上被顶回来，被迫自己面对这份收尾。镜头要把他的停顿、看包、回看便利贴和明细、再把笔收回自己面前这一连串边界转移，一次读清：不再假装这件事，也没替自己开脱，下一镜就由他自己亲手对下去。
+
+观察对象：林屿的脸、眼睛和持笔右手同时可读。前侧中近景框住他面部与眼区，下沿保留桌面持笔手与三张便利贴和明细、结算单的边沿。
+
+画面与机位：林屿面部停顿及看包回看纸的眼区为主，下沿保留原收笔动作；前侧林屿面部中近景，脸和眼清晰，持笔右手在画面下沿可读
+
+切镜理由：切在林屿听完拒绝之后的脸眼停顿、视线从方澄椅背挎包回到自己便利贴与明细、再把笔收回结算单边沿的整段反应已读清之后。下一镜才转B07他自己对照结算单一行行改账，此时边界已经由他自己收回去，不留手部或背影的半截状态。
+
+刺激与反应要求：[{"id": "W_SH06_1", "subject": "C02", "stimulus_ref": "raw_linear_script.beats.4.steps.1", "reaction_ref": "raw_linear_script.beats.5.steps.0", "relation": "after", "minimum_seconds": 2.0}]
+
+首态：{"C01(方澄)": {"facing": "toward_E01", "gaze": "at_C02_eyes", "position": "standing_at_E01", "posture": "standing"}, "C02(林屿)": {"facing": "toward_E01", "gaze": "down_at_E02_desk", "position": "sitting_at_E02", "posture": "sitting"}, "P01(挎包)": {"holder": "none", "location": "surface:E09:backrest"}, "P02(院线电影票根)": {"holder": "none", "location": "surface:E01:corner"}, "P03_B(浅蓝收尾便利贴)": {"holder": "none", "location": "surface:E02:right"}, "P03_P(浅粉改明细便利贴)": {"holder": "none", "location": "surface:E02:center"}, "P03_Y(浅黄对账便利贴)": {"holder": "none", "location": "surface:E02:left_front"}, "P04(咖啡杯)": {"holder": "none", "location": "surface:E02:near_edge"}, "P05(客户明细单)": {"holder": "none", "location": "surface:E02:near_E01_edge"}, "P06(结算单)": {"holder": "none", "location": "surface:E02:corner"}, "P07(签字笔)": {"holder": "C02", "location": "right_hand"}}
+
+| 全片时间 | 原文与表演 | 实际操作 |
+| --- | --- | --- |
+| 31.66–34.06秒 | raw_linear_script.beats.5.steps.0 / SH06-A00-G00 / group / 林屿握笔的右手在桌沿停住，笔尖仍朝方澄那一侧。他看了一眼方澄椅背上挂着的米灰色挎包，又看回自己面前摊着的浅黄便利贴和那张A4横版客户明细单，没接她的话。 / 林屿听完拒绝后脸眼停顿一瞬，呼吸略浅；右手握笔停桌沿未动，笔尖仍朝向方澄一侧。 | [] |
+| 34.06–35.26秒 | raw_linear_script.beats.5.steps.0 / SH06-A00-G01 / group / 同一原步骤续行（不重演动作） / 林屿视线抬起，移向方澄椅背上挂着的米灰色挎包，眨一下眼。 | [{"kind": "gaze", "actor": "C02", "target": "", "value": "at_P01_on_E09_backrest"}] |
+| 35.26–36.46秒 | raw_linear_script.beats.5.steps.0 / SH06-A00-G02 / group / 同一原步骤续行（不重演动作） / 林屿视线由挎包回到自己面前摊着的浅黄便利贴和A4横版客户明细单红笔批注上。 | [{"kind": "gaze", "actor": "C02", "target": "", "value": "at_E02_P03_Y_and_P05"}] |
+| 36.46–38.06秒 | raw_linear_script.beats.5.steps.1 / SH06-A01-G00 / group / 林屿把右手那支笔尖朝外的签字笔收回自己面前，搁在那张结算单边沿，笔尖不再指向方澄。 / 林屿右手收腕，把那支笔尖朝外的黑色签字笔收回自己面前，搁在A4纵版结算单边沿，手指不离笔身，笔尖不再指向方澄。 | [] |
+
+尾态：{"C01(方澄)": {"facing": "toward_E01", "gaze": "at_C02_eyes", "position": "standing_at_E01", "posture": "standing"}, "C02(林屿)": {"facing": "toward_E01", "gaze": "at_E02_P03_Y_and_P05", "position": "sitting_at_E02", "posture": "sitting"}, "P01(挎包)": {"holder": "none", "location": "surface:E09:backrest"}, "P02(院线电影票根)": {"holder": "none", "location": "surface:E01:corner"}, "P03_B(浅蓝收尾便利贴)": {"holder": "none", "location": "surface:E02:right"}, "P03_P(浅粉改明细便利贴)": {"holder": "none", "location": "surface:E02:center"}, "P03_Y(浅黄对账便利贴)": {"holder": "none", "location": "surface:E02:left_front"}, "P04(咖啡杯)": {"holder": "none", "location": "surface:E02:near_edge"}, "P05(客户明细单)": {"holder": "none", "location": "surface:E02:near_E01_edge"}, "P06(结算单)": {"holder": "none", "location": "surface:E02:corner"}, "P07(签字笔)": {"holder": "C02", "location": "right_hand"}}
+
+## SH07（38.06–46.36秒）
+
+新增信息：让他自己接手对账的难处被观众看见。
+
+观察对象：右手笔尖、明细单红批数字、结算单两边与纸的比对位置。
+
+画面与机位：两份单据与右手笔同时可读；只跟随原文实际比对动作，不新增纸张反复移动；桌面斜俯近景，完整容纳明细单、结算单及林屿右手黑色签字笔
+
+切镜理由：他自己把对不上的项改清后，转B08方澄拿包与票出门。
+
+刺激与反应要求：[]
+
+首态：{"C01(方澄)": {"facing": "toward_E01", "gaze": "at_C02_eyes", "position": "standing_at_E01", "posture": "standing"}, "C02(林屿)": {"facing": "toward_E01", "gaze": "at_E02_P03_Y_and_P05", "position": "sitting_at_E02", "posture": "sitting"}, "P01(挎包)": {"holder": "none", "location": "surface:E09:backrest"}, "P02(院线电影票根)": {"holder": "none", "location": "surface:E01:corner"}, "P03_B(浅蓝收尾便利贴)": {"holder": "none", "location": "surface:E02:right"}, "P03_P(浅粉改明细便利贴)": {"holder": "none", "location": "surface:E02:center"}, "P03_Y(浅黄对账便利贴)": {"holder": "none", "location": "surface:E02:left_front"}, "P04(咖啡杯)": {"holder": "none", "location": "surface:E02:near_edge"}, "P05(客户明细单)": {"holder": "none", "location": "surface:E02:near_E01_edge"}, "P06(结算单)": {"holder": "none", "location": "surface:E02:corner"}, "P07(签字笔)": {"holder": "C02", "location": "right_hand"}}
+
+| 全片时间 | 原文与表演 | 实际操作 |
+| --- | --- | --- |
+| 38.06–38.86秒 | raw_linear_script.beats.6.steps.0 / SH07-A00-G00 / group / 林屿重新低头看向那张A4横版客户明细单，用右手那支签字笔在第一处红笔批注旁落字改了一笔，写到第二行数字时停住，把那张A4纵版结算单从桌角拉到明细单旁边对齐，比对后又用笔尖在明细单第二行点了一下，把那个数字划掉重写，写完一笔停一下，再对向结算单继续往下改。 / 林屿重新低头，目光落在面前那张A4横版客户明细单的红笔批注行。 | [{"kind": "gaze", "actor": "C02", "target": "", "value": "at_E02_P05"}] |
+| 38.86–39.86秒 | raw_linear_script.beats.6.steps.0 / SH07-A00-G01 / group / 同一原步骤续行（不重演动作） / 右手握笔，笔尖压在明细单第一处红笔批注旁，落下一笔修改的字，笔画干净不拖。 | [] |
+| 39.86–40.56秒 | raw_linear_script.beats.6.steps.0 / SH07-A00-G02 / group / 同一原步骤续行（不重演动作） / 笔尖移到第二行数字处停住，他眉头微拧，意识到这一格对不上。 | [] |
+| 40.56–41.36秒 | raw_linear_script.beats.6.steps.0 / SH07-A00-G03 / group / 同一原步骤续行（不重演动作） / 左手抬起，把桌角那张A4纵版结算单拉到明细单右侧、与明细单基本对齐后松手。 | [{"kind": "slide", "actor": "C02", "target": "P06", "value": "surface:E02:beside_P05"}] |
+| 41.36–42.26秒 | raw_linear_script.beats.6.steps.0 / SH07-A00-G04 / group / 同一原步骤续行（不重演动作） / 目光从明细单第二行移向旁边那张结算单同一行，逐字比对，眼球微转。 | [{"kind": "gaze", "actor": "C02", "target": "", "value": "at_E02_P06"}] |
+| 42.26–42.76秒 | raw_linear_script.beats.6.steps.0 / SH07-A00-G05 / group / 同一原步骤续行（不重演动作） / 右手笔尖回到明细单第二行上，轻轻点一下那格数字，确认要改的位置。 | [] |
+| 42.76–43.76秒 | raw_linear_script.beats.6.steps.0 / SH07-A00-G06 / group / 同一原步骤续行（不重演动作） / 笔尖划掉原数字，停顿半拍后写下新的正确数字，笔画紧贴纸面。 | [] |
+| 43.76–44.36秒 | raw_linear_script.beats.6.steps.0 / SH07-A00-G07 / group / 同一原步骤续行（不重演动作） / 写完这一笔，笔尖抬离纸面，停住，呼吸短浅一下。 | [] |
+| 44.36–45.06秒 | raw_linear_script.beats.6.steps.0 / SH07-A00-G08 / group / 同一原步骤续行（不重演动作） / 目光再次看向右侧那张结算单下方的下一行，提前对一遍要改的项。 | [{"kind": "gaze", "actor": "C02", "target": "", "value": "at_E02_P06"}] |
+| 45.06–45.56秒 | raw_linear_script.beats.6.steps.0 / SH07-A00-G09 / group / 同一原步骤续行（不重演动作） / 目光明确回到明细单下方那一行待改的位置，落定。 | [{"kind": "gaze", "actor": "C02", "target": "", "value": "at_E02_P05"}] |
+| 45.56–46.36秒 | raw_linear_script.beats.6.steps.0 / SH07-A00-G10 / group / 同一原步骤续行（不重演动作） / 右手笔尖落下，继续一行一行地往下写，动作比第一处稍稳。 | [] |
+
+尾态：{"C01(方澄)": {"facing": "toward_E01", "gaze": "at_C02_eyes", "position": "standing_at_E01", "posture": "standing"}, "C02(林屿)": {"facing": "toward_E01", "gaze": "at_E02_P05", "position": "sitting_at_E02", "posture": "sitting"}, "P01(挎包)": {"holder": "none", "location": "surface:E09:backrest"}, "P02(院线电影票根)": {"holder": "none", "location": "surface:E01:corner"}, "P03_B(浅蓝收尾便利贴)": {"holder": "none", "location": "surface:E02:right"}, "P03_P(浅粉改明细便利贴)": {"holder": "none", "location": "surface:E02:center"}, "P03_Y(浅黄对账便利贴)": {"holder": "none", "location": "surface:E02:left_front"}, "P04(咖啡杯)": {"holder": "none", "location": "surface:E02:near_edge"}, "P05(客户明细单)": {"holder": "none", "location": "surface:E02:near_E01_edge"}, "P06(结算单)": {"holder": "none", "location": "surface:E02:beside_P05"}, "P07(签字笔)": {"holder": "C02", "location": "right_hand"}}
+
+## SH08（46.36–53.56秒）
+
+新增信息：方澄把留给自己的一晚真正从工位取走：挎包上肩、电影票离桌、推门离开办公室，把时间交给自己，观众看到她赴约的清晰出口。
+
+观察对象：方澄的左手取包佩戴左肩、右手拿票、空出的左手推门走出的整套执行
+
+画面与机位：保留左肩挎包、右手电影票与自由左手推门的原分工，单镜连续，不重设初态；方澄前侧平视中景，轻跟从工位到门外的完整原动作；不添加起坐或关门
+
+切镜理由：等她已走出办公室门后再切，下一镜直接接她在走廊外低头看票呼气，不在门内多停一拍。
+
+刺激与反应要求：[]
+
+首态：{"C01(方澄)": {"facing": "toward_E01", "gaze": "at_C02_eyes", "position": "standing_at_E01", "posture": "standing"}, "C02(林屿)": {"facing": "toward_E01", "gaze": "at_E02_P05", "position": "sitting_at_E02", "posture": "sitting"}, "P01(挎包)": {"holder": "none", "location": "surface:E09:backrest"}, "P02(院线电影票根)": {"holder": "none", "location": "surface:E01:corner"}, "P03_B(浅蓝收尾便利贴)": {"holder": "none", "location": "surface:E02:right"}, "P03_P(浅粉改明细便利贴)": {"holder": "none", "location": "surface:E02:center"}, "P03_Y(浅黄对账便利贴)": {"holder": "none", "location": "surface:E02:left_front"}, "P04(咖啡杯)": {"holder": "none", "location": "surface:E02:near_edge"}, "P05(客户明细单)": {"holder": "none", "location": "surface:E02:near_E01_edge"}, "P06(结算单)": {"holder": "none", "location": "surface:E02:beside_P05"}, "P07(签字笔)": {"holder": "C02", "location": "right_hand"}}
+
+| 全片时间 | 原文与表演 | 实际操作 |
+| --- | --- | --- |
+| 46.36–47.56秒 | raw_linear_script.beats.7.steps.0 / SH08-A00-G00 / group / 方澄左手从椅背上取下米灰色挎包挎到左肩上，右手拿起桌角那张米白底深红字的院线电影票，朝办公室门方向走出两步。 / 方澄左手从椅背取下米灰色挎包，自然挎上左肩，左手松开挎包带落回身侧，动作平稳不急。 | [{"kind": "take", "actor": "C01", "target": "P01", "value": "worn_on_left_shoulder"}] |
+| 47.56–48.56秒 | raw_linear_script.beats.7.steps.0 / SH08-A00-G01 / group / 同一原步骤续行（不重演动作） / 方澄右手从桌角拿起那张米白底深红字的院线电影票，指尖捏住票沿握稳，目光不在票面上停留。 | [{"kind": "take", "actor": "C01", "target": "P02", "value": "right_hand"}] |
+| 48.56–49.16秒 | raw_linear_script.beats.7.steps.0 / SH08-A00-G02 / group / 同一原步骤续行（不重演动作） / 方澄的视线平稳地从原位抬起，转向办公室门方向的走廊出口，步调不慌，眼神自然。 | [{"kind": "gaze", "actor": "C01", "target": "", "value": "along_E08_to_corridor_exit"}] |
+| 49.16–49.66秒 | raw_linear_script.beats.7.steps.0 / SH08-A00-G03 / group / 同一原步骤续行（不重演动作） / 方澄上身自然转向办公室门方向，肩线从原朝向工位转为朝向出口，转体过程连贯不停顿。；程序派生身体朝向：[{"kind": "face", "actor": "C01", "target": "", "value": "toward_corridor_exit"}] | [{"kind": "face", "actor": "C01", "target": "", "value": "toward_corridor_exit"}] |
+| 49.66–51.06秒 | raw_linear_script.beats.7.steps.0 / SH08-A00-G04 / group / 同一原步骤续行（不重演动作） / 方澄挎包在左肩、电影票在右手，向办公室门方向迈出两步，平稳走到门内停下，不回头，不重看工位。 | [{"kind": "move", "actor": "C01", "target": "", "value": "standing_at_E08_inside"}] |
+| 51.06–52.26秒 | raw_linear_script.beats.7.steps.1 / SH08-A01-G00 / group / 方澄空出左手推开那扇米灰色木纹平板门，走出办公室。 / 方澄空出的左手抬起，掌心轻推那扇米灰色木纹平板门，门向前打开让出通道，推力自然不过猛，右手电影票保持不动。 | [] |
+| 52.26–53.56秒 | raw_linear_script.beats.7.steps.1 / SH08-A01-G01 / group / 同一原步骤续行（不重演动作） / 方澄左脚先跨出门槛走入走廊，挎包左肩、票在右手，保持走出方向，不回头看室内，不在门口停留呼气。 | [{"kind": "move", "actor": "C01", "target": "", "value": "standing_in_corridor_outside_E08"}] |
+
+尾态：{"C01(方澄)": {"facing": "toward_corridor_exit", "gaze": "along_E08_to_corridor_exit", "position": "standing_in_corridor_outside_E08", "posture": "standing"}, "C02(林屿)": {"facing": "toward_E01", "gaze": "at_E02_P05", "position": "sitting_at_E02", "posture": "sitting"}, "P01(挎包)": {"holder": "C01", "location": "worn_on_left_shoulder"}, "P02(院线电影票根)": {"holder": "C01", "location": "right_hand"}, "P03_B(浅蓝收尾便利贴)": {"holder": "none", "location": "surface:E02:right"}, "P03_P(浅粉改明细便利贴)": {"holder": "none", "location": "surface:E02:center"}, "P03_Y(浅黄对账便利贴)": {"holder": "none", "location": "surface:E02:left_front"}, "P04(咖啡杯)": {"holder": "none", "location": "surface:E02:near_edge"}, "P05(客户明细单)": {"holder": "none", "location": "surface:E02:near_E01_edge"}, "P06(结算单)": {"holder": "none", "location": "surface:E02:beside_P05"}, "P07(签字笔)": {"holder": "C02", "location": "right_hand"}}
+
+## SH09（53.56–57.26秒）
+
+新增信息：方澄已经在走廊里争取到自己的一晚：她右手捏着电影票，低头看票面后轻轻呼出一口气，这是她为自己赴约的可见回报，不是回头、不是和解、也不是再被任何活叫回去。
+
+观察对象：方澄脸、目光向下的眼、右手那张米白底深红字电影票和轻呼气的口鼻，三者要在同一镜里同时被观众读清。
+
+画面与机位：面部和持票手同时入画，背景走廊弱化；不拍纯背影、不新增回头或对话；走廊前侧三分之二面部中近景，面部、右手电影票与轻呼气同框清楚可读
+
+切镜理由：B09的看票和轻呼气已经把她争取到自己时间的释放交代清楚，下一切到B10林屿继续自己一行一行对账，由各自承担收束本镜，不再加回头、对话或别的动作。
+
+刺激与反应要求：[{"id": "W_SH09_1", "subject": "C01", "stimulus_ref": "raw_linear_script.beats.7.steps.1", "reaction_ref": "raw_linear_script.beats.8.steps.0", "relation": "after", "minimum_seconds": 2.0}]
+
+首态：{"C01(方澄)": {"facing": "toward_corridor_exit", "gaze": "along_E08_to_corridor_exit", "position": "standing_in_corridor_outside_E08", "posture": "standing"}, "C02(林屿)": {"facing": "toward_E01", "gaze": "at_E02_P05", "position": "sitting_at_E02", "posture": "sitting"}, "P01(挎包)": {"holder": "C01", "location": "worn_on_left_shoulder"}, "P02(院线电影票根)": {"holder": "C01", "location": "right_hand"}, "P03_B(浅蓝收尾便利贴)": {"holder": "none", "location": "surface:E02:right"}, "P03_P(浅粉改明细便利贴)": {"holder": "none", "location": "surface:E02:center"}, "P03_Y(浅黄对账便利贴)": {"holder": "none", "location": "surface:E02:left_front"}, "P04(咖啡杯)": {"holder": "none", "location": "surface:E02:near_edge"}, "P05(客户明细单)": {"holder": "none", "location": "surface:E02:near_E01_edge"}, "P06(结算单)": {"holder": "none", "location": "surface:E02:beside_P05"}, "P07(签字笔)": {"holder": "C02", "location": "right_hand"}}
+
+| 全片时间 | 原文与表演 | 实际操作 |
+| --- | --- | --- |
+| 53.56–55.06秒 | raw_linear_script.beats.8.steps.0 / SH09-A00-G00 / group / 方澄站在办公室门外走廊上，右手捏着那张米白底深红字的院线电影票，低头看了一眼票面，轻轻呼出一口气。 / 方澄站在走廊里，挎包斜挂在左肩，右手在腰部高度捏着那张米白底深红字的院线电影票，肩膀微沉。她先微微低头，目光顺着右手落到票面上，睫毛轻压，停留片刻把票上的开场时间与座位号看清楚，嘴角没有动，安静地把票再捏稳一些。 | [{"kind": "gaze", "actor": "C01", "target": "", "value": "at_P02_in_right_hand"}] |
+| 55.06–57.26秒 | raw_linear_script.beats.8.steps.0 / SH09-A00-G01 / group / 同一原步骤续行（不重演动作） / 看完票后她轻轻把气从鼻腔呼出，嘴唇微启，肩线顺势松下来一点，眼睛没有抬向镜头，也没有回头看办公室门，整个人停在走廊这一格至少两秒，把属于自己的这一晚接住。 | [] |
+
+尾态：{"C01(方澄)": {"facing": "toward_corridor_exit", "gaze": "at_P02_in_right_hand", "position": "standing_in_corridor_outside_E08", "posture": "standing"}, "C02(林屿)": {"facing": "toward_E01", "gaze": "at_E02_P05", "position": "sitting_at_E02", "posture": "sitting"}, "P01(挎包)": {"holder": "C01", "location": "worn_on_left_shoulder"}, "P02(院线电影票根)": {"holder": "C01", "location": "right_hand"}, "P03_B(浅蓝收尾便利贴)": {"holder": "none", "location": "surface:E02:right"}, "P03_P(浅粉改明细便利贴)": {"holder": "none", "location": "surface:E02:center"}, "P03_Y(浅黄对账便利贴)": {"holder": "none", "location": "surface:E02:left_front"}, "P04(咖啡杯)": {"holder": "none", "location": "surface:E02:near_edge"}, "P05(客户明细单)": {"holder": "none", "location": "surface:E02:near_E01_edge"}, "P06(结算单)": {"holder": "none", "location": "surface:E02:beside_P05"}, "P07(签字笔)": {"holder": "C02", "location": "right_hand"}}
+
+## SH10（57.26–62.26秒）
+
+新增信息：林屿独自低头对账，一个人把手里的事收回自己手里，方澄那晚留给了自己，这一段落定。
+
+观察对象：林屿的右手、签字笔与两份单据的对账动作，附带桌面杯与浅黄便利贴作背景。
+
+画面与机位：保持工作者与当前桌面物件同框，杯和便利贴作背景，不新增物件或动作；林屿工位前侧中近景，侧脸、右手黑色签字笔及两份单据同框
+
+切镜理由：看见他一个人收下这件事，对账落到具体动作上，全片在此处自然结束。
+
+刺激与反应要求：[]
+
+首态：{"C01(方澄)": {"facing": "toward_corridor_exit", "gaze": "at_P02_in_right_hand", "position": "standing_in_corridor_outside_E08", "posture": "standing"}, "C02(林屿)": {"facing": "toward_E01", "gaze": "at_E02_P05", "position": "sitting_at_E02", "posture": "sitting"}, "P01(挎包)": {"holder": "C01", "location": "worn_on_left_shoulder"}, "P02(院线电影票根)": {"holder": "C01", "location": "right_hand"}, "P03_B(浅蓝收尾便利贴)": {"holder": "none", "location": "surface:E02:right"}, "P03_P(浅粉改明细便利贴)": {"holder": "none", "location": "surface:E02:center"}, "P03_Y(浅黄对账便利贴)": {"holder": "none", "location": "surface:E02:left_front"}, "P04(咖啡杯)": {"holder": "none", "location": "surface:E02:near_edge"}, "P05(客户明细单)": {"holder": "none", "location": "surface:E02:near_E01_edge"}, "P06(结算单)": {"holder": "none", "location": "surface:E02:beside_P05"}, "P07(签字笔)": {"holder": "C02", "location": "right_hand"}}
+
+| 全片时间 | 原文与表演 | 实际操作 |
+| --- | --- | --- |
+| 57.26–58.46秒 | raw_linear_script.beats.9.steps.0 / SH10-A00-G00 / group / 林屿仍坐在工位前，没抬头去喊她，右手里那支黑色签字笔继续在那张A4横版客户明细单的红笔批注旁一行一行改下去，每写一笔就把笔尖挪向旁边那张结算单比对一次，白色陶瓷咖啡杯没动，那张浅黄便利贴压在他左手边的桌面。 / 右手持黑色签字笔落在客户明细单下一处红笔批注旁，原位接续写下一笔，手腕稳，不抬眼。 | [] |
+| 58.46–59.06秒 | raw_linear_script.beats.9.steps.0 / SH10-A00-G01 / group / 同一原步骤续行（不重演动作） / 落笔这一项收住，原手腕带笔尖向右挪一小段，停向旁边A4纵版结算单那一栏数字。 | [] |
+| 59.06–59.86秒 | raw_linear_script.beats.9.steps.0 / SH10-A00-G02 / group / 同一原步骤续行（不重演动作） / 目光顺着笔尖方向略向右侧那张结算单看，对准那一行数字停住比对，面部保持原抿唇专注相，不抬眼去门口。 | [{"kind": "gaze", "actor": "C02", "target": "", "value": "at_E02_P06"}] |
+| 59.86–60.56秒 | raw_linear_script.beats.9.steps.0 / SH10-A00-G03 / group / 同一原步骤续行（不重演动作） / 视线从结算单回到正下方那张客户明细单的下一行数字上，停在该行起点，握笔姿态不变。 | [{"kind": "gaze", "actor": "C02", "target": "", "value": "at_E02_P05"}] |
+| 60.56–61.56秒 | raw_linear_script.beats.9.steps.0 / SH10-A00-G04 / group / 同一原步骤续行（不重演动作） / 右手带笔尖落回明细单这一行，原位沿该行数字逐字核改下一笔，笔迹稳而不快。 | [] |
+| 61.56–62.26秒 | raw_linear_script.beats.9.steps.0 / SH10-A00-G05 / group / 同一原步骤续行（不重演动作） / 这一笔收住，手腕再带笔尖小幅向右挪向结算单继续比对，眼仍低垂，白色陶瓷咖啡杯与左侧浅黄便利贴原位不动。 | [] |
+
+尾态：{"C01(方澄)": {"facing": "toward_corridor_exit", "gaze": "at_P02_in_right_hand", "position": "standing_in_corridor_outside_E08", "posture": "standing"}, "C02(林屿)": {"facing": "toward_E01", "gaze": "at_E02_P05", "position": "sitting_at_E02", "posture": "sitting"}, "P01(挎包)": {"holder": "C01", "location": "worn_on_left_shoulder"}, "P02(院线电影票根)": {"holder": "C01", "location": "right_hand"}, "P03_B(浅蓝收尾便利贴)": {"holder": "none", "location": "surface:E02:right"}, "P03_P(浅粉改明细便利贴)": {"holder": "none", "location": "surface:E02:center"}, "P03_Y(浅黄对账便利贴)": {"holder": "none", "location": "surface:E02:left_front"}, "P04(咖啡杯)": {"holder": "none", "location": "surface:E02:near_edge"}, "P05(客户明细单)": {"holder": "none", "location": "surface:E02:near_E01_edge"}, "P06(结算单)": {"holder": "none", "location": "surface:E02:beside_P05"}, "P07(签字笔)": {"holder": "C02", "location": "right_hand"}}
+
+## 制作交接与待办
+
+1. 在媒体授权范围内先出少量审美样板，由用户确认人物、场景与画风。
+2. 生成或复用资产，把实际选定图片及文件标识回传给导演，重核本安排。
+3. 逐段生成视频；接口成功且文件完整保存后记录 awaiting_human_review。
+4. 用户明确通过当前段后，使用服务返回的原始尾帧续段。

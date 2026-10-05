@@ -1,0 +1,28 @@
+{
+  "schema": "verified_local_fault_memory/v1",
+  "active_binding": {
+    "raw_script_sha256": "465b12b846c5a14581e069d62f0068b0b27d2cb224231f6e7c08eed88301f1f3",
+    "local_input_sha256": "2272668b5ca74ec3564c809000aa2da8eef2a5b0c1fe38244371924ad6e4fd38",
+    "current_shot": "SH03"
+  },
+  "precedence": "Earlier verified constraints remain active unless explicitly corrected by a later source audit. Submit one complete new draft; never splice earlier outputs.",
+  "history": [
+    {
+      "ordinal": 217,
+      "request_sha256": "8fd8bed6b7220424089d014779588c2ecc1a495bfe87119f70fb14290b31c506",
+      "known_status": "contract_rejected",
+      "verified_feedback_inputs": [
+        "六slots完整新表演，原列词对白由程序按约2.3秒插入，动作合计约3秒全镜5–6秒。参考自然短动作：侧身约0.4、整叠take约0.6、同步place约0.6、一次黄角按压约0.2、拿笔约0.5、反握停等约0.7秒；由你独立提交完整秒数与可读表演，不强行压缩对白。每slot只当前动作，取时不摊，摊时不再次揭/取，三贴一起、一压角，浅黄左前固定，笔在右手。dialogue_performance仅原列词随口语气和声音，不夹动作或台词改写；table_hands原说话者画外。正文简洁不再复述整段原动作，不新gaze、搬纸或affect。"
+      ]
+    }
+  ],
+  "current_verified_feedback": {
+    "previous_call": 217,
+    "verified_faults": "重复A0E2导致七行而非六行；拿贴描述出现张一指等乱码；摊贴时写字是原稿外动作且未拿笔；拿笔slot提前反握导致下个slot重复。",
+    "complete_new_performance": "恰A0E0/A0E1/A0E2/A0E3/A1E0/A1E1六行，每行一句朴素能拍的表演，不加小数厘米、手指夹法等无用细节。侧身0.4；右手整叠三色一起取0.6；三色一起落桌黄左前粉中蓝右0.6，不写字不再次取贴；一次指尖压黄角0.2；右手只拿原黑签字笔0.5；最后才反握笔尖朝方澄桌沿停等0.7。原列词对白只正常念对账改明细收尾，无其他话，声音不夹动作。六个事件全新提交，保持5–6秒目标，不拼接原稿，不造笔夹材质或新物件。"
+  },
+  "automatic_retry": false,
+  "model_output_manually_patched": false,
+  "event_plan_sha256_checked_for_all_history": "689376f0105a63cacba6bd2a5002fe7235e474d69d3cb5a4210f518b6d812b27",
+  "input_memory_builder_sha256": "689413bb61fe1d642ff728a4a3564d8a51a3287864d301b098918c29ef744f63"
+}

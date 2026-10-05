@@ -1,0 +1,27 @@
+{
+  "approved_for_film_assembly": true,
+  "module_sha256": "4cb649c92882b9f170f99b5cefd5464a0e221821d7df84ae4697303313861d11",
+  "evidence": [
+    {
+      "path": "new_information_and_purpose",
+      "quote": "林屿独自低头对账，一个人把手里的事收回自己手里，方澄那晚留给了自己，这一段落定。",
+      "finding": "他继续自己的工作、她保留自己的晚上，完整两人结尾。"
+    },
+    {
+      "path": "observation_object",
+      "quote": "林屿的右手、签字笔与两份单据的对账动作，附带桌面杯与浅黄便利贴作背景。",
+      "finding": "原右手笔和两纸为主，杯与黄贴只背景，无搬运。"
+    },
+    {
+      "path": "frame_id",
+      "quote": "lin_table_medium",
+      "finding": "本人和桌面同框证明持续承担。"
+    },
+    {
+      "path": "cut_reason",
+      "quote": "看见他一个人收下这件事，对账落到具体动作上，全片在此处自然结束。",
+      "finding": "实际承担已可见即结束，不添新镜或和解。"
+    }
+  ],
+  "human_quality_approval": false
+}

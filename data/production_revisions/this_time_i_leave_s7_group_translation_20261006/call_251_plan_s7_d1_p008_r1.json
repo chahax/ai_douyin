@@ -1,0 +1,198 @@
+{
+  "schema": "authorized_creative_continuation/v3",
+  "ordinal": 251,
+  "label": "plan_s7_d1_p008_r1",
+  "request": {
+    "role": "writer",
+    "model": "MiniMax-M3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "atomic_event_group_lines/v2。你只翻译已经确定的当前原动作，不创作剧情、不考虑审美，不添加动作或台词。输出七列事件行：group|subject|kind|target|value|satisfies|intent。group只能填下列原动作组标签A/B等，保持原组顺序，不写事件索引或数字；每行七列。事件序号由编译器按行顺序生成。kind只有hold/gaze/face/move/stand/sit/take/place/pass/slide。hold的target/value都是-；gaze/face/move的target为-、value为实际目标或位置；道具操作target道具ID、value实际位置。satisfies无窗口为-，有窗口填要求ID；人物ID也就是操作者。写字/呼吸/握着笔的手腕动作hold，不站起/重拿笔。所有原action完整、状态变化各一行，不能藏于hold。不要JSON、工具调用、表格标题、围栏、编号解释。 情绪只写自然表演，不使用affect状态操作。"
+      },
+      {
+        "role": "user",
+        "content": "{\"role\":\"mechanical_state_translation_only\",\"current_complete_source\":{\"current_shot\":{\"shot_id\":\"SH08\",\"source_step_refs\":[\"raw_linear_script.beats.7.steps.0\",\"raw_linear_script.beats.7.steps.1\"],\"new_information\":\"方澄把留给自己的一晚真正从工位取走：挎包上肩、电影票离桌、推门离开办公室，把时间交给自己，观众看到她赴约的清晰出口。\",\"purpose\":\"方澄把留给自己的一晚真正从工位取走：挎包上肩、电影票离桌、推门离开办公室，把时间交给自己，观众看到她赴约的清晰出口。\",\"observation_object\":\"方澄的左手取包佩戴左肩、右手拿票、空出的左手推门走出的整套执行\",\"camera\":\"方澄前侧平视中景，轻跟从工位到门外的完整原动作；不添加起坐或关门\",\"composition\":\"保留左肩挎包、右手电影票与自由左手推门的原分工，单镜连续，不重设初态\",\"cut_reason\":\"等她已走出办公室门后再切，下一镜直接接她在走廊外低头看票呼气，不在门内多停一拍。\",\"dialogue_mode\":\"无对白\",\"performance_requirements\":[]},\"ordered_complete_current_steps\":[{\"source_step_ref\":\"raw_linear_script.beats.7.steps.0\",\"kind\":\"action\",\"speaker\":\"\",\"text\":\"方澄左手从椅背上取下米灰色挎包挎到左肩上，右手拿起桌角那张米白底深红字的院线电影票，朝办公室门方向走出两步。\"},{\"source_step_ref\":\"raw_linear_script.beats.7.steps.1\",\"kind\":\"action\",\"speaker\":\"\",\"text\":\"方澄空出左手推开那扇米灰色木纹平板门，走出办公室。\"}],\"actual_start_state\":{\"C01\":{\"affect\":\"neutral\",\"facing\":\"toward_E01\",\"gaze\":\"at_C02_eyes\",\"position\":\"standing_at_E01\",\"posture\":\"standing\"},\"C02\":{\"affect\":\"neutral\",\"facing\":\"toward_E01\",\"gaze\":\"at_E02_P05\",\"position\":\"sitting_at_E02\",\"posture\":\"sitting\"},\"P01\":{\"holder\":\"none\",\"location\":\"surface:E09:backrest\"},\"P02\":{\"holder\":\"none\",\"location\":\"surface:E01:corner\"},\"P03_Y\":{\"holder\":\"none\",\"location\":\"surface:E02:left_front\"},\"P03_P\":{\"holder\":\"none\",\"location\":\"surface:E02:center\"},\"P03_B\":{\"holder\":\"none\",\"location\":\"surface:E02:right\"},\"P04\":{\"holder\":\"none\",\"location\":\"surface:E02:near_edge\"},\"P05\":{\"holder\":\"none\",\"location\":\"surface:E02:near_E01_edge\"},\"P06\":{\"holder\":\"none\",\"location\":\"surface:E02:beside_P05\"},\"P07\":{\"holder\":\"C02\",\"location\":\"right_hand\"}}},\"spatial_contract\":{\"seats\":[{\"seat_id\":\"E09\",\"access_positions\":[\"standing_at_E01\",\"sitting_at_E01\"],\"required_facing\":\"toward_E01\"},{\"seat_id\":\"E10\",\"access_positions\":[\"sitting_at_E02\"],\"required_facing\":\"toward_E02\"}]},\"registered_characters\":[{\"id\":\"C01\",\"name\":\"方澄\"},{\"id\":\"C02\",\"name\":\"林屿\"}],\"registered_prop_ids\":[\"P01\",\"P02\",\"P03_Y\",\"P03_P\",\"P03_B\",\"P04\",\"P05\",\"P06\",\"P07\"],\"source_binding\":{\"raw_script_sha256\":\"465b12b846c5a14581e069d62f0068b0b27d2cb224231f6e7c08eed88301f1f3\",\"raw_source_full_creative_stages\":161,\"complete_direction_source_consumed_R01\":187,\"reference_pack_sha256\":\"bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1\"},\"verified_faults\":{\"source_state\":\"当前C01一直站在E01旁，不站起。左手从E09椅背取P01挎到左肩，持有位置佩戴左肩，左手随后空闲；右手从E01拿P02，位置right_hand。包/票始终随C01，不放下再拿。\",\"complete_action_groups\":\"原action组A：取包上左肩、右手取票、朝门/走廊方向必要face与gaze、走两步到门内E08；原组B：空闲左手推固定门E08（hold，不操作为道具），走出到走廊。身体朝向沿走廊出口路线，出门后不回头面向办公室；不关门、回头、同事、新话或呼气，后者原下一镜。\",\"format_examples_only\":[\"A|C01|take|P01|佩戴左肩|-|左手取包挎左肩\",\"A|C01|take|P02|right_hand|-|右手拿原票\",\"A|C01|face|-|toward_corridor_exit|-|朝原门外路线\",\"A|C01|move|-|standing_at_E08_inside|-|走两步到门内\",\"B|C01|hold|-|-|-|空闲左手推固定门\",\"B|C01|move|-|standing_in_corridor_outside_E08|-|走出办公室\"]},\"original_action_groups\":[{\"label\":\"A\",\"source_step_ref\":\"raw_linear_script.beats.7.steps.0\",\"original_text\":\"方澄左手从椅背上取下米灰色挎包挎到左肩上，右手拿起桌角那张米白底深红字的院线电影票，朝办公室门方向走出两步。\"},{\"label\":\"B\",\"source_step_ref\":\"raw_linear_script.beats.7.steps.1\",\"original_text\":\"方澄空出左手推开那扇米灰色木纹平板门，走出办公室。\"}],\"format_examples_only\":[\"A|C02|gaze|-|at_E02_P05|-|看向原明细单\",\"A|C02|hold|-|-|-|原右手持笔落字\",\"A|C02|slide|P06|surface:E02:beside_P05|-|拉齐原结算单\"]}"
+      }
+    ],
+    "structured_schema": null,
+    "parameters": {
+      "max_completion_tokens": 1800,
+      "temperature": 0.4,
+      "thinking": "disabled"
+    },
+    "input_provenance": {
+      "raw_script_sha256": "465b12b846c5a14581e069d62f0068b0b27d2cb224231f6e7c08eed88301f1f3",
+      "reference_pack_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+      "local_input_sha256": "0b442e78013d08705d9b95a4c4ca15f7b6ee83b2e123d5b5ed7d0a771aa576ae",
+      "current_shot": "SH08",
+      "stage": "mechanical_current_action_translation",
+      "native_object_tool_schema": true,
+      "server_strict_decoding_claimed": false,
+      "reference_consumed_by_creative_upstream": true
+    },
+    "operator_version": "s7_grouped_translation_program_event_indices/v41",
+    "output_contract": "atomic_event_group_lines/v2"
+  },
+  "request_sha256": "1cc23c24760af6100ff8f88eafc80d5f53a599fb5612dd825a57fd07a74b23ae",
+  "source_binding_sha256": "c1ef59de79440ee3cbaa29f7db70694d91c278fded3816c34a062a5ccd0e7d95",
+  "status": "contract_valid",
+  "started_at": "2026-10-05T19:34:23.104209+00:00",
+  "token_reservation": 7828,
+  "automatic_retry": false,
+  "semantic_approval": false,
+  "response_metadata": {
+    "http_status_code": 200,
+    "http_request_id": null,
+    "safe_response_headers": {
+      "trace-id": "07132ec046101d7169b78cbcfe23ff7e",
+      "content-type": "application/json; charset=utf-8",
+      "date": "Mon, 05 Oct 2026 19:34:26 GMT"
+    },
+    "role": "writer",
+    "provider": "minimax",
+    "requested_model": "MiniMax-M3",
+    "response_model": "MiniMax-M3",
+    "response_id": "07132ec046101d7169b78cbcfe23ff7e",
+    "finish_reason": "stop",
+    "thinking_mode": "disabled",
+    "output_mode": "content",
+    "transport_version": "creative_evidenced_role_clients/v1",
+    "strict_mode": false,
+    "server_schema_guarantee": false,
+    "response_body_complete": true,
+    "raw_body_sha256": "73e0680f0ff49e1a8d929d48c1d94f414928e17e8e6df6e99bf316acc7009313",
+    "prompt_tokens": 1655,
+    "completion_tokens": 103,
+    "total_tokens": 1758,
+    "usage_source": "original_provider_response",
+    "provider_status_code": 0,
+    "local_projection": "atomic_event_group_lines/v2",
+    "original_model_event_lines_preserved": true
+  },
+  "response_text": "{\"event_lines\": \"A|C01|take|P01|佩戴左肩|-|左手取包挎左肩\\nA|C01|take|P02|right_hand|-|右手拿原票\\nA|C01|face|-|toward_corridor_exit|-|朝原门外路线\\nA|C01|move|-|standing_at_E08_inside|-|走两步到门内\\nB|C01|hold|-|-|-|空闲左手推固定门\\nB|C01|move|-|standing_in_corridor_outside_E08|-|走出办公室\"}",
+  "response_payload": {
+    "id": "07132ec046101d7169b78cbcfe23ff7e",
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "A|C01|take|P01|佩戴左肩|-|左手取包挎左肩\nA|C01|take|P02|right_hand|-|右手拿原票\nA|C01|face|-|toward_corridor_exit|-|朝原门外路线\nA|C01|move|-|standing_at_E08_inside|-|走两步到门内\nB|C01|hold|-|-|-|空闲左手推固定门\nB|C01|move|-|standing_in_corridor_outside_E08|-|走出办公室",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1791228865,
+    "model": "MiniMax-M3",
+    "object": "chat.completion",
+    "usage": {
+      "total_tokens": 1758,
+      "total_characters": 0,
+      "prompt_tokens": 1655,
+      "completion_tokens": 103,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      }
+    },
+    "input_sensitive": false,
+    "output_sensitive": false,
+    "input_sensitive_type": 0,
+    "output_sensitive_type": 0,
+    "output_sensitive_int": 0,
+    "service_tier": "standard",
+    "base_resp": {
+      "status_code": 0,
+      "status_msg": ""
+    }
+  },
+  "completed_at": "2026-10-05T19:34:26.606041+00:00",
+  "output": {
+    "event_lines": "A|C01|take|P01|佩戴左肩|-|左手取包挎左肩\nA|C01|take|P02|right_hand|-|右手拿原票\nA|C01|face|-|toward_corridor_exit|-|朝原门外路线\nA|C01|move|-|standing_at_E08_inside|-|走两步到门内\nB|C01|hold|-|-|-|空闲左手推固定门\nB|C01|move|-|standing_in_corridor_outside_E08|-|走出办公室"
+  },
+  "validation": {
+    "planning_physical_preflight": true,
+    "not_actual_performance": true,
+    "semantic_approval": false,
+    "canonical_event_plan": {
+      "actions": [
+        {
+          "source_step_ref": "raw_linear_script.beats.7.steps.0",
+          "events": [
+            {
+              "intent": "左手取包挎左肩",
+              "subject": "C01",
+              "operation": {
+                "kind": "take",
+                "actor": "C01",
+                "target": "P01",
+                "value": "佩戴左肩"
+              },
+              "satisfies": []
+            },
+            {
+              "intent": "右手拿原票",
+              "subject": "C01",
+              "operation": {
+                "kind": "take",
+                "actor": "C01",
+                "target": "P02",
+                "value": "right_hand"
+              },
+              "satisfies": []
+            },
+            {
+              "intent": "朝原门外路线",
+              "subject": "C01",
+              "operation": {
+                "kind": "face",
+                "actor": "C01",
+                "target": "",
+                "value": "toward_corridor_exit"
+              },
+              "satisfies": []
+            },
+            {
+              "intent": "走两步到门内",
+              "subject": "C01",
+              "operation": {
+                "kind": "move",
+                "actor": "C01",
+                "target": "",
+                "value": "standing_at_E08_inside"
+              },
+              "satisfies": []
+            }
+          ]
+        },
+        {
+          "source_step_ref": "raw_linear_script.beats.7.steps.1",
+          "events": [
+            {
+              "intent": "空闲左手推固定门",
+              "subject": "C01",
+              "operation": null,
+              "satisfies": []
+            },
+            {
+              "intent": "走出办公室",
+              "subject": "C01",
+              "operation": {
+                "kind": "move",
+                "actor": "C01",
+                "target": "",
+                "value": "standing_in_corridor_outside_E08"
+              },
+              "satisfies": []
+            }
+          ]
+        }
+      ]
+    },
+    "original_event_lines_sha256": "17e95e8bd9837d9469e4fa4052b13ddf42183162be35fea01792f13c8605c1f4"
+  },
+  "call_evidence": {
+    "directory": "call_evidence\\call_251",
+    "identity_sha256": "9efb5a9b4577198b8c6582dd298287f028043b7efc95209456cd929f6d1e6b7a"
+  }
+}

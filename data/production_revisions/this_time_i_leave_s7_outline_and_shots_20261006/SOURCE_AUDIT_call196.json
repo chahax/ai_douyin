@@ -1,0 +1,13 @@
+{
+  "ordinal": 196,
+  "contract_status": "valid",
+  "source_accepted": false,
+  "adopted": false,
+  "fault_class": "source_semantic_or_state_contract",
+  "issues": [
+    "提前写方澄已走向门口",
+    "伪引号颠倒委托方向"
+  ],
+  "repair": "model authored complete new module, no hand patch",
+  "human_quality_approval": false
+}

@@ -1,0 +1,218 @@
+{
+  "missing_relations": [
+    {
+      "shot": "SH01",
+      "check": "assets",
+      "must_add_one_actual_source": [
+        {
+          "id": "Ed57e0f8adebd-0538",
+          "path": "shots.shots.0.visible_performance",
+          "actual_value": "全片0.0–1.4秒；镜内0.0–1.4秒；实际表演：方澄站在自己浅木色工位前，灰蓝薄针织开衫垂落，白色圆领T恤领口微露。目光低垂落在桌面上，米灰色挎包已挂在椅背、电影票压在自己伸手就能够到的桌角，无视线巡看，双手自然垂于桌面边缘，身体保持安静站姿，不抬手、不取物。；实际操作：[]\n全片1.4–2.9秒；镜内1.4–2.9秒；实际表演：林屿坐在右侧工位，米驼色棉质衬衫袖口已挽至前臂，没抬头，右手贴着桌面轻推A4横版客户明细单，让它沿浅木色表面往两人之间的方向滑出约一掌距离，自己手收回原位。明细单"
+        },
+        {
+          "id": "Ed57e0f8adebd-0527",
+          "path": "shots.shots.0.composition",
+          "actual_value": "两人工位与脸部、当前桌面物件同框，保留人物实际站坐高度差"
+        },
+        {
+          "id": "Ed57e0f8adebd-0531",
+          "path": "shots.shots.0.duration_seconds",
+          "actual_value": "2.9"
+        }
+      ]
+    },
+    {
+      "shot": "SH02",
+      "check": "assets",
+      "must_add_one_actual_source": [
+        {
+          "id": "Ed57e0f8adebd-0554",
+          "path": "shots.shots.1.visible_performance",
+          "actual_value": "全片2.9–13.485714285714288秒；镜内0.0–10.585714285714287秒；对白：林屿：上月那张对账是你帮我熬到十一点重打的，今晚这份也对到一半了，你顺手帮我收了吧。；实际表演：林屿坐在方澄右侧工位，仍低着头朝自己桌面客户明细单，语气随口、不抬眼，嘴角微松，下唇先抿再松，像把一句已经默认会应的事平着说出来；眼区基本不动，视线压在纸面红笔批注上方，说到\"重打的\"轻顿一拍，\"你顺手帮我收了吧\"末尾气息略轻收，话尾不在等回应。；实际操作：[]\n全片13.4857142857"
+        },
+        {
+          "id": "Ed57e0f8adebd-0541",
+          "path": "shots.shots.1.composition",
+          "actual_value": "两人半侧脸同框，桌面位于下沿，避免前实后虚遮蔽听者"
+        },
+        {
+          "id": "Ed57e0f8adebd-0547",
+          "path": "shots.shots.1.duration_seconds",
+          "actual_value": "12.985714285714286"
+        }
+      ]
+    },
+    {
+      "shot": "SH03",
+      "check": "assets",
+      "must_add_one_actual_source": [
+        {
+          "id": "Ed57e0f8adebd-0570",
+          "path": "shots.shots.2.visible_performance",
+          "actual_value": "全片15.885714285714286–16.285714285714285秒；镜内0.0–0.4秒；实际表演：林屿坐着将脸和上身微微转向左侧方澄工位方向，目光由原下垂顺势离开桌面前方。；程序派生身体朝向：[{\"kind\": \"face\", \"actor\": \"C02\", \"target\": \"\", \"value\": \"toward_E01\"}]；实际操作：[]\n全片16.285714285714285–16.885714285714286秒；镜内0.4–1.0秒；实际表演：林屿右手自方澄桌角"
+        },
+        {
+          "id": "Ed57e0f8adebd-0557",
+          "path": "shots.shots.2.composition",
+          "actual_value": "三色便利贴及握笔手在桌面近景可读，不改变当前持有、朝向或支持面"
+        },
+        {
+          "id": "Ed57e0f8adebd-0563",
+          "path": "shots.shots.2.duration_seconds",
+          "actual_value": "5.3"
+        }
+      ]
+    },
+    {
+      "shot": "SH04",
+      "check": "assets",
+      "must_add_one_actual_source": [
+        {
+          "id": "Ed57e0f8adebd-0590",
+          "path": "shots.shots.3.visible_performance",
+          "actual_value": "全片21.185714285714287–21.685714285714287秒；镜内0.0–0.5秒；实际表演：方澄目光落在林屿右手握着的黑色签字笔上，笔尖仍朝向自己这一侧，她没伸手，指尖微收了一下又松开。；实际操作：[{\"kind\":\"gaze\",\"actor\":\"C01\",\"target\":\"\",\"value\":\"at_P07\"}]\n全片21.685714285714287–22.28571428571429秒；镜内0.5–1.1秒；实际表演：她的视线顺着那只握笔停住的手腕往上抬，慢慢对上"
+        },
+        {
+          "id": "Ed57e0f8adebd-0573",
+          "path": "shots.shots.3.composition",
+          "actual_value": "方澄脸部为主，笔及握笔手在下沿，不遮挡她从笔抬眼的目光"
+        },
+        {
+          "id": "Ed57e0f8adebd-0583",
+          "path": "shots.shots.3.duration_seconds",
+          "actual_value": "3.3000000000000003"
+        }
+      ]
+    },
+    {
+      "shot": "SH05",
+      "check": "assets",
+      "must_add_one_actual_source": [
+        {
+          "id": "Ed57e0f8adebd-0620",
+          "path": "shots.shots.4.visible_performance",
+          "actual_value": "本镜共用表演原文（整镜只执行一遍；下列两个窗口各说其对应原句）：方澄的目光稳稳落在林屿眼睛上，没有躲，也没有多余的动作。她微微吸了一口气，让气息自然沉下来，然后开口，嗓音不高不低，平稳而确定——\"今晚不行，七点我有一场早就买好票的电影。\"说到\"电影\"两个字时，嘴唇轻轻合拢，尾音干净地收住，不留余地，也没有解释的余地。气息从胸腔自然过渡，她没有刻意换气，只是让呼吸在句与句之间轻轻续上。停了一拍，视线依旧没有移开，第二句话比第一句轻了一档，却更加明确——\"这次我先走。\"嘴唇的动作幅度更小，几乎只是轻"
+        },
+        {
+          "id": "Ed57e0f8adebd-0593",
+          "path": "shots.shots.4.composition",
+          "actual_value": "方澄眼睛和嘴为中心，背景弱化但不改变人物或道具状态"
+        },
+        {
+          "id": "Ed57e0f8adebd-0613",
+          "path": "shots.shots.4.duration_seconds",
+          "actual_value": "7.171428571428572"
+        }
+      ]
+    },
+    {
+      "shot": "SH06",
+      "check": "assets",
+      "must_add_one_actual_source": [
+        {
+          "id": "Ed57e0f8adebd-0640",
+          "path": "shots.shots.5.visible_performance",
+          "actual_value": "全片31.65714285714286–34.05714285714286秒；镜内0.0–2.4秒；实际表演：林屿听完拒绝后脸眼停顿一瞬，呼吸略浅；右手握笔停桌沿未动，笔尖仍朝向方澄一侧。；实际操作：[]\n全片34.05714285714286–35.25714285714286秒；镜内2.4–3.5999999999999996秒；实际表演：林屿视线抬起，移向方澄椅背上挂着的米灰色挎包，眨一下眼。；实际操作：[{\"kind\":\"gaze\",\"actor\":\"C02\",\"target\":\"\",\""
+        },
+        {
+          "id": "Ed57e0f8adebd-0623",
+          "path": "shots.shots.5.composition",
+          "actual_value": "林屿面部停顿及看包回看纸的眼区为主，下沿保留原收笔动作"
+        },
+        {
+          "id": "Ed57e0f8adebd-0633",
+          "path": "shots.shots.5.duration_seconds",
+          "actual_value": "6.4"
+        }
+      ]
+    },
+    {
+      "shot": "SH07",
+      "check": "assets",
+      "must_add_one_actual_source": [
+        {
+          "id": "Ed57e0f8adebd-0654",
+          "path": "shots.shots.6.visible_performance",
+          "actual_value": "全片38.05714285714286–38.857142857142854秒；镜内0.0–0.8秒；实际表演：林屿重新低头，目光落在面前那张A4横版客户明细单的红笔批注行。；实际操作：[{\"kind\":\"gaze\",\"actor\":\"C02\",\"target\":\"\",\"value\":\"at_E02_P05\"}]\n全片38.857142857142854–39.857142857142854秒；镜内0.8–1.8秒；实际表演：右手握笔，笔尖压在明细单第一处红笔批注旁，落下一笔修改的字，笔画干净不"
+        },
+        {
+          "id": "Ed57e0f8adebd-0643",
+          "path": "shots.shots.6.composition",
+          "actual_value": "两份单据与右手笔同时可读；只跟随原文实际比对动作，不新增纸张反复移动"
+        },
+        {
+          "id": "Ed57e0f8adebd-0647",
+          "path": "shots.shots.6.duration_seconds",
+          "actual_value": "8.3"
+        }
+      ]
+    },
+    {
+      "shot": "SH08",
+      "check": "assets",
+      "must_add_one_actual_source": [
+        {
+          "id": "Ed57e0f8adebd-0668",
+          "path": "shots.shots.7.visible_performance",
+          "actual_value": "全片46.35714285714286–47.557142857142864秒；镜内0.0–1.2秒；实际表演：方澄左手从椅背取下米灰色挎包，自然挎上左肩，左手松开挎包带落回身侧，动作平稳不急。；实际操作：[{\"kind\":\"take\",\"actor\":\"C01\",\"target\":\"P01\",\"value\":\"worn_on_left_shoulder\"}]\n全片47.557142857142864–48.557142857142864秒；镜内1.2–2.2秒；实际表演：方澄右手从桌角拿起那张"
+        },
+        {
+          "id": "Ed57e0f8adebd-0657",
+          "path": "shots.shots.7.composition",
+          "actual_value": "保留左肩挎包、右手电影票与自由左手推门的原分工，单镜连续，不重设初态"
+        },
+        {
+          "id": "Ed57e0f8adebd-0661",
+          "path": "shots.shots.7.duration_seconds",
+          "actual_value": "7.2"
+        }
+      ]
+    },
+    {
+      "shot": "SH09",
+      "check": "assets",
+      "must_add_one_actual_source": [
+        {
+          "id": "Ed57e0f8adebd-0688",
+          "path": "shots.shots.8.visible_performance",
+          "actual_value": "全片53.557142857142864–55.057142857142864秒；镜内0.0–1.5秒；实际表演：方澄站在走廊里，挎包斜挂在左肩，右手在腰部高度捏着那张米白底深红字的院线电影票，肩膀微沉。她先微微低头，目光顺着右手落到票面上，睫毛轻压，停留片刻把票上的开场时间与座位号看清楚，嘴角没有动，安静地把票再捏稳一些。；实际操作：[{\"kind\":\"gaze\",\"actor\":\"C01\",\"target\":\"\",\"value\":\"at_P02_in_right_hand\"}]\n全片55.0"
+        },
+        {
+          "id": "Ed57e0f8adebd-0671",
+          "path": "shots.shots.8.composition",
+          "actual_value": "面部和持票手同时入画，背景走廊弱化；不拍纯背影、不新增回头或对话"
+        },
+        {
+          "id": "Ed57e0f8adebd-0681",
+          "path": "shots.shots.8.duration_seconds",
+          "actual_value": "3.7"
+        }
+      ]
+    },
+    {
+      "shot": "SH10",
+      "check": "assets",
+      "must_add_one_actual_source": [
+        {
+          "id": "Ed57e0f8adebd-0702",
+          "path": "shots.shots.9.visible_performance",
+          "actual_value": "全片57.25714285714287–58.45714285714287秒；镜内0.0–1.2秒；实际表演：右手持黑色签字笔落在客户明细单下一处红笔批注旁，原位接续写下一笔，手腕稳，不抬眼。；实际操作：[]\n全片58.45714285714287–59.057142857142864秒；镜内1.2–1.7999999999999998秒；实际表演：落笔这一项收住，原手腕带笔尖向右挪一小段，停向旁边A4纵版结算单那一栏数字。；实际操作：[]\n全片59.057142857142864–59.857"
+        },
+        {
+          "id": "Ed57e0f8adebd-0691",
+          "path": "shots.shots.9.composition",
+          "actual_value": "保持工作者与当前桌面物件同框，杯和便利贴作背景，不新增物件或动作"
+        },
+        {
+          "id": "Ed57e0f8adebd-0695",
+          "path": "shots.shots.9.duration_seconds",
+          "actual_value": "5.0"
+        }
+      ]
+    }
+  ],
+  "prior_output_modified": false,
+  "wire_schema_bytes": 27020,
+  "full_business_schema_bytes": 41483,
+  "new_provider_calls": 0
+}

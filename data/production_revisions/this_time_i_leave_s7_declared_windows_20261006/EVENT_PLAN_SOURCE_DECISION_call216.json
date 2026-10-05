@@ -1,0 +1,38 @@
+{
+  "approved_for_performance_text": true,
+  "plan_sha256": "689376f0105a63cacba6bd2a5002fe7235e474d69d3cb5a4210f518b6d812b27",
+  "evidence": [
+    {
+      "path": "actions.0.events.0.operation.value",
+      "quote": "toward_E01",
+      "finding": "原侧身朝向单独提交，没有混入取放。"
+    },
+    {
+      "path": "actions.0.events.1.intent",
+      "quote": "林屿右手同步取起整叠三色便利贴",
+      "finding": "整叠三色同步取，未逐张揭。"
+    },
+    {
+      "path": "actions.0.events.2.operation.0.value",
+      "quote": "surface:E02:left_front",
+      "finding": "浅黄从首次摊开即E02左前侧，吻合原结尾，避免补挪纸。"
+    },
+    {
+      "path": "actions.0.events.3.intent",
+      "quote": "林屿指尖压住浅黄便利贴边角，不移动纸张",
+      "finding": "仅一次压黄角，纸位置不动。"
+    },
+    {
+      "path": "actions.1.events.0.operation.value",
+      "quote": "right_hand",
+      "finding": "右手拿笔前已放下三贴，持有前提正确。"
+    },
+    {
+      "path": "actions.1.events.1.intent",
+      "quote": "林屿右手反握签字笔，笔尖朝向方澄一侧搁在桌沿停住等她接",
+      "finding": "原反握笔尖朝方澄停等，右手仍持笔。"
+    }
+  ],
+  "actual_timing_verified": false,
+  "human_quality_approval": false
+}

@@ -1,0 +1,13 @@
+{
+  "ordinal": 188,
+  "contract_status": "valid",
+  "source_accepted": false,
+  "adopted": false,
+  "fault_class": "source_semantic_or_state_contract",
+  "issues": [
+    "委托主体含混",
+    "cut_reason只解释选开场机位，未解释转下一拍"
+  ],
+  "repair": "model authored complete new module, no hand patch",
+  "human_quality_approval": false
+}

@@ -1,0 +1,34 @@
+{
+  "approved_for_next_local_text": true,
+  "derived_local_sha256": "3a2b7708a917c0c3084c3ef2a0fa5d3af11570d8ebd07e0e025bcf991039a121",
+  "evidence": [
+    {
+      "path": "dialogue_performance",
+      "quote": "本镜无对白",
+      "finding": "本镜无对白，不把未来原句放进制作指导。"
+    },
+    {
+      "path": "performances.0.performance",
+      "quote": "方澄目光落在林屿右手握着的黑色签字笔上，笔尖仍朝向自己这一侧，她没伸手，指尖微收了一下又松开。",
+      "finding": "原看笔与不接，指尖小反应没有取物。"
+    },
+    {
+      "path": "performances.1.performance",
+      "quote": "她的视线顺着那只握笔停住的手腕往上抬，慢慢对上了林屿的眼睛，下颌没有动。",
+      "finding": "方澄抬眼看Lin眼睛，不要求另一人回望。"
+    },
+    {
+      "path": "performances.2.performance",
+      "quote": "她就这样看着他，嘴唇轻轻抿了一下又松开，呼吸比刚才浅一点，眼睛里那种被默认接活的压力慢慢被自己按下去。",
+      "finding": "看他保持，唇和呼吸表现决定，无新台词或对象。"
+    },
+    {
+      "path": "performances.2.seconds",
+      "quote": "2.2",
+      "finding": "2.2秒明确主体反应超过最低2秒，整镜3.3秒。"
+    }
+  ],
+  "human_quality_approval": false,
+  "scalar_model_document_sha256": "478a5aa9868adb67ea1649219b12a56f721ed05f4d017d23c43741005f2199cb",
+  "all_seconds_and_performance_from_original_model": true
+}

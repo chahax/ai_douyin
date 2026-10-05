@@ -1,0 +1,14 @@
+{
+  "complete_current_original_and_real_start_consumed": true,
+  "current_only_mechanical_translation": true,
+  "upstream_creative_R01_ordinals": [
+    161,
+    187
+  ],
+  "full_reference_in_this_translation": false,
+  "raw_script_sha256": "465b12b846c5a14581e069d62f0068b0b27d2cb224231f6e7c08eed88301f1f3",
+  "reference_pack_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+  "no_s6_performance_reused": true,
+  "old_unknown_reservations": 93117,
+  "no_automatic_retry": true
+}

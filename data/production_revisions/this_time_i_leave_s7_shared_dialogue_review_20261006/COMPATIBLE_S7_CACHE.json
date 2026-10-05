@@ -1,0 +1,99 @@
+{
+  "only_same_S7_source": true,
+  "context_sha256": "710718c98f13c0bd3de5d49a8bd8b3e06a132b0743e5aa24a6982fc40984847e",
+  "direction_sha256": "b92b2169978bb84788517a2a1e3ec5100e472d04e3cd816d03e6a1bdf9715614",
+  "locals": [
+    {
+      "shot": 1,
+      "local_ordinal": 208,
+      "event_plan_ordinal": 206,
+      "local_input_sha256": "a355b6ed9d773bebef96330092b9376ff29d8df31c2f91f20302798156e61ecf",
+      "event_plan_sha256": "f11ebef1ae7e9cf3e18230127eab0b76eb161e1dee00851560be80cafe335a58",
+      "derived_local_sha256": "d234776c7a45fc47593ee680bae4b458e178d8832ded3ba8af28a9882a22c1c5",
+      "source_approved": true
+    },
+    {
+      "shot": 2,
+      "local_ordinal": 212,
+      "event_plan_ordinal": 210,
+      "local_input_sha256": "cb1486ae3441c5f6af96234b03babf7771bd72a452844f47bb4bc56cd1b374db",
+      "event_plan_sha256": "0238042aea8133db844f7b12789070c611fd7787f9fd7fb92ae9bd3cf83d3137",
+      "derived_local_sha256": "ca0e6e1da2a518efcafbde07a15be8ab705b639ea994b8258c446dd0829a4a01",
+      "source_approved": true
+    },
+    {
+      "shot": 3,
+      "local_ordinal": 219,
+      "event_plan_ordinal": 216,
+      "local_input_sha256": "2272668b5ca74ec3564c809000aa2da8eef2a5b0c1fe38244371924ad6e4fd38",
+      "event_plan_sha256": "689376f0105a63cacba6bd2a5002fe7235e474d69d3cb5a4210f518b6d812b27",
+      "derived_local_sha256": "acf768d7e360bd05c6f3dbad4a0778b9607dd4af5e3d575b405a340314681348",
+      "source_approved": true
+    },
+    {
+      "shot": 4,
+      "local_ordinal": 223,
+      "event_plan_ordinal": 221,
+      "local_input_sha256": "c8fd0ae48f95ef7852b72612be29be48530bf9a09b3bd3381df341883428a7a9",
+      "event_plan_sha256": "60a79005aa5d5536003ab0b137634bb298ed50f00b100df0cd66f50e782c7f28",
+      "derived_local_sha256": "3a2b7708a917c0c3084c3ef2a0fa5d3af11570d8ebd07e0e025bcf991039a121",
+      "source_approved": true
+    },
+    {
+      "shot": 5,
+      "local_ordinal": 229,
+      "event_plan_ordinal": 224,
+      "local_input_sha256": "15c347e64403a95c02551c1823af9e1c2fd13e064a2f74478ae1074ba534df6c",
+      "event_plan_sha256": "7d357b0ef1f85ba71c5ccebb6671b0c34f4b3950f5b21d2af7b4a3d4e9dcd570",
+      "derived_local_sha256": "268eebbc7a06e7f553a799548e3ac2e474af6bbb3c4e91ad95d191c4ec13616f",
+      "source_approved": true
+    },
+    {
+      "shot": 6,
+      "local_ordinal": 235,
+      "event_plan_ordinal": 233,
+      "local_input_sha256": "4864b43e3a747615557a37e77d9904e085cfe2221cabb733dae8ed48d0e1d7fc",
+      "event_plan_sha256": "44c1e3f58c213f3087318aaf3989a26cd9f102a8ff7beb37dceb6061fd784f12",
+      "derived_local_sha256": "042d0e37b62ba9023d70902039f66c493aa144c20298fdd0a86c7de02999b4a8",
+      "source_approved": true
+    },
+    {
+      "shot": 7,
+      "local_ordinal": 250,
+      "event_plan_ordinal": 249,
+      "local_input_sha256": "c790b87a8e76a5387fbe3f7556fb46165ca1ed0556ba3181c26afd55c2f711de",
+      "event_plan_sha256": "71f4d2fe67cd21fcd30f1ae3c9e6506b982c28e0099fc145a703d610eb6a35ac",
+      "derived_local_sha256": "b3787b6245934a81d25aeb53f3458db07c9d4ac6a92159d31eba7ed091b8a0cf",
+      "source_approved": true
+    },
+    {
+      "shot": 8,
+      "local_ordinal": 257,
+      "event_plan_ordinal": 254,
+      "local_input_sha256": "0b442e78013d08705d9b95a4c4ca15f7b6ee83b2e123d5b5ed7d0a771aa576ae",
+      "event_plan_sha256": "646c5b0e675b00586597cd92fea2164d996d2a42758414370f1193a0c4259e4e",
+      "derived_local_sha256": "26cb05c11aa4b56933ffe11a095f940a51b9c8da43f64c0114784c056c07c2de",
+      "source_approved": true
+    },
+    {
+      "shot": 9,
+      "local_ordinal": 259,
+      "event_plan_ordinal": 258,
+      "local_input_sha256": "70dc632e973c04ecc0c51cb059c6dcf51b6775d93ce583b286c5e2a3ab8622bc",
+      "event_plan_sha256": "dc70f2edc11d11e820fe6de3b98ab4e66326e13f7cd859fc3d0ebb36f71d5df4",
+      "derived_local_sha256": "c034c563c142c19999a193c97363c856f0103ac6a91207cf44da01c1a2eb4908",
+      "source_approved": true
+    },
+    {
+      "shot": 10,
+      "local_ordinal": 263,
+      "event_plan_ordinal": 260,
+      "local_input_sha256": "2530e11e5f4b2addd978bddd9e0b43edce13e68c2bc12b2cad915a1bdae78784",
+      "event_plan_sha256": "86eda2dec4f4ec682e26f36441c9c64b367094d0070b52acfd37b8532b64c2e8",
+      "derived_local_sha256": "71d65d8b5af461e23b32d5cf551dc0a79e9996e1b41074995aa11aee90bcda24",
+      "source_approved": true
+    }
+  ],
+  "old_failed_outputs_spliced": false,
+  "human_quality_approval": false
+}

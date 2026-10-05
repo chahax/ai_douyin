@@ -1,0 +1,77 @@
+{
+  "schema": "s7_compact_review_wire_and_complete_evidence_repair/v45",
+  "status": "text_reviewed_awaiting_human_content_and_aesthetic_confirmation",
+  "script_sha256": "465b12b846c5a14581e069d62f0068b0b27d2cb224231f6e7c08eed88301f1f3",
+  "compiled_sha256": "2e3000780980237efb1599eef81a4acd5fe211aa13e764296036f3ad21bc8af8",
+  "reviewed_view_sha256": "4590f27d81e016958f2857f1b1110a9c279ebeff05c8e99bd1d967aaade678fd",
+  "review_sha256": "9eba09fa4eab2922e3411600c5da609e0715be7eab0d871f01db3d0f81f1703a",
+  "adopted_review_ordinal": 265,
+  "shots": 10,
+  "compiled_duration_seconds": 62.25714285714286,
+  "text_production_handoff_complete": true,
+  "creative_quality_passed": false,
+  "user_quality_confirmation": null,
+  "actual_selected_images": [],
+  "actual_images_returned_to_director": false,
+  "media_calls": 0,
+  "video_human_review_required": true,
+  "automatic_media_submit": false,
+  "old_s6_preserved": true,
+  "old_unknown_billing_reservations": 93117,
+  "cost_ledger": {
+    "schema": "authorized_creative_continuation/v3",
+    "new_calls": 1,
+    "effective_calls_started": 265,
+    "new_reported_tokens": 153830,
+    "effective_reported_tokens": 4559929,
+    "unknown_token_reservations": 93117,
+    "max_total_tokens": null,
+    "unbounded_aggregate_text_authorized": true,
+    "old_budget_reset": false,
+    "old_governance_migrated": false,
+    "media_calls": 0,
+    "semantic_approval": false,
+    "calls_with_known_usage": 263,
+    "new_unknown_token_reservations": 0,
+    "inherited_unknown_token_reservations": 93117,
+    "unknown_outcome_ordinals": [
+      70
+    ],
+    "unknown_usage_ordinals": [
+      70,
+      160
+    ]
+  },
+  "assistant_verified_evidence": [
+    {
+      "path": "raw_linear_script.beats.2.steps.0.text",
+      "quote": "林屿侧身从方澄桌角拿起那一小叠便利贴，把浅黄、浅粉、浅蓝三张一并摊开在自己面前的桌面上，指尖压住浅黄那张边角。",
+      "finding": "原三张便利贴整体操作，完整S7未手工拼改。"
+    },
+    {
+      "path": "raw_linear_script.beats.4.steps.1.text",
+      "quote": "这次我先走。",
+      "finding": "标题句这次我先走原句保留。"
+    },
+    {
+      "path": "shots.shots.4.visible_performance",
+      "quote": "本镜共用表演原文（整镜只执行一遍；下列两个窗口各说其对应原句）：方澄的目光稳稳落在林屿眼睛上，没有躲，也没有多余的动作。她微微吸了一口气，让气息自然沉下来，然后开口，嗓音不高不低，平稳而确定——\"今晚不行，七点我有一场早就买好票的电影。\"说到\"电影\"两个字时，嘴唇轻轻合拢，尾音干净地收住，不留余地，也没有解释的余地。气息从胸腔自然过渡，她没有刻意换气，只是让呼吸在句与句之间轻轻续上。停了一拍，视线依旧没有移开，第二句话比第一句轻了一档，却更加明确——\"这次我先走。\"嘴唇的动作幅度更小，几乎只是轻轻一碰，但每个字都听得清，说完，嘴自然闭上，目光仍稳稳留在林屿脸上，没有抬眼去确认他的反应，也没有低下去找台阶。整张脸是平静的，没有歉意，没有笑意，也没有歉疚的软化，只是把今晚留给了自己。\n全片24.485714285714288–29.92857142857143秒；镜内0.0–5.442857142857143秒；对白：方澄：今晚不行，七点我有一场早就买好票的电影。；实际表演：引用本镜共用表演原文；本窗口仅对应上述原句，不重复整段表演；实际操作：[]\n全片29.92857142857143–31.65714285714286秒；镜内5.442857142857143–7.171428571428572秒；对白：方澄：这次我先走。；实际表演：引用本镜共用表演原文；本窗口仅对应上述原句，不重复整段表演；实际操作：[]\n声明表演窗口：{\"requirement_id\":\"W_SH05_1\",\"start\":24.485714285714288,\"end\":29.92857142857143,\"relation\":\"during\",\"subject\":\"C01\",\"mechanical_check\":\"passed\"}\n声明表演窗口：{\"requirement_id\":\"W_SH05_2\",\"start\":29.92857142857143,\"end\":31.65714285714286,\"relation\":\"during\",\"subject\":\"C01\",\"mechanical_check\":\"passed\"}",
+      "finding": "共用表演完整原文只执行一遍，两句原对白各有完整窗口且不在句间切镜。"
+    },
+    {
+      "path": "shots.shots.5.visible_performance",
+      "quote": "全片31.65714285714286–34.05714285714286秒；镜内0.0–2.4秒；实际表演：林屿听完拒绝后脸眼停顿一瞬，呼吸略浅；右手握笔停桌沿未动，笔尖仍朝向方澄一侧。；实际操作：[]\n全片34.05714285714286–35.25714285714286秒；镜内2.4–3.5999999999999996秒；实际表演：林屿视线抬起，移向方澄椅背上挂着的米灰色挎包，眨一下眼。；实际操作：[{\"kind\":\"gaze\",\"actor\":\"C02\",\"target\":\"\",\"value\":\"at_P01_on_E09_backrest\"}]\n全片35.25714285714286–36.457142857142856秒；镜内3.5999999999999996–4.8秒；实际表演：林屿视线由挎包回到自己面前摊着的浅黄便利贴和A4横版客户明细单红笔批注上。；实际操作：[{\"kind\":\"gaze\",\"actor\":\"C02\",\"target\":\"\",\"value\":\"at_E02_P03_Y_and_P05\"}]\n全片36.457142857142856–38.05714285714286秒；镜内4.8–6.4秒；实际表演：林屿右手收腕，把那支笔尖朝外的黑色签字笔收回自己面前，搁在A4纵版结算单边沿，手指不离笔身，笔尖不再指向方澄。；实际操作：[]\n声明表演窗口：{\"requirement_id\":\"W_SH06_1\",\"start\":31.65714285714286,\"end\":34.05714285714286,\"relation\":\"after\",\"subject\":\"C02\",\"mechanical_check\":\"passed\"}",
+      "finding": "完整拒绝之后林屿反应并收回持笔手腕，手指不离笔身。"
+    },
+    {
+      "path": "shots.shots.8.visible_performance",
+      "quote": "全片53.557142857142864–55.057142857142864秒；镜内0.0–1.5秒；实际表演：方澄站在走廊里，挎包斜挂在左肩，右手在腰部高度捏着那张米白底深红字的院线电影票，肩膀微沉。她先微微低头，目光顺着右手落到票面上，睫毛轻压，停留片刻把票上的开场时间与座位号看清楚，嘴角没有动，安静地把票再捏稳一些。；实际操作：[{\"kind\":\"gaze\",\"actor\":\"C01\",\"target\":\"\",\"value\":\"at_P02_in_right_hand\"}]\n全片55.057142857142864–57.25714285714287秒；镜内1.5–3.7秒；实际表演：看完票后她轻轻把气从鼻腔呼出，嘴唇微启，肩线顺势松下来一点，眼睛没有抬向镜头，也没有回头看办公室门，整个人停在走廊这一格至少两秒，把属于自己的这一晚接住。；实际操作：[]\n声明表演窗口：{\"requirement_id\":\"W_SH09_1\",\"start\":55.057142857142864,\"end\":57.25714285714287,\"relation\":\"after\",\"subject\":\"C01\",\"mechanical_check\":\"passed\"}",
+      "finding": "真正在门外看原票，随后轻呼气并停留，明确3.7秒完整释放。"
+    },
+    {
+      "path": "shots.shots.9.visible_performance",
+      "quote": "全片57.25714285714287–58.45714285714287秒；镜内0.0–1.2秒；实际表演：右手持黑色签字笔落在客户明细单下一处红笔批注旁，原位接续写下一笔，手腕稳，不抬眼。；实际操作：[]\n全片58.45714285714287–59.057142857142864秒；镜内1.2–1.7999999999999998秒；实际表演：落笔这一项收住，原手腕带笔尖向右挪一小段，停向旁边A4纵版结算单那一栏数字。；实际操作：[]\n全片59.057142857142864–59.85714285714287秒；镜内1.7999999999999998–2.5999999999999996秒；实际表演：目光顺着笔尖方向略向右侧那张结算单看，对准那一行数字停住比对，面部保持原抿唇专注相，不抬眼去门口。；实际操作：[{\"kind\":\"gaze\",\"actor\":\"C02\",\"target\":\"\",\"value\":\"at_E02_P06\"}]\n全片59.85714285714287–60.557142857142864秒；镜内2.5999999999999996–3.3秒；实际表演：视线从结算单回到正下方那张客户明细单的下一行数字上，停在该行起点，握笔姿态不变。；实际操作：[{\"kind\":\"gaze\",\"actor\":\"C02\",\"target\":\"\",\"value\":\"at_E02_P05\"}]\n全片60.557142857142864–61.557142857142864秒；镜内3.3–4.3秒；实际表演：右手带笔尖落回明细单这一行，原位沿该行数字逐字核改下一笔，笔迹稳而不快。；实际操作：[]\n全片61.557142857142864–62.25714285714287秒；镜内4.3–5.0秒；实际表演：这一笔收住，手腕再带笔尖小幅向右挪向结算单继续比对，眼仍低垂，白色陶瓷咖啡杯与左侧浅黄便利贴原位不动。；实际操作：[]",
+      "finding": "完整新263从下一处红批接续工作，未回第一处，未改纸杯和贴。"
+    }
+  ]
+}

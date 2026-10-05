@@ -1,0 +1,8 @@
+{
+  "result": "4 passed in 6.17s",
+  "model_calls": 0,
+  "creative_quality_passed": false,
+  "successful_tool_output_chunk": "1d2084",
+  "source_sha256": "e72c417457feb746e577eee4527ab855f0ab6a9a2b9cf7c8664b1fa3448758e1",
+  "test_sha256": "117936a479212cc2d21d5af7d131b52bae166479c51e7d14ece064535a8c60bd"
+}

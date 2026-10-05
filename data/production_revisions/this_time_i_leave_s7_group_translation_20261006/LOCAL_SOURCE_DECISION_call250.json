@@ -1,0 +1,39 @@
+{
+  "approved_for_next_local_text": true,
+  "derived_local_sha256": "b3787b6245934a81d25aeb53f3458db07c9d4ac6a92159d31eba7ed091b8a0cf",
+  "evidence": [
+    {
+      "path": "performances.2.performance",
+      "quote": "笔尖移到第二行数字处停住，他眉头微拧，意识到这一格对不上。",
+      "finding": "原第二行停笔及眉头反应，困难可见。"
+    },
+    {
+      "path": "performances.3.performance",
+      "quote": "左手抬起，把桌角那张A4纵版结算单拉到明细单右侧、与明细单基本对齐后松手。",
+      "finding": "左手只拉齐P06一次，右手持原笔。"
+    },
+    {
+      "path": "performances.4.performance",
+      "quote": "目光从明细单第二行移向旁边那张结算单同一行，逐字比对，眼球微转。",
+      "finding": "核对发生在点、改写之前。"
+    },
+    {
+      "path": "performances.6.performance",
+      "quote": "笔尖划掉原数字，停顿半拍后写下新的正确数字，笔画紧贴纸面。",
+      "finding": "仅原数字划改，没有新数值或取放。"
+    },
+    {
+      "path": "performances.9.performance",
+      "quote": "目光明确回到明细单下方那一行待改的位置，落定。",
+      "finding": "末段明确回到明细单观察目标。"
+    },
+    {
+      "path": "performances.10.performance",
+      "quote": "右手笔尖落下，继续一行一行地往下写，动作比第一处稍稳。",
+      "finding": "原右手继续改，整镜8.3秒不重复拉纸或前镜台词。"
+    }
+  ],
+  "human_quality_approval": false,
+  "scalar_model_document_sha256": "bf455c95519bb6c40ab0bee82dbcdef871097302763db521a06000be7e9d07bc",
+  "all_seconds_and_performance_from_original_model": true
+}

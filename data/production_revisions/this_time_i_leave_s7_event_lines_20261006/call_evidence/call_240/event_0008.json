@@ -1,0 +1,12 @@
+{
+  "schema": "creative_call_evidence/v1",
+  "sequence": 8,
+  "identity_sha256": "3621a47fef1ce1bcb7650eef90d8e17dd80da66c73a6ed13bbac88255df0d506",
+  "at_utc": "2026-10-05T19:08:40.239911+00:00",
+  "phase": "event_lines_received",
+  "details": {
+    "contract": "atomic_event_lines/v1",
+    "exact_original_lines": true,
+    "no_content_fallback": true
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema": "s7_directed_minimum_windows/v1",
+  "author": "assistant declared production constraints from user feedback and AGENTS timing rule",
+  "source_script_ordinal": 161,
+  "source_script_sha256": "465b12b846c5a14581e069d62f0068b0b27d2cb224231f6e7c08eed88301f1f3",
+  "film_sha256": "19d46fef9661e91232eee0aadfc801898dbb4dfa33514273b3b12c187f8420f0",
+  "targets": [
+    {
+      "key": "before_refusal",
+      "shot_id": "SH04",
+      "subject": "C01",
+      "stimulus_path": "raw_linear_script.beats.2.steps.2",
+      "reaction_path": "raw_linear_script.beats.3.steps.0",
+      "relation": "after",
+      "minimum_seconds": 2.0
+    },
+    {
+      "key": "refusal_reason",
+      "shot_id": "SH05",
+      "subject": "C01",
+      "stimulus_path": "raw_linear_script.beats.4.steps.0",
+      "reaction_path": "raw_linear_script.beats.4.steps.0",
+      "relation": "during",
+      "minimum_seconds": 2.0
+    },
+    {
+      "key": "title_refusal",
+      "shot_id": "SH05",
+      "subject": "C01",
+      "stimulus_path": "raw_linear_script.beats.4.steps.1",
+      "reaction_path": "raw_linear_script.beats.4.steps.1",
+      "relation": "during",
+      "minimum_seconds": 1.5
+    },
+    {
+      "key": "listener_after_refusal",
+      "shot_id": "SH06",
+      "subject": "C02",
+      "stimulus_path": "raw_linear_script.beats.4.steps.1",
+      "reaction_path": "raw_linear_script.beats.5.steps.0",
+      "relation": "after",
+      "minimum_seconds": 2.0
+    },
+    {
+      "key": "outside_release",
+      "shot_id": "SH09",
+      "subject": "C01",
+      "stimulus_path": "raw_linear_script.beats.7.steps.1",
+      "reaction_path": "raw_linear_script.beats.8.steps.0",
+      "relation": "after",
+      "minimum_seconds": 2.0
+    }
+  ],
+  "actual_timing_verified": false,
+  "model_authored": false,
+  "human_quality_approval": false
+}

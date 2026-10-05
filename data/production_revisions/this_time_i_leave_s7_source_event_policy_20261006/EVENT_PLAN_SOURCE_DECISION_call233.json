@@ -1,0 +1,28 @@
+{
+  "approved_for_performance_text": true,
+  "plan_sha256": "44c1e3f58c213f3087318aaf3989a26cd9f102a8ff7beb37dceb6061fd784f12",
+  "evidence": [
+    {
+      "path": "actions.0.events.0.intent",
+      "quote": "林屿听完拒绝后脸眼停顿：右手握笔停在桌沿，笔尖仍朝方澄一侧，未接话",
+      "finding": "听完完整拒绝后才停顿，null保持主体C02与after窗口。"
+    },
+    {
+      "path": "actions.0.events.1.operation.value",
+      "quote": "at_P01_on_E09_backrest",
+      "finding": "第一次视线变化明确到方澄椅背P01。"
+    },
+    {
+      "path": "actions.0.events.2.operation.value",
+      "quote": "at_E02_P03_Y_and_P05",
+      "finding": "第二次视线明确回到自己的便利贴和明细单。"
+    },
+    {
+      "path": "actions.1.events.0.intent",
+      "quote": "林屿把右手那支笔尖朝外的签字笔收回自己面前，搁在那张结算单边沿，笔尖不再指向方澄",
+      "finding": "收笔是同手手腕姿态，null保持持有与身体方向，不造取放或后镜书写。"
+    }
+  ],
+  "actual_timing_verified": false,
+  "human_quality_approval": false
+}

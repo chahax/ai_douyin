@@ -1,0 +1,22 @@
+{
+  "schema": "complete_text_handoff_display_verification/v1",
+  "shots": 10,
+  "five_windows_checked": true,
+  "text_seconds": 62.25714285714286,
+  "whole_review_ordinal": 265,
+  "issues": 0,
+  "shared_original_paragraph_once": true,
+  "every_original_scheduled_performance_preserved": true,
+  "core_source_files_unchanged": true,
+  "user_quality_confirmation": null,
+  "media_calls": 0,
+  "core_file_sha256": {
+    "FULL_SCRIPT.json": "4204944153dae367153c49f8dffe4505bc1d6b9f772a4f3ebec2fca5096d3eea",
+    "WHOLE_FILM_DIRECTION.json": "700da71d08be1b184dedf2af516b2515ab19285d2c6a14ebc0cfcbbe75baa0a1",
+    "COMPILED_PERFORMANCE.json": "e47087914191efa551dca5cfa426ce455f04f65d00ed77230b5610050bf16230",
+    "FULL_TEXT_REVIEW.json": "2bb468062a5998da4e8850c0004b240379dd8cc3080f8fe1f50d30f58c4b952f",
+    "PRODUCTION_HANDOFF.json": "be73da1bf7b81c191864cdc0d8d1ed4474d641a4a26e6f1caa05ac51883b6eed"
+  },
+  "readable_sha256": "8b64d40dcd954a1471304ee362b6d88912b1598f192af396da084d51a667a310",
+  "renderer_sha256": "b10405f4249f74b3c8645c5b11bb52d3234c46388a8745aab5f9ee9a65471f0d"
+}

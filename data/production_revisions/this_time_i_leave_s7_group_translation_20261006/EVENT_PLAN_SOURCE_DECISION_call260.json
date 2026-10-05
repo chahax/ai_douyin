@@ -1,0 +1,28 @@
+{
+  "approved_for_performance_text": true,
+  "plan_sha256": "86eda2dec4f4ec682e26f36441c9c64b367094d0070b52acfd37b8532b64c2e8",
+  "evidence": [
+    {
+      "path": "actions.0.events.0.intent",
+      "quote": "右手持笔在明细单红笔批注旁逐项写下去",
+      "finding": "保留原右手持笔从明细单继续逐项写。"
+    },
+    {
+      "path": "actions.0.events.1.intent",
+      "quote": "每写一笔将笔尖挪向旁边结算单比对",
+      "finding": "挪笔尖是原持笔手腕动作，未用拿笔或道具转移代替。"
+    },
+    {
+      "path": "actions.0.events.2.operation.value",
+      "quote": "at_E02_P06",
+      "finding": "比对既有旁边结算单；没有再次拉纸。"
+    },
+    {
+      "path": "actions.0.events.3.operation.value",
+      "quote": "at_E02_P05",
+      "finding": "明确回明细单后继续核改。"
+    }
+  ],
+  "actual_timing_verified": false,
+  "human_quality_approval": false
+}

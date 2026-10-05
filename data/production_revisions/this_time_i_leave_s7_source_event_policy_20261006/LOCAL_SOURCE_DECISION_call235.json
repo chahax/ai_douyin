@@ -1,0 +1,34 @@
+{
+  "approved_for_next_local_text": true,
+  "derived_local_sha256": "042d0e37b62ba9023d70902039f66c493aa144c20298fdd0a86c7de02999b4a8",
+  "evidence": [
+    {
+      "path": "performances.0.seconds",
+      "quote": "2.4",
+      "finding": "听完完整标题句后的2.4秒反应窗口，未提前收笔或移开目光。"
+    },
+    {
+      "path": "performances.0.performance",
+      "quote": "林屿听完拒绝后脸眼停顿一瞬，呼吸略浅；右手握笔停桌沿未动，笔尖仍朝向方澄一侧。",
+      "finding": "脸眼停顿及浅呼吸，仍握笔朝向方澄。"
+    },
+    {
+      "path": "performances.1.performance",
+      "quote": "林屿视线抬起，移向方澄椅背上挂着的米灰色挎包，眨一下眼。",
+      "finding": "原目标挎包，无未绑定左右或新包扣。"
+    },
+    {
+      "path": "performances.2.performance",
+      "quote": "林屿视线由挎包回到自己面前摊着的浅黄便利贴和A4横版客户明细单红笔批注上。",
+      "finding": "原目光回到自己的便利贴和明细单。"
+    },
+    {
+      "path": "performances.3.performance",
+      "quote": "林屿右手收腕，把那支笔尖朝外的黑色签字笔收回自己面前，搁在A4纵版结算单边沿，手指不离笔身，笔尖不再指向方澄。",
+      "finding": "手指不离笔身，收腕不改变人物身体朝向或笔持有。"
+    }
+  ],
+  "human_quality_approval": false,
+  "scalar_model_document_sha256": "f5498984a6a9bebd10f876bec7878dd619e71fd6e09248817eed43c10793f70e",
+  "all_seconds_and_performance_from_original_model": true
+}
