@@ -1,0 +1,13 @@
+{
+  "current_shot_source_preflight": [
+    "笔在C02手里悬着，C01不接。先看笔尖，再顺握笔的手抬眼到C02眼睛；目光改变用两个相继组。",
+    "B04-R01在原反应内给C01至少1秒可读保持，operation=null且satisfies=[B04-R01]。不要让C02松笔或C01拿笔。"
+  ],
+  "compact_contract_reminder": [
+    "提交本镜完整新根对象，仅dialogue_performance/actions。无对白也写非空本镜无对白。",
+    "每group恰seconds/subject/performance/operation/satisfies；operation是null或恰kind/actor/target/value的一个对象，不是数组、不是operations。拿和放、同一角色两次gaze必须相继组。",
+    "value始终非空。gaze/face/move的target空，真实目标写value；take/slide的target道具ID。move是人物整体移动，伸手/笔转向只写performance。",
+    "satisfies只在正确subject且operation=null的实际保持组中。during由程序绑定原完整对白，不放入satisfies。",
+    "保留全部原steps、对白、实际首态；不自行计算总镜长、不补剧情、不拆原对白。"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "prior_call": 97,
+  "verified_faults": [
+    {
+      "path": "actions.0.events.0",
+      "finding": "face.target必须空字符串，不是C02；侧身朝方澄E01不是自己E02。第一intent又藏视线抬向变化，若写变化就另列gaze事件。"
+    },
+    {
+      "path": "actions.0.events.7",
+      "finding": "gaze.target必须空字符串，不是P03_Y；观察目标在value。"
+    },
+    {
+      "path": "actions.1.events.1",
+      "finding": "P07 take后为C02持有，slide必须无人持有，所以不可slide。原B04那只握笔停住的手和B06递笔的手悬在桌面上方证明持续手持。反转伸出等接应是take事件的手部意图或后续operation=null事件，绝不落桌、松手或slide。"
+    }
+  ],
+  "field_examples": [
+    {
+      "kind": "face",
+      "actor": "C02",
+      "target": "",
+      "value": "侧身朝方澄E01桌角"
+    },
+    {
+      "kind": "gaze",
+      "actor": "C02",
+      "target": "",
+      "value": "自己E02桌前浅黄便利贴"
+    },
+    {
+      "kind": "take",
+      "actor": "C02",
+      "target": "P07",
+      "value": "右手拇指食指握笔身中段"
+    }
+  ],
+  "complete_source_requirements": [
+    "保留前三张6个独立take/place事件，三张都无人持有后在自己E02面前摊开，点浅黄。别把清单对白写进intent或遗漏成员。",
+    "第二个原action只取笔反转伸手并手持等接；不包含任何非take道具操作，不改变林屿坐姿/人物位置，不添加C01未来反应。",
+    "完整重交全部actions/events；satisfies都[]；每event四键intents/subject/operation/satisfies中的实际键是intent单数，不增额外字段。"
+  ]
+}

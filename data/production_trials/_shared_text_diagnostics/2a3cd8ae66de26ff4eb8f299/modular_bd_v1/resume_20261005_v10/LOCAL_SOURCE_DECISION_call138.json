@@ -1,0 +1,28 @@
+{
+  "call": 138,
+  "derived_local_sha256": "977646331a362b97f1285fcafebb57140cac5829d270cd642d72623fda92fcab",
+  "model_performance_sha256": "dd02f62ea59142e9bfb81e9070277d72978ae11d9213c3c43cab9d0fd6455e47",
+  "event_plan_ordinal": 135,
+  "approved_for_next_local_text": true,
+  "source_verified_evidence": [
+    {
+      "path": "performances.1.performance",
+      "quote": "目光未下移去看票",
+      "finding": "原桌角票拿到右手，不回置三贴也不新增gaze。"
+    },
+    {
+      "path": "performances.4.performance",
+      "quote": "平稳走出两步",
+      "finding": "完成原两步后完整告别，状态尾E04可接推门，不造两米距离。"
+    },
+    {
+      "path": "performances.6.performance",
+      "quote": "整体移出门框，离开画面",
+      "finding": "原推门后真正携包票离开，无走廊停留/新光源/新人物。"
+    }
+  ],
+  "full_review_required": true,
+  "human_quality_confirmation": null,
+  "media_approval": false,
+  "readability_pending_note": "dialogue_performance首段复述原句并含空格，仅原完整对白由程序执行；整片审查判断cue格式/可读性。门开关和人体侧身几何仍不由现有状态编译证明。"
+}

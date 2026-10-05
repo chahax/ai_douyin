@@ -1,0 +1,20 @@
+{
+  "call": 120,
+  "derived_local_sha256": "58578c72dab6e41a97f96ad76a6770adf53b9357e959779d93a128904b481fbe",
+  "approved_for_next_local_text": false,
+  "source_verified_evidence": [
+    {
+      "path": "performances.0.performance",
+      "quote": "眼神停在她刚才说话的方向",
+      "finding": "首次null保持引入未记录gaze，实际首态仍桌面方向。"
+    },
+    {
+      "path": "performances.1.performance",
+      "quote": "右侧方澄工位",
+      "finding": "原林屿在方澄右边，此处演员方向未验证且无必要；完整新稿不加方位猜测。"
+    }
+  ],
+  "full_review_required": true,
+  "human_quality_confirmation": null,
+  "media_approval": false
+}

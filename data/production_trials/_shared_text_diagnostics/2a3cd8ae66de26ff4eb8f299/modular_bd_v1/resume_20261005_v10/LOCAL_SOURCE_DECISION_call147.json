@@ -1,0 +1,22 @@
+{
+  "call": 147,
+  "derived_local_sha256": "8bc0f897f550133c13a4826414b931616cbea70a4a26923f282dc25401eabf20",
+  "model_performance_sha256": "78231ac2c2a61da7d6701ad16c8a752f5adf32bf7c47410c1e7ef408f3664f65",
+  "event_plan_ordinal": 135,
+  "approved_for_next_local_text": false,
+  "source_verified_evidence": [
+    {
+      "path": "performances.1.performance",
+      "quote": "依然朝着前方门向",
+      "finding": "在A0E3正式gaze门之前越序变视线，初态视线为林屿眼睛。"
+    },
+    {
+      "path": "performances.5.performance",
+      "quote": "夕光随门缝斜进走廊",
+      "finding": "增添未建模走廊光线关系。"
+    }
+  ],
+  "full_review_required": true,
+  "human_quality_confirmation": null,
+  "media_approval": false
+}

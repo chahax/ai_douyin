@@ -1,0 +1,12 @@
+{
+  "verified_serialization_fault": {
+    "error_message": "Expecting ',' delimiter",
+    "position": 8524,
+    "line": 1,
+    "column": 8525,
+    "near_error": "es_after_beat\"}},\"spatial_contract\":{\"seats\":[{\"seat_id\":\"E09\",\"access_positions\":[\"from_E01_left_side\",\"from_E01_front\"],\"required_facing\":\"E02\"},{\"seat_id\":\"E10\",\"access_positions\":[\"from_E02_left_side\",\"from_E02_front\"],\"required_facing\":\"E01\"}]}}",
+    "inner_tail": "der\":\"none\",\"location\":\"surface:E02:upper_right_corner\"},\"P05\":{\"holder\":\"none\",\"location\":\"surface:E02:center\"},\"P06\":{\"holder\":\"none\",\"location\":\"surface:E02:right_edge_corner\"},\"P07\":{\"holder\":\"C02\",\"location\":\"hand_to_surface:E02:between_two_tables_after_beat\"}},\"spatial_contract\":{\"seats\":[{\"seat_id\":\"E09\",\"access_positions\":[\"from_E01_left_side\",\"from_E01_front\"],\"required_facing\":\"E02\"},{\"seat_id\":\"E10\",\"access_positions\":[\"from_E02_left_side\",\"from_E02_front\"],\"required_facing\":\"E01\"}]}}"
+  },
+  "source_output_cap_not_exhausted": true,
+  "request": "原响应完整但payload_json不是有效JSON。按同一S6和合同重新生成完整新导演稿；字符串内的JSON必须有完整对象、正确逗号与转义。不要仅返回修补片段，不增删原steps。"
+}

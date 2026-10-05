@@ -1,0 +1,8 @@
+{
+  "verified_combined_generation_fault": "此前96写三张已摊，却只记录P03_Y take且未place；在原action里提前念清单和提前C01抬眼，源拒绝。完整计划阶段不写长表演或秒数。",
+  "current_source_obligations": [
+    "只处理B03两条原action，原清单对白不写进事件。第一条：C02坐E10/E02侧身；三张P03_Y/P03_P/P03_B都从E01无人持有相继take再place到自己E02面前；点浅黄。每个成员都需要完整拿放两事件，侧身face和有变化的gaze独立事件。",
+    "第二条：在清单对白之后才take P07，右手持笔反转伸出悬停等接。只有take操作；若需要伸出保持事件则operation=null，不能place/slide松开笔，手动不是人物move/face。",
+    "不写C01看笔抬眼等下一镜动作；当前satisfies均[]，不使用未来B04-R01。所有非empty value持有位置写右手握法，不在location嵌整段转移文字。"
+  ]
+}

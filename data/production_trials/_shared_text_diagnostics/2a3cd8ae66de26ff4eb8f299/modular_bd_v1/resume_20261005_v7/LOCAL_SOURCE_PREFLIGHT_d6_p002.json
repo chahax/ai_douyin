@@ -1,0 +1,8 @@
+{
+  "verified_source_constraints": [
+    "本镜对白完整引用林屿原长句，只在dialogue_performance安排呼吸和语气，程序按正常语速插入原句，不缩写/拆句/重说。",
+    "唯一原action是方澄从红笔批注移到桌角电影票、没接话。gaze第三列为空字符串，第四列写唯一观察对象；目光实际变化必须operations，不能只藏表演文字。",
+    "B02-R01是原对白之后C01原反应保持的可读窗口，satisfies只能标在该source_step_ref内operations=[]且subject=C01的真实保持组，秒数至少0.8，不能标在移动视线的动作组。"
+  ],
+  "format_contract": "只根两字段，完整actions包含当前原action一次；group五字段；op四列数组；对白说明非空；无重复无用保持、无物件拿放起坐。"
+}

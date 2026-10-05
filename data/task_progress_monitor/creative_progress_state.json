@@ -3,36 +3,40 @@
   "automation_id": "codex",
   "interval_minutes": 30,
   "enabled": true,
-  "updated_at_utc": "2026-10-05T05:43:12.736211+00:00",
+  "updated_at_utc": "2026-10-05T13:01:41.380707+00:00",
   "current_goal": "完整剧本、整片导演规划、逐镜表演、确定性编译和制作交接",
-  "actual_latest_call": 71,
+  "actual_latest_call": 158,
   "latest_script": {
     "ordinal": 67,
     "version": "s6",
-    "status": "adopted_for_direction_only"
+    "status": "unchanged_original_full_script_in_complete_text_handoff"
   },
-  "current_stage": "independent small response-layer production test passed; original call70 unresolved; full director/performance continuation remains blocked",
-  "effective_calls_started": 71,
-  "effective_reported_tokens": 710117,
+  "current_stage": "complete text handoff awaiting human content and aesthetic confirmation",
+  "effective_calls_started": 158,
+  "effective_reported_tokens": 2915735,
   "aggregate_text_token_limit": null,
   "quota_monitor_cancelled": true,
   "media_calls": 0,
   "unresolved": [
-    "原70结果/真实用量未知，所有新模型派发阻止",
-    "无有效整片导演/实际局部窗口/编译/交接",
-    "B02真实对白时间及拒绝前中后/听者反应未实际验收",
-    "历史长分析服务端原因与心跳延后原因未查明"
+    "原70结果/用量未知，64010预留保持不重发",
+    "旧MiniMax长分析耗尽输出的服务端原因仍未知",
+    "用户内容/审美确认、实际选定图回传导演、第二镜长句媒体承载未验证"
   ],
   "latest_story_direction": "call64 story_plan_r10 adopted for complete script only",
   "latest_user_direction_confirmation": "用户已确认完整主线符合目标并要求继续；具体方向和成稿仍须实际验收",
   "latest_transport_candidate": "same MiniMax-M3 single-string transport: individual valid57/58/60 and invalid56/59 inner JSON; no general guarantee",
   "latest_offline_validation": {
-    "tests_passed": 500,
-    "subtests_passed": 14,
-    "production_pass": false
+    "specialized_review_tests_passed": 12,
+    "delivery_tests_passed": 2,
+    "provider_calls": 0,
+    "creative_quality_passed": false,
+    "proofs": [
+      "data/qa/creative_resume_v15_20261005/OFFLINE_TESTS_01.txt",
+      "data/qa/creative_resume_delivery_v16_20261005/OFFLINE_TESTS_01.txt"
+    ]
   },
-  "last_completed_semantic_review": 68,
-  "latest_independent_semantic_review": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v4\\SOURCE_SEMANTIC_VERIFICATION_s6_call68.json",
+  "last_completed_semantic_review": 158,
+  "latest_independent_semantic_review": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v15\\DELIVERABLE_s6_d6\\FULL_TEXT_REVIEW.json",
   "latest_operator_clarification": "data/production_trials/_shared_text_diagnostics/2a3cd8ae66de26ff4eb8f299/modular_bd_v1/resume_20261005_v3/OPERATOR_CLARIFICATION_after_call57.json",
   "adopted_story_direction": {
     "ordinal": 64,
@@ -41,7 +45,7 @@
     "approved_for_complete_script": true,
     "media_approval": false
   },
-  "latest_call": 71,
+  "latest_call": 158,
   "pending_calls": [
     70
   ],
@@ -49,16 +53,28 @@
     70
   ],
   "spend_snapshot": {
-    "effective_calls_started": 71,
-    "calls_with_known_usage": 70,
-    "effective_reported_tokens": 710117,
+    "schema": "authorized_creative_continuation/v3",
+    "new_calls": 1,
+    "effective_calls_started": 158,
+    "new_reported_tokens": 202763,
+    "effective_reported_tokens": 2915735,
     "unknown_token_reservations": 64010,
     "max_total_tokens": null,
+    "unbounded_aggregate_text_authorized": true,
     "old_budget_reset": false,
-    "media_calls": 0
+    "old_governance_migrated": false,
+    "media_calls": 0,
+    "semantic_approval": false,
+    "calls_with_known_usage": 157,
+    "inherited_unknown_token_reservations": 64010,
+    "new_unknown_token_reservations": 0,
+    "inherited_pending_ordinals": [
+      70
+    ],
+    "original_call70_recovered": false
   },
   "unknown_token_reservations": 64010,
-  "stage": "independent small response-layer production test passed; original call70 unresolved; full director/performance continuation remains blocked",
+  "stage": "text_handoff_complete_human_confirmation_pending",
   "offline_regression": {
     "passed": 500,
     "subtests_passed": 14,
@@ -66,59 +82,61 @@
     "proof": "data/qa/creative_resume_v4_20261005/REGRESSION_AFTER_SOURCE_AUDIT.txt"
   },
   "latest_user_alignment": "2026-10-05 符合，继续这条主线",
-  "next_step": "原70结果及真实用量对账后，采用或完整返修导演，逐镜生成实际表演窗口并确定性编译与全文复审",
+  "next_step": "用户核对完整故事和实际表演；确认少量审美样板，选定实图回传导演，验证长句段长后逐段媒体制作",
   "content_alignment_pending": {
     "optional_preference": "真实克制释放更清楚 / 强对抗反击",
     "question_sent": true,
     "working_assumption": "真实克制释放更清楚",
-    "user_evaluation_record": "data/qa/creative_resume_v4_20261005/USER_CREATIVE_FEEDBACK_FOR_STORY_R9.json"
+    "user_evaluation_record": "data/qa/creative_resume_v4_20261005/USER_CREATIVE_FEEDBACK_FOR_STORY_R9.json",
+    "current_complete_artifact": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v15\\DELIVERABLE_s6_d6\\CREATIVE_REVIEW_COPY.md",
+    "confirmation_received": false
   },
   "latest_git_backup": {
     "branch": "codex/backup-ai-creative-20261003",
-    "commit": "ce1bb2bcf7fda739fe737cef38ed1e4d30c5a0b8",
+    "commit": "e7967f44957d769cc75ecae62ee2ebda505700a0",
     "remote_verified": true,
-    "changed_files": 171,
-    "scope": "response evidence repair, 49 repair tests, 98 unchanged regressions, offline candidate; original call70 remains unresolved"
+    "changed_files": 181,
+    "scope": "approved one-call production receiving-layer test, raw response, phase receipts, source snapshots; parent70 remains unknown"
   },
-  "content_review_artifact": "D:\\IT\\ai_douyin\\data\\production_records\\this_time_i_leave_s6_20261005\\FULL_SCRIPT.md",
+  "content_review_artifact": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v15\\DELIVERABLE_s6_d6\\CREATIVE_REVIEW_COPY.md",
   "last_progress_check": {
-    "at_utc": "2026-10-05T05:43:12.736211+00:00",
-    "latest_actual_call": 71,
-    "effective_reported_tokens": 710117,
-    "new_provider_calls": 1,
-    "full_text_handoff_available": false,
+    "at_utc": "2026-10-05T13:01:41.380707+00:00",
+    "latest_actual_call": 158,
+    "effective_reported_tokens": 2915735,
+    "full_text_handoff_available": true,
     "frozen_records_modified": false,
-    "client_small_request_production_passed": true
+    "creative_quality_passed": false,
+    "media_calls": 0
   },
   "content_feedback_received": true,
   "foreground_progress_check": {
-    "last_visible_checkpoint_utc": "2026-10-05T05:02:44Z",
+    "last_visible_checkpoint_utc": "2026-10-05T07:50:04.378431+00:00",
     "interval_minutes": 30,
     "content_required": true,
     "reason": "Observed last scheduled heartbeat started after long turn ended; scheduler cause unknown."
   },
   "heartbeat_configuration_audit": "data/qa/creative_progress_heartbeat_20261005/AUDIT.json",
-  "last_periodic_visible_summary_utc": "2026-10-05T05:02:44Z",
-  "last_periodic_visible_summary_beijing": "2026-10-05 13:02",
-  "latest_review": "call68 complete source-bound script review valid; adopted for direction only",
-  "effective_calls": 71,
+  "last_periodic_visible_summary_utc": "2026-10-05T09:20:00+00:00",
+  "last_periodic_visible_summary_beijing": "2026-10-05 17:20",
+  "latest_review": "call158 complete source-bound full director/performance review valid; user creative quality pending",
+  "effective_calls": 158,
   "latest_text_review": {
-    "ordinal": 68,
-    "version": "script_review_s6_r1",
-    "status": "complete_review_evidence_valid",
+    "ordinal": 158,
+    "status": "complete_full_text_review_and_source_evidence_valid",
     "issues": 0,
-    "production_quality_passed": false
+    "creative_quality_passed": false,
+    "record": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v15\\DELIVERABLE_s6_d6\\FULL_TEXT_REVIEW.json"
   },
-  "production_handoff": null,
+  "production_handoff": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v15\\DELIVERABLE_s6_d6\\PRODUCTION_HANDOFF.json",
   "periodic_summary_delay_note": "本次前台核对晚于上次30分钟约8分钟，未把自动任务ACTIVE解释为准点保证；人工继续在工作边界核对。",
-  "calls_with_known_usage": 70,
+  "calls_with_known_usage": 157,
   "unknown_outcome_ordinals": [
     70
   ],
   "quota_queries_enabled": false,
   "current_production_document": "D:\\IT\\ai_douyin\\docs\\THIS_TIME_I_LEAVE_S6_PRODUCTION_RECORD_20261005.md",
   "documented_script_version": "s6_call67",
-  "documentation_last_update_utc": "2026-10-05T03:30:15.619630+00:00",
+  "documentation_last_update_utc": "2026-10-05T13:01:41.380707+00:00",
   "user_quality_confirmation": null,
   "latest_reconciliation_audit": "D:\\IT\\ai_douyin\\data\\qa\\call70_reconciliation_20261005\\RECONCILIATION_AUDIT.json",
   "console_recovery_tool_blocked": true,
@@ -130,7 +148,7 @@
     "approved_for_complete_script": true,
     "media_approval": false
   },
-  "new_dispatch_blocked": true,
+  "new_dispatch_blocked": false,
   "response_capture_repair": {
     "status": "offline_verified_production_not_adopted",
     "tests_passed": 49,
@@ -154,6 +172,60 @@
     "prior_approval_review_rejection_preserved": true,
     "root": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\response_receive_production_test_20261005",
     "creative_quality_passed": false,
-    "regular_production_continuation_ready": false
-  }
+    "regular_production_continuation_ready": false,
+    "git_commit": "e7967f44957d769cc75ecae62ee2ebda505700a0",
+    "completed_at_utc": "2026-10-05T05:55:36.903714+00:00"
+  },
+  "spend_continuation_anchor": "D:\\IT\\ai_douyin\\data\\qa\\creative_response_live_acceptance_20261005\\SPEND_CONTINUATION_ANCHOR.json",
+  "latest_actual_call": 158,
+  "new_continuation_authorization": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v5\\CREATIVE_CONTINUATION_AUTHORIZATION.json",
+  "latest_director": {
+    "ordinal": 77,
+    "status": "contract_valid_source_preflight_valid",
+    "adopted_for_local_text": true,
+    "readable_artifact": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v5\\WHOLE_FILM_DIRECTION_call77_FOR_LOCAL_TEXT.md"
+  },
+  "regular_continuation": {
+    "version": "v5",
+    "source_files": 152,
+    "offline_tests_passed": 4,
+    "new_provider_calls": 8,
+    "old70_resolved": false,
+    "old_budget_reset": false,
+    "media_calls": 0,
+    "current_version": "v15_production_v16_read_only_delivery",
+    "current_source_files": 183
+  },
+  "local_progress": {
+    "direction_call": 77,
+    "direction_revision": 6,
+    "contract_valid_shots": 9,
+    "source_approved_shots": 9,
+    "required_shots": 9,
+    "compiled_prefix_seconds": 91.44285714285714,
+    "complete": true,
+    "declared_windows": 6,
+    "adopted_local_ordinals": [
+      83,
+      86,
+      101,
+      104,
+      118,
+      121,
+      129,
+      148,
+      153
+    ]
+  },
+  "compact_local_contract": {
+    "version": "v10",
+    "source_files": 167,
+    "offline_tests_passed": 3,
+    "actor_actions_manually_patched": false,
+    "original_outputs_preserved": true,
+    "input_reference_full_text_checked": true,
+    "old_budget_reset": false
+  },
+  "last_periodic_summary_at_utc": "2026-10-05T12:34:03.847326+00:00",
+  "actual_latest_call_status": "complete_valid_full_text_review"
 }

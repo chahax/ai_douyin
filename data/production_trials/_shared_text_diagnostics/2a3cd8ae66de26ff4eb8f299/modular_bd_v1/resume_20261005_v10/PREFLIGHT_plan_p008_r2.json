@@ -1,0 +1,9 @@
+{
+  "complete_new_plan_required": true,
+  "precise_fault": "130将推E04门写成place E04；E04是固定环境门，不是道具，不能take/place/slide。原推门是保持现有道具持有的C01微动作，operation为JSON null，intent明确推开门。之后C01整体move出办公室。",
+  "source_order": [
+    "第一个原action分别take P01至肩上、take P02至手中、move两步到E04门内方向；第二个原action推E04门的null微动作、move真正走出E04外。",
+    "原那我先走了由程序插在两原actions之间，事件不说话。P01/P02持续持有，不放下不交林屿，P07仍C02持有。",
+    "不用新开门kind，不拿/放环境门、不造走廊资产，不新gaze/回头；satisfies全空。完整新计划，非补丁。"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "complete_new_plan_required": true,
+  "precise_fault": "132给固定环境门写stand E04且value门开启；stand只描述人物站姿/位置，不是环境开关。本合同不追踪门的开关字段，原推门动作只写intent和operation:null，后move到门外。门的实际开启交自然表演明确执行，不伪造成站姿或道具状态。",
+  "atomic_field_examples_not_new_script": {
+    "opening_door_event_operation": null,
+    "move_actor_target": "",
+    "face_actor_target": "",
+    "gaze_actor_target": ""
+  },
+  "source_guards": [
+    "取包P01跨肩、取票P02手中、转向既有E04门的face及路径gaze、真实走两步到门方向；原对白随后程序完整插入。",
+    "原后action先推E04门(op null)再真实身体move到E04外；保留包票，不能take/place/pass/slide/stand操作门。",
+    "C02仍在E02自己核对，C01不回头看票/新台词/第三角色/新走廊资产，全部satisfies空数组。完整新计划。"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "current_shot_source_preflight": [
+    "C02保持握P07停在两桌间，视线先她的包，再回客户明细。两次gaze分相继组。",
+    "B06-R01让首次被拒绝后的愣住有至少1秒C02保持；B06-R02在接回工作后至少1秒C02保持。两组各绑定对应原action ref，不能用操作组冒充保持。",
+    "笔从两桌间收回手边但仍同一人同一握法持有；只描述握笔手收回，不place后又take。浅黄P03_Y由E02面滑回自己客户单旁，slide第四列surface:E02:明细单旁；浅粉/浅蓝不动。"
+  ],
+  "compact_contract_reminder": [
+    "提交本镜完整新根对象，仅dialogue_performance/actions。无对白也写非空本镜无对白。",
+    "所有operation严格四列，不加字段。每group最多一条状态操作；组间相继，组内读首态末尾提交。拿和放、同一角色两次gaze不能同组。",
+    "第四列始终非空。gaze/face/move第三列空，真实目标在第四列；take/slide第三列是道具ID。",
+    "satisfies只在正确subject且operations=[]的实际保持组中，after/before必须满足原q；during由程序绑定原完整对白。",
+    "保留全部原steps、对白、实际首态；不自行计算总镜长、不补剧情、不拆原对白。"
+  ]
+}

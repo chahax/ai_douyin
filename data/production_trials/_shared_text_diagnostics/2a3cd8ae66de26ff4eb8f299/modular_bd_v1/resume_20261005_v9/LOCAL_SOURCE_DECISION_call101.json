@@ -1,0 +1,29 @@
+{
+  "call": 101,
+  "derived_local_sha256": "2d6796ad94a7efe34e25de5d725b036401aef5d4777baeb9757db9453dc10e6c",
+  "model_performance_sha256": "69c851605aa41e2970aac26d0edc841ba0e3be8bc93b361a2f10150e0b3018b7",
+  "event_plan_ordinal": 99,
+  "approved_for_next_local_text": true,
+  "source_verified_evidence": [
+    {
+      "path": "performances.7.performance",
+      "quote": "轻点一下",
+      "finding": "点浅黄在完整清单对白前，仅点纸面，不提前念词。"
+    },
+    {
+      "path": "performances.9.performance",
+      "quote": "保持握持等她来接",
+      "finding": "P07持续C02手持，原步骤反转伸出成立，不释放或新增人物移动。"
+    },
+    {
+      "path": "performances.6.performance",
+      "quote": "三张便利贴并排摊开",
+      "finding": "三色成员逐次拿放和物理计划全部对应，不新增第四张纸。"
+    }
+  ],
+  "duration_seconds": 14.000000000000002,
+  "full_review_required": true,
+  "human_quality_confirmation": null,
+  "media_approval": false,
+  "readability_pending_note": "对白cue有舌尖/鼻腔气流等过细建议，全文复审与人工内容确认仍需评估可制作性，不据此批准口型。"
+}

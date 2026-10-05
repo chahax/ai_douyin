@@ -1,0 +1,9 @@
+{
+  "complete_new_performance_required": true,
+  "verified_source_fault": "142 A0E4 says pen tip still above P05 while looking P06; raw B09 requires each stroke then pen-tip moves to adjacent P06 to compare. Both cycles must actually move the same held pen tip to P06 and return P05. Gaze alone insufficient.",
+  "contract_scope": [
+    "Keep exact six slots and model plan141; hand micro movements accompany corresponding real gaze, no take/place/subject face changes needed. A0E1/A0E4 held-tip truly moves toward/over P06 corresponding entry, A0E2/A0E5 tip returns current P05 next-entry. A0E0/A0E3 actually write, not prepare.",
+    "Use current established paper adjacency only, avoid inventing left/right layout, distances, new数字障碍 or elaborate micro-anatomy. C02 still faces E02 seated, C01 outside. Static cup/notes need not be repeated per row.",
+    "Full complete new performance with natural seconds; no dialogue, no new story/heldprop changes or hidden gaze outside approved slots."
+  ]
+}

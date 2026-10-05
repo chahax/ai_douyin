@@ -1,0 +1,15 @@
+{
+  "call": 126,
+  "derived_local_sha256": "6c0087cf6a1e6d5b2871d80f18add1a5c3460524a15321b2c0e2755f8dcb24ac",
+  "approved_for_next_local_text": false,
+  "source_verified_evidence": [
+    {
+      "path": "performances.10.performance",
+      "quote": "准备继续在下一行落字改下去",
+      "finding": "原步骤要求继续往下改，不能停在准备而未实际改。"
+    }
+  ],
+  "full_review_required": true,
+  "human_quality_confirmation": null,
+  "media_approval": false
+}

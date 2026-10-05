@@ -1,0 +1,28 @@
+{
+  "call": 143,
+  "derived_local_sha256": "bbf82eb05282b8a7228ee30e873ea99558e15f2ab6a81b6647a722ba53daedad",
+  "model_performance_sha256": "c84beb1fc90080deb443db629e0c491cda149b20f0aeccdc0a27bd30c3c21e6e",
+  "event_plan_ordinal": 141,
+  "approved_for_next_local_text": true,
+  "source_verified_evidence": [
+    {
+      "path": "performances.0.performance",
+      "quote": "真正留下墨迹",
+      "finding": "本镜首笔实际发生，P07原持有不中断。"
+    },
+    {
+      "path": "performances.1.performance",
+      "quote": "停在该行数字上方",
+      "finding": "第一笔后同一持笔手真正移动笔尖到P06配合视线比对。"
+    },
+    {
+      "path": "performances.4.performance",
+      "quote": "平移到结算单那一行数字上方停稳",
+      "finding": "第二笔后再次实际持笔比对，不仅换视线，不重拿笔，不增加新困难/喊她。"
+    }
+  ],
+  "full_review_required": true,
+  "human_quality_confirmation": null,
+  "media_approval": false,
+  "readability_pending_note": "本镜写“第一处/第二行”与前镜下一行状态的连续解释、向右空间措辞和微动作精度由整片全文审查核对；纸内行内容未被状态编译验证。"
+}

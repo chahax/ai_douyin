@@ -1,0 +1,74 @@
+{
+  "complete_new_plan_required": true,
+  "dependency_change": "前镜完整新表演118替代107，相視矛盾取消。开始状态操作不变但输入SHA已变，不能借旧112/115输入沿用，模型必须重交当前完整计划。",
+  "previous_complete_plan_for_source_order_reference": {
+    "actions": [
+      {
+        "source_step_ref": "raw_linear_script.beats.5.steps.0",
+        "events": [
+          {
+            "intent": "林屿递笔的手悬停在桌面上方，笔尖仍朝向方澄那一侧，未收回——第一次被明确拒绝后的可见停顿反应。",
+            "subject": "C02",
+            "operation": null,
+            "satisfies": [
+              "B06-R01"
+            ]
+          },
+          {
+            "intent": "林屿视线先看向方澄椅背上挂着的米灰色挎包。",
+            "subject": "C02",
+            "operation": {
+              "kind": "gaze",
+              "actor": "C02",
+              "target": "",
+              "value": "surface:E09:椅背上挂着的米灰色挎包P01"
+            },
+            "satisfies": []
+          },
+          {
+            "intent": "林屿视线从挎包看回自己桌面上摊开的客户明细单。",
+            "subject": "C02",
+            "operation": {
+              "kind": "gaze",
+              "actor": "C02",
+              "target": "",
+              "value": "surface:E02:两人之间摊开的客户明细单P05"
+            },
+            "satisfies": []
+          }
+        ]
+      },
+      {
+        "source_step_ref": "raw_linear_script.beats.5.steps.1",
+        "events": [
+          {
+            "intent": "林屿保持原握法，将签字笔从两人桌面之间收回自己手边，过程中未松笔也未换手。",
+            "subject": "C02",
+            "operation": null,
+            "satisfies": []
+          },
+          {
+            "intent": "林屿用指尖把那张浅黄便利贴沿桌面滑回自己面前，搁在客户明细单旁边。",
+            "subject": "C02",
+            "operation": {
+              "kind": "slide",
+              "actor": "C02",
+              "target": "P03_Y",
+              "value": "surface:E02:客户明细单P05旁边"
+            },
+            "satisfies": []
+          },
+          {
+            "intent": "林屿把签字笔和浅黄便利贴认领回自己这边后，独自停在工位前，没有开口喊她。",
+            "subject": "C02",
+            "operation": null,
+            "satisfies": [
+              "B06-R02"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "guard": "保持原六事件真实源顺序及两个null保持ID；没有独处场景，C01仍站E01；不转身不喊话，不改变原握法，不加动作；最后只保持刚收回握笔和浅黄贴的状态。"
+}

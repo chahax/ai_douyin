@@ -1,0 +1,16 @@
+{
+  "actual_transmitted_schema_errors": 0,
+  "actual_full_local_validator_errors": [
+    {
+      "path": "step_units.1.groups.0.operations.1.target",
+      "message": "'' was expected"
+    },
+    {
+      "path": "step_units.1.groups.0.hold_subject",
+      "message": "'' was expected"
+    }
+  ],
+  "cause_verified": "_simple_schema removes allOf conditions but local _local_schema validator retains them",
+  "old_bound_code_changed": false,
+  "fix_for_next_request": "include existing complete validation schema as actual model input, not patched output"
+}

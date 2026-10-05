@@ -1,0 +1,111 @@
+{
+  "source_call": 74,
+  "source_receipt_sha256": "ae2e5be9751801bfd016c1f4f8eb2525696b162b9367476b89aa4d50096670ad",
+  "request": "独立重新创作完整导演稿，不沿用第73/74次窗口或补丁。不要复述错误示例。完整输出所有字段。",
+  "root_required_fields": [
+    "schema",
+    "context_sha256",
+    "raw_linear_script_sha256",
+    "emotional_arc",
+    "causal_chain",
+    "ending_intent",
+    "beats",
+    "initial_state",
+    "spatial_contract"
+  ],
+  "beat_required_fields": [
+    "beat_id",
+    "shots"
+  ],
+  "shot_required_fields": [
+    "shot_id",
+    "source_step_refs",
+    "new_information",
+    "observation_object",
+    "camera",
+    "cut_reason",
+    "purpose",
+    "composition",
+    "dialogue_mode",
+    "performance_requirements"
+  ],
+  "verified_schema_faults": [
+    {
+      "path": "beats.0.shots.0",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.0.shots.1",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.1.shots.0",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.1.shots.1",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.2.shots.0",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.3.shots.0",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.4.shots.0",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.5.shots.0",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.6.shots.0",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.7.shots.0",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.8.shots.0",
+      "message": "'purpose' is a required property"
+    }
+  ],
+  "verified_source_faults": [
+    "B01步骤1重复；B03递笔steps.2丢失。每拍shots连接后必须exactly等于该拍原steps顺序；不得遗漏或复制。",
+    "全部同源before/after关系无法编译，必须废弃该套窗口；不是只删除during。",
+    "便利贴初态holder=none、location=surface:E01:桌角便利贴叠；三段字段，zone是区域名字而非额外标签。包位置明确椅背，不伪称桌面。"
+  ],
+  "window_design": "只设置真正关键且可编译的窗口，普通建立/拿放/离开动作无需额外要求，可使用空数组。B04方澄原反应发生在B03已完整递笔之后；B05拒绝说话表演在其同一dialogue中；B06林屿原反应发生在B05已完整拒绝之后。不要把这些要求移到无关步骤。每条reaction_ref归属本镜，跨镜只能after且刺激在前。",
+  "valid_contract_examples": [
+    {
+      "id": "任意全片唯一ID",
+      "subject": "C01",
+      "stimulus_ref": "raw_linear_script.beats.2.steps.2",
+      "reaction_ref": "raw_linear_script.beats.3.steps.0",
+      "relation": "after",
+      "minimum_seconds": 2
+    },
+    {
+      "id": "另一个全片唯一ID",
+      "subject": "C01",
+      "stimulus_ref": "raw_linear_script.beats.4.steps.0",
+      "reaction_ref": "raw_linear_script.beats.4.steps.0",
+      "relation": "during",
+      "minimum_seconds": 1
+    },
+    {
+      "id": "第三个全片唯一ID",
+      "subject": "C02",
+      "stimulus_ref": "raw_linear_script.beats.4.steps.0",
+      "reaction_ref": "raw_linear_script.beats.5.steps.0",
+      "relation": "after",
+      "minimum_seconds": 2
+    }
+  ],
+  "cinematic_and_state": "所有shot必须有purpose。保持单机位可读表演，没有镜内隐含切镜、提前动作、无关等待、起坐、额外对白/人物/道具。方澄站着，林屿坐着；保持原结尾。全文原稿及Schema均在本请求，不采用旧稿。"
+}

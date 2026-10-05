@@ -1,0 +1,19 @@
+{
+  "source_call": 87,
+  "verified_transport_fault": {
+    "code": "JSON_DOCUMENT_INNER_OBJECT_REQUIRED",
+    "inner_actual_type": "str",
+    "reason": "payload_json解码一次后又得到JSON字符串，发生二次编码；正确应一次解码得到完整object。不得自动解开第二层来采用。"
+  },
+  "root_shape": {
+    "dialogue_performance": "填写完整原三词对白期间的嘴部/呼吸/情绪",
+    "actions": "包含本镜两个kind=action原步骤的有序数组"
+  },
+  "request": "提交完整新第三镜稿，根对象恰好dialogue_performance/actions；payload_json字符串所代表的文本必须以{开始、}结束，不加内层首尾引号，不再把JSON对象编码成第二层JSON字符串，不返回补丁或摘要。所有原来源和真实首态继续适用。",
+  "verified_source_constraints": [
+    "本镜原顺序是先从方澄E01桌角抽出浅黄/浅粉/浅蓝三张便利贴摊在林屿E02桌面并点黄，然后原三词对白，最后从E02桌沿拿P07反转笔尖朝她、等她接。",
+    "便利贴归属C01但当前都在E01表面holder=none，模型须分别take三个实际成员、在E02放置；不能slide跨桌面、不能集合ID、未动成员不漂移。先take再place同一道具必须相继不同组，同组不能两次读写同一holder/location/gaze等字段。",
+    "P07从桌沿拿起后到B04及B06仍是林屿握笔停住，笔可抵桌面但不得松手、转交给她或再次拿笔。取笔/递笔发生原三词对白之后，不在对白期间提前。",
+    "林屿保持坐姿仅侧身；没有无关起坐、纸张改写或额外对白。本镜无要求故所有satisfies=[]；dialogue_performance非空且只对白期嘴部/呼吸/情绪。"
+  ]
+}

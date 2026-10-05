@@ -1,0 +1,17 @@
+{
+  "schema": "s6_direction_production_preflight/v1",
+  "new_calls": 0,
+  "source_count": 152,
+  "request_sha256": "eb2488aa92514d668995c9a9043958034cc19caf07e61717bb54f624dd860ae9",
+  "not_original70_network_request": true,
+  "model": "MiniMax-M3",
+  "output_cap": 8000,
+  "raw_s6_script_sha256": "c38f75d6efa1a3a016458e7da8497bc987663b93b76d64be304c2d01c93bd090",
+  "reference_pack_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+  "actual_input_reference_full": true,
+  "inherited_calls": 71,
+  "inherited_reported_tokens": 710117,
+  "original_unknown_reservation": 64010,
+  "entry_offline_tests_passed": 4,
+  "old25_records_and144_sources_unchanged": true
+}

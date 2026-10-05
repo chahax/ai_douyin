@@ -1,0 +1,111 @@
+{
+  "call": 75,
+  "schema_errors": [
+    {
+      "path": "beats.0",
+      "message": "Additional properties are not allowed ('id' was unexpected)"
+    },
+    {
+      "path": "beats.0",
+      "message": "'beat_id' is a required property"
+    },
+    {
+      "path": "beats.1",
+      "message": "Additional properties are not allowed ('id' was unexpected)"
+    },
+    {
+      "path": "beats.1",
+      "message": "'beat_id' is a required property"
+    },
+    {
+      "path": "beats.2",
+      "message": "Additional properties are not allowed ('id' was unexpected)"
+    },
+    {
+      "path": "beats.2",
+      "message": "'beat_id' is a required property"
+    },
+    {
+      "path": "beats.2.shots.1",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.3",
+      "message": "Additional properties are not allowed ('id' was unexpected)"
+    },
+    {
+      "path": "beats.3",
+      "message": "'beat_id' is a required property"
+    },
+    {
+      "path": "beats.3.shots.0",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.3.shots.0",
+      "message": "'composition' is a required property"
+    },
+    {
+      "path": "beats.4",
+      "message": "Additional properties are not allowed ('id' was unexpected)"
+    },
+    {
+      "path": "beats.4",
+      "message": "'beat_id' is a required property"
+    },
+    {
+      "path": "beats.5",
+      "message": "Additional properties are not allowed ('id' was unexpected)"
+    },
+    {
+      "path": "beats.5",
+      "message": "'beat_id' is a required property"
+    },
+    {
+      "path": "beats.6",
+      "message": "Additional properties are not allowed ('id' was unexpected)"
+    },
+    {
+      "path": "beats.6",
+      "message": "'beat_id' is a required property"
+    },
+    {
+      "path": "beats.7",
+      "message": "Additional properties are not allowed ('id' was unexpected)"
+    },
+    {
+      "path": "beats.7",
+      "message": "'beat_id' is a required property"
+    },
+    {
+      "path": "beats.7.shots.0",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.7.shots.0",
+      "message": "'composition' is a required property"
+    },
+    {
+      "path": "beats.7.shots.1",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.8",
+      "message": "Additional properties are not allowed ('id' was unexpected)"
+    },
+    {
+      "path": "beats.8",
+      "message": "'beat_id' is a required property"
+    },
+    {
+      "path": "beats.8.shots.0",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.8.shots.0",
+      "message": "'composition' is a required property"
+    }
+  ],
+  "unsupported_window": "B01_S01 action steps.0 during forbidden",
+  "adopted": false
+}

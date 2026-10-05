@@ -1,0 +1,22 @@
+{
+  "call": 151,
+  "derived_local_sha256": "d1440877cd479f0b858c4c8819ca318454fd71a4fc57118520af942760338ba5",
+  "model_performance_sha256": "c0bcb1b600eb871d6da4fb0ebdd48e7007ed0193caa18a1a4d41f634fa627647",
+  "event_plan_ordinal": 150,
+  "approved_for_next_local_text": false,
+  "source_verified_evidence": [
+    {
+      "path": "performances.2.performance",
+      "quote": "微调纸位",
+      "finding": "在gaze槽隐藏纸的位置改变，原计划P05保持两人之间，不增加调整动作。"
+    },
+    {
+      "path": "performances.0.performance",
+      "quote": "第二行",
+      "finding": "前镜已在第二行修正后继续下一行，本镜指定第二行回退，不能拿不建模纸内行号默许重复。"
+    }
+  ],
+  "full_review_required": true,
+  "human_quality_confirmation": null,
+  "media_approval": false
+}

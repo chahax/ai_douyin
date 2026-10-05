@@ -1,0 +1,20 @@
+{
+  "call": 150,
+  "plan_sha256": "c049c1a229baf87f12b1c0be791ab981197bbb51c2928919af6babedd4a50439",
+  "approved_for_performance_text": true,
+  "source_verified_evidence": [
+    {
+      "path": "actions.0.events.0.intent",
+      "quote": "下一行落字处实际写下修改",
+      "finding": "接上一镜当前落字，不重新回首行，原持笔微落字为null。"
+    },
+    {
+      "path": "actions.0.events.4.intent",
+      "quote": "用于比对",
+      "finding": "两次原P05/P06比对，无take/slide/P07持有中断、没有新数字困难或喊人。"
+    }
+  ],
+  "planning_only_not_actual_windows": true,
+  "full_review_required": true,
+  "media_approval": false
+}

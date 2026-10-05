@@ -1,0 +1,12 @@
+{
+  "prior_call": 94,
+  "verified_faults": [
+    "原镜有林屿整句对账，改明细，收尾。dialogue_performance开头本镜无对白错误；只能写该整句的自然语气/面部/呼吸。",
+    "P07已take之后不得slide或place，也不得松手。下一镜原文握笔停住的手及B06递笔的手悬在桌面上方明确持续手持。当前94 slide已被物理前提拒绝。",
+    "笔在手里反转/伸出/收回，只是手部表演，不是人物face/move或道具slide。若人物朝向不变，operation=null。",
+    "三张便利贴摊在林屿E02桌前，两桌之间一侧；不能提前把浅黄收回客户单旁，也不能浅蓝既写下方又一行并排。",
+    "末尾C01额外旁观hold写半小时无叙事作用，删除。不额外让林屿抬眼求确认。"
+  ],
+  "complete_new_pen_step_contract": "原steps.2只需要一个take P07的operation，value=实际右手握法。取起/反转/伸出握住等待可以在这个take组的performance完整表现；若再给伸出后可读等接组，则operation=null，手一直握笔且人物仍坐E02。不添加其他place/slide/move/face。这是状态合同：相同持有相对手位置无需伪造变化，绝不是由程序补动作。",
+  "required_complete": "生成整镜全部actions完整新稿。保留三张便利贴相继拿放与侧身/必要gaze，按原steps顺序，自然动作时长、不机械加等待；模型自行写每组秒数和完整表演。根对象/每组五键/operation四键或null结构保持。"
+}

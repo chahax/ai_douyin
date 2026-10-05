@@ -1,0 +1,28 @@
+{
+  "call": 104,
+  "derived_local_sha256": "c075e2288d841f8a7b70b0ddb8167cc4d9f16fa9bb6e7c350e7508bf3ce94b09",
+  "model_performance_sha256": "4a455565ae9d21828a371cc96ba0187d366f3291bc4f2b8d27b23646e19e87fc",
+  "event_plan_ordinal": 103,
+  "approved_for_next_local_text": true,
+  "source_verified_evidence": [
+    {
+      "path": "performances.0.performance",
+      "quote": "被林屿的手握着停在桌面上方",
+      "finding": "观察手持悬停笔，C01不接，未改变持有。"
+    },
+    {
+      "path": "performances.1.performance",
+      "quote": "最后抬到林屿的眼睛",
+      "finding": "看笔后才沿握笔手抬眼，没有提前下个对白。"
+    },
+    {
+      "path": "performances.2.seconds",
+      "quote": "1.6",
+      "finding": "当前B04-R01稳定C01反应1.6秒，超过最低1秒。"
+    }
+  ],
+  "full_review_required": true,
+  "human_quality_confirmation": null,
+  "media_approval": false,
+  "readability_pending_note": "五度/瞳孔等微细cue仍需整片文本可制作性复审，不算已验证表演质量。"
+}

@@ -1,0 +1,11 @@
+{
+  "call": 92,
+  "contract_valid": true,
+  "approved_for_next_local_text": false,
+  "verified_source_faults": [
+    "dialogue_performance说整句期间右手已持笔悬停，但原文读清单结束后才拿笔。该字段只能语气/面部/呼吸，不描述手或身体动作/道具状态。",
+    "actions.0.groups.0的move把C02整个人从E02椅移到E01桌角；actions.1.groups.1又移整个人到两桌中线，原文只是侧身及伸手，C02全镜始终坐E10/E02。move是人物整体位置变化，绝不是手/笔移动。",
+    "对白cue视线仍放方澄桌角便利贴叠，三张已经摊到自己面前。看/点浅黄时视线真实对应自己E02桌面，不能留旧叠作为清单。"
+  ],
+  "media_approval": false
+}

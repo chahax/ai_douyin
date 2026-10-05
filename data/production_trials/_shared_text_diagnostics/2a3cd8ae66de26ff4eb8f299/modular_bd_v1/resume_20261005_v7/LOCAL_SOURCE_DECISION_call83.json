@@ -1,0 +1,24 @@
+{
+  "call": 83,
+  "source_verified_evidence": [
+    {
+      "path": "compact_document.actions.0.groups.0.performance",
+      "quote": "已挂",
+      "finding": "首镜建立已有包与站姿，没有重复拿挂。"
+    },
+    {
+      "path": "compact_document.actions.1.groups.0.operations.0.0",
+      "quote": "slide",
+      "finding": "只由C02沿同一E02推动客户单；没有coffee/结算单/笔转手。"
+    },
+    {
+      "path": "compiled_local.duration_seconds",
+      "quote": "6.0",
+      "finding": "真实串行3秒建立+3秒推动，无重叠、无尾余量。"
+    }
+  ],
+  "approved_for_next_local_text": true,
+  "full_review_required": true,
+  "human_quality_confirmation": null,
+  "media_approval": false
+}

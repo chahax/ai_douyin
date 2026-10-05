@@ -1,0 +1,20 @@
+{
+  "call": 124,
+  "plan_sha256": "4cd2084f8f701100765cb70b22833b49674f073e295cd7c6f23dfda3f5f18773",
+  "approved_for_performance_text": false,
+  "source_verified_evidence": [
+    {
+      "path": "actions.0.events.0.intent",
+      "quote": "重新低头看向客户明细单",
+      "finding": "缺原B07转回桌前face，首态仍侧身面对E01。"
+    },
+    {
+      "path": "actions.0.events.9.intent",
+      "quote": "稳定停住反应，不再开口求援，低头持续在纸面对照修改",
+      "finding": "停住/持续修改互相矛盾，求援无原历史；要求把原第二行停顿明确作稳定null反应，不在结尾补泛化反应。"
+    }
+  ],
+  "planning_only_not_actual_windows": true,
+  "full_review_required": true,
+  "media_approval": false
+}

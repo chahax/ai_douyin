@@ -1,0 +1,23 @@
+{
+  "schema": "s6_text_compile_limits/v1",
+  "covered": [
+    "完整九镜原步骤按序覆盖与唯一原句插入",
+    "已建模人物位置/姿态/朝向/视线及道具当前持有/位置前提",
+    "每条声明反应窗口的刺激先后、主体、最低持续时间",
+    "模型全部实际排时与编译payload对应"
+  ],
+  "not_verified": [
+    "实际声音语速、口型、脸部可读性与观众情绪",
+    "门铰链/开门几何、两步距离、手指接触几何、纸内数字/行内容",
+    "泛化自然语言位置的完整三维可达性",
+    "资产实际图片审美、选定图片回传及服务端视频段长能力"
+  ],
+  "legacy_compiled_prompt_not_media_instruction": true,
+  "authoritative_reviewed_view": "REVIEWED_EXECUTION_VIEW.json",
+  "actual_selected_images": [],
+  "media_calls": 0,
+  "human_content_confirmation": null,
+  "old70_result": "unknown",
+  "old70_reserved_tokens": 64010,
+  "minimax_old_long_analysis_server_cause": "unknown"
+}

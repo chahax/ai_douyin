@@ -1,0 +1,17 @@
+{
+  "call": 142,
+  "derived_local_sha256": "3d72fb7f2d455d715cad22796e74698b6f00c9e52920b3446ac019c2b43a16a1",
+  "model_performance_sha256": "b0a10060ef40a331b6ebbe4ec7457a0bca372e9b74a5ac53f40896fd4724fb3c",
+  "event_plan_ordinal": 141,
+  "approved_for_next_local_text": false,
+  "source_verified_evidence": [
+    {
+      "path": "performances.4.performance",
+      "quote": "笔尖仍悬在明细单上方",
+      "finding": "原每写一笔把笔尖挪到结算单比对，本行只换视线且明确笔尖未移到P06，源动作缺失。"
+    }
+  ],
+  "full_review_required": true,
+  "human_quality_confirmation": null,
+  "media_approval": false
+}

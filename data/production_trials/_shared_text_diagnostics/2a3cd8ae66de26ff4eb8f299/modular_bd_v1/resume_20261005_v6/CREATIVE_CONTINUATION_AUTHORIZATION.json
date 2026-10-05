@@ -1,0 +1,18 @@
+{
+  "user_quote": "开始实际表演窗口和制作交接",
+  "scope": "S6 complete direction, local actual performance, deterministic compilation, necessary full text review and handoff",
+  "writer_model": "MiniMax-M3",
+  "review_model": "deepseek-flash",
+  "aggregate_token_cap": null,
+  "automatic_retry": false,
+  "old_call70_result": "unknown",
+  "old_call70_reservation": 64010,
+  "old_call70_resend_authorized": false,
+  "old_call70_resolved": false,
+  "media_calls_authorized": false,
+  "old_budget_reset": false,
+  "prior_single_test_exception_not_used_as_authority": true,
+  "continuation_of_v5_user_instruction": true,
+  "local_validation_schema_repair": true,
+  "new_instruction_required_for_this_continuation": true
+}

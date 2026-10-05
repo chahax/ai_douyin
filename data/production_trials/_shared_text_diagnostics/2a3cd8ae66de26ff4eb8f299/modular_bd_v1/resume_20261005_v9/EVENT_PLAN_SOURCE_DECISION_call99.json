@@ -1,0 +1,25 @@
+{
+  "call": 99,
+  "plan_sha256": "f1d8626d0ee6ae73ca9bed05e16035db284caa2c3fe53fabcda1df95eaca32d5",
+  "approved_for_performance_text": true,
+  "source_verified_evidence": [
+    {
+      "path": "actions.0.events.0.operation.value",
+      "quote": "侧身朝向方澄工位E01",
+      "finding": "侧身在取便利贴之前，演员位置/坐姿不改变。"
+    },
+    {
+      "path": "actions.0.events.5.operation.target",
+      "quote": "P03_B",
+      "finding": "三张成员均各自take/place完整，没有把集体摊面藏在单张元数据。"
+    },
+    {
+      "path": "actions.1.events.1.intent",
+      "quote": "保持握着P07",
+      "finding": "取笔后反转/微伸保持手持，不release/slide，不提前下一镜反应。"
+    }
+  ],
+  "planning_only_not_actual_windows": true,
+  "full_review_required": true,
+  "media_approval": false
+}

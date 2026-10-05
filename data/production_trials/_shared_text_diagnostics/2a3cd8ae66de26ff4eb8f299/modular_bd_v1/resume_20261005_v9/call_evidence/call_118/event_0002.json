@@ -1,0 +1,15 @@
+{
+  "schema": "creative_call_evidence/v1",
+  "sequence": 2,
+  "identity_sha256": "6cfbbc6f9d52e1ba0ed9dbdef8c0e3577c04d87fec0d0b7c4e6dc7fec7e003aa",
+  "at_utc": "2026-10-05T10:08:40.538332+00:00",
+  "phase": "client_configured",
+  "details": {
+    "role": "writer",
+    "model": "MiniMax-M3",
+    "base_url": "https://api.minimaxi.com/v1",
+    "timeout_seconds": 600,
+    "max_retries": 0,
+    "server_stream_requested": false
+  }
+}

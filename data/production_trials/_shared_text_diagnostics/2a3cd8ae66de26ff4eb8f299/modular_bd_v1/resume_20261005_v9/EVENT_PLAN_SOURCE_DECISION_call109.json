@@ -1,0 +1,22 @@
+{
+  "call": 109,
+  "plan_sha256": "2ac40aafe31863afffc15111e8274a6502476f1ea79ebc2cab0acfda0495700f",
+  "approved_for_performance_text": false,
+  "source_verified_evidence": [
+    {
+      "path": "actions.1.events.2.intent",
+      "quote": "重新面对工作，停下不再喊她",
+      "finding": "重新面对工作可能提前B07转身，null未记录；不再喊她引入原B06没有的喊人历史，需完整新计划消除歧义。"
+    }
+  ],
+  "planning_only_not_actual_windows": true,
+  "full_review_required": true,
+  "media_approval": false,
+  "correction": {
+    "reason": "approval used tool envelope hash; gate blocked before SDK; bind original parsed complete document instead",
+    "original_decision_file": "EVENT_PLAN_SOURCE_DECISION_call109_ORIGINAL_WRONG_ENVELOPE_HASH.json",
+    "original_decision_sha256": "0d463cb9dafda3d89ef94ca5a6db79c9107fdebb597462c1189f870a15a89ae4",
+    "model_content_changed": false,
+    "provider_calls": 0
+  }
+}

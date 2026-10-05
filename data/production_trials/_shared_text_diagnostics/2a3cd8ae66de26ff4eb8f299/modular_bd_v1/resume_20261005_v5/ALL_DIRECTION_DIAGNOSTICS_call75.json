@@ -1,0 +1,146 @@
+{
+  "schema": "complete_direction_readonly_diagnostics/v1",
+  "faults": [
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.0",
+      "message": "Additional properties are not allowed ('id' was unexpected)"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.0",
+      "message": "'beat_id' is a required property"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.1",
+      "message": "Additional properties are not allowed ('id' was unexpected)"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.1",
+      "message": "'beat_id' is a required property"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.2",
+      "message": "Additional properties are not allowed ('id' was unexpected)"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.2",
+      "message": "'beat_id' is a required property"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.2.shots.1",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.3",
+      "message": "Additional properties are not allowed ('id' was unexpected)"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.3",
+      "message": "'beat_id' is a required property"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.3.shots.0",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.3.shots.0",
+      "message": "'composition' is a required property"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.4",
+      "message": "Additional properties are not allowed ('id' was unexpected)"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.4",
+      "message": "'beat_id' is a required property"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.5",
+      "message": "Additional properties are not allowed ('id' was unexpected)"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.5",
+      "message": "'beat_id' is a required property"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.6",
+      "message": "Additional properties are not allowed ('id' was unexpected)"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.6",
+      "message": "'beat_id' is a required property"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.7",
+      "message": "Additional properties are not allowed ('id' was unexpected)"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.7",
+      "message": "'beat_id' is a required property"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.7.shots.0",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.7.shots.0",
+      "message": "'composition' is a required property"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.7.shots.1",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.8",
+      "message": "Additional properties are not allowed ('id' was unexpected)"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.8",
+      "message": "'beat_id' is a required property"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.8.shots.0",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "code": "SCHEMA_INVALID",
+      "path": "beats.8.shots.0",
+      "message": "'composition' is a required property"
+    },
+    {
+      "code": "DURING_NOT_SAME_DIALOGUE",
+      "path": "REQ_B01_S01_FACIAL_STILLNESS"
+    }
+  ],
+  "fault_count": 27,
+  "document_modified": false,
+  "model_calls": 0,
+  "mechanical_only": true,
+  "semantic_approval": false,
+  "ordinal": 75,
+  "receipt_sha256": "e6cb5b3475b1f144d6784e6d9a43e1dfad5b2a90a3e2d5774ca1eb50bb4dc810"
+}

@@ -1,0 +1,5 @@
+{
+  "complete_new_performance_required": true,
+  "exact_fault": "116虽无相视但又在开头写抬眼；104已完成抬眼，此镜没有gaze/action slots。完整新稿仅说话自然语气、表情、呼吸；不提任何抬眼、转移目光、双方对视或身体动作。",
+  "format": "dialogue_performance简洁一到两句，不复述原台词不添加台词；performances必须空数组。原句由程序完整插入，保持正常生活语速、坚定不笑不补偿即可。"
+}

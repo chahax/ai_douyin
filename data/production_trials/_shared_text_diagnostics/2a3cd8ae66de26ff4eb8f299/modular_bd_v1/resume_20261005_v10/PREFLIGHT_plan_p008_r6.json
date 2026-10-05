@@ -1,0 +1,97 @@
+{
+  "complete_new_plan_required": true,
+  "previous_complete_model_plan_for_diagnosis": {
+    "actions": [
+      {
+        "source_step_ref": "raw_linear_script.beats.7.steps.0",
+        "events": [
+          {
+            "intent": "方澄从椅背取下挎包挎上左肩",
+            "subject": "C01",
+            "operation": {
+              "kind": "take",
+              "actor": "C01",
+              "target": "P01",
+              "value": "C01左肩跨挎持有"
+            },
+            "satisfies": []
+          },
+          {
+            "intent": "方澄右手拿起桌角的电影票",
+            "subject": "C01",
+            "operation": {
+              "kind": "take",
+              "actor": "C01",
+              "target": "P02",
+              "value": "C01右手持有"
+            },
+            "satisfies": []
+          },
+          {
+            "intent": "方澄面向办公室门方向",
+            "subject": "C01",
+            "operation": {
+              "kind": "face",
+              "actor": "C01",
+              "target": "",
+              "value": "E04"
+            },
+            "satisfies": []
+          },
+          {
+            "intent": "方澄目光看向办公室门方向",
+            "subject": "C01",
+            "operation": {
+              "kind": "gaze",
+              "actor": "C01",
+              "target": "",
+              "value": "E04"
+            },
+            "satisfies": []
+          },
+          {
+            "intent": "方澄整体向办公室门方向移动两步",
+            "subject": "C01",
+            "operation": {
+              "kind": "move",
+              "actor": "C01",
+              "target": "",
+              "value": "E04"
+            },
+            "satisfies": []
+          }
+        ]
+      },
+      {
+        "source_step_ref": "raw_linear_script.beats.7.steps.2",
+        "events": [
+          {
+            "intent": "方澄推开办公室门",
+            "subject": "C01",
+            "operation": {
+              "kind": "stand",
+              "actor": "C01",
+              "target": "",
+              "value": "推门"
+            },
+            "satisfies": []
+          },
+          {
+            "intent": "方澄整体穿过门移动到门外",
+            "subject": "C01",
+            "operation": {
+              "kind": "move",
+              "actor": "C01",
+              "target": "",
+              "value": "E04门外"
+            },
+            "satisfies": []
+          }
+        ]
+      }
+    ]
+  },
+  "only_detected_mechanical_fault": "actions.1.events.0.operation仍是stand，但C01早已站立，stand要求坐/跪/卧→站，不能表示推门。本事件operation必须是JSON null，不含kind/actor/target/value键。intent仍真实推开既有E04门；后事件move才记录身体过门。",
+  "required_operation_type_for_push_event": null,
+  "scope": "自行完整重交所有原actions/events，保持正确P01跨肩持有/P02右手、先face和gaze门、向门两步、程序原告别后推门和真正move门外。包票不释放、不加新台词/人物/环境，不在本地修旧稿。"
+}

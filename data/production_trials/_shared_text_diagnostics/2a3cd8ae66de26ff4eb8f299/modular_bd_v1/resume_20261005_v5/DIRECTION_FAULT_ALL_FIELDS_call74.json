@@ -1,0 +1,90 @@
+{
+  "source_call": 74,
+  "receipt_sha256": "ae2e5be9751801bfd016c1f4f8eb2525696b162b9367476b89aa4d50096670ad",
+  "verified_faults": [
+    {
+      "path": "beats.0.shots.0",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.0.shots.1",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.1.shots.0",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.1.shots.1",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.2.shots.0",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.3.shots.0",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.4.shots.0",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.5.shots.0",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.6.shots.0",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.7.shots.0",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.8.shots.0",
+      "message": "'purpose' is a required property"
+    },
+    {
+      "path": "beats.0.shots",
+      "message": "源步骤覆盖错误；expected=['raw_linear_script.beats.0.steps.0', 'raw_linear_script.beats.0.steps.1'];actual=['raw_linear_script.beats.0.steps.0', 'raw_linear_script.beats.0.steps.1', 'raw_linear_script.beats.0.steps.1']"
+    },
+    {
+      "path": "beats.2.shots",
+      "message": "源步骤覆盖错误；expected=['raw_linear_script.beats.2.steps.0', 'raw_linear_script.beats.2.steps.1', 'raw_linear_script.beats.2.steps.2'];actual=['raw_linear_script.beats.2.steps.0', 'raw_linear_script.beats.2.steps.1']"
+    },
+    {
+      "path": "performance_requirements",
+      "message": "同源before/after不可能编译，仍重复前次错误",
+      "ids": [
+        "B01-S01-PR01",
+        "B01-S01-PR02",
+        "B02-S01-PR01",
+        "B03-S01-PR01",
+        "B03-S01-PR03",
+        "B04-S01-PR01",
+        "B05-S01-PR01",
+        "B06-S01-PR01",
+        "B07-S01-PR01",
+        "B08-S01-PR01",
+        "B08-S01-PR03",
+        "B09-S01-PR01"
+      ]
+    },
+    {
+      "path": "initial_state.P03_Y.location",
+      "message": "surface:E01:zone:...含第四个冒号字段，非法；只有surface:E01:非空区域名三个字段"
+    },
+    {
+      "path": "initial_state.P03_P.location",
+      "message": "surface:E01:zone:...含第四个冒号字段，非法；只有surface:E01:非空区域名三个字段"
+    },
+    {
+      "path": "initial_state.P03_B.location",
+      "message": "surface:E01:zone:...含第四个冒号字段，非法；只有surface:E01:非空区域名三个字段"
+    }
+  ],
+  "adopted": false,
+  "source_unchanged": true
+}

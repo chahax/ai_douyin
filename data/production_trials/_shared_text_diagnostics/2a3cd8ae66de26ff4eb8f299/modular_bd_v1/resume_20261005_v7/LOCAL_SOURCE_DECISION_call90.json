@@ -1,0 +1,26 @@
+{
+  "call": 90,
+  "approved_for_next_local_text": false,
+  "contract_valid": true,
+  "full_review_required": true,
+  "verified_source_faults": [
+    {
+      "path": "actions.0.groups.0.performance",
+      "finding": "侧身写在表演里却没有face状态操作。必须独立明确朝向变化，不藏在拿便利贴组。"
+    },
+    {
+      "path": "actions.0.groups.7",
+      "finding": "读清单前的空操作hold写把笔握入右手，提前原steps.2且状态未操作；整组不得出现在steps.0。steps.0只侧身/三张便利贴/点浅黄。"
+    },
+    {
+      "path": "actions.1.groups.1",
+      "finding": "place P07把笔释放在桌上，下一组却说握笔悬停。原B04明写那只握笔停住的手，B06明写递笔的手悬在桌面上方。搁在两桌之间是手持笔停在两桌间，不能松手落桌；本镜P07只take，绝不place。"
+    },
+    {
+      "path": "dialogue_performance",
+      "finding": "含读后拿笔反转动作，在对白cue隐藏了后一步。此字段仅整句的自然语气/嘴唇/面部/呼吸，不安排身体动作。"
+    }
+  ],
+  "media_approval": false,
+  "human_quality_confirmation": null
+}

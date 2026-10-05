@@ -1,0 +1,59 @@
+{
+  "source_call": 85,
+  "mechanical_contract_valid": true,
+  "previous_complete_model_local": {
+    "dialogue_performance": "林屿原句完整插入。方澄在林屿说话期间保持克制呼吸，嘴唇不动，眉眼微收，不抢嘴；语意落到替她熬过夜时，眼神轻微下压一次，但视线位置未变。林屿语速平、随口不抬眼，句尾不加重。",
+    "actions": [
+      {
+        "source_step_ref": "raw_linear_script.beats.1.steps.1",
+        "groups": [
+          {
+            "seconds": 1.2,
+            "subject": "C01",
+            "performance": "克制呼吸，目光停在林屿桌面上A4横版客户明细单的红笔批注处，未接话，未抬手，下颌微收。",
+            "operations": [
+              [
+                "gaze",
+                "C01",
+                "",
+                "客户明细单红笔批注"
+              ]
+            ],
+            "satisfies": []
+          },
+          {
+            "seconds": 1.4,
+            "subject": "C01",
+            "performance": "克制呼吸，目光沿桌面空隙从林屿桌面的红笔批注滑向自己桌角那张米白底深红字的竖版电影票，肩线不动，未抬手，未开口。",
+            "operations": [
+              [
+                "gaze",
+                "C01",
+                "",
+                "桌角电影票"
+              ]
+            ],
+            "satisfies": []
+          },
+          {
+            "seconds": 1.0,
+            "subject": "C01",
+            "performance": "克制呼吸，目光停在桌角电影票上，未接话，未抬手，肩线不动。",
+            "operations": [],
+            "satisfies": [
+              "B02-R01"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "verified_source_fault": [
+    {
+      "path": "dialogue_performance",
+      "quote": "替她熬过夜",
+      "reason": "原话是林屿说你帮我熬到十一点，即方澄替林屿收尾；这里把帮助方向写反。保持原说话人、台词及人物关系，表演cue不能暗示林屿曾替她熬夜。"
+    }
+  ],
+  "request": "提交第二镜完整新稿，保留已正确的四列动作、相继目光组与1秒保持窗口；修正对白表演中的人物关系表述，不重新输出/改台词，不交补丁。"
+}

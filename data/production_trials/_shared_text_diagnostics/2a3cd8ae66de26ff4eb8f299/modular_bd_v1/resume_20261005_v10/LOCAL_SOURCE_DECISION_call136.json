@@ -1,0 +1,25 @@
+{
+  "call": 136,
+  "derived_local_sha256": "32f260c070e56e0d9359d25879678bb468b72c85a0cc982a9775d5cc97055c77",
+  "approved_for_next_local_text": false,
+  "source_verified_evidence": [
+    {
+      "path": "performances.1.performance",
+      "quote": "压在浅蓝色那张收尾便利贴边上",
+      "finding": "浅蓝便利贴已在林屿E02桌面，电影票仍方澄E01桌角；新增错位和翻票动作。"
+    },
+    {
+      "path": "performances.4.performance",
+      "quote": "距离办公室门还有两米左右",
+      "finding": "下一slot直接够门把手不可达，实际move尾态已经E04，不能凭空造两米距离。"
+    },
+    {
+      "path": "performances.6.performance",
+      "quote": "沿门外走廊方向继续前行两步",
+      "finding": "原source仅走出办公室，不新增走廊/额外步/门合拢情节。"
+    }
+  ],
+  "full_review_required": true,
+  "human_quality_confirmation": null,
+  "media_approval": false
+}

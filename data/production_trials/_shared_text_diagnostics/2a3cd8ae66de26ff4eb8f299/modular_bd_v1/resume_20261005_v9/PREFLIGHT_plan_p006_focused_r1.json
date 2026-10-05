@@ -1,0 +1,13 @@
+{
+  "current_shot_source_preflight": [
+    "C02保持握P07停在两桌间，视线先她的包，再回客户明细。两次gaze分相继组。",
+    "B06-R01让首次被拒绝后的愣住有至少1秒C02保持；B06-R02在接回工作后至少1秒C02保持。两组各绑定对应原action ref，不能用操作组冒充保持。",
+    "笔从两桌间收回手边但仍同一人同一握法持有；只描述握笔手收回，不place后又take。浅黄P03_Y由E02面滑回自己客户单旁，slide第四列surface:E02:明细单旁；浅粉/浅蓝不动。"
+  ],
+  "stage_reminder": "仅完整状态事件计划，无秒数/长表演；每event intent/subject/operation/satisfies。原微细不变状态动作可以null事件明确目的；真实状态操作不可省略。下一阶段另写完整表演和实际时间。",
+  "exact_current_requirements": {
+    "B06-R01": "raw_linear_script.beats.5.steps.0，subject=C02,operation=null，明确拒绝后的真实停住反应至少1秒",
+    "B06-R02": "raw_linear_script.beats.5.steps.1，subject=C02,operation=null，接回工作后的稳定反应至少1秒"
+  },
+  "operation_semantics": "gaze只改变眼看对象，target空、value具体对象，不创造ID。右手已握P07，收回手/微转笔不能写take/place/pass/slide/move/face，不松笔；null事件明确收手原意。只有浅黄P03_Y从E02桌面中央slide到客户明细单旁，浅粉/蓝不动。真实反应必须null，不用affect变化冒充。"
+}

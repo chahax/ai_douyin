@@ -1,0 +1,18 @@
+{
+  "schema": "complete_direction_json_syntax_fault/v1",
+  "ordinal": 72,
+  "failure_category": "generated_serialization/interface",
+  "provider_response_complete": true,
+  "output_truncated": false,
+  "reported_tokens": 18164,
+  "error_message": "Expecting ',' delimiter",
+  "position": 8524,
+  "line": 1,
+  "column": 8525,
+  "inner_characters": 8524,
+  "near_error": "es_after_beat\"}},\"spatial_contract\":{\"seats\":[{\"seat_id\":\"E09\",\"access_positions\":[\"from_E01_left_side\",\"from_E01_front\"],\"required_facing\":\"E02\"},{\"seat_id\":\"E10\",\"access_positions\":[\"from_E02_left_side\",\"from_E02_front\"],\"required_facing\":\"E01\"}]}}",
+  "inner_tail": "der\":\"none\",\"location\":\"surface:E02:upper_right_corner\"},\"P05\":{\"holder\":\"none\",\"location\":\"surface:E02:center\"},\"P06\":{\"holder\":\"none\",\"location\":\"surface:E02:right_edge_corner\"},\"P07\":{\"holder\":\"C02\",\"location\":\"hand_to_surface:E02:between_two_tables_after_beat\"}},\"spatial_contract\":{\"seats\":[{\"seat_id\":\"E09\",\"access_positions\":[\"from_E01_left_side\",\"from_E01_front\"],\"required_facing\":\"E02\"},{\"seat_id\":\"E10\",\"access_positions\":[\"from_E02_left_side\",\"from_E02_front\"],\"required_facing\":\"E01\"}]}}",
+  "original_payload_sha256": "222372593e2799c923415e75d2a9e56ce38df28b834b36fd7c6ca37b3466e2b9",
+  "manual_patch_or_adoption": false,
+  "next_action": "model submits complete new director document then full validation"
+}

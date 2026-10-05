@@ -1,0 +1,51 @@
+{
+  "revision": "local_p003_r4",
+  "prior_receipt": "call_089_local_s6_d6_p003_r3.json",
+  "verified_faults": [
+    {
+      "kind": "state_precondition",
+      "detail": "call89每张便利贴take与place仍放在同一group。组内操作全部读取组首状态、末尾才统一提交；它们不是相继指令。place无法读取同组take刚建立的持有。三处都必须在完整新稿中改为相继组。"
+    },
+    {
+      "kind": "performance",
+      "detail": "不需要逐字拼音、舌尖/喉部等伪精确口型。完整原对白自然按清单读，人物习惯性等她接，不改字数/说话人。"
+    }
+  ],
+  "required_complete_replacement": "只输出compact根对象，不对旧JSON手动拆组。所有三张便利贴及递笔必须完整。拿取第四列非空真实持有位置；放置第四列为surface:E02:区域；P07拿后仍持有，不能place。",
+  "group_semantics_example": {
+    "description": "这是通用格式示意，不是需要复制的本镜动作。每个group最多一条状态操作是安全的生成方式。生成模型自己安排实际三张便利贴并完整覆盖原文。",
+    "take_group": {
+      "seconds": 0.8,
+      "subject": "C02",
+      "performance": "完整描述拿起过程。",
+      "operations": [
+        [
+          "take",
+          "C02",
+          "P03_Y",
+          "right_hand_thumb_index"
+        ]
+      ],
+      "satisfies": []
+    },
+    "following_place_group": {
+      "seconds": 0.8,
+      "subject": "C02",
+      "performance": "完整描述随后放下过程。",
+      "operations": [
+        [
+          "place",
+          "C02",
+          "P03_Y",
+          "surface:E02:两人之间"
+        ]
+      ],
+      "satisfies": []
+    }
+  },
+  "source_constraints": [
+    "原动作先侧身、抽出三张摊在自己桌前并点浅黄，再整句读清单，再拿黑笔反转笔尖朝她、握住等待。不要在动作组增加对白。",
+    "face/gaze若需要变化可以独立组；不要同组写两次同一人物gaze或同一道具take/place。",
+    "所有组seconds是自己的实际正秒数，无机械等待或新情节。"
+  ]
+}

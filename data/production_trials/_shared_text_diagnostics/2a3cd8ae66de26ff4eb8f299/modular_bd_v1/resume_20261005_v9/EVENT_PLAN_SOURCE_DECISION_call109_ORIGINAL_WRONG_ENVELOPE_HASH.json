@@ -1,0 +1,15 @@
+{
+  "call": 109,
+  "plan_sha256": "93ba7125785a8423ab5137592bdc2197c892a239f633a875158c4594d4ee44e4",
+  "approved_for_performance_text": false,
+  "source_verified_evidence": [
+    {
+      "path": "actions.1.events.2.intent",
+      "quote": "重新面对工作，停下不再喊她",
+      "finding": "重新面对工作可能提前B07转身，null未记录；不再喊她引入原B06没有的喊人历史，需完整新计划消除歧义。"
+    }
+  ],
+  "planning_only_not_actual_windows": true,
+  "full_review_required": true,
+  "media_approval": false
+}

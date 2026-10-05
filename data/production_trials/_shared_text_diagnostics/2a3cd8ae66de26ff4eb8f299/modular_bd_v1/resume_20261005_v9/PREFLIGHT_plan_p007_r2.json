@@ -1,0 +1,11 @@
+{
+  "complete_new_plan_required": true,
+  "verified_122_faults": [
+    "B07-R01必须挂在C02的operation为JSON null的实际稳定反应事件，不可挂gaze。gaze到第二行和停住反应应各是自己的事件，只有停住有B07-R01。",
+    "落字/笔尖点/划掉重写不等于gaze；P07原右手握持不变，微动作可null并明确intent。原目光真实转移则单独gaze，value与intent对象一致。",
+    "末两条intent和gaze.value对调互相矛盾，须真实看结算P06再继续改明细P05，按原顺序。",
+    "face事件只转回身体朝向，不在face.intent里藏视线；后续gaze明确看明细第一批注。"
+  ],
+  "source_order": "转回桌前→看明细第一红批→落字改笔→到第二行停住(独立C02/null稳定反应B07-R01)→P06同E02 slide到P05旁对齐→看P06比对→看回P05第二行点数字→划掉重写→写完停一下→再对P06继续往下改。必须全部以模型完整新计划兑现；没有对白、不做未来镜。",
+  "contract_example_only": "要求ID的保持事件必须是 operation:null；带任何operation的事件 satisfies:[]。不要新增affect或P07 take/place/slide。"
+}

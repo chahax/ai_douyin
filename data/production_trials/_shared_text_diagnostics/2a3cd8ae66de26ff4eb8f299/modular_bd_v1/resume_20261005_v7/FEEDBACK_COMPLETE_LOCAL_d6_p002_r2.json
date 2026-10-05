@@ -1,0 +1,53 @@
+{
+  "source_call": 84,
+  "previous_complete_model_local": {
+    "dialogue_performance": "林屿原句完整插入；方澄在林屿说话期间保持克制呼吸，嘴唇不动，眼神先随语意轻微下压，再抬向桌角电影票；林屿语速平、随口不抬眼，句尾不加重。",
+    "actions": [
+      {
+        "source_step_ref": "raw_linear_script.beats.1.steps.1",
+        "groups": [
+          {
+            "seconds": 1.6,
+            "subject": "C01",
+            "performance": "克制呼吸，目光从林屿桌面上红笔批注的A4横版明细单，沿桌面空隙滑向自己桌角那张米白底深红字的竖版电影票，下颌微收，未开口、未抬手。",
+            "operations": [
+              [
+                "gaze",
+                "C01",
+                "",
+                "客户明细单红笔批注"
+              ],
+              [
+                "gaze",
+                "C01",
+                "",
+                "桌角电影票"
+              ]
+            ],
+            "satisfies": []
+          },
+          {
+            "seconds": 1.0,
+            "subject": "C01",
+            "performance": "克制呼吸，目光停在桌角电影票上，未接话，未抬手，肩线不动。",
+            "operations": [],
+            "satisfies": [
+              "B02-R01"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "verified_faults": [
+    {
+      "path": "actions.0.groups.0.operations",
+      "reason": "同一组两次gaze读写C01.gaze，模型必须分为相继独立组，保留红笔批注到电影票的实际变化，不删除必要动作。"
+    },
+    {
+      "path": "dialogue_performance",
+      "reason": "原步骤序列是完整林屿对白之后才发生方澄看电影票的动作；不能把同一看票动作提前到说话期间，不能在对白表演文字里藏关键gaze变化。"
+    }
+  ],
+  "whole_new_request": "提交完整第二镜新稿；原完整对白由程序正常语速插入；两个目光相继变化分别有完整独立groups，最后真实保持组satisfies B02-R01、C01、至少0.8秒。对白期只嘴部/呼吸/情绪，既有 gaze 暂不改变。无需重说台词、拿放或起坐；仅根两字段和四列operations，非空对白表演。"
+}

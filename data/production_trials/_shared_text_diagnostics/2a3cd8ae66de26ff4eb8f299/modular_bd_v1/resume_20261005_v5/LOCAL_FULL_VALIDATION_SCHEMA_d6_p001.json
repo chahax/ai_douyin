@@ -1,0 +1,382 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "shot_id",
+    "input_sha256",
+    "duration_seconds",
+    "dialogue_performance",
+    "step_units",
+    "performance_windows"
+  ],
+  "properties": {
+    "schema": {
+      "enum": [
+        "step_index_physical_local_offline_v5"
+      ]
+    },
+    "shot_id": {
+      "enum": [
+        "B01-S01"
+      ]
+    },
+    "input_sha256": {
+      "enum": [
+        "fdbeacab92779ad678d2a5b5d637ef3edc197560cb0f8473f683c63304bd643c"
+      ]
+    },
+    "duration_seconds": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "dialogue_performance": {
+      "type": "string",
+      "minLength": 1
+    },
+    "step_units": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_step_ref",
+          "groups",
+          "dialogue_ref"
+        ],
+        "properties": {
+          "source_step_ref": {
+            "type": "string",
+            "enum": [
+              "raw_linear_script.beats.0.steps.0",
+              "raw_linear_script.beats.0.steps.1"
+            ]
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "action",
+                    "hold"
+                  ]
+                },
+                "duration_seconds": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "hold_subject": {
+                  "type": "string",
+                  "enum": [
+                    "",
+                    "C01",
+                    "C02"
+                  ]
+                },
+                "performance": {
+                  "type": "string",
+                  "description": "该动作组内表演；during组不得重演已说完对白。物理变化必须写operations，不得删除必要动作以修结构"
+                },
+                "operations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "enum": [
+                          "move",
+                          "gaze",
+                          "affect",
+                          "sit",
+                          "stand",
+                          "take",
+                          "place",
+                          "pass",
+                          "slide",
+                          "face"
+                        ]
+                      },
+                      "actor": {
+                        "type": "string",
+                        "enum": [
+                          "C01",
+                          "C02"
+                        ]
+                      },
+                      "target": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "move/sit/stand为动作后具体位置；take为手持位置；place为落点；pass为接收人物；gaze/face为目标；affect为表情"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "actor",
+                      "target",
+                      "value"
+                    ],
+                    "additionalProperties": false,
+                    "allOf": [
+                      {
+                        "if": {
+                          "properties": {
+                            "kind": {
+                              "enum": [
+                                "take",
+                                "place",
+                                "pass"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "kind"
+                          ]
+                        },
+                        "then": {
+                          "properties": {
+                            "target": {
+                              "enum": [
+                                "P01",
+                                "P02",
+                                "P03_Y",
+                                "P03_P",
+                                "P03_B",
+                                "P04",
+                                "P05",
+                                "P06",
+                                "P07"
+                              ],
+                              "description": "被拿起/放下/交接的移动道具ID，不是桌子等落点"
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "if": {
+                          "properties": {
+                            "kind": {
+                              "const": "sit"
+                            }
+                          },
+                          "required": [
+                            "kind"
+                          ]
+                        },
+                        "then": {
+                          "properties": {
+                            "target": {
+                              "enum": [
+                                "E01",
+                                "E02",
+                                "E03",
+                                "E04",
+                                "E05",
+                                "E06",
+                                "E07",
+                                "E08",
+                                "E09",
+                                "E10"
+                              ],
+                              "description": "固定可坐物ID；实际可坐性还需空间前提及语义审核"
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "if": {
+                          "properties": {
+                            "kind": {
+                              "enum": [
+                                "move",
+                                "gaze",
+                                "affect",
+                                "face",
+                                "stand"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "kind"
+                          ]
+                        },
+                        "then": {
+                          "properties": {
+                            "target": {
+                              "const": ""
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "if": {
+                          "properties": {
+                            "kind": {
+                              "const": "pass"
+                            }
+                          },
+                          "required": [
+                            "kind"
+                          ]
+                        },
+                        "then": {
+                          "properties": {
+                            "value": {
+                              "enum": [
+                                "C01",
+                                "C02"
+                              ]
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "if": {
+                          "properties": {
+                            "kind": {
+                              "const": "slide"
+                            }
+                          },
+                          "required": [
+                            "kind"
+                          ]
+                        },
+                        "then": {
+                          "properties": {
+                            "target": {
+                              "enum": [
+                                "P01",
+                                "P02",
+                                "P03_Y",
+                                "P03_P",
+                                "P03_B",
+                                "P04",
+                                "P05",
+                                "P06",
+                                "P07"
+                              ]
+                            },
+                            "value": {
+                              "type": "string",
+                              "pattern": "^surface:(E01|E02):[^\\s:][^:\\r\\n]*(?<!\\s)$"
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "action_ref": {
+                  "type": "string",
+                  "enum": [
+                    "raw_linear_script.beats.0.steps.0",
+                    "raw_linear_script.beats.0.steps.1"
+                  ]
+                },
+                "semantic_role": {
+                  "enum": [
+                    "action",
+                    "reaction"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "kind",
+                "duration_seconds",
+                "hold_subject",
+                "performance",
+                "operations",
+                "action_ref",
+                "semantic_role"
+              ],
+              "additionalProperties": false,
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "kind": {
+                        "const": "hold"
+                      }
+                    },
+                    "required": [
+                      "kind"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "operations": {
+                        "const": []
+                      },
+                      "hold_subject": {
+                        "enum": [
+                          "C01",
+                          "C02"
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "kind": {
+                        "const": "action"
+                      }
+                    },
+                    "required": [
+                      "kind"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "hold_subject": {
+                        "const": ""
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "dialogue_ref": {
+            "enum": [
+              null
+            ]
+          }
+        }
+      }
+    },
+    "performance_windows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "requirement_id",
+          "anchor"
+        ],
+        "properties": {
+          "requirement_id": {
+            "enum": []
+          },
+          "anchor": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

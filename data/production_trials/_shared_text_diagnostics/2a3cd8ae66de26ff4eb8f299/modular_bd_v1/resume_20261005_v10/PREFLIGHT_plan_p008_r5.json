@@ -1,0 +1,12 @@
+{
+  "complete_new_plan_required": true,
+  "precise_faults": [
+    "133多出place P01 surface:C01左肩，这是伪支持面释放，不是仍肩上携带；取包take的value直接写C01左肩跨挎持有即可，P01一直holder=C01，禁止place/pass。",
+    "原action0内须在走两步之前完成face/gaze到E04门方向，不可拖到原action2开门步骤，不能move.intent先写面向门而未face。",
+    "原action2只实际推门null和整体move到E04门外，保持包票；位置直接门外，不写办公室地板E07表面外延到新室外。"
+  ],
+  "current_source_only": [
+    "首原action：take P01肩持、take P02右手持、face朝门、gaze门方向、move向门两步。全部必须模型完整生成，唯一JSON。",
+    "后原action：推既有门null微动作、move穿过到门外，真正离开不只准备。不伪造门stand/place，不拿放包票，不加新环境/人物/对白。"
+  ]
+}

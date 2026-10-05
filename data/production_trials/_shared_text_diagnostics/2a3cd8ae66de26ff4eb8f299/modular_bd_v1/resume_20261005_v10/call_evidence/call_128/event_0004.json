@@ -1,0 +1,16 @@
+{
+  "schema": "creative_call_evidence/v1",
+  "sequence": 4,
+  "identity_sha256": "166b313f9f6e101924aa86607b1407c22589970ed2eb5d37e9b9052366a8ba7f",
+  "at_utc": "2026-10-05T10:41:54.825977+00:00",
+  "phase": "http_headers_received",
+  "details": {
+    "http_status_code": 200,
+    "http_request_id": null,
+    "safe_response_headers": {
+      "trace-id": "0712b1ea5f5edd983a3a296789f2626a",
+      "content-type": "application/json; charset=utf-8",
+      "date": "Mon, 05 Oct 2026 10:41:56 GMT"
+    }
+  }
+}

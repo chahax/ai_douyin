@@ -1,0 +1,253 @@
+{
+  "source_call": 75,
+  "verified_faults": "九个beat写了id而非beat_id；六镜漏purpose，三镜漏composition；B01 action不能during。后续关键窗口关系已改善，但不采用第75稿，要求完整新稿。",
+  "format_template": {
+    "schema": "step_index_physical_direction_offline_v5",
+    "context_sha256": "068e141bde598eb1223d124b8c4fb5a9bdfe1bbcd6c49d151779cdf28cc852cc",
+    "raw_linear_script_sha256": "c38f75d6efa1a3a016458e7da8497bc987663b93b76d64be304c2d01c93bd090",
+    "emotional_arc": "填写完整情绪方向",
+    "causal_chain": [
+      "填写完整因果"
+    ],
+    "ending_intent": "填写完整结尾方向",
+    "beats": [
+      {
+        "beat_id": "B01",
+        "shots": [
+          {
+            "shot_id": "B01-S01",
+            "source_step_refs": [
+              "raw_linear_script.beats.0.steps.0",
+              "raw_linear_script.beats.0.steps.1"
+            ],
+            "new_information": "填写新增信息",
+            "observation_object": "填写观察对象",
+            "camera": "填写单镜连续机位",
+            "cut_reason": "填写切镜理由",
+            "purpose": "填写本镜叙事作用",
+            "composition": "填写真实构图与面部可读性",
+            "dialogue_mode": "无对白",
+            "performance_requirements": []
+          }
+        ]
+      },
+      {
+        "beat_id": "B02",
+        "shots": [
+          {
+            "shot_id": "B02-S01",
+            "source_step_refs": [
+              "raw_linear_script.beats.1.steps.0",
+              "raw_linear_script.beats.1.steps.1"
+            ],
+            "new_information": "填写新增信息",
+            "observation_object": "填写观察对象",
+            "camera": "填写单镜连续机位",
+            "cut_reason": "填写切镜理由",
+            "purpose": "填写本镜叙事作用",
+            "composition": "填写真实构图与面部可读性",
+            "dialogue_mode": "画内对白",
+            "performance_requirements": []
+          }
+        ]
+      },
+      {
+        "beat_id": "B03",
+        "shots": [
+          {
+            "shot_id": "B03-S01",
+            "source_step_refs": [
+              "raw_linear_script.beats.2.steps.0",
+              "raw_linear_script.beats.2.steps.1",
+              "raw_linear_script.beats.2.steps.2"
+            ],
+            "new_information": "填写新增信息",
+            "observation_object": "填写观察对象",
+            "camera": "填写单镜连续机位",
+            "cut_reason": "填写切镜理由",
+            "purpose": "填写本镜叙事作用",
+            "composition": "填写真实构图与面部可读性",
+            "dialogue_mode": "画内对白",
+            "performance_requirements": []
+          }
+        ]
+      },
+      {
+        "beat_id": "B04",
+        "shots": [
+          {
+            "shot_id": "B04-S01",
+            "source_step_refs": [
+              "raw_linear_script.beats.3.steps.0"
+            ],
+            "new_information": "填写新增信息",
+            "observation_object": "填写观察对象",
+            "camera": "填写单镜连续机位",
+            "cut_reason": "填写切镜理由",
+            "purpose": "填写本镜叙事作用",
+            "composition": "填写真实构图与面部可读性",
+            "dialogue_mode": "无对白",
+            "performance_requirements": []
+          }
+        ]
+      },
+      {
+        "beat_id": "B05",
+        "shots": [
+          {
+            "shot_id": "B05-S01",
+            "source_step_refs": [
+              "raw_linear_script.beats.4.steps.0"
+            ],
+            "new_information": "填写新增信息",
+            "observation_object": "填写观察对象",
+            "camera": "填写单镜连续机位",
+            "cut_reason": "填写切镜理由",
+            "purpose": "填写本镜叙事作用",
+            "composition": "填写真实构图与面部可读性",
+            "dialogue_mode": "画内对白",
+            "performance_requirements": []
+          }
+        ]
+      },
+      {
+        "beat_id": "B06",
+        "shots": [
+          {
+            "shot_id": "B06-S01",
+            "source_step_refs": [
+              "raw_linear_script.beats.5.steps.0",
+              "raw_linear_script.beats.5.steps.1"
+            ],
+            "new_information": "填写新增信息",
+            "observation_object": "填写观察对象",
+            "camera": "填写单镜连续机位",
+            "cut_reason": "填写切镜理由",
+            "purpose": "填写本镜叙事作用",
+            "composition": "填写真实构图与面部可读性",
+            "dialogue_mode": "无对白",
+            "performance_requirements": []
+          }
+        ]
+      },
+      {
+        "beat_id": "B07",
+        "shots": [
+          {
+            "shot_id": "B07-S01",
+            "source_step_refs": [
+              "raw_linear_script.beats.6.steps.0"
+            ],
+            "new_information": "填写新增信息",
+            "observation_object": "填写观察对象",
+            "camera": "填写单镜连续机位",
+            "cut_reason": "填写切镜理由",
+            "purpose": "填写本镜叙事作用",
+            "composition": "填写真实构图与面部可读性",
+            "dialogue_mode": "无对白",
+            "performance_requirements": []
+          }
+        ]
+      },
+      {
+        "beat_id": "B08",
+        "shots": [
+          {
+            "shot_id": "B08-S01",
+            "source_step_refs": [
+              "raw_linear_script.beats.7.steps.0",
+              "raw_linear_script.beats.7.steps.1",
+              "raw_linear_script.beats.7.steps.2"
+            ],
+            "new_information": "填写新增信息",
+            "observation_object": "填写观察对象",
+            "camera": "填写单镜连续机位",
+            "cut_reason": "填写切镜理由",
+            "purpose": "填写本镜叙事作用",
+            "composition": "填写真实构图与面部可读性",
+            "dialogue_mode": "画内对白",
+            "performance_requirements": []
+          }
+        ]
+      },
+      {
+        "beat_id": "B09",
+        "shots": [
+          {
+            "shot_id": "B09-S01",
+            "source_step_refs": [
+              "raw_linear_script.beats.8.steps.0"
+            ],
+            "new_information": "填写新增信息",
+            "observation_object": "填写观察对象",
+            "camera": "填写单镜连续机位",
+            "cut_reason": "填写切镜理由",
+            "purpose": "填写本镜叙事作用",
+            "composition": "填写真实构图与面部可读性",
+            "dialogue_mode": "无对白",
+            "performance_requirements": []
+          }
+        ]
+      }
+    ],
+    "initial_state": {
+      "C01": {
+        "posture": "standing",
+        "position": "填写真实开场状态",
+        "gaze": "填写真实开场状态",
+        "affect": "填写真实开场状态",
+        "facing": "填写真实开场状态"
+      },
+      "C02": {
+        "posture": "sitting",
+        "position": "填写真实开场状态",
+        "gaze": "填写真实开场状态",
+        "affect": "填写真实开场状态",
+        "facing": "填写真实开场状态"
+      },
+      "P01": {
+        "holder": "none",
+        "location": "填写真实开场状态"
+      },
+      "P02": {
+        "holder": "none",
+        "location": "填写真实开场状态"
+      },
+      "P03_Y": {
+        "holder": "none",
+        "location": "填写真实开场状态"
+      },
+      "P03_P": {
+        "holder": "none",
+        "location": "填写真实开场状态"
+      },
+      "P03_B": {
+        "holder": "none",
+        "location": "填写真实开场状态"
+      },
+      "P04": {
+        "holder": "none",
+        "location": "填写真实开场状态"
+      },
+      "P05": {
+        "holder": "none",
+        "location": "填写真实开场状态"
+      },
+      "P06": {
+        "holder": "none",
+        "location": "填写真实开场状态"
+      },
+      "P07": {
+        "holder": "none",
+        "location": "填写真实开场状态"
+      }
+    },
+    "spatial_contract": {
+      "seats": []
+    }
+  },
+  "template_policy": "此模板由当前Schema及原steps自动生成，只有原步骤、身份和字段名固定；填完所有占位文字再输出。可按观察对象变化新增镜头，但每原步骤仍恰好一次，不复制、不遗失、不能内部暗含切镜。beat_id不能写成id；shot必须同时有purpose/new_information/composition/camera。",
+  "key_window_policy": "除必要反应外使用[]；B04犹豫after B03递笔；B05整句拒绝during同一句dialogue；B06林屿停住after B05整句拒绝。每原action内部动作后可安排hold由局部生成；不设同源before/after，也不设任何action during。",
+  "state_policy": "桌面便利贴holder=none且location=surface:E01:桌角便利贴叠；surface格式恰好三段。挎包挂E09椅背，电影票在E01桌角；林屿坐着、方澄站着。笔B03从桌沿拿起后仍由林屿握住，笔尖可抵桌面但未交给她；B04/6继续该持笔状态，不暗中释放或重新拿笔。",
+  "full_rewrite": "保留原S6全部九拍和全部steps对白；不要返回补丁或按旧稿字段混填。只返回完整目标。"
+}

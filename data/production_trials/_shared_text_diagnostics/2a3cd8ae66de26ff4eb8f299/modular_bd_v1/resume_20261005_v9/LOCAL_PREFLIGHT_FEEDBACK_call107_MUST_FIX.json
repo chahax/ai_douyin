@@ -1,0 +1,8 @@
+{
+  "call": 107,
+  "current_decision_file": "LOCAL_SOURCE_DECISION_call107.json",
+  "pending_flag_escalated_to_must_fix": true,
+  "finding": "相视与同段明确C02仍低头矛盾，在完整交接前要求完整表演修订；既有推进决定保留，不回写。",
+  "invalidates": "new complete p5 SHA requires rebuilding p6 plan/performance and all subsequent input bindings",
+  "media_calls": 0
+}

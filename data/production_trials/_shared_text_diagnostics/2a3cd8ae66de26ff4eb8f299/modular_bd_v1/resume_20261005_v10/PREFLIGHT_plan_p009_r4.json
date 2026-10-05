@@ -1,0 +1,6 @@
+{
+  "complete_new_plan_required": true,
+  "input_change": "前镜现为call148完整新表演，旧call141/143绑定前镜call138，仅作为历史不能重用。",
+  "source_scope": "B09已坐E02朝桌，P07连续原右手持有；继续当前P05行落笔→持笔尖移P06比对→回P05下一处→再实际落笔→移P06比对→回P05。真实gaze变化记录，写字/移笔尖为null手部微动作；不take/place/sit/face/affect。C01已门外，静态物不动。",
+  "prose": "简短计划，两个完整原循环，无新错误数字/重复最初第一行/喊她/等待。不要逐行指定纸内行号，接上一镜当前落字处。"
+}

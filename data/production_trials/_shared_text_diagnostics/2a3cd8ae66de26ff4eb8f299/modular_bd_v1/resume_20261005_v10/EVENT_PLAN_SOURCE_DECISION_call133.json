@@ -1,0 +1,20 @@
+{
+  "call": 133,
+  "plan_sha256": "c766605f4c1d88120ff5d9484cfd9d9694afeeeaac68d15bd465203aa0c2bbf6",
+  "approved_for_performance_text": false,
+  "source_verified_evidence": [
+    {
+      "path": "actions.0.events.1.operation.kind",
+      "quote": "place",
+      "finding": "place将P01 holder变none，跨肩携带应仍由C01携带，不能伪造surface:C01导致释放。"
+    },
+    {
+      "path": "actions.0.events.3.intent",
+      "quote": "面向办公室门方向",
+      "finding": "move前无face到E04，状态和intent矛盾；face拖到之后的开门步骤。"
+    }
+  ],
+  "planning_only_not_actual_windows": true,
+  "full_review_required": true,
+  "media_approval": false
+}

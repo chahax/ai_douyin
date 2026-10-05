@@ -129,3 +129,11 @@ F02 页面完整准备/续段/合成/整片审核及文本派发前预览，F03 
 ### 2026-10-04 明确恢复后的文本续行
 
 用户授权后续文本暂不设总token硬限；旧49次/490913与原500000上限保留为冻结历史。新增物理适配v4、无损审查传输v8及独立续行入口，旧v17/v23不迁移。当前离线316项及7个subtests通过，不构成整片质量通过。见[续行合同、产物与验证边界](CREATIVE_TEXT_CONTINUATION_20261004.md)。
+
+## 2026-10-05 S6完整实际表演与文本制作交接
+
+独立S6任务已得到第77次整片导演规划、九份源核对的完整局部实际表演、91.442857秒确定性编译及第158次有效全文审查。[完整正文](../data/production_trials/_shared_text_diagnostics/2a3cd8ae66de26ff4eb8f299/modular_bd_v1/resume_20261005_v15/DELIVERABLE_s6_d6/CREATIVE_REVIEW_COPY.md)与[后续制作交接](../data/production_trials/_shared_text_diagnostics/2a3cd8ae66de26ff4eb8f299/modular_bd_v1/resume_20261005_v15/DELIVERABLE_s6_d6/MEDIA_HANDOFF_REQUIREMENTS.md)现可直接审阅，详见[版本与实际执行记录](THIS_TIME_I_LEAVE_S6_PRODUCTION_RECORD_20261005.md)。状态为等待用户内容/审美确认，不代表实际声画或用户质量通过。
+
+`python scripts/show_s6_text_handoff_v16.py`仅本地重验并幂等保存完整交接，不派发模型或媒体。生产独立v15冻结183源码，保存器v16单独SHA记录；默认平台v23和旧任务未迁移。完整原稿/R01仍进入实际模型请求，MiniMax创作、DeepSeek全文审查未换模型；旧70结果未知及64010预留保持，旧账本未重置。
+
+当前媒体0，实际图片0；后续按少量样板确认、选定实图回传导演、核对长句段长承载、逐段生成并等待用户人工审核推进。助手不主动抽帧/听看/ASR或音画审核模型。问题分类与验证边界见[交接证据说明](CREATIVE_S6_HANDOFF_EVIDENCE_20261005.md)。

@@ -1,0 +1,7 @@
+{
+  "current_shot_source_preflight": [
+    "笔在C02手里悬着，C01不接。先看笔尖，再顺握笔的手抬眼到C02眼睛；目光改变用两个相继组。",
+    "B04-R01在原反应内给C01至少1秒可读保持，operation=null且satisfies=[B04-R01]。不要让C02松笔或C01拿笔。"
+  ],
+  "stage_reminder": "仅完整状态事件计划，无秒数/长表演；每event intent/subject/operation/satisfies。原微细不变状态动作可以null事件明确目的；真实状态操作不可省略。下一阶段另写完整表演和实际时间。"
+}

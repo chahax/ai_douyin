@@ -1,0 +1,14 @@
+{
+  "current_shot_source_preflight": [
+    "先拿P01肩上、再拿P02手里、再朝E04走两步，按相继组。包和票初态支持面以请求真实首态为准，不能只写已携带或在初始化预持有。",
+    "原告别句程序插入；随后推开E04，真正走出办公室，move写出门后的终位置。门开合微细动作可写performance，不能新增资产/走廊场景/人物。",
+    "不添加手机确认、笑/回头求许可、新对白，末尾C02继续坐着。"
+  ],
+  "compact_contract_reminder": [
+    "提交本镜完整新根对象，仅dialogue_performance/actions。无对白也写非空本镜无对白。",
+    "每group恰seconds/subject/performance/operation/satisfies；operation是null或恰kind/actor/target/value的一个对象，不是数组、不是operations。拿和放、同一角色两次gaze必须相继组。",
+    "value始终非空。gaze/face/move的target空，真实目标写value；take/slide的target道具ID。move是人物整体移动，伸手/笔转向只写performance。",
+    "satisfies只在正确subject且operation=null的实际保持组中。during由程序绑定原完整对白，不放入satisfies。",
+    "保留全部原steps、对白、实际首态；不自行计算总镜长、不补剧情、不拆原对白。"
+  ]
+}

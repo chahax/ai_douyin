@@ -1,0 +1,15 @@
+{
+  "complete_new_plan_required": true,
+  "feedback": [
+    {
+      "path": "actions.1.events.2.intent",
+      "quote": "重新面对工作，停下不再喊她",
+      "problem": "最后B06-R02空操作保持不能藏B07转身，也不能引入此前喊她的新历史。这里只保留已收回握笔、浅黄贴已移回之后的稳定可见反应；无新动作无对白。"
+    }
+  ],
+  "source_constraints": [
+    "B06先握笔手悬停不收回(B06-R01至少1秒实际反应保持)，接着分别gaze挎包、gaze明细单；再原握法收手不松笔不换手，浅黄P03_Y在E02沿桌面slide回明细单旁，其他两贴不动；最后B06-R02至少1秒稳定反应保持。",
+    "本镜C02仍侧身，不提前B07转身、落笔改纸；C01仍站E01未离开。原对白和此前真实状态不变。",
+    "提交完整所有actions/events的新计划，不给补丁；保留每个真实事件，单operation或null，face/gaze.target空。"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "verified_static_source": "call135 actual request read_only_complete_context_and_direction.context.static_visual_manifest",
+  "findings": [
+    "E04下半金属横拉把手已定义；先前反馈称未知把手形制不准确。",
+    "P06彩色logo条/浅蓝表头已定义；127反馈称虚构彩条不准确，实际问题是滑纸时藏gaze及赵工。",
+    "P01金属扣/P02竖版撕齿均已有定义，不作为新增资产拒绝依据。"
+  ],
+  "original_feedback_preserved": true,
+  "model_content_changed": false,
+  "rejections_remain_valid_due_to_separate_cited_operation_or_source_faults": true
+}

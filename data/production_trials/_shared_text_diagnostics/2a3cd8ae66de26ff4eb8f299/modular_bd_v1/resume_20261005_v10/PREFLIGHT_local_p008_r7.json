@@ -1,0 +1,17 @@
+{
+  "complete_new_performance_required": true,
+  "current_shot": "B08-S01, original only farewell 那我先走了。",
+  "performance_style": "每个槽只写一两句当前真实动作完成方式。不要再次写服装/布景/门缝光线/身体解剖/旁边人/视线修辞。重要信息是动作实际完成和合法先后，不靠长描述。",
+  "start_gaze": "方澄看着林屿眼睛。在A0E0/A0E1取包取票时视线不变；A0E2只身体朝E04；A0E3才视线转门；其后保持。",
+  "fixed_events": [
+    "取包到左肩",
+    "右手拿桌角票",
+    "身体朝E04",
+    "目光E04",
+    "自然两步走到E04可推门处",
+    "左手推开门可过",
+    "携包票跨过门框离开画面"
+  ],
+  "dialogue_performance": "只声音平稳轻而坚定、自然告别、不找补；不复述原句，也不加入身体动作。",
+  "verified_fault": "147提前gaze门并增添走廊光线。保持本次七槽完整新稿，别创造细节。"
+}

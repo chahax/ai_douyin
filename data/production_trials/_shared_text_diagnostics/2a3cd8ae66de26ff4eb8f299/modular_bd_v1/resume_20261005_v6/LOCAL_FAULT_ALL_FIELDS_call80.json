@@ -1,0 +1,18 @@
+{
+  "call": 80,
+  "actual_transmitted_schema_faults": [
+    {
+      "path": "step_units.1.groups.0.operations.0",
+      "message": "Additional properties are not allowed ('action_ref', 'semantic_role' were unexpected)"
+    },
+    {
+      "path": "step_units.1.groups.0.operations.1",
+      "message": "Additional properties are not allowed ('action_ref', 'semantic_role' were unexpected)"
+    },
+    {
+      "path": "step_units.1.groups.0.operations.2",
+      "message": "Additional properties are not allowed ('action_ref', 'semantic_role' were unexpected)"
+    }
+  ],
+  "patched": false
+}

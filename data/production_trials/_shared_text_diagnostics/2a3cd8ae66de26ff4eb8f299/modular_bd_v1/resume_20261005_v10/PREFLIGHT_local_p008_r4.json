@@ -1,0 +1,9 @@
+{
+  "complete_new_performance_required": true,
+  "verified_fault": "call138 dialogue_performance repeats 那  我先走了 with extra spaces. Actual original execution text is intact but cue creates alternate spoken instruction. Do not put any quoted/spaced/literal dialogue text in cue.",
+  "scope": [
+    "根dialogue_performance只写告别的自然语气、脸与呼吸，不重复台词、不夹动作；实际完整原句由程序唯一插入。",
+    "原计划135全部七槽完整新稿，按顺序真实取包左肩、右手取桌角票、face门、gaze门、两步到门、左手推门、携包票真正离画。不新增向票下看/走廊停留/回头/补偿台词/新灯光。",
+    "静态资产与上一镜输入全不变，不改事件目标、不伪放包、持笔林屿不出新动作。自然秒数保留可制作性，不加冗长微表情解剖。"
+  ]
+}

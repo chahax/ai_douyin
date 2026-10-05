@@ -1,0 +1,8 @@
+{
+  "raw_review_sha256": "244537d136d28750dd6b115d7ed626a9373e041f9f786e681698b63b1a90e150",
+  "decoded_compact_review_sha256": "a83b4d56599ebef04ea9a399413ab380a0aa3aedc13a73394c7540e832f7049a",
+  "context_sha256": "584aa7d85b2fa41f4a28e5bd6782a966132408840b0616274a0404582b69ff3f",
+  "catalog_sha256": "f0d30ed6f6bd967e35e310d9b2a2e6bea25f35c4270cfc6c2c0cdda88bd7394f",
+  "complete_review_source_checked": true,
+  "automatic_approval": false
+}

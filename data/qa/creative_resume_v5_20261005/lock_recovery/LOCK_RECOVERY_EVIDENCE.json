@@ -1,0 +1,15 @@
+{
+  "owner_pid": 41792,
+  "owner_process_present": false,
+  "old_request_resent": false,
+  "old_receipt_or_ledger_mutated": false,
+  "original70_reservation": 64010,
+  "original_sha256": "80924b6c5ea58f8e1543affc8de89f4c0ef6b470e5a3edfe86b887458204b4f6",
+  "schema": "verified_stale_dispatch_lock_archive/v1",
+  "at_utc": "2026-10-05T06:18:04.1119305Z",
+  "original_path": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\DISPATCH.lock",
+  "user_new_instruction": "开始实际表演窗口和制作交接",
+  "owner_time": "2026-10-05T03:03:43.162329+08:00",
+  "archive_path": "D:\\IT\\ai_douyin\\data\\qa\\creative_resume_v5_20261005\\lock_recovery\\archived_DISPATCH.lock",
+  "original70_result": "unknown"
+}

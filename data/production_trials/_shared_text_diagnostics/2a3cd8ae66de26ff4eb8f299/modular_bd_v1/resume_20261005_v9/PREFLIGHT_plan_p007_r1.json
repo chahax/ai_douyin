@@ -1,0 +1,8 @@
+{
+  "current_shot_source_preflight": [
+    "原文全部具体比对必须完成：第一批注落字、第二行停、结算P06从E02角滑到P05旁对齐、比对后点第二行、划掉重写、写一笔停一下、再对结算继续。",
+    "P07始终C02手持，笔画/指尖细动作写performance，不能伪造拿放。P06是holder=none在同一E02面slide，不take/place。C02转回桌前和目光变更按真实操作。",
+    "B07-R01至少2秒C02可读反应保持应落在实际停笔/核对困难中，给具体动作收束和犹豫，不添加机械空等。"
+  ],
+  "stage_reminder": "仅完整状态事件计划，无秒数/长表演；每event intent/subject/operation/satisfies。原微细不变状态动作可以null事件明确目的；真实状态操作不可省略。下一阶段另写完整表演和实际时间。"
+}

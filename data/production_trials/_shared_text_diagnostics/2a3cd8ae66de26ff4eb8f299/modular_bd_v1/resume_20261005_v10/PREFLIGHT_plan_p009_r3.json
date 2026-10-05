@@ -1,0 +1,20 @@
+{
+  "complete_new_plan_required": true,
+  "verified_contract_fault": "call140 uses take(P07) twice, but C02 already holds P07 continuously since B03. take requires holder=none. Contract rejects before performance; no valid adoption.",
+  "source_constraints": [
+    "B09 original continue writing beside red markings, each actual pen stroke compare P06. Two simple write/compare cycles suffice; no new mismatch, crossing out, call-out, doorway action, static posture/affect restatement.",
+    "Pen remains in same right hand. Actual writing/pen-tip movement is micro-action intent with operation:null, not take or place. Only real P05→P06→P05 gaze changes use gaze (target empty, value nonempty). Writing on the currently viewed P05 does not require another gaze operation.",
+    "C01 already outside carrying bag/ticket. C02 already seated and facing E02; do not sit/face/affect just restate. Return complete new actions array, not patch."
+  ],
+  "illustrative_operation_contract": {
+    "unchanged_holding_hand_writes": {
+      "operation": null
+    },
+    "real_gaze_change": {
+      "kind": "gaze",
+      "actor": "C02",
+      "target": "",
+      "value": "surface:E02:结算单P06比对处"
+    }
+  }
+}

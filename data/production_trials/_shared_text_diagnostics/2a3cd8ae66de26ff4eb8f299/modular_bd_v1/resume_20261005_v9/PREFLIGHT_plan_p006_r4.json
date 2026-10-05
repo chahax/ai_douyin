@@ -1,0 +1,11 @@
+{
+  "complete_new_plan_required": true,
+  "verified_errors": [
+    "110的affect/gaze.target填C02/P01/P05错误，这三类target必须空字符串；反应ID只允许当前人物operation=null保持，不可绑affect/gaze/slide/face/sit/stand。",
+    "P07已经C02右手持续握持，收手不是take/place/slide，不改变持有。既有侧身/坐姿/方澄站姿不要重新发face/sit/stand，保持不是新操作。"
+  ],
+  "current_source_only": [
+    "原step0：手悬停不收回的null反应(B06-R01)，相继gaze挎包和gaze明细单；原step1：原握法收手的null微动作，slide浅黄到明细单旁，保持认领后状态的null反应(B06-R02)。这是当前源事件关系说明，必须自行提交完整计划。",
+    "不提前B07转身写字；不写喊她/再次拿笔；浅粉浅蓝不动；各反应ID只对应本身保持事件，不复制到其他事件。"
+  ]
+}

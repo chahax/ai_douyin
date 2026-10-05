@@ -1,0 +1,136 @@
+{
+  "source_call": 80,
+  "prior_complete_model_local": {
+    "schema": "step_index_physical_local_offline_v5",
+    "shot_id": "B01-S01",
+    "input_sha256": "fdbeacab92779ad678d2a5b5d637ef3edc197560cb0f8473f683c63304bd643c",
+    "duration_seconds": 6.0,
+    "dialogue_performance": "本镜无对白，画内静默。两步均为动作，表演聚焦物件对照与身体朝向。",
+    "step_units": [
+      {
+        "source_step_ref": "raw_linear_script.beats.0.steps.0",
+        "groups": [
+          {
+            "id": "B01-G01",
+            "kind": "hold",
+            "duration_seconds": 6.0,
+            "hold_subject": "C01",
+            "performance": "方澄维持建立起始之站立姿态，不重复起身/挂包/压票，肩线半侧对桌面，目光低垂朝向桌角电影票，呼吸平稳。",
+            "operations": [],
+            "action_ref": "raw_linear_script.beats.0.steps.0",
+            "semantic_role": "action"
+          },
+          {
+            "id": "B01-G02",
+            "kind": "hold",
+            "duration_seconds": 6.0,
+            "hold_subject": "C01",
+            "performance": "挎包P01维持悬挂椅背E09状态，院线电影票P02维持压于E01桌角状态，便利贴记忆保持原位，无身体移动，无物件位移。",
+            "operations": [],
+            "action_ref": "raw_linear_script.beats.0.steps.0",
+            "semantic_role": "action"
+          }
+        ],
+        "dialogue_ref": null
+      },
+      {
+        "source_step_ref": "raw_linear_script.beats.0.steps.1",
+        "groups": [
+          {
+            "id": "B01-G03",
+            "kind": "action",
+            "duration_seconds": 3.0,
+            "hold_subject": "",
+            "performance": "林屿坐在E10转椅上，右手贴于P05近身一侧边缘，沿E02桌面将客户明细单P05朝两人之间方向slide推出，保持客户明细单仍由E02支撑，holder维持none。",
+            "operations": [
+              {
+                "kind": "slide",
+                "actor": "C02",
+                "target": "P05",
+                "value": "surface:E02:桌沿近E01侧",
+                "action_ref": "raw_linear_script.beats.0.steps.1",
+                "semantic_role": "action"
+              },
+              {
+                "kind": "gaze",
+                "actor": "C02",
+                "target": "",
+                "value": "surface:E02:P05",
+                "action_ref": "raw_linear_script.beats.0.steps.1",
+                "semantic_role": "action"
+              },
+              {
+                "kind": "affect",
+                "actor": "C02",
+                "target": "",
+                "value": "未抬头、默认她接手",
+                "action_ref": "raw_linear_script.beats.0.steps.1",
+                "semantic_role": "action"
+              }
+            ],
+            "action_ref": "raw_linear_script.beats.0.steps.1",
+            "semantic_role": "action"
+          },
+          {
+            "id": "B01-G04",
+            "kind": "hold",
+            "duration_seconds": 3.0,
+            "hold_subject": "C02",
+            "performance": "P07签字笔、P06结算单、P04咖啡杯维持原位，林屿肩线不动，下巴微低。",
+            "operations": [],
+            "action_ref": "raw_linear_script.beats.0.steps.1",
+            "semantic_role": "action"
+          }
+        ],
+        "dialogue_ref": null
+      }
+    ],
+    "performance_windows": []
+  },
+  "verified_faults": [
+    {
+      "path": "step_units.1.groups.0.operations",
+      "reason": "operation只能kind/actor/target/value四字段，action_ref/semantic_role属于group不能放operations里。"
+    },
+    {
+      "path": "duration_seconds",
+      "reason": "本镜无对白，组串行时长总和18.0，声明镜长6，物理组不能压缩，无法排入。模型必须给自洽总镜长。"
+    },
+    {
+      "path": "step_units.0.groups",
+      "reason": "两个6秒hold重复建立同一已挂包/已压票状态，没有新增信息；本步骤一个自然建立hold已足够，删除重复和无用保持。"
+    },
+    {
+      "path": "step_units.1.groups.1",
+      "reason": "源没有推动后3秒展示所有未动道具的要求，避免机械追加等待。"
+    }
+  ],
+  "canonical_group_fields": [
+    "id",
+    "kind",
+    "duration_seconds",
+    "hold_subject",
+    "performance",
+    "operations",
+    "action_ref",
+    "semantic_role"
+  ],
+  "canonical_operation_fields": [
+    "kind",
+    "actor",
+    "target",
+    "value"
+  ],
+  "group_kind_rules": {
+    "action": {
+      "hold_subject": "",
+      "operations": "非空数组，仅真实关键操作"
+    },
+    "hold": {
+      "hold_subject": "真实被观察人物ID",
+      "operations": []
+    }
+  },
+  "timing_contract": "所有动作组相继串行，不能把两组各6秒误当并行6秒。总镜长至少=sum(groups seconds)+原完整对白优选3.5units/s及0.3余量，本镜无对白即可sum(groups)。不要靠同意缩动作或多无用保持来凑预算。",
+  "request": "提交完整本镜新稿；原steps/首态不改，不返回补丁；无反应要求故performance_windows=[]。表演写可见表演，不解释代码。"
+}

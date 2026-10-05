@@ -1,0 +1,20 @@
+{
+  "call": 127,
+  "derived_local_sha256": "5a5c6334d97d9df8069b54d5db8258e9b67072dd9187a7a89488c7b05cee2592",
+  "approved_for_next_local_text": false,
+  "source_verified_evidence": [
+    {
+      "path": "performances.0.performance",
+      "quote": "赵工",
+      "finding": "原稿只有林屿/方澄，没有赵工，不能带入第三角色。"
+    },
+    {
+      "path": "performances.5.performance",
+      "quote": "目光短暂抬过一次落到结算单顶部彩条再垂回纸面",
+      "finding": "slide事件隐藏新gaze，实际比对目光在后slot。"
+    }
+  ],
+  "full_review_required": true,
+  "human_quality_confirmation": null,
+  "media_approval": false
+}

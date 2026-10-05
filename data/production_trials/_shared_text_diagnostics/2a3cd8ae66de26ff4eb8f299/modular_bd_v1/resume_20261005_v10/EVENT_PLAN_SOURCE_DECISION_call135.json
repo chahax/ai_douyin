@@ -1,0 +1,26 @@
+{
+  "call": 135,
+  "plan_sha256": "5c8753f9d7f6d13cbfd6365538c0da434b3cdd1e01f48f01a85b7b07d4f82fdd",
+  "approved_for_performance_text": true,
+  "source_verified_evidence": [
+    {
+      "path": "actions.0.events.0.operation.value",
+      "quote": "C01左肩跨挎持有",
+      "finding": "包跨肩仍C01携带，不place释放；票后续C01右手。"
+    },
+    {
+      "path": "actions.0.events.4.intent",
+      "quote": "移动两步",
+      "finding": "先真实face/gaze门再原两步，原对白在两actions间。"
+    },
+    {
+      "path": "actions.1.events.1.intent",
+      "quote": "整体穿过门移动到门外",
+      "finding": "推门null源微动作后真正离开，不新增环境或准备占位。"
+    }
+  ],
+  "planning_only_not_actual_windows": true,
+  "full_review_required": true,
+  "media_approval": false,
+  "compiler_coverage_limit": "门开启由原动作实际表演兑现，现有状态模型不追踪环境门开关，不把预检称为几何/环境状态全证明。"
+}

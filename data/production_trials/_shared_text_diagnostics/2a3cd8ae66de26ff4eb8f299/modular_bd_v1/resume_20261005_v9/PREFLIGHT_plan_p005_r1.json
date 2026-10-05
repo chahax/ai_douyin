@@ -1,0 +1,7 @@
+{
+  "current_shot_source_preflight": [
+    "本镜只有原完整拒绝对白；actions必须为空数组，程序插原句，during窗口自动绑定。",
+    "dialogue_performance说明方澄拒绝前后语气/面部和呼吸，禁止在对白cue藏拿票/拿包/走动或新台词。坚定平实，不笑着补偿，不把更多动作堆到拒绝后。"
+  ],
+  "stage_reminder": "仅完整状态事件计划，无秒数/长表演；每event intent/subject/operation/satisfies。原微细不变状态动作可以null事件明确目的；真实状态操作不可省略。下一阶段另写完整表演和实际时间。"
+}

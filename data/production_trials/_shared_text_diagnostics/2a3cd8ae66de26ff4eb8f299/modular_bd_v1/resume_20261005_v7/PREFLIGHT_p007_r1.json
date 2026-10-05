@@ -1,0 +1,14 @@
+{
+  "current_shot_source_preflight": [
+    "原文全部具体比对必须完成：第一批注落字、第二行停、结算P06从E02角滑到P05旁对齐、比对后点第二行、划掉重写、写一笔停一下、再对结算继续。",
+    "P07始终C02手持，笔画/指尖细动作写performance，不能伪造拿放。P06是holder=none在同一E02面slide，不take/place。C02转回桌前和目光变更按真实操作。",
+    "B07-R01至少2秒C02可读反应保持应落在实际停笔/核对困难中，给具体动作收束和犹豫，不添加机械空等。"
+  ],
+  "compact_contract_reminder": [
+    "提交本镜完整新根对象，仅dialogue_performance/actions。无对白也写非空本镜无对白。",
+    "所有operation严格四列，不加字段。每group最多一条状态操作；组间相继，组内读首态末尾提交。拿和放、同一角色两次gaze不能同组。",
+    "第四列始终非空。gaze/face/move第三列空，真实目标在第四列；take/slide第三列是道具ID。",
+    "satisfies只在正确subject且operations=[]的实际保持组中，after/before必须满足原q；during由程序绑定原完整对白。",
+    "保留全部原steps、对白、实际首态；不自行计算总镜长、不补剧情、不拆原对白。"
+  ]
+}

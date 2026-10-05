@@ -1,0 +1,25 @@
+{
+  "call": 137,
+  "derived_local_sha256": "2955c121462fe99d638f0d66a38fb18c75912328aa382b5ec54ec56bd63fa698",
+  "approved_for_next_local_text": false,
+  "source_verified_evidence": [
+    {
+      "path": "dialogue_performance",
+      "quote": "那我先走了。",
+      "finding": "仅复述台词，没有提交原对白的自然语气气息；台词由程序插入。"
+    },
+    {
+      "path": "performances.1.performance",
+      "quote": "目光落向自己浅木色桌面",
+      "finding": "take票事件隐藏新gaze，固定目光变化只后A0E3门方向。"
+    },
+    {
+      "path": "performances.5.performance",
+      "quote": "向内一拉再顺势外推",
+      "finding": "原只是推开，不添加先拉再推；也新增门后走廊暖光来源。"
+    }
+  ],
+  "full_review_required": true,
+  "human_quality_confirmation": null,
+  "media_approval": false
+}

@@ -1,0 +1,46 @@
+{
+  "source_call": 82,
+  "verified_faults": [
+    {
+      "path": "dialogue_performance",
+      "reason": "当前合同与原物理编译器都要求非空字符串，即使没有对白也必须写明无对白；不能返回空字符串。"
+    }
+  ],
+  "previous_complete_model_local": {
+    "dialogue_performance": "",
+    "actions": [
+      {
+        "source_step_ref": "raw_linear_script.beats.0.steps.0",
+        "groups": [
+          {
+            "seconds": 3,
+            "subject": "C01",
+            "performance": "方澄穿着灰蓝色薄针织开衫站在浅木色工位前，侧身半侧对桌面，米灰色挎包已挂在椅背上金属扣可读，米白底深红字的院线电影票压在桌角自己伸手就能拿到的位置。临窗夕光从侧面斜入，克制尚未表态。",
+            "operations": [],
+            "satisfies": []
+          }
+        ]
+      },
+      {
+        "source_step_ref": "raw_linear_script.beats.0.steps.1",
+        "groups": [
+          {
+            "seconds": 3,
+            "subject": "C02",
+            "performance": "林屿穿着米驼色棉质衬衫坐在方澄右边工位的黑色网面转椅上，没抬头看她，视线落在自己桌面。右手按住A4横版客户明细单往两人桌面之间推了推，红笔批注在浅灰线条格上可读；A4纵版结算单仍摊在桌角、黑色签字笔在桌沿、白色陶瓷咖啡杯留在原位。",
+            "operations": [
+              [
+                "slide",
+                "C02",
+                "P05",
+                "surface:E02:两人之间"
+              ]
+            ],
+            "satisfies": []
+          }
+        ]
+      }
+    ]
+  },
+  "request": "基于相同真实首态重新提交完整本镜稿；根只有dialogue_performance/actions；无对白写明无对白，两项原动作完整覆盖，四列operation格式保持，不返回只含一字段的补丁。不要加重复等待，不改原steps。"
+}

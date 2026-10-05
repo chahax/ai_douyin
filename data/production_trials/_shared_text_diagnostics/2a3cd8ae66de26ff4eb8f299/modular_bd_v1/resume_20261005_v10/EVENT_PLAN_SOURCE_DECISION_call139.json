@@ -1,0 +1,15 @@
+{
+  "call": 139,
+  "plan_sha256": "3424a6a4834507365b46802833f637fa4357489c3ec110028a126de5ec575b6f",
+  "approved_for_performance_text": false,
+  "source_verified_evidence": [
+    {
+      "path": "actions.0.events.4.intent",
+      "quote": "比对后不一致的数字实际划掉",
+      "finding": "先改一笔后又发现不一致并划掉重写，复制上镜新的数字困难循环；原B09只有继续逐行改/每笔比对，不增加再次改错情节。"
+    }
+  ],
+  "planning_only_not_actual_windows": true,
+  "full_review_required": true,
+  "media_approval": false
+}

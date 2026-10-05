@@ -1,0 +1,136 @@
+{
+  "evidence_source": {
+    "call": 73,
+    "receipt_sha256": "b9ea57f6a5afcd9c4559798f2e7054c544bacf6162f3bb65979875bcf493644a"
+  },
+  "verified_faults": [
+    {
+      "code": "STEP_PHYSICAL_UNSUPPORTED",
+      "path": "beats.3.shots.0.performance_requirements.1",
+      "reason": "during绑定action；只能是同一完整dialogue"
+    },
+    {
+      "code": "WINDOW_SELF_ORDER_IMPOSSIBLE",
+      "requirements": [
+        {
+          "id": "B01-S01-PR01",
+          "subject": "C01",
+          "stimulus_ref": "raw_linear_script.beats.0.steps.0",
+          "reaction_ref": "raw_linear_script.beats.0.steps.0",
+          "relation": "before",
+          "minimum_seconds": 1.5
+        },
+        {
+          "id": "B01-S01-PR02",
+          "subject": "C02",
+          "stimulus_ref": "raw_linear_script.beats.0.steps.1",
+          "reaction_ref": "raw_linear_script.beats.0.steps.1",
+          "relation": "after",
+          "minimum_seconds": 1.5
+        },
+        {
+          "id": "B02-S01-PR01",
+          "subject": "C02",
+          "stimulus_ref": "raw_linear_script.beats.1.steps.0",
+          "reaction_ref": "raw_linear_script.beats.1.steps.0",
+          "relation": "before",
+          "minimum_seconds": 1.5
+        },
+        {
+          "id": "B03-S01-PR01",
+          "subject": "C02",
+          "stimulus_ref": "raw_linear_script.beats.2.steps.0",
+          "reaction_ref": "raw_linear_script.beats.2.steps.0",
+          "relation": "before",
+          "minimum_seconds": 1.5
+        },
+        {
+          "id": "B03-S01-PR03",
+          "subject": "C02",
+          "stimulus_ref": "raw_linear_script.beats.2.steps.2",
+          "reaction_ref": "raw_linear_script.beats.2.steps.2",
+          "relation": "after",
+          "minimum_seconds": 1.5
+        },
+        {
+          "id": "B04-S01-PR01",
+          "subject": "C01",
+          "stimulus_ref": "raw_linear_script.beats.3.steps.0",
+          "reaction_ref": "raw_linear_script.beats.3.steps.0",
+          "relation": "before",
+          "minimum_seconds": 1.8
+        },
+        {
+          "id": "B05-S01-PR01",
+          "subject": "C01",
+          "stimulus_ref": "raw_linear_script.beats.4.steps.0",
+          "reaction_ref": "raw_linear_script.beats.4.steps.0",
+          "relation": "before",
+          "minimum_seconds": 1.2
+        },
+        {
+          "id": "B06-S01-PR01",
+          "subject": "C02",
+          "stimulus_ref": "raw_linear_script.beats.5.steps.0",
+          "reaction_ref": "raw_linear_script.beats.5.steps.0",
+          "relation": "before",
+          "minimum_seconds": 2.0
+        },
+        {
+          "id": "B07-S01-PR01",
+          "subject": "C02",
+          "stimulus_ref": "raw_linear_script.beats.6.steps.0",
+          "reaction_ref": "raw_linear_script.beats.6.steps.0",
+          "relation": "before",
+          "minimum_seconds": 2.5
+        },
+        {
+          "id": "B08-S01-PR01",
+          "subject": "C01",
+          "stimulus_ref": "raw_linear_script.beats.7.steps.0",
+          "reaction_ref": "raw_linear_script.beats.7.steps.0",
+          "relation": "before",
+          "minimum_seconds": 2.0
+        },
+        {
+          "id": "B08-S01-PR03",
+          "subject": "C01",
+          "stimulus_ref": "raw_linear_script.beats.7.steps.2",
+          "reaction_ref": "raw_linear_script.beats.7.steps.2",
+          "relation": "after",
+          "minimum_seconds": 1.5
+        },
+        {
+          "id": "B09-S01-PR01",
+          "subject": "C02",
+          "stimulus_ref": "raw_linear_script.beats.8.steps.0",
+          "reaction_ref": "raw_linear_script.beats.8.steps.0",
+          "relation": "before",
+          "minimum_seconds": 3.0
+        }
+      ],
+      "reason": "_windows把刺激原步骤的全部events取min(start)/max(end)。属于同一步骤的正时长反应不可能结束在该步骤开始之前，或开始在该步骤全部结束之后。"
+    },
+    {
+      "path": "initial_state.P03_Y/P03_P/P03_B",
+      "reason": "源B03从方澄桌角便利贴叠抽取，初态应holder=none，桌面surface:E01:zone；归属owner=C01不是手持。"
+    },
+    {
+      "path": "beats.0.shots.0.purpose",
+      "reason": "开场仅P05被推动，P07递笔发生B03，不得提前。"
+    },
+    {
+      "path": "beats.1.shots.0.camera/composition",
+      "reason": "单shot写先林屿近景切方澄近景，存在未登记内部切镜。应拆为覆盖连续steps的两个shot，或同机位保留可读两人表演。"
+    }
+  ],
+  "complete_revision_scope": "整片完整新导演稿；全部九拍/原steps/原对白保持，初态、镜头及反应要求一并自洽，禁止只交补丁。",
+  "window_contract_explanation": {
+    "positive_duration_rule": "stimulus_ref是整原步骤，其全部事件构成刺激范围；reaction_ref须当前镜。before/after只能用不同步骤；跨镜after的刺激必须是已完成的先前步骤。",
+    "during": "仅stimulus_ref=reaction_ref且原kind=dialogue，窗口为该句完整对白，用于说话中表演或真实可见听者；不要把动作伪装对白。",
+    "priority": "只为有叙事作用的关键刺激反应设要求。方澄B04犹豫由B03递笔触发；B05拒绝在其完整对白内表演；林屿B06停住由B05已完成拒绝触发，再以具体行动接回工作。其它纯动作可performance_requirements=[]，局部仍完整执行，不能靠无意义self-before/after追加时间。",
+    "framing": "一shot一个连续可实现机位，切镜必须另建shot并有新增信息；同一完整原步骤不可拆分。镜数按信息变化，不机械每拍一镜。"
+  },
+  "state_and_story": "初态只在首动作前；全部桌面便利贴holder=none，规范surface:E01:zone；林屿一直坐着，方澄一直站着，无无关起坐、补偿对白、第三人、手机确认或走廊新资产。开场不提前递笔。保持票/挎包与工作冲突、明确拒绝、林屿具体比对改写、她携票离开、他继续工作的结尾。",
+  "request": "只提交目标Schema完整JSON，缩短解释性重复但完整覆盖字段，关闭thinking不变。"
+}

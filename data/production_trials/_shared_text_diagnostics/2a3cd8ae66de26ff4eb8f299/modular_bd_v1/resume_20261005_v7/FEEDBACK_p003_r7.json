@@ -1,0 +1,23 @@
+{
+  "prior_call": 92,
+  "verified_faults": [
+    "dialogue_performance说整句期间右手已持笔悬停，但原文读清单结束后才拿笔。该字段只能语气/面部/呼吸，不描述手或身体动作/道具状态。",
+    "actions.0.groups.0的move把C02整个人从E02椅移到E01桌角；actions.1.groups.1又移整个人到两桌中线，原文只是侧身及伸手，C02全镜始终坐E10/E02。move是人物整体位置变化，绝不是手/笔移动。",
+    "对白cue视线仍放方澄桌角便利贴叠，三张已经摊到自己面前。看/点浅黄时视线真实对应自己E02桌面，不能留旧叠作为清单。"
+  ],
+  "phase_invariants": [
+    {
+      "phase": "原steps.0",
+      "allowed_change": "侧身face、必要gaze、三张成员相继take→place，最后点自己面前浅黄；人物C02仍坐E02/E10；P07仍E02桌沿无人持有。"
+    },
+    {
+      "phase": "原steps.1完整对白",
+      "allowed_change": "只有原清单的自然嘴唇/语气/呼吸表演，不持笔、不手伸出。三张全在E02；P07仍E02桌沿无人持有。"
+    },
+    {
+      "phase": "原steps.2",
+      "allowed_change": "P07才take一次，之后整镜持续C02同一握法持有。手伸/笔反转写该操作表演；不place、不move人物、不附加face重复。"
+    }
+  ],
+  "required_new_complete": "根据实际首态提交完整第三镜新稿，不拼接之前任何版本。保持前一次成功的三张成员take/place分组且四列非空正确，groups五必需字段完整，无无用hold/状态空转。"
+}

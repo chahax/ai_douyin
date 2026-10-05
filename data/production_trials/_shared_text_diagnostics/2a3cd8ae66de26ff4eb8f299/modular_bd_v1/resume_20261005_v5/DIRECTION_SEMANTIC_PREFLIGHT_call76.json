@@ -1,0 +1,30 @@
+{
+  "call": 76,
+  "mechanical_contract_valid": true,
+  "source_coverage_valid": true,
+  "source_raw_unchanged": true,
+  "adopted_for_locals": false,
+  "verified_faults": [
+    {
+      "path": "initial_state.C01.gaze",
+      "quote": "未明确注视点，开场未定",
+      "finding": "未明确/未定不是可执行初态；导演须为开场明确可见注视点，不依赖局部补猜。"
+    },
+    {
+      "path": "initial_state.P05.location",
+      "quote": "surface:E02:桌面（推向两人之间）",
+      "finding": "初态在推动之前，推向两人之间只可由B01 steps.1实际操作完成；初态桌上落点应不含动作目标/完成态含义。"
+    },
+    {
+      "path": "beats.2.shots.0.performance_requirements.0",
+      "quote": "{\"id\": \"B03-R01\", \"subject\": \"C01\", \"stimulus_ref\": \"raw_linear_script.beats.2.steps.1\", \"reaction_ref\": \"raw_linear_script.beats.2.steps.2\", \"relation\": \"after\", \"minimum_seconds\": 0.8}",
+      "finding": "reaction_ref是林屿递笔，而subject是方澄，要求局部把C01保持补入C02动作。方澄可见反应源已经是B04；此项非必要，删除无叙事作用的额外保持。"
+    },
+    {
+      "path": "beats.7.shots.0.performance_requirements.0",
+      "quote": "{\"id\": \"B08-R01\", \"subject\": \"C01\", \"stimulus_ref\": \"raw_linear_script.beats.6.steps.0\", \"reaction_ref\": \"raw_linear_script.beats.7.steps.0\", \"relation\": \"after\", \"minimum_seconds\": 0.8}",
+      "finding": "取包拿票走两步是连续离开动作，不需要人为追加C01静止保持；本项会迫使生成额外等待。"
+    }
+  ],
+  "creative_quality_passed": false
+}

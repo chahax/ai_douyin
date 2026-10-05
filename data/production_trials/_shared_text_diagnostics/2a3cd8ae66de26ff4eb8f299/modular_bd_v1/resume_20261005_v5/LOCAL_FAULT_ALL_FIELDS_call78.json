@@ -1,0 +1,68 @@
+{
+  "source_call": 78,
+  "schema_faults": [],
+  "source_faults": [
+    {
+      "path": "dialogue_performance",
+      "quote": "挎包半路半挂",
+      "reason": "源和初态均是已挂在椅背，没有半挂过程；必须保持已完整挂好的开场态。"
+    }
+  ],
+  "previous_complete_model_local": {
+    "schema": "step_index_physical_local_offline_v5",
+    "shot_id": "B01-S01",
+    "input_sha256": "fdbeacab92779ad678d2a5b5d637ef3edc197560cb0f8473f683c63304bd643c",
+    "duration_seconds": 6.0,
+    "dialogue_performance": "本镜无画内对白；建立静默开场。方澄保持站姿、挎包半路半挂椅背上电影票压桌角的建立态，克制且尚未表态，林屿坐姿低头不看她，两人之间形成第一道物件对峙。",
+    "step_units": [
+      {
+        "source_step_ref": "raw_linear_script.beats.0.steps.0",
+        "groups": [
+          {
+            "id": "B01-S01-G1",
+            "kind": "hold",
+            "duration_seconds": 3.0,
+            "hold_subject": "C01",
+            "performance": "方澄站在E01浅木色工位前，维持已建立状态：挎包挂于E09椅背，电影票压在E01桌角便利贴叠旁不接触。她不抬手、不取包、不拿票、不转向；保持半侧对桌面，目光停在桌角电影票，呼吸平稳，眉眼克制。观众通过静默的姿态读到：这是建立态，不是起身动作。",
+            "operations": [],
+            "action_ref": "raw_linear_script.beats.0.steps.0",
+            "semantic_role": "action"
+          }
+        ],
+        "dialogue_ref": null
+      },
+      {
+        "source_step_ref": "raw_linear_script.beats.0.steps.1",
+        "groups": [
+          {
+            "id": "B01-S01-G2",
+            "kind": "action",
+            "duration_seconds": 3.0,
+            "hold_subject": "C02",
+            "performance": "林屿坐在E10黑色网面转椅上，低头朝向E02桌面，不抬头看向方澄。他用右手在E02桌面上将A4横版客户明细单P05沿E02表面向两人之间的方向做一次短幅滑移（仍由E02桌面支撑，不被任何手握住），停顿后指尖回收离开纸面。P05保持holder为none，P04咖啡杯、P06结算单、P07签字笔原位不动；P01挎包挂E09椅背、P02电影票压E01桌角保持建立态。",
+            "operations": [
+              {
+                "kind": "slide",
+                "actor": "C02",
+                "target": "P05",
+                "value": "surface:E02:两人之间侧"
+              },
+              {
+                "kind": "gaze",
+                "actor": "C02",
+                "target": "P05",
+                "value": "P05表面"
+              }
+            ],
+            "action_ref": "raw_linear_script.beats.0.steps.1",
+            "semantic_role": "action"
+          }
+        ],
+        "dialogue_ref": null
+      }
+    ],
+    "performance_windows": []
+  },
+  "full_revision_request": "提交本镜全部字段完整新表演方案，不交补丁。保持原步骤、首态、单次slide，动作组kind=action时hold_subject严格空字符串；只有kind=hold时hold_subject=C01或C02。gaze/face/affect/move/stand的target严格空字符串，目标写value，slide的target才是P05。无需重复已经成立的gaze，删无叙事作用操作可保持真实姿态。无对白写无对白表演，不解释编译器、合同或Schema。",
+  "actual_source": "方澄站立；包已挂/票已压。林屿坐着不抬头；只把P05在E02同面推向两人之间，其他物品不动。"
+}

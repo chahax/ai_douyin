@@ -1,0 +1,26 @@
+{
+  "call": 112,
+  "plan_sha256": "df812d60c0177a2d3412bc863bf938932c4499711eca612df24bbfb27ed4adde",
+  "approved_for_performance_text": true,
+  "source_verified_evidence": [
+    {
+      "path": "actions.0.events.0.intent",
+      "quote": "未收回",
+      "finding": "C02/null悬停保持承担B06-R01；两个gaze按挎包、明细顺序且无反应ID。"
+    },
+    {
+      "path": "actions.1.events.0.intent",
+      "quote": "未松笔也未换手",
+      "finding": "原持有不变，收的是手，非道具拿放。"
+    },
+    {
+      "path": "actions.1.events.1.operation.kind",
+      "quote": "slide",
+      "finding": "仅浅黄在E02同表面滑回，粉蓝不动。"
+    }
+  ],
+  "planning_only_not_actual_windows": true,
+  "full_review_required": true,
+  "media_approval": false,
+  "performance_guard": "末事件独自仅可表现他自己认领工作；C01仍在E01，C02仍坐E02且侧身，无转身/起身/喊话。实际表演不得写办公室已无人或方澄已离开。"
+}

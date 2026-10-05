@@ -1,0 +1,12 @@
+...F                                                                     [100%]
+================================== FAILURES ===================================
+___ test_new_unknown_call_blocks_later_dispatch_without_reusing_old_budget ____
+tests\test_creative_resume_v5.py:60: in test_new_unknown_call_blocks_later_dispatch_without_reusing_old_budget
+    with pytest.raises(RuntimeError,match='unknown outcome/usage'):runner.direction(2)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE RuntimeError
+---------------------------- Captured stdout call -----------------------------
+{"status": "dispatching", "ordinal": 72, "label": "direction_s6_r1"}
+=========================== short test summary info ===========================
+FAILED tests/test_creative_resume_v5.py::test_new_unknown_call_blocks_later_dispatch_without_reusing_old_budget
+1 failed, 3 passed in 246.33s (0:04:06)

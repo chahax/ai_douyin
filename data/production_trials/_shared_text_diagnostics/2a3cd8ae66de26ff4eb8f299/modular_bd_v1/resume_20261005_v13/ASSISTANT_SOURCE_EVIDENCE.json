@@ -1,0 +1,57 @@
+[
+  {
+    "path": "raw_linear_script.beats.4.steps.0.text",
+    "quote": "今晚不行",
+    "finding": "原拒绝台词完整，不添加补偿话或替换主题。"
+  },
+  {
+    "path": "execution_script.beats.4.dialogue.0.text",
+    "quote": "得先走",
+    "finding": "唯一执行对白保留全文，时长来自编译而非初步估算。"
+  },
+  {
+    "path": "execution_bindings.20.start",
+    "quote": "45.814",
+    "finding": "拒绝窗口真实编排起点。"
+  },
+  {
+    "path": "execution_bindings.20.end",
+    "quote": "52.114",
+    "finding": "拒绝窗口真实编排终点，未当作实际声画通过。"
+  },
+  {
+    "path": "shots.shots.2.visible_performance",
+    "quote": "保持握持等她来接",
+    "finding": "原持笔从第三镜建立并持续，后镜未重复拿笔。"
+  },
+  {
+    "path": "shots.shots.5.visible_performance",
+    "quote": "原有低头朝向桌面的目光不变",
+    "finding": "拒绝后保持原低头和持笔，未虚构互相对视。"
+  },
+  {
+    "path": "shots.shots.5.visible_performance",
+    "quote": "未换手未松笔",
+    "finding": "收回笔时同一持有不中断，所有权不代替当前持有。"
+  },
+  {
+    "path": "shots.shots.7.visible_performance",
+    "quote": "一同跨过门框",
+    "finding": "左手推門后携包票真正离画，原告别句独立执行。"
+  },
+  {
+    "path": "shots.shots.8.visible_performance",
+    "quote": "真正落下一笔",
+    "finding": "结尾接当前落字，实际自己做，没有新改错障碍。"
+  },
+  {
+    "path": "shots.shots.8.visible_performance",
+    "quote": "只是定位，不落字",
+    "finding": "比对返回槽不重演书写，六槽仅两次实际写字。"
+  },
+  {
+    "path": "shots.shots.8.visible_performance",
+    "quote": "不喊她、不抬头",
+    "finding": "她已经离开后，他继续自己做，保持原结尾。"
+  }
+]

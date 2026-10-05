@@ -1,0 +1,27 @@
+{
+  "call": 148,
+  "derived_local_sha256": "b9962d97ee2e70927ca682ce044d0ca82505208c2facc92e1a7a6dc920c465eb",
+  "model_performance_sha256": "3a753eee561f18ba1595ed99a38750c0b7d0bf7b6bcbc142a802ce090ef4fce0",
+  "event_plan_ordinal": 135,
+  "approved_for_next_local_text": true,
+  "source_verified_evidence": [
+    {
+      "path": "dialogue_performance",
+      "quote": "告别不找补",
+      "finding": "只原告别声音/呼吸，无其他台词或隐藏身体转回。"
+    },
+    {
+      "path": "performances.3.performance",
+      "quote": "视线由林屿眼睛移向办公室门",
+      "finding": "取包/取票之后依正式槽才gaze门，保持先后。"
+    },
+    {
+      "path": "performances.6.performance",
+      "quote": "一同跨过门框",
+      "finding": "左手真实推门后携包/右手票真正离画，无新走廊光线。"
+    }
+  ],
+  "full_review_required": true,
+  "human_quality_confirmation": null,
+  "media_approval": false
+}

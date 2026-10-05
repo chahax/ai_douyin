@@ -1,0 +1,94 @@
+{
+  "schema": "text_handoff_media_requirements/v1",
+  "text_handoff_sha256": "c6917467f8e7145d0ee1dd51050f4e7c6708371f6b230fe902c47dc1cf8b09d5",
+  "shot_timings": [
+    {
+      "shot": "B01-S01",
+      "start": 0,
+      "end": 6.0,
+      "duration": 6.0,
+      "integer_provider_seconds": 6,
+      "configured_seedance_2_0_max15_exceeded": false,
+      "below_configured_min4": false
+    },
+    {
+      "shot": "B02-S01",
+      "start": 6.0,
+      "end": 27.614285714285714,
+      "duration": 21.614285714285714,
+      "integer_provider_seconds": 22,
+      "configured_seedance_2_0_max15_exceeded": true,
+      "below_configured_min4": false
+    },
+    {
+      "shot": "B03-S01",
+      "start": 27.614285714285714,
+      "end": 41.614285714285714,
+      "duration": 14.000000000000002,
+      "integer_provider_seconds": 15,
+      "configured_seedance_2_0_max15_exceeded": false,
+      "below_configured_min4": false
+    },
+    {
+      "shot": "B04-S01",
+      "start": 41.614285714285714,
+      "end": 45.81428571428572,
+      "duration": 4.199999999999999,
+      "integer_provider_seconds": 5,
+      "configured_seedance_2_0_max15_exceeded": false,
+      "below_configured_min4": false
+    },
+    {
+      "shot": "B05-S01",
+      "start": 45.81428571428572,
+      "end": 52.114285714285714,
+      "duration": 6.3,
+      "integer_provider_seconds": 7,
+      "configured_seedance_2_0_max15_exceeded": false,
+      "below_configured_min4": false
+    },
+    {
+      "shot": "B06-S01",
+      "start": 52.114285714285714,
+      "end": 58.51428571428571,
+      "duration": 6.4,
+      "integer_provider_seconds": 7,
+      "configured_seedance_2_0_max15_exceeded": false,
+      "below_configured_min4": false
+    },
+    {
+      "shot": "B07-S01",
+      "start": 58.51428571428571,
+      "end": 69.5142857142857,
+      "duration": 11.0,
+      "integer_provider_seconds": 11,
+      "configured_seedance_2_0_max15_exceeded": false,
+      "below_configured_min4": false
+    },
+    {
+      "shot": "B08-S01",
+      "start": 69.5142857142857,
+      "end": 80.24285714285713,
+      "duration": 10.728571428571428,
+      "integer_provider_seconds": 11,
+      "configured_seedance_2_0_max15_exceeded": false,
+      "below_configured_min4": false
+    },
+    {
+      "shot": "B09-S01",
+      "start": 80.24285714285713,
+      "end": 91.44285714285714,
+      "duration": 11.2,
+      "integer_provider_seconds": 12,
+      "configured_seedance_2_0_max15_exceeded": false,
+      "below_configured_min4": false
+    }
+  ],
+  "actual_selected_images": [],
+  "selected_images_returned_to_director": false,
+  "duration_capability_status": "pending_media_plan_validation",
+  "user_content_confirmation": null,
+  "user_aesthetic_confirmation": null,
+  "media_calls": 0,
+  "no_automatic_media_dispatch": true
+}

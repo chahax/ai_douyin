@@ -1,0 +1,20 @@
+{
+  "call": 128,
+  "derived_local_sha256": "c96a9951a0e3b767903d74d6f5f676dbe494d32f575d57081a6205c74a8013ba",
+  "approved_for_next_local_text": false,
+  "source_verified_evidence": [
+    {
+      "path": "performances.4.performance",
+      "quote": "对她不在场的反应",
+      "finding": "方澄仍在E01，B08才拿包票离开，不能提前她不在场。"
+    },
+    {
+      "path": "performances.0.performance",
+      "quote": "先落回两人之间摊着的客户明细单第一处红笔批注上",
+      "finding": "face先提前下一gaze第一批注，整镜重交以避免两处重复前后。"
+    }
+  ],
+  "full_review_required": true,
+  "human_quality_confirmation": null,
+  "media_approval": false
+}

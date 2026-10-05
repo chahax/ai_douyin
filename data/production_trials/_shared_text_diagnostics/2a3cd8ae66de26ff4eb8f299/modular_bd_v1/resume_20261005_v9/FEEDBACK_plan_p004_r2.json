@@ -1,0 +1,10 @@
+{
+  "prior_call": 102,
+  "verified_faults": [
+    "B04-R01必须绑定subject=C01且operation=null的真实保持事件；affect是状态变化，不能同时冒充稳定反应保持。",
+    "C02_to_G07是无出处的新符号；视线应原文林屿眼睛，用value=C02的眼睛或林屿的眼睛，gaze.target空。",
+    "不伸手是持续未接的表演，不需要伪造affect=不伸手这种操作；不要增加无用状态变化。"
+  ],
+  "required_source_order": "完整原action：先gaze看停在两桌间且C02仍握住的P07，再gaze沿握笔手抬至C02眼睛，随后保持未接/抬眼的可读反应。反应事件operation=null,subject=C01,satisfies=[B04-R01]，该事件实际表演阶段不少于1秒。三处顺序明确，不改任何道具持有、不加C02动作。",
+  "complete_new": "重交全部当前原action事件，gaze的target空且真实观察目标在value，null事件仍给完整intent。禁止使用其它未来要求ID。"
+}

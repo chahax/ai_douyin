@@ -1,0 +1,19 @@
+{
+  "prior_call": 98,
+  "verified_source_faults": [
+    "侧身应在从她桌角取便利贴之前，目前写在intent里但face排在取笔后。原steps.0开头先单列face，target空,value侧身朝方澄E01桌角。",
+    "反转手里笔不是人物face。steps.2 face事件错误，把反转意图改为operation=null的手部原地表演事件，演员仍坐着且仍侧身。",
+    "最后place P07会把holder变none。value写右手握笔不能改变place=释放道具的语义；该事件应operation=null，手始终握着P07伸出等接，不能place/slide。"
+  ],
+  "explicit_current_action_operation_kinds": [
+    {
+      "source_step_ref": "raw_linear_script.beats.2.steps.0",
+      "allowed": "face/gaze、三张成员各自take与place。null只用于点浅黄等不变状态微细表演。保持前稿完整6个拿放事件。"
+    },
+    {
+      "source_step_ref": "raw_linear_script.beats.2.steps.2",
+      "allowed": "take P07仅一次，其余事件operation必须null。禁止face/place/slide/move/gaze。null表示只变手指/手腕表演，P07持有及演员坐姿位置朝向保持。"
+    }
+  ],
+  "complete_new": "根据当前镜原步骤整体重交全部事件。value取放明晰：take=右手握法，place=surface:E02:区域；null可以承载转笔、伸手等在原地维持同一持有的微细动作。不要加未来方澄反应，不写原对白，satisfies都[]。"
+}

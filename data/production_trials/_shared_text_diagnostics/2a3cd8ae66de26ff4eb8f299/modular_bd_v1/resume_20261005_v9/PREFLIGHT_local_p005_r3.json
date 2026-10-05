@@ -1,0 +1,11 @@
+{
+  "complete_new_performance_required": true,
+  "verified_preflight_fault": {
+    "path": "dialogue_performance",
+    "problem": "相视意味着双方互看，但同一cue又写林屿仍低头，与原B02未抬头及B05只方澄开口冲突。请完整新表演明确只有方澄看向林屿眼睛方向，林屿不抬头对视；不新增动作。"
+  },
+  "source_constraints": [
+    "本镜仅C01完整拒绝原话一次；performances空数组，不重演B04抬眼，不写双方相视/林屿抬头、不添加改写台词。",
+    "自然克制语气和面部呼吸，不补偿、不笑、不身体动作；C02维持原侧身握笔低头状态，反应到下一镜。"
+  ]
+}

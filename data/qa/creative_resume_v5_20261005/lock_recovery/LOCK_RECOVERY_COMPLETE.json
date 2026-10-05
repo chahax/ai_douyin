@@ -1,0 +1,8 @@
+{
+  "archived_sha256": "80924b6c5ea58f8e1543affc8de89f4c0ef6b470e5a3edfe86b887458204b4f6",
+  "old70_reservation": 64010,
+  "schema": "verified_stale_lock_archive_complete/v1",
+  "original_lock_absent": true,
+  "old70_result": "unknown",
+  "archived_bytes_match": true
+}

@@ -1,0 +1,42 @@
+{
+  "prior_call": 90,
+  "verified_faults": [
+    {
+      "path": "actions.0.groups.0.performance",
+      "finding": "侧身写在表演里却没有face状态操作。必须独立明确朝向变化，不藏在拿便利贴组。"
+    },
+    {
+      "path": "actions.0.groups.7",
+      "finding": "读清单前的空操作hold写把笔握入右手，提前原steps.2且状态未操作；整组不得出现在steps.0。steps.0只侧身/三张便利贴/点浅黄。"
+    },
+    {
+      "path": "actions.1.groups.1",
+      "finding": "place P07把笔释放在桌上，下一组却说握笔悬停。原B04明写那只握笔停住的手，B06明写递笔的手悬在桌面上方。搁在两桌之间是手持笔停在两桌间，不能松手落桌；本镜P07只take，绝不place。"
+    },
+    {
+      "path": "dialogue_performance",
+      "finding": "含读后拿笔反转动作，在对白cue隐藏了后一步。此字段仅整句的自然语气/嘴唇/面部/呼吸，不安排身体动作。"
+    }
+  ],
+  "source_disambiguation": [
+    "raw_linear_script.beats.2.steps.0只侧身、抽三张摊面、点浅黄。steps.1整句读清单；steps.2才拿笔反转伸出并握住等接。",
+    "raw_linear_script.beats.3.steps.0：目光顺着那只握笔停住的手抬向林屿的眼睛。raw_linear_script.beats.5.steps.0：林屿递笔的手悬在桌面上方停住，笔尖朝向方澄那一侧，没收回。",
+    "因此P07最终holder=C02，position右手实际握法；不在两桌面落笔释放。不新增读前拿笔。"
+  ],
+  "required_complete_new_draft": "整镜所有动作从真实首态重新完整生成，保留此前解决的三张便利贴take→下一组place，不能采用旧稿补字段/拼接。每状态组最多一条操作；拿放相继、视线及侧身状态显式。无用hold删除，但原等接留可读时间。",
+  "latest_interface_fault": {
+    "prior_call": 91,
+    "position": 297,
+    "message": "Expecting ',' delimiter",
+    "original_excerpt": ":\"林屿上半身从朝向自己桌面转为侧身朝向方澄桌角，右手从桌面抬起准备去拿便利贴。\",\"operations\":[[\"face\",\"C02\",\"\",\"C01\"]]]},{\"seconds\":1.5,\"subject\":\"C02\",\"performance\":\"林屿右手伸到方澄桌角便利贴叠上方，捏起浅黄对账便利贴离开桌面。",
+    "complete_body": true,
+    "not_truncated_by_output_cap": true
+  },
+  "required_format": [
+    "payload_json内是一个完整JSON对象原文，不能增加引号再次编码。",
+    "每group恰好seconds/subject/performance/operations/satisfies，最后satisfies无要求时也必须[]。",
+    "每take第四列必须非空实际持有位置例如right_hand_thumb_index；任何操作第四列均非空。",
+    "每种变化独立group，笔只在读完清单后take一次并持有，不place，不在hold/对白期隐藏动作。",
+    "无用方澄旁观hold不加，当前镜观察林屿清单及默认递笔即可。"
+  ]
+}

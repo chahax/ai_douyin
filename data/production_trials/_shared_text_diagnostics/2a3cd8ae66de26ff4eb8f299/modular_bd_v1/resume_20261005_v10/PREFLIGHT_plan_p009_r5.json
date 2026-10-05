@@ -1,0 +1,14 @@
+{
+  "complete_new_plan_required": true,
+  "verified_contract_fault": "149把手里笔尖运动误写成slide(P07)。slide是无人持有道具沿支持面移动，不能用于手里笔；value也不接受from:...;to:...。P07已持有，不take/place/pass/slide，不改变持有位置。",
+  "current_scope": "B09只C02原持笔实际写字及P05/P06视线比对，不重新face/sit/affect，不给门外C01建静态保持事件。",
+  "six_event_shape": [
+    "当前P05处实际落笔，operation=null",
+    "视线真实P06，gaze/C02/target空/value=surface:E02:结算单P06比对处",
+    "视线回P05下一落字处，gaze/C02/target空/value=surface:E02:客户明细单P05下一处落字处",
+    "真实再落笔，operation=null",
+    "视线P06，gaze，target空",
+    "视线回P05，gaze，target空"
+  ],
+  "pen_micro_movements": "原每笔后手中笔尖挪到P06比对、再回P05，是同一持有下的手部微动作，可在intent/performance说明，不造道具转移操作。完整新计划，不复用/拼接旧内容。"
+}

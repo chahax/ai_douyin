@@ -1,0 +1,10 @@
+{
+  "schema": "creative_call_evidence/v1",
+  "sequence": 1,
+  "identity_sha256": "51a14dc7e8a1307dab89d200b303e8eb0ff2938f48e6f5f626ffb8b5fccd4af6",
+  "at_utc": "2026-10-05T07:34:35.200390+00:00",
+  "phase": "call_prepared",
+  "details": {
+    "provider_received_request": null
+  }
+}

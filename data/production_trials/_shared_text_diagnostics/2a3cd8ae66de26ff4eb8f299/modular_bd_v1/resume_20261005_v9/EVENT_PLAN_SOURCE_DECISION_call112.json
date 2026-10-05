@@ -1,0 +1,33 @@
+{
+  "call": 112,
+  "plan_sha256": "792dec8610648f9a93844fe872773c2e7d263022461c4d0866392efa0855903d",
+  "approved_for_performance_text": true,
+  "source_verified_evidence": [
+    {
+      "path": "actions.0.events.0.intent",
+      "quote": "未收回",
+      "finding": "C02/null悬停保持承担B06-R01；两个gaze按挎包、明细顺序且无反应ID。"
+    },
+    {
+      "path": "actions.1.events.0.intent",
+      "quote": "未松笔也未换手",
+      "finding": "原持有不变，收的是手，非道具拿放。"
+    },
+    {
+      "path": "actions.1.events.1.operation.kind",
+      "quote": "slide",
+      "finding": "仅浅黄在E02同表面滑回，粉蓝不动。"
+    }
+  ],
+  "planning_only_not_actual_windows": true,
+  "full_review_required": true,
+  "media_approval": false,
+  "performance_guard": "末事件独自仅可表现他自己认领工作；C01仍在E01，C02仍坐E02且侧身，无转身/起身/喊话。实际表演不得写办公室已无人或方澄已离开。",
+  "correction": {
+    "reason": "approval used tool envelope hash; gate blocked before SDK; bind original parsed complete document instead",
+    "original_decision_file": "EVENT_PLAN_SOURCE_DECISION_call112_ORIGINAL_WRONG_ENVELOPE_HASH.json",
+    "original_decision_sha256": "6c0eb595c0ba50b87da7ad6bc5074b7983e3757d6d2a8707443f14fb5256b044",
+    "model_content_changed": false,
+    "provider_calls": 0
+  }
+}

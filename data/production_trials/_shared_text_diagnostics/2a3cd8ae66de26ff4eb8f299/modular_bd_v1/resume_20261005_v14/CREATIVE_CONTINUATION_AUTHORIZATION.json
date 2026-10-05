@@ -1,0 +1,10 @@
+{
+  "user_quote": "开始实际表演窗口和制作交接",
+  "scope": "independent deterministic review view, complete necessary text review and handoff",
+  "automatic_retry": false,
+  "aggregate_token_cap": null,
+  "old_call70_resend": false,
+  "media_calls_authorized": false,
+  "old_budget_reset": false,
+  "parent_governance_migrated": false
+}

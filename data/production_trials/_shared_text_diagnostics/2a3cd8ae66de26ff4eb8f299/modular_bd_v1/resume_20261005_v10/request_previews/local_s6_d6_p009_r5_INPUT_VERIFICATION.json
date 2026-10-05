@@ -1,0 +1,7 @@
+{
+  "request_sha256": "6d40362d597adf9fddb7c7cdd1701a6e06d8ce53fb6a52eea521d4c1ba0ad28b",
+  "full_reference_pack_in_actual_messages": true,
+  "raw_s6_script_unchanged": true,
+  "not_same_network_payload_as_unknown70": true,
+  "old_unknown_reservation_preserved": 64010
+}

@@ -1,0 +1,11 @@
+{
+  "call113": {
+    "position": 756,
+    "verified_cause": "complete inner object followed by extraneous quote/brace; also five rows omit A1E2"
+  },
+  "call114": {
+    "position": 821,
+    "verified_cause": "unescaped ASCII double quotes around 对账 in performance text; not extraneous closing suffix"
+  },
+  "operator_feedback_r3_correction": "r3 inaccurately grouped both as extra closing suffix; this annotation preserves that sent request and records the actual separate causes. No model output repaired."
+}

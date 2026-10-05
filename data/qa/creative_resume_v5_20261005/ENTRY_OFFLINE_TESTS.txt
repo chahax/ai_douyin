@@ -1,0 +1,47 @@
+FF
+================================== FAILURES ===================================
+________ test_prepare_inherits_both_ledgers_and_exact_reviewed_script _________
+tests\test_creative_resume_v5.py:25: in test_prepare_inherits_both_ledgers_and_exact_reviewed_script
+    calls,state=continuation;summary=runner.prepare();ctx=runner.context()
+                                     ^^^^^^^^^^^^^^^^
+scripts\run_creative_resume_v5.py:55: in prepare
+    value=runtime().prepare();control.write(ROOT/'INHERITED_SPEND_ANCHOR.json',control.read(ANCHOR),True)
+          ^^^^^^^^^^^^^^^^^^^
+scripts\creative_resume_dispatch_v3.py:99: in prepare
+    with self.lock():
+         ^^^^^^^^^^^
+C:\Python314\Lib\contextlib.py:141: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+scripts\creative_resume_dispatch_v3.py:91: in lock
+    with path.open("x",encoding="utf-8") as f: json.dump({"pid":os.getpid(),"time":now()},f)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\pathlib\__init__.py:771: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileExistsError: [Errno 17] File exists: 'D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\DISPATCH.lock'
+__________ test_original_unknown70_network_request_cannot_be_resent ___________
+tests\test_creative_resume_v5.py:34: in test_original_unknown70_network_request_cannot_be_resent
+    calls,state=continuation;runner.prepare()
+                             ^^^^^^^^^^^^^^^^
+scripts\run_creative_resume_v5.py:55: in prepare
+    value=runtime().prepare();control.write(ROOT/'INHERITED_SPEND_ANCHOR.json',control.read(ANCHOR),True)
+          ^^^^^^^^^^^^^^^^^^^
+scripts\creative_resume_dispatch_v3.py:99: in prepare
+    with self.lock():
+         ^^^^^^^^^^^
+C:\Python314\Lib\contextlib.py:141: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+scripts\creative_resume_dispatch_v3.py:91: in lock
+    with path.open("x",encoding="utf-8") as f: json.dump({"pid":os.getpid(),"time":now()},f)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\pathlib\__init__.py:771: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileExistsError: [Errno 17] File exists: 'D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\DISPATCH.lock'
+=========================== short test summary info ===========================
+FAILED tests/test_creative_resume_v5.py::test_prepare_inherits_both_ledgers_and_exact_reviewed_script
+FAILED tests/test_creative_resume_v5.py::test_original_unknown70_network_request_cannot_be_resent
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 2 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+2 failed in 0.88s

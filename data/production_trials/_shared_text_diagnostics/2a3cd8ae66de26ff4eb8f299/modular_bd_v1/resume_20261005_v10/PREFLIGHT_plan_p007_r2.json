@@ -1,0 +1,125 @@
+{
+  "complete_new_plan_required": true,
+  "previous_complete_model_plan_for_diagnosis": {
+    "actions": [
+      {
+        "source_step_ref": "raw_linear_script.beats.6.steps.0",
+        "events": [
+          {
+            "intent": "林屿重新低头看向客户明细单，视线落在第一处红笔批注位置",
+            "subject": "C02",
+            "operation": {
+              "kind": "gaze",
+              "actor": "C02",
+              "target": "",
+              "value": "surface:E02:客户明细单P05第一处红笔批注"
+            },
+            "satisfies": []
+          },
+          {
+            "intent": "林屿用右手握着的黑色签字笔在客户明细单第一处红笔批注旁落字改了一笔",
+            "subject": "C02",
+            "operation": {
+              "kind": "gaze",
+              "actor": "C02",
+              "target": "",
+              "value": "surface:E02:客户明细单P05第一处红笔批注旁落字处"
+            },
+            "satisfies": []
+          },
+          {
+            "intent": "林屿写到客户明细单第二行数字时停住，视线停在第二行数字",
+            "subject": "C02",
+            "operation": {
+              "kind": "gaze",
+              "actor": "C02",
+              "target": "",
+              "value": "surface:E02:客户明细单P05第二行数字"
+            },
+            "satisfies": []
+          },
+          {
+            "intent": "林屿把结算单从林屿工位桌角滑到客户明细单旁边对齐摆放",
+            "subject": "C02",
+            "operation": {
+              "kind": "slide",
+              "actor": "C02",
+              "target": "P06",
+              "value": "surface:E02:客户明细单P05旁边"
+            },
+            "satisfies": []
+          },
+          {
+            "intent": "林屿把视线在结算单与明细单第二行之间比对",
+            "subject": "C02",
+            "operation": {
+              "kind": "gaze",
+              "actor": "C02",
+              "target": "",
+              "value": "surface:E02:结算单P06与客户明细单P05第二行数字之间比对"
+            },
+            "satisfies": []
+          },
+          {
+            "intent": "林屿用笔尖在客户明细单第二行点了一下定位该数字",
+            "subject": "C02",
+            "operation": {
+              "kind": "gaze",
+              "actor": "C02",
+              "target": "",
+              "value": "surface:E02:客户明细单P05第二行数字笔尖点住处"
+            },
+            "satisfies": []
+          },
+          {
+            "intent": "林屿用签字笔把客户明细单第二行那个数字划掉重写",
+            "subject": "C02",
+            "operation": {
+              "kind": "gaze",
+              "actor": "C02",
+              "target": "",
+              "value": "surface:E02:客户明细单P05第二行重写数字处"
+            },
+            "satisfies": []
+          },
+          {
+            "intent": "林屿写完第二行一笔停一下，视线回到结算单继续比对",
+            "subject": "C02",
+            "operation": {
+              "kind": "gaze",
+              "actor": "C02",
+              "target": "",
+              "value": "surface:E02:结算单P06对应行"
+            },
+            "satisfies": []
+          },
+          {
+            "intent": "林屿比对完结算单后继续沿客户明细单往下改，视线跟随笔尖落向下一行",
+            "subject": "C02",
+            "operation": {
+              "kind": "gaze",
+              "actor": "C02",
+              "target": "",
+              "value": "surface:E02:客户明细单P05下一行落字处"
+            },
+            "satisfies": []
+          },
+          {
+            "intent": "林屿对拒绝后接回工作的稳定停住反应，不再开口求援，低头持续在纸面对照修改",
+            "subject": "C02",
+            "operation": null,
+            "satisfies": [
+              "B07-R01"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "precise_source_faults": [
+    "第一事件之前缺原文转回桌前。当前首态C02仍侧身朝E01，须自行生成真实face回E02桌前，target空，之后再gaze明细。",
+    "原第二行数字停住须给独立C02/null保持反应B07-R01；先gaze第二行后null停住，再slide P06，不能把反应泛加到最后持续写字。",
+    "删去无源求援历史表达，原稿只没接话。不要在最后新加与持续写字冲突的泛化停住反应；写一笔停一下仍按原顺序真实保留。"
+  ],
+  "source_unchanged": "P07持续右手持有，不重新take；P06同E02表面slide，C01仍站E01。完整原步骤全部兑现，提交完整新计划而非补丁。"
+}

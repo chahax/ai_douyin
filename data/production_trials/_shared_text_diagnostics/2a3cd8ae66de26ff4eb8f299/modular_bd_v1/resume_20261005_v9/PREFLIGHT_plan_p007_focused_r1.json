@@ -1,0 +1,9 @@
+{
+  "current_source_only": [
+    "完整原B07顺序：转回桌前低头看明细、第一处红批落字、写第二行停住、slide结算单P06从E02角到P05旁对齐、比对、笔尖点明细第二行、划掉重写、每写一笔停一下、再对结算继续。不得省步骤。",
+    "P07一直C02原右手持有，书写/笔尖点/旋转为原持有微动作null，不take/place/slide笔；P06 holder=none同E02 surface，slide不是take/place。",
+    "真正转向自己工位是face，真正看某对象是gaze，二者target空，value是真实目标状态。",
+    "B07-R01在C02第二行停住的null稳定可读反应事件，satisfies只该ID≥2秒后续实际表演；其他带操作的事件satisfies空数组，不能把ID绑gaze/face/slide/affect。",
+    "这里只完整事件计划，不写seconds、不写对白；C01仍在E01未拿包离开，不做B08/B09。"
+  ]
+}

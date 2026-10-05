@@ -1,0 +1,79 @@
+{
+  "complete_new_plan_required": true,
+  "last_mechanically_valid_complete_plan_for_diagnosis": {
+    "actions": [
+      {
+        "source_step_ref": "raw_linear_script.beats.5.steps.0",
+        "events": [
+          {
+            "intent": "林屿递笔的手悬停在桌面上方，笔尖仍朝向方澄一侧，未收回——第一次被明确拒绝后的可见停住反应。",
+            "subject": "C02",
+            "operation": null,
+            "satisfies": [
+              "B06-R01"
+            ]
+          },
+          {
+            "intent": "林屿的视线移向方澄椅背上挂着的米灰色挎包。",
+            "subject": "C02",
+            "operation": {
+              "kind": "gaze",
+              "actor": "C02",
+              "target": "",
+              "value": "surface:E09:椅背上挂着的米灰色挎包P01"
+            },
+            "satisfies": []
+          },
+          {
+            "intent": "林屿的视线从挎包看回自己桌面上摊开的那张客户明细单。",
+            "subject": "C02",
+            "operation": {
+              "kind": "gaze",
+              "actor": "C02",
+              "target": "",
+              "value": "surface:E02:两人之间桌面上摊开的客户明细单P05"
+            },
+            "satisfies": []
+          }
+        ]
+      },
+      {
+        "source_step_ref": "raw_linear_script.beats.5.steps.1",
+        "events": [
+          {
+            "intent": "林屿原握法把签字笔从两人桌面之间收回自己手边，未松笔未换手。",
+            "subject": "C02",
+            "operation": null,
+            "satisfies": []
+          },
+          {
+            "intent": "林屿把那张浅黄便利贴沿自己桌面滑回自己面前，搁在客户明细单旁边。",
+            "subject": "C02",
+            "operation": {
+              "kind": "slide",
+              "actor": "C02",
+              "target": "P03_Y",
+              "value": "surface:E02:客户明细单P05旁边"
+            },
+            "satisfies": []
+          },
+          {
+            "intent": "林屿把笔和便利贴都认领回自己这边之后，重新面对工作，停下不再喊她。",
+            "subject": "C02",
+            "operation": null,
+            "satisfies": [
+              "B06-R02"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "only_fault_of_that_plan": "actions.1.events.2.intent含重新面对工作、不再喊她；前者提前B07转身，后者无源历史。请模型完整重写整份计划，保持原事件关系；不是程序补丁或拼接。",
+  "verified_111_errors": [
+    "第一保持不能用affect；B06-R01只给C02/null悬停保持，两个gaze均satisfies空数组。",
+    "收回手不是affect/道具take；同握法微动作operation=null，不绑ID。浅黄slide的satisfies空数组。",
+    "收回笔和浅黄贴后的C02稳定保持须独立null事件，只给B06-R02。共两个null反应窗口，不能用有operation的事件代替。"
+  ],
+  "key_type_contract": "null是JSON空值，不是字符串，不是affect对象；satisfies有ID必operation为JSON null。这是编译条件，不是表演评分。"
+}

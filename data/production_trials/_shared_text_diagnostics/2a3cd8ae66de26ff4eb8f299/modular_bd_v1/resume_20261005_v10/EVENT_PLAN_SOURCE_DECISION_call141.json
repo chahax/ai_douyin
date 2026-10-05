@@ -1,0 +1,26 @@
+{
+  "call": 141,
+  "plan_sha256": "aa0e65051d13a817d5372938fc6a996365e31689dc47fe481dac268ac03b402c",
+  "approved_for_performance_text": true,
+  "source_verified_evidence": [
+    {
+      "path": "actions.0.events.0.intent",
+      "quote": "继续",
+      "finding": "原有右手持笔继续实际落字，operation为null，不重新拿笔或放笔。"
+    },
+    {
+      "path": "actions.0.events.1.intent",
+      "quote": "写完一笔后把视线移向旁边那张结算单",
+      "finding": "原每落笔即结算比对，没有新不一致/划错困难情节。"
+    },
+    {
+      "path": "actions.0.events.3.intent",
+      "quote": "再次落字改一笔",
+      "finding": "第二循环真正写字，C01已离开不召回，静态杯与三贴不增事件。"
+    }
+  ],
+  "planning_only_not_actual_windows": true,
+  "full_review_required": true,
+  "media_approval": false,
+  "pending_whole_text_note": "“第一处”是本镜当前行的首笔表述，表演必须接上一镜P05下一行当前落字处，不能倒回最初一行另藏gaze。"
+}

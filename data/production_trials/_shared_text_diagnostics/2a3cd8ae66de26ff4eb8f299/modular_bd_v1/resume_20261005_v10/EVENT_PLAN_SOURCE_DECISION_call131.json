@@ -1,0 +1,15 @@
+{
+  "call": 131,
+  "plan_sha256": "cb3d4da7d99684fc00880f65e88f4591cfb66300d0fb03acd75be01c5e2168ce",
+  "approved_for_performance_text": false,
+  "source_verified_evidence": [
+    {
+      "path": "actions.0.events.2.intent",
+      "quote": "侧身朝办公室门方向走出两步",
+      "finding": "move只改位置，侧身改变朝向未记录；当前C01朝向E01/目光C02，朝门行走应完整记录真实朝向/路径观察。"
+    }
+  ],
+  "planning_only_not_actual_windows": true,
+  "full_review_required": true,
+  "media_approval": false
+}

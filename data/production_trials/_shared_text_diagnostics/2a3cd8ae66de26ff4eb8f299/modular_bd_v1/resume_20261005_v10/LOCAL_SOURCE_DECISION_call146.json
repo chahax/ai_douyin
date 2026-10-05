@@ -1,0 +1,22 @@
+{
+  "call": 146,
+  "derived_local_sha256": "eaf65b5bde4d98a0c401cea51da5ccd34a851da417735435218eb8f836c71f52",
+  "model_performance_sha256": "f61e9251b8d486abf1d99bdc70d261962a04311c5d540720fcb52ca49608eb48",
+  "event_plan_ordinal": 135,
+  "approved_for_next_local_text": false,
+  "source_verified_evidence": [
+    {
+      "path": "dialogue_performance",
+      "quote": "说到「今晚」",
+      "finding": "错误复演B05拒绝，本镜B08只有告别；语气cue不能换成别镜台词。"
+    },
+    {
+      "path": "performances.5.performance",
+      "quote": "向自己方向平稳拉动",
+      "finding": "原推门变成拉门，并新增靠近半步；不采用。"
+    }
+  ],
+  "full_review_required": true,
+  "human_quality_confirmation": null,
+  "media_approval": false
+}

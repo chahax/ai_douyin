@@ -1,0 +1,7 @@
+{
+  "verified_original_source_constraints": [
+    "首镜源steps.0是已站着、包已挂、票已压的建立态，不是新起身/挂包/拿票；可明确hold建立，不以stand重复动作。",
+    "steps.1只由C02在E02同一桌面slide移动P05往两人之间；客户单仍由桌面支撑，holder保持none，E02规范surface位置；不跨桌面、不改咖啡杯、笔或结算单。"
+  ],
+  "execution_contract": "本镜无额外performance_requirements，窗口数组[]；源steps各一个step_unit不漏不重排；完整action/hold组、operations普通数组、唯一group.id、实际duration_seconds。所有字段按Schema。"
+}

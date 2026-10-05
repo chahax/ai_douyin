@@ -1,0 +1,24 @@
+{
+  "call": 100,
+  "approved_for_next_local_text": false,
+  "contract_valid": true,
+  "verified_source_faults": [
+    {
+      "slot": "A0E0",
+      "problem": "计划是仅face侧身，没有gaze；表演却目光从自己桌面抬向她桌角。按当前已成立低头状态表现侧身，不新增未计划视线转移。"
+    },
+    {
+      "slot": "A0E7",
+      "problem": "点浅黄发生在完整原清单对白之前，随念词节奏提前对白，必须只点纸面，不念词或随念词动作。"
+    },
+    {
+      "slot": "A0E5",
+      "problem": "散落底层纸缘暗加了未定义额外便利贴，原资产只有指定三张；不添加其它纸。"
+    },
+    {
+      "slot": "dialogue_performance",
+      "problem": "不需要字数/逐字吸气推断，收尾是2字。自然整句读清单、短词之间停顿即可，不说语速偏快，避免人为切碎语流。"
+    }
+  ],
+  "media_approval": false
+}

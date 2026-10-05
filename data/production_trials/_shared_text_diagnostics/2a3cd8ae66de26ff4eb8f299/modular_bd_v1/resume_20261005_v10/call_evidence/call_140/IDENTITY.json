@@ -1,0 +1,12 @@
+{
+  "schema": "creative_call_evidence/v1",
+  "identity": {
+    "ordinal": 140,
+    "label": "plan_s6_d6_p009_r2",
+    "request_sha256": "f25aff9316b2b4103ea3abdc99ca45fe3f142b1765d76c7e5b60b3e900e8d112",
+    "source_binding_sha256": "0e967954ddaee4e057b00b8741067822ca9f58f0e04bc37003e177040e53ca5e",
+    "role": "writer",
+    "model": "MiniMax-M3"
+  },
+  "identity_sha256": "01e174d57e12d73d8ca8bbcf647f8600df9559f5437fed07402282fc22edf2c9"
+}

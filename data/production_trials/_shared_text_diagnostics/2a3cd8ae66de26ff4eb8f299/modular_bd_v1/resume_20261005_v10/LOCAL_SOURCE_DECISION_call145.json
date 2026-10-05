@@ -1,0 +1,22 @@
+{
+  "call": 145,
+  "derived_local_sha256": "849b4e056b81a88574ce1983c21d7eff5f0633f3d96560d95d7c585674ddfa19",
+  "model_performance_sha256": "b991d22816d15d742e8696fe114b7924cf6ab52249e519b1385e7b6b4aada1c6",
+  "event_plan_ordinal": 135,
+  "approved_for_next_local_text": false,
+  "source_verified_evidence": [
+    {
+      "path": "dialogue_performance",
+      "quote": "侧脸朝向林屿",
+      "finding": "对白已在两步到门、face/gaze E04之后，不应新增回朝林屿。"
+    },
+    {
+      "path": "performances.5.performance",
+      "quote": "走廊更冷一度的光",
+      "finding": "新增走廊光源未在源剧本/资产中建立。"
+    }
+  ],
+  "full_review_required": true,
+  "human_quality_confirmation": null,
+  "media_approval": false
+}

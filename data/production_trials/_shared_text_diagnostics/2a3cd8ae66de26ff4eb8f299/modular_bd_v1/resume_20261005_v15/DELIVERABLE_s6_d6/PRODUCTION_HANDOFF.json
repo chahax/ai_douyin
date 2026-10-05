@@ -1,0 +1,572 @@
+{
+  "schema": "s6_delivery_finalization/v16",
+  "delivery_source_sha256": "5ac2fbbb58b01d1e363fb41b232c64ddf81ca13f2deb99f2d2d4bd19f2462774",
+  "production_source_binding_unchanged": true,
+  "adopted_review_ordinal": 158,
+  "status": "text_reviewed_awaiting_human_content_and_aesthetic_confirmation",
+  "script_sha256": "c38f75d6efa1a3a016458e7da8497bc987663b93b76d64be304c2d01c93bd090",
+  "compiled_sha256": "b85533f8bcc9a568218896e925f9b25221500c4ba21cdf7aa4fcd464c4e49fe2",
+  "reviewed_view_sha256": "46a92e6b73dc1596235ac1deb56658bd0ed14e2dcb4f1f0b601d00277161ffc5",
+  "review_sha256": "fa0bb7eeb7081a858d59b314dabb9f87dd74c0d18462bcea6be4f6c92495187f",
+  "review_context_sha256": "584aa7d85b2fa41f4a28e5bd6782a966132408840b0616274a0404582b69ff3f",
+  "assistant_verified_evidence": [
+    {
+      "path": "raw_linear_script.beats.4.steps.0.text",
+      "quote": "今晚不行",
+      "finding": "原拒绝台词完整，不添加补偿话或替换主题。"
+    },
+    {
+      "path": "execution_script.beats.4.dialogue.0.text",
+      "quote": "得先走",
+      "finding": "唯一执行对白保留全文，时长来自编译而非初步估算。"
+    },
+    {
+      "path": "execution_bindings.20.start",
+      "quote": "45.814",
+      "finding": "拒绝窗口真实编排起点。"
+    },
+    {
+      "path": "execution_bindings.20.end",
+      "quote": "52.114",
+      "finding": "拒绝窗口真实编排终点，未当作实际声画通过。"
+    },
+    {
+      "path": "shots.shots.2.visible_performance",
+      "quote": "保持握持等她来接",
+      "finding": "原持笔从第三镜建立并持续，后镜未重复拿笔。"
+    },
+    {
+      "path": "shots.shots.5.visible_performance",
+      "quote": "原有低头朝向桌面的目光不变",
+      "finding": "拒绝后保持原低头和持笔，未虚构互相对视。"
+    },
+    {
+      "path": "shots.shots.5.visible_performance",
+      "quote": "未换手未松笔",
+      "finding": "收回笔时同一持有不中断，所有权不代替当前持有。"
+    },
+    {
+      "path": "shots.shots.7.visible_performance",
+      "quote": "一同跨过门框",
+      "finding": "左手推門后携包票真正离画，原告别句独立执行。"
+    },
+    {
+      "path": "shots.shots.8.visible_performance",
+      "quote": "真正落下一笔",
+      "finding": "结尾接当前落字，实际自己做，没有新改错障碍。"
+    },
+    {
+      "path": "shots.shots.8.visible_performance",
+      "quote": "只是定位，不落字",
+      "finding": "比对返回槽不重演书写，六槽仅两次实际写字。"
+    },
+    {
+      "path": "shots.shots.8.visible_performance",
+      "quote": "不喊她、不抬头",
+      "finding": "她已经离开后，他继续自己做，保持原结尾。"
+    }
+  ],
+  "narrative_beats": 9,
+  "shots": 9,
+  "compiled_duration_seconds": 91.44285714285714,
+  "text_production_handoff_complete": true,
+  "creative_quality_passed": false,
+  "user_quality_confirmation": null,
+  "actual_selected_images": [],
+  "actual_images_returned_to_director": false,
+  "component_registry": {
+    "schema": "creative_component_registry_v1",
+    "original_manifest": {
+      "schema": "static_visual_manifest_v2",
+      "render": {
+        "style_option_id": "S01",
+        "visual_medium": "写实真人实拍质感的AI短片，自然皮肤纹理与生活化布光",
+        "palette": "傍晚办公室暖调，浅木色桌面、米白墙、暖灰窗帘透橙黄夕光、人物服装为低饱和的灰蓝与米驼",
+        "light_source": "临窗自然夕光为主，从办公桌侧面斜入，室内顶灯为辅补光，形成柔和侧光与轻微暖色阴影"
+      },
+      "characters": [
+        {
+          "id": "C01",
+          "name": "方澄",
+          "age_group": "成年",
+          "hair": "黑色齐肩直发，自然中分",
+          "clothing": "灰蓝色薄针织开衫，内搭白色圆领T恤，下着深灰色直筒长裤",
+          "body_shape": "中等偏瘦，肩线柔和"
+        },
+        {
+          "id": "C02",
+          "name": "林屿",
+          "age_group": "成年",
+          "hair": "深栗色短碎发，稍长刘海",
+          "clothing": "米驼色棉质衬衫，袖口挽至前臂，下着深藏蓝休闲长裤",
+          "body_shape": "中等身高，肩宽略宽于方澄"
+        }
+      ],
+      "props": [
+        {
+          "id": "P01",
+          "name": "挎包",
+          "appearance": "软皮小号斜挎包，米灰色金属扣，单层翻盖",
+          "owner_id": "C01"
+        },
+        {
+          "id": "P02",
+          "name": "院线电影票根",
+          "appearance": "竖版窄长纸片，米白底深红字，右侧带撕齿虚线，今晚院线开场时间与座位号可读",
+          "owner_id": "C01"
+        },
+        {
+          "id": "P03",
+          "name": "善后便利贴三张",
+          "appearance": "正方形小纸片，分别为浅黄、浅粉、浅蓝底，深灰手写短词（对账/改明细/收尾）",
+          "owner_id": "C01"
+        },
+        {
+          "id": "P04",
+          "name": "咖啡杯",
+          "appearance": "白色陶瓷马克杯，杯身外侧无图案，杯口微宽",
+          "owner_id": "C02"
+        },
+        {
+          "id": "P05",
+          "name": "客户明细单",
+          "appearance": "A4横版打印表格纸，浅灰线条格，黑字数字，红笔批注",
+          "owner_id": "C02"
+        },
+        {
+          "id": "P06",
+          "name": "结算单",
+          "appearance": "A4纵版表格纸，右上角有彩色公司logo条，浅蓝表头",
+          "owner_id": "C02"
+        },
+        {
+          "id": "P07",
+          "name": "签字笔",
+          "appearance": "黑色细头签字笔，金属笔夹",
+          "owner_id": "C02"
+        }
+      ],
+      "scene": {
+        "name": "傍晚办公室",
+        "elements": [
+          {
+            "id": "E01",
+            "name": "方澄工位桌",
+            "appearance": "浅木色长方形办公桌，金属细腿，桌面靠近窗户一侧"
+          },
+          {
+            "id": "E02",
+            "name": "林屿工位桌",
+            "appearance": "浅木色长方形办公桌，与方澄桌同款，平行摆放，靠近室内一侧"
+          },
+          {
+            "id": "E03",
+            "name": "抽屉柜",
+            "appearance": "浅木色三斗文件柜，贴墙放置，黑色拉手"
+          },
+          {
+            "id": "E04",
+            "name": "办公室门",
+            "appearance": "木纹平板门，米灰色，下半部带金属横拉把手，位于房间远端侧墙"
+          },
+          {
+            "id": "E05",
+            "name": "窗户",
+            "appearance": "宽幅铝合金推拉窗，米灰色半透明卷帘半垂，窗框占据外侧整面墙"
+          },
+          {
+            "id": "E06",
+            "name": "顶灯",
+            "appearance": "白色圆形吸顶灯，暖白光，位于房间正中天花板"
+          },
+          {
+            "id": "E07",
+            "name": "地面",
+            "appearance": "浅灰色PVC地板，哑光"
+          },
+          {
+            "id": "E08",
+            "name": "墙面",
+            "appearance": "米白色乳胶漆墙面，干净无装饰"
+          },
+          {
+            "id": "E09",
+            "name": "办公椅（方澄）",
+            "appearance": "黑色网面靠背转椅，灰色塑料五星脚"
+          },
+          {
+            "id": "E10",
+            "name": "办公椅（林屿）",
+            "appearance": "黑色网面靠背转椅，灰色塑料五星脚，与方澄椅同款"
+          }
+        ],
+        "relations": [
+          {
+            "subject": "E02",
+            "relation": "right_of",
+            "reference": "E01"
+          },
+          {
+            "subject": "E01",
+            "relation": "next_to",
+            "reference": "E05"
+          },
+          {
+            "subject": "E02",
+            "relation": "next_to",
+            "reference": "E01"
+          },
+          {
+            "subject": "E03",
+            "relation": "behind",
+            "reference": "E02"
+          },
+          {
+            "subject": "E04",
+            "relation": "behind",
+            "reference": "E01"
+          },
+          {
+            "subject": "E06",
+            "relation": "above",
+            "reference": "E01"
+          },
+          {
+            "subject": "E07",
+            "relation": "below",
+            "reference": "E01"
+          },
+          {
+            "subject": "E08",
+            "relation": "behind",
+            "reference": "E05"
+          },
+          {
+            "subject": "E09",
+            "relation": "next_to",
+            "reference": "E01"
+          },
+          {
+            "subject": "E10",
+            "relation": "next_to",
+            "reference": "E02"
+          }
+        ]
+      }
+    },
+    "original_manifest_sha256": "7e5ad17743bce4e285673636980238471825686d832bc2787a43cfa1bec5f977",
+    "component_declarations": [
+      {
+        "source_prop_id": "P03",
+        "source_count": 3,
+        "source_count_evidence": "三张",
+        "members": [
+          {
+            "id": "P03_Y",
+            "name": "浅黄对账便利贴",
+            "appearance": "正方形小纸片，浅黄底，深灰手写短词（对账）",
+            "owner_id": "C01",
+            "source_evidence": [
+              "浅黄",
+              "对账"
+            ]
+          },
+          {
+            "id": "P03_P",
+            "name": "浅粉改明细便利贴",
+            "appearance": "正方形小纸片，浅粉底，深灰手写短词（改明细）",
+            "owner_id": "C01",
+            "source_evidence": [
+              "浅粉",
+              "改明细"
+            ]
+          },
+          {
+            "id": "P03_B",
+            "name": "浅蓝收尾便利贴",
+            "appearance": "正方形小纸片，浅蓝底，深灰手写短词（收尾）",
+            "owner_id": "C01",
+            "source_evidence": [
+              "浅蓝",
+              "收尾"
+            ]
+          }
+        ]
+      }
+    ],
+    "component_declarations_sha256": "28e40b3c6b934de208b4f273a872ed8f4e2c18073a83817a24c69df3f62ebb60",
+    "component_collections": {
+      "P03": {
+        "member_ids": [
+          "P03_Y",
+          "P03_P",
+          "P03_B"
+        ],
+        "source_count": 3,
+        "source_count_evidence": "三张",
+        "source_prop_sha256": "4dc52efb61d4b181265fab5bdc393ada8ed5d2f16a4f9d58d2b25d1874e156f7"
+      }
+    },
+    "member_source_map": {
+      "P03_Y": {
+        "source_prop_id": "P03",
+        "source_prop_sha256": "4dc52efb61d4b181265fab5bdc393ada8ed5d2f16a4f9d58d2b25d1874e156f7",
+        "source_evidence": [
+          "浅黄",
+          "对账"
+        ]
+      },
+      "P03_P": {
+        "source_prop_id": "P03",
+        "source_prop_sha256": "4dc52efb61d4b181265fab5bdc393ada8ed5d2f16a4f9d58d2b25d1874e156f7",
+        "source_evidence": [
+          "浅粉",
+          "改明细"
+        ]
+      },
+      "P03_B": {
+        "source_prop_id": "P03",
+        "source_prop_sha256": "4dc52efb61d4b181265fab5bdc393ada8ed5d2f16a4f9d58d2b25d1874e156f7",
+        "source_evidence": [
+          "浅蓝",
+          "收尾"
+        ]
+      }
+    },
+    "effective_manifest": {
+      "schema": "static_visual_manifest_v2",
+      "render": {
+        "style_option_id": "S01",
+        "visual_medium": "写实真人实拍质感的AI短片，自然皮肤纹理与生活化布光",
+        "palette": "傍晚办公室暖调，浅木色桌面、米白墙、暖灰窗帘透橙黄夕光、人物服装为低饱和的灰蓝与米驼",
+        "light_source": "临窗自然夕光为主，从办公桌侧面斜入，室内顶灯为辅补光，形成柔和侧光与轻微暖色阴影"
+      },
+      "characters": [
+        {
+          "id": "C01",
+          "name": "方澄",
+          "age_group": "成年",
+          "hair": "黑色齐肩直发，自然中分",
+          "clothing": "灰蓝色薄针织开衫，内搭白色圆领T恤，下着深灰色直筒长裤",
+          "body_shape": "中等偏瘦，肩线柔和"
+        },
+        {
+          "id": "C02",
+          "name": "林屿",
+          "age_group": "成年",
+          "hair": "深栗色短碎发，稍长刘海",
+          "clothing": "米驼色棉质衬衫，袖口挽至前臂，下着深藏蓝休闲长裤",
+          "body_shape": "中等身高，肩宽略宽于方澄"
+        }
+      ],
+      "props": [
+        {
+          "id": "P01",
+          "name": "挎包",
+          "appearance": "软皮小号斜挎包，米灰色金属扣，单层翻盖",
+          "owner_id": "C01"
+        },
+        {
+          "id": "P02",
+          "name": "院线电影票根",
+          "appearance": "竖版窄长纸片，米白底深红字，右侧带撕齿虚线，今晚院线开场时间与座位号可读",
+          "owner_id": "C01"
+        },
+        {
+          "id": "P03_Y",
+          "name": "浅黄对账便利贴",
+          "appearance": "正方形小纸片，浅黄底，深灰手写短词（对账）",
+          "owner_id": "C01"
+        },
+        {
+          "id": "P03_P",
+          "name": "浅粉改明细便利贴",
+          "appearance": "正方形小纸片，浅粉底，深灰手写短词（改明细）",
+          "owner_id": "C01"
+        },
+        {
+          "id": "P03_B",
+          "name": "浅蓝收尾便利贴",
+          "appearance": "正方形小纸片，浅蓝底，深灰手写短词（收尾）",
+          "owner_id": "C01"
+        },
+        {
+          "id": "P04",
+          "name": "咖啡杯",
+          "appearance": "白色陶瓷马克杯，杯身外侧无图案，杯口微宽",
+          "owner_id": "C02"
+        },
+        {
+          "id": "P05",
+          "name": "客户明细单",
+          "appearance": "A4横版打印表格纸，浅灰线条格，黑字数字，红笔批注",
+          "owner_id": "C02"
+        },
+        {
+          "id": "P06",
+          "name": "结算单",
+          "appearance": "A4纵版表格纸，右上角有彩色公司logo条，浅蓝表头",
+          "owner_id": "C02"
+        },
+        {
+          "id": "P07",
+          "name": "签字笔",
+          "appearance": "黑色细头签字笔，金属笔夹",
+          "owner_id": "C02"
+        }
+      ],
+      "scene": {
+        "name": "傍晚办公室",
+        "elements": [
+          {
+            "id": "E01",
+            "name": "方澄工位桌",
+            "appearance": "浅木色长方形办公桌，金属细腿，桌面靠近窗户一侧"
+          },
+          {
+            "id": "E02",
+            "name": "林屿工位桌",
+            "appearance": "浅木色长方形办公桌，与方澄桌同款，平行摆放，靠近室内一侧"
+          },
+          {
+            "id": "E03",
+            "name": "抽屉柜",
+            "appearance": "浅木色三斗文件柜，贴墙放置，黑色拉手"
+          },
+          {
+            "id": "E04",
+            "name": "办公室门",
+            "appearance": "木纹平板门，米灰色，下半部带金属横拉把手，位于房间远端侧墙"
+          },
+          {
+            "id": "E05",
+            "name": "窗户",
+            "appearance": "宽幅铝合金推拉窗，米灰色半透明卷帘半垂，窗框占据外侧整面墙"
+          },
+          {
+            "id": "E06",
+            "name": "顶灯",
+            "appearance": "白色圆形吸顶灯，暖白光，位于房间正中天花板"
+          },
+          {
+            "id": "E07",
+            "name": "地面",
+            "appearance": "浅灰色PVC地板，哑光"
+          },
+          {
+            "id": "E08",
+            "name": "墙面",
+            "appearance": "米白色乳胶漆墙面，干净无装饰"
+          },
+          {
+            "id": "E09",
+            "name": "办公椅（方澄）",
+            "appearance": "黑色网面靠背转椅，灰色塑料五星脚"
+          },
+          {
+            "id": "E10",
+            "name": "办公椅（林屿）",
+            "appearance": "黑色网面靠背转椅，灰色塑料五星脚，与方澄椅同款"
+          }
+        ],
+        "relations": [
+          {
+            "subject": "E02",
+            "relation": "right_of",
+            "reference": "E01"
+          },
+          {
+            "subject": "E01",
+            "relation": "next_to",
+            "reference": "E05"
+          },
+          {
+            "subject": "E02",
+            "relation": "next_to",
+            "reference": "E01"
+          },
+          {
+            "subject": "E03",
+            "relation": "behind",
+            "reference": "E02"
+          },
+          {
+            "subject": "E04",
+            "relation": "behind",
+            "reference": "E01"
+          },
+          {
+            "subject": "E06",
+            "relation": "above",
+            "reference": "E01"
+          },
+          {
+            "subject": "E07",
+            "relation": "below",
+            "reference": "E01"
+          },
+          {
+            "subject": "E08",
+            "relation": "behind",
+            "reference": "E05"
+          },
+          {
+            "subject": "E09",
+            "relation": "next_to",
+            "reference": "E01"
+          },
+          {
+            "subject": "E10",
+            "relation": "next_to",
+            "reference": "E02"
+          }
+        ]
+      },
+      "surface_ids": [
+        "E01",
+        "E02"
+      ]
+    },
+    "effective_manifest_sha256": "a4f3f2510f19538875b221e6d37eadd9c94c23299e6eeb12e0b583ef17b6481a",
+    "semantic_approval": false,
+    "production_ready": false
+  },
+  "asset_sample_selection_status": "awaiting_human_aesthetic_approval",
+  "media_calls": 0,
+  "video_human_review_required": true,
+  "automatic_media_submit": false,
+  "cost_ledger": {
+    "schema": "authorized_creative_continuation/v3",
+    "new_calls": 1,
+    "effective_calls_started": 158,
+    "new_reported_tokens": 202763,
+    "effective_reported_tokens": 2915735,
+    "unknown_token_reservations": 64010,
+    "max_total_tokens": null,
+    "unbounded_aggregate_text_authorized": true,
+    "old_budget_reset": false,
+    "old_governance_migrated": false,
+    "media_calls": 0,
+    "semantic_approval": false,
+    "calls_with_known_usage": 157,
+    "inherited_unknown_token_reservations": 64010,
+    "new_unknown_token_reservations": 0,
+    "inherited_pending_ordinals": [
+      70
+    ],
+    "original_call70_recovered": false
+  },
+  "old_call70_still_unknown": true,
+  "old_unknown_reservation_preserved": 64010,
+  "old_task_or_budget_reset": false,
+  "legacy_compiled_prompt_not_media_instruction": true,
+  "reviewed_execution_view_is_authoritative_text_projection": true,
+  "next_steps": [
+    "human content and aesthetic review",
+    "few selected aesthetic images under media authorization",
+    "return actually selected images to director",
+    "validate long dialogue media duration",
+    "generate current segment then await human review",
+    "continue only with approved original service tail frame"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "call": 98,
+  "approved_for_performance_text": false,
+  "contract_valid": true,
+  "verified_source_faults": [
+    "侧身应在从她桌角取便利贴之前，目前写在intent里但face排在取笔后。原steps.0开头先单列face，target空,value侧身朝方澄E01桌角。",
+    "反转手里笔不是人物face。steps.2 face事件错误，把反转意图改为operation=null的手部原地表演事件，演员仍坐着且仍侧身。",
+    "最后place P07会把holder变none。value写右手握笔不能改变place=释放道具的语义；该事件应operation=null，手始终握着P07伸出等接，不能place/slide。"
+  ],
+  "media_approval": false
+}

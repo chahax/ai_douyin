@@ -1,0 +1,32 @@
+{
+  "call": 153,
+  "derived_local_sha256": "8aade730a9a28135fbd7bb26fed7a51ee67080a81ad3112ce560d0608779c5bf",
+  "model_performance_sha256": "bfcbe7adb733d5e32d2aacafa6030015c6d583c0f08fe4d4280e9f2912352dd4",
+  "event_plan_ordinal": 150,
+  "approved_for_next_local_text": true,
+  "source_verified_evidence": [
+    {
+      "path": "performances.0.performance",
+      "quote": "当前落字处真正落下一笔",
+      "finding": "接前镜当前P05处，原持笔实际写字，无指定已改过行号。"
+    },
+    {
+      "path": "performances.1.performance",
+      "quote": "笔尖缓缓挪向旁边那张结算单",
+      "finding": "原每笔后同一持笔手笔尖实际挪P06配合视线；纸不移动。"
+    },
+    {
+      "path": "performances.3.performance",
+      "quote": "真正再写一笔",
+      "finding": "第二循环实际书写，定位槽不提前写，无新改错障碍。"
+    },
+    {
+      "path": "performances.5.performance",
+      "quote": "不喊她、不抬头",
+      "finding": "她真离开后他继续自己做，无新旁观者/奖励/走廊。"
+    }
+  ],
+  "full_review_required": true,
+  "human_quality_confirmation": null,
+  "media_approval": false
+}

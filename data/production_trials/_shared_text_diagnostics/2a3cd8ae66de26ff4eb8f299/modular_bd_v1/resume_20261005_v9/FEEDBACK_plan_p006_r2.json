@@ -1,0 +1,20 @@
+{
+  "prior_call": 108,
+  "verified_faults": [
+    "原步骤0遗漏看挎包再看回明细单，两次实际gaze必须相继事件；只给手悬保持不能覆盖原动作。",
+    "原步骤1的intent把握筆收回写成松笔再握，新增无作用动作且破坏持续手持；只能原握法收手。",
+    "浅黄slide操作须intent明确浅黄移动，不能用笔收回intent指代该操作。",
+    "B06-R02要单列subject=C02、operation=null事件绑定，不能在slide状态变化事件填satisfies。"
+  ],
+  "complete_current_events_by_original_action": [
+    {
+      "source_step_ref": "raw_linear_script.beats.5.steps.0",
+      "required_events": "手悬未收回的真实停住反应null(B06-R01)；gaze看她椅背挎包P01；gaze看回客户明细P05。三者分别事件，target在gaze时为空，观察目标写value。"
+    },
+    {
+      "source_step_ref": "raw_linear_script.beats.5.steps.1",
+      "required_events": "null原握法收回握笔手；slide P03_Y沿E02至客户单旁；null接回工作后的稳定反应(B06-R02)。两个null事件都不松笔不补take/place。"
+    }
+  ],
+  "complete_new": "完整重交两条原action全部事件。P07始终C02右手持有；C02仍坐E02/E10；浅粉/蓝不动。只当前两个反应ID，在对应null事件；不添加说话/道歉/拿票/未定义符号。"
+}

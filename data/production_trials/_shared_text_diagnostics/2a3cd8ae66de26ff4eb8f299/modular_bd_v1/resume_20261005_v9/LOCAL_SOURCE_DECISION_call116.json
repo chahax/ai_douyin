@@ -1,0 +1,15 @@
+{
+  "call": 116,
+  "derived_local_sha256": "a2373eea5e2b1b2738af07846afedadaeb7eb648ecce9d49b1db3f87c5937fa6",
+  "approved_for_next_local_text": false,
+  "source_verified_evidence": [
+    {
+      "path": "dialogue_performance",
+      "quote": "方澄抬眼看向林屿的方向",
+      "finding": "重复上一镜已经完成的抬眼；本镜纯对白不能新增gaze动作。"
+    }
+  ],
+  "full_review_required": true,
+  "human_quality_confirmation": null,
+  "media_approval": false
+}

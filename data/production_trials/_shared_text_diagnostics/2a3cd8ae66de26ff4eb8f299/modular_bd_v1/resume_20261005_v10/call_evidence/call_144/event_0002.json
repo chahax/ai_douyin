@@ -1,0 +1,15 @@
+{
+  "schema": "creative_call_evidence/v1",
+  "sequence": 2,
+  "identity_sha256": "0868eb4ab53f9977ffef13df7d22d77b08e395c022ecd11e97668169acb3ebb2",
+  "at_utc": "2026-10-05T11:33:51.124171+00:00",
+  "phase": "client_configured",
+  "details": {
+    "role": "director",
+    "model": "deepseek-flash",
+    "base_url": "https://api.deepseek.com/v1",
+    "timeout_seconds": 600,
+    "max_retries": 0,
+    "server_stream_requested": false
+  }
+}

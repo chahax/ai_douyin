@@ -1,0 +1,20 @@
+{
+  "call": 103,
+  "plan_sha256": "04d89a3751fbdc6fb5d73438e15475f108289790749406f8c6614e2c180b72a7",
+  "approved_for_performance_text": true,
+  "source_verified_evidence": [
+    {
+      "path": "actions.0.events.1.intent",
+      "quote": "握住签字笔",
+      "finding": "目光沿实际C02握笔手抬至眼睛，不改变持有。"
+    },
+    {
+      "path": "actions.0.events.2.intent",
+      "quote": "维持未伸手接笔",
+      "finding": "正确C01 null反应事件绑定当前B04-R01，按原顺序。"
+    }
+  ],
+  "planning_only_not_actual_windows": true,
+  "full_review_required": true,
+  "media_approval": false
+}

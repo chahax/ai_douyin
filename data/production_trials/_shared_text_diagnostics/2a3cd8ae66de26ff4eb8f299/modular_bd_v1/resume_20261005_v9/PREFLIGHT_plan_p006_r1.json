@@ -1,0 +1,8 @@
+{
+  "current_shot_source_preflight": [
+    "C02保持握P07停在两桌间，视线先她的包，再回客户明细。两次gaze分相继组。",
+    "B06-R01让首次被拒绝后的愣住有至少1秒C02保持；B06-R02在接回工作后至少1秒C02保持。两组各绑定对应原action ref，不能用操作组冒充保持。",
+    "笔从两桌间收回手边但仍同一人同一握法持有；只描述握笔手收回，不place后又take。浅黄P03_Y由E02面滑回自己客户单旁，slide第四列surface:E02:明细单旁；浅粉/浅蓝不动。"
+  ],
+  "stage_reminder": "仅完整状态事件计划，无秒数/长表演；每event intent/subject/operation/satisfies。原微细不变状态动作可以null事件明确目的；真实状态操作不可省略。下一阶段另写完整表演和实际时间。"
+}

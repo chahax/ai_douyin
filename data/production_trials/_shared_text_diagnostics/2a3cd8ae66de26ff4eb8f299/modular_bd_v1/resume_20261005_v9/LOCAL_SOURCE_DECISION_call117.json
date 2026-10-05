@@ -1,0 +1,15 @@
+{
+  "call": 117,
+  "derived_local_sha256": "7209032685476f7d32a8f0d585f67938260303215de304c7af617770c457c4c6",
+  "approved_for_next_local_text": false,
+  "source_verified_evidence": [
+    {
+      "path": "dialogue_performance",
+      "quote": "手上挑起的对象",
+      "finding": "方澄双手未拿物，此处凭空添加手持对象，源拒绝。"
+    }
+  ],
+  "full_review_required": true,
+  "human_quality_confirmation": null,
+  "media_approval": false
+}

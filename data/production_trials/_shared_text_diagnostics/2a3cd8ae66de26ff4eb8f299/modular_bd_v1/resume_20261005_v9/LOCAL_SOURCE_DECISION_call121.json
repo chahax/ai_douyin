@@ -1,0 +1,28 @@
+{
+  "call": 121,
+  "derived_local_sha256": "21c8f4ba607292e96cdfd65dc01fd5adbf3ab8164b0a75c5012aa96ebbe0fd24",
+  "model_performance_sha256": "0f82116e65c936ba7ba062eff978b7d26fff6d9e974948e600f8388dd15859ef",
+  "event_plan_ordinal": 119,
+  "approved_for_next_local_text": true,
+  "source_verified_evidence": [
+    {
+      "path": "performances.0.performance",
+      "quote": "原有低头朝向桌面的目光不变",
+      "finding": "首次null反应保持维持原gaze，1.2秒实际窗口。"
+    },
+    {
+      "path": "performances.3.performance",
+      "quote": "未换手未松笔",
+      "finding": "同持有收回手，后续仅左手滑浅黄；C01未离开。"
+    },
+    {
+      "path": "performances.5.performance",
+      "quote": "没转身，没喊她，也未抬笔写字",
+      "finding": "最后稳定1.4秒未提前B07，作为认领后的保持。"
+    }
+  ],
+  "full_review_required": true,
+  "human_quality_confirmation": null,
+  "media_approval": false,
+  "readability_pending_note": "A0E1向右侧与具体机位/演员侧身方向在全文空间核对中需评估，实际gaze绑定P01；不凭文字认定屏幕方位或视频观感通过。"
+}

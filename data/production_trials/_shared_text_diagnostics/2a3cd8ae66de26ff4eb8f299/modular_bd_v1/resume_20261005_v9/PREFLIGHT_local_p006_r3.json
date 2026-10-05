@@ -1,0 +1,18 @@
+{
+  "complete_new_performance_required": true,
+  "precise_interface_fault": "113和114的payload_json字符串完整文档末尾多写了包装层结束字符，导致Extra data；payload_json只含dialogue_performance/performances那一个完整对象，不把payload_json自己的外层引号/花括号再写进字符串。完整新稿，不在本地截删。",
+  "required_slots_once_in_order": [
+    "A0E0",
+    "A0E1",
+    "A0E2",
+    "A1E0",
+    "A1E1",
+    "A1E2"
+  ],
+  "current_source_only": [
+    "A0E0和A1E2各C02稳定保持≥1秒；六slot全部提交，113漏最后A1E2不可采用。",
+    "表演每slot简洁一句自然可拍，不加额外指点/金属扣/三把笔/握法改变/瞳孔尺寸/解剖/角度。只表现对应事件。",
+    "C02仍坐且侧身，P07原右手握笔笔身中段始终不松；gaze先P01挎包后P05明细，收回同握笔手，slide仅P03_Y浅黄，不提前写字。C01仍站E01。",
+    "本镜无对白；所有seconds是实际数值，非表达式。"
+  ]
+}

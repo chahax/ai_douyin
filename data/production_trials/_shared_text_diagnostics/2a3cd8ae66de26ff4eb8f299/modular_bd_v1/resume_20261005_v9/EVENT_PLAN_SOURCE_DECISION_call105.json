@@ -1,0 +1,15 @@
+{
+  "call": 105,
+  "plan_sha256": "7d357b0ef1f85ba71c5ccebb6671b0c34f4b3950f5b21d2af7b4a3d4e9dcd570",
+  "approved_for_performance_text": true,
+  "source_verified_evidence": [
+    {
+      "path": "raw_linear_script.beats.4.steps.0.kind",
+      "quote": "dialogue",
+      "finding": "唯一原步骤是完整对白，空事件计划准确；during自动绑定整句。"
+    }
+  ],
+  "planning_only_not_actual_windows": true,
+  "full_review_required": true,
+  "media_approval": false
+}

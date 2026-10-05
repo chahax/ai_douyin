@@ -1,0 +1,9 @@
+{
+  "schema": "complete_direction_readonly_diagnostics/v1",
+  "faults": [],
+  "fault_count": 0,
+  "document_modified": false,
+  "model_calls": 0,
+  "mechanical_only": true,
+  "semantic_approval": false
+}

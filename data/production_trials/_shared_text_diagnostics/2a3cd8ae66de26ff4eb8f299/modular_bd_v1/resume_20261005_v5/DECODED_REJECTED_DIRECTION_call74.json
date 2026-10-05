@@ -1,0 +1,388 @@
+{
+  "schema": "step_index_physical_direction_offline_v5",
+  "context_sha256": "068e141bde598eb1223d124b8c4fb5a9bdfe1bbcd6c49d151779cdf28cc852cc",
+  "raw_linear_script_sha256": "c38f75d6efa1a3a016458e7da8497bc987663b93b76d64be304c2d01c93bd090",
+  "emotional_arc": "观众随方澄走进傍晚办公室，先看到挎包已挂、电影票压在桌角——她为自己留出时间的同时，林屿已经把今晚的明细推到两人桌之间。她无法回避：上个月熬到十一点的对账、去年底周末顺过的结算明细，被他用闲话带出来。便利贴被他抽走念成清单，签字笔被推到两人桌之间等她接。她停顿、没接笔，开口说出七点要赴的院线电影——不给补偿话术。林屿的笔悬在半空，他把便利贴认领回自己桌前，没追问电影，没装作没事，重新握住笔一行一行对着纸面明细改下去。她挎上包、携票、推门离开；关系没有崩，他把她的边界接住了，她第一次把今晚留给自己。",
+  "causal_chain": [
+    "B01开场：挎包已挂椅背、电影票压桌角，林屿将P05客户明细单推向两人桌间，建立冲突——她为自己留出的时间撞上他默认她会接的工作。",
+    "B02林屿用闲话摊旧账：B02对白把上个月熬到十一点的对账、去年底周末顺过的结算明细带到台面，方澄目光从批注移到票票未接话，把为难具体化——不顺不是单次而是习惯性的。",
+    "B03林屿从方澄桌角抽三张便利贴摊成清单：浅黄对账、浅粉改明细、浅蓝收尾，P07签字笔被推近她手边，等她接，把拒绝逼成无法回避的选择。",
+    "B04方澄看着停在两人桌之间笔尖朝自己的P07，没伸手，目光顺着那只握笔停住的手抬向林屿的眼睛，承担开口说不之前的可见犹豫。",
+    "B05方澄开口拒绝，给出明确不可打折的理由——七点要赴早就买好票的电影，不补偿话术，把球交给对方测试其能否承受一句不。",
+    "B06林屿第一次被明确拒绝：递笔手悬停在桌面上方，把签字笔收回自己手边、把浅黄便利贴挪回自己面前，承担关系不被立刻修复的停顿。",
+    "B07林屿用具体行动接回工作：在P05客户明细单的红笔批注旁落字、与P06结算单逐行比对并改写，不熟练但没再开口求援。",
+    "B08方澄从椅背取下P01挎包挎到肩上、拿起桌角P02电影票，轻声说那我先走了，推开米灰色门E04走出，兑现其为自己留的时间出口。",
+    "B09林屿独自坐在工位前，没抬头喊她，P07签字笔继续在P05与P06之间一行一行改下去，浅黄便利贴压回桌面，关系未崩但她真的离开了。"
+  ],
+  "ending_intent": "方澄挎包携票推门离开去赴七点的院线电影；林屿独自坐在自己工位前，把那张浅黄便利贴压在P05客户明细单旁边，重新握紧P07签字笔，在纸面一行一行改下去，P06结算单仍摊在桌角，P04咖啡杯没动，他没再喊她。不是和解，不是口号，是他把她的边界接住了，她也第一次把今晚留给了自己。",
+  "beats": [
+    {
+      "beat_id": "B01",
+      "shots": [
+        {
+          "shot_id": "B01-S01",
+          "source_step_refs": [
+            "raw_linear_script.beats.0.steps.0",
+            "raw_linear_script.beats.0.steps.1"
+          ],
+          "new_information": "开场同时呈现两件事：方澄为今晚自己留出的时间（挎包已挂椅背、电影票压桌角自己伸手能够到的位置），和林屿仍把临收尾的P05客户明细单推向两人桌间——她不需要做任何动作。",
+          "observation_object": "两桌工位之间的桌面接壤区：左侧方澄桌角挎包与电影票，右侧林屿桌前明细单被推出，斜入的临窗夕光在两桌接壤处形成可见暖调高光。",
+          "camera": "中景双人对坐机位，从两桌接壤侧略带俯角，机位稳定不动；前景不入镜，两人同时在画面里。",
+          "cut_reason": "开场建立空间与冲突，后续需要把信息分到不同景别——此处保持一个完整机位，让观众用一次扫视同时读到她为自己留的时间和他默认要她接的活。",
+          "composition": "左前景方澄桌角：米灰色P01挎包挂椅背、P02电影票竖压桌角靠近自己；右前景林屿桌面：P05客户明细单被推到两人桌之间，浅灰线条格与红笔批注可读，P04白色陶瓷咖啡杯在右上、P06结算单摊在桌角；E05临窗夕光从左侧斜入打亮桌面接壤线，米白墙与浅木色桌面形成暖调层次。",
+          "dialogue_mode": "无对白",
+          "performance_requirements": [
+            {
+              "id": "B01-S01-PR01",
+              "subject": "C01",
+              "stimulus_ref": "raw_linear_script.beats.0.steps.0",
+              "reaction_ref": "raw_linear_script.beats.0.steps.0",
+              "relation": "before",
+              "minimum_seconds": 1.5
+            },
+            {
+              "id": "B01-S01-PR02",
+              "subject": "C02",
+              "stimulus_ref": "raw_linear_script.beats.0.steps.1",
+              "reaction_ref": "raw_linear_script.beats.0.steps.1",
+              "relation": "after",
+              "minimum_seconds": 1.5
+            }
+          ]
+        },
+        {
+          "shot_id": "B01-S02",
+          "source_step_refs": [
+            "raw_linear_script.beats.0.steps.1"
+          ],
+          "new_information": "同一镜内，P05客户明细单已被推到两人桌之间进入两人共享视野，P06结算单仍摊在林屿桌角——她第一次在视觉上接收到他把活推过来的事实。",
+          "observation_object": "P05客户明细单在两人桌接壤处的最终位置、红笔批注与浅灰线条格的可读性。",
+          "camera": "接上镜同机位中景，不切；只在原机位保持稳定，让P05进入两人共享视野。",
+          "cut_reason": "不需要新切镜——只是同一开场镜内桌面关系推进，保持机位稳定即可。",
+          "composition": "P05居中横跨两人桌接壤线，红笔批注可见，P04咖啡杯右上原位，P06桌角被部分压入。",
+          "dialogue_mode": "无对白",
+          "performance_requirements": []
+        }
+      ]
+    },
+    {
+      "beat_id": "B02",
+      "shots": [
+        {
+          "shot_id": "B02-S01",
+          "source_step_refs": [
+            "raw_linear_script.beats.1.steps.0"
+          ],
+          "new_information": "林屿没抬头，用一句话把过去她替他加班的具体旧事（上月熬到十一点的对账、去年底周末顺过的结算明细）摊到台面，并默认今晚也由她接手——观众第一次听见她不是第一次替他收尾。",
+          "observation_object": "林屿低眼盯桌面P05红笔批注的嘴部与桌面区，浅入镜的P05红笔批注作为他念话时目光所落的同一对象。",
+          "camera": "林屿侧机位中近景，机位在他右前方约45度，浅俯，带入P05边缘红笔批注，机位稳定让他完整说完整句话。",
+          "cut_reason": "需要从开场两人共享机位分出林屿单人中近景，让他完整说出旧账并让观众看清他没抬头、像念备忘一样的默认语气；方澄反应放下一镜。",
+          "composition": "林屿居画面右，米驼色棉质衬衫袖口挽至前臂、深栗色短碎发刘海低眼，嘴部可读；前景浅入P05客户明细单一角与红笔批注作为他目光所落的对象；夕光从画左斜入。",
+          "dialogue_mode": "画内对白",
+          "performance_requirements": [
+            {
+              "id": "B02-S01-PR01",
+              "subject": "C02",
+              "stimulus_ref": "raw_linear_script.beats.1.steps.0",
+              "reaction_ref": "raw_linear_script.beats.1.steps.0",
+              "relation": "before",
+              "minimum_seconds": 1.5
+            }
+          ]
+        },
+        {
+          "shot_id": "B02-S02",
+          "source_step_refs": [
+            "raw_linear_script.beats.1.steps.1"
+          ],
+          "new_information": "方澄没接话，目光从林屿桌面的红笔批注移到自己桌角压着的P02电影票——观众第一次看到她把今晚的安排与他的默认放进同一帧做无声对比。",
+          "observation_object": "方澄目光的轨迹：从P05红笔批注移向P02电影票，嘴部未启。",
+          "camera": "方澄正面中近景，机位在她正前方略低，带入桌面下沿；机位稳定，让他完整拍完目光移动与未启嘴的留白。",
+          "cut_reason": "接林屿说完后切方澄，让她把旧账与今晚安排放进同一帧做无声对比，承接他那句默认。",
+          "composition": "方澄居中，灰蓝薄针织开衫与白色圆领T恤内搭，下沿浅入桌角P02米白底深红字电影票竖压边缘；夕光从画左斜入打亮她半边脸，米白墙虚化为背景。",
+          "dialogue_mode": "画内对白",
+          "performance_requirements": []
+        }
+      ]
+    },
+    {
+      "beat_id": "B03",
+      "shots": [
+        {
+          "shot_id": "B03-S01",
+          "source_step_refs": [
+            "raw_linear_script.beats.2.steps.0",
+            "raw_linear_script.beats.2.steps.1"
+          ],
+          "new_information": "林屿侧身从方澄桌角那叠便利贴里抽出P03_Y浅黄、P03_P浅粉、P03_B浅蓝三张，摊在自己面前桌面上，指尖点了点那张浅黄的，念出对账、改明细、收尾——观众第一次从善后对象嘴里听见她替他善后的固定清单。",
+          "observation_object": "P03_Y浅黄便利贴被指尖点中的瞬间和林屿念出三个词时的嘴部。",
+          "camera": "林屿侧机位中近景，接B02侧面形态但略抬，让桌面进入画面下半，机位稳定让他完整完成抽贴—摊放—点中—念词这一连续动作。",
+          "cut_reason": "需要看清他从她桌角抽贴摊到自己面前、点中浅黄、念出三个词的完整动作序列；此镜把动作与对白放在同一机位，避免为抽贴动作另起一镜。",
+          "composition": "画面上半林屿肩部与嘴部，画面下半浅木色桌面边缘进入，P03_Y居中略左被指尖轻点，其余两张在右上、右下虚焦；夕光从画左斜入。",
+          "dialogue_mode": "画内对白",
+          "performance_requirements": [
+            {
+              "id": "B03-S01-PR01",
+              "subject": "C02",
+              "stimulus_ref": "raw_linear_script.beats.2.steps.0",
+              "reaction_ref": "raw_linear_script.beats.2.steps.0",
+              "relation": "before",
+              "minimum_seconds": 1.5
+            },
+            {
+              "id": "B03-S01-PR03",
+              "subject": "C02",
+              "stimulus_ref": "raw_linear_script.beats.2.steps.2",
+              "reaction_ref": "raw_linear_script.beats.2.steps.2",
+              "relation": "after",
+              "minimum_seconds": 1.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "beat_id": "B04",
+      "shots": [
+        {
+          "shot_id": "B04-S01",
+          "source_step_refs": [
+            "raw_linear_script.beats.3.steps.0"
+          ],
+          "new_information": "林屿把P07签字笔反转、笔尖朝她那一侧搁在两人桌面之间等她接；方澄低头看了一眼停在两人桌间笔尖朝自己的P07，没伸手，目光顺着那只握笔停住的手抬向林屿的眼睛——观众第一次看到她承担开口说不之前的可见犹豫。",
+          "observation_object": "P07签字笔笔尖朝她那一侧停在两人桌接壤处的状态，以及方澄目光从笔尖沿那只握笔停住的手抬向其眼睛。",
+          "camera": "双人在林屿/方澄桌接壤侧的中景，机位在两人桌接壤处略靠方澄一侧、略带俯角，让P07停在画面中央前景，两人上半身进入画面上沿，机位稳定让他完整完成伸手—搁笔—方澄未接—目光上抬的连续过程。",
+          "cut_reason": "需要让观众在同镜读到她没接笔、又抬眼看他，承担她开口前的犹豫——单人中近景无法承载两人关系与那支停在两人之间的笔。",
+          "composition": "画面中央前景P07黑色签字笔笔尖朝画面左侧（方澄侧）、搁在两人浅木色桌面之间；左上方澄正面低头看笔、未伸手、目光沿握笔手抬向画右；右上方澄桌角P02电影票虚化边缘；右上林屿侧面握笔手臂悬停；夕光从画左斜入打亮P07金属笔夹。",
+          "dialogue_mode": "无对白",
+          "performance_requirements": [
+            {
+              "id": "B04-S01-PR01",
+              "subject": "C01",
+              "stimulus_ref": "raw_linear_script.beats.3.steps.0",
+              "reaction_ref": "raw_linear_script.beats.3.steps.0",
+              "relation": "before",
+              "minimum_seconds": 1.8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "beat_id": "B05",
+      "shots": [
+        {
+          "shot_id": "B05-S01",
+          "source_step_refs": [
+            "raw_linear_script.beats.4.steps.0"
+          ],
+          "new_information": "方澄开口拒绝，给出明确不可打折的理由——七点要赴早就买好票的电影，不补偿话术；观众既替她松了口气，又替她悬心。",
+          "observation_object": "方澄说出完整拒绝句时的嘴部与眼神。",
+          "camera": "方澄正面中近景，机位在她正前方略低，机位稳定，让她完整说完那句话，对白期间可见她目光从林屿方向微微收回、未笑、不软化。",
+          "cut_reason": "需要让她在对白窗口内独立说完拒绝——单人中近景让观众读到她既坚定又紧张、又不肯再退。",
+          "composition": "方澄居中，灰蓝薄针织开衫与白色圆领T恤内搭清晰可读；夕光从画左斜入打亮她半边脸；前景略虚化，P02电影票下沿虚入画底；背景米白墙虚化。",
+          "dialogue_mode": "画内对白",
+          "performance_requirements": [
+            {
+              "id": "B05-S01-PR01",
+              "subject": "C01",
+              "stimulus_ref": "raw_linear_script.beats.4.steps.0",
+              "reaction_ref": "raw_linear_script.beats.4.steps.0",
+              "relation": "before",
+              "minimum_seconds": 1.2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "beat_id": "B06",
+      "shots": [
+        {
+          "shot_id": "B06-S01",
+          "source_step_refs": [
+            "raw_linear_script.beats.5.steps.0",
+            "raw_linear_script.beats.5.steps.1"
+          ],
+          "new_information": "林屿第一次被明确拒绝：递笔手悬停在桌面上方，笔尖朝方澄侧未收回，他看了一眼她椅背挂着的P01挎包、又看回自己桌上摊开的P05客户明细单，没接她的话，没问电影是什么；随后他把P07签字笔从两人桌之间收回自己手边、把那张浅黄便利贴也挪回自己面前搁在P05旁边——他真的停住，把善后认领回自己这边。",
+          "observation_object": "林屿悬停的手、他目光往返于P01挎包与P05客户明细单之间的轨迹，以及他收回P07与挪回P03_Y浅黄便利贴的连续动作。",
+          "camera": "林屿侧机位中近景接B03侧面形态，机位稳定让他完整完成悬停—看挎包—看明细—收回笔—挪回浅黄便利贴的连续动作。",
+          "cut_reason": "需要让他在同镜内从拒绝瞬间过渡到收回笔与挪回便利贴的具体动作——承担关系不被立刻修复的停顿，不能用另一切镜打断这个未愈合的过渡。",
+          "composition": "画面上半林屿侧面肩部与眼，画面下半浅木色桌面进入；中间可见P03_Y浅黄便利贴从画面中央前景被指尖收回右上P05客户明细单旁，P07签字笔同时由中央前景回收到右下他手边，P04白色陶瓷咖啡杯仍在右上原位；夕光从画左斜入。",
+          "dialogue_mode": "无对白",
+          "performance_requirements": [
+            {
+              "id": "B06-S01-PR01",
+              "subject": "C02",
+              "stimulus_ref": "raw_linear_script.beats.5.steps.0",
+              "reaction_ref": "raw_linear_script.beats.5.steps.0",
+              "relation": "before",
+              "minimum_seconds": 2.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "beat_id": "B07",
+      "shots": [
+        {
+          "shot_id": "B07-S01",
+          "source_step_refs": [
+            "raw_linear_script.beats.6.steps.0"
+          ],
+          "new_information": "林屿转回桌前重新低头看P05客户明细单，用P07签字笔在第一处红笔批注旁落字改了一笔，写到第二行数字时停住，把P06结算单从桌角拉到P05旁边对齐比对后用笔尖在P05第二行点了一下把那个数字划掉重写，写完一笔停一下再对向结算单继续往下改——他真的在用笔自己改纸质明细，动作不熟练、停停顿顿。",
+          "observation_object": "P07签字笔笔尖在P05红笔批注旁的落字轨迹、P06结算单被拉到P05旁的相对关系。",
+          "camera": "林屿侧机位近景，机位在他右前方约45度，比B03/B06更俯、更近桌面，让P05红笔批注与P06浅蓝表头占画面下半，机位稳定让他完整完成逐行比对改写的连续过程。",
+          "cut_reason": "需要用近景让观众看见他真的在用笔自己改纸质明细——动作不熟练、停停顿顿，没有再开口求援；这是关键反应，必须用近景把因果落在可见的纸面上。",
+          "composition": "画面上半林屿肩部与下颌，画面下半浅木色桌面占大半；P05客户明细单横陈画面中央偏左，红笔批注可见；P06结算单纵版在右侧对齐；P07黑色签字笔笔尖落在P05第一处红笔批注旁的浅灰线条格上；夕光从画左斜入打亮P05纸面。",
+          "dialogue_mode": "无对白",
+          "performance_requirements": [
+            {
+              "id": "B07-S01-PR01",
+              "subject": "C02",
+              "stimulus_ref": "raw_linear_script.beats.6.steps.0",
+              "reaction_ref": "raw_linear_script.beats.6.steps.0",
+              "relation": "before",
+              "minimum_seconds": 2.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "beat_id": "B08",
+      "shots": [
+        {
+          "shot_id": "B08-S01",
+          "source_step_refs": [
+            "raw_linear_script.beats.7.steps.0",
+            "raw_linear_script.beats.7.steps.1",
+            "raw_linear_script.beats.7.steps.2"
+          ],
+          "new_information": "方澄从椅背上取下P01挎包挎到肩上、伸手拿起桌角那张P02米白底深红字的院线电影票，朝办公室门方向走出两步；轻声说那我先走了；推开米灰色木纹平板门E04走出办公室——她真的把今晚留给自己，给观众她去赴约的清晰出口。",
+          "observation_object": "P01挎包从椅背被取下挎肩、P02电影票被拿起、与E04办公室门被推开的连续动作。",
+          "camera": "方澄正面偏侧中景，机位在她工位前方略低、带出椅背E09与身后方澄桌E01边缘线，机位稳定让她完整完成取包—取票—落座方向—走步—开口—推门的连续动作。",
+          "cut_reason": "需要让她在同镜内完成从取包到推门的全部动作与一句告别——这是她把时间留给自己的完整出口，不能在中途另起机位打断。",
+          "composition": "画面左方澄侧面灰蓝薄针织开衫、P01米灰色挎包被挎上右肩、P02电影票持于右手，画面右带出E01浅木色桌面边缘与椅背E09；背景米白墙与E04办公室门虚化；夕光从画左斜入。",
+          "dialogue_mode": "画内对白",
+          "performance_requirements": [
+            {
+              "id": "B08-S01-PR01",
+              "subject": "C01",
+              "stimulus_ref": "raw_linear_script.beats.7.steps.0",
+              "reaction_ref": "raw_linear_script.beats.7.steps.0",
+              "relation": "before",
+              "minimum_seconds": 2.0
+            },
+            {
+              "id": "B08-S01-PR03",
+              "subject": "C01",
+              "stimulus_ref": "raw_linear_script.beats.7.steps.2",
+              "reaction_ref": "raw_linear_script.beats.7.steps.2",
+              "relation": "after",
+              "minimum_seconds": 1.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "beat_id": "B09",
+      "shots": [
+        {
+          "shot_id": "B09-S01",
+          "source_step_refs": [
+            "raw_linear_script.beats.8.steps.0"
+          ],
+          "new_information": "林屿独自坐在工位前，没抬头去喊她，手里的P07黑色签字笔继续在P05客户明细单的红笔批注旁一行一行改下去，每写一笔就把笔尖挪向旁边P06结算单比对一次，P04白色陶瓷咖啡杯没动，P03_Y浅黄便利贴压回他手边桌面——关系没有崩，他自己收自己的尾。",
+          "observation_object": "P07签字笔在P05纸面的落字轨迹、与P06结算单的逐行比对节奏、P04咖啡杯未动。",
+          "camera": "林屿侧机位中近景接B07形态但更稳、不更近，机位在他右前方约45度稳定不动，让他完整拍完她已离开后他独自继续逐行改写的连续过程。",
+          "cut_reason": "结尾必须让观众看见她走后他真的继续改——这是关系的真实变化，不是和解但他把她的边界接住了；机位保持中近景与B07一致，让观众能用同一景别读到他没停。",
+          "composition": "画面上半林屿侧面肩部与下颌，画面下半浅木色桌面；P05客户明细单横陈中央偏左、P06结算单纵版在右侧对齐、P07黑色签字笔笔尖持续落在P05浅灰线条格上、P04白色陶瓷咖啡杯在右上原位未动、P03_Y浅黄便利贴压回P05旁；夕光从画左斜入打亮P05纸面。",
+          "dialogue_mode": "无对白",
+          "performance_requirements": [
+            {
+              "id": "B09-S01-PR01",
+              "subject": "C02",
+              "stimulus_ref": "raw_linear_script.beats.8.steps.0",
+              "reaction_ref": "raw_linear_script.beats.8.steps.0",
+              "relation": "before",
+              "minimum_seconds": 3.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "initial_state": {
+    "C01": {
+      "posture": "standing",
+      "position": "E01方澄工位前，正对E01桌面",
+      "gaze": "低眼看E01桌角P02电影票",
+      "affect": "未启嘴、既为自己今晚留出时间又被林屿默认推过来的活压住",
+      "facing": "E01方澄工位桌"
+    },
+    "C02": {
+      "posture": "sitting",
+      "position": "E10办公椅，坐于E02林屿工位前",
+      "gaze": "低眼看E02桌面P05客户明细单红笔批注",
+      "affect": "默认把临收尾的活推到方澄一侧，不反驳",
+      "facing": "E02林屿工位桌"
+    },
+    "P01": {
+      "holder": "none",
+      "location": "surface:E01:zone:chair-back-E09-椅背挂"
+    },
+    "P02": {
+      "holder": "none",
+      "location": "surface:E01:zone:table-corner-方澄伸手能够到的桌角"
+    },
+    "P03_Y": {
+      "holder": "none",
+      "location": "surface:E01:zone:table-corner-方澄桌角便利贴叠（浅黄最先）"
+    },
+    "P03_P": {
+      "holder": "none",
+      "location": "surface:E01:zone:table-corner-方澄桌角便利贴叠（浅粉居中）"
+    },
+    "P03_B": {
+      "holder": "none",
+      "location": "surface:E01:zone:table-corner-方澄桌角便利贴叠（浅蓝最后）"
+    },
+    "P04": {
+      "holder": "none",
+      "location": "surface:E02:zone:table-corner-林屿桌角右上"
+    },
+    "P05": {
+      "holder": "none",
+      "location": "surface:E02:zone:desk-center-林屿桌前中央"
+    },
+    "P06": {
+      "holder": "none",
+      "location": "surface:E02:zone:table-corner-林屿桌角桌沿"
+    },
+    "P07": {
+      "holder": "none",
+      "location": "surface:E02:zone:desk-edge-right-林屿桌沿右侧"
+    }
+  },
+  "spatial_contract": {
+    "seats": [
+      {
+        "seat_id": "E09",
+        "access_positions": [
+          "E01方澄工位前"
+        ],
+        "required_facing": "E01方澄工位桌"
+      },
+      {
+        "seat_id": "E10",
+        "access_positions": [
+          "E02林屿工位前"
+        ],
+        "required_facing": "E02林屿工位桌"
+      }
+    ]
+  }
+}

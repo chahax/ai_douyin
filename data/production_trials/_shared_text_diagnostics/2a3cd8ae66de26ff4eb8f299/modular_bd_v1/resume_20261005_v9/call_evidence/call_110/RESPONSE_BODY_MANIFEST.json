@@ -1,0 +1,20 @@
+{
+  "schema": "creative_call_evidence/v1",
+  "identity_sha256": "dd11480b43607925f2a72b8d8f6fbd04fe7e2fd226a9ba9764de01a2cc071fa6",
+  "body_file": "response_body.raw",
+  "stored_sha256": "7687e580dc23c5cd0fddf1ecac8c528084f6057397acf5d3c32ccb4ad989edd5",
+  "original_sha256": "7687e580dc23c5cd0fddf1ecac8c528084f6057397acf5d3c32ccb4ad989edd5",
+  "bytes": 4692,
+  "body_complete": true,
+  "raw_bytes_preserved": true,
+  "credential_redacted": false,
+  "http_metadata": {
+    "http_status_code": 200,
+    "http_request_id": null,
+    "safe_response_headers": {
+      "trace-id": "0712a68a1386d153e98234f73afb51b7",
+      "content-type": "application/json; charset=utf-8",
+      "date": "Mon, 05 Oct 2026 09:53:28 GMT"
+    }
+  }
+}

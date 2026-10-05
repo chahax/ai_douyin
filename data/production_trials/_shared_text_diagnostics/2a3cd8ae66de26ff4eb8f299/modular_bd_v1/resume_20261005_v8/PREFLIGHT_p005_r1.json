@@ -1,0 +1,13 @@
+{
+  "current_shot_source_preflight": [
+    "本镜只有原完整拒绝对白；actions必须为空数组，程序插原句，during窗口自动绑定。",
+    "dialogue_performance说明方澄拒绝前后语气/面部和呼吸，禁止在对白cue藏拿票/拿包/走动或新台词。坚定平实，不笑着补偿，不把更多动作堆到拒绝后。"
+  ],
+  "compact_contract_reminder": [
+    "提交本镜完整新根对象，仅dialogue_performance/actions。无对白也写非空本镜无对白。",
+    "每group恰seconds/subject/performance/operation/satisfies；operation是null或恰kind/actor/target/value的一个对象，不是数组、不是operations。拿和放、同一角色两次gaze必须相继组。",
+    "value始终非空。gaze/face/move的target空，真实目标写value；take/slide的target道具ID。move是人物整体移动，伸手/笔转向只写performance。",
+    "satisfies只在正确subject且operation=null的实际保持组中。during由程序绑定原完整对白，不放入satisfies。",
+    "保留全部原steps、对白、实际首态；不自行计算总镜长、不补剧情、不拆原对白。"
+  ]
+}

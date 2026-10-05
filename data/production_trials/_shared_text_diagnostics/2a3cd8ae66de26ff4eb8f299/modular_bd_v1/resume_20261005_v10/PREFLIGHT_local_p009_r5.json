@@ -1,0 +1,18 @@
+{
+  "complete_new_performance_required": true,
+  "current_shot": "B09-S01 only, no dialogue",
+  "source_fault": "151回到上一镜已经改过的第二行，又藏了微调纸位。不要指定第几行；本镜从前镜当前落字处继续。P05/P06都不动，左手不调整、不滑纸。",
+  "format_style": "每槽只一句约30至60中文字，别再写服装、logo表头、左右方向、厘米、手肌肉或纸内行号。写动作真正完成与克制专注就够。",
+  "required_visible_completion": [
+    "A0E0同一右手持笔在明细单当前落字处真正写下一笔",
+    "A0E1笔尖挪到旁边结算单对应处，视线同向停住比对",
+    "A0E2笔尖和视线回明细单下一处，不移动纸",
+    "A0E3真正再写下一笔",
+    "A0E4笔尖和视线再次结算比对",
+    "A0E5笔尖和视线回明细单下一处继续做，不喊她"
+  ],
+  "dialogue_performance": "本镜无对白。",
+  "natural_seconds": "每槽有自然可读时间，不补空操作，不拼接旧稿。",
+  "verified_interface_fault": "152服务收到且已返回完整正文，但缺submit_creative_json工具调用，stop而不是tool_calls。本次提交完整新稿，仅用指定工具，其arguments为payload_json字符串包装完整内层对象；不直接输出普通content。完整六槽，保持已核对计划150。",
+  "diagnostic_content_fault_not_adopted": "152普通正文里A0E2提前落字，A0E3又划旧数字重写，额外重演改错。A0E2/A0E5只同笔尖/视线回来定位，不落字；真正落字只A0E0/A0E3，两个完整原写/比对循环，不增加另一次发现错数。"
+}

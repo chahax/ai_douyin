@@ -1,0 +1,44 @@
+{
+  "at_utc": "2026-10-05T07:04:26.047610+00:00",
+  "call": 77,
+  "direction_sha256": "3c17eb46550134a6a870cf891b83e6c556715f8bbfdc2e2523cec37b13cf39e5",
+  "source_script_sha256": "c38f75d6efa1a3a016458e7da8497bc987663b93b76d64be304c2d01c93bd090",
+  "source_review_call": 68,
+  "assistant_source_preflight": [
+    {
+      "path": "initial_state.C01.gaze",
+      "quote": "电影票",
+      "finding": "已明确开场注视点，人物站在原工位。"
+    },
+    {
+      "path": "initial_state.P05.location",
+      "quote": "surface:E02:桌面",
+      "finding": "推动前仍在林屿桌面，未提前推到两人之间。"
+    },
+    {
+      "path": "beats.3.shots.0.performance_requirements.0.stimulus_ref",
+      "quote": "raw_linear_script.beats.2.steps.2",
+      "finding": "B04方澄反应由已完成递笔触发。"
+    },
+    {
+      "path": "beats.4.shots.0.performance_requirements.0.relation",
+      "quote": "during",
+      "finding": "拒绝表演绑定完整同一对白。"
+    },
+    {
+      "path": "beats.5.shots.0.performance_requirements.0.stimulus_ref",
+      "quote": "raw_linear_script.beats.4.steps.0",
+      "finding": "林屿停住发生在听完拒绝之后。"
+    },
+    {
+      "path": "ending_intent",
+      "quote": "咖啡杯没动，他没再喊她",
+      "finding": "没有新增剧情、补偿对白或奖励，保持原退出/自己收尾。"
+    }
+  ],
+  "approved_for_local_text_generation": true,
+  "requires_full_compiled_review": true,
+  "creative_quality_passed": false,
+  "human_quality_confirmation": null,
+  "media_approval": false
+}

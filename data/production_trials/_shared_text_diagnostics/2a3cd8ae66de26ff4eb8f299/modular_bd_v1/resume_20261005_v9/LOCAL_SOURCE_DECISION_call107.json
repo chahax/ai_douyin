@@ -1,0 +1,23 @@
+{
+  "call": 107,
+  "derived_local_sha256": "fcc9bf79da919507cc7d011b4df1cd6580656e19b0ad7955fac2d66441d3c2ef",
+  "model_performance_sha256": "830ee8119f517cb3a0e0a96e63f2a75b48a471fb6450770f722ea5efaced4de0",
+  "event_plan_ordinal": 105,
+  "approved_for_next_local_text": true,
+  "source_verified_evidence": [
+    {
+      "path": "dialogue_performance",
+      "quote": "正常生活语速把整句拒绝说完",
+      "finding": "完整原句由程序插入一次，纯对白没有新动作，语气明确不补偿。"
+    },
+    {
+      "path": "dialogue_performance",
+      "quote": "仍低头握笔，姿态未变",
+      "finding": "C02仍保持原低头手持；不采用其相视用语作为C02新gaze。"
+    }
+  ],
+  "full_review_required": true,
+  "human_quality_confirmation": null,
+  "media_approval": false,
+  "readability_pending_note": "相视用语与C02低头可能有歧义，完整联合审查需明确只以实际状态/未改变姿态解释；不算已验证表演观感。"
+}

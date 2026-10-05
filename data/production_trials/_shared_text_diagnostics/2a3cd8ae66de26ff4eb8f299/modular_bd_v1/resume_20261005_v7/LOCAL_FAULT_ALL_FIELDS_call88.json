@@ -1,0 +1,117 @@
+{
+  "source_call": 88,
+  "previous_complete_model_local": {
+    "dialogue_performance": "对白期嘴部连续开合三次，依次咬住\"对\"、\"账\"、\"改明细，收尾\"五个字的唇形；语速不快不慢，气息平稳从鼻腔呼出，喉结只在下\"账\"和\"尾\"时轻轻一动。林屿眉眼不抬，嘴角没有弧度，整段读得像把清单报一遍，不是商量也不是请求，是把活摊到台面等着她接。",
+    "actions": [
+      {
+        "source_step_ref": "raw_linear_script.beats.2.steps.0",
+        "groups": [
+          {
+            "seconds": 3.0,
+            "subject": "C02",
+            "performance": "林屿侧身，从方澄桌角那叠便利贴里用拇指和食指先后夹出浅黄、浅粉、浅蓝三张，指腹带着纸片不攥皱，依次平摊到自己桌面上靠近两人之间的空处；指尖点了点那张浅黄的，停住。视线始终低在自己桌面上方。",
+            "operations": [
+              [
+                "take",
+                "C02",
+                "P03_Y",
+                ""
+              ],
+              [
+                "place",
+                "C02",
+                "P03_Y",
+                "surface:E02:两人之间"
+              ],
+              [
+                "take",
+                "C02",
+                "P03_P",
+                ""
+              ],
+              [
+                "place",
+                "C02",
+                "P03_P",
+                "surface:E02:两人之间"
+              ],
+              [
+                "take",
+                "C02",
+                "P03_B",
+                ""
+              ],
+              [
+                "place",
+                "C02",
+                "P03_B",
+                "surface:E02:两人之间"
+              ],
+              [
+                "gaze",
+                "C02",
+                "",
+                "自己桌面浅黄便利贴"
+              ]
+            ],
+            "satisfies": []
+          }
+        ]
+      },
+      {
+        "source_step_ref": "raw_linear_script.beats.2.steps.2",
+        "groups": [
+          {
+            "seconds": 2.0,
+            "subject": "C02",
+            "performance": "林屿收回点在浅黄便利贴上的指尖，伸手从自己桌沿拿起那支黑色签字笔，用拇指和中指反转笔身，笔尖朝向方澄那一侧，搁在两人桌面之间靠近她手边的位置停住；手指仍虚捏着笔尾，没松，等她接。",
+            "operations": [
+              [
+                "take",
+                "C02",
+                "P07",
+                ""
+              ],
+              [
+                "place",
+                "C02",
+                "P07",
+                "surface:E02:两人之间方澄侧"
+              ],
+              [
+                "gaze",
+                "C02",
+                "",
+                "签字笔笔尖朝向方澄一侧"
+              ]
+            ],
+            "satisfies": []
+          }
+        ]
+      }
+    ]
+  },
+  "verified_faults": [
+    {
+      "path": "actions.*.groups.*.operations.*.3",
+      "reason": "全部四个take第四列为空；第四列必须给真实手持/佩戴位置，不能省略。"
+    },
+    {
+      "path": "actions.0.groups.0.operations",
+      "reason": "同一便利贴take/place连续写同一holder/location却放同组，必冲突；相继动作由模型分相继独立groups，保留全部三张动作，不删。"
+    },
+    {
+      "path": "actions.1.groups.0.operations",
+      "reason": "P07 take后又place造成holder=none，和表演明确虚捏未松及原B04握笔手矛盾。原稿要求仍是C02持笔递向她，不能释放桌面或转交；笔尖接触桌面不等于松手。"
+    },
+    {
+      "path": "actions.0.groups.0.performance",
+      "reason": "侧身的朝向变化若成立须对应真实face操作，不能只藏文字。"
+    },
+    {
+      "path": "dialogue_performance",
+      "reason": "原三词共七汉字，不是五个；不要用三次开合/喉结时点等伪精确口型细节代替自然朗读表演，不改原词，不提前递笔。"
+    }
+  ],
+  "request": "提交完整第三镜新稿，仅根两字段、四列operations。完整拿三张/摊回自己桌面/点黄、完整原三词对白、之后拿笔反转伸近仍握着。所有相继读写同字段操作须分组，第四列都非空，takes给真实手持位置，place只用于真正松手的便利贴。无需无关起坐、连续重复保持、原对白重说、新增动作。保持原首态和源。"
+}

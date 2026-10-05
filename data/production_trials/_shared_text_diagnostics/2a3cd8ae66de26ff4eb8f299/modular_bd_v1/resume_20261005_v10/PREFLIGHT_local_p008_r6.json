@@ -1,0 +1,16 @@
+{
+  "current_shot": "B08-S01 only, raw_linear_script.beats.7",
+  "only_original_dialogue": "那我先走了。",
+  "dialogue_cue_scope": "只描述这句告别的平稳、轻声、不找补语气。禁止复述任何台词文字，尤其B05的今晚/不行/七点/电影/得先走；本镜不是拒绝镜。",
+  "fixed_events": [
+    "A0E0取原椅背包至左肩，身体face桌/gaze林屿眼睛不变，不新增听声抬眼。",
+    "A0E1右手取原桌角票，face/gaze不变。",
+    "A0E2身体向门E04。",
+    "A0E3视线向门E04，之后保持。",
+    "A0E4完整原两步走到门E04，可直接左手推门，不新增第三半步。",
+    "A1E0左手真实推门，让门开到可通过；推不是拉。",
+    "A1E1携包票真正出门离画，不回头/碰包/回弹门/新走廊/新光源。"
+  ],
+  "complete_new_performance_required": true,
+  "prose": "短而具体，全部七槽，少写精确身体解剖。只当前原步骤和合法微动作，不变事件操作。"
+}

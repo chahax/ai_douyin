@@ -1,0 +1,23 @@
+{
+  "call": 118,
+  "derived_local_sha256": "c502dd9d58e7fb72c282f6a7db5650aa941d089c26d5cf28cb3bf5109c464c53",
+  "model_performance_sha256": "edd87e594ece9af789975f3bf31faa9dbe4ea0e7844cfcd5613320bc34eac6db",
+  "event_plan_ordinal": 105,
+  "approved_for_next_local_text": true,
+  "source_verified_evidence": [
+    {
+      "path": "dialogue_performance",
+      "quote": "声音不大但稳，气息平而不抖",
+      "finding": "仅原句自然语气气息，无新对象、双方相视、补偿或新台词；本镜无动作槽。"
+    },
+    {
+      "path": "dialogue_performance",
+      "quote": "方澄抬眼望向林屿",
+      "finding": "作为104已完成后的抬眼姿态描述；未写再次抬眼或从笔移到眼，actual gaze不变。相视冲突已消除，此措辞仍交完整联合审查判断可制作性。"
+    }
+  ],
+  "full_review_required": true,
+  "human_quality_confirmation": null,
+  "media_approval": false,
+  "preflight_note": "116/117保守拒绝及107 must_fix保留；118仅批准后续文本，不能证明实际面部表演或观感。"
+}

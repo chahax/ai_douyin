@@ -1,0 +1,9 @@
+{
+  "complete_new_plan_required": true,
+  "precise_fault": "131的move.intent含侧身朝门，但move只改人物位置，没有记录朝向变化。当前C01朝向E01、目光C02；朝门行走的实际朝向与路径观察应在同原action内用face/gaze明确，不藏在move。",
+  "source_guards": [
+    "取包take P01跨肩、取票take P02手中、实际转向/看向既有E04门方向、走两步；真正face/gaze target空，value写E04门方向，之后move到E01至E04中段。",
+    "原对白由程序插入，只自然告别；原后action推门、穿过到E04外保留包票持有，不放下/交人，E04不place。",
+    "只补明确原走向门动作所需真实朝向/路径状态，不加回头看票、新台词、第三角色、走廊资产；所有satisfies空数组。提交完整新计划。"
+  ]
+}

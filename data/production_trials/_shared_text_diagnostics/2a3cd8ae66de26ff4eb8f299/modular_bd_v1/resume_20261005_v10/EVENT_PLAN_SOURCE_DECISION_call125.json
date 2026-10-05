@@ -1,0 +1,26 @@
+{
+  "call": 125,
+  "plan_sha256": "334a3218cc5a061b83a19e6b1dd762e42a0247f88fc059aac1e8a65708e809de",
+  "approved_for_performance_text": true,
+  "source_verified_evidence": [
+    {
+      "path": "actions.0.events.0.intent",
+      "quote": "从方澄工位E01转回自己工位E02桌前",
+      "finding": "真实face先于gaze，承接第六镜侧身状态。"
+    },
+    {
+      "path": "actions.0.events.4.intent",
+      "quote": "写到第二行数字停住",
+      "finding": "单独C02/null稳定保持B07-R01置于原数字困难，之后才P06滑对齐比对。"
+    },
+    {
+      "path": "actions.0.events.8.intent",
+      "quote": "划掉重写",
+      "finding": "原点数字、划掉重写、写完停一下、再比对均保留，P07原右手持有不变。"
+    }
+  ],
+  "planning_only_not_actual_windows": true,
+  "full_review_required": true,
+  "media_approval": false,
+  "performance_guard": "求援只是初次交任务后的不再请求帮助，不得增加实际喊话/恼怒/求援台词；原手持书写微动作与其凝视纸面可同时，自身没有新拿放。"
+}

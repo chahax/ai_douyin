@@ -1,0 +1,24 @@
+{
+  "verified_prior_failures": "原第三镜87-93已全部保存；93把face写嵌套数组并混入place_holder，旧稿均不采用。新v2每group只给operation=null或四键对象，不用operations数组/四列元组。",
+  "source_phase_constraints": [
+    {
+      "phase": "原steps.0",
+      "invariant": "C02始终坐E10/E02，只侧身face和必要gaze，抽出三张便利贴分别相继拿到右手再放自己E02；点浅黄，P07仍E02桌沿无人持有。"
+    },
+    {
+      "phase": "原steps.1",
+      "invariant": "原清单整句程序插；dialogue_performance只自然语气/面部/呼吸，不描述手、不写持笔。三张已在自己E02，P07仍未拿。"
+    },
+    {
+      "phase": "原steps.2",
+      "invariant": "此时才take P07，反转伸手等接。持续C02手持，不place。伸手不是人物move，C02位置/坐姿不变。"
+    }
+  ],
+  "required_complete": "从真实首态提交本镜所有原action完整新方案，不拼接/修补以前输出，不新增方澄旁观hold。每组5键必需，秒数适合自然动作，satisfies无要求也[]。",
+  "operation_format_example": {
+    "kind": "face",
+    "actor": "C02",
+    "target": "",
+    "value": "侧身朝方澄桌角"
+  }
+}

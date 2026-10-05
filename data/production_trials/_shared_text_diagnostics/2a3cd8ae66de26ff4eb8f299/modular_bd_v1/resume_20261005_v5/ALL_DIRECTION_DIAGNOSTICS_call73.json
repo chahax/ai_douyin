@@ -1,0 +1,100 @@
+{
+  "schema": "complete_direction_readonly_diagnostics/v1",
+  "faults": [
+    {
+      "code": "SOURCE_WINDOW_ORDER_IMPOSSIBLE",
+      "path": "B01-S01-PR01",
+      "stimulus": "raw_linear_script.beats.0.steps.0",
+      "reaction": "raw_linear_script.beats.0.steps.0",
+      "relation": "before"
+    },
+    {
+      "code": "SOURCE_WINDOW_ORDER_IMPOSSIBLE",
+      "path": "B01-S01-PR02",
+      "stimulus": "raw_linear_script.beats.0.steps.1",
+      "reaction": "raw_linear_script.beats.0.steps.1",
+      "relation": "after"
+    },
+    {
+      "code": "SOURCE_WINDOW_ORDER_IMPOSSIBLE",
+      "path": "B02-S01-PR01",
+      "stimulus": "raw_linear_script.beats.1.steps.0",
+      "reaction": "raw_linear_script.beats.1.steps.0",
+      "relation": "before"
+    },
+    {
+      "code": "SOURCE_WINDOW_ORDER_IMPOSSIBLE",
+      "path": "B03-S01-PR01",
+      "stimulus": "raw_linear_script.beats.2.steps.0",
+      "reaction": "raw_linear_script.beats.2.steps.0",
+      "relation": "before"
+    },
+    {
+      "code": "SOURCE_WINDOW_ORDER_IMPOSSIBLE",
+      "path": "B03-S01-PR03",
+      "stimulus": "raw_linear_script.beats.2.steps.2",
+      "reaction": "raw_linear_script.beats.2.steps.2",
+      "relation": "after"
+    },
+    {
+      "code": "SOURCE_WINDOW_ORDER_IMPOSSIBLE",
+      "path": "B04-S01-PR01",
+      "stimulus": "raw_linear_script.beats.3.steps.0",
+      "reaction": "raw_linear_script.beats.3.steps.0",
+      "relation": "before"
+    },
+    {
+      "code": "DURING_NOT_SAME_DIALOGUE",
+      "path": "B04-S01-PR02"
+    },
+    {
+      "code": "SOURCE_WINDOW_ORDER_IMPOSSIBLE",
+      "path": "B05-S01-PR01",
+      "stimulus": "raw_linear_script.beats.4.steps.0",
+      "reaction": "raw_linear_script.beats.4.steps.0",
+      "relation": "before"
+    },
+    {
+      "code": "SOURCE_WINDOW_ORDER_IMPOSSIBLE",
+      "path": "B06-S01-PR01",
+      "stimulus": "raw_linear_script.beats.5.steps.0",
+      "reaction": "raw_linear_script.beats.5.steps.0",
+      "relation": "before"
+    },
+    {
+      "code": "SOURCE_WINDOW_ORDER_IMPOSSIBLE",
+      "path": "B07-S01-PR01",
+      "stimulus": "raw_linear_script.beats.6.steps.0",
+      "reaction": "raw_linear_script.beats.6.steps.0",
+      "relation": "before"
+    },
+    {
+      "code": "SOURCE_WINDOW_ORDER_IMPOSSIBLE",
+      "path": "B08-S01-PR01",
+      "stimulus": "raw_linear_script.beats.7.steps.0",
+      "reaction": "raw_linear_script.beats.7.steps.0",
+      "relation": "before"
+    },
+    {
+      "code": "SOURCE_WINDOW_ORDER_IMPOSSIBLE",
+      "path": "B08-S01-PR03",
+      "stimulus": "raw_linear_script.beats.7.steps.2",
+      "reaction": "raw_linear_script.beats.7.steps.2",
+      "relation": "after"
+    },
+    {
+      "code": "SOURCE_WINDOW_ORDER_IMPOSSIBLE",
+      "path": "B09-S01-PR01",
+      "stimulus": "raw_linear_script.beats.8.steps.0",
+      "reaction": "raw_linear_script.beats.8.steps.0",
+      "relation": "before"
+    }
+  ],
+  "fault_count": 13,
+  "document_modified": false,
+  "model_calls": 0,
+  "mechanical_only": true,
+  "semantic_approval": false,
+  "ordinal": 73,
+  "receipt_sha256": "b9ea57f6a5afcd9c4559798f2e7054c544bacf6162f3bb65979875bcf493644a"
+}

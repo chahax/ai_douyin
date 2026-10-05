@@ -1,0 +1,21 @@
+{
+  "call": 119,
+  "plan_sha256": "792dec8610648f9a93844fe872773c2e7d263022461c4d0866392efa0855903d",
+  "approved_for_performance_text": true,
+  "source_verified_evidence": [
+    {
+      "path": "actions.1.events.0.intent",
+      "quote": "未松笔也未换手",
+      "finding": "同握法收手，无新增拿放；六事件完整源顺序、两个C02/null保持有效。"
+    },
+    {
+      "path": "actions.1.events.1.operation.kind",
+      "quote": "slide",
+      "finding": "仅P03_Y沿E02桌面移回。"
+    }
+  ],
+  "planning_only_not_actual_windows": true,
+  "full_review_required": true,
+  "media_approval": false,
+  "performance_guard": "独自只指自己接回任务，不是办公室无人；C01仍站E01，C02仍坐且侧身。"
+}
