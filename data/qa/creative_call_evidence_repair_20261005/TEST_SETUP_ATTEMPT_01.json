@@ -1,0 +1,6 @@
+{
+  "status": "setup_error",
+  "reason": "pytest basetemp parent did not exist",
+  "test_assertions_executed": false,
+  "real_provider_calls": 0
+}

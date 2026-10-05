@@ -1,0 +1,44 @@
+{
+  "schema": "offline_client_failure_evidence/v1",
+  "cases": [
+    {
+      "offline_case": "http400",
+      "exception_type": "RuntimeError",
+      "safe_error": "writer API 调用失败: FakeHTTP400; status=400; request_id=OFFLINE_ONLY_HTTP_ID",
+      "structured_status_code": null,
+      "structured_request_id": null,
+      "response_metadata_preserved": false,
+      "failure": {
+        "schema": "creative_failure/v1",
+        "code": "OUTCOME_UNKNOWN",
+        "category": "interface",
+        "next_action": "reconcile_original_request",
+        "response_received": false,
+        "automatic_retry": false,
+        "blocks_handoff": true
+      },
+      "real_provider_calls": 0
+    },
+    {
+      "offline_case": "malformed_response",
+      "exception_type": "AttributeError",
+      "safe_error": "'NoneType' object has no attribute 'name'",
+      "structured_status_code": null,
+      "structured_request_id": null,
+      "response_metadata_preserved": false,
+      "failure": {
+        "schema": "creative_failure/v1",
+        "code": "OUTCOME_UNKNOWN",
+        "category": "interface",
+        "next_action": "reconcile_original_request",
+        "response_received": false,
+        "automatic_retry": false,
+        "blocks_handoff": true
+      },
+      "real_provider_calls": 0
+    }
+  ],
+  "real_provider_calls": 0,
+  "original_call70_cause_proven": false,
+  "production_code_modified": false
+}

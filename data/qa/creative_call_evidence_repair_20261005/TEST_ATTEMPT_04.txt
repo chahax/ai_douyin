@@ -1,0 +1,19 @@
+................................................F                        [100%]
+================================== FAILURES ===================================
+___ test_real_parent_gate_and_offline_candidate_preserve_frozen_production ____
+tests\test_creative_call_evidence_repair_v1.py:365: in test_real_parent_gate_and_offline_candidate_preserve_frozen_production
+    candidate=prepare_candidate(project,output,baseline,code)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts\prepare_creative_call_evidence_repair_v1.py:75: in prepare_candidate
+    else:atomic_create(target,(project/rel).read_bytes())
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts\creative_call_evidence_v1.py:23: in atomic_create
+    with temporary.open('xb') as handle:
+         ^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\pathlib\__init__.py:771: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'D:\\IT\\ai_douyin\\data\\qa\\creative_call_evidence_repair_20261005\\test_work_04\\test_real_parent_gate_and_offl0\\offline_candidate\\source_at_binding\\scripts\\run_creative_resume_v4.py.tmp_e2cda3bca1034cdbbab64b4bbac5e715'
+=========================== short test summary info ===========================
+FAILED tests/test_creative_call_evidence_repair_v1.py::test_real_parent_gate_and_offline_candidate_preserve_frozen_production
+1 failed, 48 passed in 28.82s

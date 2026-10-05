@@ -1,0 +1,126 @@
+{
+  "schema": "official_model_call_method_review/v1",
+  "checked_at_utc": "2026-10-05T04:26:23.587534+00:00",
+  "checked_at_beijing": "2026-10-05T12:26:23.587534+08:00",
+  "question": "目前卡在服务端结果仍未知，是调用方式的问题吗，有看官方文档吗",
+  "sources": {
+    "openai_sdk": "https://platform.minimax.io/docs/api-reference/text-openai-api",
+    "china_chat_api": "https://platform.minimax.cn/docs/api-reference/text-chat-openai",
+    "tool_use": "https://platform.minimax.cn/docs/guides/text-m3-function-call",
+    "responses_api": "https://platform.minimax.io/docs/api-reference/responses-create"
+  },
+  "documented_supported": [
+    "OpenAI SDK client.chat.completions.create",
+    "MiniMax-M3",
+    "thinking type disabled for M3",
+    "max_completion_tokens positive integer",
+    "temperature 0.4 within documented range",
+    "function tools definitions",
+    "non-streaming supported; streaming supported with include_usage option"
+  ],
+  "not_confirmed_by_current_docs": [
+    "Chat Completions指定function对象的tool_choice服务端强制执行保证",
+    "strict JSON Schema服务器约束生成保证",
+    "api.minimaxi.com旧域名和api.minimax.cn当前域名的完整兼容承诺"
+  ],
+  "domain_evidence": "原配置是api.minimaxi.com/v1，当前中文文档示例api.minimax.cn/v1；同一生产通路call67/69已收到M3响应。不能只按域名文字变化认定70故障或静默切换。",
+  "transport_limitation": "工具Schema只声明payload_json字符串；完整导演内层Schema作为消息提供，服务端未对其内层字段做本项目已验证的强制解码。所有内层内容仍本地严格验收。",
+  "verified_local_defects": [
+    {
+      "code": "HTTP_ERROR_METADATA_LOST",
+      "evidence": "SDK HTTP400异常有status_code和request_id，角色客户端改抛RuntimeError只留文本；故障分类无法取得结构化信息并归OUTCOME_UNKNOWN",
+      "original70_cause_proven": false
+    },
+    {
+      "code": "RESPONSE_PARSE_METADATA_NOT_DURABLE",
+      "evidence": "模拟已返回id/usage但工具function为空；快照解析AttributeError没有RoleResponseError元信息，调用方归OUTCOME_UNKNOWN并丢失已知用量",
+      "original70_cause_proven": false
+    },
+    {
+      "code": "MISSING_RESPONSE_PHASE_EVIDENCE",
+      "evidence": "pending在客户端创建及网络调用前写入；只在RoleResult返回后落响应；未单独保存HTTP头、安全请求ID、原JSON、base_resp或解析开始/完成事件",
+      "original70_cause_proven": false
+    }
+  ],
+  "receipts": {
+    "67": {
+      "receipt": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v4\\call_067_draft_s6.json",
+      "receipt_sha256": "3cfa6131c7b0e32aa0ca38cc44877ef38d609f5774c19034caf9b15b024f90c7",
+      "status": "contract_valid",
+      "parameters": {
+        "max_completion_tokens": 6500,
+        "temperature": 0.4,
+        "thinking": "disabled"
+      },
+      "response_metadata": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "0711d0fb3dddd1af63b638a58a480a4d",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 7364,
+        "completion_tokens": 1374,
+        "total_tokens": 8738
+      },
+      "started_at": "2026-10-04T18:42:02.444933+00:00",
+      "completed_at": "2026-10-04T18:42:16.069399+00:00"
+    },
+    "69": {
+      "receipt": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v4\\call_069_direction_s6_r1.json",
+      "receipt_sha256": "ecf4959e9c552e94de2321a2c8b95dae7a754621e48c697b0a99b0d9c6617144",
+      "status": "contract_rejected",
+      "parameters": {
+        "max_completion_tokens": 8000,
+        "temperature": 0.4,
+        "thinking": "disabled"
+      },
+      "response_metadata": {
+        "role": "writer",
+        "provider": "minimax",
+        "requested_model": "MiniMax-M3",
+        "response_model": "MiniMax-M3",
+        "response_id": "0711d4f91380a7056c30330d60fb3366",
+        "finish_reason": "tool_calls",
+        "thinking_mode": "disabled",
+        "output_mode": "tool_call",
+        "prompt_tokens": 14737,
+        "completion_tokens": 5021,
+        "total_tokens": 19758
+      },
+      "started_at": "2026-10-04T18:59:04.157436+00:00",
+      "completed_at": "2026-10-04T18:59:49.484418+00:00"
+    },
+    "70": {
+      "receipt": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v4\\call_070_direction_s6_r2.json",
+      "receipt_sha256": "4f829c3141588bf6bc544649ba846e8600b87186f56826d7998eebb0b00ff102",
+      "status": "pending_response",
+      "parameters": {
+        "max_completion_tokens": 8000,
+        "temperature": 0.4,
+        "thinking": "disabled"
+      },
+      "response_metadata": {},
+      "started_at": "2026-10-04T19:03:43.698593+00:00",
+      "completed_at": null
+    }
+  },
+  "offline_evidence": "D:\\IT\\ai_douyin\\data\\qa\\official_call_method_review_20261005\\OFFLINE_CLIENT_EVIDENCE.json",
+  "offline_cases": 2,
+  "proposed_minimal_changes": [
+    "结构化保留安全HTTP状态/服务请求ID/异常类型，区分已收到错误与未知传输；用量未知仍禁止自动重派",
+    "HTTP响应到达后先安全保存原响应与服务错误字段，再做内容解析和Schema验收；不存凭据",
+    "增加清楚界定含义的请求阶段事件；流式可分块保存，但部分结果不算完整作品或用量已知",
+    "原70对账保留；改进使用新代码绑定并完整继承账本，不改144个冻结源或原回执"
+  ],
+  "original_call70_result": "still_unknown",
+  "original_call70_cause": "unknown",
+  "new_provider_calls": 0,
+  "new_media_calls": 0,
+  "production_code_modified": false,
+  "original_files_verified_unchanged": 25,
+  "source_files_verified_unchanged": 144,
+  "production_quality_passed": false
+}

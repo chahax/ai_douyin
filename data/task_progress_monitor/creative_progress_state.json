@@ -3,7 +3,7 @@
   "automation_id": "codex",
   "interval_minutes": 30,
   "enabled": true,
-  "updated_at_utc": "2026-10-05T04:08:36.240392+00:00",
+  "updated_at_utc": "2026-10-05T05:19:47.771231+00:00",
   "current_goal": "完整剧本、整片导演规划、逐镜表演、确定性编译和制作交接",
   "actual_latest_call": 70,
   "latest_script": {
@@ -11,7 +11,7 @@
     "version": "s6",
     "status": "adopted_for_direction_only"
   },
-  "current_stage": "director original response unknown; new model dispatch blocked",
+  "current_stage": "waiting for original call70 service evidence; director and local performance dispatch blocked",
   "effective_calls_started": 70,
   "effective_reported_tokens": 709272,
   "aggregate_text_token_limit": null,
@@ -58,7 +58,7 @@
     "media_calls": 0
   },
   "unknown_token_reservations": 64010,
-  "stage": "director original response unknown; new model dispatch blocked",
+  "stage": "waiting for original call70 service evidence; director and local performance dispatch blocked",
   "offline_regression": {
     "passed": 500,
     "subtests_passed": 14,
@@ -75,29 +75,31 @@
   },
   "latest_git_backup": {
     "branch": "codex/backup-ai-creative-20261003",
-    "commit": "0e26aa852436465b009e0d0e1af285c42583f8f3",
+    "commit": "b3951ef28d049434a0eb3b5c806745b43af17ffc",
     "remote_verified": true,
-    "scope": "S6剧本、144代码绑定和制作文档；本次核查尚未备份"
+    "changed_files": 14,
+    "scope": "原70核查、请求参数与来源、导演窗口源目标、准确进度文档；无实际导演输出"
   },
   "content_review_artifact": "D:\\IT\\ai_douyin\\data\\production_records\\this_time_i_leave_s6_20261005\\FULL_SCRIPT.md",
   "last_progress_check": {
-    "at_utc": "2026-10-05T04:07:46.022055+00:00",
+    "at_utc": "2026-10-05T05:19:47.771231+00:00",
     "latest_actual_call": 70,
     "effective_reported_tokens": 709272,
     "new_provider_calls": 0,
     "full_text_handoff_available": false,
-    "frozen_records_modified": false
+    "frozen_records_modified": false,
+    "client_repair_offline_verified": true
   },
   "content_feedback_received": true,
   "foreground_progress_check": {
-    "last_visible_checkpoint_utc": "2026-10-05T04:03:49Z",
+    "last_visible_checkpoint_utc": "2026-10-05T05:02:44Z",
     "interval_minutes": 30,
     "content_required": true,
     "reason": "Observed last scheduled heartbeat started after long turn ended; scheduler cause unknown."
   },
   "heartbeat_configuration_audit": "data/qa/creative_progress_heartbeat_20261005/AUDIT.json",
-  "last_periodic_visible_summary_utc": "2026-10-05T04:03:49Z",
-  "last_periodic_visible_summary_beijing": "2026-10-05 12:03",
+  "last_periodic_visible_summary_utc": "2026-10-05T05:02:44Z",
+  "last_periodic_visible_summary_beijing": "2026-10-05 13:02",
   "latest_review": "call68 complete source-bound script review valid; adopted for direction only",
   "effective_calls": 70,
   "latest_text_review": {
@@ -127,5 +129,15 @@
     "plan_sha256": "ca2a8b594b5fd30289967b2a31a2ff847776082b7363bc5565f672432675c234",
     "approved_for_complete_script": true,
     "media_approval": false
+  },
+  "new_dispatch_blocked": true,
+  "response_capture_repair": {
+    "status": "offline_verified_production_not_adopted",
+    "tests_passed": 49,
+    "regression_passed": 98,
+    "record": "D:\\IT\\ai_douyin\\docs\\CREATIVE_CALL_EVIDENCE_REPAIR_20261005.md",
+    "candidate_binding": "D:\\IT\\ai_douyin\\data\\qa\\creative_call_evidence_repair_20261005\\CANDIDATE_BINDING.json",
+    "provider_calls": 0,
+    "original_call70_recovered": false
   }
 }
