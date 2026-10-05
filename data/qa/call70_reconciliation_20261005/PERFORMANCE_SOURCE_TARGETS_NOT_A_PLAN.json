@@ -1,0 +1,155 @@
+{
+  "schema": "source_targets_for_pending_director/v1",
+  "status": "input_audit_only_not_director_or_local_output",
+  "raw_script_sha256": "c38f75d6efa1a3a016458e7da8497bc987663b93b76d64be304c2d01c93bd090",
+  "items": [
+    {
+      "beat_id": "B02",
+      "source_steps": [
+        {
+          "ref": "raw_linear_script.beats.1.steps.0",
+          "original_step": {
+            "kind": "dialogue",
+            "speaker": "林屿",
+            "text": "上个月那张客户对账单是你帮我熬到十一点重新打的吧，去年底那批结算明细也是你周末过来帮我顺过一遍，今晚这份我对到一半，你顺手帮我收了。"
+          }
+        },
+        {
+          "ref": "raw_linear_script.beats.1.steps.1",
+          "original_step": {
+            "kind": "action",
+            "speaker": "",
+            "text": "方澄的目光从他桌上的红笔批注，移到自己桌角压着的电影票，没接话。"
+          }
+        }
+      ],
+      "actual_start_seconds": null,
+      "actual_end_seconds": null
+    },
+    {
+      "beat_id": "B04",
+      "source_steps": [
+        {
+          "ref": "raw_linear_script.beats.3.steps.0",
+          "original_step": {
+            "kind": "action",
+            "speaker": "",
+            "text": "方澄低头看了一眼停在两人桌面之间笔尖朝自己的签字笔，没伸手拿，目光顺着那只握笔停住的手抬向林屿的眼睛。"
+          }
+        }
+      ],
+      "actual_start_seconds": null,
+      "actual_end_seconds": null
+    },
+    {
+      "beat_id": "B05",
+      "source_steps": [
+        {
+          "ref": "raw_linear_script.beats.4.steps.0",
+          "original_step": {
+            "kind": "dialogue",
+            "speaker": "方澄",
+            "text": "今晚不行，七点我有一场早就买好票的电影，得先走。"
+          }
+        }
+      ],
+      "actual_start_seconds": null,
+      "actual_end_seconds": null
+    },
+    {
+      "beat_id": "B06",
+      "source_steps": [
+        {
+          "ref": "raw_linear_script.beats.5.steps.0",
+          "original_step": {
+            "kind": "action",
+            "speaker": "",
+            "text": "林屿递笔的手悬在桌面上方停住，笔尖朝向方澄那一侧，没收回。她椅背上挂着的米灰色挎包和他桌上摊开的那张客户明细单同时进入他视线，他看了一眼挎包，又看回那张明细单，没接她的话。"
+          }
+        },
+        {
+          "ref": "raw_linear_script.beats.5.steps.1",
+          "original_step": {
+            "kind": "action",
+            "speaker": "",
+            "text": "林屿把那支签字笔从两人桌面之间收回自己手边，把那张浅黄便利贴也挪回自己面前，搁在那张客户明细单旁边。"
+          }
+        }
+      ],
+      "actual_start_seconds": null,
+      "actual_end_seconds": null
+    },
+    {
+      "beat_id": "B07",
+      "source_steps": [
+        {
+          "ref": "raw_linear_script.beats.6.steps.0",
+          "original_step": {
+            "kind": "action",
+            "speaker": "",
+            "text": "林屿重新低头看向那张A4横版客户明细单，用黑色签字笔在第一处红笔批注旁落字改了一笔，写到第二行数字时停住，把那张A4纵版结算单从桌角拉到明细单旁边对齐，比对后又用笔尖在明细单第二行点了一下，把那个数字划掉重写，写完一笔停一下，再对向结算单继续往下改。"
+          }
+        }
+      ],
+      "actual_start_seconds": null,
+      "actual_end_seconds": null
+    },
+    {
+      "beat_id": "B08",
+      "source_steps": [
+        {
+          "ref": "raw_linear_script.beats.7.steps.0",
+          "original_step": {
+            "kind": "action",
+            "speaker": "",
+            "text": "方澄从椅背上取下米灰色挎包挎到肩上，伸手拿起桌角那张米白底深红字的院线电影票，朝办公室门方向走出两步。"
+          }
+        },
+        {
+          "ref": "raw_linear_script.beats.7.steps.1",
+          "original_step": {
+            "kind": "dialogue",
+            "speaker": "方澄",
+            "text": "那我先走了。"
+          }
+        },
+        {
+          "ref": "raw_linear_script.beats.7.steps.2",
+          "original_step": {
+            "kind": "action",
+            "speaker": "",
+            "text": "方澄推开那扇米灰色木纹平板门，走出办公室。"
+          }
+        }
+      ],
+      "actual_start_seconds": null,
+      "actual_end_seconds": null
+    },
+    {
+      "beat_id": "B09",
+      "source_steps": [
+        {
+          "ref": "raw_linear_script.beats.8.steps.0",
+          "original_step": {
+            "kind": "action",
+            "speaker": "",
+            "text": "林屿仍坐在工位前，没抬头去喊她，手里的黑色签字笔继续在那张A4横版客户明细单的红笔批注旁一行一行改下去，每写一笔就把笔尖挪向旁边那张结算单比对一次，白色陶瓷咖啡杯没动，那张浅黄便利贴压在他手边的桌面。"
+          }
+        }
+      ],
+      "actual_start_seconds": null,
+      "actual_end_seconds": null
+    }
+  ],
+  "critical_requirements": [
+    "B02完整长对白须按局部真实安排核对，不以82秒整片估算放行",
+    "B04拒绝前目光变化可读；B05同一完整对白during窗口；B06拒绝后独立after反应",
+    "B07停住、比对、划掉重写及B08携票真正离场须可读",
+    "每镜新增信息/观察对象/切镜理由，不按每个拿放操作拆镜",
+    "便利贴所有权与持有分开，持笔连续来源不擅加放开再拿起"
+  ],
+  "timing_contract": "during仅同一完整dialogue；跨镜只after；普通action由step_units串行安排",
+  "actual_duration_seconds": null,
+  "director_adopted": false,
+  "local_performance_complete": false
+}

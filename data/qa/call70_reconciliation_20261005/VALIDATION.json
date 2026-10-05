@@ -1,0 +1,16 @@
+{
+  "schema": "reconciliation_documentation_offline_validation/v1",
+  "all_original_run_files_unchanged": true,
+  "original_run_files_checked": 25,
+  "frozen_source_files_verified": 144,
+  "wire_reconstruction_exact": true,
+  "full_reference_and_feedback_exact": true,
+  "sdk_capture_matches_wire": true,
+  "source_script_unchanged": true,
+  "initial_documentation_attempt_error": "QA source-target projection used beat_id instead of raw id; corrected before audit/production-view writes; original source untouched",
+  "new_provider_calls": 0,
+  "new_media_calls": 0,
+  "budget_reset": false,
+  "production_quality_passed": false,
+  "director_and_performance_complete": false
+}

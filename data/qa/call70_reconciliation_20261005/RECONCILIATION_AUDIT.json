@@ -1,0 +1,131 @@
+{
+  "schema": "unknown_original_text_call_reconciliation_audit/v1",
+  "checked_at_utc": "2026-10-05T04:07:46.022055+00:00",
+  "checked_at_beijing": "2026-10-05T12:07:46.022055+08:00",
+  "user_instruction": "核实原请求，再完成导演与实际表演窗口",
+  "original_receipt": {
+    "path": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v4\\call_070_direction_s6_r2.json",
+    "sha256": "4f829c3141588bf6bc544649ba846e8600b87186f56826d7998eebb0b00ff102",
+    "ordinal": 70,
+    "label": "direction_s6_r2",
+    "started_at_utc": "2026-10-04T19:03:43.698593+00:00",
+    "started_at_beijing": "2026-10-05T03:03:43.698593+08:00",
+    "request_sha256": "569b7c8939f96a410a0f34f6bb3d7dc95f7a9a8f5f7919b1efa2c577d4a847f9",
+    "source_binding_sha256": "21c0493d9ff31eaf75c8b745b95320150fb3be9180f9cf21ea95d35fce4a3ed7",
+    "unchanged_status": "pending_response",
+    "response_id": null,
+    "response_or_usage_saved": false,
+    "token_reservation": 64010
+  },
+  "verified_request_configuration": {
+    "provider": "minimax",
+    "base_url": "https://api.minimaxi.com/v1",
+    "endpoint": "POST /chat/completions",
+    "model": "MiniMax-M3",
+    "max_completion_tokens": 8000,
+    "temperature": 0.4,
+    "thinking": {
+      "type": "disabled"
+    },
+    "named_tool": "submit_creative_json",
+    "tool_choice_forced": true,
+    "timeout_seconds": 600,
+    "sdk_max_retries": 0,
+    "request_messages": 5,
+    "sdk_capture_fake_calls": 1,
+    "sdk_capture_real_provider_calls": 0,
+    "provider_received_request_verified": false
+  },
+  "local_recovery_evidence": {
+    "matching_original_python_processes": 0,
+    "agent_log": {
+      "path": "D:\\IT\\ai_douyin\\data\\logs\\agent.log",
+      "exists": true,
+      "bytes": 4436006,
+      "lines": 38695,
+      "request_sha256_match_count": 0,
+      "stage_label_match_count": 0
+    },
+    "original_tool_session_id": 91043,
+    "original_tool_session_observed_error": "Unknown process id 91043",
+    "no_original_receipt_response_id": true,
+    "original_local_files_unchanged": {
+      "AUTHORIZATION.json": true,
+      "call_063_story_plan_r9.json": true,
+      "call_064_story_plan_r10.json": true,
+      "call_065_draft_s5.json": true,
+      "call_066_script_review_s5_r1.json": true,
+      "call_067_draft_s6.json": true,
+      "call_068_script_review_s6_r1.json": true,
+      "call_069_direction_s6_r1.json": true,
+      "call_070_direction_s6_r2.json": true,
+      "CALL_LEDGER.json": true,
+      "DIRECTION_FAILURE_ALL_FIELDS_call69.json": true,
+      "DIRECTION_INPUT_FOCUS_s6_r1.json": true,
+      "DIRECTION_INPUT_FOCUS_s6_r2.json": true,
+      "DIRECTION_INPUT_FOCUS_s6_r2_CORRECTED.json": true,
+      "DIRECTION_INPUT_FOCUS_s6_r2_FINAL.json": true,
+      "FEEDBACK_FOR_COMPLETE_SCRIPT_s5.json": true,
+      "FEEDBACK_FOR_COMPLETE_SCRIPT_s6.json": true,
+      "FULL_REVIEW_INPUT_FOCUS_s6_r1.json": true,
+      "OUTCOME_UNKNOWN_call70_OBSERVATION.json": true,
+      "REQUEST_REFERENCE_AND_SEMANTIC_VERIFICATION_call64.json": true,
+      "RESULT.json": true,
+      "SCRIPT_DECISION_s6_call68.json": true,
+      "SEMANTIC_REVIEW_FAILURE_OBSERVATION_call66.json": true,
+      "SOURCE_SEMANTIC_VERIFICATION_s6_call68.json": true,
+      "STORY_PLAN_DECISION_call64.json": true
+    },
+    "source_files_verified": 144
+  },
+  "public_documentation_review": {
+    "text_api": "https://platform.minimax.io/docs/api-reference/text-chat-openai",
+    "api_index": "https://platform.minimax.io/docs/llms.txt",
+    "account_faq": "https://platform.minimax.cn/docs/faq/about-account",
+    "console_billing_page": "https://platform.minimax.cn/console/recharge-records",
+    "limited_finding": "已查公开文档中未找到同步文本历史结果恢复接口，不据此断言服务方不存在内部查询能力",
+    "no_undocumented_authenticated_endpoints_probed": true
+  },
+  "console_access": {
+    "completed": false,
+    "cua_get_state_failure": "trusted Node process exited unexpectedly; kernel reset",
+    "computer_use_init_failure": "windows sandbox failed: helper_unknown_error: apply deny-read ACLs; kernel exited unexpectedly",
+    "reason_type": "tool_initialization_failure_not_approval_rejection",
+    "authentication_data_read": false,
+    "security_settings_changed": false,
+    "required_manual_lookup_question_already_sent": true
+  },
+  "confirmed_facts": [
+    "冻结代码重构请求全等；完整S6/R01/最终r2反馈/内部Schema在本地messages中",
+    "本地无可恢复原响应或请求ID；原进程不存在",
+    "原服务结果、是否计费和真实用量仍未知"
+  ],
+  "unverified_inferences": [
+    "最初进程消失观察时间接近600秒超时，不能证明发生SDK超时、服务故障或进程中断",
+    "pending_response在客户端构造和网络调用前写入，不能单独证明服务收到请求"
+  ],
+  "required_reconciliation_evidence": [
+    "匹配原时间/模型/配置的服务请求或响应身份",
+    "原调用结果及真实用量",
+    "成功时完整原响应；无法恢复时可核实服务方对账证据和具体恢复决策"
+  ],
+  "current_dispatch_decision": "blocked_original_outcome_and_usage_unknown",
+  "automatic_retry": false,
+  "reservation_released": false,
+  "budget_reset": false,
+  "receipt_or_ledger_mutated": false,
+  "new_provider_calls": 0,
+  "new_media_calls": 0,
+  "spend": {
+    "effective_calls_started": 70,
+    "calls_with_known_usage": 69,
+    "effective_reported_tokens": 709272,
+    "unknown_token_reservations": 64010,
+    "max_total_tokens": null,
+    "old_budget_reset": false,
+    "media_calls": 0
+  },
+  "director_adopted": false,
+  "local_performance_complete": false,
+  "production_handoff_complete": false
+}

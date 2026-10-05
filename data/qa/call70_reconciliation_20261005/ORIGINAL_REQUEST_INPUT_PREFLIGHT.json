@@ -1,0 +1,26 @@
+{
+  "schema": "original_director_request_preflight/v1",
+  "checked_at_utc": "2026-10-05T04:04:06.985375+00:00",
+  "original_ordinal": 70,
+  "wire_exactly_reconstructed": true,
+  "wire_sha256": "569b7c8939f96a410a0f34f6bb3d7dc95f7a9a8f5f7919b1efa2c577d4a847f9",
+  "source_binding_sha256": "21c0493d9ff31eaf75c8b745b95320150fb3be9180f9cf21ea95d35fce4a3ed7",
+  "raw_script_sha256": "c38f75d6efa1a3a016458e7da8497bc987663b93b76d64be304c2d01c93bd090",
+  "source_beat_count": 9,
+  "source_step_count": 16,
+  "full_original_reference_exact_in_messages": true,
+  "reference_pack_sha256": "bdcf2cc65056e3903cadae8df9430d11a5a12ff55d20c0c4e1b94b291f2b6de1",
+  "reference_ids": [
+    "R01"
+  ],
+  "full_feedback_exact_in_messages": true,
+  "inner_schema_exact_in_messages": true,
+  "sdk_capture_is_offline_only": true,
+  "expected_provider_body_not_sent_sha256": "8ea569dd3c3262129202aef6454af501719d10cd6f10ffd5f26c26049e63171a",
+  "actual_service_receipt_verified": false,
+  "selected_images": [],
+  "source_actual_timing": null,
+  "new_provider_calls": 0,
+  "new_media_calls": 0,
+  "creative_quality_passed": false
+}
