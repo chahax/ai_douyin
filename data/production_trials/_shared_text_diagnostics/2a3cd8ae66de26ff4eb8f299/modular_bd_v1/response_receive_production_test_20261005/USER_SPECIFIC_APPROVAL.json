@@ -1,0 +1,15 @@
+{
+  "schema": "explicit_live_probe_user_confirmation/v1",
+  "confirmed_at_utc": "2026-10-05T05:41:30.968353+00:00",
+  "user_quote": "允许独立测试",
+  "scope": "previously prepared single MiniMax-M3 paid text request",
+  "destination": "https://api.minimaxi.com/v1/chat/completions",
+  "maximum_new_calls": 1,
+  "maximum_output_tokens": 1024,
+  "request_file": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\response_receive_production_test_20261005\\REQUEST_NOT_YET_SENT.json",
+  "request_file_sha256": "1ae373d370377eb71014ec4b05fb0f5e16d97c542eb5352d7cd4067caf9b4164",
+  "original70_still_unknown": true,
+  "original70_resend_authorized": false,
+  "automatic_retry": false,
+  "media_calls_authorized": false
+}

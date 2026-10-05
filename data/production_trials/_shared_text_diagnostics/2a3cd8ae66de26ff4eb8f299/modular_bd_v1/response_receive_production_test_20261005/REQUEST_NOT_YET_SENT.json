@@ -1,0 +1,90 @@
+{
+  "role": "writer",
+  "model": "MiniMax-M3",
+  "messages": [
+    {
+      "role": "system",
+      "content": "这是文本接口接收层验收，只提交一次工具调用；无长篇分析。"
+    },
+    {
+      "role": "user",
+      "content": "probe_id填receive_layer_20261005_v1，status填received。items为只有一个对象的数组。stimulus填“方澄明确说今晚不行”，reaction填“林屿停住并收回笔”。这是接口测试，不是导演方案或最终剧本。"
+    },
+    {
+      "role": "system",
+      "content": "本次仅升级工具输出传输，原创作/审查任务和完整输入继续适用。此前要求直接输出内部字段的格式说明由本传输协议替代：只调用submit_creative_json，参数恰为payload_json一个字符串。该字符串是完整内部JSON对象的原文，按用户提供的inner_document_schema完整填写，数组仍为JSON数组；不要item包装、XML数组、代码围栏、patch或丢弃字段。JSON字符串中的引号和换行按JSON转义。思考或正文分析不能代替完整工具文档，不能仅返回摘要。"
+    },
+    {
+      "role": "user",
+      "content": "{\"transport\":\"creative_json_document_transport/v1\",\"tool_name\":\"submit_creative_json\",\"inner_document_schema\":{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"probe_id\",\"status\",\"items\"],\"properties\":{\"probe_id\":{\"type\":\"string\",\"const\":\"receive_layer_20261005_v1\"},\"status\":{\"type\":\"string\",\"enum\":[\"received\"]},\"items\":{\"type\":\"array\",\"minItems\":1,\"maxItems\":1,\"items\":{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"stimulus\",\"reaction\"],\"properties\":{\"stimulus\":{\"type\":\"string\",\"minLength\":1,\"maxLength\":60},\"reaction\":{\"type\":\"string\",\"minLength\":1,\"maxLength\":60}}}}}}}"
+    }
+  ],
+  "parameters": {
+    "max_completion_tokens": 1024,
+    "temperature": 0.4,
+    "thinking": "disabled"
+  },
+  "structured_schema": {
+    "title": "submit_creative_json",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "payload_json"
+    ],
+    "properties": {
+      "payload_json": {
+        "type": "string",
+        "minLength": 2,
+        "description": "完整内部JSON对象原文，严格按用户inner_document_schema；仅此一个字符串字段"
+      }
+    }
+  },
+  "inner_document_schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "probe_id",
+      "status",
+      "items"
+    ],
+    "properties": {
+      "probe_id": {
+        "type": "string",
+        "const": "receive_layer_20261005_v1"
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "received"
+        ]
+      },
+      "items": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 1,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "stimulus",
+            "reaction"
+          ],
+          "properties": {
+            "stimulus": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 60
+            },
+            "reaction": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 60
+            }
+          }
+        }
+      }
+    }
+  },
+  "output_transport": "creative_json_document_transport/v1",
+  "purpose": "one explicitly authorized independent response receiving test; not a resend or production continuation"
+}

@@ -1,0 +1,33 @@
+{
+  "schema": "production_test_approval_review_block/v1",
+  "at_utc": "2026-10-05T05:36:32.674936+00:00",
+  "user_request": "production test",
+  "status": "blocked_before_process_start_by_automatic_approval_review",
+  "command": ".venv\\Scripts\\python.exe -u -m scripts.run_creative_response_production_test_v1",
+  "reason": "Automatic review requires explicit authorization of this payload to external MiniMax with potential charges while original call70 is unresolved.",
+  "process_started": false,
+  "sdk_constructed": false,
+  "new_provider_calls": 0,
+  "new_media_calls": 0,
+  "new_call_ledger_entries": 0,
+  "maximum_requested_calls": 1,
+  "maximum_output_tokens": 1024,
+  "destination": "https://api.minimaxi.com/v1/chat/completions",
+  "request_file": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\response_receive_production_test_20261005\\REQUEST_NOT_YET_SENT.json",
+  "request_sha256": "1ae373d370377eb71014ec4b05fb0f5e16d97c542eb5352d7cd4067caf9b4164",
+  "source_count": 150,
+  "original_result_unknown": 70,
+  "original_spend": {
+    "calls_started": 70,
+    "calls_with_known_usage": 69,
+    "reported_tokens": 709272,
+    "unknown_token_reservation": 64010,
+    "max_total_tokens": null,
+    "old_budget_reset": false
+  },
+  "original_files_verified": 25,
+  "original_sources_verified": 144,
+  "automatic_retry": false,
+  "no_workaround_attempted": true,
+  "requires_user_specific_approval": true
+}

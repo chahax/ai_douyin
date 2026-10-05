@@ -1,0 +1,14 @@
+{
+  "schema": "authorized_creative_continuation/v3",
+  "new_calls": 1,
+  "effective_calls_started": 71,
+  "new_reported_tokens": 845,
+  "effective_reported_tokens": 710117,
+  "unknown_token_reservations": 0,
+  "max_total_tokens": null,
+  "unbounded_aggregate_text_authorized": true,
+  "old_budget_reset": false,
+  "old_governance_migrated": false,
+  "media_calls": 0,
+  "semantic_approval": false
+}

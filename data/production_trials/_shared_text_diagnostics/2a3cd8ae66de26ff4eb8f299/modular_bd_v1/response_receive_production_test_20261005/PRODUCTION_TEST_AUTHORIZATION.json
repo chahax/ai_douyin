@@ -1,0 +1,20 @@
+{
+  "schema": "creative_response_live_acceptance/v1",
+  "user_request": "生产测试",
+  "scope": "one independent MiniMax-M3 text receiving-layer production test",
+  "max_new_calls": 1,
+  "max_output_tokens": 1024,
+  "automatic_retry": false,
+  "original_call70_result": "unknown",
+  "original_call70_reservation": 64010,
+  "original_call70_resend_authorized": false,
+  "director_continuation_authorized_by_this_test": false,
+  "media_calls_authorized": false,
+  "explicit_test_exception_only": true,
+  "parent_unknown_gate_for_regular_work_remains": true,
+  "parent_observation_sha256": "fd06b9a84d751c3b3fd2946ac59204c21f89096c0b7a8ef2f1227e64d3b503af",
+  "candidate_binding_sha256": "3715bf371f22cea959e94c7b49e7e7d763abe77eaf8e8a6fd6a82bde58181120",
+  "wire_sha256": "a0caceab004acb479c332a7a9013af130d37dcf76e57ecb3e7871e142912c9d3",
+  "aggregate_text_limit": null,
+  "old_budget_reset": false
+}

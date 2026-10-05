@@ -1,0 +1,221 @@
+{
+  "schema": "authorized_creative_continuation/v3",
+  "ordinal": 71,
+  "label": "response_layer_live_acceptance",
+  "request": {
+    "role": "writer",
+    "model": "MiniMax-M3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "这是文本接口接收层验收，只提交一次工具调用；无长篇分析。"
+      },
+      {
+        "role": "user",
+        "content": "probe_id填receive_layer_20261005_v1，status填received。items为只有一个对象的数组。stimulus填“方澄明确说今晚不行”，reaction填“林屿停住并收回笔”。这是接口测试，不是导演方案或最终剧本。"
+      },
+      {
+        "role": "system",
+        "content": "本次仅升级工具输出传输，原创作/审查任务和完整输入继续适用。此前要求直接输出内部字段的格式说明由本传输协议替代：只调用submit_creative_json，参数恰为payload_json一个字符串。该字符串是完整内部JSON对象的原文，按用户提供的inner_document_schema完整填写，数组仍为JSON数组；不要item包装、XML数组、代码围栏、patch或丢弃字段。JSON字符串中的引号和换行按JSON转义。思考或正文分析不能代替完整工具文档，不能仅返回摘要。"
+      },
+      {
+        "role": "user",
+        "content": "{\"transport\":\"creative_json_document_transport/v1\",\"tool_name\":\"submit_creative_json\",\"inner_document_schema\":{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"probe_id\",\"status\",\"items\"],\"properties\":{\"probe_id\":{\"type\":\"string\",\"const\":\"receive_layer_20261005_v1\"},\"status\":{\"type\":\"string\",\"enum\":[\"received\"]},\"items\":{\"type\":\"array\",\"minItems\":1,\"maxItems\":1,\"items\":{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"stimulus\",\"reaction\"],\"properties\":{\"stimulus\":{\"type\":\"string\",\"minLength\":1,\"maxLength\":60},\"reaction\":{\"type\":\"string\",\"minLength\":1,\"maxLength\":60}}}}}}}"
+      }
+    ],
+    "parameters": {
+      "max_completion_tokens": 1024,
+      "temperature": 0.4,
+      "thinking": "disabled"
+    },
+    "structured_schema": {
+      "title": "submit_creative_json",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_json"
+      ],
+      "properties": {
+        "payload_json": {
+          "type": "string",
+          "minLength": 2,
+          "description": "完整内部JSON对象原文，严格按用户inner_document_schema；仅此一个字符串字段"
+        }
+      }
+    },
+    "inner_document_schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "probe_id",
+        "status",
+        "items"
+      ],
+      "properties": {
+        "probe_id": {
+          "type": "string",
+          "const": "receive_layer_20261005_v1"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "received"
+          ]
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "stimulus",
+              "reaction"
+            ],
+            "properties": {
+              "stimulus": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 60
+              },
+              "reaction": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 60
+              }
+            }
+          }
+        }
+      }
+    },
+    "output_transport": "creative_json_document_transport/v1",
+    "purpose": "one explicitly authorized independent response receiving test; not a resend or production continuation"
+  },
+  "request_sha256": "a0caceab004acb479c332a7a9013af130d37dcf76e57ecb3e7871e142912c9d3",
+  "source_binding_sha256": "a87866e71d66c5375b328c6fc4128eacd51f46fae2b81859c747ec627b366c4f",
+  "status": "contract_valid",
+  "started_at": "2026-10-05T05:41:55.592702+00:00",
+  "token_reservation": 4425,
+  "automatic_retry": false,
+  "semantic_approval": false,
+  "response_metadata": {
+    "http_status_code": 200,
+    "http_request_id": null,
+    "safe_response_headers": {
+      "trace-id": "07126ba6998f66ebc7e44d55e599f810",
+      "content-type": "application/json; charset=utf-8",
+      "date": "Mon, 05 Oct 2026 05:42:00 GMT"
+    },
+    "role": "writer",
+    "provider": "minimax",
+    "requested_model": "MiniMax-M3",
+    "response_model": "MiniMax-M3",
+    "response_id": "07126ba6998f66ebc7e44d55e599f810",
+    "finish_reason": "tool_calls",
+    "thinking_mode": "disabled",
+    "output_mode": "tool_call",
+    "transport_version": "creative_evidenced_role_clients/v1",
+    "strict_mode": false,
+    "server_schema_guarantee": false,
+    "response_body_complete": true,
+    "raw_body_sha256": "3a72284c043622d03c4f8a65d369c301ae2fbc306e3a9ffae4cd09157b390def",
+    "prompt_tokens": 775,
+    "completion_tokens": 70,
+    "total_tokens": 845,
+    "usage_source": "original_provider_response",
+    "provider_status_code": 0
+  },
+  "response_text": "{\"payload_json\": \"{\\\"probe_id\\\":\\\"receive_layer_20261005_v1\\\",\\\"status\\\":\\\"received\\\",\\\"items\\\":[{\\\"stimulus\\\":\\\"方澄明确说今晚不行\\\",\\\"reaction\\\":\\\"林屿停住并收回笔\\\"}]}\"}",
+  "response_payload": {
+    "id": "07126ba6998f66ebc7e44d55e599f810",
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-95d288733d82da21",
+              "type": "function",
+              "function": {
+                "name": "submit_creative_json",
+                "arguments": "{\"payload_json\": \"{\\\"probe_id\\\":\\\"receive_layer_20261005_v1\\\",\\\"status\\\":\\\"received\\\",\\\"items\\\":[{\\\"stimulus\\\":\\\"方澄明确说今晚不行\\\",\\\"reaction\\\":\\\"林屿停住并收回笔\\\"}]}\"}"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1791178919,
+    "model": "MiniMax-M3",
+    "object": "chat.completion",
+    "usage": {
+      "total_tokens": 845,
+      "total_characters": 0,
+      "prompt_tokens": 775,
+      "completion_tokens": 70,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      }
+    },
+    "input_sensitive": false,
+    "output_sensitive": false,
+    "input_sensitive_type": 0,
+    "output_sensitive_type": 0,
+    "output_sensitive_int": 0,
+    "service_tier": "standard",
+    "base_resp": {
+      "status_code": 0,
+      "status_msg": ""
+    }
+  },
+  "completed_at": "2026-10-05T05:41:59.457590+00:00",
+  "output": {
+    "payload_json": "{\"probe_id\":\"receive_layer_20261005_v1\",\"status\":\"received\",\"items\":[{\"stimulus\":\"方澄明确说今晚不行\",\"reaction\":\"林屿停住并收回笔\"}]}"
+  },
+  "document_output": {
+    "probe_id": "receive_layer_20261005_v1",
+    "status": "received",
+    "items": [
+      {
+        "stimulus": "方澄明确说今晚不行",
+        "reaction": "林屿停住并收回笔"
+      }
+    ]
+  },
+  "document_transport_validation": {
+    "schema": "creative_json_document_transport/v1",
+    "payload_sha256": "3992c3730bf87b04081cfac1cfeb09f85fe8b1c2e13c4b5b43a6c3088f9bf454",
+    "document_sha256": "abeaac710f04d18aeb7b81f87f4382e04e6c3035c3e0bab1269f468d2b6148b5",
+    "metadata": {
+      "tool_name": "submit_creative_json",
+      "payload_json_sha256": "3992c3730bf87b04081cfac1cfeb09f85fe8b1c2e13c4b5b43a6c3088f9bf454",
+      "payload_utf8_bytes": 151,
+      "outer_argument_sha256": "191cb632a502026021bbe2dddd09837ebdd64577eb222e65633720e4929652c8",
+      "outer_duplicate_keys_verified": true,
+      "inner_duplicate_keys_verified": true,
+      "inner_schema_validated": true,
+      "inner_object_is_derived": true,
+      "source_string_modified": false,
+      "automatic_repair": false,
+      "semantic_approval": false
+    },
+    "original_wire_output_preserved": true,
+    "model_document_repaired": false
+  },
+  "validation": {
+    "probe_document_valid": true,
+    "creative_quality_passed": false,
+    "production_handoff_complete": false
+  },
+  "call_evidence": {
+    "directory": "call_evidence\\call_071",
+    "identity_sha256": "07fc544fc0ccbe61ac983409552a7a027d134e2c96e839dfceaf4fba2d1a74a3"
+  }
+}

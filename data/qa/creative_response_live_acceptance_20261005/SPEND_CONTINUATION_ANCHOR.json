@@ -1,0 +1,30 @@
+{
+  "schema": "creative_actual_spend_continuation_anchor/v1",
+  "at_utc": "2026-10-05T05:49:47.817404+00:00",
+  "ledger_bindings": [
+    {
+      "file": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\resume_20261005_v4\\CALL_LEDGER.json",
+      "sha256": "3b8469298279792d2ea4650fc06bc815d839d80e82bf191156a1379c58093ebc"
+    },
+    {
+      "file": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\response_receive_production_test_20261005\\CALL_LEDGER.json",
+      "sha256": "e033b67eec949b81d4fcbae54eddfd4dc13c920977dc1f0806ccd002d37344fc"
+    }
+  ],
+  "new_result": {
+    "file": "D:\\IT\\ai_douyin\\data\\production_trials\\_shared_text_diagnostics\\2a3cd8ae66de26ff4eb8f299\\modular_bd_v1\\response_receive_production_test_20261005\\PRODUCTION_TEST_RESULT.json",
+    "sha256": "5a886692d4f9dd8f688c5b3dbbaab5185c31cbb4c130e392c55d00628d6a4484"
+  },
+  "calls_started": 71,
+  "calls_with_known_usage": 70,
+  "reported_tokens": 710117,
+  "unknown_token_reservations": 64010,
+  "pending_ordinals": [
+    70
+  ],
+  "max_total_tokens": null,
+  "historical_legacy_limit": 500000,
+  "old_budget_reset": false,
+  "future_continuation_must_inherit_both_ledgers": true,
+  "regular_new_dispatch_ready": false
+}
