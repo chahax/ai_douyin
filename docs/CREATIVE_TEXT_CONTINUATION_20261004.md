@@ -146,3 +146,8 @@ call69 / direction_s6_r1返回MiniMax-M3 tool_calls，19758 reported tokens，co
 call70 / direction_s6_r2在19:03:43Z启动，使用DIRECTION_INPUT_FOCUS_s6_r2_FINAL.json要求完整新稿。03:13之后原工具session无法找到，Win32_Process按python.exe/运行入口筛选没有原执行进程；不可变回执仍pending_response，未收到响应ID、用量或输出。服务端是否执行/计费及进程消失原因均未知。保存OUTCOME_UNKNOWN_call70_OBSERVATION.json，不改原回执，不重发、不重置。门禁继续阻止后续派发。
 
 累计70次已启动，其中69次用量已知；709272 reported tokens，未知请求预留64010（不是实耗），无媒体。完整s6剧本采用为导演输入，但没有有效整片导演、逐镜表演或制作交接。03:13前台已再次明确核对目标与具体内容；该次较30分钟约定晚约8分钟，不能以自动任务ACTIVE宣称准点完成。
+
+
+## 2026-10-05：保存S6版本并建立后续确认记录
+
+用户要求当前剧本和代码留档、更新后续流程，实际完成并确认后记录。已保存完整原稿、144源清单、原回执SHA和阶段基线，见[制作版本记录](THIS_TIME_I_LEAVE_S6_PRODUCTION_RECORD_20261005.md)。工作源码及Git c1832bc均与冻结SHA一致。未来确认绑定真实原话、阶段和产物SHA；未新增调用，原70未知结果、预留和旧账本保留。

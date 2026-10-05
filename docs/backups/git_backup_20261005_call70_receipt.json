@@ -1,0 +1,19 @@
+{
+  "schema": "git_incremental_creative_backup_receipt/v1",
+  "base": "533bdfd426641af46fe45f001c9680f8df8dc03b",
+  "commit": "c1832bc0a4d230ac3689e6ec7f1fc3d632474837",
+  "tree": "611bddd29e0d91cd11099bce7dc7f85940c88f01",
+  "branch": "codex/backup-ai-creative-20261003",
+  "changed_files_including_manifest": 184,
+  "bytes": 3483375,
+  "working_head_preserved": true,
+  "original_index_unchanged": true,
+  "all_changed_raw_blobs_verified": true,
+  "pushed": true,
+  "new_media_files": 0,
+  "pending_content_alignment": false,
+  "director_request_outcome_unknown": 70,
+  "remote_verified": true,
+  "verified_remote_commit": "c1832bc0a4d230ac3689e6ec7f1fc3d632474837",
+  "verified_at_utc": "2026-10-04T19:20:53.302811+00:00"
+}

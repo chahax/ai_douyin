@@ -1,0 +1,81 @@
+{
+  "schema": "documented_production_workflow/v1",
+  "created_at_utc": "2026-10-05T03:28:44.646093+00:00",
+  "script_sha256": "c38f75d6efa1a3a016458e7da8497bc987663b93b76d64be304c2d01c93bd090",
+  "documentation_record_only": true,
+  "stages": [
+    {
+      "id": "P0",
+      "stage": "原70请求对账",
+      "status": "blocked_unknown_result",
+      "completion_evidence": "原结果与真实用量，或服务方可核实对账证据；无ID不可伪写失败/免费。",
+      "output": null
+    },
+    {
+      "id": "P1",
+      "stage": "完整剧本",
+      "status": "adopted_for_direction_only",
+      "completion_evidence": "call67完整原稿、call68全文复审及实际叶字段核对。",
+      "output": "FULL_SCRIPT.md"
+    },
+    {
+      "id": "P2",
+      "stage": "整片导演规划与分镜",
+      "status": "waiting_on_P0",
+      "completion_evidence": "完整MiniMax导演稿、每镜信息/观察对象/刺激反应/切镜理由、可信初态。",
+      "output": null
+    },
+    {
+      "id": "P3",
+      "stage": "逐镜局部表演",
+      "status": "waiting_on_P2",
+      "completion_evidence": "真实动作和对白前中后窗口，前镜终态与后镜首态。",
+      "output": null
+    },
+    {
+      "id": "P4",
+      "stage": "确定性编译及整片文本复审",
+      "status": "waiting_on_P3",
+      "completion_evidence": "真实排时与连续性通过、必要DeepSeek完整联合审查及最终请求。",
+      "output": null
+    },
+    {
+      "id": "P5",
+      "stage": "制作文本交接和用户确认",
+      "status": "waiting_on_P4",
+      "completion_evidence": "完整剧本、导演、表演、编译、审查和资产需求；用户确认绑定整包版本与SHA。",
+      "output": null
+    },
+    {
+      "id": "P6",
+      "stage": "少量审美样板及实际资产回传导演",
+      "status": "waiting_on_P5_and_media_authorization",
+      "completion_evidence": "用户选择样板、生成或复用人物场景资产、实际图片与文件回传导演核对。",
+      "output": null
+    },
+    {
+      "id": "P7",
+      "stage": "逐段视频与人工审核",
+      "status": "waiting_on_P6",
+      "completion_evidence": "保存awaiting_human_review；用户批准原片与服务原始尾帧后续段；助手不抽帧/听看/ASR/音画模型审查。",
+      "output": null
+    },
+    {
+      "id": "P8",
+      "stage": "合成及整片用户确认",
+      "status": "waiting_on_P7",
+      "completion_evidence": "批准链完整、合成后整片人工审核；发布独立核对授权。",
+      "output": null
+    }
+  ],
+  "human_confirmation_events": [],
+  "confirmation_required_fields": [
+    "stage",
+    "artifact_version",
+    "artifact_sha256",
+    "decision",
+    "exact_user_quote",
+    "recorded_at"
+  ],
+  "interface_success_is_not_content_confirmation": true
+}

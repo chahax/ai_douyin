@@ -1,0 +1,12 @@
+{
+  "checked_at_utc": "2026-10-05T03:30:15.619841+00:00",
+  "complete_script_sha256": "c38f75d6efa1a3a016458e7da8497bc987663b93b76d64be304c2d01c93bd090",
+  "copied_script_equals_source": true,
+  "bound_source_files_verified": 144,
+  "all_original_trial_file_hashes_unchanged": true,
+  "local_doc_links_verified": 7,
+  "stage_baseline_count": 9,
+  "human_quality_confirmation_count": 0,
+  "new_provider_calls": 0,
+  "scope": "documentation and source identity only; no new production or creative quality approval"
+}

@@ -1,0 +1,57 @@
+# 《这次我先走》S6版本与后续制作记录
+
+建立时间：2026-10-05T11:28:44.646093+08:00（北京时间）。本页记录版本与制作进度；不是新的执行任务或制作交接。后续完成及用户确认追加记录，原稿、回执、代码绑定和账本保留。
+
+## 当前版本
+
+- [完整剧本全文](../data/production_records/this_time_i_leave_s6_20261005/FULL_SCRIPT.md)与[原结构正文](../data/production_records/this_time_i_leave_s6_20261005/FULL_SCRIPT.json)：MiniMax-M3第67次完整新稿，九拍，正文无模型时长。
+- 剧本SHA：`c38f75d6efa1a3a016458e7da8497bc987663b93b76d64be304c2d01c93bd090`。全文原样保存，包括B04不通顺的事件标题；没有手工回填动作或拼接旧稿。
+- 第68次DeepSeek有效全文审查及助手来源核对完成，[采用决定](../data/production_trials/_shared_text_diagnostics/2a3cd8ae66de26ff4eb8f299/modular_bd_v1/resume_20261005_v4/SCRIPT_DECISION_s6_call68.json)仅批准进入导演安排。实际表演窗口、整片制作交接与质量尚未验收。
+- [版本证据记录](../data/production_records/this_time_i_leave_s6_20261005/BASELINE_RECORD.json)、[源码清单](../data/production_records/this_time_i_leave_s6_20261005/CODE_BINDING_MANIFEST.json)、[后续阶段基线](../data/production_records/this_time_i_leave_s6_20261005/WORKFLOW_BASELINE.json)。
+- Git基线：[c1832bc](https://github.com/chahax/ai_douyin/commit/c1832bc0a4d230ac3689e6ec7f1fc3d632474837)。144个工作源码与该Git提交对应blob均和冻结SHA一致。平台登记基线仍v23，本轮独立文本续行为v4。
+
+## 故事与情绪目标
+
+方澄为自己的电影留出晚上，林屿习惯地交来临收尾工作。她看笔、抬眼后明确拒绝；他停住，收回笔和任务，亲自面对数字困难，比对重写；她取包携票离开。目标是让拒绝后的释放可见，保留可信、克制的协作关系。没有新增第三角色、手机消息或奖励式翻转。
+
+## 代码职责
+
+| 责任 | 实际绑定代码 |
+|---|---|
+| 阶段入口与独立续行 | scripts/run_creative_resume_v4.py |
+| 完整正文与初步预算分离 | scripts/creative_linear_script_v3.py |
+| 独立便利贴成员与持有/桌面状态 | scripts/creative_component_registry_v1.py、scripts/creative_surface_state_v1.py |
+| 导演、源步骤、局部表演和编译 | scripts/step_index_physical_adapter_v5.py |
+| 全文审查和真实排时来源 | scripts/creative_review_wire_v10.py、scripts/creative_joint_source_binding_v10.py |
+| 不可变回执、调用隔离及未知预留 | scripts/creative_resume_dispatch_v2.py |
+
+## 后续流程与完成证据
+
+| 阶段 | 当前状态 | 完成后记录 |
+|---|---|
+| 原70请求核实 | 结果和用量未知 | 原响应/真实用量或可核实服务方对账证据 |
+| 整片导演规划与分镜 | 无有效方案 | 完整导演稿、每镜信息/观察/刺激反应/切镜理由、源绑定 |
+| 逐镜局部表演 | 未开始 | 实际动作、对白前中后及听者反应窗口、跨镜状态 |
+| 确定性编译、整片复审 | 未开始 | 实际排时、完整审查和最终请求、未解决问题 |
+| 文本交接及用户确认 | 未形成交接 | 完整可读产物；真实确认原话、范围、版本和SHA |
+| 少量审美样板及资产 | 未开始，媒体授权待具体执行核对 | 用户选定图、资产文件SHA与复用来源、实际图片回传导演请求 |
+| 逐段视频 | 未开始 | 接口/保存证据、awaiting_human_review、真实用户批准与服务原始尾帧 |
+| 合成与整片确认 | 未开始 | 批准链、合成原片、用户整片反馈；发布独立核对 |
+
+镜头按信息与观察变化选择，九拍不固定映射为九段视频，每次拿放不单独建镜。正文保持，内容返修由生成模型完整重交相应产物并整体复审。实际时长来自局部表演和编译；初步82秒估算不能证明可以执行。
+
+## 当前阻断与消耗
+
+第69次导演方案因缺ending_intent被拒绝；离线共发现22个Schema错误、5个窗口关系错误及便利贴所有权/持有混淆，未采用。第70次完整返修仍pending_response，没有响应ID、结果或用量，[未知结果观察](../data/production_trials/_shared_text_diagnostics/2a3cd8ae66de26ff4eb8f299/modular_bd_v1/resume_20261005_v4/OUTCOME_UNKNOWN_call70_OBSERVATION.json)保留。进程不存在不证明服务未执行、免费或可重发。新模型派发继续阻止。
+
+累计70次已启动、69次已知用量、709272 reported tokens；未知预留64010不是实耗。后续文本无总token硬限，旧账本与旧500000授权上限保留，不清零、不迁移、不自动重试。当前媒体调用0。
+
+## 用户确认记录
+
+目前没有新的质量确认。用户本次保存版本及后续确认入档的要求作为工作指令记录，未解释为剧本质量、视频通过或付费媒体许可。
+
+以后每次确认追加时间、阶段、文件版本与SHA、用户原话、通过/不通过范围、待修问题及可继续下一步。拒绝也记录，旧批准不能自动用于新版。阶段完成、接口成功、文本审查与用户内容确认分开记录。
+
+## 本次更新
+
+保存完整S6原稿、代码与回执证据；核对144个源文件及Git版本；建立后续阶段和用户确认记录要求。未新增模型、媒体或发布调用，原冻结记录保持。后续执行先解决原70请求未知结果。
