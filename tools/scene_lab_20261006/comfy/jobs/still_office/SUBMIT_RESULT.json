@@ -1,0 +1,13 @@
+{
+  "meta": null,
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"workflow\": \"D:\\\\IT\\\\ai_douyin\\\\tools\\\\scene_lab_20261006\\\\comfy\\\\workflows\\\\still_office.json\",\n  \"status\": \"queued\",\n  \"prompt_id\": \"0523cc1f-9d59-430b-abe8-c3814988d400\",\n  \"client_id\": \"9c1b0b07-8a66-4ea5-977e-aaa177751e7e\",\n  \"outputs\": [],\n  \"elapsed_seconds\": null,\n  \"host\": \"127.0.0.1\",\n  \"port\": 8192,\n  \"state_file\": \"C:\\\\Users\\\\c\\\\AppData\\\\Local\\\\comfy-cli\\\\jobs\\\\0523cc1f-9d59-430b-abe8-c3814988d400.json\",\n  \"watcher_spawned\": false\n}",
+      "annotations": null,
+      "meta": null
+    }
+  ],
+  "structuredContent": null,
+  "isError": false
+}

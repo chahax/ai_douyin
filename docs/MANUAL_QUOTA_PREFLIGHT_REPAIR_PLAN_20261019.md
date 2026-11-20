@@ -1,0 +1,9 @@
+# 已知配额前置拒绝与人工开窗未决诊断
+
+本轮账号累计20次后，后台搜索产生新human_required，自动人工命令a6dce29d932f406c803a4a685c2c7903在manual-session租约获取时抛AccountRuntimeUnavailable，core保守记outcome_unknown。当前无浏览器子进程，cursor/result为空，发布未提交；不能直接清除未决或重派。
+
+先离线修复：manual/recovery在start阶段沿用原20次额度/熔断等明确等待门，拒绝发生在handler前，保持原IDqueued，不新增浏览器或控制状态。原实际租约事务仍二次检查；实际派发后的未知仍保护。不能扩大配额、把所有AccountRuntimeUnavailable一概改失败。
+
+旧manual单独只读取证，只有以下全部成立才可建议监督对账：精确原ID/账号/owner代次/部署源码绑定，manual唯一异常类且result/cursor为空；原runtime day_key对应命令日、daily_runs已20、last_run_at早于命令创建且原配额未回改；原lease为空、实际服务及所有浏览器子进程/所有业务租约检查无在途；部署源码唯一可抛该类的分支在page创建/goto之前的租约获取。源码或任何前提不足、存在当前页/动作结果/未知业务均停止，不依据“无窗口”单独推断。
+
+子agent只开发start门和离线测试，另提交旧ID只读因果核对报告，不能修改生产/执行对账。主agent审查后，若足够证明已知前置拒绝，再单独保存before完整snapshot和证据，以原transition+CAS结清failed；否则保留outcome_unknown并如实停止部署。旧异常/原始快照、账号配额、背景/模型/媒体账本与所有发布日志不改。此计划本身不将未知变成失败，也不授权新上传。

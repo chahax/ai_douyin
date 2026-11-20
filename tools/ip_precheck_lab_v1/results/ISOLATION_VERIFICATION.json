@@ -1,0 +1,32 @@
+{
+  "python": "D:\\IT\\ai_douyin\\tools\\ip_precheck_lab_v1\\.venv\\Scripts\\python.exe",
+  "prefix": "D:\\IT\\ai_douyin\\tools\\ip_precheck_lab_v1\\.venv",
+  "base_prefix": "C:\\Users\\c\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none",
+  "system_site_packages": false,
+  "package_origins": {
+    "gliner": {
+      "version": "0.2.29",
+      "location": "D:\\IT\\ai_douyin\\tools\\ip_precheck_lab_v1\\.venv\\Lib\\site-packages"
+    },
+    "spacy": {
+      "version": "3.8.16",
+      "location": "D:\\IT\\ai_douyin\\tools\\ip_precheck_lab_v1\\.venv\\Lib\\site-packages"
+    },
+    "torch": {
+      "version": "2.14.1+cpu",
+      "location": "D:\\IT\\ai_douyin\\tools\\ip_precheck_lab_v1\\.venv\\Lib\\site-packages"
+    },
+    "transformers": {
+      "version": "4.57.6",
+      "location": "D:\\IT\\ai_douyin\\tools\\ip_precheck_lab_v1\\.venv\\Lib\\site-packages"
+    },
+    "huggingface-hub": {
+      "version": "0.36.2",
+      "location": "D:\\IT\\ai_douyin\\tools\\ip_precheck_lab_v1\\.venv\\Lib\\site-packages"
+    }
+  },
+  "protected_file_count": 30,
+  "changed_files": [],
+  "production_packages_unchanged_since_baseline": true,
+  "isolation": "venv/cache isolation and Python socket guard, not an OS security sandbox"
+}

@@ -1,0 +1,22 @@
+{
+  "schema": "git_incremental_creative_backup_receipt/v1",
+  "base": "fa91b8d6cdd2c5c710f611d96715fd81d37e8580",
+  "commit": "931f6b19de9c9f3d187dbbcac6710a6526994f0c",
+  "tree": "ecef5b31e1fc683ed2be35023ba652937515dccc",
+  "branch": "codex/backup-ai-creative-20261003",
+  "changed_files": 4924,
+  "bytes": 113509875,
+  "working_head_preserved": true,
+  "original_index_unchanged": true,
+  "raw_blobs_verified": true,
+  "pushed": true,
+  "text_handoff_complete": true,
+  "creative_quality_passed": false,
+  "media_calls": 0,
+  "remote_commit": "931f6b19de9c9f3d187dbbcac6710a6526994f0c",
+  "remote_verified": true,
+  "non_force_push": true,
+  "working_head_preserved_after_push": true,
+  "original_index_unchanged_after_push": true,
+  "url": "https://github.com/chahax/ai_douyin/commit/931f6b19de9c9f3d187dbbcac6710a6526994f0c"
+}

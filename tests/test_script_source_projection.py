@@ -11,7 +11,13 @@ import src.trend_intelligence.script_pair as module
 from script_pair_fixture import FixtureClient, pair_payload, enrich_review_report
 from test_pre_video_script import NOW
 from test_script_pair import service_for
-from src.trend_intelligence.pre_video_script import PreVideoScriptRequest
+from src.trend_intelligence.pre_video_script import PreVideoScriptRequest, PreVideoScriptService
+
+
+@pytest.fixture(autouse=True)
+def source_projection_uses_isolated_output_root(monkeypatch):
+    monkeypatch.setattr(PreVideoScriptService, '_resolve_output_dir',
+                        staticmethod(lambda request: Path(request.output_dir).resolve()))
 
 
 @pytest.mark.parametrize('selection', [('labor-0', 'labor-0'), 'labor-0', None, ('',), (' labor-0',)])

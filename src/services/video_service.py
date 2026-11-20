@@ -15,6 +15,38 @@ def _now_iso() -> str:
     return datetime.now().isoformat()
 
 
+def bind_verified_publication(*, account_uuid, account_key, command_id, post_id, title, description):
+    """Project verified original-work identity without inventing/resetting metrics.
+
+    This accepts an already verified exact ID, never searches a platform or
+    declares a title-only candidate published. Ambiguous legacy rows stay intact.
+    """
+    if not account_uuid or not account_key or not command_id or not str(post_id).isdigit() or not title:
+        raise ValueError('Incomplete verified publication identity')
+    with get_db() as conn:
+        conn.execute('BEGIN IMMEDIATE')
+        rows = conn.execute('SELECT id,account_uuid FROM videos WHERE video_id=? LIMIT 2', (post_id,)).fetchall()
+        if rows:
+            if len(rows) != 1 or rows[0]['account_uuid'] != account_uuid:
+                raise ValueError('Verified work has conflicting local account ownership')
+            conn.execute("UPDATE videos SET status='published',last_synced_at=? WHERE id=?", (_now_iso(),rows[0]['id']))
+        else:
+            pending = conn.execute("""SELECT id,video_id FROM videos WHERE account_uuid=? AND title=?
+                AND status='pending_review' LIMIT 2""", (account_uuid,title)).fetchall()
+            if len(pending) > 1 or (pending and pending[0]['video_id'] not in (None,'',post_id)):
+                raise ValueError('Ambiguous local pending publication records')
+            if pending:
+                conn.execute("UPDATE videos SET video_id=?,status='published',last_synced_at=? WHERE id=? AND account_uuid=?",
+                    (post_id,_now_iso(),pending[0]['id'],account_uuid))
+            else:
+                now = _now_iso()
+                conn.execute("""INSERT INTO videos(local_id,video_id,title,description,status,
+                    last_synced_at,created_at,account_uuid,account_key) VALUES(?,?,?,?,?,?,?,?,?)""",
+                    ('publication:'+command_id,post_id,title,description,'published',now,now,account_uuid,account_key))
+        conn.commit()
+    return True
+
+
 def save_video(video: VideoItem) -> bool:
     """
     Upsert 视频：优先按 local_id 更新，其次按 video_id，
@@ -37,9 +69,11 @@ def save_video(video: VideoItem) -> bool:
 
         # 1. 按 local_id 查找（本地发布记录优先）
         if video.local_id:
-            cursor.execute("SELECT id FROM videos WHERE local_id = ?", (video.local_id,))
+            cursor.execute("SELECT id, account_uuid FROM videos WHERE local_id = ?", (video.local_id,))
             row = cursor.fetchone()
             if row:
+                if (row["account_uuid"] or "") != (video.account_uuid or ""):
+                    raise ValueError("作品账号归属冲突；不能覆盖其他账号或自动认领历史未归属作品")
                 cursor.execute("""
                     UPDATE videos SET
                         video_id = COALESCE(?, video_id),
@@ -64,9 +98,11 @@ def save_video(video: VideoItem) -> bool:
 
         # 2. 按 video_id 查找（已知抖音 ID 的情况）
         if video.video_id:
-            cursor.execute("SELECT id FROM videos WHERE video_id = ?", (video.video_id,))
+            cursor.execute("SELECT id, account_uuid FROM videos WHERE video_id = ?", (video.video_id,))
             row = cursor.fetchone()
             if row:
+                if (row["account_uuid"] or "") != (video.account_uuid or ""):
+                    raise ValueError("作品账号归属冲突；不能覆盖其他账号或自动认领历史未归属作品")
                 cursor.execute("""
                     UPDATE videos SET
                         title = ?, description = ?, status = ?,
@@ -89,14 +125,15 @@ def save_video(video: VideoItem) -> bool:
                 return True
 
         # 3. 按 title 匹配 pending_review 记录（sync 时补 video_id）
-        if video.title and video.video_id:
+        if video.title and video.video_id and video.account_uuid:
             cursor.execute("""
                 SELECT id FROM videos
                 WHERE title = ? AND status = 'pending_review'
-                  AND (? = '' OR account_uuid = ?)
-                LIMIT 1
-            """, (video.title, video.account_uuid, video.account_uuid))
-            row = cursor.fetchone()
+                  AND account_uuid = ?
+                LIMIT 2
+            """, (video.title, video.account_uuid))
+            matches = cursor.fetchall()
+            row = matches[0] if len(matches) == 1 else None
             if row:
                 cursor.execute("""
                     UPDATE videos SET
@@ -105,14 +142,13 @@ def save_video(video: VideoItem) -> bool:
                         account_uuid = CASE WHEN ? != '' THEN ? ELSE account_uuid END,
                         account_key = CASE WHEN ? != '' THEN ? ELSE account_key END,
                         last_synced_at = ?
-                    WHERE title = ? AND status = 'pending_review'
-                      AND (? = '' OR account_uuid = ?)
+                    WHERE id = ? AND account_uuid = ?
                 """, (
                     video.video_id,
                     video.account_uuid, video.account_uuid,
                     video.account_key, video.account_key,
-                    now, video.title,
-                    video.account_uuid, video.account_uuid,
+                    now, row["id"],
+                    video.account_uuid,
                 ))
                 conn.commit()
                 return True
@@ -148,7 +184,7 @@ def get_videos(
     status: Optional[str] = None,
     limit: int = 50,
     offset: int = 0,
-    account_uuid: str = "",
+    account_uuid: str | None = None,
 ) -> list[dict]:
     """
     分页查询视频列表，支持状态筛选。
@@ -163,14 +199,14 @@ def get_videos(
     """
     with get_db() as conn:
         cursor = conn.cursor()
-        if status and account_uuid:
+        if status and account_uuid is not None:
             cursor.execute("""
                 SELECT * FROM videos
                 WHERE status = ? AND account_uuid = ?
                 ORDER BY created_at DESC
                 LIMIT ? OFFSET ?
             """, (status, account_uuid, limit, offset))
-        elif account_uuid:
+        elif account_uuid is not None:
             cursor.execute("""
                 SELECT * FROM videos
                 WHERE account_uuid = ?
@@ -217,16 +253,16 @@ def update_video_stats(video_id: str, stats: VideoStats) -> bool:
         return cursor.rowcount > 0
 
 
-def count_videos(status: Optional[str] = None, *, account_uuid: str = "") -> int:
+def count_videos(status: Optional[str] = None, *, account_uuid: str | None = None) -> int:
     """统计视频数量"""
     with get_db() as conn:
         cursor = conn.cursor()
-        if status and account_uuid:
+        if status and account_uuid is not None:
             cursor.execute(
                 "SELECT COUNT(*) FROM videos WHERE status = ? AND account_uuid = ?",
                 (status, account_uuid),
             )
-        elif account_uuid:
+        elif account_uuid is not None:
             cursor.execute(
                 "SELECT COUNT(*) FROM videos WHERE account_uuid = ?",
                 (account_uuid,),

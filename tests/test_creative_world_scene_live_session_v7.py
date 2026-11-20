@@ -1,0 +1,129 @@
+"""Three-call SDK Mock closure for the new native/derived identity boundary."""
+from copy import deepcopy
+import json
+from pathlib import Path
+import socket
+from types import SimpleNamespace
+
+import httpx
+import pytest
+
+from scripts import creative_world_scene_live_session_v7 as m
+
+ROOT=Path(__file__).resolve().parents[1]
+SCENARIO=ROOT/"data/qa/creative_world_scene_workflow28_20261015/SCENARIO_HAPPY_v1.json"
+TEMPLATE=ROOT/"data/production_trials/world_scene_live_20261015/round_02/call_653_complete_script_03.json"
+
+
+@pytest.fixture(autouse=True)
+def offline(monkeypatch):
+    def deny(*args,**kwargs):raise AssertionError("real network forbidden")
+    monkeypatch.setattr(socket.socket,"connect",deny);monkeypatch.setattr(socket,"create_connection",deny)
+    monkeypatch.setattr(m.base.clients,"role_config",lambda role:SimpleNamespace(
+        model=m.base.clients.WRITER_MODEL if role=="writer" else m.base.clients.REVIEW_MODEL,
+        base_url="https://api.minimax.cn/v1" if role=="writer" else "https://api.deepseek.com/v1",api_key="offline-only"))
+
+
+def setup_session(tmp_path,monkeypatch,*,unknown=False):
+    scenario=m.read(SCENARIO);inputs,docs=scenario["inputs"],scenario["documents"]
+    monkeypatch.setattr(m.base,"PROJECT",tmp_path)
+    for name,value in (("CODE",{"offline":True}),("SOURCE",{"offline":True}),("PROFILE",scenario["profile"]),
+            ("PREFS",inputs["production_preferences"]),("GOALS",inputs["user_goal_contract"]),
+            ("AUTHORIZATION_AND_CADENCE_v1",{"offline":True}),("USER_COUNT_UNIT_CONFIRMATION_v1",{"offline":True})):
+        m.write(tmp_path/(name+".json"),value,True)
+    original=tmp_path/"original_creation";original.mkdir();parent=tmp_path/"v6_exhausted_bodies";parent.mkdir()
+    for directory in (original,parent):
+        m.write(directory/"INPUTS.json",inputs,True);m.write(directory/"SESSION_CONFIG.json",{"profile_path":str(tmp_path/"PROFILE.json")},True)
+    template=m.read(TEMPLATE)
+    def ref(ordinal,label,output,*,request=None,validation=None):
+        receipt=deepcopy(template);receipt.update(ordinal=ordinal,label=label,output=deepcopy(output),status="contract_valid")
+        receipt.pop("failure",None);receipt.pop("validation_error",None)
+        if request is not None:
+            receipt.update(request=deepcopy(request),request_sha256=m.digest(request),stage=request["stage"])
+            receipt["response_metadata"].update(requested_model=request["model"],response_model=request["model"])
+        if validation is not None:receipt["validation"]=deepcopy(validation)
+        path=parent/(label+".json");m.write(path,receipt,True)
+        return {"path":str(path),"file_sha256":m.sha(path),"ordinal":ordinal,"label":label,
+            "request_sha256":receipt["request_sha256"],"native_sha256":m.digest(output),"status":"contract_valid"}
+    from scripts.creative_world_scene_replanned_workflow_v2 import ReviewWorkflow as SourceWorkflow
+    from tests.test_creative_world_scene_source_state_audit_v4 import synthetic_report
+    wf=SourceWorkflow(m.base.workflow,None);goal=docs["whole_plan_01"]["output"];setup=docs["opening_setup_01"]["output"]
+    prepared=wf.prepare_source_state_audit_request(inputs,scenario["profile"],goal,setup);report=synthetic_report(prepared)
+    decision=wf.validate_source_state_audit(report,prepared);assert decision["valid"] and decision["accepted"]
+    source_ref=ref(672,"accepted_source",report,request=prepared["request"],validation=decision)
+    intent=parent/"SOURCE_INTENT.json";m.write(intent,{"prepared":prepared},True)
+    embedded={"path":source_ref["path"],"file_sha256":source_ref["file_sha256"],"json_pointer":"/validation","native_sha256":m.digest(decision)}
+    anchor={"schema":"OFFLINE injected settled675 proof","root":str(parent),"creative_source_root":str(original),
+        "parent_identity":{"root":str(parent),"end_ordinal":675},
+        "source_files":{str(original/name):m.sha(original/name) for name in ("INPUTS.json","SESSION_CONFIG.json")},
+        "inherited":{"calls_started":675,"reported_tokens":14587163,"calls_with_known_usage":673,
+            "pending_ordinals":[70,160],"unknown_token_reservations":93117},
+        "current_text_scope_accounting":{"limits":m.PARENT_LIMITS,"consumed":m.PARENT_USED,"remaining":m.PARENT_REMAINING,
+            "calls_used":4,"calls_remaining":6,"body_used":3,"body_limit":3},
+        "current_native_goal_receipt":ref(665,"whole_plan_01",goal),
+        "current_native_goal_audit_receipts":{kind:ref(666+i,kind+"_audit_01",docs[kind+"_audit_01"]["output"]) for i,kind in enumerate(m.base.workflow.AUDITS)},
+        "current_native_opening_setup_receipt":ref(670,"opening_setup_01_01",setup),"accepted_source_state_audit_receipt":source_ref,
+        "accepted_source_state_decision_ref":embedded,"accepted_source_state_prepared_ref":{"path":str(intent),"file_sha256":m.sha(intent),
+            "json_pointer":"/prepared","native_sha256":m.digest(prepared),"context_sha256":prepared["context_sha256"]}}
+    for key,path in (("inputs",parent/"INPUTS.json"),("profile",tmp_path/"PROFILE.json")):
+        anchor.update({"current_"+key+"_path":str(path),"current_"+key+"_file_sha256":m.sha(path),"current_"+key+"_sha256":m.digest(m.read(path))})
+    m.write(tmp_path/"PARENT.json",anchor,True)
+    counter=m.base.CountedExecution(tmp_path);counter.initialize(tmp_path/"AUTHORIZATION_AND_CADENCE_v1.json");counter.begin_round("round23","OFFLINE native-derived closure")
+    sent=[];holder={}
+    def builder(request):
+        def respond(outgoing):
+            label=holder["session"].pending_intent["label"];sent.append({"label":label,"wire":json.loads(outgoing.read())})
+            if unknown:raise httpx.ReadTimeout("OFFLINE unknown; no retry",request=outgoing)
+            if label.startswith("complete_script"):
+                from tests.test_creative_world_scene_derived_context_script_v1 import synthetic_native
+                output=synthetic_native(docs["complete_script_01"]["output"])
+            else:
+                output=deepcopy(docs[label.rsplit("_",1)[0]+"_01"]["output"])
+                # Binding a synthetic report to the actual new request does not
+                # claim that a model assessed these contents.
+                for key,rule in request["structured_schema"]["properties"].items():
+                    if key in output and "const" in rule:output[key]=deepcopy(rule["const"])
+            body={"id":"offline-"+label,"model":request["model"],"choices":[{"index":0,
+                "message":{"role":"assistant","content":None,"tool_calls":[{"id":"tool-"+label,"type":"function",
+                    "function":{"name":m.base.clients.TOOL_NAME,"arguments":json.dumps(output,ensure_ascii=False)}}]},"finish_reason":"tool_calls"}],
+                "usage":{"prompt_tokens":90,"completion_tokens":10,"total_tokens":100}}
+            return httpx.Response(200,content=json.dumps(body,ensure_ascii=False).encode())
+        return m.base.clients.make_client_factory(request,http_client_factory=lambda **kwargs:httpx.Client(transport=httpx.MockTransport(respond),verify=False,**kwargs))
+    cfg=m.Config(str(tmp_path/"run"),"offline-v7-derived",str(tmp_path/"PARENT.json"),m.digest(anchor),str(tmp_path/"source"),
+        str(tmp_path/"PREFS.json"),str(tmp_path/"GOALS.json"),str(tmp_path/"PROFILE.json"),str(tmp_path/"AUTH.json"),str(tmp_path),"round23")
+    session=m.Session(cfg,parent_verifier=lambda a,**k:{"verified":True,"inherited":a["inherited"],"source_files":a["source_files"]},
+        input_builder=lambda *a,**k:{"inputs":deepcopy(inputs),"evidence":{"offline":True},"source_files":[str(tmp_path/"SOURCE.json")]},
+        source_gate=lambda *a,**k:{"valid":True,"current_source_freshness_verified":True},client_factory_builder=builder)
+    holder["session"]=session;monkeypatch.setattr(session,"code_files",lambda:[tmp_path/"CODE.json"])
+    preview=session.preview();m.write(cfg.authorization_path,session.authorization_template(preview),True);session.prepare()
+    return session,sent
+
+
+def test_sdk_native_body_three_calls_and_default_admission_deep_three_identities(tmp_path,monkeypatch):
+    session,sent=setup_session(tmp_path,monkeypatch);result=session.run()
+    assert result["status"]=="text_ready_for_director",result
+    assert [row["label"] for row in sent]==["complete_script_12","full_review_semantic_12","full_review_physical_12"]
+    assert result["spend"]["stage_limits"]==m.LIMITS and result["spend"]["effective_calls_started"]==678
+    monkeypatch.setattr(m.Session,"open",classmethod(lambda cls,root,**k:session));proof=m.verify_text_handoff(session.root)
+    raw,derived,compiled=(m.read(proof["paths"][key]) for key in ("raw_script","derived_script","compiled_script"))
+    assert raw["contract_version"]=="creative_world_scene_screenplay/v2"
+    assert all("previous_context_id" not in row for row in raw["scene_contexts"])
+    assert derived["scene_contexts"][0]["previous_context_id"] is None
+    for i,row in enumerate(derived["scene_contexts"][1:],1):assert row["previous_context_id"]==derived["scene_contexts"][i-1]["id"]
+    identities=proof["identity"]
+    assert identities["native_script_sha256"]==m.digest(raw)!=identities["derived_script_sha256"]==m.digest(derived)
+    assert identities["compiled_script_sha256"]==m.digest(compiled)
+    assert len({m.digest(raw),m.digest(derived),m.digest(compiled)})==3
+    assert proof["source_descriptor"]["native_script_sha256"]==m.digest(raw)
+    assert proof["source_descriptor"]["derived_script_sha256"]==m.digest(derived)
+    handoff=m.read(session.root/"TEXT_HANDOFF.json")
+    assert handoff["decision"]["review_admission_version"]=="creative_world_scene_review_admission/v1"
+    assert not proof["authorizes_media_dispatch"]
+    with pytest.raises(FileExistsError):session.run()
+
+
+def test_unknown_new_native_one_send_no_source_resubmit_no_handoff(tmp_path,monkeypatch):
+    session,sent=setup_session(tmp_path,monkeypatch,unknown=True);result=session.run()
+    assert result["status"]=="halt_interface_or_unknown" and [row["label"] for row in sent]==["complete_script_12"],result
+    assert result["spend"]["new_unknown_token_reservations"]>0 and not(session.root/"TEXT_HANDOFF.json").exists()
+    with pytest.raises(FileExistsError):session.run()

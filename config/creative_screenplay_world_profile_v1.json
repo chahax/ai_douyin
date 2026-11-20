@@ -1,0 +1,45 @@
+{
+  "schema": "creative_screenplay_world_profile/v1",
+  "writer": {
+    "provider": "minimax",
+    "model": "MiniMax-M3.1-Flash-Preview",
+    "base_url": "https://api.minimax.cn/v1",
+    "parameters": {
+      "temperature": 0.4,
+      "thinking": "adaptive",
+      "reasoning_effort": "medium",
+      "max_completion_tokens": 16000
+    }
+  },
+  "director": {
+    "provider": "deepseek",
+    "model": "deepseek-flash",
+    "base_url": "https://api.deepseek.com/v1",
+    "parameters": {
+      "temperature": 0.4,
+      "thinking": "disabled",
+      "max_completion_tokens": 12000
+    }
+  },
+  "stage_parameters": {
+    "goal_plan": {
+      "max_completion_tokens": 16000
+    },
+    "complete_script": {
+      "max_completion_tokens": 65536
+    },
+    "full_review": {
+      "max_completion_tokens": 32000
+    }
+  },
+  "official_output_reference": "https://platform.minimax.cn/docs/api-reference/text-chat-openai",
+  "official_reference_checked_at": "2026-10-15",
+  "official_m31_recommended_max_completion_tokens": 131072,
+  "official_m31_maximum_max_completion_tokens": 524288,
+  "selected_body_allowance_basis": "Independent65536 output cap for150–180seconds of complete timed screenplay plus always-enabled reasoning; world16000; does not add candidates or reset old consumption.",
+  "body_real_endpoint_with_this_allowance_verified": false,
+  "sdk_max_retries": 0,
+  "http_follow_redirects": false,
+  "server_schema_guarantee": false,
+  "media_authorized": false
+}

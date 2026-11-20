@@ -1,0 +1,7 @@
+{
+  "schema": "creative_reference_defaults/v1",
+  "original": [
+    "data/reference_reviews/reusable_expression_20261001/EXPRESSION_REFERENCE.md"
+  ],
+  "scope": "仅新原创CLI任务未显式指定reference时使用；历史任务从materials.json恢复绑定参考，不补入当前默认"
+}

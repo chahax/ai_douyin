@@ -1,0 +1,27 @@
+{
+  "version": "original_events_v3",
+  "status": "reviewed_workflow_available",
+  "new_original_cli_default": true,
+  "existing_runs_unchanged": true,
+  "creator": "MiniMax-M3",
+  "reviewer": "deepseek-flash",
+  "thinking": "disabled",
+  "mandatory_assistant_review": true,
+  "unattended_quality_claim": false,
+  "prompt": {
+    "path": "D:\\IT\\ai_douyin\\config\\prompts\\creative_writer_modules_reviewed_v3.json",
+    "sha256": "195ae5955d18bfd1942b0595f296db860170bde0b869612671a987a8332e9bd3",
+    "bytes": 5559
+  },
+  "evidence": "D:\\IT\\ai_douyin\\data\\model_evaluations\\minimax_module_release_20260927\\ASSISTANT_ACCEPTANCE.json",
+  "limits": "首稿和模型审查仍不稳定，不证明只换提示词即可自动生成优质成片；媒体逐段审核不变。",
+  "text_review_policy": {
+    "version": "evidence_review_v2",
+    "new_original_event_runs_default": true,
+    "existing_runs_unchanged": true,
+    "mandatory_assistant_adjudication": true,
+    "review_prompt_sha256": "266336201775398883ffcd551c99ed0f843ef04831671797f73f5599207f8917",
+    "evidence": "data/model_evaluations/review_scope_v2_20260927/REPORT.md",
+    "unattended_approval": false
+  }
+}

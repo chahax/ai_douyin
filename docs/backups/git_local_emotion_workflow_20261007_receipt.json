@@ -1,0 +1,28 @@
+{
+  "schema": "local_creative_workflow_checkpoint/v1",
+  "at_utc": "2026-10-07T11:09:23.603754+00:00",
+  "base": "931f6b19de9c9f3d187dbbcac6710a6526994f0c",
+  "commit": "23ad09749ddb7be9ab71e1a723d3332ba4572cc1",
+  "branch": "codex/emotion-workflow-20261007",
+  "selected_files": 324,
+  "working_head_preserved": true,
+  "original_index_unchanged": true,
+  "secret_scan_findings": 0,
+  "pushed": false,
+  "creative_quality_passed": false,
+  "source_ordinals": [
+    266,
+    267,
+    268,
+    269,
+    270,
+    271,
+    272,
+    273,
+    274,
+    275,
+    276
+  ],
+  "media_calls": 0,
+  "status": "reviewed_story_candidate_awaiting_human_alignment"
+}

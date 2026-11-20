@@ -20,6 +20,7 @@ from src.trend_intelligence.providers import (
     TrendCollectionRequest,
     estimate_douyin_planned_pages,
 )
+from src.trend_intelligence.collection.legal_core import request_from_legal_core_plan
 from src.trend_intelligence.repository import TrendRepository
 from src.trend_intelligence.research_workflow import AccountVideoResearchWorkflow
 from src.trend_intelligence.source_policy import (
@@ -52,6 +53,7 @@ COLLECTED_FIELDS = frozenset(
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--account-id", required=True)
+    parser.add_argument("--legal-core-plan", type=Path, help="已保存的法律单核心标签计划；只执行本批次元数据采集分析")
     parser.add_argument("--keywords", default="", help="逗号分隔关键词；续用已保存批次时可省略")
     parser.add_argument(
         "--sorts",
@@ -115,7 +117,17 @@ def main(argv=None) -> int:
     if args.run_local_toolchain and (not (args.local_media_manifest or args.acquire_source_media) or content_implementation != "local_qwen_paraformer"):
         raise ValueError("执行本地音画工具链须提供原视频清单并选择 local_qwen_paraformer")
 
-    keywords = _split(args.keywords)[:10]
+    core_plan = None
+    core_plan_source_sha256 = None
+    if args.legal_core_plan:
+        if (args.keywords or args.expand_related_tags or args.resume_collection_run or args.local_media_manifest
+                or args.acquire_source_media or args.run_local_toolchain or args.generate_script_pair
+                or content_implementation != "metadata_heuristic"):
+            raise ValueError("法律核心计划只允许绑定计划的全新元数据批次，不能混入其他关键词、旧批次、媒体或旧A/B编剧")
+        core_raw = args.legal_core_plan.read_bytes()
+        core_plan_source_sha256 = hashlib.sha256(core_raw).hexdigest()
+        core_plan = json.loads(core_raw.decode("utf-8-sig"))
+    keywords = list(core_plan["collection_request"]["keywords"]) if core_plan else _split(args.keywords)[:10]
     if not keywords and not args.resume_collection_run:
         raise ValueError("新采集须提供 keywords；已有来源请指定 resume-collection-run")
     sorts = tuple(_split(args.sorts))
@@ -134,6 +146,10 @@ def main(argv=None) -> int:
 
     profile = (AccountProfileRepository().get(args.account_id) if args.resume_collection_run
         else AccountRuntimeService().resolve(args.account_id).profile)
+    if core_plan:
+        request = request_from_legal_core_plan(core_plan, profile, headless=args.headless,
+            manual_verification_seconds=args.wait_for_verification)
+        planned_pages = estimate_douyin_planned_pages(request)
     provider = DouyinWebTrendProvider.for_account(args.account_id)
     policy = _build_policy(
         args.authorization_reference,
@@ -176,6 +192,12 @@ def main(argv=None) -> int:
             acquisition_blocked = True
             acquisition_summary = {"status": "blocked_by_research", "stopped_reason": result.stopped_reason}
     payload = asdict(result)
+    if core_plan:
+        payload["legal_core_plan"] = {"path": str(args.legal_core_plan.resolve()),
+            "file_sha256": core_plan_source_sha256,
+            "plan_id": core_plan["plan_id"], "core_tag": core_plan["core_tag"],
+            "related_tags": core_plan["related_tags"], "estimated_pages": planned_pages,
+            "metadata_only": True, "script_generation_submitted": False}
     if acquisition_summary is not None:
         payload['source_media_acquisition'] = acquisition_summary
         payload['video_generation_submitted'] = False
@@ -224,7 +246,7 @@ def main(argv=None) -> int:
             payload['script_finished_at'] = datetime.now(timezone.utc).isoformat()
             payload['finished_at'] = payload['script_finished_at']
         Path(result.log_path).write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding='utf-8')
-    elif acquisition_summary is not None and result.log_path:
+    elif (acquisition_summary is not None or core_plan is not None) and result.log_path:
         Path(result.log_path).write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding='utf-8')
     print(json.dumps(payload, ensure_ascii=False, indent=2))
     if args.generate_script_pair and payload['script_stage'] != 'completed':

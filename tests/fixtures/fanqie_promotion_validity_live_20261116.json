@@ -1,0 +1,9 @@
+{
+  "source": "data/fanqie_account_control/commands/da13e0f73df543dbaaf3cbb409ec7140/LIST_BEFORE_RAW.json",
+  "capture_type": "actual_readonly_platform_DOM",
+  "cases": [
+    {"raw": "2026-02-18～ 2026-08-17", "expected_from": "2026-02-18", "expected_until": "2026-08-17"},
+    {"raw": "2026-01-08～ 2026-07-07", "expected_from": "2026-01-08", "expected_until": "2026-07-07"},
+    {"raw": "-", "expected_from": null, "expected_until": null}
+  ]
+}

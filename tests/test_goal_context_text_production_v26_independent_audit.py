@@ -1,0 +1,326 @@
+"""Native planning first, closed report-revision lineage, offline only."""
+from copy import deepcopy
+import json
+from pathlib import Path
+import socket
+from types import SimpleNamespace
+import pytest
+from scripts import run_goal_context_text_production_v26 as runner
+from scripts import record_fixed_legal_source_sparse_continuation_v1 as authorizer
+from tests import fixed_legal_sparse_service_helper_v1 as service
+from tests.test_creative_goal_context_workflow_v7_independent_audit import causal_scenario, prior_scenario
+from tests.test_creative_goal_legal_usage_source_audit_v5 import synthetic_source, add_legal_usage
+from src.content_factory import creative_goal_legal_usage_source_audit_v5 as legal
+
+INHERITED={"calls_started":617,"reported_tokens":12833156,"calls_with_known_usage":615,
+    "pending_ordinals":[70,160],"unknown_token_reservations":93117}
+ACTUAL_ROOT=runner.PREFLIGHT_PARENT
+
+@pytest.fixture(autouse=True)
+def offline(monkeypatch):
+    def deny(*a,**k):raise AssertionError("v25 tests cannot contact providers")
+    monkeypatch.setattr(socket.socket,"connect",deny)
+    monkeypatch.setattr(socket,"create_connection",deny)
+
+
+def replay(tmp_path,monkeypatch,scenario,modes=None):
+    monkeypatch.setattr(service,"runner",runner)
+    monkeypatch.setattr(service,"INHERITED",deepcopy(INHERITED))
+    monkeypatch.setattr(service,"synthetic_source",synthetic_source)
+    monkeypatch.setattr(service,"legal_audit",legal)
+    monkeypatch.setattr(service,"add_usage",lambda document,goal,ref,*,relation,status=None:add_legal_usage(document,goal,ref,relation=relation))
+    original_clients=runner.clients
+    monkeypatch.setattr(runner,"clients",SimpleNamespace(TOOL_NAME=original_clients.TOOL_NAME,
+        expected_wire_request=lambda request:runner.strict_clients.expected_wire_request(request,source_strict=runner.is_strict_source(request))))
+    runtime,root,sends=service.replay(tmp_path,monkeypatch,scenario,modes)
+    inputs,profile,goal=runner.read(root/"INPUTS.json"),runner.read(runner.PROFILE),runner.read(root/"INHERITED_NATIVE_GOAL.json")
+    qa={"schema":"creative_fixed_legal_source_sparse_diagnostics/v1","native_goal_ordinal":616,
+        "native_goal_sha256":runner.digest(goal),"native_source_report_ordinal":617,
+        "native_source_report_sha256":"b"*64,"parent_terminal_state_sha256":"a"*64,
+        "exact_frame_quote_failure":{"synthetic":True},"legal_source_drift":{"synthetic":True},
+        "creative_causal_review_questions":[],"original_complete_report_required":True,
+        "native_goal_locally_patched":False,"native_report_locally_converted":False,
+        "human_adopted":False,"creative_quality_passed":False}
+    diagnostic={"native_goal_sha256":runner.digest(goal),"complete_fixed_legal_and_sparse_repair_qa":qa,
+        "complete_native_previous_source_report":{"schema":"synthetic_old_rejected_report/v1"},"source_file_sha256":{}}
+    monkeypatch.setattr(runner,"REVIEW_QUESTIONS",root/"REVIEW_QUESTIONS.json")
+    monkeypatch.setattr(runner,"FIRST_DIAGNOSTICS",root/"FIRST_DIAGNOSTICS.json")
+    runner.write(runner.REVIEW_QUESTIONS,qa)
+    monkeypatch.setattr(runner,"build_revision_diagnostics",lambda seed:deepcopy(diagnostic))
+    runner.write(root/"INHERITED_DIAGNOSTICS.json",diagnostic)
+    first=runner.prepare_first_goal_request(inputs,profile,goal,diagnostic)
+    runner.write(root/"FIRST_NATIVE_PLAN_REQUEST_PREVIEW.json",first)
+    return runtime,root,sends,diagnostic,first
+
+
+def test_first_whole_plan29_then_current_goal_three_audits_and_body_double_review(tmp_path,monkeypatch,causal_scenario):
+    runtime,root,sends,_,first=replay(tmp_path,monkeypatch,causal_scenario)
+    result=runner.run()
+    assert result["status"]=="text_ready_for_director",result
+    assert [service.phase(row) for row in sends]==["goal_plan","source","commitment","drama","opening_setup","complete_script","semantic","physical"]
+    assert sends[0]==first["request"] and sends[0]["role"]=="writer"
+    assert result["cumulative_goal_candidates_used"]==29 and result["native_goal_ordinal"]==618
+    assert runner.read(runtime.ledger)["starting_spend"]==INHERITED
+    assert sends[1]["structured_schema"]["properties"]["goal_sha256"]["const"]==runner.digest(runner.read(root/"goals/native_01.json"))
+    assert runner.read(root/"goals/native_01.json")!=runner.read(root/"INHERITED_NATIVE_GOAL.json")
+    assert not result["human_quality_approved"] and not result["media_authorized"]
+    service.assert_no_reentry(runtime,root,sends)
+
+
+@pytest.mark.parametrize("mode",["transport_unknown","usage_unknown","truncated","missing_tool"])
+def test_first_planner_interface_unknown_or_incomplete_stops_without_source_or_replacement(tmp_path,monkeypatch,causal_scenario,mode):
+    runtime,root,sends,_,_=replay(tmp_path,monkeypatch,causal_scenario,{("goal_plan",1):mode})
+    result=runner.run()
+    assert result["status"]=="halt_goal_interface_or_unknown",result
+    assert [service.phase(row) for row in sends]==["goal_plan"]
+    assert not (root/"TEXT_HANDOFF.json").exists()
+    service.assert_no_reentry(runtime,root,sends)
+
+
+@pytest.mark.parametrize("phase,mode",[("source","legal_unknown"),("source","legal_fail"),("commitment","unknown"),("drama","goal_unknown")])
+def test_known_valid_content_failure_or_uncertainty_preserves_report_but_no_second_whole_plan(tmp_path,monkeypatch,causal_scenario,phase,mode):
+    runtime,root,sends,_,_=replay(tmp_path,monkeypatch,causal_scenario,{(phase,1):mode})
+    result=runner.run()
+    assert result["status"]=="halt_goal_content_capacity_exhausted",result
+    assert result["cumulative_goal_candidates_used"]==29
+    assert sum(service.phase(row)=="goal_plan" for row in sends)==1
+    assert runtime.summary()["stage_calls"]["goal_audit"]<=3
+    assert runner.read(root/f"goals/{phase}_native_audit_01.json")
+    assert runner.read(root/f"goals/{phase}_audit_decision_01.json")
+    assert not (root/"TEXT_HANDOFF.json").exists()
+    service.assert_no_reentry(runtime,root,sends)
+
+
+@pytest.mark.parametrize("mode",["missing_scan","mixed_authority","legacy_schema","negative_overlap"])
+def test_current_source_contract_failure_stops_no_source_report_repair(tmp_path,monkeypatch,causal_scenario,mode):
+    runtime,root,sends,_,_=replay(tmp_path,monkeypatch,causal_scenario,{("source",1):mode})
+    result=runner.run()
+    assert result["status"]=="halt_goal_audit_contract_requires_pipeline_diagnosis"
+    assert [service.phase(row) for row in sends]==["goal_plan","source"]
+    assert sum(service.phase(row)=="source" for row in sends)==1
+    service.assert_no_reentry(runtime,root,sends)
+
+
+
+
+def test_exact_unchanged_seed_cannot_be_reaudited_when_planner_returns_unchanged_seed(tmp_path,monkeypatch,causal_scenario):
+    runtime,root,sends,_,_=replay(tmp_path,monkeypatch,causal_scenario,{("goal_plan",1):"unchanged_original"})
+    result=runner.run()
+    assert result["status"]=="halt_unchanged_native_goal_requires_pipeline_diagnosis"
+    assert [service.phase(row) for row in sends]==["goal_plan"]
+    assert result["cumulative_goal_candidates_used"]==29
+    assert not (root/"TEXT_HANDOFF.json").exists()
+    service.assert_no_reentry(runtime,root,sends)
+
+
+def test_true_parent617_pure_preview_has_full616_617_R01_and_fixed_legal_causal_QA():
+    summary=runner.prior_guard();binding,prepared=authorizer.build_binding()
+    inputs=runner.read(ACTUAL_ROOT/"INPUTS.json");seed=runner.read(ACTUAL_ROOT/"goals/native_01.json")
+    payload=json.loads(prepared["request"]["messages"][1]["content"])
+    diagnostic=runner.build_revision_diagnostics(seed)
+    assert payload["previous_complete_document"]==seed and payload["reference_fulltext"]==inputs["reference_fulltext"]
+    supplied=payload["revision_diagnostics"]
+    assert supplied["complete_native_previous_source_report"]==runner.read(ACTUAL_ROOT/"call_617_goal_source_audit_01.json")["output"]
+    assert supplied["fixed_legal_and_causal_review"]["creative_causal_review_questions"]==runner.read(runner.REVIEW_QUESTIONS)["creative_causal_review_questions"]
+    assert supplied["fixed_legal_and_causal_review"]["legal_source_drift"]==runner.read(runner.REVIEW_QUESTIONS)["legal_source_drift"]
+    assert supplied["original617_not_new_goal_approval"]
+    assert prepared["request"]["stage"]=="goal_plan" and prepared["request"]["role"]=="writer"
+    assert prepared["request"]["parameters"]["max_completion_tokens"]==16000
+    assert len(prepared["request"]["messages"][1]["content"])<100000
+    assert (summary["effective_calls_started"],summary["effective_reported_tokens"],summary["effective_calls_with_known_usage"])==(617,12833156,615)
+    runner.verify_authorization_request_binding(binding,diagnostic,prepared,binding["seed_native_identity"])
+    assert binding["parent_whole_plan_unused_capacity"]==1 and binding["new_local_bound_from_existing_authority"]==1
+    assert not runner.ROOT.exists() and not runner.CLAIM.exists()
+
+
+@pytest.mark.parametrize("mode",["contract_fail","fixed_text_drift"])
+def test_single_planner_contract_rejection_consumes29_without_new_plan_or_source(tmp_path,monkeypatch,causal_scenario,mode):
+    runtime,root,sends,_,_=replay(tmp_path,monkeypatch,causal_scenario,{("goal_plan",1):mode})
+    result=runner.run()
+    assert result["status"]=="halt_goal_content_capacity_exhausted",result
+    assert [service.phase(row) for row in sends]==["goal_plan"]
+    assert result["cumulative_goal_candidates_used"]==29
+    service.assert_no_reentry(runtime,root,sends)
+
+
+def test_actual_first_minimax_sdk_wire_preserves_R01_goal_QA_and_matches_future_lineage(tmp_path,monkeypatch):
+    import httpx
+    from tests import test_creative_m31_flash_role_clients_v1 as sdk
+    from src.content_factory import creative_flat_lineage_verifier_v6 as lineage
+    binding,prepared=authorizer.build_binding();request,sent=prepared["request"],[]
+    monkeypatch.setattr(runner.clients,"role_config",lambda role:SimpleNamespace(
+        model=runner.clients.WRITER_MODEL,api_key=sdk.KEY,base_url="https://api.minimax.cn/v1"))
+    client,evidence,_=sdk.setup(tmp_path,request,
+        lambda outgoing:sent.append(outgoing.read()) or httpx.Response(200,content=sdk.reply()))
+    sdk.call(client,request,evidence)
+    assert len(sent)==1
+    actual=json.loads(sent[0])
+    assert actual==runner.clients.expected_wire_request(request)
+    assert actual["max_completion_tokens"]==16000 and actual["reasoning_effort"]=="medium"
+    payload=json.loads(actual["messages"][1]["content"])
+    assert payload["reference_fulltext"]==runner.read(ACTUAL_ROOT/"INPUTS.json")["reference_fulltext"]
+    assert payload["previous_complete_document"]==runner.read(ACTUAL_ROOT/"goals/native_01.json")
+    assert payload["revision_diagnostics"]["fixed_legal_and_causal_review"]["creative_causal_review_questions"]==runner.read(runner.REVIEW_QUESTIONS)["creative_causal_review_questions"]
+    assert lineage._outbound(lineage.VerificationCycle(),runner.PROJECT,evidence.root,request,evidence.identity_sha256)==actual
+    proof=runner.read(evidence.root/"M31_WIRE_PREFLIGHT.json")
+    assert proof["SDK_max_retries"]==0 and proof["HTTP_follow_redirects"] is False
+
+
+def test_known_new_setup4_contract_failure_has_one_complete_revision_without_old_type_conversion(tmp_path,monkeypatch,causal_scenario):
+    runtime,root,sends,_,_=replay(tmp_path,monkeypatch,causal_scenario,{("opening_setup",1):"null_orientation"})
+    result=runner.run()
+    assert result["status"]=="text_ready_for_director",result
+    setup_requests=[row for row in sends if service.phase(row)=="opening_setup"]
+    assert len(setup_requests)==2 and result["opening_setup_calls"]==2
+    invalid=runner.read(root/"setups/native_01.json")
+    second=json.loads(setup_requests[1]["messages"][1]["content"])
+    assert second["previous_opening_setup"]==invalid
+    assert second["opening_setup_diagnostics"]["validation_error"]["code"]=="OPENING_SETUP_SCHEMA_INVALID"
+    assert setup_requests[0]["input_provenance"]["opening_setup_contract_version"]=="creative_opening_setup/v4"
+    assert result["cumulative_goal_candidates_used"]==29
+    service.assert_no_reentry(runtime,root,sends)
+
+
+@pytest.mark.parametrize("mode",["transport_unknown","usage_unknown","truncated","missing_tool"])
+def test_new_setup4_interface_unknown_stops_after_one_native_call(tmp_path,monkeypatch,causal_scenario,mode):
+    runtime,root,sends,_,_=replay(tmp_path,monkeypatch,causal_scenario,{("opening_setup",1):mode})
+    result=runner.run()
+    assert result["status"]=="halt_opening_setup_interface_or_unknown",result
+    assert sum(service.phase(row)=="opening_setup" for row in sends)==1
+    assert all(service.phase(row)!="complete_script" for row in sends)
+    service.assert_no_reentry(runtime,root,sends)
+
+
+def test_new_setup4_two_rejections_close_local_capacity_without_body_or_third_setup(tmp_path,monkeypatch,causal_scenario):
+    runtime,root,sends,_,_=replay(tmp_path,monkeypatch,causal_scenario,{("opening_setup",1):"null_orientation",("opening_setup",2):"null_orientation"})
+    result=runner.run()
+    assert result["status"]=="halt_opening_setup_content_capacity_exhausted"
+    assert sum(service.phase(row)=="opening_setup" for row in sends)==2
+    assert all(service.phase(row)!="complete_script" for row in sends)
+    assert result["parent_whole_plan_unused_capacity"]==1
+    service.assert_no_reentry(runtime,root,sends)
+
+
+def test_three_complete_bodies_and_six_same_source_full_audits_are_bounded(tmp_path,monkeypatch,causal_scenario):
+    runtime,root,sends,_,_=replay(tmp_path,monkeypatch,causal_scenario,{("physical",1):"fail",("physical",2):"fail"})
+    result=runner.run()
+    assert result["status"]=="text_ready_for_director",result
+    assert runtime.summary()["stage_calls"]["complete_script"]==3
+    assert runtime.summary()["stage_calls"]["full_review"]==6
+    assert result["cumulative_goal_candidates_used"]==29
+    service.assert_no_reentry(runtime,root,sends)
+
+
+def test_new_setup4_actual_sdk_wire_is_verified_by_unchanged_flat5(tmp_path,monkeypatch,causal_scenario):
+    import httpx
+    from tests import test_creative_m31_flash_role_clients_v1 as sdk
+    from src.content_factory import creative_flat_lineage_verifier_v6 as lineage
+    inputs,_,goal,*_=causal_scenario
+    goal=deepcopy(goal)
+    legal_catalog=runner.workflow.fixed_legal_claim_catalog(inputs)
+    for claim in goal["claims"]:
+        if claim["kind"]=="verified_legal":
+            ref=next(value for value in claim["origin_ids"] if value in legal_catalog)
+            claim.update(origin_ids=[ref],text=legal_catalog[ref]["text"])
+    prepared=runner.workflow.prepare_opening_setup_request(inputs,runner.read(runner.PROFILE),goal)
+    request,sent=prepared["request"],[]
+    assert request["input_provenance"]["opening_setup_contract_version"]=="creative_opening_setup/v4"
+    assert request["structured_schema"]["properties"]["schema"]["const"]=="creative_opening_setup/v4"
+    monkeypatch.setattr(runner.clients,"role_config",lambda role:SimpleNamespace(
+        model=runner.clients.WRITER_MODEL,api_key=sdk.KEY,base_url="https://api.minimax.cn/v1"))
+    client,evidence,_=sdk.setup(tmp_path,request,
+        lambda outgoing:sent.append(outgoing.read()) or httpx.Response(200,content=sdk.reply()))
+    sdk.call(client,request,evidence)
+    assert len(sent)==1
+    actual=json.loads(sent[0])
+    assert actual==runner.clients.expected_wire_request(request)
+    assert lineage._outbound(lineage.VerificationCycle(),runner.PROJECT,evidence.root,request,evidence.identity_sha256)==actual
+    proof=runner.read(evidence.root/"M31_WIRE_PREFLIGHT.json")
+    assert proof["SDK_max_retries"]==0 and proof["HTTP_follow_redirects"] is False
+
+
+def test_full_sparse_source5_sdk_wire_and_original_compiled_schema_proof(tmp_path,monkeypatch,causal_scenario):
+    import httpx
+    from tests import test_creative_deepseek_strict_role_clients_v4 as sdk
+    from tests.test_creative_goal_context_workflow_v22 import synthetic_fixed_goal
+    from src.content_factory import creative_flat_lineage_verifier_v6 as lineage
+    inputs,_,fixture_goal,*_=causal_scenario
+    goal=synthetic_fixed_goal(inputs,fixture_goal)
+    prepared=runner.prepare_source_audit(inputs,runner.read(runner.PROFILE),goal)
+    request,sent=prepared["request"],[]
+    monkeypatch.setattr(runner.strict_clients,"role_config",lambda role:SimpleNamespace(
+        model=runner.strict_clients.REVIEW_MODEL,api_key=sdk.KEY,base_url="https://api.deepseek.com/v1"))
+    client,evidence,_=sdk.setup(tmp_path,request,
+        lambda outgoing:sent.append(outgoing.read()) or httpx.Response(200,content=sdk.reply()))
+    sdk.call(client,request,evidence)
+    assert len(sent)==1 and json.loads(sent[0])==prepared["wire"]
+    actual=json.loads(sent[0]);schema=actual["tools"][0]["function"]["parameters"]
+    assert "no_legal_refs" in schema["properties"] and "source_observations" in schema["properties"]
+    assert "interpretation_frame_evidence" not in json.dumps(schema)
+    assert actual["max_tokens"]==24000 and actual["tools"][0]["function"]["strict"] is True
+    assert lineage._outbound(lineage.VerificationCycle(),runner.PROJECT,evidence.root,request,evidence.identity_sha256)==actual
+    proof=runner.read(evidence.root/"DEEPSEEK_STRICT_WIRE_PREFLIGHT.json")
+    assert proof["schema"]=="creative_deepseek_strict_role_clients/v4/outbound_proof"
+    assert proof["structured_schema_sha256"]==runner.digest(request["structured_schema"])
+    assert proof["service_schema_sha256"]==runner.digest(schema)
+    assert proof["SDK_max_retries"]==0 and proof["HTTP_follow_redirects"] is False
+
+
+def test_real_registered_parent617_prepare_reads_original_seed_and_creates_only_isolated_root(tmp_path,monkeypatch):
+    """Exercise the actual prepare function against the real closed parent."""
+    if not runner.APPROVAL.exists() or not runner.REQUEST_PREVIEW.exists():
+        pytest.skip("requires root-authorized v26 registration before real isolated prepare")
+    actual_root,actual_claim=runner.ROOT,runner.CLAIM
+    parent=runner.PREFLIGHT_PARENT
+    assert (parent/"goals/native_01.json").exists()
+    original_seed=runner.read(parent/"goals/native_01.json")
+    assert not actual_root.exists() and not actual_claim.exists()
+    frozen=runner.read(parent/"PRODUCTION_FREEZE.json")["files"]
+    assert len(frozen)==1748
+    assert {path:runner.sha_file(path) for path in frozen}==frozen
+    protected=[runner.APPROVAL,runner.REQUEST_PREVIEW,runner.FIRST_DIAGNOSTICS,runner.REVIEW_QUESTIONS,
+        parent/"CALL_LEDGER.json",parent/"STATE.json",parent/"TASKS.sqlite3"]
+    before={str(path):runner.sha_file(path) for path in protected}
+    saved_approval=runner.read(runner.APPROVAL)
+    saved_preview=runner.read(runner.REQUEST_PREVIEW)
+    # Source snapshot paths must remain within the real project. Default pytest
+    # temp roots may be outside it, so allocate only the isolated output there.
+    isolated=tmp_path
+    if not isolated.resolve().is_relative_to(runner.PROJECT.resolve()):
+        import uuid
+        isolated=runner.PROJECT/"data/qa/creative_fixed_legal_sparse_20261014"/"isolated_prepare_tests"/uuid.uuid4().hex
+    root=isolated/"round25_isolated"
+    monkeypatch.setattr(runner,"ROOT",root)
+    monkeypatch.setattr(runner,"CLAIM",isolated/"claim/CLAIM.json")
+    monkeypatch.setattr(runner,"CERTIFICATE",root/"CERTIFIED_PARENT_LINEAGE.json")
+    original_runtime=runner.get_runtime
+    def isolated_runtime():
+        runtime=original_runtime()
+        runtime.shared_lock=isolated/"DISPATCH.lock"
+        return runtime
+    monkeypatch.setattr(runner,"get_runtime",isolated_runtime)
+    def forbid_provider(*args,**kwargs):raise AssertionError("real isolated prepare cannot dispatch a provider")
+    monkeypatch.setattr(runner.strict_clients,"make_client_factory",forbid_provider)
+    result=runner.prepare()
+    assert result["new_calls"]==0
+    assert (result["effective_calls_started"],result["effective_reported_tokens"],result["effective_calls_with_known_usage"])==(617,12833156,615)
+    assert result["historical_pending_ordinals"]==[70,160] and result["unknown_token_reservations"]==93117
+    assert result["stage_limits"]=={"goal_plan":3,"goal_audit":3,"complete_script":3,"full_review":6}
+    assert all(value==0 for value in result["stage_calls"].values())
+    assert runner.read(root/"INHERITED_NATIVE_GOAL.json")==original_seed
+    assert runner.read(root/"FIRST_NATIVE_PLAN_REQUEST_PREVIEW.json")==saved_preview["prepared"]
+    assert runner.read(root/"CALL_LEDGER.json")["calls"]==[]
+    assert not (root/"RUN_CLAIM.json").exists()
+    scope=runner.read(root/"USER_SCOPE.json")
+    assert scope["inherited_goal_candidates_used"]==28 and scope["local_goal_candidates_limit"]==1
+    assert scope["cumulative_goal_candidates_this_run_maximum"]==29
+    assert scope["parent_whole_plan_unused_capacity"]==1 and scope["parent_unused_capacity_stays_in_closed_run"]
+    assert scope["local_opening_setup_limit"]==2 and scope["first_action_is_native_plan_rebuild"]
+    freeze=runner.read(root/"PRODUCTION_FREEZE.json")
+    assert freeze["continuation_authorization_sha256"]==before[str(runner.APPROVAL)]
+    assert {path:runner.sha_file(path) for path in freeze["files"]}==freeze["files"]
+    isolated_runtime().inherited_guard()
+    assert runner.read(runner.APPROVAL)==saved_approval
+    assert {str(path):runner.sha_file(path) for path in protected}==before
+    assert {path:runner.sha_file(path) for path in frozen}==frozen
+    assert not actual_root.exists() and not actual_claim.exists()

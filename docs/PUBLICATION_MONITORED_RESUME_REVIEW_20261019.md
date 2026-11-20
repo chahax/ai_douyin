@@ -1,0 +1,15 @@
+# 同片自动发布启动、监控与实际停点
+
+用户要求启动并监控，并明确为视频自动发布；据本次新启动请求保守登记同片一次30→31，原新请求逐字和范围解释保存在resume_monitored_publish_20261019/USER_AUTHORIZATION.json，旧v5三次及消耗不改。原账号、原60秒片、PREPARED五tag/虚构声明/法律评论完全保持。
+
+已按文档先行、子agent分模块、主agent实际审查完成独立v6、原安全handoff与AI custom label/value证明。v6原4决定案通过，修历史过期透传后必要跨日1案通过，真实已注册原生完整链验证通过；handoff5桥案通过及main/双库栅栏/EOF函数完全未变；首次AI修复67原门此前通过，最终custom11真实worker通过，不冒称一次78全绿。实际parent注册后独立预检通过。
+
+原45996/gen12/create1792395198.5984535在双库栅栏下正常父退出/EOF子树退出并交还。新40520/gen13/create1792397886.0884209健康200，9份源码早于创建且SHA符合冻结；实际部署AI helper30d2a344a2efcb7186b67ab067daac9c2dac48a2decf201419e8ffad34a7697a。首次queue在validate_authorization前遇到本地SQLite read lock，尚未创建任务或消耗；保存证据后同一个固定key入队，没有重领第二次身份。
+
+唯一任务8fac1b26ff9e4d2e98bbf48bb42ed277在16:19启动，原journal 707d14...20261019T081954524575。上传、五tag全部稳定读回通过，简介首部虚构说明保留。16:20:57明确failed/ai_declaration_unverified：custom diagnostic document/label/value/trigger/unique全true，原radio确认并关闭证明已绑定；global popupsClear=false，structure因为早退尚未检查。不能从此断言具体哪一个role popup；已确认程序把全页面无关role弹层也作为本声明失败条件。未点击发布，无submission_started/作品ID/URL/新提交锁或评论；不把UI设置截图或通过本地测试写成已发布。最终日31空业务lease，control active42/failures2保持。
+
+真实停点后已完成最小离线修复：只改_read_custom_setting，用本次原container关闭作为门，保留准确title/AI原生控件/原radio detached/原身份/非AI→AI/导航尾栅栏；全局role只记录有界计数不干预声明资格。最终c93d80129b534b2dcae7638f869c55ae4f4e4c2e551f4e9eb97d8dc1509dfe28，33个真实worker/必要回归通过，主agent确认其余函数AST相同、workflow/worker未变。此最后修复尚未部署，未派本轮第二次发布，不能把原失败追改通过。证据data/development_checkpoints/ai_scoped_popup_20261019/PRIMARY_REVIEW.json。
+
+监控原automation-2恢复并改为本片5分钟只读跟踪，基线已保存，主agent持续监控到上述终态。试图按原规则暂停时，工具明确返回automation已不存在；本地原配置也不见，删除主体未知，未重建或修改其他旧监控。不存在不当作已成功暂停；当前没有持续监控承诺。本次监控未独立派发业务或越过额度。
+
+最终完整原命令、journal SHA、AI原诊断、双锁不存在与实际runtime/control见 [FINAL_STATE.json](../data/video_generation/h3_dense_office_full_20261018/publication/resume_monitored_publish_20261019/FINAL_STATE.json)。新授权、父grant、原queue、部署及失败全部保留。未新模型/媒体/养号调用，助手未看听或审核媒体。下一次生产需新的有效启动范围与新授权登记，不能修改本轮上限或重传原ID。

@@ -11,6 +11,9 @@ import os
 import subprocess
 import time
 
+from src.content_factory.video_enhancer import VideoEnhancer
+from src.content_factory.video_quality import VideoQualityProfile, resolve_quality_profile
+from src.content_factory.video_quality_gate import VideoQualityGate
 from src.shared.logger import logger
 
 
@@ -126,13 +129,56 @@ def _overlay_filter(base: str, layer: str, x, y, out: str, enable: str = None) -
     return f"{base}{layer}overlay=x={x}:y={y}{suffix}{out}"
 
 
+def _verify_final_output(
+    final_path: str,
+    profile: VideoQualityProfile,
+    expected_duration: float | None = None,
+) -> bool:
+    """写入质量报告，并阻断不符合发布规格的最终视频。"""
+    report = VideoQualityGate().inspect(
+        final_path,
+        profile,
+        expected_duration=expected_duration,
+    )
+    report.write_json(os.path.splitext(final_path)[0] + ".quality.json")
+    for warning in report.warnings:
+        logger.warning(f"[VideoQualityGate] {warning.code}: {warning.message}")
+    if report.passed:
+        return True
+
+    details = "; ".join(f"{issue.code}: {issue.message}" for issue in report.issues)
+    logger.error(f"[VideoQualityGate] 最终视频未通过质量门禁: {details}")
+    return False
+
+
+def _verify_character_assets(
+    final_path: str,
+    assets: list[tuple[str, str, str]],
+) -> bool:
+    """在合成前检查透明或色键角色素材，避免边缘问题进入最终视频。"""
+    gate = VideoQualityGate()
+    output_base = os.path.splitext(final_path)[0]
+    all_passed = True
+    for label, asset_path, asset_kind in assets:
+        report = gate.inspect_character_asset(asset_path, asset_kind)
+        report.write_json(f"{output_base}.{label}.quality.json")
+        for warning in report.warnings:
+            logger.warning(f"[CharacterQualityGate] {label} {warning.code}: {warning.message}")
+        if not report.passed:
+            details = "; ".join(f"{issue.code}: {issue.message}" for issue in report.issues)
+            logger.error(f"[CharacterQualityGate] {label} 未通过质量门禁: {details}")
+            all_passed = False
+    return all_passed
+
+
 def compose_video(
     video_clip_path: str,
     audio_path: str,
     output_dir: str = "data/videos",
     output_name: str = None,
     audio_volume: float = 1.0,
-    crf: int = 23,
+    quality_profile: str | VideoQualityProfile = "publish",
+    crf: int | None = None,
 ) -> str:
     """
     完整流水线：循环拼接视频 + 替换音频
@@ -145,10 +191,15 @@ def compose_video(
         output_dir:      输出目录
         output_name:     输出文件名（不含扩展名）
         audio_volume:    配音音量倍率（0.0-2.0）
-        crf:             视频质量（0=无损，23=默认，28=更高压缩）
+        quality_profile: 预览、发布或母版质量档位
+        crf:             兼容旧调用的临时覆盖值；新调用应使用 quality_profile
 
     Returns: 最终视频路径（成功） / 空字符串（失败）
     """
+    profile = resolve_quality_profile(quality_profile)
+    if crf is not None:
+        profile = profile.with_overrides(crf=crf)
+    enhancer = VideoEnhancer(profile)
     os.makedirs(output_dir, exist_ok=True)
 
     audio_duration = get_duration(audio_path)
@@ -177,23 +228,24 @@ def compose_video(
         "-i", video_clip_path,
         # 配音音频
         "-i", audio_path,
-        # 视频：取 loop 后的视频流
-        "-map", "0:v",
+        "-filter_complex", f"[0:v]{enhancer.cover_filter()}[outv]",
+        "-map", "[outv]",
         # 音频：取配音（自动对齐 -shortest）
         "-map", "1:a",
-        # 视频编码：H.264 重编码（stream_loop 需要重编码）
-        "-c:v", "libx264", "-preset", "fast", "-crf", str(crf),
-        # 音频编码：AAC 192k
-        "-c:a", "aac", "-b:a", "192k",
         # 音量调整
         "-af", f"volume={audio_volume}",
         # 以配音长度为总时长（自然截断 loop 视频）
         "-shortest",
+        *profile.video_encoding_args(),
+        *profile.audio_encoding_args(),
+        *profile.muxing_args(),
         final_path,
     ]
 
     if _run_ffmpeg(cmd):
         actual = get_duration(final_path)
+        if not _verify_final_output(final_path, profile, expected_duration=audio_duration):
+            return ""
         print(f"[VideoComposer] 完成: {final_path}  (时长 {actual:.2f}s)")
         return final_path
 
@@ -221,7 +273,8 @@ def compose_dual_character_video(
     colorkey_blend: float = 0.05,
     composite_a_path: str = None,
     composite_b_path: str = None,
-    crf: int = 23,
+    quality_profile: str | VideoQualityProfile = "publish",
+    crf: int | None = None,
     role_motion: bool = False,
     role_motion_px: int = 4,
 ) -> str:
@@ -251,12 +304,16 @@ def compose_dual_character_video(
         colorkey_blend: colorkey 混合值
         composite_a_path: 角色A的预合成图（GrabCut全身PNG + SadTalker头像叠加），直接叠加无需colorkey
         composite_b_path: 角色B的预合成图（同上）
-        crf: 视频质量
+        quality_profile: 预览、发布或母版质量档位
+        crf: 兼容旧调用的临时覆盖值；新调用应使用 quality_profile
         role_motion: 是否给最终角色层添加轻微漂浮动效
         role_motion_px: 角色上下浮动像素幅度
 
     Returns: 最终视频路径（成功） / 空字符串（失败）
     """
+    profile = resolve_quality_profile(quality_profile)
+    if crf is not None:
+        profile = profile.with_overrides(crf=crf)
     os.makedirs(output_dir, exist_ok=True)
 
     for path, label in [(background_path, "背景视频"), (clip_a_path, "角色A视频"), (clip_b_path, "角色B视频")]:
@@ -277,11 +334,19 @@ def compose_dual_character_video(
     total_dur = audio_a_dur + audio_b_dur
 
     if portrait:
-        canvas_w, canvas_h = 1080, 1920
-        role_w, role_h = 540, 960
+        canvas_w, canvas_h = profile.width, profile.height
+        role_w, role_h = round(canvas_w / 2), round(canvas_h / 2)
     else:
         canvas_w, canvas_h = 1280, 720
         role_w, role_h = 320, 360
+        profile = profile.with_overrides(width=canvas_w, height=canvas_h)
+    enhancer = VideoEnhancer(profile)
+    coordinate_scale = canvas_w / (1080 if portrait else 1280)
+    role_a_x = round(role_a_x * coordinate_scale)
+    role_a_y = round(role_a_y * coordinate_scale)
+    role_b_x = round(role_b_x * coordinate_scale)
+    role_b_y = round(role_b_y * coordinate_scale)
+    role_motion_px = max(1, round(role_motion_px * coordinate_scale))
 
     bg_dur = get_duration(background_path)
     if bg_dur <= 0:
@@ -297,6 +362,15 @@ def compose_dual_character_video(
     use_composite_a = composite_a_path and os.path.exists(composite_a_path)
     use_composite_b = composite_b_path and os.path.exists(composite_b_path)
     use_composite = use_composite_a or use_composite_b
+    role_a_kind = "static" if use_composite_a else ("video_chroma" if colorkey else "video")
+    role_b_kind = "static" if use_composite_b else ("video_chroma" if colorkey else "video")
+    role_a_asset = composite_a_path if use_composite_a else clip_a_path
+    role_b_asset = composite_b_path if use_composite_b else clip_b_path
+    if not _verify_character_assets(
+        final_path,
+        [("role_a", role_a_asset, role_a_kind), ("role_b", role_b_asset, role_b_kind)],
+    ):
+        return ""
 
     ck_msg = f", colorkey={colorkey_color}" if colorkey else (" + composite" if use_composite else "")
     print(f"[VideoComposer] 竖屏合成: {canvas_w}x{canvas_h}, 背景循环 {repeat_count} 次, 时长 {total_dur:.2f}s{ck_msg}")
@@ -344,13 +418,13 @@ def compose_dual_character_video(
     # 视频滤镜构建
     if use_composite_a:
         # 预合成图：直接缩放叠加（身体+头像已合并）
-        role_a_filter = f"[{role_a_idx}:v]scale={role_w}:{role_h}[ra]"
+        role_a_filter = f"[{role_a_idx}:v]scale={role_w}:{role_h}:flags=lanczos[ra]"
         if use_composite_b:
-            role_b_filter = f"[{role_b_idx}:v]{role_b_delay}scale={role_w}:{role_h}[rb]"
+            role_b_filter = f"[{role_b_idx}:v]{role_b_delay}scale={role_w}:{role_h}:flags=lanczos[rb]"
         else:
-            role_b_filter = f"[{role_b_idx}:v]{role_b_delay}scale={role_w}:{role_h}[rb]"
+            role_b_filter = f"[{role_b_idx}:v]{role_b_delay}scale={role_w}:{role_h}:flags=lanczos[rb]"
         video_filter = (
-            f"[0:v]scale={canvas_w}:{canvas_h}[bg];"
+            f"[0:v]{enhancer.cover_filter()}[bg];"
             f"{role_a_filter};"
             f"{role_b_filter};"
             f"[bg][ra]overlay=x={a_x}:y={a_y}[tmp1];"
@@ -359,14 +433,14 @@ def compose_dual_character_video(
     elif colorkey:
         role_a_filter = (
             f"[{role_a_idx}:v]colorkey={colorkey_color}:similarity={colorkey_similarity}:blend={colorkey_blend},"
-            f"scale={role_w}:{role_h},format=rgba[ra]"
+            f"scale={role_w}:{role_h}:flags=lanczos,format=rgba[ra]"
         )
         role_b_filter = (
             f"[{role_b_idx}:v]{role_b_delay}colorkey={colorkey_color}:similarity={colorkey_similarity}:blend={colorkey_blend},"
-            f"scale={role_w}:{role_h},format=rgba[rb]"
+            f"scale={role_w}:{role_h}:flags=lanczos,format=rgba[rb]"
         )
         video_filter = (
-            f"[0:v]scale={canvas_w}:{canvas_h}[bg];"
+            f"[0:v]{enhancer.cover_filter()}[bg];"
             f"{role_a_filter};"
             f"{role_b_filter};"
             f"[bg][ra]overlay=x={a_x}:y={a_y}[tmp1];"
@@ -374,9 +448,9 @@ def compose_dual_character_video(
         )
     else:
         video_filter = (
-            f"[0:v]scale={canvas_w}:{canvas_h}[bg];"
-            f"[{role_a_idx}:v]scale={role_w}:{role_h}[ra];"
-            f"[{role_b_idx}:v]{role_b_delay}scale={role_w}:{role_h}[rb];"
+            f"[0:v]{enhancer.cover_filter()}[bg];"
+            f"[{role_a_idx}:v]scale={role_w}:{role_h}:flags=lanczos[ra];"
+            f"[{role_b_idx}:v]{role_b_delay}scale={role_w}:{role_h}:flags=lanczos[rb];"
             f"[bg][ra]overlay=x={a_x}:y={a_y}[tmp1];"
             f"[tmp1][rb]overlay=x={b_x}:y={b_y}[outv]"
         )
@@ -396,14 +470,17 @@ def compose_dual_character_video(
     ])
 
     cmd.extend([
-        "-c:v", "libx264", "-preset", "fast", "-crf", str(crf),
-        "-c:a", "aac", "-b:a", "192k",
         "-t", str(total_dur),
+        *profile.video_encoding_args(),
+        *profile.audio_encoding_args(),
+        *profile.muxing_args(),
         final_path,
     ])
 
     if _run_ffmpeg(cmd):
         actual = get_duration(final_path)
+        if not _verify_final_output(final_path, profile, expected_duration=total_dur):
+            return ""
         print(f"[VideoComposer] 完成: {final_path}  (时长 {actual:.2f}s)")
         return final_path
 
@@ -425,7 +502,8 @@ def compose_dual_character_sequence_video(
     role_a_y: int = 480,
     role_b_x: int = 540,
     role_b_y: int = 480,
-    crf: int = 23,
+    quality_profile: str | VideoQualityProfile = "publish",
+    crf: int | None = None,
     active_speaker_timeline: list = None,
     active_scale: float = 1.05,
     active_brightness: float = 0.035,
@@ -446,7 +524,8 @@ def compose_dual_character_sequence_video(
         output_name: 输出文件名（不含扩展名）
         portrait: 是否竖屏（默认 True，1080x1920）
         role_a_x/y, role_b_x/y: 角色叠加位置
-        crf: 视频质量
+        quality_profile: 预览、发布或母版质量档位
+        crf: 兼容旧调用的临时覆盖值；新调用应使用 quality_profile
         active_speaker_timeline: 主动说话角色时间轴，示例 [("A", 0, 3.2), ("B", 3.2, 6.0)]
         active_scale: 说话角色放大倍率
         active_brightness: 说话角色亮度提升值
@@ -455,6 +534,9 @@ def compose_dual_character_sequence_video(
 
     Returns: 最终视频路径（成功） / 空字符串（失败）
     """
+    profile = resolve_quality_profile(quality_profile)
+    if crf is not None:
+        profile = profile.with_overrides(crf=crf)
     os.makedirs(output_dir, exist_ok=True)
 
     audio_a_dur = get_duration(audio_a_path)
@@ -469,11 +551,19 @@ def compose_dual_character_sequence_video(
     total_dur = audio_a_dur + audio_b_dur
 
     if portrait:
-        canvas_w, canvas_h = 1080, 1920
-        role_w, role_h = 540, 960
+        canvas_w, canvas_h = profile.width, profile.height
+        role_w, role_h = round(canvas_w / 2), round(canvas_h / 2)
     else:
         canvas_w, canvas_h = 1280, 720
         role_w, role_h = 320, 360
+        profile = profile.with_overrides(width=canvas_w, height=canvas_h)
+    enhancer = VideoEnhancer(profile)
+    coordinate_scale = canvas_w / (1080 if portrait else 1280)
+    role_a_x = round(role_a_x * coordinate_scale)
+    role_a_y = round(role_a_y * coordinate_scale)
+    role_b_x = round(role_b_x * coordinate_scale)
+    role_b_y = round(role_b_y * coordinate_scale)
+    active_y_offset = round(active_y_offset * coordinate_scale)
 
     bg_dur = get_duration(background_path)
     if bg_dur <= 0:
@@ -484,6 +574,11 @@ def compose_dual_character_sequence_video(
     if not output_name:
         output_name = f"dual_seq_{int(time.time() * 1000)}"
     final_path = os.path.join(output_dir, f"{output_name}.mp4")
+    if not _verify_character_assets(
+        final_path,
+        [("role_a", role_a_sequence, "sequence"), ("role_b", role_b_sequence, "sequence")],
+    ):
+        return ""
 
     active_segments = _normalize_active_speaker_timeline(active_speaker_timeline, total_dur)
     has_active_speaker = bool(active_segments["a"] or active_segments["b"])
@@ -494,8 +589,8 @@ def compose_dual_character_sequence_video(
     cmd = [
         "ffmpeg", "-y",
         "-stream_loop", str(repeat_count), "-i", background_path,  # [0]
-        "-framerate", "30", "-i", role_a_sequence,  # [1] PNG 序列
-        "-framerate", "30", "-i", role_b_sequence,  # [2] PNG 序列
+        "-framerate", str(profile.fps), "-i", role_a_sequence,  # [1] PNG 序列
+        "-framerate", str(profile.fps), "-i", role_b_sequence,  # [2] PNG 序列
         "-i", audio_a_path,  # [3]
         "-i", audio_b_path,  # [4]
     ]
@@ -514,18 +609,18 @@ def compose_dual_character_sequence_video(
         active_b_expr = _active_enable_expr(active_segments["b"])
 
         video_parts = [
-            f"[0:v]scale={canvas_w}:{canvas_h}[bg]",
-            f"[1:v]scale={role_w}:{role_h},format=rgba[ra_base]",
-            f"[2:v]scale={role_w}:{role_h},format=rgba[rb_base]",
+            f"[0:v]{enhancer.cover_filter()}[bg]",
+            f"[1:v]scale={role_w}:{role_h}:flags=lanczos,format=rgba[ra_base]",
+            f"[2:v]scale={role_w}:{role_h}:flags=lanczos,format=rgba[rb_base]",
         ]
         if active_a_expr:
             video_parts.append(
-                f"[1:v]scale={active_role_w}:{active_role_h},"
+                f"[1:v]scale={active_role_w}:{active_role_h}:flags=lanczos,"
                 f"eq=brightness={active_brightness}:saturation={active_saturation},format=rgba[ra_active]"
             )
         if active_b_expr:
             video_parts.append(
-                f"[2:v]scale={active_role_w}:{active_role_h},"
+                f"[2:v]scale={active_role_w}:{active_role_h}:flags=lanczos,"
                 f"eq=brightness={active_brightness}:saturation={active_saturation},format=rgba[rb_active]"
             )
 
@@ -552,9 +647,9 @@ def compose_dual_character_sequence_video(
         video_filter = ";".join(video_parts)
     else:
         video_filter = (
-            f"[0:v]scale={canvas_w}:{canvas_h}[bg];"
-            f"[1:v]scale={role_w}:{role_h}[ra];"
-            f"[2:v]scale={role_w}:{role_h}[rb];"
+            f"[0:v]{enhancer.cover_filter()}[bg];"
+            f"[1:v]scale={role_w}:{role_h}:flags=lanczos[ra];"
+            f"[2:v]scale={role_w}:{role_h}:flags=lanczos[rb];"
             f"[bg][ra]overlay=x={role_a_x}:y={role_a_y}[tmp1];"
             f"[tmp1][rb]overlay=x={role_b_x}:y={role_b_y}[outv]"
         )
@@ -571,15 +666,17 @@ def compose_dual_character_sequence_video(
     cmd.extend([
         "-filter_complex", f"{video_filter};{audio_filter}",
         "-map", "[outv]", "-map", "[outa]",
-        "-c:v", "libx264", "-preset", "fast", "-crf", str(crf),
-        "-c:a", "aac", "-b:a", "192k",
         "-t", str(total_dur),
-        "-pix_fmt", "yuv420p",
+        *profile.video_encoding_args(),
+        *profile.audio_encoding_args(),
+        *profile.muxing_args(),
         final_path,
     ])
 
     if _run_ffmpeg(cmd):
         actual = get_duration(final_path)
+        if not _verify_final_output(final_path, profile, expected_duration=total_dur):
+            return ""
         print(f"[VideoComposer] 完成: {final_path}  (时长 {actual:.2f}s)")
         return final_path
 

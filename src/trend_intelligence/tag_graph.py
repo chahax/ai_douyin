@@ -7,7 +7,7 @@ import re
 import unicodedata
 from collections import defaultdict
 from statistics import median
-from typing import Iterable
+from typing import Callable, Iterable
 
 from .models import TrendObservation, TrendTagRelation, TrendTagTrafficSnapshot
 
@@ -45,6 +45,9 @@ def build_keyword_tag_relations(
     *,
     max_tags_per_keyword: int,
     max_total_tags: int,
+    candidate_filter: Callable[[str], bool] | None = None,
+    min_support_videos: int = 1,
+    min_unique_authors: int = 0,
 ) -> tuple[list[TrendTagRelation], dict[str, list[str]]]:
     rows_by_root: dict[str, list[TrendObservation]] = defaultdict(list)
     for row in observations:
@@ -121,6 +124,9 @@ def build_keyword_tag_relations(
                 and chosen < per_root_limit
                 and relation.target_tag != normalized_root
                 and relation.target_tag not in GENERIC_EXPANSION_TAGS
+                and relation.support_video_count >= min_support_videos
+                and relation.unique_authors >= min_unique_authors
+                and (candidate_filter is None or candidate_filter(relation.target_tag))
             )
             if can_expand:
                 relation.expanded = True

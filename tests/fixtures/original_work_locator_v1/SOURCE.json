@@ -1,0 +1,14 @@
+{
+  "source": {
+    "path": "D:\\IT\\ai_douyin\\data\\production_trials\\fanqie_full_two_minutes_20261117_v1\\original_publication_diagnostic_request_v2\\capture\\SAMPLE_03.json",
+    "sha256": "299fa4b25397fa151d3e0b95e64f8a3c7d5b22a2cb1b6ed3b7c5c1d8514d9577"
+  },
+  "fixture": {
+    "path": "D:\\IT\\ai_douyin\\tests\\fixtures\\original_work_locator_v1\\observed_card.html",
+    "sha256": "7e090301222adcf6a94dd10625cbf1212f4cb33d6f6d0cc5f23d4052d4cbef94"
+  },
+  "kind": "minimal_reconstruction_from_sanitized_observed_class_shape_and_exact_caption",
+  "omitted": "metric SVGs, images, platform links and private data; no signed URLs",
+  "status_text": "流量减少",
+  "legacy_published_leaf_absent": true
+}

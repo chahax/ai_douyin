@@ -1,0 +1,15 @@
+# 严格来源审查：主agent生产前验收
+
+2026-10-14，主agent审查子agent独立模块，接管其服务中断后的未完成接线，完成复验。新strict schema、客户端及producer20共121个不同离线测试通过（data/qa/creative_deepseek_strict_source_20261014/ROOT_FINAL_v1.xml，129.52s）。此前缺pytest临时目录父目录造成的39个fixture环境错误已保留于旧XML，未解释为内容故障；修正目录后复跑通过，不覆盖失败记录。
+
+修复实际接入source2审查：新独立/beta端点、function.strict=true、非思考deepseek-flash；其他阶段使用原M31客户端。主审补齐实际raw600000字节限制、ordinary/strict selector、invoke的严格wire比对、新Schema编译器冻结和后续严格回执证书读回。未改任何1537旧冻结文件。
+
+生产预览原合同14069 bytes，服务Schema402758 bytes，compactwire484136 bytes。服务端约束因去除长度/数组数量/唯一性而较本地合同弱；所有目录、来源身份、互斥kind、精确judgment关系保留，原合同本地继续验收。严格模式只证明请求启用官方协议，当前尚无真实端点接受或语义质量成功。
+
+首动作仅对604完整规划提交一份新的原生来源报告。旧605完整非法JSON仅认证其已知消耗，原arguments和protocol_rejected不修改；原601 PENDING与70/160未知历史不改。本轮source诊断失败、未知或合同拒收均停止，不自动重派。来源通过后才进入focused/drama、原生开场和完整正文及同源双审；内容失败仍有界整稿修订。新增审查总6，不偷增上限。
+
+父轮承接605/12148396 reported tokens/603 known及93117预留。规划used26，旧max27剩余1留在已关闭运行；本轮独立的最多2份完整内容返修规划来自持续文本追加授权，累计26+2=28。首份新source不耗规划次数。无媒体或发布，机器文本合格不写成人工采用。
+
+读回新父605证书使用ROOT_PARENT605_LINEAGE_READBACK_v2.json；实际prepare后另检查冻结和首请求，生产结果另存。本文件属于生产前检查，不构成完整可制作剧本交付。
+
+实际prepare补充：首登记漏了first_action_is_source_audit/source_only_strict_protocol两个显式标记，发送前绑定检查拒绝，0claim、0新root、0provider。失败及原USER_CONTINUATION、v1预览完整保留，新v2登记补齐；原输入/模型/请求SHA未变。新增回归后producer24项通过（ROOT_PRODUCER_v2.xml，95.41s），与不变的transport/schema98项合计122个不同当前用例。未因这一准备故障重领消耗或生产次数。

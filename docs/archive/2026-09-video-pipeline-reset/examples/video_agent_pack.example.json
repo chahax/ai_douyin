@@ -1,0 +1,9 @@
+{
+  "template": "video_agent_pack/v1",
+  "id": "video_control_probe_agent_pack",
+  "namespace": "video_control_probe_v1",
+  "plan_report": "../../data/qa/video_control_plan.example.report.json",
+  "comfyui_root": "D:\\IT\\AI_vido\\ComfyUI",
+  "orchestrator_root": "D:\\IT\\ai_douyin",
+  "output_dir": "../../data/qa/video_control_probe_v1/agent_tasks"
+}

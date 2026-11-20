@@ -1,0 +1,116 @@
+{
+  "at_utc": "2026-10-06T05:07:29.101721+00:00",
+  "downloads": [
+    {
+      "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\downloads\\ahujasid__blender-mcp.zip",
+      "sha256": "783b7ea0694b0cc6d5426aaf8d6634d7cdf50ae58670b8f91925c564cd511333",
+      "bytes": 982623,
+      "url": "https://codeload.github.com/ahujasid/blender-mcp/zip/34b7bd277fff75a693cde78930b4359478958a01",
+      "verified_expected_sha256": false,
+      "commit": "34b7bd277fff75a693cde78930b4359478958a01",
+      "extracted": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\sources\\ahujasid__blender-mcp"
+    },
+    {
+      "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\downloads\\Comfy-Org__comfy-mcp.zip",
+      "sha256": "4c61856311b497cbb6475e5824eb7b4af0ef646ad717fa1007342dd83fce4ba9",
+      "bytes": 826388,
+      "url": "https://codeload.github.com/Comfy-Org/comfy-mcp/zip/e5f768d31de21ea32829381cebdda5336492a8ac",
+      "verified_expected_sha256": false,
+      "commit": "e5f768d31de21ea32829381cebdda5336492a8ac",
+      "extracted": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\sources\\Comfy-Org__comfy-mcp"
+    },
+    {
+      "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\downloads\\Comfy-Org__comfy-cli.zip",
+      "sha256": "c74ec197dac5a1e7b038c780f641ff175185e090b41844d7d733b1cb5dda4534",
+      "bytes": 7569152,
+      "url": "https://codeload.github.com/Comfy-Org/comfy-cli/zip/805e7de758a297f4888f4a8fcf170f49d124434f",
+      "verified_expected_sha256": false,
+      "commit": "805e7de758a297f4888f4a8fcf170f49d124434f",
+      "extracted": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\sources\\Comfy-Org__comfy-cli"
+    },
+    {
+      "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\downloads\\Comfy-Org__comfy-skills.zip",
+      "sha256": "18bc8efd5b754d17402bd358b8e17e0e9044bc8c425d9965fe5618f025ef33be",
+      "bytes": 663124,
+      "url": "https://codeload.github.com/Comfy-Org/comfy-skills/zip/d50722a53585d0ab4fd1909fd59294b978aad449",
+      "verified_expected_sha256": false,
+      "commit": "d50722a53585d0ab4fd1909fd59294b978aad449",
+      "extracted": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\sources\\Comfy-Org__comfy-skills"
+    },
+    {
+      "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\downloads\\Wan-Video__Wan2.1.zip",
+      "sha256": "2e0e8d43e92bc697ebd26394feb9e70b4672a49f9b581a8fd1f1176fe91ae427",
+      "bytes": 10442176,
+      "url": "https://codeload.github.com/Wan-Video/Wan2.1/zip/9737cba9c1c3c4d04b33fcad41c111989865d315",
+      "verified_expected_sha256": false,
+      "commit": "9737cba9c1c3c4d04b33fcad41c111989865d315",
+      "extracted": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\sources\\Wan-Video__Wan2.1"
+    },
+    {
+      "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\downloads\\ali-vilab__VACE.zip",
+      "sha256": "f1505e5ae0061810559b2c415a138d0e8fb9f7901dfc51a2d3adbf631a9afebe",
+      "bytes": 4683641,
+      "url": "https://codeload.github.com/ali-vilab/VACE/zip/48eb44f1c4be87cc65a98bff985a26976841e9f3",
+      "verified_expected_sha256": false,
+      "commit": "48eb44f1c4be87cc65a98bff985a26976841e9f3",
+      "extracted": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\sources\\ali-vilab__VACE"
+    },
+    {
+      "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\templates\\vace_source.mdx",
+      "sha256": "9c5b1c430862a29dcf079738038e3dc23897dba2e9590375125b1389b9137f4d",
+      "bytes": 20429,
+      "url": "https://raw.githubusercontent.com/Comfy-Org/docs/043723e1eadae9faf7f8540b9e37fc32474f2c64/tutorials/video/wan/vace.mdx",
+      "verified_expected_sha256": false
+    },
+    {
+      "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\templates\\official_vace\\video_wan_vace_14B_ref2v.json",
+      "sha256": "e857bbcf4138ee340eb22320ebb1b39ee5f3c210af7b7f7eb113907c91397737",
+      "bytes": 852091,
+      "url": "https://github.com/Comfy-Org/workflow_templates/blob/main/templates/video_wan_vace_14B_ref2v.json",
+      "verified_expected_sha256": false
+    },
+    {
+      "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\templates\\official_vace\\video_wan_vace_14B_t2v.json",
+      "sha256": "cb7489fcef51e2428ab475368480b6dc5e08d8515a3ab9784f6478213b4c7412",
+      "bytes": 816431,
+      "url": "https://github.com/Comfy-Org/workflow_templates/blob/main/templates/video_wan_vace_14B_t2v.json",
+      "verified_expected_sha256": false
+    },
+    {
+      "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\templates\\official_vace\\video_wan_vace_14B_v2v.json",
+      "sha256": "039c79aab40e4599809fd8409cc4dad6c7536c857490fe1b9bcb34d3f4de6ebf",
+      "bytes": 825096,
+      "url": "https://github.com/Comfy-Org/workflow_templates/blob/main/templates/video_wan_vace_14B_v2v.json",
+      "verified_expected_sha256": false
+    },
+    {
+      "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\templates\\official_vace\\video_wan_vace_flf2v.json",
+      "sha256": "1f48ebb2969c2d6cd2e5c5c6c13c84f5359326940f3dbf3981b21ca09c9e979e",
+      "bytes": 959255,
+      "url": "https://github.com/Comfy-Org/workflow_templates/blob/main/templates/video_wan_vace_flf2v.json",
+      "verified_expected_sha256": false
+    },
+    {
+      "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\templates\\official_vace\\video_wan_vace_inpainting.json",
+      "sha256": "7887ae7d70c5de2e229d49875bec234e11cd73c9a4c2466f6f2fad727f0e9235",
+      "bytes": 1014978,
+      "url": "https://github.com/Comfy-Org/workflow_templates/blob/main/templates/video_wan_vace_inpainting.json",
+      "verified_expected_sha256": false
+    },
+    {
+      "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\templates\\official_vace\\video_wan_vace_outpainting.json",
+      "sha256": "6308866a8c0df258e41bc6a55ff64550cfc1300d8e62dabfaf9d1c7eadbff560",
+      "bytes": 837751,
+      "url": "https://github.com/Comfy-Org/workflow_templates/blob/main/templates/video_wan_vace_outpainting.json",
+      "verified_expected_sha256": false
+    },
+    {
+      "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\templates\\depth_controlnet_official.png",
+      "sha256": "b4887eda5e278b274322e51c1b3ecc7e6bb82c077b3f9cdef271e764b27857a4",
+      "bytes": 423293,
+      "url": "https://raw.githubusercontent.com/comfyanonymous/ComfyUI_examples/master/controlnet/depth_controlnet.png",
+      "verified_expected_sha256": false
+    }
+  ],
+  "paid_calls": 0
+}

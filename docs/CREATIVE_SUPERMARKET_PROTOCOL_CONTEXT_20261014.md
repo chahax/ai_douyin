@@ -1,0 +1,9 @@
+# 超市老员工：605协议故障后持久交接
+
+用户方向仍是“继续超市老员工方向，强化情绪交锋”，没有改为采用草稿。最新完整原生规划604，最新来源605为完整已知非法JSON失败；原round18已经停止，不重启。累计605/12148396 reported tokens/603 known，旧70/160和93117预留保持。原round18规划26/max27剩余1关闭保留。
+
+实际结果见CREATIVE_LEGAL_PRAGMATICS_PRODUCTION_RESULT_20261014.md。604保留明天班，经理在纸上记公司提出且员工未签字；来源、情绪因果、完整正文尚未通过。不把600或604当最终剧本。
+
+独立修复计划CREATIVE_DEEPSEEK_STRICT_SOURCE_REPAIR_PLAN_20261014.md已先记录。子agent分别新严格schema/client、新producer20/profile4/605消耗证书，主agent审真实请求与离线边界。只接来源strict，完整原source2本地合同继续验收，其他DeepSeek阶段普通工具保持。首次新请求仅以新身份审604完整规划，不手改605括号，不重新生成已有规划，不把605的内容算通过。
+
+文本持续授权无需逐次询问MiniMax，DeepSeek必要审查少量；本次无媒体或发布。不看余额，不抽帧/听看/ASR视频。每30分钟用户可见内容核对保持。可恢复独立开发前副本creative_legal_usage_release_20261014_v18，不覆盖旧冻结、回执或重置账本。

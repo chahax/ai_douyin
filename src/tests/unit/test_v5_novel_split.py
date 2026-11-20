@@ -54,7 +54,7 @@ class TestCalcMaxSegments:
         assert calc_max_segments(2000) == 8  # 2000//250=8
 
     def test_long_text_clamps_to_max(self):
-        assert calc_max_segments(5000) == MAX_SEGMENTS_MAX  # min(15, 20)=15
+        assert calc_max_segments(15000) == MAX_SEGMENTS_MAX  # min(60, 60)=60
 
     def test_very_long_text_clamps_to_max(self):
         assert calc_max_segments(100000) == MAX_SEGMENTS_MAX
@@ -63,9 +63,9 @@ class TestCalcMaxSegments:
         # 1000//250=4, 正好 = 下限
         assert calc_max_segments(1000) == 4
 
-    def test_boundary_at_3750_chars(self):
-        # 3750//250=15, 正好 = 上限
-        assert calc_max_segments(3750) == MAX_SEGMENTS_MAX
+    def test_boundary_at_15000_chars(self):
+        # 15000//250=60, 正好 = 上限
+        assert calc_max_segments(15000) == MAX_SEGMENTS_MAX
 
 
 # ---------------------------------------------------------------------------
@@ -264,8 +264,8 @@ class TestSplitNovelInput:
 
 
 class TestPromptVariants:
-    def test_three_variants(self):
-        assert len(PROMPT_VARIANTS) == 3
+    def test_five_variants(self):
+        assert len(PROMPT_VARIANTS) == 5
 
     def test_v2_has_example(self):
         assert "示例" in PROMPT_VARIANTS[1]

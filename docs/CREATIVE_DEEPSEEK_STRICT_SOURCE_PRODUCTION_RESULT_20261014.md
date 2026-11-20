@@ -1,0 +1,9 @@
+# 606真实严格接口结果
+
+新source-only /beta严格请求实际484136 bytes，function.strict=true，SDK重试0；HTTP200证明这份服务Schema被实际端点接受，不能证明完整内容或通用服务质量。
+
+606输入165138、输出16000、总181138 tokens，finish_reason=length，原arguments37167字符不完整。保持interface_rejected/RESPONSE_TRUNCATED，状态halt_strict_source_diagnostic_interface_or_unknown；本次结果与用量实际已知，不解释为服务器没有返回。TaskStore原complete_end=false，原RUN_CLAIM保留，无自动重派或尾字符修补。
+
+本轮1次调用，累计606次/12329534 reported tokens/604 known，历史70/160、93117保持，新未知0。整片规划仍只待审604，正文0、制作交接0、媒体0、发布0。此前122项当前独立离线检查不构成完整剧本或创作质量通过。
+
+后续按CREATIVE_COMPACT_SOURCE_OBSERVATIONS_PLAN_20261014.md减少重复Schema与非法律观测重复解释，重新提交完整原生来源合同；不复用606部分判断，不静默改旧v20或默认v23。旧可恢复基线保留，可在独立目录恢复而不覆盖冻结或清零消耗。

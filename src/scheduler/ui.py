@@ -7,8 +7,11 @@ src/scheduler/ui.py — Streamlit 调度管理页面
 """
 
 import streamlit as st
+from src.web.components.ui import page_header
 import uuid
 from datetime import datetime
+
+from sqlalchemy.orm import joinedload
 
 from src.scheduler import (
     ScheduledTask,
@@ -21,7 +24,73 @@ from src.shared.database import SessionLocal
 
 
 def page_scheduler():
-    st.title("📋 任务调度")
+    from src.web.handling_feedback_upgrade import render_feedback_upgrade
+    render_feedback_upgrade()
+    page_header(
+        "任务调度",
+        "统一查看调度器、任务队列、执行记录与 ComfyUI 失败诊断。",
+        icon="◷",
+        eyebrow="ORCHESTRATION",
+    )
+
+    from src.web.account_refresh_dashboard import render_account_refresh
+    render_account_refresh()
+    from src.web.components.flow_graph import sequence_graph
+    sequence_graph([
+        ('计划任务', '定义何时触发与要执行的业务任务。', '调度说明'),
+        ('等待队列', '任务进入队列，等待工作进程领取。', '队列说明'),
+        ('执行任务', '工作进程按参数执行，并记录完成或失败结果。', '执行说明'),
+        ('结果与诊断', '查看执行记录；发生错误时结合诊断决定下一步。', '检查说明'),
+    ], key='scheduler_intro_graph', title='任务如何从计划走到结果',
+       description='这里是调度机制说明；点击节点和连线查看职责。实时状态以本页任务记录为准。')
+
+    # ── 顶部：番茄抓取实时进度（自动 5 秒刷新） ──
+    import time as _time
+    from src.platform_adapter.fanqie_batch import read_progress, clear_progress
+    _prog = read_progress()
+    if _prog and _prog.get("running"):
+        total = max(1, int(_prog.get("total", 0)))
+        current = int(_prog.get("current", 0))
+        ratio = min(1.0, current / total)
+        phase = _prog.get("phase", "")
+        phase_label = {"scan": "🔍 扫榜", "fetch": "📖 抓章节"}.get(phase, phase)
+        status_text = _prog.get("status_text") or _prog.get("current_book") or ""
+        succeeded = int(_prog.get("succeeded", 0))
+        failed = int(_prog.get("failed", 0))
+        headful = _prog.get("headful", False)
+        eye = "👀 浏览器可见" if headful else "🕶 后台 headless"
+        events = _prog.get("events", []) or []
+
+        with st.container(border=True):
+            st.markdown(
+                f"### 🟢 番茄抓取进行中 · {phase_label}\n"
+                f"**进度**：{current}/{total}　　"
+                f"✅ {succeeded} 成功　❌ {failed} 失败　　{eye}　　"
+                f"_5 秒自动刷新_"
+            )
+            st.progress(ratio, text=status_text)
+            if _prog.get("completed"):
+                st.success("✅ 全部完成")
+                _age = _time.time() - _time.mktime(
+                    _time.strptime(_prog["updated_at"][:19], "%Y-%m-%dT%H:%M:%S")
+                )
+                if _age > 30:
+                    clear_progress()
+
+            # P3：操作流水 tail（最近 15 条事件）
+            if events:
+                st.markdown("**📜 操作流水**（最近 15 条）")
+                # 倒序展示最新的在上面
+                recent = list(reversed(events[-15:]))
+                lines = []
+                for ev in recent:
+                    ts = ev.get("ts", "")[11:19]   # "HH:MM:SS"
+                    text = ev.get("text", "")
+                    lines.append(f"`{ts}`  {text}")
+                st.code("\n".join(lines), language=None)
+
+            _time.sleep(5)
+            st.rerun()
 
     tab_names = ["仪表板", "定时任务", "任务队列", "执行记录", "错误诊断", "ComfyUI 失败"]
     tabs = st.tabs(tab_names)
@@ -149,6 +218,8 @@ def _render_error_dashboard():
 
 def _render_dashboard():
     st.subheader("概览")
+    from src.web.components.action_feedback import render
+    render('scheduler_control')
 
     with SessionLocal() as sess:
         total_tasks = sess.query(ScheduledTask).filter_by(enabled=True).count()
@@ -167,20 +238,24 @@ def _render_dashboard():
     # 启动/停止 Worker 和调度器
     col_start, col_stop = st.columns(2)
     with col_start:
-        if st.button("▶ 启动调度器 + Worker", use_container_width=True):
-            _start_scheduler()
-            st.rerun()
+        if st.button("▶ 启动调度器 + Worker", width="stretch"):
+            if _start_scheduler():
+                st.rerun()
     with col_stop:
-        if st.button("⏹ 停止调度器 + Worker", use_container_width=True):
-            _stop_scheduler()
-            st.rerun()
+        st.caption('停止定时调度会等待当前扫描收尾；队列 Worker 与已开始的业务任务不会被强行终止。')
+        if st.button("⏹ 停止定时调度", width="stretch"):
+            with st.spinner('正在停止定时调度，等待当前扫描收尾…'):
+                if _stop_scheduler():
+                    st.rerun()
 
     # 最近的执行
     st.divider()
     st.subheader("最近执行")
     with SessionLocal() as sess:
+        # joinedload 一次性把 task 拉出来，避开 DetachedInstanceError
         recent = (
             sess.query(TaskExecution)
+            .options(joinedload(TaskExecution.task))
             .order_by(TaskExecution.created_at.desc())
             .limit(10)
             .all()
@@ -194,10 +269,12 @@ def _render_dashboard():
                 "执行ID": e.execution_uuid[:8],
                 "任务": task_name,
                 "状态": _status_badge(e.status),
-                "耗时(秒)": e.duration_seconds or "-",
+                # 强制 str：duration_seconds 可能是 None / int / 0 三种值，
+                # mix type 会让 pyarrow 推不出统一 schema 报 ArrowTypeError
+                "耗时(秒)": str(e.duration_seconds) if e.duration_seconds is not None else "-",
                 "时间": e.created_at.strftime("%m-%d %H:%M") if e.created_at else "-",
             })
-        st.dataframe(data, use_container_width=True, hide_index=True)
+        st.dataframe(data, width="stretch", hide_index=True)
     else:
         st.info("暂无执行记录")
 
@@ -208,10 +285,10 @@ def _render_scheduled_tasks():
     st.subheader("定时任务")
     col_new, col_cg, _ = st.columns([1, 1, 3])
     with col_new:
-        if st.button("+ 新建任务", use_container_width=True):
+        if st.button("+ 新建任务", width="stretch"):
             st.session_state["show_new_task"] = True
     with col_cg:
-        if st.button("📊 CodeGraph 周更", use_container_width=True):
+        if st.button("📊 CodeGraph 周更", width="stretch"):
             _create_codegraph_weekly_task()
             st.success("CodeGraph 周更任务已创建！每周日凌晨 3 点执行 codegraph init -i")
             st.rerun()
@@ -245,7 +322,7 @@ def _render_scheduled_tasks():
             if enabled != bool(task.enabled):
                 _toggle_task(task.id, enabled)
                 st.rerun()
-            if cols[5].button("入队", key=f"eq_{task.id}", use_container_width=True):
+            if cols[5].button("入队", key=f"eq_{task.id}", width="stretch"):
                 _enqueue_task(task.id)
                 st.success(f"任务已入队: {task.name}")
 
@@ -264,8 +341,7 @@ def _render_new_task_form():
                 "generate_audio",
                 "sync_douyin_videos",
                 "fetch_comments",
-                "auto_reply_comments",
-                "douyin_warmup",
+                "douyin_maintenance",
                 "rag_search",
             ],
         )
@@ -333,18 +409,20 @@ def _render_task_queue():
     st.subheader("任务队列")
     col_refresh, _ = st.columns([1, 4])
     with col_refresh:
-        if st.button("🔄 刷新", use_container_width=True):
+        if st.button("🔄 刷新", width="stretch"):
             st.rerun()
 
     with SessionLocal() as sess:
         pending = (
             sess.query(TaskExecution)
+            .options(joinedload(TaskExecution.task))
             .filter_by(status=TaskStatus.PENDING.value)
             .order_by(TaskExecution.created_at.asc())
             .all()
         )
         running = (
             sess.query(TaskExecution)
+            .options(joinedload(TaskExecution.task))
             .filter_by(status=TaskStatus.RUNNING.value)
             .all()
         )
@@ -380,12 +458,17 @@ def _render_execution_history():
         status_filter = st.selectbox(
             "状态筛选",
             ["全部", TaskStatus.COMPLETED.value, TaskStatus.FAILED.value, TaskStatus.PENDING.value, TaskStatus.RUNNING.value],
+            key="exec_history_status_filter",
         )
     with col_limit:
-        limit = st.selectbox("条数", [20, 50, 100], index=0)
+        limit = st.selectbox("条数", [20, 50, 100], index=0, key="exec_history_limit")
 
     with SessionLocal() as sess:
-        q = sess.query(TaskExecution).order_by(TaskExecution.created_at.desc())
+        q = (
+            sess.query(TaskExecution)
+            .options(joinedload(TaskExecution.task))
+            .order_by(TaskExecution.created_at.desc())
+        )
         if status_filter != "全部":
             q = q.filter_by(status=status_filter)
         executions = q.limit(limit).all()
@@ -426,9 +509,10 @@ def _render_compyui_failures():
         class_filter = st.selectbox(
             "错误类型",
             ["全部", "OOM", "WORKFLOW", "TIMEOUT", "UNAVAILABLE", "UNKNOWN"],
+            key="comfy_fail_class_filter",
         )
     with col_limit:
-        limit = st.selectbox("条数", [20, 50, 100], index=0)
+        limit = st.selectbox("条数", [20, 50, 100], index=0, key="comfy_fail_limit")
 
     with SessionLocal() as sess:
         query = sess.query(ComfyTaskFailure)
@@ -480,19 +564,28 @@ def _status_badge(status: str) -> str:
 def _start_scheduler():
     try:
         from src.scheduler.runner import start_scheduler as _do_start
-        _do_start()
-        st.success("调度器 + Worker 已启动")
-    except Exception as exc:
-        st.error(f"启动失败: {exc}")
+        accepted = _do_start()
+        if accepted is not True:
+            st.warning('调度器未确认启动：请核对迁移状态、后台失败记录与服务心跳；未自动重复启动。')
+            return False
+        from src.web.components.action_feedback import remember
+        remember('scheduler_control', '调度器与 Worker 已确认启动；业务是否执行完成请查看原任务记录。')
+        return True
+    except Exception:
+        st.error('调度器启动失败，请核对本地后台日志；未确认启动成功。')
+        return False
 
 
 def _stop_scheduler():
     try:
         from src.scheduler.runner import stop_scheduler as _do_stop
         _do_stop()
-        st.success("调度器已停止")
-    except Exception as exc:
-        st.error(f"停止失败: {exc}")
+        from src.web.components.action_feedback import remember
+        remember('scheduler_control', '定时调度已停止；队列 Worker 与已开始的业务任务仍按原状态执行。')
+        return True
+    except Exception:
+        st.error('定时调度停止结果未确认，请核对后台状态和日志。')
+        return False
 
 
 def _toggle_task(task_id: int, enabled: bool):

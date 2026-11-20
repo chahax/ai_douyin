@@ -16,8 +16,7 @@ from src.trend_intelligence.script_outline import build_outline_messages
 from src.trend_intelligence.production_revision import (
     parse_unique_json, validate_production_revision_fields, apply_production_revision,
 )
-from src.trend_intelligence.script_drama import validate_revision_fields
-from src.trend_intelligence.story_revision import apply_story_revision
+from src.trend_intelligence.story_revision import apply_story_revision, validate_story_revision_fields
 
 MAX_PRODUCTION_LINEAGE = 64
 MAX_STORY_LINEAGE = 64
@@ -290,7 +289,7 @@ def main():
             prompt_name = 'script_screenplay.md'
             if args.stage == 'story-revise':
                 previous_story = evidence['previous_screenplay']
-                fields = validate_revision_fields(previous_story, args.revise_field)
+                fields = validate_story_revision_fields(previous_story, args.revise_field)
                 _, _, parent_run = read_artifact(Path(args.previous_screenplay).with_name('run.json'))
                 inherited = parent_run['inputs'].get('companion_screenplay')
                 if inherited is not None:
@@ -342,6 +341,9 @@ def main():
                     evidence.get('companion_screenplay'))
             validate_screenplay(result,args.kind,evidence['duration_seconds'],full_sources,
                                 reference_source_ids=args.reference_source_id)
+            if args.stage == 'story':
+                from src.trend_intelligence.dramatic_pacing import require_new_draft_pacing
+                state['dramatic_pacing_sha256'] = save('dramatic_pacing.json', require_new_draft_pacing(result, args.kind))
             if args.companion_screenplay:
                 companion=evidence['companion_screenplay']
                 if (result['core_message'] != companion['core_message']
@@ -358,6 +360,9 @@ def main():
                 state['production_revision_output_sha256'] = save('production_revision.json',result)
                 result = apply_production_revision(story,previous_production,result,fields,args.kind)
             compiled=compile_screenplay(story,result,args.kind)
+            if args.stage == 'production':
+                from src.trend_intelligence.dramatic_pacing import require_delivery_fields
+                require_delivery_fields(result)
             state['production_sha256']=save('production.json',result)
             state['candidate_sha256']=save('compiled_version.json',compiled)
             if args.stage == 'production-revise':

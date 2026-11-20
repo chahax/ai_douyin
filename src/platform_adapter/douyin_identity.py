@@ -9,7 +9,8 @@ from datetime import datetime, timedelta, timezone
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-from src.platform_adapter.browser_session import BrowserSession
+from src.platform_adapter.browser_session import BrowserSession, BrowserNavigationTimeout
+from src.platform_adapter.douyin_challenge import confirmed_douyin_challenge, DouyinVerificationSurfaceError
 from src.shared.config import settings
 
 
@@ -21,33 +22,48 @@ _DOUYIN_CHALLENGE_SELECTOR = (
 
 
 class DouyinIdentityVerificationError(RuntimeError):
-    def __init__(self, code: str, message: str):
+    def __init__(self, code: str, message: str, *, navigation_evidence=None):
         super().__init__(message)
         self.code = code
+        self.navigation_evidence = navigation_evidence
 
 
 class DouyinPageIdentityVerifier:
     """Read only the public identity shown by the authenticated Douyin page."""
 
     def probe(self, session: BrowserSession) -> DouyinIdentity:
-        page = session.open_page(DOUYIN_SELF_URL)
+        navigation = None
+        try:
+            page = session.open_page(DOUYIN_SELF_URL)
+        except BrowserNavigationTimeout as exc:
+            navigation = exc.navigation_evidence
+            # Inspect only this navigation's committed target. Never accept
+            # identity left on the old page or reload a failed request.
+            if (exc.page is None or not navigation['navigation_committed']
+                    or not navigation['target_matched']
+                    or navigation['ready_state'] not in {'interactive', 'complete'}):
+                raise DouyinIdentityVerificationError(
+                    exc.code, str(exc), navigation_evidence=navigation) from exc
+            page = exc.page
         profile_navigation_attempted = False
+        login_required = False
         for _ in range(16):
             page.wait_for_timeout(500)
-            if self._has_captcha(page):
+            try:
+                captcha_ready = self._has_captcha(page)
+            except DouyinVerificationSurfaceError as exc:
+                raise DouyinIdentityVerificationError(exc.code, str(exc)) from exc
+            if captcha_ready:
                 raise DouyinIdentityVerificationError(
                     "human_required", "抖音要求人工完成安全验证。"
                 )
             body_text = self._body_text(page)
-            if self._requires_login(body_text):
-                raise DouyinIdentityVerificationError(
-                    "login_expired", "抖音登录已过期，请重新扫码。"
-                )
+            login_required = self._requires_login(body_text)
             identity = self._extract(page)
             if identity.nickname and identity.platform_identity_key:
                 identity.validate()
                 return identity
-            if not profile_navigation_attempted:
+            if not profile_navigation_attempted and navigation is None:
                 profile_navigation_attempted = True
                 try:
                     profile_links = page.locator('a[href*="/user/self"]')
@@ -57,6 +73,16 @@ class DouyinPageIdentityVerifier:
                         continue
                 except Exception:
                     pass
+        if login_required:
+            raise DouyinIdentityVerificationError(
+                "login_expired", "抖音页面要求登录，当前会话无法读取绑定身份，请重新登录后验证。"
+            )
+        if navigation is not None:
+            raise DouyinIdentityVerificationError(
+                "browser_navigation_timeout",
+                "原身份页跳转超时，当前页面仍未读到可核验身份；未重新加载或恢复任务。",
+                navigation_evidence=navigation,
+            )
         raise DouyinIdentityVerificationError(
             "identity_unavailable",
             "已打开抖音页面，但没有读取到可确认的昵称和公开 UID。",
@@ -134,26 +160,11 @@ class DouyinPageIdentityVerifier:
 
 
 def has_visible_douyin_challenge(page) -> bool:
-    """Ignore the zero-size challenge iframe that Douyin keeps mounted normally."""
-    script = r"""
-    (() => {
-      // data-douyin-visible-challenge: stable marker for tests and diagnostics.
-      const selector = 'iframe[src*="/verifycenter/"], iframe[src*="/captcha/"], iframe[src*="captcha"]';
-      return Array.from(document.querySelectorAll(selector)).some((element) => {
-        const rect = element.getBoundingClientRect();
-        const style = getComputedStyle(element);
-        return style.display !== 'none'
-          && style.visibility !== 'hidden'
-          && Number(style.opacity || 1) > 0
-          && rect.width > 8
-          && rect.height > 8;
-      });
-    })()
-    """
-    try:
-        return bool(page.locator("").evaluate(script))
-    except Exception:
-        return False
+    """Only ready verification content is human_required; unknown remains blocked."""
+    evidence = confirmed_douyin_challenge(page)
+    if evidence['blocking'] and evidence['surface_state'] != 'challenge_ready':
+        raise DouyinVerificationSurfaceError(evidence)
+    return evidence['blocking']
 
 
 class DouyinOAuthClient:

@@ -1,0 +1,563 @@
+{
+  "status": "local_trial_completed_not_production_accepted",
+  "sample_cases": 18,
+  "ner_gold_entities": 28,
+  "candidate_gold_entities": 25,
+  "same_cases_dictionary_prompt_across_three_configs": true,
+  "local_inference_runs": [
+    {
+      "file": "benchmark_03_default.json",
+      "label": "GLiNER 默认分词",
+      "metrics": {
+        "ner_strict": {
+          "tp": 8,
+          "fp": 9,
+          "fn": 20,
+          "precision": 0.47058823529411764,
+          "recall": 0.2857142857142857
+        },
+        "ner_span_only": {
+          "tp": 8,
+          "fp": 9,
+          "fn": 20,
+          "precision": 0.47058823529411764,
+          "recall": 0.2857142857142857
+        },
+        "dictionary_strict": {
+          "tp": 22,
+          "fp": 0,
+          "fn": 3,
+          "precision": 1.0,
+          "recall": 0.88
+        },
+        "dictionary_span_only": {
+          "tp": 22,
+          "fp": 0,
+          "fn": 3,
+          "precision": 1.0,
+          "recall": 0.88
+        }
+      }
+    },
+    {
+      "file": "benchmark_04_chinese.json",
+      "label": "GLiNER 中文分词（原始空白错位配置）",
+      "metrics": {
+        "ner_strict": {
+          "tp": 20,
+          "fp": 16,
+          "fn": 8,
+          "precision": 0.5555555555555556,
+          "recall": 0.7142857142857143
+        },
+        "ner_span_only": {
+          "tp": 25,
+          "fp": 11,
+          "fn": 3,
+          "precision": 0.6944444444444444,
+          "recall": 0.8928571428571429
+        },
+        "dictionary_strict": {
+          "tp": 22,
+          "fp": 0,
+          "fn": 3,
+          "precision": 1.0,
+          "recall": 0.88
+        },
+        "dictionary_span_only": {
+          "tp": 22,
+          "fp": 0,
+          "fn": 3,
+          "precision": 1.0,
+          "recall": 0.88
+        }
+      }
+    },
+    {
+      "file": "benchmark_05_chinese_nonspace.json",
+      "label": "GLiNER 中文分词＋过滤空白词",
+      "metrics": {
+        "ner_strict": {
+          "tp": 20,
+          "fp": 16,
+          "fn": 8,
+          "precision": 0.5555555555555556,
+          "recall": 0.7142857142857143
+        },
+        "ner_span_only": {
+          "tp": 25,
+          "fp": 11,
+          "fn": 3,
+          "precision": 0.6944444444444444,
+          "recall": 0.8928571428571429
+        },
+        "dictionary_strict": {
+          "tp": 22,
+          "fp": 0,
+          "fn": 3,
+          "precision": 1.0,
+          "recall": 0.88
+        },
+        "dictionary_span_only": {
+          "tp": 22,
+          "fp": 0,
+          "fn": 3,
+          "precision": 1.0,
+          "recall": 0.88
+        }
+      }
+    }
+  ],
+  "actual_prompt": {
+    "characters": 1961,
+    "chunks": 17,
+    "dictionary_candidates": [],
+    "ner_entities": [
+      {
+        "start": 132,
+        "end": 139,
+        "text": "长江中下游一带",
+        "label": "location",
+        "score": 0.5797722935676575
+      },
+      {
+        "start": 140,
+        "end": 146,
+        "text": "内陆渡口小镇",
+        "label": "location",
+        "score": 0.6893153786659241
+      },
+      {
+        "start": 154,
+        "end": 157,
+        "text": "候船室",
+        "label": "location",
+        "score": 0.7561503052711487
+      },
+      {
+        "start": 207,
+        "end": 210,
+        "text": "候船室",
+        "label": "location",
+        "score": 0.8721627593040466
+      },
+      {
+        "start": 223,
+        "end": 227,
+        "text": "码头栈桥",
+        "label": "location",
+        "score": 0.460430383682251
+      },
+      {
+        "start": 295,
+        "end": 297,
+        "text": "周明",
+        "label": "person",
+        "score": 0.9841139316558838
+      },
+      {
+        "start": 314,
+        "end": 316,
+        "text": "河西",
+        "label": "location",
+        "score": 0.7933858036994934
+      },
+      {
+        "start": 317,
+        "end": 319,
+        "text": "河东",
+        "label": "location",
+        "score": 0.8191353678703308
+      },
+      {
+        "start": 333,
+        "end": 335,
+        "text": "周明",
+        "label": "person",
+        "score": 0.9865999817848206
+      },
+      {
+        "start": 341,
+        "end": 343,
+        "text": "渡口",
+        "label": "location",
+        "score": 0.7863836884498596
+      },
+      {
+        "start": 412,
+        "end": 414,
+        "text": "周禾",
+        "label": "person",
+        "score": 0.9277206659317017
+      },
+      {
+        "start": 420,
+        "end": 422,
+        "text": "周明",
+        "label": "person",
+        "score": 0.9660384058952332
+      },
+      {
+        "start": 433,
+        "end": 435,
+        "text": "县城",
+        "label": "location",
+        "score": 0.4785594940185547
+      },
+      {
+        "start": 502,
+        "end": 504,
+        "text": "周明",
+        "label": "person",
+        "score": 0.9599376320838928
+      },
+      {
+        "start": 519,
+        "end": 521,
+        "text": "周禾",
+        "label": "person",
+        "score": 0.9788641333580017
+      },
+      {
+        "start": 544,
+        "end": 546,
+        "text": "周禾",
+        "label": "person",
+        "score": 0.9812018871307373
+      },
+      {
+        "start": 556,
+        "end": 558,
+        "text": "小镇",
+        "label": "location",
+        "score": 0.4549237787723541
+      },
+      {
+        "start": 586,
+        "end": 591,
+        "text": "渡口候船室",
+        "label": "location",
+        "score": 0.8044240474700928
+      },
+      {
+        "start": 696,
+        "end": 698,
+        "text": "周禾",
+        "label": "person",
+        "score": 0.8601926565170288
+      },
+      {
+        "start": 724,
+        "end": 729,
+        "text": "value",
+        "label": "person",
+        "score": 0.4709591865539551
+      },
+      {
+        "start": 735,
+        "end": 737,
+        "text": "桌边",
+        "label": "location",
+        "score": 0.4401736855506897
+      },
+      {
+        "start": 742,
+        "end": 744,
+        "text": "行李",
+        "label": "person",
+        "score": 0.5103535056114197
+      },
+      {
+        "start": 747,
+        "end": 749,
+        "text": "行李",
+        "label": "person",
+        "score": 0.43956658244132996
+      },
+      {
+        "start": 950,
+        "end": 952,
+        "text": "周禾",
+        "label": "fictional character",
+        "score": 0.6723847985267639
+      },
+      {
+        "start": 975,
+        "end": 980,
+        "text": "value",
+        "label": "person",
+        "score": 0.4370400607585907
+      },
+      {
+        "start": 1042,
+        "end": 1054,
+        "text": "scene_ledger",
+        "label": "person",
+        "score": 0.5617707371711731
+      },
+      {
+        "start": 1065,
+        "end": 1070,
+        "text": "after",
+        "label": "person",
+        "score": 0.5225841403007507
+      },
+      {
+        "start": 1124,
+        "end": 1126,
+        "text": "周明",
+        "label": "person",
+        "score": 0.8704040050506592
+      },
+      {
+        "start": 1332,
+        "end": 1336,
+        "text": "S1-A",
+        "label": "work of art",
+        "score": 0.7921224236488342
+      },
+      {
+        "start": 1338,
+        "end": 1340,
+        "text": "S1",
+        "label": "work of art",
+        "score": 0.5849601030349731
+      },
+      {
+        "start": 1360,
+        "end": 1362,
+        "text": "女儿",
+        "label": "person",
+        "score": 0.4555089771747589
+      },
+      {
+        "start": 1362,
+        "end": 1364,
+        "text": "周禾",
+        "label": "person",
+        "score": 0.9107638001441956
+      },
+      {
+        "start": 1385,
+        "end": 1387,
+        "text": "父亲",
+        "label": "person",
+        "score": 0.5016855001449585
+      },
+      {
+        "start": 1387,
+        "end": 1389,
+        "text": "周明",
+        "label": "person",
+        "score": 0.9348903894424438
+      },
+      {
+        "start": 1469,
+        "end": 1471,
+        "text": "女儿",
+        "label": "fictional character",
+        "score": 0.7456300258636475
+      },
+      {
+        "start": 1474,
+        "end": 1476,
+        "text": "女儿",
+        "label": "fictional character",
+        "score": 0.6642348170280457
+      },
+      {
+        "start": 1485,
+        "end": 1487,
+        "text": "父亲",
+        "label": "person",
+        "score": 0.6590266227722168
+      },
+      {
+        "start": 1507,
+        "end": 1509,
+        "text": "女儿",
+        "label": "fictional character",
+        "score": 0.5120494365692139
+      },
+      {
+        "start": 1553,
+        "end": 1555,
+        "text": "女儿",
+        "label": "fictional character",
+        "score": 0.7496068477630615
+      },
+      {
+        "start": 1558,
+        "end": 1560,
+        "text": "父亲",
+        "label": "person",
+        "score": 0.6809753179550171
+      },
+      {
+        "start": 1569,
+        "end": 1571,
+        "text": "女儿",
+        "label": "fictional character",
+        "score": 0.6805216073989868
+      },
+      {
+        "start": 1571,
+        "end": 1573,
+        "text": "周禾",
+        "label": "fictional character",
+        "score": 0.4620247483253479
+      },
+      {
+        "start": 1571,
+        "end": 1573,
+        "text": "周禾",
+        "label": "person",
+        "score": 0.6839829087257385
+      },
+      {
+        "start": 1588,
+        "end": 1590,
+        "text": "房间",
+        "label": "location",
+        "score": 0.6612974405288696
+      },
+      {
+        "start": 1617,
+        "end": 1619,
+        "text": "女儿",
+        "label": "fictional character",
+        "score": 0.6711409687995911
+      },
+      {
+        "start": 1625,
+        "end": 1627,
+        "text": "父亲",
+        "label": "fictional character",
+        "score": 0.42816051840782166
+      },
+      {
+        "start": 1640,
+        "end": 1642,
+        "text": "房间",
+        "label": "location",
+        "score": 0.6536459922790527
+      },
+      {
+        "start": 1667,
+        "end": 1669,
+        "text": "女儿",
+        "label": "fictional character",
+        "score": 0.7005922794342041
+      },
+      {
+        "start": 1704,
+        "end": 1706,
+        "text": "父亲",
+        "label": "person",
+        "score": 0.9651573300361633
+      },
+      {
+        "start": 1801,
+        "end": 1803,
+        "text": "父亲",
+        "label": "person",
+        "score": 0.9863691329956055
+      },
+      {
+        "start": 1814,
+        "end": 1816,
+        "text": "女儿",
+        "label": "person",
+        "score": 0.5043911933898926
+      },
+      {
+        "start": 1827,
+        "end": 1829,
+        "text": "父亲",
+        "label": "person",
+        "score": 0.9881125092506409
+      },
+      {
+        "start": 1843,
+        "end": 1845,
+        "text": "父亲",
+        "label": "person",
+        "score": 0.9879277348518372
+      },
+      {
+        "start": 1858,
+        "end": 1860,
+        "text": "父亲",
+        "label": "person",
+        "score": 0.9845409393310547
+      },
+      {
+        "start": 1872,
+        "end": 1874,
+        "text": "父亲",
+        "label": "person",
+        "score": 0.9854159951210022
+      },
+      {
+        "start": 1911,
+        "end": 1913,
+        "text": "母亲",
+        "label": "person",
+        "score": 0.9004200100898743
+      },
+      {
+        "start": 1942,
+        "end": 1944,
+        "text": "人物",
+        "label": "person",
+        "score": 0.6248939633369446
+      }
+    ],
+    "gold_annotations": null,
+    "known_false_reference_examples": [
+      {
+        "start": 724,
+        "end": 729,
+        "text": "value",
+        "label": "person",
+        "score": 0.4709591865539551
+      },
+      {
+        "start": 975,
+        "end": 980,
+        "text": "value",
+        "label": "person",
+        "score": 0.4370400607585907
+      },
+      {
+        "start": 1042,
+        "end": 1054,
+        "text": "scene_ledger",
+        "label": "person",
+        "score": 0.5617707371711731
+      },
+      {
+        "start": 1332,
+        "end": 1336,
+        "text": "S1-A",
+        "label": "work of art",
+        "score": 0.7921224236488342
+      },
+      {
+        "start": 1338,
+        "end": 1340,
+        "text": "S1",
+        "label": "work of art",
+        "score": 0.5849601030349731
+      }
+    ]
+  },
+  "copyright_verdict": null,
+  "new_media_submissions": 0,
+  "paid_inference_calls": 0,
+  "retained_setup_failures": [
+    "benchmark_01.json: missing offline main cache ref",
+    "benchmark_02_default.json: missing protobuf"
+  ],
+  "recommendation": "规则词库匹配与模型补充候选可继续试验；上下文复核前不自动屏蔽、改稿或判定版权通过。"
+}

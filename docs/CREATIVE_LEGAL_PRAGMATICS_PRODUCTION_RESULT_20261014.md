@@ -1,0 +1,13 @@
+# round_18真实结果：604完整规划、605工具参数非法JSON
+
+本轮主审172项不同离线检查通过，1537文件冻结后实际派发2次文本请求。604 MiniMax-M3.1-Flash-Preview返回完整原生整片规划，HTTP200/tool_calls，36637 reported tokens，结构contract_valid；这不证明创作或法律内容通过。605 deepseek-flash返回完整来源审查响应，HTTP200/tool_calls，38266 tokens，arguments末尾比完整JSON多一个右花括号，报Extra data并保留interface_rejected。
+
+终止状态halt_goal_audit_interface_or_unknown是现有生产入口的合并状态名；本次证据已明确605响应和用量均已知，不应把它描述为服务端未返回。实际失败类别为INVALID_JSON_RESPONSE/interface。该运行已停止，未自动重试、未重启RUN_CLAIM、未手工删字符验收来源报告。诊断证据见data/qa/creative_legal_pragmatics_20261014/ROOT_605_PROTOCOL_DIAGNOSIS_v1.json。
+
+604把结尾改为经理在纸面记“由公司提出协商，员工未签字”，未冒充双方已达成协议；经理承受区域考核及调任压力，员工将纸面与工时记录带往后续咨询的打算，构成其风险变化的触发。明天的班仍保留，争议没有解决。当前只有完整规划，尚无来源审查准入、有效正文、导演/表演/制作交接。人物动机和合法性仍需实际新报告检验。
+
+实际writer wire与首次预览一致：完整602修订种子、最新10项用户目标、R01全文及法律事实/权威/范围进入请求，真实wire canonical SHA 9e46d5ec032c9cf2c8cffff70e97016968f6d54ba898262c52f3fe2dc13e8ca0。旧可选策略及采样元信息按原阶段投影，未宣称本地全部元数据原样输入。接口用普通strict=false，不能宣称服务端结构保证。
+
+本轮2次/74903 tokens，累计605次/12148396 reported tokens/603 known。历史70/160未知及93117预留保持，新未知0。规划累计26，原round18上限27剩余1留在关闭运行。无正文、全文复审、媒体或发布。本轮失败不能把旧600草稿或604规划标为最终交付。
+
+后续独立修复见docs/CREATIVE_DEEPSEEK_STRICT_SOURCE_REPAIR_PLAN_20261014.md：官方/beta strict能力先离线适配，本地完整合同继续验收，然后新身份生成完整新来源报告。旧接口和冻结不修改，未知或新诊断失败不盲重派。可在独立目录恢复开发前data/development_checkpoints/creative_legal_usage_release_20261014_v18，保留账本与回执。

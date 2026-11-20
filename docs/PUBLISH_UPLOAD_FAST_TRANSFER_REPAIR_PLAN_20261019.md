@@ -1,0 +1,21 @@
+# 本次快速上传后完成识别修复
+
+唯一新任务6730f85e9f9b45bc9c0520f2e23c5cd3已知停在upload_failed，未填写文案、未AI声明、未点击发布、未评论。原日计数26已消费，本计划不授予新增发布或核验。原日志、截图、控制状态、锁与次数必须保留。
+
+实际诊断：13:18:33首份诊断仅有导航；13:18:37第二份已进入编辑界面并出现“重新上传”“快速检测”“检测中5%”；13:19:36起为“作品未见异常”“重新检测”，无当前上传取消/字节/传输文字。旧程序只接受观察到字节＋取消上传后才承认稳定检测完成，因此快传后漏掉这一瞬态会永远超时；通用progress数量不能区分播放器进度、封面生成和上传。诊断本文不据此伪写平台发布成功。
+
+文档先行，由既有发布worker子agent实施独立有界修复，主助手审查。保留旧transfer→clean分支，增加同一次成功选文件、同Page/同URL、当前检查容器“检测中→作品未见异常”的原节点身份转移证明：必须有明确独立检测UI容器和当前检测状态，可操作重新上传控件，连续两个稳定完成观察，无当前传输、失败、检测中、截断、导航或节点替换。不能仅凭预览、footer文案、body出现“未见异常”、未经历本次状态变化或旧草稿放行。不主动播放/读取媒体或调用网络；只读渲染UI和本次用户操作身份。
+
+新增少量真实本地Chrome DOM决定案覆盖快传检查转移、旧稳定稿/伪造正文、传输中、原容器替换/导航、旧transfer分支与未知观察拒绝。保存最终源码SHA、补丁和生产日志回放证据。当前实际HTML未完整采集，不编造class；若不能从明确现有UI建立严格资格就停止在未确认，而非放宽。修复和离线测试不自动派发下一次发布、不改变原25→26或注册授权。
+
+## 原节点能力核对与最小接线
+
+当前生产IPC Page只有evaluate到JSON，不能从workflow持有原生ElementHandle。经主agent确认，增量允许browser_session仅增加`upload_check_proof(operation, selection_nonce)`专用短RPC，worker原Page调用独立helper，以进程私有WeakKeyDictionary保存Document、URL、原检查容器/状态节点和可操作重新上传句柄。DOM及页面window不写状态，不读媒体、文件input值或网络；主frame导航事件失效。begin仅在本次set_input_files成功后由workflow生成唯一nonce，observe仍走原tab及派发门。旧42a14worker字节已保存在`data/development_checkpoints/upload_fast_check_transition_20261019/before`，线上原owner不热更新。
+
+新资格只认独立“快速检测”标题与有界原状态节点，且检查中时能绑定唯一原可用“重新上传”控件；旧稳定clean不能建立见证。容器或状态节点/控件被替换、检查转移后又检测、导航、UI截断或传输/失败会拒绝该新证明。仅本地DOM证明此合同，不声称真实平台所有渲染形态均适配；缺失原节点资格则保持未确认。
+
+首次真实本地RPC试验发现helper若放在platform_adapter包下，会在worker第一次调用时触发整个包/pydantic导入：一份试验发生transport超时并停止测试worker，另一份主审试验导入延迟导致fixture的一秒检查已结束。该延迟也可能丢失真实瞬态，因此不是只延长测试超时：新纯helper移到无初始化依赖的`src/shared/upload_check_transition.py`（仅re/weakref），worker仅从该namespace导入。未发布旧路径源码另存失败检查点后移除，不保留双份实现。本地fixture在成功begin后才安排clean定时器，以分离节点证明和包导入耗时；生产仍依靠轻量加载及时观察原UI检查状态。
+
+## 实际IPC能力与最小接线
+
+现有生产Page.evaluate只返回JSON，不能跨RPC持有DOM原节点，不能只靠文本JSON宣称原节点身份。主助手审查后扩展最小worker接线：独立上传helper在worker私有WeakMap中持同Page/Document、检测容器和重新上传控件句柄，新增专用begin/observe操作，由成功选择文件的本次nonce绑定，导航事件失效。只读页面DOM，状态保存在worker，不向window注入全局状态，不读网络/媒体。保存原browser_session SHA42a14de639d12f6f7366b820dfd49b0ff121ee684f3f72233e77ecb3d35ca157及新源码；实际服务22452仍为该原worker版，新修复仅离线。

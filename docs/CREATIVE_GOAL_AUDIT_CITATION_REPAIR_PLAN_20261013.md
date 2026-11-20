@@ -1,0 +1,11 @@
+# 537已知完整审查的引用合同修复
+
+536完整规划通过goal_source_v3结构验收；537 DeepSeek完整HTTP200/tool_calls、用量27653已知，全部25claim和7goal行齐全，但自由document_path写成native_goal_document.claims[0]、多路径串和范围，quote有汇总而非当前叶子原句，pass还填写“无需修改”。本地拒收正确，服务结果不是未知，不能把path规范化或删除返修文字冒充有效审查。
+
+已验证接口设计问题：Schema给路径自由字符串，却要求本地必须为特定叶子；Schema允许pass的返修字段非空，却本地要求空。重派同一合同不会隔离根因。
+
+新增独立goal_audit_citation_contract_v1：由程序按未改原生goal SHA编译证据目录、短G编号和准确path/原文；模型只提交status/reason/required_revision及goal_checks的evidence_refs。claim_checks的key本身绑定该claim原文，引用元数据由编译器按准确ID取回，不由模型再抄path。pass的required_revision在请求Schema中const空串，fail非空。引用只能来自当前不可变目录，错误/漏项不能靠本地补审。
+
+新增workflow_v4和production_v5接线；goal_source_v3、context_v3及已冻结round_03不修改。离线先验证旧537仍拒收、虚构证据和未知/空覆盖停止、实际wire/上下文SHA相同、完整536规划不改。实际新增审查用于已通过结构但尚未通过语义的536；如语义失败，由MiniMax按已授权自主范围提交完整新计划，不拼接。DeepSeek保持必要少量审查。
+
+round_03终止，累计537/10218615 reported tokens、known535，70/160未知与93117预留不变；本批4新调用，0正文/媒体。下一独立run承接这些数与历史6份规划，禁止重启原RUN_CLAIM。

@@ -6,6 +6,8 @@ import json
 import os
 import sqlite3
 import uuid
+import threading
+from functools import lru_cache
 from contextlib import contextmanager
 from dataclasses import asdict
 from pathlib import Path
@@ -39,6 +41,17 @@ from .collection.planner import AccountCollectionPlan
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DB_PATH = PROJECT_ROOT / "data" / "trend_intelligence.db"
 TREND_SCHEMA_VERSION = 8
+_DATABASE_LOCKS_GUARD = threading.Lock()
+_DATABASE_LOCKS = {}
+
+
+def _database_lock(path):
+    # Multiple repository instances share short metadata/transaction ownership.
+    # Computation and network calls stay outside this connection scope. SQLite
+    # still enforces cross-process exclusion; this never retries a business task.
+    key = str(Path(path).resolve()).casefold()
+    with _DATABASE_LOCKS_GUARD:
+        return _DATABASE_LOCKS.setdefault(key, threading.RLock())
 
 
 SCHEMA_SQL = """
@@ -364,36 +377,89 @@ class TrendRepository:
 
     @contextmanager
     def connection(self) -> Iterator[sqlite3.Connection]:
-        conn = sqlite3.connect(self.db_path)
+        with _database_lock(self.db_path):
+            conn = sqlite3.connect(self.db_path)
+            try:
+                conn.row_factory = sqlite3.Row
+                conn.execute("PRAGMA foreign_keys = ON")
+                conn.execute("PRAGMA busy_timeout = 5000")
+                yield conn
+                conn.commit()
+            finally:
+                conn.close()
+
+    def initialize(self) -> None:
+        if self._schema_ready():
+            return
+        with self.connection() as conn:
+            self._initialize_connection(conn)
+
+    @staticmethod
+    def _schema_signature(conn):
+        rows = conn.execute(
+            "SELECT type,name,sql FROM sqlite_master WHERE type IN ('table','index') "
+            "AND name NOT LIKE 'sqlite_%'").fetchall()
+        tables = {}
+        indexes = {}
+        for kind, name, sql in rows:
+            if kind == 'table':
+                quoted = '"' + name.replace('"', '""') + '"'
+                # Column order differs on legitimately migrated databases.
+                tables[name] = frozenset(tuple(row)[1:] for row in conn.execute(
+                    f'PRAGMA table_info({quoted})'))
+            else:
+                indexes[name] = ' '.join((sql or '').split())
+        return tables, indexes
+
+    @classmethod
+    @lru_cache(maxsize=1)
+    def _expected_schema(cls):
+        conn = sqlite3.connect(':memory:')
         conn.row_factory = sqlite3.Row
-        conn.execute("PRAGMA foreign_keys = ON")
-        conn.execute("PRAGMA busy_timeout = 5000")
         try:
-            yield conn
-            conn.commit()
+            cls._initialize_connection(conn)
+            return cls._schema_signature(conn)
         finally:
             conn.close()
 
-    def initialize(self) -> None:
-        with self.connection() as conn:
-            conn.executescript(SCHEMA_SQL)
-            self._ensure_observation_columns(conn)
-            self._ensure_item_columns(conn)
-            self._ensure_collection_run_columns(conn)
-            self._ensure_published_context_columns(conn)
-            conn.execute(
-                "CREATE INDEX IF NOT EXISTS idx_trend_observations_query "
-                "ON trend_observations(query_kind, query_value, collected_at)"
-            )
-            conn.execute(
-                "CREATE INDEX IF NOT EXISTS idx_collection_runs_account "
-                "ON trend_collection_runs(account_uuid, finished_at)"
-            )
-            conn.execute(
-                "CREATE INDEX IF NOT EXISTS idx_collection_runs_plan "
-                "ON trend_collection_runs(plan_id, batch_id)"
-            )
-            conn.execute(f"PRAGMA user_version = {TREND_SCHEMA_VERSION}")
+    def _schema_ready(self):
+        with _database_lock(self.db_path):
+            return self._schema_ready_locked()
+
+    def _schema_ready_locked(self):
+        if not self.db_path.exists():
+            return False
+        # Failures remain failures. A version number alone does not certify a
+        # complete schema, and this path never repairs or upgrades a live DB.
+        conn = sqlite3.connect(self.db_path.as_uri()+'?mode=ro', uri=True, timeout=5)
+        try:
+            if conn.execute('PRAGMA user_version').fetchone()[0] != TREND_SCHEMA_VERSION:
+                return False
+            tables, indexes = self._schema_signature(conn)
+            expected_tables, expected_indexes = self._expected_schema()
+            return (all(columns <= tables.get(name, frozenset())
+                        for name, columns in expected_tables.items())
+                    and all(indexes.get(name) == sql for name, sql in expected_indexes.items()))
+        finally:
+            conn.close()
+
+    @classmethod
+    def _initialize_connection(cls, conn):
+        conn.executescript(SCHEMA_SQL)
+        cls._ensure_observation_columns(conn)
+        cls._ensure_item_columns(conn)
+        cls._ensure_collection_run_columns(conn)
+        cls._ensure_published_context_columns(conn)
+        conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_trend_observations_query "
+            "ON trend_observations(query_kind, query_value, collected_at)")
+        conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_collection_runs_account "
+            "ON trend_collection_runs(account_uuid, finished_at)")
+        conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_collection_runs_plan "
+            "ON trend_collection_runs(plan_id, batch_id)")
+        conn.execute(f"PRAGMA user_version = {TREND_SCHEMA_VERSION}")
 
     @staticmethod
     def _ensure_observation_columns(conn: sqlite3.Connection) -> None:

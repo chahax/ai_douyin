@@ -1,0 +1,16 @@
+{
+  "schema": "seedance_model_catalog/v1",
+  "source_archive": "docs/reference/seedance/2026-09-07/manifest.json",
+  "preferred": {"provider": "ark_api", "model": "doubao-seedance-2-0-mini-260615", "resolution": "480p", "ratio": "9:16", "generate_audio": true},
+  "providers": {
+    "ark_api": {"label": "火山方舟 API", "base_url": "https://ark.cn-beijing.volces.com/api/v3", "key_env": "ARK_API_KEY", "tasks_path": "/contents/generations/tasks"},
+    "byteplus_api": {"label": "BytePlus LAS API", "base_url": "https://operator.las.ap-southeast-1.bytepluses.com/api/v1", "key_env": "SEEDANCE_API_KEY", "tasks_path": "/contents/generations/tasks"},
+    "dreamina_cli": {"label": "即梦 CLI", "authentication": "current Windows user's OAuth login", "model": "seedance2.5"}
+  },
+  "ark_models": [
+    {"id": "doubao-seedance-2-0-mini-260615", "name": "Seedance 2.0 Mini", "family": "2.0", "duration_min": 4, "duration_max": 15, "auto_duration": true, "resolutions": ["480p", "720p"], "output_formats": ["mp4"], "reference_limits": {"image": 9, "video": 3, "audio": 3, "total": 15}, "audio_only_reference": false, "prompt_timing": "ordered", "api_guide": "seedance_2_0_api.md", "prompt_guide": "seedance_2_0_prompt.md"},
+    {"id": "doubao-seedance-2-0-fast-260128", "name": "Seedance 2.0 Fast", "family": "2.0", "duration_min": 4, "duration_max": 15, "auto_duration": true, "resolutions": ["480p", "720p"], "output_formats": ["mp4"], "reference_limits": {"image": 9, "video": 3, "audio": 3, "total": 15}, "audio_only_reference": false, "prompt_timing": "ordered", "api_guide": "seedance_2_0_api.md", "prompt_guide": "seedance_2_0_prompt.md"},
+    {"id": "doubao-seedance-2-0-260128", "name": "Seedance 2.0", "family": "2.0", "duration_min": 4, "duration_max": 15, "auto_duration": true, "resolutions": ["480p", "720p", "1080p", "4k"], "output_formats": ["mp4"], "reference_limits": {"image": 9, "video": 3, "audio": 3, "total": 15}, "audio_only_reference": false, "prompt_timing": "ordered", "api_guide": "seedance_2_0_api.md", "prompt_guide": "seedance_2_0_prompt.md"},
+    {"id": "doubao-seedance-2-5-260628", "name": "Seedance 2.5", "family": "2.5", "duration_min": 4, "duration_max": 30, "auto_duration": true, "resolutions": ["480p", "720p", "1080p"], "output_formats": ["mp4", "mov"], "reference_limits": {"image": 30, "video": 10, "audio": 10, "total": 50}, "audio_only_reference": true, "prompt_timing": "integer_seconds_or_ordered", "api_guide": "seedance_2_5_api.md", "prompt_guide": "seedance_2_5_prompt.md"}
+  ]
+}

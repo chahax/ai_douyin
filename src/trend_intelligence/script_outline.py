@@ -39,6 +39,7 @@ def build_outline_messages(workflow_messages, feedback, previous=None, *, refere
             'source_id': s['source_id'], 'metric_kind': s.get('metric_kind'), 'metric_value': s.get('metric_value'),
             'core_message': copy.deepcopy(s.get('expression_analysis', {}).get('core_message')),
             'expression_modes': copy.deepcopy(s.get('expression_analysis', {}).get('expression_modes')),
+            'emotion_analysis': copy.deepcopy(s.get('emotion_analysis', {'status': 'not_analyzed'})),
             'independent_review': copy.deepcopy(s['independent_review'])} for s in sources]
         evidence['source_evidence'] = [copy.deepcopy(s) for s in sources if s['source_id'] in selected]
         evidence['planning_evidence_scope'] = {

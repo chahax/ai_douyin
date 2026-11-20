@@ -1,0 +1,22 @@
+# 原已提交评论的只读补核
+
+原gen29/a0842bdafbad43eabb2ed35937ca7038已对原作品7698306800386379018执行sole发送，claim存在，1.2秒内未读到回显，结果未知。禁止再次填入、激活发送或点击；保留旧native、receipt、claim及原发布锁。用户最新明确授权无限只读核查和精确项目进程交还，允许实现独立只读补核，不扩大旧评论发送授权。
+
+采用同账号管控actor/绑定/冻结授权的显式readonly模式：只有原已完成unknown native证据、claim身份和原文、准备文件及原作品全项核验均匹配时，才能进入。此模式的实际handler只调用独立只读检查函数，不进入post_authorized_publication_comment，不提供任意URL、脚本或平台写操作。首次保存原unknown receipt全文SHA及原native；新补核结果另存，不改旧回执为成功。只读DOM等待可以有界等待和滚动评论列表，不点击发送、不填文本；记录实际原生comment结构和截图帮助识别，只有同作品范围内原文精确可见、原作品六项证据完整才允许结清，并通过原store审核结算及control CAS恢复。若评论仍不可见/遇验证码，保留unknown和锁，不重发。
+
+若加载代码需重启，必须原任务已终结为unknown且无运行操作，沿用现有项目PID/create-time/命令行/profile/子进程双栅栏交还，保留全部未知历史和维护游标；不得热接管未知在途任务。实现先子agent、主助手审查精确派发与只读代码及反例，再部署真实补核。
+
+
+## 浏览器服务固定接口
+
+独立publication_comment_settlement.verify_only(adapter,frozen_command,post_id,*,evidence_dir)，输入沿原account/authorization/comment/title/hashtags/publish_evidence，加original_comment_command_id、source_claim及source_unknown_receipt冻结ref。复核原claim/unknown收据SHA/身份/原文，原文件不写；原身份核验后只读canonical fullscope和同一唯一comment-list，8读20秒、最多一次标准scroll，无fill/click/激活。只已知comment-item下唯一comment-content/item-content原文精确可见能成功；未知布局保存浅层tree与固定approved全文匹配候选安全形状（≤12/有限祖先），不得因draft/全页文字通过。独立receipt schema authorized_publication_comment_readonly/v1，status matching_comment_already_visible/unconfirmed/human_required，exact_visible/new_submissionFalse/ownership_verifiedFalse/original_comment_command_id/source refs，本轮publish_evidence。receipt本体不含自身ref；返回加readonly_evidence_ref。主动AI原journal来源由runtime验证后补外层，显示UI不证明来源。旧unknown回执/claim及历史不改。
+
+
+## 实际嵌套SPAN评论文字（首轮只读7abd）
+
+7abd23a417cf47f082f04aa5933f7f13原生UI已显示原批准完整评论1条，known comment-item=1但named content=0。原native确认为最深唯一SPAN全文，连续至少3个可见SPAN祖先保持相同全文；不绑定第4层hash。独立checkpoint publication_comment_observed_span_20261019保存原native/receipt/UI/旧发送claim与unknown SHA。仅在known top-level comment-item且原named content为0时增只读资格：card内最深唯一无子SPAN，连续3个可见同全文SPAN，非draft/form/header/quote/reply，且整体exact匹配唯一。仍同canonical/fullscope/document尾栅栏，原文件和提交模块不写；错scope/重复只诊断拒绝。
+
+
+## 实际原生文字容器修正
+
+首次只读7abd已真实观察到唯一comment-list内唯一comment-item含完整原授权173字符正文，UI显示作者标识；原named comment-content/item-content为0。实际最深正文为SPAN，连续至少3层可见SPAN祖先同全文，属于同comment-item，原生diagnostic及UI已冻结。本轮仅允许在named正文0且上述实际结构唯一、非草稿/表单/引用/回复区域时补充此原生容器识别；多候选或身份改变继续拒绝。不增加评论发送次数，仍只读结算。

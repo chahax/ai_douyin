@@ -1,0 +1,63 @@
+{
+  "template": "video_recipe/v1",
+  "id": "anti_fraud_subject_lock_example",
+  "intent": {
+    "motion": "subject",
+    "framing": "medium",
+    "camera": "locked",
+    "background": "static",
+    "preserve_reference": true,
+    "contains_hands": true,
+    "contains_phone": true,
+    "multi_person": false,
+    "replacement": false,
+    "relight": false
+  },
+  "inputs": {
+    "generated_video": "D:\\IT\\AI_vido\\ComfyUI\\output\\wan_anti_fraud_subject_v1\\composite_static_bg_00001_.mp4",
+    "reference_image": "D:\\IT\\AI_vido\\ComfyUI\\input\\flux_fixed_00001.png",
+    "subject_mask": "D:\\IT\\AI_vido\\ComfyUI\\input\\anti_fraud_subject_mask_refined.png"
+  },
+  "appearance_lock": {
+    "enabled": true,
+    "motion_gain": 0.55
+  },
+  "smoothing": {
+    "interpolation": "minterpolate"
+  },
+  "output": {
+    "path": "../../data/qa/video_recipe_example/final.mp4",
+    "width": 704,
+    "height": 1248,
+    "fps": 30,
+    "crf": 18,
+    "preset": "slow"
+  },
+  "gate": {
+    "regions": {
+      "background_left": {
+        "rect_normalized": [0.0, 0.0, 0.23, 0.34],
+        "motion": "static",
+        "reference_lock": true
+      },
+      "background_right": {
+        "rect_normalized": [0.793, 0.0, 0.207, 0.353],
+        "motion": "static",
+        "reference_lock": true
+      },
+      "subject": {
+        "rect_normalized": [0.0, 0.163, 1.0, 0.837],
+        "motion": "dynamic",
+        "min_active_pixel_ratio": 0.001,
+        "max_active_pixel_ratio": 0.12
+      },
+      "phone_hand": {
+        "rect_normalized": [0.253, 0.475, 0.372, 0.258],
+        "motion": "dynamic",
+        "max_frame_distance": 5.0,
+        "max_anchor_distance": 10.0,
+        "max_active_pixel_ratio": 0.15
+      }
+    }
+  }
+}

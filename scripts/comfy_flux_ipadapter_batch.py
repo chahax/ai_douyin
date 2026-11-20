@@ -187,7 +187,21 @@ def main() -> None:
     parser.add_argument("--seed-offset", type=int, default=2000)
     parser.add_argument("--filename-prefix", default="anti_fraud_police_chibi/new")
     parser.add_argument("--timeout-seconds", type=int, default=3600)
+    parser.add_argument(
+        "--candidates-per-shot",
+        type=int,
+        default=1,
+        help="Generate multiple independently seeded candidates for every shot.",
+    )
+    parser.add_argument(
+        "--candidate-seed-stride",
+        type=int,
+        default=101,
+        help="Seed increment between candidates for the same shot.",
+    )
     args = parser.parse_args()
+    if args.candidates_per_shot < 1:
+        raise ValueError("--candidates-per-shot must be at least 1")
 
     project = json.loads(Path(args.project).read_text(encoding="utf-8"))
     settings = project["keyframe_generation"]
@@ -206,10 +220,6 @@ def main() -> None:
 
     for shot in project["shots"]:
         if args.only and shot["id"] not in args.only:
-            continue
-        destination = image_dir / f"{shot['id']}.png"
-        if args.skip_existing and destination.is_file():
-            print(f"skipped {shot['id']}", flush=True)
             continue
         shot_options = overrides.get(shot["id"], {})
         override_prompt = shot_options.get("prompt")
@@ -232,42 +242,72 @@ def main() -> None:
             "ip_scale",
             shot.get("ip_scale", IP_SCALES.get(shot["id"], 0.65)),
         )
-        graph = workflow(
-            checkpoint=settings["checkpoint"],
-            prompt=prompt,
-            negative_prompt=shot_options.get("negative_prompt", ""),
-            seed=shot["seed"] + args.seed_offset,
-            width=settings["width"],
-            height=settings["height"],
-            steps=settings["steps"],
-            cfg=settings["cfg"],
-            sampler=settings["sampler"],
-            scheduler=settings["scheduler"],
-            reference_image=args.reference_image,
-            ip_adapter=args.ip_adapter,
-            clip_vision=args.clip_vision,
-            ip_scale=ip_scale,
-            filename_prefix=f"{args.filename_prefix}/{shot['id']}",
-        )
-        workflow_path = workflow_dir / f"{shot['id']}.api.json"
-        workflow_path.write_text(json.dumps(graph, ensure_ascii=False, indent=2), encoding="utf-8")
-        response = request_json(f"{args.base_url}/prompt", {"prompt": graph, "client_id": client_id})
-        prompt_id = response["prompt_id"]
-        print(f"queued {shot['id']}: {prompt_id}", flush=True)
-        history = wait_history(args.base_url, prompt_id, args.timeout_seconds)
-        source = saved_image(history, Path(args.comfy_output))
-        shutil.copy2(source, destination)
-        report.append({
-            "id": shot["id"],
-            "status": "generated",
-            "prompt_id": prompt_id,
-            "source": str(source),
-            "output": str(destination),
-            "seed": shot["seed"] + args.seed_offset,
-            "ip_scale": ip_scale,
-        })
-        report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
-        print(f"generated {shot['id']}: {destination}", flush=True)
+        for candidate_index in range(args.candidates_per_shot):
+            candidate_id = (
+                shot["id"]
+                if args.candidates_per_shot == 1
+                else f"{shot['id']}_c{candidate_index + 1:02d}"
+            )
+            destination = image_dir / f"{candidate_id}.png"
+            if args.skip_existing and destination.is_file():
+                print(f"skipped {candidate_id}", flush=True)
+                continue
+            seed = (
+                shot["seed"]
+                + args.seed_offset
+                + candidate_index * args.candidate_seed_stride
+            )
+            graph = workflow(
+                checkpoint=settings["checkpoint"],
+                prompt=prompt,
+                negative_prompt=shot_options.get(
+                    "negative_prompt",
+                    project.get("keyframe_generation", {}).get("negative_prompt")
+                    or project.get("video_generation", {}).get("negative_prompt", ""),
+                ),
+                seed=seed,
+                width=settings["width"],
+                height=settings["height"],
+                steps=settings["steps"],
+                cfg=settings["cfg"],
+                sampler=settings["sampler"],
+                scheduler=settings["scheduler"],
+                reference_image=args.reference_image,
+                ip_adapter=args.ip_adapter,
+                clip_vision=args.clip_vision,
+                ip_scale=ip_scale,
+                filename_prefix=f"{args.filename_prefix}/{candidate_id}",
+            )
+            workflow_path = workflow_dir / f"{candidate_id}.api.json"
+            workflow_path.write_text(
+                json.dumps(graph, ensure_ascii=False, indent=2),
+                encoding="utf-8",
+            )
+            response = request_json(
+                f"{args.base_url}/prompt",
+                {"prompt": graph, "client_id": client_id},
+            )
+            prompt_id = response["prompt_id"]
+            print(f"queued {candidate_id}: {prompt_id}", flush=True)
+            history = wait_history(args.base_url, prompt_id, args.timeout_seconds)
+            source = saved_image(history, Path(args.comfy_output))
+            shutil.copy2(source, destination)
+            report.append({
+                "id": candidate_id,
+                "shot_id": shot["id"],
+                "candidate_index": candidate_index + 1,
+                "status": "generated",
+                "prompt_id": prompt_id,
+                "source": str(source),
+                "output": str(destination),
+                "seed": seed,
+                "ip_scale": ip_scale,
+            })
+            report_path.write_text(
+                json.dumps(report, ensure_ascii=False, indent=2),
+                encoding="utf-8",
+            )
+            print(f"generated {candidate_id}: {destination}", flush=True)
 
 
 if __name__ == "__main__":

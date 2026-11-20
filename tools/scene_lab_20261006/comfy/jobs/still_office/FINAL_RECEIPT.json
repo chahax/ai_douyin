@@ -1,0 +1,20 @@
+{
+  "id": "still_office",
+  "prompt_id": "0523cc1f-9d59-430b-abe8-c3814988d400",
+  "interface_success": true,
+  "outputs_saved": [
+    {
+      "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\comfy\\output\\scene_lab\\depth_office_to_door_00001_.png",
+      "bytes": 165439,
+      "sha256": "f9bfb7a75dbe05d5dece6483f7e12da5734576dae99a32cc08b4971f2d4bde7b",
+      "node": "14",
+      "output_key": "images"
+    }
+  ],
+  "at_utc": "2026-10-06T05:23:51.371951+00:00",
+  "status": "awaiting_human_review",
+  "human_content_approval": null,
+  "assistant_video_content_review_performed": false,
+  "auto_retries": 0,
+  "paid_cloud_calls": 0
+}

@@ -8,11 +8,18 @@ from test_screenplay_stage_cli import case, workflow, write, client_for
 from test_script_screenplay import production_v2
 
 
+DELIVERY = ('触发：对方递出合同；情绪：迟疑后稳定；语速：略慢；'
+            '语气：克制；重音：合同；停顿：回答前一拍；余波：目光回到对方。')
+
+
 def create_production(case, monkeypatch):
     story = case.related()
     review = case.review(story)
     case.argv('--stage', 'production', '--screenplay', story, '--story-review', review)
-    client_for(monkeypatch, json.dumps(production_v2(case.story()), ensure_ascii=False))
+    production = production_v2(case.story())
+    for shot in production['shots']:
+        shot['emotion_and_performance'] = DELIVERY
+    client_for(monkeypatch, json.dumps(production, ensure_ascii=False))
     stage.main()
     return case.output / 'production.json', story, review
 
@@ -45,7 +52,7 @@ def test_production_revision_exact_patch_preserves_story_and_other_production_fi
     original, story, review = create_production(case, monkeypatch)
     before = {p: p.read_bytes() for p in case.root.rglob('*.json')}
     changes = {'/scene_design/camera_angle': '同一桌轴一侧，平视二人面部。',
-               '/shots/1/emotion_and_performance': '双方目光稳定，语气自然利落。'}
+               '/shots/1/emotion_and_performance': DELIVERY.replace('回答前一拍', '回答前两拍')}
     output = revise_args(case, original, story, review, fields=tuple(changes))
     calls = client_for(monkeypatch, json.dumps(changes, ensure_ascii=False))
     stage.main()

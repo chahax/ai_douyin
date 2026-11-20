@@ -118,6 +118,127 @@ def _process_douyin_oauth_callback(
         st.query_params.pop("state", None)
 
 
+def _account_binding_metrics(profiles, bindings, controls):
+    normal = sum(bindings[p.account_key].status == 'active' for p in profiles if p.account_key in bindings)
+    if not isinstance(controls, list):
+        return normal, '未知'
+    expected = {p.account_uuid: p.account_key for p in profiles}
+    observed = set()
+    for row in controls:
+        if (not isinstance(row, dict) or not isinstance(row.get('account_uuid'), str)
+                or not row['account_uuid'] or not isinstance(row.get('account_key'), str) or not row['account_key']
+                or row.get('state') not in ('active', 'paused', 'recovery_requested', 'recovering')):
+            return normal, '未知'
+        uuid, key = row['account_uuid'], row['account_key']
+        if uuid in expected:
+            if key != expected[uuid] or uuid in observed:
+                return normal, '未知'
+            observed.add(uuid)
+        elif key in expected.values():
+            return normal, '未知'
+    if set(expected) - observed:
+        return normal, '未知'
+    paused = {row.get('account_uuid') for row in controls
+              if row.get('state') in ('paused', 'recovery_requested', 'recovering')}
+    pending = sum(p.account_key not in bindings or bindings[p.account_key].status != 'active'
+                  or p.account_uuid in paused for p in profiles)
+    return normal, pending
+
+
+def _initialize_single_account_scope(profiles, state=None):
+    state = st.session_state if state is None else state
+    if len(profiles) != 1 or 'accounts_selected_scope' in state:
+        return
+    valid = {profile.account_uuid for profile in profiles}
+    if state.get('active_account_uuid') not in valid:
+        state['active_account_uuid'] = profiles[0].account_uuid
+
+
+def page_douyin_accounts() -> None:
+    repository = AccountProfileRepository()
+    _process_douyin_oauth_callback(repository)
+    profiles = repository.list_active(status=None)
+    if "account" in st.query_params:
+        account_uuid = st.query_params["account"]
+        profile = next((p for p in profiles if p.account_uuid == account_uuid), None)
+        st.markdown("[返回抖音账号列表](./douyin-accounts)")
+        if profile is None:
+            st.warning("找不到该运营账号，请从账号列表重新打开。")
+            return
+        page_header(profile.display_name or profile.account_key, profile.account_key, icon="◉", eyebrow="ACCOUNTS")
+        _render_account_binding(profile, repository)
+        _render_account_maintenance(profile, repository)
+        return
+
+    page_header("抖音账号", "查看真实抖音身份、登录状态与浏览器绑定，管理账号内容策略。", icon="◉", eyebrow="ACCOUNTS")
+    _initialize_single_account_scope(profiles)
+    bindings = {item.account_key: item for item in AccountBindingRepository(repository.db_path).list_all()}
+    try:
+        from src.scheduler.account_refresh import snapshot
+        controls = snapshot().get('controls')
+    except Exception:
+        controls = None
+    normal, pending = _account_binding_metrics(profiles, bindings, controls)
+    cols = st.columns(3)
+    cols[0].metric("运营账号", len(profiles))
+    cols[1].metric("绑定记录正常", normal)
+    cols[2].metric("待绑定或处理", pending)
+    st.caption("绑定记录正常仅表示保存的身份绑定正常，不等于养号正在运行；后台暂停或等待核验仍计入待处理。其他浏览器登录不代表本项目已完成身份验证。")
+    if pending == '未知':
+        st.caption('后台控制尚未登记、读取失败或数据待核对，当前不能确定待处理账号数量。')
+    identity_tab, add_tab, strategy_tab, refresh_tab = st.tabs(["账号与登录", "添加抖音账号", "内容策略与新建账号", "自动更新与日志"])
+    with refresh_tab:
+        from src.web.account_refresh_dashboard import render_account_refresh
+        render_account_refresh()
+    with add_tab:
+        st.caption("先创建独立运营账号，再在“账号与登录”中扫码绑定。不会替换其他账号的绑定或浏览器环境。")
+        if has_permission(get_current_role(), 'editor'):
+            with st.form('add_operation_account'):
+                new_key = st.text_input('新账号标识', placeholder='例如 douyin_account_02')
+                new_name = st.text_input('显示名称', placeholder='例如第二个普法号')
+                specs = get_default_domain_registry().list_available()
+                strategy = st.selectbox('初始内容领域', [s.strategy_id for s in specs])
+                create = st.form_submit_button('创建独立运营账号')
+            if create:
+                try:
+                    if not new_key.strip() or not new_name.strip():
+                        raise ValueError('请填写账号标识和显示名称。')
+                    if any(p.account_key == new_key.strip() for p in profiles):
+                        raise ValueError('账号标识已存在，请使用新标识；原账号无需重复创建。')
+                    profile = AccountProfile(account_uuid=stable_account_uuid(new_key.strip()), account_key=new_key.strip(),
+                                             display_name=new_name.strip(), domain_strategy_id=strategy)
+                    repository.save(profile)
+                    st.session_state['active_account_uuid'] = profile.account_uuid
+                    st.success('已创建独立账号，请进入“账号与登录”完成绑定。')
+                    st.rerun()
+                except (ValueError, RuntimeError) as exc:
+                    st.error(str(exc))
+        else:
+            st.info('请由编辑者或管理员添加运营账号。')
+    with identity_tab:
+        if not profiles:
+            st.info("尚无运营账号。请由编辑者或管理员在“内容策略与新建账号”中创建，再由管理员登录绑定。")
+        else:
+            for account in profiles:
+                st.link_button(
+                    f"查看资料 · {account.display_name or account.account_key} · {account.account_key}",
+                    f"./douyin-accounts?account={quote(account.account_uuid, safe='')}",
+                )
+            from src.web.components.account_scope import select_account_scope
+            selected = select_account_scope(profiles, key='accounts_selected_scope', allow_all=False)
+            profile = next((p for p in profiles if p.account_uuid == selected), None)
+            if profile:
+                _render_account_binding(profile, repository)
+                _render_account_maintenance(profile, repository)
+            else:
+                st.info('请选择运营账号查看登录身份，或进入“添加抖音账号”创建新账号。')
+    with strategy_tab:
+        if has_permission(get_current_role(), "editor"):
+            _render_account_profiles(repository, include_binding=False)
+        else:
+            st.info("内容策略由编辑者或管理员维护；当前为只读账号查看权限。")
+
+
 def page_trend_operations() -> None:
     page_header(
         "热门选题",
@@ -183,15 +304,13 @@ def _render_collection(
     account_profile: AccountProfile | None = None
     account_binding_ready = False
     if account_profiles:
-        selected_account_key = st.selectbox(
-            "分析账号",
-            [item.account_key for item in account_profiles],
-            format_func=lambda value: _account_profile_label(account_profiles, value),
-            key="trend_analysis_account",
-        )
-        account_profile = next(
-            item for item in account_profiles if item.account_key == selected_account_key
-        )
+        from src.web.components.account_scope import select_account_scope
+        selected_uuid = select_account_scope(account_profiles, key='trend_analysis_scope', allow_all=False)
+        account_profile = next((item for item in account_profiles if item.account_uuid == selected_uuid), None)
+        if account_profile is None:
+            st.info('请选择具体运营账号后开始采集与分析。')
+            return
+        selected_account_key = account_profile.account_key
         selected_binding = AccountBindingRepository(
             account_repository.db_path
         ).get_optional(selected_account_key)
@@ -610,7 +729,7 @@ def _render_collection(
     _render_content_analysis(repository, account_profile)
 
 
-def _render_account_profiles(repository: AccountProfileRepository) -> None:
+def _render_account_profiles(repository: AccountProfileRepository, *, include_binding: bool = True) -> None:
     section_header(
         "运营账号与领域策略",
         "法律和小说是首批领域插件；每次修改都会创建不可变账号策略版本。",
@@ -661,7 +780,7 @@ def _render_account_profiles(repository: AccountProfileRepository) -> None:
         (item for item in profiles if item.account_key == selected_existing),
         None,
     )
-    if current is not None:
+    if current is not None and include_binding:
         _render_account_binding(current, repository)
         _render_account_maintenance(current, repository)
     specs = registry.list_available()
@@ -801,6 +920,10 @@ def _render_account_binding(
     is_admin = has_permission(get_current_role(), "admin")
     binding = runtime.bindings.get_optional(profile.account_key)
     if binding:
+        st.caption("已有登录优先复用当前账号的专属浏览器会话。安全验证时先打开原环境处理，仅页面要求时重新登录；换绑身份仍须单独确认。")
+    else:
+        st.caption("登录后会绑定到当前选中的运营账号，不会额外创建一条运营账号记录。")
+    if binding:
         left, middle, right = st.columns([1, 2, 2])
         with left:
             if binding.avatar_url:
@@ -814,17 +937,74 @@ def _render_account_binding(
         with right:
             state_label = {
                 "active": "登录健康",
-                "expired": "登录已过期，请重新扫码",
+                "expired": "记录为登录过期；可先请求核验原会话",
                 "mismatch": "账号不匹配，已停止任务",
-                "blocked": "需要人工安全验证",
+                "blocked": "登录或安全状态待核验；先检查原环境",
             }.get(binding.status, binding.status)
             if binding.status == "active":
                 st.success(state_label)
             else:
                 st.error(state_label)
             st.caption(f"浏览器环境：{binding.browser_environment_key}")
+            from src.web.production_insights import display_time
+            st.caption("最近身份验证（UTC+8）：" + display_time(binding.verified_at))
+            st.caption("最近健康检查（UTC+8）：" + display_time(binding.last_health_at))
     else:
         st.warning("尚未绑定真实抖音账号；采集、维护、同步和发布均不会执行。")
+
+    official_col, profile_col = st.columns(2)
+    with official_col:
+        st.link_button("打开抖音内容管理", "https://creator.douyin.com/creator-micro/content/manage", width="stretch")
+    with profile_col:
+        if binding and binding.sec_uid:
+            from urllib.parse import quote
+            st.link_button("查看该抖音账号主页", "https://www.douyin.com/user/" + quote(binding.sec_uid, safe=""), width="stretch")
+        else:
+            st.caption("账号主页链接待获取：需要已验证的主页标识，不能用抖音号代替。")
+    st.caption("官方创作者中心使用打开链接的浏览器当前登录账号，不会自动切换为这里绑定的账号；进入后请核对头像与抖音号。账号主页链接则指向上方已绑定身份。")
+    st.info("要复用登录，请使用下方“专属环境”按钮。每个账号独立保存浏览器数据和登录会话；创作者中心首次使用可能还需登录一次，之后关闭窗口会保存状态。普通链接不会读取项目专属会话。")
+    from src.operations_accounts.browser_control_runtime import (
+        enabled as browser_control_enabled, queue_official_console, official_console_snapshot,
+    )
+    console_task = None
+    console_available = True
+    if browser_control_enabled() and binding:
+        try:
+            console_task = official_console_snapshot(profile.account_key)
+        except Exception:
+            console_available = False
+            st.warning('官方窗口管控状态读取失败，未开放重复开窗；其他账号数据仍可查看。')
+        st.caption('专属官方管理页交给账号管控排队，在原登录环境核验身份后打开。操作完成后只需关闭该管理标签页；其他验证页保留，不新增“处理完成”步骤。')
+        if console_task:
+            console_labels = {'queued': '等待账号空闲', 'running': '核验身份并打开中',
+                'waiting_human': '管理页已打开，操作后关闭此标签页交还',
+                'succeeded': '管理标签页已正常交还', 'failed': '未能打开，请核对原任务原因',
+                'outcome_unknown': '原窗口结果未知，不重复打开', 'paused': '原窗口任务等待核对'}
+            st.caption('官方管理窗口：' + console_labels.get(console_task['state'], console_task['state'])
+                       + ' · 任务 ' + console_task['command_id'])
+    console_busy = console_task is not None and console_task['state'] in {'queued', 'running', 'waiting_human', 'paused', 'outcome_unknown'}
+    if st.button('在此账号专属环境打开官方管理页', key=f'official_environment_{profile.account_key}',
+                 disabled=not is_admin or binding is None or binding.status != 'active' or not console_available or console_busy):
+        session = None
+        try:
+            if browser_control_enabled():
+                task = queue_official_console(profile.account_uuid, profile.account_key, get_current_user() or '')
+                st.info('官方管理窗口已入队，尚未确认打开。任务：' + task['command_id'])
+            else:
+                context = runtime.resolve(profile.account_key)
+                with runtime.operation_lease(context, operation='official_console', daily_limit=100,
+                                             cooldown_seconds=0, lock_seconds=1800):
+                    session = context.create_browser_session(headless=False)
+                    check = runtime.verify_identity(context, session=session)
+                    if not check.healthy:
+                        raise ValueError('专属环境身份核验未通过：' + check.message)
+                    with st.spinner('已打开此账号的专属管理窗口；操作完成后关闭该窗口即可释放环境。'):
+                        session.open_for_manual_login_until_closed('https://creator.douyin.com/creator-micro/content/manage', timeout_seconds=1800)
+        except (ValueError, RuntimeError) as exc:
+            st.error(str(exc))
+        finally:
+            if session:
+                session.stop()
 
     oauth = DouyinOAuthClient()
     if oauth.configured and is_admin:
@@ -849,59 +1029,55 @@ def _render_account_binding(
     login_col, health_col = st.columns(2)
     pending_key = f"pending_douyin_identity_{profile.account_key}"
     with login_col:
-        if st.button(
+        if binding:
+            from src.web.account_exception_notice import render_account_manual_window_controls
+            render_account_manual_window_controls(profile.account_uuid, profile.account_key,
+                                                   key=f"bind_douyin_{profile.account_key}", runtime=runtime)
+        if not binding and st.button(
             "登录并绑定抖音账号",
             key=f"bind_douyin_{profile.account_key}",
             type="primary",
             width="stretch",
             disabled=not is_admin,
-        ):
+        ) and is_admin:
             try:
-                prepared = runtime.prepare_browser_environment(profile.account_key)
-                session = prepared.create_browser_session(headless=False)
-                with st.spinner("请在弹出的浏览器中扫码登录，完成后关闭该浏览器窗口..."):
-                    session.open_for_manual_login_until_closed(
-                        DOUYIN_SELF_URL,
-                        timeout_seconds=1800,
-                    )
-                    page_identity = runtime.probe_unbound_identity(
-                        profile.account_key,
-                        headless=False,
-                    )
-                existing_pending = st.session_state.get(pending_key) or {}
-                if existing_pending.get("verification_source") == "official_oauth":
-                    identity = DouyinIdentity(
-                        nickname=page_identity.nickname,
-                        avatar_url=(existing_pending.get("avatar_url") or page_identity.avatar_url),
-                        public_uid=page_identity.public_uid,
-                        sec_uid=page_identity.sec_uid,
-                        open_id=str(existing_pending.get("open_id") or ""),
-                        union_id=str(existing_pending.get("union_id") or ""),
-                        verification_source="official_oauth",
-                        verified_at=page_identity.verified_at,
-                        auth_expires_at=str(existing_pending.get("auth_expires_at") or ""),
-                    )
-                else:
-                    identity = page_identity
-                st.session_state[pending_key] = asdict(identity)
-            except (DouyinIdentityVerificationError, AccountRuntimeError, RuntimeError) as exc:
+                if not binding:
+                    with runtime.manual_browser_environment(profile.account_key) as prepared:
+                        session = prepared.create_browser_session(headless=False)
+                        with st.spinner("已打开账号专属环境；按页面提示完成登录后关闭窗口..."):
+                            try:
+                                session.open_for_manual_login_until_closed(DOUYIN_SELF_URL, timeout_seconds=1800)
+                            finally:
+                                session.stop()
+                            page_identity = runtime.probe_unbound_identity(profile.account_key, headless=False)
+                    existing_pending = st.session_state.get(pending_key) or {}
+                    if existing_pending.get("verification_source") == "official_oauth":
+                        identity = DouyinIdentity(
+                            nickname=page_identity.nickname,
+                            avatar_url=(existing_pending.get("avatar_url") or page_identity.avatar_url),
+                            public_uid=page_identity.public_uid,
+                            sec_uid=page_identity.sec_uid,
+                            open_id=str(existing_pending.get("open_id") or ""),
+                            union_id=str(existing_pending.get("union_id") or ""),
+                            verification_source="official_oauth",
+                            verified_at=page_identity.verified_at,
+                            auth_expires_at=str(existing_pending.get("auth_expires_at") or ""),
+                        )
+                    else:
+                        identity = page_identity
+                    st.session_state[pending_key] = asdict(identity)
+            except (ValueError, DouyinIdentityVerificationError, AccountRuntimeError) as exc:
                 st.error(f"登录身份读取失败：{exc}")
+            except RuntimeError as exc:
+                import re
+                code = str(getattr(exc,'code',type(exc).__name__))
+                if not re.fullmatch(r'[A-Za-z0-9_]{1,80}',code):
+                    code = 'login_runtime_error'
+                st.error(f"首次登录未完成（{code}），尚未绑定账号；请核对原窗口和后台记录。")
     with health_col:
-        if st.button(
-            "检测登录健康",
-            key=f"verify_douyin_{profile.account_key}",
-            width="stretch",
-            disabled=binding is None,
-        ):
-            try:
-                context = runtime.resolve(profile.account_key, require_healthy=False)
-                with st.spinner("正在从真实抖音页面核验当前登录身份..."):
-                    check = runtime.verify_identity(context)
-            except (AccountRuntimeError, RuntimeError) as exc:
-                st.error(str(exc))
-            else:
-                (st.success if check.healthy else st.error)(check.message)
-                st.rerun()
+        from src.web.account_exception_notice import render_account_handling_completion
+        render_account_handling_completion(profile.account_uuid, profile.account_key,
+                                           key=f"verify_douyin_{profile.account_key}")
 
     pending_payload = st.session_state.get(pending_key)
     if not pending_payload:
@@ -924,7 +1100,7 @@ def _render_account_binding(
     if binding and binding.platform_identity_key != identity.platform_identity_key:
         st.error(
             f"当前绑定为 {binding.display_identity}，本次读取身份不同。"
-            "只有管理员明确确认后才允许换绑。"
+            "确认换绑会替换本运营账号原有绑定，不会新增账号；如需保留两个账号，请取消本次换绑并先新建运营账号。"
         )
         allow_rebind = st.checkbox(
             "我确认要将该运营账号换绑到上述真实抖音账号",
@@ -943,14 +1119,15 @@ def _render_account_binding(
             )
         ),
         width="stretch",
-    ):
+    ) and is_admin:
         try:
-            saved = runtime.confirm_binding(
-                profile.account_key,
-                identity,
-                confirmed_by=get_current_user() or "admin",
-                allow_rebind=allow_rebind,
-            )
+            with runtime.manual_browser_environment(profile.account_key):
+                saved = runtime.confirm_binding(
+                    profile.account_key,
+                    identity,
+                    confirmed_by=get_current_user() or "admin",
+                    allow_rebind=allow_rebind,
+                )
         except (AccountBindingConflict, ValueError, RuntimeError) as exc:
             st.error(f"绑定失败：{exc}")
         else:
@@ -979,18 +1156,19 @@ def _render_account_maintenance(
     can_run = can_run and bool(binding and binding.status == "active")
     mode = st.selectbox(
         "维护模式",
-        ["daily", "pre-publish", "playback", "post-publish"],
+        ["daily", "pre-publish", "smart-operations", "playback", "post-publish"],
         format_func=lambda value: {
             "daily": "daily · 登录健康 + 有限相关内容调研",
             "pre-publish": "pre-publish · 近期同领域内容与用户反馈",
+            "smart-operations": "smart-operations · 已发布内容关联研究 + 自有后台数据",
             "playback": "playback · 高相关内容播放维护",
             "post-publish": "post-publish · 同步自己的作品数据与评论",
         }[value],
         key=f"maintenance_mode_{profile.account_key}",
     )
     authorization_reference = st.text_input(
-        "调研授权说明/工单编号",
-        placeholder="daily / pre-publish / playback 必填",
+        "调研授权说明/工单编号（可选）",
+        placeholder="留空时记录为运营后台手动执行",
         disabled=mode == "post-publish",
         key=f"maintenance_auth_{profile.account_key}",
     )
@@ -1000,9 +1178,10 @@ def _render_account_maintenance(
         disabled=mode == "post-publish",
         key=f"maintenance_confirm_{profile.account_key}",
     )
-    missing_authorization = mode != "post-publish" and (
-        not authorization_reference.strip() or not confirmed
+    effective_authorization_reference = (
+        authorization_reference.strip() or "运营后台手动执行"
     )
+    missing_authorization = mode != "post-publish" and not confirmed
     playback_options = None
     visible_browser = False
     interaction_confirmed = True
@@ -1015,8 +1194,6 @@ def _render_account_maintenance(
         with limit_col:
             playback_max_videos = st.number_input(
                 "视频数",
-                min_value=1,
-                max_value=20,
                 value=20,
                 step=1,
                 key=f"playback_max_videos_{profile.account_key}",
@@ -1024,17 +1201,13 @@ def _render_account_maintenance(
         with per_video_col:
             playback_seconds = st.number_input(
                 "单条上限（秒）",
-                min_value=5,
-                max_value=300,
                 value=90,
-                step=5,
+                step=1,
                 key=f"playback_seconds_{profile.account_key}",
             )
         with total_col:
             playback_minutes = st.number_input(
                 "总时长（分钟）",
-                min_value=1,
-                max_value=60,
                 value=20,
                 step=1,
                 key=f"playback_minutes_{profile.account_key}",
@@ -1102,6 +1275,7 @@ def _render_account_maintenance(
                 "同一作者每天最多评论一次，评论间隔至少 30 分钟。"
             )
         playback_options = PlaybackOptions(
+            source="search_candidates" if auto_like or auto_comment else "recommend_feed",
             max_videos=int(playback_max_videos),
             per_video_seconds=int(playback_seconds),
             total_minutes=int(playback_minutes),
@@ -1125,7 +1299,7 @@ def _render_account_maintenance(
             result = AccountMaintenanceService().run(
                 profile.account_key,
                 mode,
-                authorization_reference=authorization_reference,
+                authorization_reference=effective_authorization_reference,
                 headless=not visible_browser if mode == "playback" else True,
                 playback_options=playback_options,
             )
@@ -1668,20 +1842,26 @@ def _render_briefs(
     )
 
     section_header(
-        "生成视频前的脚本分析",
-        "每次生成短视频、长视频两版完整分镜：无旁白，以人物动作和对白推进，逐镜交代构图、光线与摄影。",
+        "账号选题与完整剧本",
+        "按运营账号进入对应创作流程：小说从目标原文改编，法律账号从同类视频研究生成剧本。",
     )
     profiles = account_repository.list_active()
     if not profiles:
         st.warning("请先配置运营账号。")
         return
 
-    account_key = st.selectbox(
-        "脚本账号",
-        [item.account_key for item in profiles],
-        format_func=lambda value: _account_profile_label(profiles, value),
-        key="pre_video_script_account",
-    )
+    from src.web.components.account_scope import select_account_scope
+    selected_uuid = select_account_scope(profiles, key='pre_video_script_scope', allow_all=False)
+    selected_profile = next((item for item in profiles if item.account_uuid == selected_uuid), None)
+    if selected_profile is None:
+        st.info('请选择具体运营账号后查看或生成剧本。')
+        return
+    account_key = selected_profile.account_key
+    if selected_profile.domain_strategy_id == "novel_promotion":
+        _render_novel_creation_opportunities(
+            repository, service, account_repository, selected_profile,
+        )
+        return
     script_service = PreVideoScriptService(
         repository=repository,
         profile_repository=account_repository,
@@ -1811,6 +1991,38 @@ def _render_briefs(
     elif saved_pair:
         st.caption('最近一次工作流生成结果 · 待人工审核 · 已停在生成视频前')
         _render_script_pair_result(saved_pair)
+
+
+def _render_novel_creation_opportunities(repository, service, account_repository, profile):
+    """Reach the novel creator before entering the legal-only script service."""
+    from src.web.account_novel_creation_panel import render_account_novel_creation
+
+    st.subheader("小说账号选题 → 完整创作")
+    st.caption("从当前账号的机会卡匹配目标小说，读取已获取正文，生成完整剧本和导演分镜。")
+    opportunity_service = ContentOpportunityService(repository)
+    if st.button("刷新小说账号机会", key="novel_creation_refresh_opportunities"):
+        try:
+            service.analyze(account_profile=profile, limit=100_000)
+            opportunity_service.build_opportunities(profile)
+        except (SampleGateError, KeyError, ValueError, OSError, RuntimeError) as exc:
+            st.error(f"机会刷新未完成：{exc}")
+    opportunities = repository.list_opportunities(account_uuid=profile.account_uuid, limit=200)
+    if not opportunities:
+        st.info("当前账号还没有机会卡。先在“采集与分析”完成账号选题研究，再刷新机会。")
+        return
+    choices = {item.opportunity_id: item for item in opportunities}
+    selected = st.selectbox(
+        "选择小说账号机会", list(choices),
+        format_func=lambda value: (
+            f"{choices[value].title} · {choices[value].opportunity_score:.1f} · {choices[value].status}"
+        ),
+        key=f"novel_creation_opportunity_{profile.account_uuid}",
+    )
+    opportunity = choices[selected]
+    if opportunity.evidence:
+        st.info("｜".join(opportunity.evidence[:3]))
+    st.caption(f"机会有效至：{opportunity.valid_until}；准备和执行都会核对账号、策略版本与有效期。")
+    render_account_novel_creation(profile, opportunity, repository, account_repository)
 
 
 def _load_saved_script_pair(account_uuid, output_dir=None):

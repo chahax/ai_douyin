@@ -7,6 +7,11 @@ __pycache__/
 venv/
 env/
 .local_py/
+.local_models/
+.pytest_cache/
+.ruff_cache/
+.codex_staging/
+.codex_tmp_*/
 
 .env
 .env.*
@@ -20,6 +25,14 @@ env/
 *.ogg
 
 data/quick_outputs/
+data/.pytest_*/
+data/.p0_*/
+data/.pycache_*/
+data/.pycompile_*/
+data/.cache/
+data/.numba_cache/
+data/.gpt_sovits_tmp/
+data/.codex_test_workdir_*/
 data/articles/
 data/books/
 data/presenter/
@@ -33,6 +46,7 @@ data/browser/
 data/chroma_db/
 data/diagnostics/
 data/framepack/
+data/tools/
 data/ip_characters/
 data/motion_assets/
 data/png/

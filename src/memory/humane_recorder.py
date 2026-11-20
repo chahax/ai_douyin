@@ -16,7 +16,7 @@ from datetime import datetime, timedelta
 
 from sqlalchemy import desc, func
 
-from src.memory.models import ConversationMessage
+from src.memory.models import ConversationMessage, ConversationSession
 from src.shared.database import SessionLocal
 
 
@@ -49,7 +49,8 @@ def get_messages_by_topic(
         pattern = f'%"{topic}"%'
         rows = (
             sess.query(ConversationMessage)
-            .filter_by(role="user")
+            .join(ConversationSession, ConversationMessage.session_id == ConversationSession.id)
+            .filter(ConversationSession.user_id == user_id, ConversationMessage.role == 'user')
             .filter(ConversationMessage.topics.like(pattern))
             .order_by(desc(ConversationMessage.created_at))
             .limit(limit)
@@ -100,8 +101,10 @@ def get_followup_reminders(
     with SessionLocal() as sess:
         rows = (
             sess.query(ConversationMessage)
-            .filter_by(role="user")
+            .join(ConversationSession, ConversationMessage.session_id == ConversationSession.id)
+            .filter(ConversationSession.user_id == user_id, ConversationMessage.role == 'user')
             .filter(ConversationMessage.needs_followup == True)  # noqa: E712
+            .filter(ConversationMessage.humane_summary.isnot(None), ConversationMessage.humane_summary != '')
             .order_by(desc(ConversationMessage.created_at))
             .limit(limit * 3)  # 多取一些，再去重
             .all()

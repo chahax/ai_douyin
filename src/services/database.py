@@ -143,6 +143,9 @@ def get_connection() -> sqlite3.Connection:
 def _ensure_tables(conn: sqlite3.Connection) -> None:
     """确保表已创建（仅在表不存在时创建），并执行必要的 schema 迁移"""
     cursor = conn.cursor()
+    new_blocked_words = cursor.execute(
+        "SELECT 1 FROM sqlite_master WHERE type='table' AND name='blocked_words'"
+    ).fetchone() is None
     cursor.executescript(CREATE_TABLES_SQL)
 
     # 迁移：从旧 schema（video_id PK）升级到新 schema（id autoincrement + local_id）
@@ -155,7 +158,10 @@ def _ensure_tables(conn: sqlite3.Connection) -> None:
     _migrate_videos_rag_context(cursor)
     _migrate_videos_account_context(cursor)
     # 初始化违禁词
-    _init_blocked_words(cursor)
+    # Defaults belong to first-time setup. Reading an intentionally empty
+    # configuration must not recreate words an administrator just removed.
+    if new_blocked_words:
+        _init_blocked_words(cursor)
     conn.commit()
 
 

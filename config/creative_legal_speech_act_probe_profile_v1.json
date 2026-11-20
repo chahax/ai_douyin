@@ -1,0 +1,40 @@
+{
+  "schema": "creative_legal_speech_act_probe_profile/v1",
+  "writer": {
+    "provider": "minimax",
+    "model": "MiniMax-M3.1-Flash-Preview",
+    "base_url": "https://api.minimax.cn/v1",
+    "parameters": {
+      "temperature": 0.4,
+      "thinking": "adaptive",
+      "reasoning_effort": "medium",
+      "max_completion_tokens": 16000
+    }
+  },
+  "director": {
+    "provider": "deepseek",
+    "model": "deepseek-flash",
+    "base_url": "https://api.deepseek.com/v1",
+    "parameters": {
+      "temperature": 0.4,
+      "thinking": "disabled",
+      "max_completion_tokens": 12000
+    }
+  },
+  "stage_parameters": {
+    "goal_audit": {
+      "max_completion_tokens": 8000
+    }
+  },
+  "scope": "historical speech-act diagnostic only; not current hot-topic production admission",
+  "output_allowance_basis": "One 12-case historical speech-act diagnostic with keyed classes and short proposition/reason; ordinary DeepSeek max8000. Output allowance is not a completion or semantic guarantee.",
+  "official_review_reference": "https://api-docs.deepseek.com/api/create-chat-completion/",
+  "review_output_allowance_official_range_checked": true,
+  "new_contract_real_endpoint_accepted": false,
+  "server_schema_guarantee": false,
+  "sdk_max_retries": 0,
+  "http_follow_redirects": false,
+  "media_authorized": false,
+  "profile_version": "creative_legal_speech_act_probe_profile/v1",
+  "purpose": "One ordinary DeepSeek call classifies blinded historical targets. No screenplay, legal outcome decision, source approval, media or publication."
+}

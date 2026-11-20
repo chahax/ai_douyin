@@ -22,6 +22,7 @@ from src.agent.skill_result import SkillResult, coerce_to_skill_result, SKILL_ER
 assert "ok" in SKILL_ERROR_CODES
 assert "validation_error" in SKILL_ERROR_CODES
 assert "timeout" in SKILL_ERROR_CODES
+assert "outcome_unknown" in SKILL_ERROR_CODES
 assert "max_retries_exceeded" in SKILL_ERROR_CODES
 print(f"  SKILL_ERROR_CODES ({len(SKILL_ERROR_CODES)}): {SKILL_ERROR_CODES}")
 
@@ -46,6 +47,7 @@ print(f"  unknown code fallback: bogus_code -> {r.code}")
 
 # is_retryable
 assert SkillResult.err("timeout", "x").is_retryable
+assert not SkillResult.err("outcome_unknown", "x").is_retryable
 assert SkillResult.err("rate_limited", "x").is_retryable
 assert not SkillResult.err("validation_error", "x").is_retryable
 print("  is_retryable map OK")
@@ -126,7 +128,7 @@ from src.agent.skill_decorator import skill
     retries=2,
     retry_on=("timeout", "skill_error"),
 )
-def test_fail_skill(should_fail: bool = True) -> dict:
+def _failing_skill(should_fail: bool = True) -> dict:
     if should_fail:
         raise RuntimeError("测试失败")
     return {"success": True, "result": "ok"}
@@ -149,8 +151,8 @@ assert r["success"] is False
 print(f"  failed skill: code={r['code']} attempts={r['attempts']} duration={r['duration_ms']}ms")
 
 # 4.2 设置 retry_on 包含 skill_error，应该重试 2 次后 max_retries
-test_skill = reg._skills["test_fail_skill"]
-test_skill.retry_on = ("timeout", "skill_error")  # 包含 skill_error
+failing_skill_spec = reg._skills["test_fail_skill"]
+failing_skill_spec.retry_on = ("timeout", "skill_error")  # 包含 skill_error
 r = reg.call("test_fail_skill", {"should_fail": True})
 assert r["code"] == "max_retries_exceeded"
 assert r["attempts"] == 3  # 1 + 2 retries
@@ -161,7 +163,7 @@ print(f"  max retries: code={r['code']} attempts={r['attempts']}")
 print("\n=== 5. timeout 熔断 ===")
 
 @skill(name="test_slow_skill", description="慢 skill", timeout_s=0.3, retries=0)
-def test_slow_skill() -> dict:
+def _slow_skill() -> dict:
     time.sleep(1.0)
     return {"success": True}
 
@@ -174,7 +176,7 @@ for s in sd._SKILLS:
 t0 = time.time()
 r = reg.call("test_slow_skill", {})
 elapsed = time.time() - t0
-assert r["code"] == "timeout"
+assert r["code"] == "outcome_unknown"
 assert elapsed < 0.8  # 应该 < 超时 + 重试时间，远小于 sleep(1)
 print(f"  timeout: code={r['code']} elapsed={elapsed:.2f}s (< 0.8s OK)")
 
@@ -183,7 +185,7 @@ print(f"  timeout: code={r['code']} elapsed={elapsed:.2f}s (< 0.8s OK)")
 print("\n=== 6. 幂等性 ===")
 
 @skill(name="test_idempotent_skill", description="幂等", idempotent=True)
-def test_idempotent_skill() -> dict:
+def _idempotent_skill() -> dict:
     return {"success": True, "result": time.time()}
 
 

@@ -1,0 +1,14 @@
+{
+  "schema": "natural_director_v10_holdout_freeze/v1",
+  "title": "六点前的那盏灯",
+  "frozen_at": "2026-10-18",
+  "before_first_live_run": true,
+  "used_for_prompt_tuning": false,
+  "semantic_service_validation": "not_run",
+  "old_office_unresolved_preserved": true,
+  "source_origin": "locally_authored_original_story",
+  "files_sha256": {
+    "README.md": "6ef25ddd146e5050b9f40734514655bbcd5dbad89244debcc3b6969244e2efd3",
+    "team_shift_source.txt": "5ddad1e1293e97d0878fa0f2c86c673032f4460367af065de492b86069e86a04"
+  }
+}

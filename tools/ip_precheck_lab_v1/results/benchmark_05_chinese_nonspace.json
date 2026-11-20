@@ -1,0 +1,4611 @@
+{
+  "schema_version": "ip_precheck_benchmark_v1",
+  "started_at": "2026-10-17T20:26:00.175369+00:00",
+  "status": "completed",
+  "copyright_verdict": null,
+  "warnings": [
+    {
+      "message": "`torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.",
+      "category": "FutureWarning",
+      "filename": "D:\\IT\\ai_douyin\\tools\\ip_precheck_lab_v1\\.venv\\Lib\\site-packages\\torch\\jit\\_script.py",
+      "lineno": 1491
+    },
+    {
+      "message": "The sentencepiece tokenizer that you are converting to a fast tokenizer uses the byte fallback option which is not implemented in the fast tokenizers. In practice this means that the fast version of the tokenizer can produce unknown tokens whereas the sentencepiece version would have converted these unknown tokens into a sequence of byte tokens matching the original piece of text.",
+      "category": "UserWarning",
+      "filename": "D:\\IT\\ai_douyin\\tools\\ip_precheck_lab_v1\\.venv\\Lib\\site-packages\\transformers\\convert_slow_tokenizer.py",
+      "lineno": 566
+    }
+  ],
+  "limitations": [
+    "小型人工样例，不能证明生产准确率或预测 Seedance 输出版权审核。",
+    "NER 实体、词库命中及创作者引用均不是侵权结论。",
+    "词库未覆盖新名称；无明确名称的描述性相似不在本次实体金标范围。",
+    "字面严格标签和只计跨度的结果均报告，不以宽松结果替代严格结果。"
+  ],
+  "runtime": {
+    "python": "D:\\IT\\ai_douyin\\tools\\ip_precheck_lab_v1\\.venv\\Scripts\\python.exe",
+    "device": "cpu",
+    "hf_hub_offline": "1",
+    "transformers_offline": "1",
+    "python_socket_guard": true,
+    "packages": {
+      "gliner": "0.2.29",
+      "spacy": "3.8.16",
+      "torch": "2.14.1+cpu",
+      "transformers": "4.57.6"
+    }
+  },
+  "settings": {
+    "threshold": 0.4,
+    "labels": [
+      "person",
+      "brand",
+      "organization",
+      "location",
+      "work of art",
+      "fictional character",
+      "creator"
+    ],
+    "chunk_chars": 160,
+    "overlap": 40,
+    "splitter": "spacy-zh-nonspace",
+    "splitter_class": "ChineseNonSpaceSplitter"
+  },
+  "inputs": {
+    "model_dir": "D:\\IT\\ai_douyin\\tools\\ip_precheck_lab_v1\\cache\\huggingface\\hub\\models--urchade--gliner_multi-v2.1\\snapshots\\443d26d654e0324125a96bebd8e796c14ff2efe6",
+    "cases_sha256": "1e03232cb56ccccfc394099c39a6e37cb38f9fd8be19787c7e7a83ec8a3fcb26",
+    "dictionary_sha256": "a8db1712c693f012b99ced3e24ec404d38b45452132106e678de7bd5a94529a9",
+    "prompt_path": "D:\\IT\\ai_douyin\\data\\video_generation\\novel_ferry_first_trial_20261018\\S1A\\PROMPT.txt",
+    "prompt_sha256": "fedacd0251d53f3c514b391ce65424a20e5823a91e7f50773b3ed2f05d9539ef",
+    "benchmark_sha256": "c1a75df33b6e4d5d37a44f78f1d1c54ae3c543149c1f3a0ef738b076fb10c6e3"
+  },
+  "cases": [
+    {
+      "id": "brand_zh",
+      "text": "她拿起耐克运动鞋，旁边放着阿迪达斯背包。",
+      "expected_ner": [
+        {
+          "start": 3,
+          "end": 5,
+          "text": "耐克",
+          "label": "brand"
+        },
+        {
+          "start": 13,
+          "end": 17,
+          "text": "阿迪达斯",
+          "label": "brand"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 3,
+          "end": 5,
+          "text": "耐克",
+          "label": "brand"
+        },
+        {
+          "start": 13,
+          "end": 17,
+          "text": "阿迪达斯",
+          "label": "brand"
+        }
+      ],
+      "gliner": {
+        "entities": [
+          {
+            "start": 0,
+            "end": 1,
+            "text": "她",
+            "label": "person",
+            "score": 0.7764425277709961
+          },
+          {
+            "start": 3,
+            "end": 5,
+            "text": "耐克",
+            "label": "brand",
+            "score": 0.9351487755775452
+          },
+          {
+            "start": 13,
+            "end": 17,
+            "text": "阿迪达斯",
+            "label": "person",
+            "score": 0.7204703092575073
+          }
+        ],
+        "chunks": [
+          {
+            "index": 0,
+            "start": 0,
+            "end": 20,
+            "text": "她拿起耐克运动鞋，旁边放着阿迪达斯背包。",
+            "raw_entities": [
+              {
+                "start": 0,
+                "end": 1,
+                "text": "她",
+                "label": "person",
+                "score": 0.7764425277709961
+              },
+              {
+                "start": 3,
+                "end": 5,
+                "text": "耐克",
+                "label": "brand",
+                "score": 0.9351487755775452
+              },
+              {
+                "start": 13,
+                "end": 17,
+                "text": "阿迪达斯",
+                "label": "person",
+                "score": 0.7204703092575073
+              }
+            ],
+            "global_entities": [
+              {
+                "start": 0,
+                "end": 1,
+                "text": "她",
+                "label": "person",
+                "score": 0.7764425277709961
+              },
+              {
+                "start": 3,
+                "end": 5,
+                "text": "耐克",
+                "label": "brand",
+                "score": 0.9351487755775452
+              },
+              {
+                "start": 13,
+                "end": 17,
+                "text": "阿迪达斯",
+                "label": "person",
+                "score": 0.7204703092575073
+              }
+            ]
+          }
+        ],
+        "coverage_characters": 20,
+        "deduplication": "same global start/end/label; highest score kept"
+      },
+      "dictionary": {
+        "candidates": [
+          {
+            "start": 3,
+            "end": 5,
+            "text": "耐克",
+            "label": "brand",
+            "score": null,
+            "canonical_id": "brand.nike",
+            "canonical": "Nike / 耐克",
+            "candidate_kind": "brand_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "她拿起耐克运动鞋",
+            "required_context_any": [],
+            "reason": "demo EntityRuler alias and context rule matched"
+          },
+          {
+            "start": 13,
+            "end": 17,
+            "text": "阿迪达斯",
+            "label": "brand",
+            "score": null,
+            "canonical_id": "brand.adidas",
+            "canonical": "adidas / 阿迪达斯",
+            "candidate_kind": "brand_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "旁边放着阿迪达斯背包",
+            "required_context_any": [],
+            "reason": "demo EntityRuler alias and context rule matched"
+          }
+        ],
+        "rejected_ambiguous_matches": [],
+        "score_policy": "rule matches have no probability score"
+      },
+      "ner_strict": {
+        "tp": 1,
+        "fp": 2,
+        "fn": 1,
+        "precision": 0.3333333333333333,
+        "recall": 0.5,
+        "false_positives": [
+          {
+            "start": 0,
+            "end": 1,
+            "text": "她",
+            "label": "person",
+            "score": 0.7764425277709961
+          },
+          {
+            "start": 13,
+            "end": 17,
+            "text": "阿迪达斯",
+            "label": "person",
+            "score": 0.7204703092575073
+          }
+        ],
+        "false_negatives": [
+          {
+            "start": 13,
+            "end": 17,
+            "text": "阿迪达斯",
+            "label": "brand"
+          }
+        ]
+      },
+      "ner_span_only": {
+        "tp": 2,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.6666666666666666,
+        "recall": 1.0,
+        "false_positives": [
+          {
+            "start": 0,
+            "end": 1,
+            "text": "她",
+            "label": "person",
+            "score": 0.7764425277709961
+          }
+        ],
+        "false_negatives": []
+      },
+      "dictionary_strict": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_span_only": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      }
+    },
+    {
+      "id": "brand_en",
+      "text": "广告上写着 Nike、NIKE 和 adidas。",
+      "expected_ner": [
+        {
+          "start": 6,
+          "end": 10,
+          "text": "Nike",
+          "label": "brand"
+        },
+        {
+          "start": 11,
+          "end": 15,
+          "text": "NIKE",
+          "label": "brand"
+        },
+        {
+          "start": 18,
+          "end": 24,
+          "text": "adidas",
+          "label": "brand"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 6,
+          "end": 10,
+          "text": "Nike",
+          "label": "brand"
+        },
+        {
+          "start": 11,
+          "end": 15,
+          "text": "NIKE",
+          "label": "brand"
+        },
+        {
+          "start": 18,
+          "end": 24,
+          "text": "adidas",
+          "label": "brand"
+        }
+      ],
+      "gliner": {
+        "entities": [
+          {
+            "start": 6,
+            "end": 10,
+            "text": "Nike",
+            "label": "brand",
+            "score": 0.7810294032096863
+          },
+          {
+            "start": 11,
+            "end": 15,
+            "text": "NIKE",
+            "label": "brand",
+            "score": 0.6903746724128723
+          },
+          {
+            "start": 18,
+            "end": 24,
+            "text": "adidas",
+            "label": "brand",
+            "score": 0.6230814456939697
+          }
+        ],
+        "chunks": [
+          {
+            "index": 0,
+            "start": 0,
+            "end": 25,
+            "text": "广告上写着 Nike、NIKE 和 adidas。",
+            "raw_entities": [
+              {
+                "start": 6,
+                "end": 10,
+                "text": "Nike",
+                "label": "brand",
+                "score": 0.7810294032096863
+              },
+              {
+                "start": 11,
+                "end": 15,
+                "text": "NIKE",
+                "label": "brand",
+                "score": 0.6903746724128723
+              },
+              {
+                "start": 18,
+                "end": 24,
+                "text": "adidas",
+                "label": "brand",
+                "score": 0.6230814456939697
+              }
+            ],
+            "global_entities": [
+              {
+                "start": 6,
+                "end": 10,
+                "text": "Nike",
+                "label": "brand",
+                "score": 0.7810294032096863
+              },
+              {
+                "start": 11,
+                "end": 15,
+                "text": "NIKE",
+                "label": "brand",
+                "score": 0.6903746724128723
+              },
+              {
+                "start": 18,
+                "end": 24,
+                "text": "adidas",
+                "label": "brand",
+                "score": 0.6230814456939697
+              }
+            ]
+          }
+        ],
+        "coverage_characters": 25,
+        "deduplication": "same global start/end/label; highest score kept"
+      },
+      "dictionary": {
+        "candidates": [
+          {
+            "start": 6,
+            "end": 10,
+            "text": "Nike",
+            "label": "brand",
+            "score": null,
+            "canonical_id": "brand.nike",
+            "canonical": "Nike / 耐克",
+            "candidate_kind": "brand_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "广告上写着 Nike、NIKE 和 adidas",
+            "required_context_any": [],
+            "reason": "demo EntityRuler alias and context rule matched"
+          },
+          {
+            "start": 11,
+            "end": 15,
+            "text": "NIKE",
+            "label": "brand",
+            "score": null,
+            "canonical_id": "brand.nike",
+            "canonical": "Nike / 耐克",
+            "candidate_kind": "brand_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "广告上写着 Nike、NIKE 和 adidas",
+            "required_context_any": [],
+            "reason": "demo EntityRuler alias and context rule matched"
+          },
+          {
+            "start": 18,
+            "end": 24,
+            "text": "adidas",
+            "label": "brand",
+            "score": null,
+            "canonical_id": "brand.adidas",
+            "canonical": "adidas / 阿迪达斯",
+            "candidate_kind": "brand_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "广告上写着 Nike、NIKE 和 adidas",
+            "required_context_any": [],
+            "reason": "demo EntityRuler alias and context rule matched"
+          }
+        ],
+        "rejected_ambiguous_matches": [],
+        "score_policy": "rule matches have no probability score"
+      },
+      "ner_strict": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "ner_span_only": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_strict": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_span_only": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      }
+    },
+    {
+      "id": "phone_context",
+      "text": "他想买苹果手机，又比较了小米手机。",
+      "expected_ner": [
+        {
+          "start": 3,
+          "end": 5,
+          "text": "苹果",
+          "label": "brand"
+        },
+        {
+          "start": 12,
+          "end": 14,
+          "text": "小米",
+          "label": "brand"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 3,
+          "end": 5,
+          "text": "苹果",
+          "label": "brand"
+        },
+        {
+          "start": 12,
+          "end": 14,
+          "text": "小米",
+          "label": "brand"
+        }
+      ],
+      "gliner": {
+        "entities": [
+          {
+            "start": 0,
+            "end": 1,
+            "text": "他",
+            "label": "person",
+            "score": 0.8081806302070618
+          },
+          {
+            "start": 3,
+            "end": 5,
+            "text": "苹果",
+            "label": "brand",
+            "score": 0.7764707803726196
+          }
+        ],
+        "chunks": [
+          {
+            "index": 0,
+            "start": 0,
+            "end": 17,
+            "text": "他想买苹果手机，又比较了小米手机。",
+            "raw_entities": [
+              {
+                "start": 0,
+                "end": 1,
+                "text": "他",
+                "label": "person",
+                "score": 0.8081806302070618
+              },
+              {
+                "start": 3,
+                "end": 5,
+                "text": "苹果",
+                "label": "brand",
+                "score": 0.7764707803726196
+              }
+            ],
+            "global_entities": [
+              {
+                "start": 0,
+                "end": 1,
+                "text": "他",
+                "label": "person",
+                "score": 0.8081806302070618
+              },
+              {
+                "start": 3,
+                "end": 5,
+                "text": "苹果",
+                "label": "brand",
+                "score": 0.7764707803726196
+              }
+            ]
+          }
+        ],
+        "coverage_characters": 17,
+        "deduplication": "same global start/end/label; highest score kept"
+      },
+      "dictionary": {
+        "candidates": [
+          {
+            "start": 3,
+            "end": 5,
+            "text": "苹果",
+            "label": "brand",
+            "score": null,
+            "canonical_id": "brand.apple",
+            "canonical": "Apple / 苹果",
+            "candidate_kind": "brand_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "他想买苹果手机",
+            "required_context_any": [
+              "手机",
+              "电脑",
+              "发布会",
+              "品牌"
+            ],
+            "reason": "demo EntityRuler alias and context rule matched"
+          },
+          {
+            "start": 12,
+            "end": 14,
+            "text": "小米",
+            "label": "brand",
+            "score": null,
+            "canonical_id": "brand.xiaomi",
+            "canonical": "Xiaomi / 小米",
+            "candidate_kind": "brand_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "又比较了小米手机",
+            "required_context_any": [
+              "手机",
+              "科技",
+              "发布会",
+              "品牌"
+            ],
+            "reason": "demo EntityRuler alias and context rule matched"
+          }
+        ],
+        "rejected_ambiguous_matches": [],
+        "score_policy": "rule matches have no probability score"
+      },
+      "ner_strict": {
+        "tp": 1,
+        "fp": 1,
+        "fn": 1,
+        "precision": 0.5,
+        "recall": 0.5,
+        "false_positives": [
+          {
+            "start": 0,
+            "end": 1,
+            "text": "他",
+            "label": "person",
+            "score": 0.8081806302070618
+          }
+        ],
+        "false_negatives": [
+          {
+            "start": 12,
+            "end": 14,
+            "text": "小米",
+            "label": "brand"
+          }
+        ]
+      },
+      "ner_span_only": {
+        "tp": 1,
+        "fp": 1,
+        "fn": 1,
+        "precision": 0.5,
+        "recall": 0.5,
+        "false_positives": [
+          {
+            "start": 0,
+            "end": 1,
+            "text": "他",
+            "label": "person",
+            "score": 0.8081806302070618
+          }
+        ],
+        "false_negatives": [
+          {
+            "start": 12,
+            "end": 14,
+            "text": "小米",
+            "label": "brand"
+          }
+        ]
+      },
+      "dictionary_strict": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_span_only": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      }
+    },
+    {
+      "id": "food_negative",
+      "text": "一筐苹果放在桌上，小米粥正在锅里煮。",
+      "expected_ner": [],
+      "expected_candidates": [],
+      "gliner": {
+        "entities": [],
+        "chunks": [
+          {
+            "index": 0,
+            "start": 0,
+            "end": 18,
+            "text": "一筐苹果放在桌上，小米粥正在锅里煮。",
+            "raw_entities": [],
+            "global_entities": []
+          }
+        ],
+        "coverage_characters": 18,
+        "deduplication": "same global start/end/label; highest score kept"
+      },
+      "dictionary": {
+        "candidates": [],
+        "rejected_ambiguous_matches": [
+          {
+            "start": 2,
+            "end": 4,
+            "text": "苹果",
+            "label": "brand",
+            "score": null,
+            "canonical_id": "brand.apple",
+            "canonical": "Apple / 苹果",
+            "candidate_kind": "brand_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "一筐苹果放在桌上",
+            "required_context_any": [
+              "手机",
+              "电脑",
+              "发布会",
+              "品牌"
+            ],
+            "reason": "ambiguous alias lacks configured local context"
+          },
+          {
+            "start": 9,
+            "end": 11,
+            "text": "小米",
+            "label": "brand",
+            "score": null,
+            "canonical_id": "brand.xiaomi",
+            "canonical": "Xiaomi / 小米",
+            "candidate_kind": "brand_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "小米粥正在锅里煮",
+            "required_context_any": [
+              "手机",
+              "科技",
+              "发布会",
+              "品牌"
+            ],
+            "reason": "ambiguous alias lacks configured local context"
+          }
+        ],
+        "score_policy": "rule matches have no probability score"
+      },
+      "ner_strict": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "ner_span_only": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_strict": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_span_only": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "false_positives": [],
+        "false_negatives": []
+      }
+    },
+    {
+      "id": "organization",
+      "text": "苹果公司与微软公司宣布合作。",
+      "expected_ner": [
+        {
+          "start": 0,
+          "end": 4,
+          "text": "苹果公司",
+          "label": "organization"
+        },
+        {
+          "start": 5,
+          "end": 9,
+          "text": "微软公司",
+          "label": "organization"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 0,
+          "end": 4,
+          "text": "苹果公司",
+          "label": "organization"
+        },
+        {
+          "start": 5,
+          "end": 9,
+          "text": "微软公司",
+          "label": "organization"
+        }
+      ],
+      "gliner": {
+        "entities": [
+          {
+            "start": 0,
+            "end": 4,
+            "text": "苹果公司",
+            "label": "organization",
+            "score": 0.48132506012916565
+          },
+          {
+            "start": 5,
+            "end": 9,
+            "text": "微软公司",
+            "label": "organization",
+            "score": 0.6041759252548218
+          }
+        ],
+        "chunks": [
+          {
+            "index": 0,
+            "start": 0,
+            "end": 14,
+            "text": "苹果公司与微软公司宣布合作。",
+            "raw_entities": [
+              {
+                "start": 0,
+                "end": 4,
+                "text": "苹果公司",
+                "label": "organization",
+                "score": 0.48132506012916565
+              },
+              {
+                "start": 5,
+                "end": 9,
+                "text": "微软公司",
+                "label": "organization",
+                "score": 0.6041759252548218
+              }
+            ],
+            "global_entities": [
+              {
+                "start": 0,
+                "end": 4,
+                "text": "苹果公司",
+                "label": "organization",
+                "score": 0.48132506012916565
+              },
+              {
+                "start": 5,
+                "end": 9,
+                "text": "微软公司",
+                "label": "organization",
+                "score": 0.6041759252548218
+              }
+            ]
+          }
+        ],
+        "coverage_characters": 14,
+        "deduplication": "same global start/end/label; highest score kept"
+      },
+      "dictionary": {
+        "candidates": [
+          {
+            "start": 0,
+            "end": 4,
+            "text": "苹果公司",
+            "label": "organization",
+            "score": null,
+            "canonical_id": "organization.apple",
+            "canonical": "苹果公司",
+            "candidate_kind": "brand_organization_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "苹果公司与微软公司宣布合作",
+            "required_context_any": [],
+            "reason": "demo EntityRuler alias and context rule matched"
+          },
+          {
+            "start": 5,
+            "end": 9,
+            "text": "微软公司",
+            "label": "organization",
+            "score": null,
+            "canonical_id": "organization.microsoft",
+            "canonical": "微软公司",
+            "candidate_kind": "brand_organization_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "苹果公司与微软公司宣布合作",
+            "required_context_any": [],
+            "reason": "demo EntityRuler alias and context rule matched"
+          }
+        ],
+        "rejected_ambiguous_matches": [],
+        "score_policy": "rule matches have no probability score"
+      },
+      "ner_strict": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "ner_span_only": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_strict": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_span_only": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      }
+    },
+    {
+      "id": "fictional_people",
+      "text": "周明看着周禾说：“渡船快到了。”",
+      "expected_ner": [
+        {
+          "start": 0,
+          "end": 2,
+          "text": "周明",
+          "label": "person"
+        },
+        {
+          "start": 4,
+          "end": 6,
+          "text": "周禾",
+          "label": "person"
+        }
+      ],
+      "expected_candidates": [],
+      "gliner": {
+        "entities": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "周明",
+            "label": "person",
+            "score": 0.8938001990318298
+          },
+          {
+            "start": 4,
+            "end": 6,
+            "text": "周禾",
+            "label": "person",
+            "score": 0.8635867834091187
+          }
+        ],
+        "chunks": [
+          {
+            "index": 0,
+            "start": 0,
+            "end": 16,
+            "text": "周明看着周禾说：“渡船快到了。”",
+            "raw_entities": [
+              {
+                "start": 0,
+                "end": 2,
+                "text": "周明",
+                "label": "person",
+                "score": 0.8938001990318298
+              },
+              {
+                "start": 4,
+                "end": 6,
+                "text": "周禾",
+                "label": "person",
+                "score": 0.8635867834091187
+              }
+            ],
+            "global_entities": [
+              {
+                "start": 0,
+                "end": 2,
+                "text": "周明",
+                "label": "person",
+                "score": 0.8938001990318298
+              },
+              {
+                "start": 4,
+                "end": 6,
+                "text": "周禾",
+                "label": "person",
+                "score": 0.8635867834091187
+              }
+            ]
+          }
+        ],
+        "coverage_characters": 16,
+        "deduplication": "same global start/end/label; highest score kept"
+      },
+      "dictionary": {
+        "candidates": [],
+        "rejected_ambiguous_matches": [],
+        "score_policy": "rule matches have no probability score"
+      },
+      "ner_strict": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "ner_span_only": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_strict": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_span_only": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "false_positives": [],
+        "false_negatives": []
+      }
+    },
+    {
+      "id": "generic_region",
+      "text": "长江中下游的渡口，河西通往河东。",
+      "expected_ner": [
+        {
+          "start": 0,
+          "end": 5,
+          "text": "长江中下游",
+          "label": "location"
+        }
+      ],
+      "expected_candidates": [],
+      "gliner": {
+        "entities": [
+          {
+            "start": 0,
+            "end": 5,
+            "text": "长江中下游",
+            "label": "location",
+            "score": 0.6368399262428284
+          },
+          {
+            "start": 6,
+            "end": 8,
+            "text": "渡口",
+            "label": "location",
+            "score": 0.5104785561561584
+          },
+          {
+            "start": 9,
+            "end": 11,
+            "text": "河西",
+            "label": "location",
+            "score": 0.8208056092262268
+          },
+          {
+            "start": 13,
+            "end": 15,
+            "text": "河东",
+            "label": "location",
+            "score": 0.8205015659332275
+          }
+        ],
+        "chunks": [
+          {
+            "index": 0,
+            "start": 0,
+            "end": 16,
+            "text": "长江中下游的渡口，河西通往河东。",
+            "raw_entities": [
+              {
+                "start": 0,
+                "end": 5,
+                "text": "长江中下游",
+                "label": "location",
+                "score": 0.6368399262428284
+              },
+              {
+                "start": 6,
+                "end": 8,
+                "text": "渡口",
+                "label": "location",
+                "score": 0.5104785561561584
+              },
+              {
+                "start": 9,
+                "end": 11,
+                "text": "河西",
+                "label": "location",
+                "score": 0.8208056092262268
+              },
+              {
+                "start": 13,
+                "end": 15,
+                "text": "河东",
+                "label": "location",
+                "score": 0.8205015659332275
+              }
+            ],
+            "global_entities": [
+              {
+                "start": 0,
+                "end": 5,
+                "text": "长江中下游",
+                "label": "location",
+                "score": 0.6368399262428284
+              },
+              {
+                "start": 6,
+                "end": 8,
+                "text": "渡口",
+                "label": "location",
+                "score": 0.5104785561561584
+              },
+              {
+                "start": 9,
+                "end": 11,
+                "text": "河西",
+                "label": "location",
+                "score": 0.8208056092262268
+              },
+              {
+                "start": 13,
+                "end": 15,
+                "text": "河东",
+                "label": "location",
+                "score": 0.8205015659332275
+              }
+            ]
+          }
+        ],
+        "coverage_characters": 16,
+        "deduplication": "same global start/end/label; highest score kept"
+      },
+      "dictionary": {
+        "candidates": [],
+        "rejected_ambiguous_matches": [],
+        "score_policy": "rule matches have no probability score"
+      },
+      "ner_strict": {
+        "tp": 1,
+        "fp": 3,
+        "fn": 0,
+        "precision": 0.25,
+        "recall": 1.0,
+        "false_positives": [
+          {
+            "start": 6,
+            "end": 8,
+            "text": "渡口",
+            "label": "location",
+            "score": 0.5104785561561584
+          },
+          {
+            "start": 9,
+            "end": 11,
+            "text": "河西",
+            "label": "location",
+            "score": 0.8208056092262268
+          },
+          {
+            "start": 13,
+            "end": 15,
+            "text": "河东",
+            "label": "location",
+            "score": 0.8205015659332275
+          }
+        ],
+        "false_negatives": []
+      },
+      "ner_span_only": {
+        "tp": 1,
+        "fp": 3,
+        "fn": 0,
+        "precision": 0.25,
+        "recall": 1.0,
+        "false_positives": [
+          {
+            "start": 6,
+            "end": 8,
+            "text": "渡口",
+            "label": "location",
+            "score": 0.5104785561561584
+          },
+          {
+            "start": 9,
+            "end": 11,
+            "text": "河西",
+            "label": "location",
+            "score": 0.8208056092262268
+          },
+          {
+            "start": 13,
+            "end": 15,
+            "text": "河东",
+            "label": "location",
+            "score": 0.8205015659332275
+          }
+        ],
+        "false_negatives": []
+      },
+      "dictionary_strict": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_span_only": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "false_positives": [],
+        "false_negatives": []
+      }
+    },
+    {
+      "id": "work_and_character",
+      "text": "镜头模仿《千与千寻》，让无脸男站在门外。",
+      "expected_ner": [
+        {
+          "start": 5,
+          "end": 9,
+          "text": "千与千寻",
+          "label": "work of art"
+        },
+        {
+          "start": 12,
+          "end": 15,
+          "text": "无脸男",
+          "label": "fictional character"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 5,
+          "end": 9,
+          "text": "千与千寻",
+          "label": "work of art"
+        },
+        {
+          "start": 12,
+          "end": 15,
+          "text": "无脸男",
+          "label": "fictional character"
+        }
+      ],
+      "gliner": {
+        "entities": [
+          {
+            "start": 5,
+            "end": 9,
+            "text": "千与千寻",
+            "label": "work of art",
+            "score": 0.40236666798591614
+          },
+          {
+            "start": 12,
+            "end": 15,
+            "text": "无脸男",
+            "label": "fictional character",
+            "score": 0.5406486988067627
+          }
+        ],
+        "chunks": [
+          {
+            "index": 0,
+            "start": 0,
+            "end": 20,
+            "text": "镜头模仿《千与千寻》，让无脸男站在门外。",
+            "raw_entities": [
+              {
+                "start": 5,
+                "end": 9,
+                "text": "千与千寻",
+                "label": "work of art",
+                "score": 0.40236666798591614
+              },
+              {
+                "start": 12,
+                "end": 15,
+                "text": "无脸男",
+                "label": "fictional character",
+                "score": 0.5406486988067627
+              }
+            ],
+            "global_entities": [
+              {
+                "start": 5,
+                "end": 9,
+                "text": "千与千寻",
+                "label": "work of art",
+                "score": 0.40236666798591614
+              },
+              {
+                "start": 12,
+                "end": 15,
+                "text": "无脸男",
+                "label": "fictional character",
+                "score": 0.5406486988067627
+              }
+            ]
+          }
+        ],
+        "coverage_characters": 20,
+        "deduplication": "same global start/end/label; highest score kept"
+      },
+      "dictionary": {
+        "candidates": [
+          {
+            "start": 5,
+            "end": 9,
+            "text": "千与千寻",
+            "label": "work of art",
+            "score": null,
+            "canonical_id": "work.spirited_away",
+            "canonical": "千与千寻",
+            "candidate_kind": "work_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "镜头模仿《千与千寻》",
+            "required_context_any": [],
+            "reason": "demo EntityRuler alias and context rule matched"
+          },
+          {
+            "start": 12,
+            "end": 15,
+            "text": "无脸男",
+            "label": "fictional character",
+            "score": null,
+            "canonical_id": "character.no_face",
+            "canonical": "无脸男",
+            "candidate_kind": "character_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "让无脸男站在门外",
+            "required_context_any": [],
+            "reason": "demo EntityRuler alias and context rule matched"
+          }
+        ],
+        "rejected_ambiguous_matches": [],
+        "score_policy": "rule matches have no probability score"
+      },
+      "ner_strict": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "ner_span_only": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_strict": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_span_only": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      }
+    },
+    {
+      "id": "translated_aliases",
+      "text": "《哈利·波特》里的赫敏·格兰杰拿着魔杖。",
+      "expected_ner": [
+        {
+          "start": 1,
+          "end": 6,
+          "text": "哈利·波特",
+          "label": "work of art"
+        },
+        {
+          "start": 9,
+          "end": 15,
+          "text": "赫敏·格兰杰",
+          "label": "fictional character"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 1,
+          "end": 6,
+          "text": "哈利·波特",
+          "label": "work of art"
+        },
+        {
+          "start": 9,
+          "end": 15,
+          "text": "赫敏·格兰杰",
+          "label": "fictional character"
+        }
+      ],
+      "gliner": {
+        "entities": [
+          {
+            "start": 1,
+            "end": 6,
+            "text": "哈利·波特",
+            "label": "location",
+            "score": 0.6535689234733582
+          },
+          {
+            "start": 9,
+            "end": 15,
+            "text": "赫敏·格兰杰",
+            "label": "fictional character",
+            "score": 0.7958066463470459
+          }
+        ],
+        "chunks": [
+          {
+            "index": 0,
+            "start": 0,
+            "end": 20,
+            "text": "《哈利·波特》里的赫敏·格兰杰拿着魔杖。",
+            "raw_entities": [
+              {
+                "start": 1,
+                "end": 6,
+                "text": "哈利·波特",
+                "label": "location",
+                "score": 0.6535689234733582
+              },
+              {
+                "start": 9,
+                "end": 15,
+                "text": "赫敏·格兰杰",
+                "label": "fictional character",
+                "score": 0.7958066463470459
+              }
+            ],
+            "global_entities": [
+              {
+                "start": 1,
+                "end": 6,
+                "text": "哈利·波特",
+                "label": "location",
+                "score": 0.6535689234733582
+              },
+              {
+                "start": 9,
+                "end": 15,
+                "text": "赫敏·格兰杰",
+                "label": "fictional character",
+                "score": 0.7958066463470459
+              }
+            ]
+          }
+        ],
+        "coverage_characters": 20,
+        "deduplication": "same global start/end/label; highest score kept"
+      },
+      "dictionary": {
+        "candidates": [
+          {
+            "start": 1,
+            "end": 6,
+            "text": "哈利·波特",
+            "label": "work of art",
+            "score": null,
+            "canonical_id": "work.harry_potter",
+            "canonical": "哈利·波特",
+            "candidate_kind": "work_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "《哈利·波特》里的赫敏·格兰杰拿着魔杖",
+            "required_context_any": [],
+            "reason": "demo EntityRuler alias and context rule matched"
+          },
+          {
+            "start": 9,
+            "end": 15,
+            "text": "赫敏·格兰杰",
+            "label": "fictional character",
+            "score": null,
+            "canonical_id": "character.hermione",
+            "canonical": "赫敏·格兰杰",
+            "candidate_kind": "character_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "《哈利·波特》里的赫敏·格兰杰拿着魔杖",
+            "required_context_any": [],
+            "reason": "demo EntityRuler alias and context rule matched"
+          }
+        ],
+        "rejected_ambiguous_matches": [],
+        "score_policy": "rule matches have no probability score"
+      },
+      "ner_strict": {
+        "tp": 1,
+        "fp": 1,
+        "fn": 1,
+        "precision": 0.5,
+        "recall": 0.5,
+        "false_positives": [
+          {
+            "start": 1,
+            "end": 6,
+            "text": "哈利·波特",
+            "label": "location",
+            "score": 0.6535689234733582
+          }
+        ],
+        "false_negatives": [
+          {
+            "start": 1,
+            "end": 6,
+            "text": "哈利·波特",
+            "label": "work of art"
+          }
+        ]
+      },
+      "ner_span_only": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_strict": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_span_only": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      }
+    },
+    {
+      "id": "creator_style",
+      "text": "画面采用宫崎骏的动画风格，背景参考梵高的笔触。",
+      "expected_ner": [
+        {
+          "start": 4,
+          "end": 7,
+          "text": "宫崎骏",
+          "label": "creator"
+        },
+        {
+          "start": 17,
+          "end": 19,
+          "text": "梵高",
+          "label": "creator"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 4,
+          "end": 7,
+          "text": "宫崎骏",
+          "label": "creator"
+        },
+        {
+          "start": 17,
+          "end": 19,
+          "text": "梵高",
+          "label": "creator"
+        }
+      ],
+      "gliner": {
+        "entities": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "画面",
+            "label": "work of art",
+            "score": 0.45585355162620544
+          },
+          {
+            "start": 4,
+            "end": 7,
+            "text": "宫崎骏",
+            "label": "creator",
+            "score": 0.5238685607910156
+          },
+          {
+            "start": 17,
+            "end": 19,
+            "text": "梵高",
+            "label": "person",
+            "score": 0.5508237481117249
+          }
+        ],
+        "chunks": [
+          {
+            "index": 0,
+            "start": 0,
+            "end": 23,
+            "text": "画面采用宫崎骏的动画风格，背景参考梵高的笔触。",
+            "raw_entities": [
+              {
+                "start": 0,
+                "end": 2,
+                "text": "画面",
+                "label": "work of art",
+                "score": 0.45585355162620544
+              },
+              {
+                "start": 4,
+                "end": 7,
+                "text": "宫崎骏",
+                "label": "creator",
+                "score": 0.5238685607910156
+              },
+              {
+                "start": 17,
+                "end": 19,
+                "text": "梵高",
+                "label": "person",
+                "score": 0.5508237481117249
+              }
+            ],
+            "global_entities": [
+              {
+                "start": 0,
+                "end": 2,
+                "text": "画面",
+                "label": "work of art",
+                "score": 0.45585355162620544
+              },
+              {
+                "start": 4,
+                "end": 7,
+                "text": "宫崎骏",
+                "label": "creator",
+                "score": 0.5238685607910156
+              },
+              {
+                "start": 17,
+                "end": 19,
+                "text": "梵高",
+                "label": "person",
+                "score": 0.5508237481117249
+              }
+            ]
+          }
+        ],
+        "coverage_characters": 23,
+        "deduplication": "same global start/end/label; highest score kept"
+      },
+      "dictionary": {
+        "candidates": [
+          {
+            "start": 4,
+            "end": 7,
+            "text": "宫崎骏",
+            "label": "creator",
+            "score": null,
+            "canonical_id": "creator.miyazaki",
+            "canonical": "宫崎骏",
+            "candidate_kind": "creator_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "画面采用宫崎骏的动画风格",
+            "required_context_any": [],
+            "reason": "demo EntityRuler alias and context rule matched"
+          },
+          {
+            "start": 17,
+            "end": 19,
+            "text": "梵高",
+            "label": "creator",
+            "score": null,
+            "canonical_id": "creator.van_gogh",
+            "canonical": "梵高",
+            "candidate_kind": "creator_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "背景参考梵高的笔触",
+            "required_context_any": [],
+            "reason": "demo EntityRuler alias and context rule matched"
+          }
+        ],
+        "rejected_ambiguous_matches": [],
+        "score_policy": "rule matches have no probability score"
+      },
+      "ner_strict": {
+        "tp": 1,
+        "fp": 2,
+        "fn": 1,
+        "precision": 0.3333333333333333,
+        "recall": 0.5,
+        "false_positives": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "画面",
+            "label": "work of art",
+            "score": 0.45585355162620544
+          },
+          {
+            "start": 17,
+            "end": 19,
+            "text": "梵高",
+            "label": "person",
+            "score": 0.5508237481117249
+          }
+        ],
+        "false_negatives": [
+          {
+            "start": 17,
+            "end": 19,
+            "text": "梵高",
+            "label": "creator"
+          }
+        ]
+      },
+      "ner_span_only": {
+        "tp": 2,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.6666666666666666,
+        "recall": 1.0,
+        "false_positives": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "画面",
+            "label": "work of art",
+            "score": 0.45585355162620544
+          }
+        ],
+        "false_negatives": []
+      },
+      "dictionary_strict": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_span_only": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      }
+    },
+    {
+      "id": "public_person",
+      "text": "请用周杰伦的形象拍一支广告。",
+      "expected_ner": [
+        {
+          "start": 2,
+          "end": 5,
+          "text": "周杰伦",
+          "label": "person"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 2,
+          "end": 5,
+          "text": "周杰伦",
+          "label": "person"
+        }
+      ],
+      "gliner": {
+        "entities": [
+          {
+            "start": 2,
+            "end": 5,
+            "text": "周杰伦",
+            "label": "fictional character",
+            "score": 0.6613604426383972
+          }
+        ],
+        "chunks": [
+          {
+            "index": 0,
+            "start": 0,
+            "end": 14,
+            "text": "请用周杰伦的形象拍一支广告。",
+            "raw_entities": [
+              {
+                "start": 2,
+                "end": 5,
+                "text": "周杰伦",
+                "label": "fictional character",
+                "score": 0.6613604426383972
+              }
+            ],
+            "global_entities": [
+              {
+                "start": 2,
+                "end": 5,
+                "text": "周杰伦",
+                "label": "fictional character",
+                "score": 0.6613604426383972
+              }
+            ]
+          }
+        ],
+        "coverage_characters": 14,
+        "deduplication": "same global start/end/label; highest score kept"
+      },
+      "dictionary": {
+        "candidates": [
+          {
+            "start": 2,
+            "end": 5,
+            "text": "周杰伦",
+            "label": "person",
+            "score": null,
+            "canonical_id": "person.jay_chou",
+            "canonical": "周杰伦",
+            "candidate_kind": "public_figure_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "请用周杰伦的形象拍一支广告",
+            "required_context_any": [],
+            "reason": "demo EntityRuler alias and context rule matched"
+          }
+        ],
+        "rejected_ambiguous_matches": [],
+        "score_policy": "rule matches have no probability score"
+      },
+      "ner_strict": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 1,
+        "precision": 0.0,
+        "recall": 0.0,
+        "false_positives": [
+          {
+            "start": 2,
+            "end": 5,
+            "text": "周杰伦",
+            "label": "fictional character",
+            "score": 0.6613604426383972
+          }
+        ],
+        "false_negatives": [
+          {
+            "start": 2,
+            "end": 5,
+            "text": "周杰伦",
+            "label": "person"
+          }
+        ]
+      },
+      "ner_span_only": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_strict": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_span_only": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      }
+    },
+    {
+      "id": "unknown_brand",
+      "text": "虚构品牌“岚星盒”推出一款新手机。",
+      "expected_ner": [
+        {
+          "start": 5,
+          "end": 8,
+          "text": "岚星盒",
+          "label": "brand"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 5,
+          "end": 8,
+          "text": "岚星盒",
+          "label": "brand"
+        }
+      ],
+      "gliner": {
+        "entities": [
+          {
+            "start": 5,
+            "end": 8,
+            "text": "岚星盒",
+            "label": "brand",
+            "score": 0.8269815444946289
+          }
+        ],
+        "chunks": [
+          {
+            "index": 0,
+            "start": 0,
+            "end": 17,
+            "text": "虚构品牌“岚星盒”推出一款新手机。",
+            "raw_entities": [
+              {
+                "start": 5,
+                "end": 8,
+                "text": "岚星盒",
+                "label": "brand",
+                "score": 0.8269815444946289
+              }
+            ],
+            "global_entities": [
+              {
+                "start": 5,
+                "end": 8,
+                "text": "岚星盒",
+                "label": "brand",
+                "score": 0.8269815444946289
+              }
+            ]
+          }
+        ],
+        "coverage_characters": 17,
+        "deduplication": "same global start/end/label; highest score kept"
+      },
+      "dictionary": {
+        "candidates": [],
+        "rejected_ambiguous_matches": [],
+        "score_policy": "rule matches have no probability score"
+      },
+      "ner_strict": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "ner_span_only": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_strict": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "false_positives": [],
+        "false_negatives": [
+          {
+            "start": 5,
+            "end": 8,
+            "text": "岚星盒",
+            "label": "brand"
+          }
+        ]
+      },
+      "dictionary_span_only": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "false_positives": [],
+        "false_negatives": [
+          {
+            "start": 5,
+            "end": 8,
+            "text": "岚星盒",
+            "label": "brand"
+          }
+        ]
+      }
+    },
+    {
+      "id": "unknown_work",
+      "text": "原创小说《月港清单》里有一个角色叫林舟。",
+      "expected_ner": [
+        {
+          "start": 5,
+          "end": 9,
+          "text": "月港清单",
+          "label": "work of art"
+        },
+        {
+          "start": 17,
+          "end": 19,
+          "text": "林舟",
+          "label": "fictional character"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 5,
+          "end": 9,
+          "text": "月港清单",
+          "label": "work of art"
+        },
+        {
+          "start": 17,
+          "end": 19,
+          "text": "林舟",
+          "label": "fictional character"
+        }
+      ],
+      "gliner": {
+        "entities": [
+          {
+            "start": 5,
+            "end": 9,
+            "text": "月港清单",
+            "label": "work of art",
+            "score": 0.5546755790710449
+          },
+          {
+            "start": 17,
+            "end": 19,
+            "text": "林舟",
+            "label": "fictional character",
+            "score": 0.7374159693717957
+          }
+        ],
+        "chunks": [
+          {
+            "index": 0,
+            "start": 0,
+            "end": 20,
+            "text": "原创小说《月港清单》里有一个角色叫林舟。",
+            "raw_entities": [
+              {
+                "start": 5,
+                "end": 9,
+                "text": "月港清单",
+                "label": "work of art",
+                "score": 0.5546755790710449
+              },
+              {
+                "start": 17,
+                "end": 19,
+                "text": "林舟",
+                "label": "fictional character",
+                "score": 0.7374159693717957
+              }
+            ],
+            "global_entities": [
+              {
+                "start": 5,
+                "end": 9,
+                "text": "月港清单",
+                "label": "work of art",
+                "score": 0.5546755790710449
+              },
+              {
+                "start": 17,
+                "end": 19,
+                "text": "林舟",
+                "label": "fictional character",
+                "score": 0.7374159693717957
+              }
+            ]
+          }
+        ],
+        "coverage_characters": 20,
+        "deduplication": "same global start/end/label; highest score kept"
+      },
+      "dictionary": {
+        "candidates": [],
+        "rejected_ambiguous_matches": [],
+        "score_policy": "rule matches have no probability score"
+      },
+      "ner_strict": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "ner_span_only": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_strict": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": null,
+        "recall": 0.0,
+        "false_positives": [],
+        "false_negatives": [
+          {
+            "start": 5,
+            "end": 9,
+            "text": "月港清单",
+            "label": "work of art"
+          },
+          {
+            "start": 17,
+            "end": 19,
+            "text": "林舟",
+            "label": "fictional character"
+          }
+        ]
+      },
+      "dictionary_span_only": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": null,
+        "recall": 0.0,
+        "false_positives": [],
+        "false_negatives": [
+          {
+            "start": 5,
+            "end": 9,
+            "text": "月港清单",
+            "label": "work of art"
+          },
+          {
+            "start": 17,
+            "end": 19,
+            "text": "林舟",
+            "label": "fictional character"
+          }
+        ]
+      }
+    },
+    {
+      "id": "beverage_aliases",
+      "text": "海报上有可口可乐和 Coca-Cola 的字样。",
+      "expected_ner": [
+        {
+          "start": 4,
+          "end": 8,
+          "text": "可口可乐",
+          "label": "brand"
+        },
+        {
+          "start": 10,
+          "end": 19,
+          "text": "Coca-Cola",
+          "label": "brand"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 4,
+          "end": 8,
+          "text": "可口可乐",
+          "label": "brand"
+        },
+        {
+          "start": 10,
+          "end": 19,
+          "text": "Coca-Cola",
+          "label": "brand"
+        }
+      ],
+      "gliner": {
+        "entities": [
+          {
+            "start": 10,
+            "end": 14,
+            "text": "Coca",
+            "label": "brand",
+            "score": 0.6718680262565613
+          },
+          {
+            "start": 15,
+            "end": 19,
+            "text": "Cola",
+            "label": "brand",
+            "score": 0.5194416046142578
+          }
+        ],
+        "chunks": [
+          {
+            "index": 0,
+            "start": 0,
+            "end": 24,
+            "text": "海报上有可口可乐和 Coca-Cola 的字样。",
+            "raw_entities": [
+              {
+                "start": 10,
+                "end": 14,
+                "text": "Coca",
+                "label": "brand",
+                "score": 0.6718680262565613
+              },
+              {
+                "start": 15,
+                "end": 19,
+                "text": "Cola",
+                "label": "brand",
+                "score": 0.5194416046142578
+              }
+            ],
+            "global_entities": [
+              {
+                "start": 10,
+                "end": 14,
+                "text": "Coca",
+                "label": "brand",
+                "score": 0.6718680262565613
+              },
+              {
+                "start": 15,
+                "end": 19,
+                "text": "Cola",
+                "label": "brand",
+                "score": 0.5194416046142578
+              }
+            ]
+          }
+        ],
+        "coverage_characters": 24,
+        "deduplication": "same global start/end/label; highest score kept"
+      },
+      "dictionary": {
+        "candidates": [
+          {
+            "start": 4,
+            "end": 8,
+            "text": "可口可乐",
+            "label": "brand",
+            "score": null,
+            "canonical_id": "brand.coca_cola",
+            "canonical": "可口可乐 / Coca-Cola",
+            "candidate_kind": "brand_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "海报上有可口可乐和 Coca-Cola 的字样",
+            "required_context_any": [],
+            "reason": "demo EntityRuler alias and context rule matched"
+          },
+          {
+            "start": 10,
+            "end": 19,
+            "text": "Coca-Cola",
+            "label": "brand",
+            "score": null,
+            "canonical_id": "brand.coca_cola",
+            "canonical": "可口可乐 / Coca-Cola",
+            "candidate_kind": "brand_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "海报上有可口可乐和 Coca-Cola 的字样",
+            "required_context_any": [],
+            "reason": "demo EntityRuler alias and context rule matched"
+          }
+        ],
+        "rejected_ambiguous_matches": [],
+        "score_policy": "rule matches have no probability score"
+      },
+      "ner_strict": {
+        "tp": 0,
+        "fp": 2,
+        "fn": 2,
+        "precision": 0.0,
+        "recall": 0.0,
+        "false_positives": [
+          {
+            "start": 10,
+            "end": 14,
+            "text": "Coca",
+            "label": "brand",
+            "score": 0.6718680262565613
+          },
+          {
+            "start": 15,
+            "end": 19,
+            "text": "Cola",
+            "label": "brand",
+            "score": 0.5194416046142578
+          }
+        ],
+        "false_negatives": [
+          {
+            "start": 4,
+            "end": 8,
+            "text": "可口可乐",
+            "label": "brand"
+          },
+          {
+            "start": 10,
+            "end": 19,
+            "text": "Coca-Cola",
+            "label": "brand"
+          }
+        ]
+      },
+      "ner_span_only": {
+        "tp": 0,
+        "fp": 2,
+        "fn": 2,
+        "precision": 0.0,
+        "recall": 0.0,
+        "false_positives": [
+          {
+            "start": 10,
+            "end": 14,
+            "text": "Coca",
+            "label": "brand",
+            "score": 0.6718680262565613
+          },
+          {
+            "start": 15,
+            "end": 19,
+            "text": "Cola",
+            "label": "brand",
+            "score": 0.5194416046142578
+          }
+        ],
+        "false_negatives": [
+          {
+            "start": 4,
+            "end": 8,
+            "text": "可口可乐",
+            "label": "brand"
+          },
+          {
+            "start": 10,
+            "end": 19,
+            "text": "Coca-Cola",
+            "label": "brand"
+          }
+        ]
+      },
+      "dictionary_strict": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_span_only": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      }
+    },
+    {
+      "id": "descriptive_only",
+      "text": "一个穿红蓝紧身衣、会吐蛛丝的少年从高楼跃下。",
+      "expected_ner": [],
+      "expected_candidates": [],
+      "gliner": {
+        "entities": [
+          {
+            "start": 14,
+            "end": 16,
+            "text": "少年",
+            "label": "person",
+            "score": 0.6573516726493835
+          },
+          {
+            "start": 17,
+            "end": 19,
+            "text": "高楼",
+            "label": "location",
+            "score": 0.4476853311061859
+          }
+        ],
+        "chunks": [
+          {
+            "index": 0,
+            "start": 0,
+            "end": 22,
+            "text": "一个穿红蓝紧身衣、会吐蛛丝的少年从高楼跃下。",
+            "raw_entities": [
+              {
+                "start": 14,
+                "end": 16,
+                "text": "少年",
+                "label": "person",
+                "score": 0.6573516726493835
+              },
+              {
+                "start": 17,
+                "end": 19,
+                "text": "高楼",
+                "label": "location",
+                "score": 0.4476853311061859
+              }
+            ],
+            "global_entities": [
+              {
+                "start": 14,
+                "end": 16,
+                "text": "少年",
+                "label": "person",
+                "score": 0.6573516726493835
+              },
+              {
+                "start": 17,
+                "end": 19,
+                "text": "高楼",
+                "label": "location",
+                "score": 0.4476853311061859
+              }
+            ]
+          }
+        ],
+        "coverage_characters": 22,
+        "deduplication": "same global start/end/label; highest score kept"
+      },
+      "dictionary": {
+        "candidates": [],
+        "rejected_ambiguous_matches": [],
+        "score_policy": "rule matches have no probability score"
+      },
+      "ner_strict": {
+        "tp": 0,
+        "fp": 2,
+        "fn": 0,
+        "precision": 0.0,
+        "recall": null,
+        "false_positives": [
+          {
+            "start": 14,
+            "end": 16,
+            "text": "少年",
+            "label": "person",
+            "score": 0.6573516726493835
+          },
+          {
+            "start": 17,
+            "end": 19,
+            "text": "高楼",
+            "label": "location",
+            "score": 0.4476853311061859
+          }
+        ],
+        "false_negatives": []
+      },
+      "ner_span_only": {
+        "tp": 0,
+        "fp": 2,
+        "fn": 0,
+        "precision": 0.0,
+        "recall": null,
+        "false_positives": [
+          {
+            "start": 14,
+            "end": 16,
+            "text": "少年",
+            "label": "person",
+            "score": 0.6573516726493835
+          },
+          {
+            "start": 17,
+            "end": 19,
+            "text": "高楼",
+            "label": "location",
+            "score": 0.4476853311061859
+          }
+        ],
+        "false_negatives": []
+      },
+      "dictionary_strict": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_span_only": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "false_positives": [],
+        "false_negatives": []
+      }
+    },
+    {
+      "id": "generic_institution",
+      "text": "经理在旧书修复工作室核对验收单。",
+      "expected_ner": [],
+      "expected_candidates": [],
+      "gliner": {
+        "entities": [],
+        "chunks": [
+          {
+            "index": 0,
+            "start": 0,
+            "end": 16,
+            "text": "经理在旧书修复工作室核对验收单。",
+            "raw_entities": [],
+            "global_entities": []
+          }
+        ],
+        "coverage_characters": 16,
+        "deduplication": "same global start/end/label; highest score kept"
+      },
+      "dictionary": {
+        "candidates": [],
+        "rejected_ambiguous_matches": [],
+        "score_policy": "rule matches have no probability score"
+      },
+      "ner_strict": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "ner_span_only": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_strict": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_span_only": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "false_positives": [],
+        "false_negatives": []
+      }
+    },
+    {
+      "id": "mixed_reference",
+      "text": "她穿着 adidas 外套，看着《三体》封面上的罗辑。",
+      "expected_ner": [
+        {
+          "start": 4,
+          "end": 10,
+          "text": "adidas",
+          "label": "brand"
+        },
+        {
+          "start": 17,
+          "end": 19,
+          "text": "三体",
+          "label": "work of art"
+        },
+        {
+          "start": 24,
+          "end": 26,
+          "text": "罗辑",
+          "label": "fictional character"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 4,
+          "end": 10,
+          "text": "adidas",
+          "label": "brand"
+        },
+        {
+          "start": 17,
+          "end": 19,
+          "text": "三体",
+          "label": "work of art"
+        },
+        {
+          "start": 24,
+          "end": 26,
+          "text": "罗辑",
+          "label": "fictional character"
+        }
+      ],
+      "gliner": {
+        "entities": [
+          {
+            "start": 4,
+            "end": 10,
+            "text": "adidas",
+            "label": "brand",
+            "score": 0.7261053919792175
+          },
+          {
+            "start": 17,
+            "end": 19,
+            "text": "三体",
+            "label": "work of art",
+            "score": 0.42651480436325073
+          },
+          {
+            "start": 24,
+            "end": 26,
+            "text": "罗辑",
+            "label": "person",
+            "score": 0.5658053755760193
+          }
+        ],
+        "chunks": [
+          {
+            "index": 0,
+            "start": 0,
+            "end": 27,
+            "text": "她穿着 adidas 外套，看着《三体》封面上的罗辑。",
+            "raw_entities": [
+              {
+                "start": 4,
+                "end": 10,
+                "text": "adidas",
+                "label": "brand",
+                "score": 0.7261053919792175
+              },
+              {
+                "start": 17,
+                "end": 19,
+                "text": "三体",
+                "label": "work of art",
+                "score": 0.42651480436325073
+              },
+              {
+                "start": 24,
+                "end": 26,
+                "text": "罗辑",
+                "label": "person",
+                "score": 0.5658053755760193
+              }
+            ],
+            "global_entities": [
+              {
+                "start": 4,
+                "end": 10,
+                "text": "adidas",
+                "label": "brand",
+                "score": 0.7261053919792175
+              },
+              {
+                "start": 17,
+                "end": 19,
+                "text": "三体",
+                "label": "work of art",
+                "score": 0.42651480436325073
+              },
+              {
+                "start": 24,
+                "end": 26,
+                "text": "罗辑",
+                "label": "person",
+                "score": 0.5658053755760193
+              }
+            ]
+          }
+        ],
+        "coverage_characters": 27,
+        "deduplication": "same global start/end/label; highest score kept"
+      },
+      "dictionary": {
+        "candidates": [
+          {
+            "start": 4,
+            "end": 10,
+            "text": "adidas",
+            "label": "brand",
+            "score": null,
+            "canonical_id": "brand.adidas",
+            "canonical": "adidas / 阿迪达斯",
+            "candidate_kind": "brand_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "她穿着 adidas 外套",
+            "required_context_any": [],
+            "reason": "demo EntityRuler alias and context rule matched"
+          },
+          {
+            "start": 17,
+            "end": 19,
+            "text": "三体",
+            "label": "work of art",
+            "score": null,
+            "canonical_id": "work.three_body",
+            "canonical": "三体",
+            "candidate_kind": "work_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "看着《三体》封面上的罗辑",
+            "required_context_any": [],
+            "reason": "demo EntityRuler alias and context rule matched"
+          },
+          {
+            "start": 24,
+            "end": 26,
+            "text": "罗辑",
+            "label": "fictional character",
+            "score": null,
+            "canonical_id": "character.luo_ji",
+            "canonical": "罗辑",
+            "candidate_kind": "character_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "看着《三体》封面上的罗辑",
+            "required_context_any": [],
+            "reason": "demo EntityRuler alias and context rule matched"
+          }
+        ],
+        "rejected_ambiguous_matches": [],
+        "score_policy": "rule matches have no probability score"
+      },
+      "ner_strict": {
+        "tp": 2,
+        "fp": 1,
+        "fn": 1,
+        "precision": 0.6666666666666666,
+        "recall": 0.6666666666666666,
+        "false_positives": [
+          {
+            "start": 24,
+            "end": 26,
+            "text": "罗辑",
+            "label": "person",
+            "score": 0.5658053755760193
+          }
+        ],
+        "false_negatives": [
+          {
+            "start": 24,
+            "end": 26,
+            "text": "罗辑",
+            "label": "fictional character"
+          }
+        ]
+      },
+      "ner_span_only": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_strict": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_span_only": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      }
+    },
+    {
+      "id": "ambiguous_same_text",
+      "text": "桌上有苹果，墙上贴着“苹果手机发布会”的海报。",
+      "expected_ner": [
+        {
+          "start": 11,
+          "end": 13,
+          "text": "苹果",
+          "label": "brand"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 11,
+          "end": 13,
+          "text": "苹果",
+          "label": "brand"
+        }
+      ],
+      "gliner": {
+        "entities": [
+          {
+            "start": 3,
+            "end": 5,
+            "text": "苹果",
+            "label": "brand",
+            "score": 0.9624276757240295
+          },
+          {
+            "start": 11,
+            "end": 13,
+            "text": "苹果",
+            "label": "brand",
+            "score": 0.9668083190917969
+          }
+        ],
+        "chunks": [
+          {
+            "index": 0,
+            "start": 0,
+            "end": 23,
+            "text": "桌上有苹果，墙上贴着“苹果手机发布会”的海报。",
+            "raw_entities": [
+              {
+                "start": 3,
+                "end": 5,
+                "text": "苹果",
+                "label": "brand",
+                "score": 0.9624276757240295
+              },
+              {
+                "start": 11,
+                "end": 13,
+                "text": "苹果",
+                "label": "brand",
+                "score": 0.9668083190917969
+              }
+            ],
+            "global_entities": [
+              {
+                "start": 3,
+                "end": 5,
+                "text": "苹果",
+                "label": "brand",
+                "score": 0.9624276757240295
+              },
+              {
+                "start": 11,
+                "end": 13,
+                "text": "苹果",
+                "label": "brand",
+                "score": 0.9668083190917969
+              }
+            ]
+          }
+        ],
+        "coverage_characters": 23,
+        "deduplication": "same global start/end/label; highest score kept"
+      },
+      "dictionary": {
+        "candidates": [
+          {
+            "start": 11,
+            "end": 13,
+            "text": "苹果",
+            "label": "brand",
+            "score": null,
+            "canonical_id": "brand.apple",
+            "canonical": "Apple / 苹果",
+            "candidate_kind": "brand_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "墙上贴着“苹果手机发布会”的海报",
+            "required_context_any": [
+              "手机",
+              "电脑",
+              "发布会",
+              "品牌"
+            ],
+            "reason": "demo EntityRuler alias and context rule matched"
+          }
+        ],
+        "rejected_ambiguous_matches": [
+          {
+            "start": 3,
+            "end": 5,
+            "text": "苹果",
+            "label": "brand",
+            "score": null,
+            "canonical_id": "brand.apple",
+            "canonical": "Apple / 苹果",
+            "candidate_kind": "brand_reference",
+            "source_kind": "manually_curated_demo",
+            "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。",
+            "matched_context": "桌上有苹果",
+            "required_context_any": [
+              "手机",
+              "电脑",
+              "发布会",
+              "品牌"
+            ],
+            "reason": "ambiguous alias lacks configured local context"
+          }
+        ],
+        "score_policy": "rule matches have no probability score"
+      },
+      "ner_strict": {
+        "tp": 1,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.5,
+        "recall": 1.0,
+        "false_positives": [
+          {
+            "start": 3,
+            "end": 5,
+            "text": "苹果",
+            "label": "brand",
+            "score": 0.9624276757240295
+          }
+        ],
+        "false_negatives": []
+      },
+      "ner_span_only": {
+        "tp": 1,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.5,
+        "recall": 1.0,
+        "false_positives": [
+          {
+            "start": 3,
+            "end": 5,
+            "text": "苹果",
+            "label": "brand",
+            "score": 0.9624276757240295
+          }
+        ],
+        "false_negatives": []
+      },
+      "dictionary_strict": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      "dictionary_span_only": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "false_positives": [],
+        "false_negatives": []
+      }
+    }
+  ],
+  "prompt": {
+    "text": "生成15秒、9:16竖屏、720p写实生活剧情片，中文普通话原生同期对白。一个连续时刻，表演自然，不加字幕、文字贴片、片头、背景音乐或旁白。仅两位成年人物，无其他说话人。\n\n世界框架（供人物关系和空间理解，里面标为后续的情节不在本段发生）：\n时代与日常环境：当代，长江中下游一带的内陆渡口小镇，傍晚六点左右。候船室只有一排日光灯亮着，空气中混着江风、柴油味和水腥气。末班船六点二十分开，六点十分开始检票。\n\n空间：候船室靠窗的一张木桌。窗外能看见码头栈桥和正慢慢暗下去的天色、江面。门在木桌正后方，门缝灌进江风。桌上放着一只旧搪瓷杯（空）、一支没有笔帽的红笔、一份对折的录取通知，以及后来由周明推出的一张纸票——今晚六点二十分，河西到河东，单程。\n\n人物关系与处境：周明，五旬上下，渡口老检票员，今天轮休，没穿制服，外套搭椅背上。他把话咽在喉咙里，习惯用动作替代语言。他最想做的事是悄悄把女儿送上船，又不让她觉得是被赶走的。周禾，二十六岁，周明唯一的女儿，刚考上对岸县城的旧书修复工作室，今晚坐末班船过江，明天报到。她想离开去对岸，又怕自己一开口就成了\"先丢下家的人\"。父女在同一张木桌两头各自较着劲——周明想买票让她走却不知怎么说出口，周禾想走却以为父亲会拦。\n\n前情：母亲三年前去世，周禾辞掉城里的临时工作回小镇陪父三年。其余前情原文未交代，标记为未知。\n\n本段地点：渡口候船室，靠窗木桌旁。本段环境：傍晚六点，一排日光灯亮着，窗外天色与江面正灰下去，江风从门缝灌入，带着柴油味和水腥气。桌上放着空搪瓷杯、无帽红笔、对折录取通知。\n\n本段起态必须保持：\n[{\"subject_id\": \"周禾\", \"predicate\": \"位置与姿势\", \"value\": \"站在桌边，右手握着行李箱杆，行李箱贴着她右腿\", \"certainty\": \"explicit\", \"evidence_refs\": [\"scene_ledger.events[0].before[0]\", \"accepted_full_draft.段首状态\"], \"qualifiers\": {\"动作\": \"站立握杆\", \"方向\": \"面向桌与父亲\", \"表情\": \"喉结轻动，话压在喉咙里\"}}, {\"subject_id\": \"周禾\", \"predicate\": \"视线\", \"value\": \"落在桌上那份录取通知上\", \"certainty\": \"explicit\", \"evidence_refs\": [\"scene_ledger.events[0].after[0]\"], \"qualifiers\": {\"对象\": \"录取通知\"}}, {\"subject_id\": \"周明\", \"predicate\": \"位置与穿着\", \"value\": \"坐在木桌另一边，今天轮休，未穿制服，外套搭椅背上\", \"certainty\": \"explicit\", \"evidence_refs\": [\"scene_ledger.events[0].before[1]\", \"accepted_full_draft.段首状态\"], \"qualifiers\": {\"状态\": \"未着工装\"}}]\n\n本次只拍S1-A（原S1的前半段），不把28秒全段压缩成15秒。女儿周禾26岁，站在桌边，右手握箱杆，箱子贴右腿；父亲周明约50岁，坐在桌子另一边，非制服日常衣服，外套搭椅背。父亲的拇指挡着无帽红笔笔尖，安静听；本段始终坐着，不放笔，不抢话。\n\n0—1秒：中近景建立父女隔桌的位置与女儿箱杆，女儿目光从录取通知移到父亲脸上，轻吸气，准备抢先开口。1—11秒：女儿带着紧绷的防备，连贯、日常语速完整说唯一一句对白，嘴型与声音对应；可在同一空间缓慢推进到女儿近景，父亲在对侧安静听。\n\n女儿周禾唯一对白，必须完整照说：\n“我房间已经找好了。钱也算过。头三个月紧一点，后面能过。”\n\n女儿原动作：抢在父亲开口前，抬头快速说出已找好房间、算过钱的话；说完喉结轻动一下，目光仍停在通知上。女儿表演：眉心微紧，嘴角克制，准备好的台词被自己抢先抛出。视线：从通知移到父亲脸上，旋即又落回桌面。反应：喉咙里还堵着准备了一路的别的话，五指下意识收紧箱杆。11—15秒：对白收住，她五指继续收紧箱杆，骨节泛白，喉咙里还压着没说完的话，留出能看清表情与手指的反应窗口，父亲仍坐着静听。\n\n段尾：女儿说完这句话并紧握箱杆，父亲尚未开口、尚未放笔；红笔仍由父亲拇指挡着笔尖。下一段才发生父亲的回应。本段禁止提前加入父亲台词、广播、船笛、取票或推票、起身、上船；纸票尚未出现，不能在桌上摆票。无母亲镜头、照片、回忆或其他人物。只有轻微江风和候船室环境底噪。人物服装、道具、坐站位置与视线连续。\n",
+    "gold_annotations": null,
+    "gliner": {
+      "entities": [
+        {
+          "start": 132,
+          "end": 139,
+          "text": "长江中下游一带",
+          "label": "location",
+          "score": 0.5797722935676575
+        },
+        {
+          "start": 140,
+          "end": 146,
+          "text": "内陆渡口小镇",
+          "label": "location",
+          "score": 0.6893153786659241
+        },
+        {
+          "start": 154,
+          "end": 157,
+          "text": "候船室",
+          "label": "location",
+          "score": 0.7561503052711487
+        },
+        {
+          "start": 207,
+          "end": 210,
+          "text": "候船室",
+          "label": "location",
+          "score": 0.8721627593040466
+        },
+        {
+          "start": 223,
+          "end": 227,
+          "text": "码头栈桥",
+          "label": "location",
+          "score": 0.460430383682251
+        },
+        {
+          "start": 295,
+          "end": 297,
+          "text": "周明",
+          "label": "person",
+          "score": 0.9841139316558838
+        },
+        {
+          "start": 314,
+          "end": 316,
+          "text": "河西",
+          "label": "location",
+          "score": 0.7933858036994934
+        },
+        {
+          "start": 317,
+          "end": 319,
+          "text": "河东",
+          "label": "location",
+          "score": 0.8191353678703308
+        },
+        {
+          "start": 333,
+          "end": 335,
+          "text": "周明",
+          "label": "person",
+          "score": 0.9865999817848206
+        },
+        {
+          "start": 341,
+          "end": 343,
+          "text": "渡口",
+          "label": "location",
+          "score": 0.7863836884498596
+        },
+        {
+          "start": 412,
+          "end": 414,
+          "text": "周禾",
+          "label": "person",
+          "score": 0.9277206659317017
+        },
+        {
+          "start": 420,
+          "end": 422,
+          "text": "周明",
+          "label": "person",
+          "score": 0.9660384058952332
+        },
+        {
+          "start": 433,
+          "end": 435,
+          "text": "县城",
+          "label": "location",
+          "score": 0.4785594940185547
+        },
+        {
+          "start": 502,
+          "end": 504,
+          "text": "周明",
+          "label": "person",
+          "score": 0.9599376320838928
+        },
+        {
+          "start": 519,
+          "end": 521,
+          "text": "周禾",
+          "label": "person",
+          "score": 0.9788641333580017
+        },
+        {
+          "start": 544,
+          "end": 546,
+          "text": "周禾",
+          "label": "person",
+          "score": 0.9812018871307373
+        },
+        {
+          "start": 556,
+          "end": 558,
+          "text": "小镇",
+          "label": "location",
+          "score": 0.4549237787723541
+        },
+        {
+          "start": 586,
+          "end": 591,
+          "text": "渡口候船室",
+          "label": "location",
+          "score": 0.8044240474700928
+        },
+        {
+          "start": 696,
+          "end": 698,
+          "text": "周禾",
+          "label": "person",
+          "score": 0.8601926565170288
+        },
+        {
+          "start": 724,
+          "end": 729,
+          "text": "value",
+          "label": "person",
+          "score": 0.4709591865539551
+        },
+        {
+          "start": 735,
+          "end": 737,
+          "text": "桌边",
+          "label": "location",
+          "score": 0.4401736855506897
+        },
+        {
+          "start": 742,
+          "end": 744,
+          "text": "行李",
+          "label": "person",
+          "score": 0.5103535056114197
+        },
+        {
+          "start": 747,
+          "end": 749,
+          "text": "行李",
+          "label": "person",
+          "score": 0.43956658244132996
+        },
+        {
+          "start": 950,
+          "end": 952,
+          "text": "周禾",
+          "label": "fictional character",
+          "score": 0.6723847985267639
+        },
+        {
+          "start": 975,
+          "end": 980,
+          "text": "value",
+          "label": "person",
+          "score": 0.4370400607585907
+        },
+        {
+          "start": 1042,
+          "end": 1054,
+          "text": "scene_ledger",
+          "label": "person",
+          "score": 0.5617707371711731
+        },
+        {
+          "start": 1065,
+          "end": 1070,
+          "text": "after",
+          "label": "person",
+          "score": 0.5225841403007507
+        },
+        {
+          "start": 1124,
+          "end": 1126,
+          "text": "周明",
+          "label": "person",
+          "score": 0.8704040050506592
+        },
+        {
+          "start": 1332,
+          "end": 1336,
+          "text": "S1-A",
+          "label": "work of art",
+          "score": 0.7921224236488342
+        },
+        {
+          "start": 1338,
+          "end": 1340,
+          "text": "S1",
+          "label": "work of art",
+          "score": 0.5849601030349731
+        },
+        {
+          "start": 1360,
+          "end": 1362,
+          "text": "女儿",
+          "label": "person",
+          "score": 0.4555089771747589
+        },
+        {
+          "start": 1362,
+          "end": 1364,
+          "text": "周禾",
+          "label": "person",
+          "score": 0.9107638001441956
+        },
+        {
+          "start": 1385,
+          "end": 1387,
+          "text": "父亲",
+          "label": "person",
+          "score": 0.5016855001449585
+        },
+        {
+          "start": 1387,
+          "end": 1389,
+          "text": "周明",
+          "label": "person",
+          "score": 0.9348903894424438
+        },
+        {
+          "start": 1469,
+          "end": 1471,
+          "text": "女儿",
+          "label": "fictional character",
+          "score": 0.7456300258636475
+        },
+        {
+          "start": 1474,
+          "end": 1476,
+          "text": "女儿",
+          "label": "fictional character",
+          "score": 0.6642348170280457
+        },
+        {
+          "start": 1485,
+          "end": 1487,
+          "text": "父亲",
+          "label": "person",
+          "score": 0.6590266227722168
+        },
+        {
+          "start": 1507,
+          "end": 1509,
+          "text": "女儿",
+          "label": "fictional character",
+          "score": 0.5120494365692139
+        },
+        {
+          "start": 1553,
+          "end": 1555,
+          "text": "女儿",
+          "label": "fictional character",
+          "score": 0.7496068477630615
+        },
+        {
+          "start": 1558,
+          "end": 1560,
+          "text": "父亲",
+          "label": "person",
+          "score": 0.6809753179550171
+        },
+        {
+          "start": 1569,
+          "end": 1571,
+          "text": "女儿",
+          "label": "fictional character",
+          "score": 0.6805216073989868
+        },
+        {
+          "start": 1571,
+          "end": 1573,
+          "text": "周禾",
+          "label": "fictional character",
+          "score": 0.4620247483253479
+        },
+        {
+          "start": 1571,
+          "end": 1573,
+          "text": "周禾",
+          "label": "person",
+          "score": 0.6839829087257385
+        },
+        {
+          "start": 1588,
+          "end": 1590,
+          "text": "房间",
+          "label": "location",
+          "score": 0.6612974405288696
+        },
+        {
+          "start": 1617,
+          "end": 1619,
+          "text": "女儿",
+          "label": "fictional character",
+          "score": 0.6711409687995911
+        },
+        {
+          "start": 1625,
+          "end": 1627,
+          "text": "父亲",
+          "label": "fictional character",
+          "score": 0.42816051840782166
+        },
+        {
+          "start": 1640,
+          "end": 1642,
+          "text": "房间",
+          "label": "location",
+          "score": 0.6536459922790527
+        },
+        {
+          "start": 1667,
+          "end": 1669,
+          "text": "女儿",
+          "label": "fictional character",
+          "score": 0.7005922794342041
+        },
+        {
+          "start": 1704,
+          "end": 1706,
+          "text": "父亲",
+          "label": "person",
+          "score": 0.9651573300361633
+        },
+        {
+          "start": 1801,
+          "end": 1803,
+          "text": "父亲",
+          "label": "person",
+          "score": 0.9863691329956055
+        },
+        {
+          "start": 1814,
+          "end": 1816,
+          "text": "女儿",
+          "label": "person",
+          "score": 0.5043911933898926
+        },
+        {
+          "start": 1827,
+          "end": 1829,
+          "text": "父亲",
+          "label": "person",
+          "score": 0.9881125092506409
+        },
+        {
+          "start": 1843,
+          "end": 1845,
+          "text": "父亲",
+          "label": "person",
+          "score": 0.9879277348518372
+        },
+        {
+          "start": 1858,
+          "end": 1860,
+          "text": "父亲",
+          "label": "person",
+          "score": 0.9845409393310547
+        },
+        {
+          "start": 1872,
+          "end": 1874,
+          "text": "父亲",
+          "label": "person",
+          "score": 0.9854159951210022
+        },
+        {
+          "start": 1911,
+          "end": 1913,
+          "text": "母亲",
+          "label": "person",
+          "score": 0.9004200100898743
+        },
+        {
+          "start": 1942,
+          "end": 1944,
+          "text": "人物",
+          "label": "person",
+          "score": 0.6248939633369446
+        }
+      ],
+      "chunks": [
+        {
+          "index": 0,
+          "start": 0,
+          "end": 160,
+          "text": "生成15秒、9:16竖屏、720p写实生活剧情片，中文普通话原生同期对白。一个连续时刻，表演自然，不加字幕、文字贴片、片头、背景音乐或旁白。仅两位成年人物，无其他说话人。\n\n世界框架（供人物关系和空间理解，里面标为后续的情节不在本段发生）：\n时代与日常环境：当代，长江中下游一带的内陆渡口小镇，傍晚六点左右。候船室只有一",
+          "raw_entities": [
+            {
+              "start": 132,
+              "end": 139,
+              "text": "长江中下游一带",
+              "label": "location",
+              "score": 0.5797722935676575
+            },
+            {
+              "start": 140,
+              "end": 146,
+              "text": "内陆渡口小镇",
+              "label": "location",
+              "score": 0.6367232799530029
+            }
+          ],
+          "global_entities": [
+            {
+              "start": 132,
+              "end": 139,
+              "text": "长江中下游一带",
+              "label": "location",
+              "score": 0.5797722935676575
+            },
+            {
+              "start": 140,
+              "end": 146,
+              "text": "内陆渡口小镇",
+              "label": "location",
+              "score": 0.6367232799530029
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "start": 120,
+          "end": 280,
+          "text": "\n时代与日常环境：当代，长江中下游一带的内陆渡口小镇，傍晚六点左右。候船室只有一排日光灯亮着，空气中混着江风、柴油味和水腥气。末班船六点二十分开，六点十分开始检票。\n\n空间：候船室靠窗的一张木桌。窗外能看见码头栈桥和正慢慢暗下去的天色、江面。门在木桌正后方，门缝灌进江风。桌上放着一只旧搪瓷杯（空）、一支没有笔帽的红笔、",
+          "raw_entities": [
+            {
+              "start": 12,
+              "end": 19,
+              "text": "长江中下游一带",
+              "label": "location",
+              "score": 0.5316250324249268
+            },
+            {
+              "start": 20,
+              "end": 26,
+              "text": "内陆渡口小镇",
+              "label": "location",
+              "score": 0.6893153786659241
+            },
+            {
+              "start": 34,
+              "end": 37,
+              "text": "候船室",
+              "label": "location",
+              "score": 0.7561503052711487
+            },
+            {
+              "start": 87,
+              "end": 90,
+              "text": "候船室",
+              "label": "location",
+              "score": 0.8721627593040466
+            },
+            {
+              "start": 103,
+              "end": 107,
+              "text": "码头栈桥",
+              "label": "location",
+              "score": 0.460430383682251
+            }
+          ],
+          "global_entities": [
+            {
+              "start": 132,
+              "end": 139,
+              "text": "长江中下游一带",
+              "label": "location",
+              "score": 0.5316250324249268
+            },
+            {
+              "start": 140,
+              "end": 146,
+              "text": "内陆渡口小镇",
+              "label": "location",
+              "score": 0.6893153786659241
+            },
+            {
+              "start": 154,
+              "end": 157,
+              "text": "候船室",
+              "label": "location",
+              "score": 0.7561503052711487
+            },
+            {
+              "start": 207,
+              "end": 210,
+              "text": "候船室",
+              "label": "location",
+              "score": 0.8721627593040466
+            },
+            {
+              "start": 223,
+              "end": 227,
+              "text": "码头栈桥",
+              "label": "location",
+              "score": 0.460430383682251
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "start": 240,
+          "end": 400,
+          "text": "。门在木桌正后方，门缝灌进江风。桌上放着一只旧搪瓷杯（空）、一支没有笔帽的红笔、一份对折的录取通知，以及后来由周明推出的一张纸票——今晚六点二十分，河西到河东，单程。\n\n人物关系与处境：周明，五旬上下，渡口老检票员，今天轮休，没穿制服，外套搭椅背上。他把话咽在喉咙里，习惯用动作替代语言。他最想做的事是悄悄把女儿送上船，",
+          "raw_entities": [
+            {
+              "start": 55,
+              "end": 57,
+              "text": "周明",
+              "label": "person",
+              "score": 0.9841139316558838
+            },
+            {
+              "start": 74,
+              "end": 76,
+              "text": "河西",
+              "label": "location",
+              "score": 0.7933858036994934
+            },
+            {
+              "start": 77,
+              "end": 79,
+              "text": "河东",
+              "label": "location",
+              "score": 0.8191353678703308
+            },
+            {
+              "start": 93,
+              "end": 95,
+              "text": "周明",
+              "label": "person",
+              "score": 0.9865999817848206
+            },
+            {
+              "start": 101,
+              "end": 103,
+              "text": "渡口",
+              "label": "location",
+              "score": 0.7863836884498596
+            }
+          ],
+          "global_entities": [
+            {
+              "start": 295,
+              "end": 297,
+              "text": "周明",
+              "label": "person",
+              "score": 0.9841139316558838
+            },
+            {
+              "start": 314,
+              "end": 316,
+              "text": "河西",
+              "label": "location",
+              "score": 0.7933858036994934
+            },
+            {
+              "start": 317,
+              "end": 319,
+              "text": "河东",
+              "label": "location",
+              "score": 0.8191353678703308
+            },
+            {
+              "start": 333,
+              "end": 335,
+              "text": "周明",
+              "label": "person",
+              "score": 0.9865999817848206
+            },
+            {
+              "start": 341,
+              "end": 343,
+              "text": "渡口",
+              "label": "location",
+              "score": 0.7863836884498596
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "start": 360,
+          "end": 520,
+          "text": "搭椅背上。他把话咽在喉咙里，习惯用动作替代语言。他最想做的事是悄悄把女儿送上船，又不让她觉得是被赶走的。周禾，二十六岁，周明唯一的女儿，刚考上对岸县城的旧书修复工作室，今晚坐末班船过江，明天报到。她想离开去对岸，又怕自己一开口就成了\"先丢下家的人\"。父女在同一张木桌两头各自较着劲——周明想买票让她走却不知怎么说出口，周",
+          "raw_entities": [
+            {
+              "start": 52,
+              "end": 54,
+              "text": "周禾",
+              "label": "person",
+              "score": 0.9277206659317017
+            },
+            {
+              "start": 60,
+              "end": 62,
+              "text": "周明",
+              "label": "person",
+              "score": 0.9660384058952332
+            },
+            {
+              "start": 73,
+              "end": 75,
+              "text": "县城",
+              "label": "location",
+              "score": 0.4785594940185547
+            },
+            {
+              "start": 142,
+              "end": 144,
+              "text": "周明",
+              "label": "person",
+              "score": 0.9599376320838928
+            }
+          ],
+          "global_entities": [
+            {
+              "start": 412,
+              "end": 414,
+              "text": "周禾",
+              "label": "person",
+              "score": 0.9277206659317017
+            },
+            {
+              "start": 420,
+              "end": 422,
+              "text": "周明",
+              "label": "person",
+              "score": 0.9660384058952332
+            },
+            {
+              "start": 433,
+              "end": 435,
+              "text": "县城",
+              "label": "location",
+              "score": 0.4785594940185547
+            },
+            {
+              "start": 502,
+              "end": 504,
+              "text": "周明",
+              "label": "person",
+              "score": 0.9599376320838928
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "start": 480,
+          "end": 640,
+          "text": "家的人\"。父女在同一张木桌两头各自较着劲——周明想买票让她走却不知怎么说出口，周禾想走却以为父亲会拦。\n\n前情：母亲三年前去世，周禾辞掉城里的临时工作回小镇陪父三年。其余前情原文未交代，标记为未知。\n\n本段地点：渡口候船室，靠窗木桌旁。本段环境：傍晚六点，一排日光灯亮着，窗外天色与江面正灰下去，江风从门缝灌入，带着柴油",
+          "raw_entities": [
+            {
+              "start": 22,
+              "end": 24,
+              "text": "周明",
+              "label": "person",
+              "score": 0.9405903220176697
+            },
+            {
+              "start": 39,
+              "end": 41,
+              "text": "周禾",
+              "label": "person",
+              "score": 0.9788641333580017
+            },
+            {
+              "start": 64,
+              "end": 66,
+              "text": "周禾",
+              "label": "person",
+              "score": 0.9812018871307373
+            },
+            {
+              "start": 76,
+              "end": 78,
+              "text": "小镇",
+              "label": "location",
+              "score": 0.4549237787723541
+            },
+            {
+              "start": 106,
+              "end": 111,
+              "text": "渡口候船室",
+              "label": "location",
+              "score": 0.8044240474700928
+            }
+          ],
+          "global_entities": [
+            {
+              "start": 502,
+              "end": 504,
+              "text": "周明",
+              "label": "person",
+              "score": 0.9405903220176697
+            },
+            {
+              "start": 519,
+              "end": 521,
+              "text": "周禾",
+              "label": "person",
+              "score": 0.9788641333580017
+            },
+            {
+              "start": 544,
+              "end": 546,
+              "text": "周禾",
+              "label": "person",
+              "score": 0.9812018871307373
+            },
+            {
+              "start": 556,
+              "end": 558,
+              "text": "小镇",
+              "label": "location",
+              "score": 0.4549237787723541
+            },
+            {
+              "start": 586,
+              "end": 591,
+              "text": "渡口候船室",
+              "label": "location",
+              "score": 0.8044240474700928
+            }
+          ]
+        },
+        {
+          "index": 5,
+          "start": 600,
+          "end": 760,
+          "text": "环境：傍晚六点，一排日光灯亮着，窗外天色与江面正灰下去，江风从门缝灌入，带着柴油味和水腥气。桌上放着空搪瓷杯、无帽红笔、对折录取通知。\n\n本段起态必须保持：\n[{\"subject_id\": \"周禾\", \"predicate\": \"位置与姿势\", \"value\": \"站在桌边，右手握着行李箱杆，行李箱贴着她右腿\", \"c",
+          "raw_entities": [
+            {
+              "start": 96,
+              "end": 98,
+              "text": "周禾",
+              "label": "person",
+              "score": 0.8601926565170288
+            },
+            {
+              "start": 142,
+              "end": 144,
+              "text": "行李",
+              "label": "person",
+              "score": 0.5103535056114197
+            },
+            {
+              "start": 147,
+              "end": 149,
+              "text": "行李",
+              "label": "person",
+              "score": 0.43956658244132996
+            }
+          ],
+          "global_entities": [
+            {
+              "start": 696,
+              "end": 698,
+              "text": "周禾",
+              "label": "person",
+              "score": 0.8601926565170288
+            },
+            {
+              "start": 742,
+              "end": 744,
+              "text": "行李",
+              "label": "person",
+              "score": 0.5103535056114197
+            },
+            {
+              "start": 747,
+              "end": 749,
+              "text": "行李",
+              "label": "person",
+              "score": 0.43956658244132996
+            }
+          ]
+        },
+        {
+          "index": 6,
+          "start": 720,
+          "end": 880,
+          "text": "\", \"value\": \"站在桌边，右手握着行李箱杆，行李箱贴着她右腿\", \"certainty\": \"explicit\", \"evidence_refs\": [\"scene_ledger.events[0].before[0]\", \"accepted_full_draft.段首状态\"], \"qualifiers\": ",
+          "raw_entities": [
+            {
+              "start": 4,
+              "end": 9,
+              "text": "value",
+              "label": "person",
+              "score": 0.4709591865539551
+            },
+            {
+              "start": 15,
+              "end": 17,
+              "text": "桌边",
+              "label": "location",
+              "score": 0.4401736855506897
+            }
+          ],
+          "global_entities": [
+            {
+              "start": 724,
+              "end": 729,
+              "text": "value",
+              "label": "person",
+              "score": 0.4709591865539551
+            },
+            {
+              "start": 735,
+              "end": 737,
+              "text": "桌边",
+              "label": "location",
+              "score": 0.4401736855506897
+            }
+          ]
+        },
+        {
+          "index": 7,
+          "start": 840,
+          "end": 1000,
+          "text": "cepted_full_draft.段首状态\"], \"qualifiers\": {\"动作\": \"站立握杆\", \"方向\": \"面向桌与父亲\", \"表情\": \"喉结轻动，话压在喉咙里\"}}, {\"subject_id\": \"周禾\", \"predicate\": \"视线\", \"value\": \"落在桌上那份录取通知上\", \"c",
+          "raw_entities": [
+            {
+              "start": 110,
+              "end": 112,
+              "text": "周禾",
+              "label": "fictional character",
+              "score": 0.6723847985267639
+            }
+          ],
+          "global_entities": [
+            {
+              "start": 950,
+              "end": 952,
+              "text": "周禾",
+              "label": "fictional character",
+              "score": 0.6723847985267639
+            }
+          ]
+        },
+        {
+          "index": 8,
+          "start": 960,
+          "end": 1120,
+          "text": "icate\": \"视线\", \"value\": \"落在桌上那份录取通知上\", \"certainty\": \"explicit\", \"evidence_refs\": [\"scene_ledger.events[0].after[0]\"], \"qualifiers\": {\"对象\": \"录取通知\"}}, {\"subject_id",
+          "raw_entities": [
+            {
+              "start": 15,
+              "end": 20,
+              "text": "value",
+              "label": "person",
+              "score": 0.4370400607585907
+            },
+            {
+              "start": 82,
+              "end": 94,
+              "text": "scene_ledger",
+              "label": "person",
+              "score": 0.5617707371711731
+            },
+            {
+              "start": 105,
+              "end": 110,
+              "text": "after",
+              "label": "person",
+              "score": 0.5225841403007507
+            }
+          ],
+          "global_entities": [
+            {
+              "start": 975,
+              "end": 980,
+              "text": "value",
+              "label": "person",
+              "score": 0.4370400607585907
+            },
+            {
+              "start": 1042,
+              "end": 1054,
+              "text": "scene_ledger",
+              "label": "person",
+              "score": 0.5617707371711731
+            },
+            {
+              "start": 1065,
+              "end": 1070,
+              "text": "after",
+              "label": "person",
+              "score": 0.5225841403007507
+            }
+          ]
+        },
+        {
+          "index": 9,
+          "start": 1080,
+          "end": 1240,
+          "text": "alifiers\": {\"对象\": \"录取通知\"}}, {\"subject_id\": \"周明\", \"predicate\": \"位置与穿着\", \"value\": \"坐在木桌另一边，今天轮休，未穿制服，外套搭椅背上\", \"certainty\": \"explicit\", \"evidence_refs\": [\"scene_le",
+          "raw_entities": [
+            {
+              "start": 44,
+              "end": 46,
+              "text": "周明",
+              "label": "person",
+              "score": 0.8704040050506592
+            }
+          ],
+          "global_entities": [
+            {
+              "start": 1124,
+              "end": 1126,
+              "text": "周明",
+              "label": "person",
+              "score": 0.8704040050506592
+            }
+          ]
+        },
+        {
+          "index": 10,
+          "start": 1200,
+          "end": 1360,
+          "text": " \"explicit\", \"evidence_refs\": [\"scene_ledger.events[0].before[1]\", \"accepted_full_draft.段首状态\"], \"qualifiers\": {\"状态\": \"未着工装\"}}]\n\n本次只拍S1-A（原S1的前半段），不把28秒全段压缩成15秒。",
+          "raw_entities": [
+            {
+              "start": 132,
+              "end": 136,
+              "text": "S1-A",
+              "label": "work of art",
+              "score": 0.7921224236488342
+            },
+            {
+              "start": 138,
+              "end": 140,
+              "text": "S1",
+              "label": "work of art",
+              "score": 0.5849601030349731
+            }
+          ],
+          "global_entities": [
+            {
+              "start": 1332,
+              "end": 1336,
+              "text": "S1-A",
+              "label": "work of art",
+              "score": 0.7921224236488342
+            },
+            {
+              "start": 1338,
+              "end": 1340,
+              "text": "S1",
+              "label": "work of art",
+              "score": 0.5849601030349731
+            }
+          ]
+        },
+        {
+          "index": 11,
+          "start": 1320,
+          "end": 1480,
+          "text": "工装\"}}]\n\n本次只拍S1-A（原S1的前半段），不把28秒全段压缩成15秒。女儿周禾26岁，站在桌边，右手握箱杆，箱子贴右腿；父亲周明约50岁，坐在桌子另一边，非制服日常衣服，外套搭椅背。父亲的拇指挡着无帽红笔笔尖，安静听；本段始终坐着，不放笔，不抢话。\n\n0—1秒：中近景建立父女隔桌的位置与女儿箱杆，女儿目光从录",
+          "raw_entities": [
+            {
+              "start": 12,
+              "end": 16,
+              "text": "S1-A",
+              "label": "work of art",
+              "score": 0.43758678436279297
+            },
+            {
+              "start": 40,
+              "end": 42,
+              "text": "女儿",
+              "label": "person",
+              "score": 0.4555089771747589
+            },
+            {
+              "start": 42,
+              "end": 44,
+              "text": "周禾",
+              "label": "person",
+              "score": 0.9107638001441956
+            },
+            {
+              "start": 65,
+              "end": 67,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.5016855001449585
+            },
+            {
+              "start": 67,
+              "end": 69,
+              "text": "周明",
+              "label": "person",
+              "score": 0.9348903894424438
+            }
+          ],
+          "global_entities": [
+            {
+              "start": 1332,
+              "end": 1336,
+              "text": "S1-A",
+              "label": "work of art",
+              "score": 0.43758678436279297
+            },
+            {
+              "start": 1360,
+              "end": 1362,
+              "text": "女儿",
+              "label": "person",
+              "score": 0.4555089771747589
+            },
+            {
+              "start": 1362,
+              "end": 1364,
+              "text": "周禾",
+              "label": "person",
+              "score": 0.9107638001441956
+            },
+            {
+              "start": 1385,
+              "end": 1387,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.5016855001449585
+            },
+            {
+              "start": 1387,
+              "end": 1389,
+              "text": "周明",
+              "label": "person",
+              "score": 0.9348903894424438
+            }
+          ]
+        },
+        {
+          "index": 12,
+          "start": 1440,
+          "end": 1600,
+          "text": "，不放笔，不抢话。\n\n0—1秒：中近景建立父女隔桌的位置与女儿箱杆，女儿目光从录取通知移到父亲脸上，轻吸气，准备抢先开口。1—11秒：女儿带着紧绷的防备，连贯、日常语速完整说唯一一句对白，嘴型与声音对应；可在同一空间缓慢推进到女儿近景，父亲在对侧安静听。\n\n女儿周禾唯一对白，必须完整照说：\n“我房间已经找好了。钱也算过",
+          "raw_entities": [
+            {
+              "start": 29,
+              "end": 31,
+              "text": "女儿",
+              "label": "fictional character",
+              "score": 0.7456300258636475
+            },
+            {
+              "start": 34,
+              "end": 36,
+              "text": "女儿",
+              "label": "fictional character",
+              "score": 0.6642348170280457
+            },
+            {
+              "start": 45,
+              "end": 47,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.6590266227722168
+            },
+            {
+              "start": 67,
+              "end": 69,
+              "text": "女儿",
+              "label": "fictional character",
+              "score": 0.5120494365692139
+            },
+            {
+              "start": 113,
+              "end": 115,
+              "text": "女儿",
+              "label": "fictional character",
+              "score": 0.7496068477630615
+            },
+            {
+              "start": 118,
+              "end": 120,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.6809753179550171
+            },
+            {
+              "start": 129,
+              "end": 131,
+              "text": "女儿",
+              "label": "fictional character",
+              "score": 0.6805216073989868
+            },
+            {
+              "start": 131,
+              "end": 133,
+              "text": "周禾",
+              "label": "person",
+              "score": 0.6839829087257385
+            }
+          ],
+          "global_entities": [
+            {
+              "start": 1469,
+              "end": 1471,
+              "text": "女儿",
+              "label": "fictional character",
+              "score": 0.7456300258636475
+            },
+            {
+              "start": 1474,
+              "end": 1476,
+              "text": "女儿",
+              "label": "fictional character",
+              "score": 0.6642348170280457
+            },
+            {
+              "start": 1485,
+              "end": 1487,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.6590266227722168
+            },
+            {
+              "start": 1507,
+              "end": 1509,
+              "text": "女儿",
+              "label": "fictional character",
+              "score": 0.5120494365692139
+            },
+            {
+              "start": 1553,
+              "end": 1555,
+              "text": "女儿",
+              "label": "fictional character",
+              "score": 0.7496068477630615
+            },
+            {
+              "start": 1558,
+              "end": 1560,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.6809753179550171
+            },
+            {
+              "start": 1569,
+              "end": 1571,
+              "text": "女儿",
+              "label": "fictional character",
+              "score": 0.6805216073989868
+            },
+            {
+              "start": 1571,
+              "end": 1573,
+              "text": "周禾",
+              "label": "person",
+              "score": 0.6839829087257385
+            }
+          ]
+        },
+        {
+          "index": 13,
+          "start": 1560,
+          "end": 1720,
+          "text": "在对侧安静听。\n\n女儿周禾唯一对白，必须完整照说：\n“我房间已经找好了。钱也算过。头三个月紧一点，后面能过。”\n\n女儿原动作：抢在父亲开口前，抬头快速说出已找好房间、算过钱的话；说完喉结轻动一下，目光仍停在通知上。女儿表演：眉心微紧，嘴角克制，准备好的台词被自己抢先抛出。视线：从通知移到父亲脸上，旋即又落回桌面。反应：",
+          "raw_entities": [
+            {
+              "start": 9,
+              "end": 11,
+              "text": "女儿",
+              "label": "fictional character",
+              "score": 0.6689363718032837
+            },
+            {
+              "start": 11,
+              "end": 13,
+              "text": "周禾",
+              "label": "fictional character",
+              "score": 0.4620247483253479
+            },
+            {
+              "start": 28,
+              "end": 30,
+              "text": "房间",
+              "label": "location",
+              "score": 0.6612974405288696
+            },
+            {
+              "start": 57,
+              "end": 59,
+              "text": "女儿",
+              "label": "fictional character",
+              "score": 0.6711409687995911
+            },
+            {
+              "start": 65,
+              "end": 67,
+              "text": "父亲",
+              "label": "fictional character",
+              "score": 0.42816051840782166
+            },
+            {
+              "start": 80,
+              "end": 82,
+              "text": "房间",
+              "label": "location",
+              "score": 0.6536459922790527
+            },
+            {
+              "start": 107,
+              "end": 109,
+              "text": "女儿",
+              "label": "fictional character",
+              "score": 0.7005922794342041
+            },
+            {
+              "start": 144,
+              "end": 146,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.40418633818626404
+            }
+          ],
+          "global_entities": [
+            {
+              "start": 1569,
+              "end": 1571,
+              "text": "女儿",
+              "label": "fictional character",
+              "score": 0.6689363718032837
+            },
+            {
+              "start": 1571,
+              "end": 1573,
+              "text": "周禾",
+              "label": "fictional character",
+              "score": 0.4620247483253479
+            },
+            {
+              "start": 1588,
+              "end": 1590,
+              "text": "房间",
+              "label": "location",
+              "score": 0.6612974405288696
+            },
+            {
+              "start": 1617,
+              "end": 1619,
+              "text": "女儿",
+              "label": "fictional character",
+              "score": 0.6711409687995911
+            },
+            {
+              "start": 1625,
+              "end": 1627,
+              "text": "父亲",
+              "label": "fictional character",
+              "score": 0.42816051840782166
+            },
+            {
+              "start": 1640,
+              "end": 1642,
+              "text": "房间",
+              "label": "location",
+              "score": 0.6536459922790527
+            },
+            {
+              "start": 1667,
+              "end": 1669,
+              "text": "女儿",
+              "label": "fictional character",
+              "score": 0.7005922794342041
+            },
+            {
+              "start": 1704,
+              "end": 1706,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.40418633818626404
+            }
+          ]
+        },
+        {
+          "index": 14,
+          "start": 1680,
+          "end": 1840,
+          "text": "制，准备好的台词被自己抢先抛出。视线：从通知移到父亲脸上，旋即又落回桌面。反应：喉咙里还堵着准备了一路的别的话，五指下意识收紧箱杆。11—15秒：对白收住，她五指继续收紧箱杆，骨节泛白，喉咙里还压着没说完的话，留出能看清表情与手指的反应窗口，父亲仍坐着静听。\n\n段尾：女儿说完这句话并紧握箱杆，父亲尚未开口、尚未放笔；红",
+          "raw_entities": [
+            {
+              "start": 24,
+              "end": 26,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.9651573300361633
+            },
+            {
+              "start": 121,
+              "end": 123,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.9767658710479736
+            },
+            {
+              "start": 134,
+              "end": 136,
+              "text": "女儿",
+              "label": "person",
+              "score": 0.5043911933898926
+            },
+            {
+              "start": 147,
+              "end": 149,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.9739868640899658
+            }
+          ],
+          "global_entities": [
+            {
+              "start": 1704,
+              "end": 1706,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.9651573300361633
+            },
+            {
+              "start": 1801,
+              "end": 1803,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.9767658710479736
+            },
+            {
+              "start": 1814,
+              "end": 1816,
+              "text": "女儿",
+              "label": "person",
+              "score": 0.5043911933898926
+            },
+            {
+              "start": 1827,
+              "end": 1829,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.9739868640899658
+            }
+          ]
+        },
+        {
+          "index": 15,
+          "start": 1800,
+          "end": 1960,
+          "text": "，父亲仍坐着静听。\n\n段尾：女儿说完这句话并紧握箱杆，父亲尚未开口、尚未放笔；红笔仍由父亲拇指挡着笔尖。下一段才发生父亲的回应。本段禁止提前加入父亲台词、广播、船笛、取票或推票、起身、上船；纸票尚未出现，不能在桌上摆票。无母亲镜头、照片、回忆或其他人物。只有轻微江风和候船室环境底噪。人物服装、道具、坐站位置与视线连续。",
+          "raw_entities": [
+            {
+              "start": 1,
+              "end": 3,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.9863691329956055
+            },
+            {
+              "start": 14,
+              "end": 16,
+              "text": "女儿",
+              "label": "person",
+              "score": 0.49317529797554016
+            },
+            {
+              "start": 27,
+              "end": 29,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.9881125092506409
+            },
+            {
+              "start": 43,
+              "end": 45,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.9879277348518372
+            },
+            {
+              "start": 58,
+              "end": 60,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.9845409393310547
+            },
+            {
+              "start": 72,
+              "end": 74,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.9854159951210022
+            },
+            {
+              "start": 111,
+              "end": 113,
+              "text": "母亲",
+              "label": "person",
+              "score": 0.9004200100898743
+            }
+          ],
+          "global_entities": [
+            {
+              "start": 1801,
+              "end": 1803,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.9863691329956055
+            },
+            {
+              "start": 1814,
+              "end": 1816,
+              "text": "女儿",
+              "label": "person",
+              "score": 0.49317529797554016
+            },
+            {
+              "start": 1827,
+              "end": 1829,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.9881125092506409
+            },
+            {
+              "start": 1843,
+              "end": 1845,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.9879277348518372
+            },
+            {
+              "start": 1858,
+              "end": 1860,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.9845409393310547
+            },
+            {
+              "start": 1872,
+              "end": 1874,
+              "text": "父亲",
+              "label": "person",
+              "score": 0.9854159951210022
+            },
+            {
+              "start": 1911,
+              "end": 1913,
+              "text": "母亲",
+              "label": "person",
+              "score": 0.9004200100898743
+            }
+          ]
+        },
+        {
+          "index": 16,
+          "start": 1920,
+          "end": 1961,
+          "text": "忆或其他人物。只有轻微江风和候船室环境底噪。人物服装、道具、坐站位置与视线连续。\n",
+          "raw_entities": [
+            {
+              "start": 22,
+              "end": 24,
+              "text": "人物",
+              "label": "person",
+              "score": 0.6248939633369446
+            }
+          ],
+          "global_entities": [
+            {
+              "start": 1942,
+              "end": 1944,
+              "text": "人物",
+              "label": "person",
+              "score": 0.6248939633369446
+            }
+          ]
+        }
+      ],
+      "coverage_characters": 1961,
+      "deduplication": "same global start/end/label; highest score kept"
+    },
+    "dictionary": {
+      "candidates": [],
+      "rejected_ambiguous_matches": [],
+      "score_policy": "rule matches have no probability score"
+    }
+  },
+  "summary": {
+    "ner_strict": {
+      "tp": 20,
+      "fp": 16,
+      "fn": 8,
+      "precision": 0.5555555555555556,
+      "recall": 0.7142857142857143
+    },
+    "ner_span_only": {
+      "tp": 25,
+      "fp": 11,
+      "fn": 3,
+      "precision": 0.6944444444444444,
+      "recall": 0.8928571428571429
+    },
+    "dictionary_strict": {
+      "tp": 22,
+      "fp": 0,
+      "fn": 3,
+      "precision": 1.0,
+      "recall": 0.88
+    },
+    "dictionary_span_only": {
+      "tp": 22,
+      "fp": 0,
+      "fn": 3,
+      "precision": 1.0,
+      "recall": 0.88
+    }
+  },
+  "completed_at": "2026-10-17T20:26:21.807021+00:00"
+}

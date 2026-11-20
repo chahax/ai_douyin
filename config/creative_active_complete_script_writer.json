@@ -1,0 +1,18 @@
+{
+  "schema": "creative_active_complete_script_writer/v1",
+  "user_quote": "剧本生产换M3.1 Flash Preview然后生产个剧本看看",
+  "selected_model": "MiniMax-M3.1-Flash-Preview",
+  "profile_path": "D:\\IT\\ai_douyin\\config\\creative_script_model_profile_m31_flash_v1.json",
+  "independent_entry": "D:\\IT\\ai_douyin\\scripts\\run_m31_flash_script_test_v1.py",
+  "supported_stages": [
+    "complete_script"
+  ],
+  "real_writer_model_verified": true,
+  "writer_receipt": "D:\\IT\\ai_douyin\\data\\production_trials\\m31_flash_script_test_20261013\\round_01\\call_529_m31_complete_script_01.json",
+  "full_review_accepted": false,
+  "old_frozen_entries_migrated": false,
+  "future_unfrozen_complete_script_default": "MiniMax-M3.1-Flash-Preview",
+  "does_not_authorize_reentry_or_reset": true,
+  "media_authorized": false,
+  "updated_at_utc": "2026-10-13T05:06:26.784971+00:00"
+}

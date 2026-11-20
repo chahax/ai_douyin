@@ -2,12 +2,6 @@ import os
 import zipfile
 from typing import List
 
-from langchain_core.documents import Document
-from langchain_community.document_loaders import TextLoader
-from langchain_community.vectorstores import Chroma
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-
 from src.shared.logger import logger
 from src.shared.config import settings
 
@@ -36,18 +30,24 @@ class KnowledgeImporter:
     def __init__(self, persist_dir="./data/chroma_db", embedding_model=None):
         self.persist_dir = persist_dir
 
+        from langchain_community.vectorstores import Chroma
+        from langchain_huggingface import HuggingFaceEmbeddings
+
         # Determine model path: prefer local (项目路径 or HF cache), else HF Hub
         local_model_path = _resolve_local_embedding_path()
         if local_model_path:
             self.embedding_model_name = local_model_path
             logger.info(f"Using local embedding model: {self.embedding_model_name}")
-        else:
+        elif embedding_model or settings.ENABLE_HF_EMBEDDING_FALLBACK:
             self.embedding_model_name = embedding_model or "shibing624/text2vec-base-chinese"
             logger.info(f"Using remote embedding model: {self.embedding_model_name}")
+        else:
+            raise RuntimeError('No local embedding model available; network model fallback is disabled.')
 
         logger.info("Initializing Embedding Model...")
         try:
-            self.embeddings = HuggingFaceEmbeddings(model_name=self.embedding_model_name)
+            self.embeddings = HuggingFaceEmbeddings(model_name=self.embedding_model_name,
+                model_kwargs={'device': 'cpu', 'local_files_only': bool(local_model_path)})
             self.db = Chroma(
                 persist_directory=self.persist_dir,
                 embedding_function=self.embeddings
@@ -58,9 +58,8 @@ class KnowledgeImporter:
 
     @staticmethod
     def _extract_text_from_txt(file_path: str) -> str:
-        loader = TextLoader(file_path, encoding="utf-8")
-        docs = loader.load()
-        return "\n".join(d.page_content for d in docs)
+        from pathlib import Path
+        return Path(file_path).read_text(encoding='utf-8-sig')
 
     @staticmethod
     def _extract_text_from_epub(file_path: str) -> str:
@@ -106,7 +105,8 @@ class KnowledgeImporter:
                 texts.append(txt)
         return "\n\n".join(texts)
 
-    def _load_book_as_documents(self, file_path: str) -> List[Document]:
+    def _load_book_as_documents(self, file_path: str) -> list:
+        from langchain_core.documents import Document
         ext = os.path.splitext(file_path)[1].lower()
 
         if ext == ".txt":
@@ -123,67 +123,18 @@ class KnowledgeImporter:
 
         return [Document(page_content=raw_text, metadata={})]
 
-    def import_books(self, books_dir: str):
-        """
-        Imports supported files from the directory into ChromaDB.
-        Supported: .txt .epub .pdf
-        """
-        if not os.path.exists(books_dir):
-            logger.error(f"Books directory not found: {books_dir}")
-            return
-
-        supported_ext = {".txt", ".epub", ".pdf"}
-        files = [
-            f for f in os.listdir(books_dir)
-            if os.path.splitext(f)[1].lower() in supported_ext
-        ]
-
-        if not files:
-            logger.warning("No supported files found to import (.txt/.epub/.pdf).")
-            return
-
-        total_docs = []
-        text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=500,
-            chunk_overlap=50,
-            separators=["\n\n", "\n", "。", "！", "？", " ", ""]
-        )
-
-        for file in files:
-            file_path = os.path.join(books_dir, file)
-            logger.info(f"Processing book: {file}")
-
-            try:
-                documents = self._load_book_as_documents(file_path)
-                if not documents:
-                    logger.warning(f"  - No extractable text: {file}")
-                    continue
-
-                chunks = text_splitter.split_documents(documents)
-
-                for chunk in chunks:
-                    chunk.metadata["source_book"] = file
-
-                total_docs.extend(chunks)
-                logger.info(f"  - Split into {len(chunks)} chunks")
-
-            except Exception as e:
-                logger.error(f"Failed to process {file}: {e}")
-
-        if total_docs:
-            logger.info(f"Importing {len(total_docs)} chunks into ChromaDB...")
-            batch_size = 100
-            for i in range(0, len(total_docs), batch_size):
-                batch = total_docs[i:i + batch_size]
-                try:
-                    self.db.add_documents(batch)
-                    logger.info(f"  - Imported batch {i // batch_size + 1}/{(len(total_docs) - 1) // batch_size + 1}")
-                except Exception as e:
-                    logger.error(f"Failed to import batch: {e}")
-
-            logger.info("Knowledge Import Completed Successfully!")
-        else:
-            logger.warning("No valid content found to import.")
+    def import_books(self, books_dir: str, *, selected_files=None):
+        """Import selected local files and return verified write accounting."""
+        from src.rag_engine.knowledge_import_result import import_directory, write_stable_chunks
+        from langchain_text_splitters import RecursiveCharacterTextSplitter
+        splitter = RecursiveCharacterTextSplitter(
+            chunk_size=500, chunk_overlap=50,
+            separators=["\n\n", "\n", "。", "！", "？", " ", ""])
+        result = import_directory(books_dir, load=self._load_book_as_documents,
+            split=splitter.split_documents, write=lambda batch: write_stable_chunks(self.db, batch),
+            selected_files=selected_files)
+        logger.info(f"Knowledge import result: {result}")
+        return result
 
 
 if __name__ == "__main__":

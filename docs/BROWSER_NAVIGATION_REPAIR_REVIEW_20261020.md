@@ -1,0 +1,36 @@
+# 浏览器跳转超时修复与测试隔离
+
+## 2026-10-20后续：用户批准取消
+
+用户对“保留完整原始证据，人工取消这条测试任务并解除它的队列占用；不重跑”明确回复“取消”。已执行专用事务处置：46186a716576430a98f2147d90ffda2f标记operator_cancelled_unknown_test，原完整unknown行、原owner、授权及空闲证据保存在browser_control_operator_disposals表和本地证据；original_outcome_known=false，不能当作确定未发生外部操作。旧6572进程、原账号Chrome、业务租约及人工窗口均确认不存在，除目标外无真实未决任务，原paused48保持。取消与gen34 owner交还在同一事务提交，未更新旧心跳、未重派任务、未重启服务。
+
+5项隔离SQLite测试通过，覆盖原快照/授权/空闲证据变化和其他未决任务的拒绝及原记录保存。最终只读复核原不可变字段全部保持，owner released；PID21472健康200，监控仅余account01 paused。结果见data/browser_navigation_repair/20261020/CANCELLATION_VERIFIED.json。下文“提案未执行”“unknown阻塞”保留为此前阶段；实际账号核验与成功观看仍未完成。
+
+2026-10-20用户要求“继续修把”。已完成页面导航、采集、研究、维护、养号调度及提示的错误分类和安全诊断传递；通过原Windows登录任务启动PID21472，health200、7组件均有启动之后的新鲜心跳。十份部署源码SHA与启动时间核对通过。账号仍paused48，不能称实际观看已恢复。
+
+## 修复和验收
+
+Page.goto现在传递wait_until。原生Playwright超时保留同一页面句柄和白名单诊断：主frame是否导航、目标是否匹配、readyState和等待时间，不保存原始页面正文、URL或凭据。搜索仅在原目标已提交、页面就绪且存在结果，并通过既有验证检测后同页继续；否则结构化停止，不刷新重试。诊断进入研究、维护及调度回执。验证码检测仍执行，普通超时不冒充登录失效或验证码。
+
+账号管控未知异常现在记录admission/handler阶段及handler_started事实，异常文本不入回执，原unknown保护不变。既有旧记录缺这些信息，不能据新代码倒推旧任务未执行。
+
+测试使用临时数据库及本地HTTP/Chrome。补全研究流水线fixture的隔离开关、临时管控库和finally释放；全体pytest用例增加生产data目录SQLite访问拦截，允许本轮basetemp及内存库，读写生产库均拒绝。此fixture约束测试执行阶段，不能承诺拦截任意第三方原生进程或导入阶段的全部文件IO。
+
+最终有效通过112个不同用例：TEST3中44项未受后续修改影响的通过项，TEST5中66项最终回归，以及TEST6中2项只读监控检查。并非一次整组112全绿；TEST1中止、TEST2的2失败、TEST3/4各1项夹具失败原日志均保留。实际本地Chrome验证导航等待条件、原标签页延续、错误目标/未提交/加载中/空结果拒绝、验证门保留；真实抖音成功观看未验收。
+
+## 测试误入生产队列及处置边界
+
+先前测试直接调用维护入口时采用了生产默认管控配置，错误提交了三条带`local test, no network`标记的maintenance请求。这是本轮测试隔离缺陷，不能将其称为用户批准的实平台运行。
+
+- a582a614ce84470caab41b58a480fb71、ff6ae544edd3450bb807b92c3f9b8a58：确认仍queued，按原快照SHA使用cancel_queued取消，保留原请求及取消前记录，未执行。
+- 46186a716576430a98f2147d90ffda2f：已被6572/gen34领取，原记录为outcome_unknown、handler_exception:OperationalError，结果为空。旧代码没有失败阶段证据，不能保证业务未进入；无对应新维护结果文件不足以证明零外部影响。原完整行已保存TEST_UNKNOWN_ORIGINAL.json，最终逐字段确认未改。
+
+发现PID6572已退出，根因未确认，日志可见此前SQLite争用与扫描延迟，但不能据此断言退出原因。旧owner交还预检因上述unknown正确拒绝，未执行release。新服务只恢复网页和扫描，原账号暂停和旧owner/unknown继续保留；没有重派该测试、原养号、发布或互动。
+
+已准备OPERATOR_DISPOSAL_PROPOSAL.json：保留完整原未知证据与不确定性，只人工处置这条误入的测试命令；交还旧owner前仍需核实原进程/账号浏览器不存在、无业务lease/人工窗口/其他未决任务。该提案未执行。
+
+## 监控
+
+监控原先只选queued/running/paused/waiting_human，漏掉这条unknown；现改为只读复用既有完整结清判定，历史已结算unknown不重复报警，真实未决unknown明确报告；不实例化管控库，不创建表或派业务。缺库/读取失败不能视为正常。
+
+STATE.json此前仍是早晨旧状态，已先归档再更新当前服务健康、账号待恢复及原unknown阻塞；历史记录见MONITOR_STATE_BEFORE_UPDATE.json。所有本轮证据在data/browser_navigation_repair/20261020，当前快照FINAL_STATE.json。

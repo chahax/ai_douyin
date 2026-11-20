@@ -1,0 +1,3 @@
+scene_lab:
+  base_path: D:/IT/ai_douyin/tools/scene_lab_20261006/models
+  diffusion_models: diffusion_models

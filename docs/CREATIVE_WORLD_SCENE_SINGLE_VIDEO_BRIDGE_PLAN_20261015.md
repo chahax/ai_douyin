@@ -1,0 +1,41 @@
+# 世界场次流程：一次首段视频的最薄准备桥
+
+本会话新授权真实文本接口，并在文本机器验收达标后生成一次视频。本文只实施准备器，不派发模型、视频或媒体claim，不修改另一会话的h3/revision_02/media。视频仍awaiting_human_review，助手不听看、抽帧、ASR或内容批准。
+
+## 已核实环境与来源
+
+2026-10-15T15:03:31Z，对127.0.0.1:8190只读GET，queue_running/queue_pending均空；RTX5070Ti16GB，H3 REF2VA/FL2VA及AddGuide节点已注册，REF2VA模型名称实际在UNETLoader目录。旧03_opening的同服务三图参考15.083秒768×448联合音视频已成功，原id为7d2f5caa-5f82-47fa-a753-f8cdc19f480a，随后被用户拒绝，不得复用该尾帧。
+
+原生1280×704是本轮目标，节点尺寸接受32倍数，但本机尚未实际完成此档；不能写成已验证720p/1080p，也不自动放大或降档重试。MAX_PIXELS常量出现在参考视频画布处理，不能拿它当显存保证。新准备器复用成功图的节点接线，不重开旧run_stage/claim。
+
+三份固定资产的实际文件SHA已重算相等：环境h3.scene.supermarket_backroom.20261015.v2、nativeboard.photoreal.20261006.r1.C01、nativeboard.photoreal.20261006.r1.C02。环境是新超市值班室，不能错拿10月6日旧办公室。两角色原始IMAGEGEN_REQUEST明确分别为成年中国职场女性/男性；不能凭C01/C02编号猜新角色。新goal的角色id/name/profile为规范来源，生产审查须把新角色和资产真实来源显式绑定。
+
+旧h3文本线当时到640/13544245 reported tokens、638次known，历史70/160+93117保留；640完整返回但内容/合同拒绝，text_final/STOP及拒绝决定保留。本会话后续已到644已知停点并开发新v2续行；实际制作须取新完整文本验证器的最新spend，不能沿旧640起算。不能从636重领或假称旧3/3正文、7/7导演有剩余额度。另一会话media/prepare_media.py仍在编辑，故本桥使用新独立root、input子目录、output prefix。
+
+## 两道纯权威验证接口
+
+文本侧固定导入scripts.creative_world_scene_text_handoff_verifier_v1.verify_text_handoff(text_root)，按STATE.schema在真实v1/v2验证器白名单准确选取，无fallback。B/A负责各原始SDK/原生/四审/双审/账本与冻结复核，媒体侧不以手写accepted替代它。返回valid/accepted=true、status=text_ready_for_director、handoff_path/handoff_sha256、paths(inputs/profile/goal/setup/raw_script/compiled_script/goal_audit_bundle/full_review_bundle)、identity(native_goal_sha256/native_script_sha256/compiled_script_sha256/native_setup_sha256)、实际inherited/parent_identity/source_files。未ready的644旧v1不能制作。
+
+生产侧固定导入root负责的scripts.creative_world_scene_production_probe_v1.verify_first_segment_handoff(production_root, text_verified=verified)。缺模块或未达标则blocked，不写prompt、workflow或claim。它必须复核真实MiniMax完整导演/局部表演、必要DeepSeek制作审查、同源实际引用和原生SDK证据，不接受assistant手写剧本旁路。
+
+生产verifier返回的最小规范合同：
+
+- schema=`creative_world_scene_production_probe/v1/verified_first_segment`；valid/accepted=true；status=`first_segment_ready_for_media`。
+- text_handoff_sha256、native_goal_sha256、native_script_sha256、native_setup_sha256，精确等于已验证文本；segment_ordinal=1、beat_id等于原生第一拍。
+- story_id精确对应本次实际同故事失败ledger；不清零、换名或把旧媒体失败忽略。
+- source_refs为creative_video_trial_contract_v1.catalog的首个连续前缀，且本最小桥只支持第一拍内的区间；不能为适配静默裁切、改对白或把下一拍混入当前情境。超出此接入范围先重新明确分段context，不手改。
+- duration_seconds为原生导演/表演编译结果；actual_video_prompt和video_prompt_sha256(UTF-8 SHA256)是同源制作审查实际验收的最终H3提示全文。桥原样注入，不另写动作/台词或套旧固定3秒建立/6秒停顿。若附H3尾端网格保持约束，也须在该审查prompt中已有，桥不偷偷追加。
+- reference_map三行，picture按环境1/女2/男3；每行asset_id/version及环境scene_ids或角色character_id/name/gender_presentation均来自规范来源。角色行须有asset_gender_evidence(path,sha256,quote)指向原始图像请求并有gender_mapping_reviewed=true；此标记由生产verifier核实原生制作审查，媒体侧不推断图像像素或中文性别同义词。
+- proof_files非空：各path/file_sha256绑定真正原生导演、表演、制作审查、决定与其证据；production verifier还应保留原始receipt身份。返回production_handoff_path/production_handoff_sha256作为最终证书身份。
+
+旧complete coordinator v4本身固定MiniMax-M3及旧7/7，不能直接重开；可参考其pure pipeline_v4的build_director_input/whole_direction_schema/compile_direction、build_performance_input/performance_schema/compile_performance。旧render_prompt固定9:16，不直接用作本轮横屏H3最终prompt。v28正文不安排秒数，因此没有合格表演时必须停在准备前，由root在新明确有限范围派发原生制作文本，不能由准备器补写。
+
+## 准备器的实际边界
+
+scripts/creative_world_scene_media_probe_v1.py固定导入两权威verifier，之后重算原生文件、证书、proof文件与三资产SHA；检查同故事失败ledger仍1/10且未清零；读取只读服务快照。只准备：共享证书快照、实际reference顺序、原样prompt、成功图派生API graph、文件保存要求及PREPARED。无POST/submit函数、SDK、付费claim或自动重试。CLI只有inspect/prepare；缺任一证据返回blocked。
+
+每次准备使用新的工作区内output_root（禁止旧h3目录），新的Comfy input子目录与output prefix；不可覆盖旧资产/输出/账本。三图按真实顺序连到ref_image_0/1/2；实际规范角色名与性别单独记录，不将旧文件node名C01/C02当身份。
+
+图直接原生1280×704、24fps、20步、REF2VA、ref_image_size=match。原v1字节已另存MEDIA_BRIDGE_V1_BEFORE_EXPLICIT_ENCODING_HOOK.py，旧12项QA和SHA不回写。新v2薄桥调用v1显式encoding_verifier hook（默认None不改变旧API行为），区分native_source_duration_seconds实际编译总时长≤15、native_integer_duration_seconds旧编译整数、encoded_duration_seconds=frame_length/24与encoding_hold_seconds。只接受H3的17k+5帧≤362；余量须精确等于encoded-native，范围[0,17/24]，且已写入实际prompt并经同源DS审查，不可补实质表演或提速删句。v2另存PREPARED_V2及配置/编码证书，verify_prepared重新核原始证书/源/输入图片字节并逐值重建图，无GET/POST。首尾PNG由同次原生解码张量保存，非MP4抽帧；禁AddGuide/旧拒绝尾、放大或LoRA。最终保存MP4、独立FLAC、原生first/last，图的保存前缀全指新独立root。
+
+root后续独立单次submitter必须在claim前及锁内重核两证书、源文件、ledger、服务queue与prepared hash；原始ID未知不重发。提交后仅原ID状态和文件/容器/packet/hash/PNG编码结构验证，不解码剧情像素；保存绝对视频位置并记awaiting_human_review。准备成功不等于已提交、已生成或内容通过。

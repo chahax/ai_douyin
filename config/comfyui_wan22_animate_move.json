@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "comfyui_root": "D:\\IT\\AI_vido\\ComfyUI",
+  "sources": {
+    "wan_video_wrapper": {
+      "repository": "https://github.com/kijai/ComfyUI-WanVideoWrapper",
+      "pinned_commit": "088128b224242e110d3906c6750e9a3a348a659b"
+    },
+    "wan_animate_preprocess": {
+      "repository": "https://github.com/kijai/ComfyUI-WanAnimatePreprocess",
+      "package_version": "1.0.3",
+      "archive_sha256": "51ddaed4b76291056ff47489042fa21eb96276519119e127013b983dd072fd06"
+    }
+  },
+  "source_workflow": "custom_nodes\\ComfyUI-WanVideoWrapper\\example_workflows\\wanvideo_WanAnimate_preprocess_example_02.json",
+  "target_workflow": "user\\default\\workflows\\wan22_animate_move_rtx5070ti_16gb.json",
+  "models": {
+    "diffusion": "Wan2_2-Animate-14B_fp8_e4m3fn_scaled_KJ.safetensors",
+    "text_encoder": "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+    "vae": "wan_2.1_vae.safetensors",
+    "clip_vision": "clip_vision_h.safetensors",
+    "sam2": "sam2.1_hiera_small-fp16.safetensors",
+    "vitpose": "onnx\\wholebody\\vitpose-l-wholebody.onnx",
+    "yolo": "process_checkpoint\\det\\yolov10m.onnx",
+    "relight_lora": "Wan22_relight\\WanAnimate_relight_lora_fp16.safetensors",
+    "lightx2v_lora": "lightx2v_I2V_14B_480p_cfg_step_distill_rank64_bf16.safetensors"
+  },
+  "runtime": {
+    "mode": "move",
+    "width": 480,
+    "height": 832,
+    "fps": 16,
+    "frame_count": 49,
+    "frame_window": 49,
+    "context_window": 49,
+    "block_swap": 30,
+    "attention": "sdpa",
+    "load_device": "offload_device",
+    "pose_execution_provider": "CPUExecutionProvider"
+  },
+  "integrity": {
+    "source_workflow": "a71f3741f42206c1f0e09968b67b51f220f6b950b2bfbbfac658a4ca41d87133",
+    "vitpose": "89bdf6692d9224dbd5004dcef23a9ba2d54c5776212b359d5a5b5068ac14fd08",
+    "yolo": "89b526498a6d55f869a6ab52e3a2eb20ad45b3711c1f7de3dd9ca0b399dfd6d7"
+  }
+}

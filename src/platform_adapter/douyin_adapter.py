@@ -13,6 +13,16 @@ from src.platform_adapter.sync_workflow import SyncWorkflow
 from src.shared.logger import logger
 
 
+class _QueuedAccountSession:
+    """Client-side adapter handle; only the control owner may open a browser."""
+    def stop(self):
+        pass
+
+    def __getattr__(self, name):
+        from src.operations_accounts.browser_control import BrowserControlRejected
+        raise BrowserControlRejected('managed_browser_required', '此客户端只负责入队，浏览器由账号管控后台持有。')
+
+
 class DouyinAdapter:
     def __init__(self, session: BrowserSession | None = None, runtime_context=None):
         self.session = session or BrowserSession(build_default_browser_session_config())
@@ -26,7 +36,12 @@ class DouyinAdapter:
     def for_account(cls, account_key: str, *, headless: bool = False):
         from src.operations_accounts import AccountRuntimeService
 
-        context = AccountRuntimeService().resolve(account_key)
+        from src.operations_accounts.browser_control_runtime import enabled, active_context
+        queue_client = enabled() and active_context() is None
+        runtime = AccountRuntimeService()
+        context = runtime.resolve(account_key, require_healthy=False) if queue_client else runtime.resolve(account_key)
+        if queue_client:
+            return cls(session=_QueuedAccountSession(), runtime_context=context)
         return cls(
             session=context.create_browser_session(headless=headless),
             runtime_context=context,
@@ -77,6 +92,27 @@ class DouyinAdapter:
         )
 
     def publish_video(self, request: PublishRequest, interactive: bool = False) -> PublishResult:
+        from src.services.artifact_account import artifact_account
+        from pathlib import Path
+        owner = artifact_account({'production_manifest': str(Path(request.video_path).parent / 'production.json')})
+        requested_owners = {value for value in (request.extra_metadata.get('account_uuid'), owner['account_uuid']) if value}
+        if owner.get('account_conflict') or (self.runtime_context and any(value != self.runtime_context.account_uuid for value in requested_owners)):
+            return PublishResult(success=False, status='account_mismatch', message='成片或发布请求属于其他运营账号，已阻止发布。')
+        from src.operations_accounts.browser_control_runtime import (
+            enabled, active_context, is_managed_account, queue_publish_request,
+        )
+        if enabled():
+            if self.runtime_context is None:
+                return PublishResult(success=False, status='account_binding_required', message='发布必须绑定运营账号。')
+            key = self.runtime_context.account_key
+            if active_context() is not None and not is_managed_account(key):
+                return PublishResult(success=False, status='account_mismatch', message='受管浏览器与发布账号不一致。')
+            if not is_managed_account(key):
+                authorization = request.extra_metadata.get('authorization_reference') or request.extra_metadata.get('explicit_user_statement', '')
+                if not authorization:
+                    return PublishResult(success=False, status='authorization_required', message='发布入队需要绑定原明确授权或已批准整片审核记录。')
+                queued = queue_publish_request(key, request, authorization=authorization)
+                return PublishResult(success=True, status='queued', message=f"发布已入队，尚未提交平台；任务 {queued['command_id']}")
         check = self._require_runtime_identity(force=True)
         if check is not None:
             return PublishResult(
@@ -85,6 +121,9 @@ class DouyinAdapter:
                 message=check[1],
             )
         request.extra_metadata["account_key"] = self.runtime_context.account_key
+        request.extra_metadata["account_uuid"] = self.runtime_context.account_uuid
+        request.extra_metadata["platform_identity_key"] = self.runtime_context.binding.platform_identity_key
+        request.extra_metadata["binding_verified_at"] = self.runtime_context.binding.verified_at
         request.extra_metadata["douyin_identity"] = (
             self.runtime_context.identity_label
         )
@@ -94,6 +133,21 @@ class DouyinAdapter:
             self.runtime_context.account_key,
         )
         return self.publish_workflow.publish(request, interactive=interactive)
+
+    def verify_published_video(self, request, post_id, publish_url):
+        """Inspect an existing exact work through the bound browser; never upload."""
+        queued, result = self._controlled_read('verify_published_video', request=request,
+                                               post_id=post_id, publish_url=publish_url)
+        if queued:
+            return result
+        from src.platform_adapter.publish_verification import video_id
+        check = self._require_runtime_identity(force=True)
+        if check is not None:
+            raise RuntimeError(check[1])
+        if video_id(publish_url) != post_id:
+            raise ValueError('verification requires an exact published video URL')
+        page = self.session.open_page(publish_url)
+        return self.publish_workflow._verify_published_work(page, post_id, publish_url, request)
 
     def reply_to_comment(
         self,
@@ -116,6 +170,9 @@ class DouyinAdapter:
         return success
 
     def fetch_comments(self, query: CommentQuery) -> CommentSyncResult:
+        queued, result = self._controlled_read('fetch_comments', query=query)
+        if queued:
+            return result
         check = self._require_runtime_identity()
         if check is not None:
             return CommentSyncResult(
@@ -142,6 +199,9 @@ class DouyinAdapter:
         Returns:
             SyncResult: 包含视频列表
         """
+        queued, result = self._controlled_read('sync_videos', page_limit=page_limit, interactive=interactive)
+        if queued:
+            return result
         check = self._require_runtime_identity()
         if check is not None:
             return SyncResult(success=False, status=check[0], message=check[1])
@@ -166,6 +226,9 @@ class DouyinAdapter:
             v.account_key = self.runtime_context.account_key
             if save_video(v):
                 new_count += 1
+            if v.creator_metrics is not None:
+                from src.services.content_performance import record_snapshot
+                record_snapshot(v)
             if trend_repository is not None and v.video_id and v.stats:
                 try:
                     from src.services.video_service import get_video_by_id
@@ -189,29 +252,40 @@ class DouyinAdapter:
                 except Exception as exc:
                     logger.warning(f"保存视频指标快照失败，视频同步继续: {exc}")
 
-        # 标记在平台上已删除的视频为 failed
-        # API成功但返回0个视频 → 平台上已无视频，应将所有 published 标记为 failed
-        existing_ids = [v.video_id for v in videos if v.video_id]
-        deleted_count = mark_videos_deleted(
-            existing_ids,
-            allow_empty=(api_success and len(videos) == 0),
-            account_uuid=self.runtime_context.account_uuid,
-        )
+        # A bounded/partial list cannot prove deletion. Background refresh only
+        # upserts observed works; reconciliation requires a complete snapshot.
+        deleted_count = 0
 
         finished_at = datetime.now().isoformat()
-        status = "success" if videos else "failed"
+        status = "success" if api_success else "failed"
         record_sync("videos", len(videos), new_count, started_at, finished_at, status)
 
         msg = f"共同步到 {len(videos)} 个视频，新增 {new_count} 个"
+        if not api_success:
+            msg = '作品接口未成功，不能认定账号没有作品；请核对创作者中心登录并查看同步日志。'
         if deleted_count > 0:
             msg += f"，标记 {deleted_count} 个已删除"
 
         return SyncResult(
-            success=bool(videos) or deleted_count > 0,
+            success=api_success,
             status=status,
             videos=videos,
             message=msg,
         )
+
+    def _controlled_read(self, method, **params):
+        from src.operations_accounts.browser_control_runtime import (
+            enabled, is_managed_account, active_context, managed_adapter_call,
+        )
+        if not enabled() or self.runtime_context is None:
+            return False, None
+        key = self.runtime_context.account_key
+        if is_managed_account(key):
+            return False, None
+        if active_context() is not None:
+            from src.operations_accounts.browser_control import BrowserControlRejected
+            raise BrowserControlRejected('account_uuid_mismatch', '不能跨账号借用浏览器执行查询。')
+        return True, managed_adapter_call(key, method, params)
 
     def close(self) -> None:
         self.session.stop()

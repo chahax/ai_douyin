@@ -1,0 +1,7 @@
+{
+  "template": "video_recovery/v1",
+  "id": "wan_subject_background_recovery",
+  "control_report": "../../data/qa/wan_anti_fraud_subject_v1/raw.control.report.json",
+  "inventory_report": "../../data/qa/video_tool_inventory_20260726_deterministic_motion.json",
+  "current_tool": "wan_animate_move"
+}

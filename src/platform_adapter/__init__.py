@@ -1,6 +1,3 @@
-from src.platform_adapter.browser_session import BrowserSession, build_default_browser_session_config
-from src.platform_adapter.comment_workflow import CommentWorkflow
-from src.platform_adapter.douyin_adapter import DouyinAdapter
 from src.platform_adapter.models import (
     BrowserSessionConfig,
     CommentQuery,
@@ -10,7 +7,28 @@ from src.platform_adapter.models import (
     PublishResult,
     SessionState,
 )
-from src.platform_adapter.publish_workflow import PublishWorkflow
+
+_LAZY_EXPORTS = {
+    "BrowserSession": ".browser_session",
+    "build_default_browser_session_config": ".browser_session",
+    "CommentWorkflow": ".comment_workflow",
+    "DouyinAdapter": ".douyin_adapter",
+    "PublishWorkflow": ".publish_workflow",
+}
+
+
+def __getattr__(name):
+    module = _LAZY_EXPORTS.get(name)
+    if module is not None:
+        from importlib import import_module
+        value = getattr(import_module(module, __name__), name)
+        globals()[name] = value
+        return value
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
+
+def __dir__():
+    return sorted(set(globals()) | set(__all__))
 
 __all__ = [
     "BrowserSession",

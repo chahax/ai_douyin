@@ -55,6 +55,9 @@ class AccountVideoResearchResult:
     content_analyses: int = 0
     opportunities: int = 0
     stopped_reason: str = ""
+    blocked_search: dict[str, str] = field(default_factory=dict)
+    challenge_evidence: dict = field(default_factory=dict)
+    navigation_evidence: dict = field(default_factory=dict)
     warnings: list[str] = field(default_factory=list)
     stages: list[ResearchStageResult] = field(default_factory=list)
     log_path: str = ""
@@ -158,6 +161,12 @@ class AccountVideoResearchWorkflow:
                 }
                 for item in candidates
             ]
+            if collection.stopped_reason in {"human_required", "verification_ui_unconfirmed", "browser_navigation_timeout"}:
+                # Preserve a partial collection's real access failure before
+                # the sample gate can replace it with a sample diagnosis.
+                result.status = "blocked"
+                result.stopped_reason = collection.stopped_reason
+                return self._finish(result)
             if not collection_run_id or not candidates:
                 result.status = "failed"
                 result.stopped_reason = collection.stopped_reason or "no_valid_videos"
@@ -296,7 +305,8 @@ class AccountVideoResearchWorkflow:
                 status="blocked", item_count=exc.result.unique_videos, message=str(exc)))
         except Exception as exc:
             result.status = "failed"
-            result.stopped_reason = f"{type(exc).__name__}: {exc}"
+            code = getattr(exc, 'code', '')
+            result.stopped_reason = code if code in {'page_probe_failed','search_results_unavailable'} else f"{type(exc).__name__}: {exc}"
             result.warnings.append(result.stopped_reason)
             result.stages.append(
                 ResearchStageResult(
@@ -320,6 +330,10 @@ class AccountVideoResearchWorkflow:
         result.tag_relations = len(collection.tag_relations)
         result.tag_traffic_snapshots = len(collection.tag_traffic_snapshots)
         result.warnings.extend(collection.warnings)
+        result.navigation_evidence = dict(getattr(collection, 'navigation_evidence', {}) or {})
+        if collection.stopped_reason in {"human_required", "verification_ui_unconfirmed", "browser_navigation_timeout"}:
+            result.blocked_search = dict(getattr(collection, "blocked_search", {}) or {})
+            result.challenge_evidence = dict(getattr(collection, 'challenge_evidence', {}) or {})
         result.stages.append(
             ResearchStageResult(
                 stage="trend_collection",

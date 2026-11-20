@@ -1,0 +1,17 @@
+# 完整源规划续行 v5 接线
+
+本入口依据 `CREATIVE_WORLD_SCENE_SOURCE_REPLAN_AND_COMPLETE_FLOW_PLAN_20261016.md`，代码为 `scripts/creative_world_scene_live_session_v5.py`。旧Session、645/650、663/664、八份正文、四格接口诊断、导演7/7和原账本全部保留；不修改旧selector或提交媒体。
+
+新独立scope、freeze、runtime policy、grant/successor、RUN、intent、STATE与TEXT_HANDOFF均明确为v5。最多三份完整MiniMax新规划，每份重新取得四项原生审查、最多两份新原生开场和一次类型化源状态审查；全运行共享正文09–11三份及同稿语义/物理审查各三份。stage limits为goal_plan9、goal_audit15、complete_script3、full_review6，总33；上游循环不清零正文计数。
+
+真实父证明固定为 `creative_world_scene_typed_audit_spend_anchor_v1.verify_anchor`，保原creative INPUTS与profile。首请求完整旧645、650和664原报告各一次，664只作未获验收的诊断，原文没有修补；引用映射只带实际报告所用ref，原四审只存SHA沿革。后续源状态明确失败也保完整当前goal/setup/report及派生计算信息，不能裁掉typed chains。上下文沿原100k字符/300kB门，超限立即保存停点，不截原稿或提升预算。
+
+原creative profile仍逐值保持goal_audit16k。仅source_state请求由纯适配器深拷贝profile，把输出上限明确改为32k；Runtime只在原生A3 schema与provenance、DS角色/模型/阶段都相符时允许此例外，其余请求仍走原精确profile门。writer provenance对已通过源审查的引用是沿革，不是申请源审查参数例外。锁内admission仍按原始builder全量重建实际request，不能凭schema标记扩大调用。
+
+所有审查先走严格audit gate：合同无效、语义未知、scope challenge或运输/用量未知、截断、缺工具均停止。只有合同有效、完整结果和用量已知、uncertainties为空且明确accepted=false与内容findings的审查，才能生成完整新计划或完整新正文。目标/正文自身已知结构失败可提交范围内完整新版本。新opening若错绑或漏掉goal header，显式停止诊断并保未用attempt，不修header，也不因元数据错误重写剧情。
+
+每次调用在SDK之前领取持久TaskStore，再在全局锁内核当前计轮、来源鲜度、不可变依赖、唯一真实父后继、label/stage、原intent和完整native前缀的确定性重建。SDK重试为0，原RUN不可重启。重建顺序从完整新planning链开始，因此不能把645旧四审或650初态冒作新规划的下游结果。
+
+达标后交接保新goal、四审bundle、新setup、原生源状态报告和决定、原生正文、编译正文、双审bundle及可读全文。`verify_text_handoff`重核SDK raw/wire、SQL原任务、receipt/intent顺序和完整流程；所有contract_valid原生阶段重新执行同源validator，编译、决定与render逐值一致。被拒绝的历史中间稿由原始SDK/SQL与receipt/intent身份证明，并用于重建后续请求；不把旧异常字符串重新格式化成新原生审查。未把诊断或机器text_ready写成用户采用、审美通过或视频通过。
+
+最小离线验证采用明确合成父证明和MockTransport，不能替代真实祖先核验。实际安装SDK成功链含新规划/四审/新开场/第五门/正文/双审及交接深核；未知单次发送并停；纯路由控制核源失败阻断下游、重建整套上游及全运行共享三正文；审查合同错误不触发创作返修；opening错误header停止而不改原文。真实预览、授权冻结和派发由主agent进行。

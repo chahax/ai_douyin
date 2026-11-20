@@ -1,0 +1,246 @@
+{
+  "765c2b59-69e7-4147-9cad-6ebc4520e9c0": {
+    "prompt": [
+      2,
+      "765c2b59-69e7-4147-9cad-6ebc4520e9c0",
+      {
+        "1": {
+          "class_type": "UNETLoader",
+          "inputs": {
+            "unet_name": "wan2.1_vace_1.3B_fp16.safetensors",
+            "weight_dtype": "default"
+          }
+        },
+        "2": {
+          "class_type": "CLIPLoader",
+          "inputs": {
+            "clip_name": "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+            "type": "wan",
+            "device": "default"
+          }
+        },
+        "3": {
+          "class_type": "VAELoader",
+          "inputs": {
+            "vae_name": "wan_2.1_vae.safetensors"
+          }
+        },
+        "4": {
+          "class_type": "CLIPTextEncode",
+          "inputs": {
+            "clip": [
+              "2",
+              0
+            ],
+            "text": "Photorealistic small contemporary office connected to a plain corridor through one doorway. The camera is locked. Two pale wood desks, two black office chairs, a pale wood drawer cabinet, off-white plaster walls, gray matte flooring, a wide gray-blinded window, warm evening light from the window. Preserve the reference room layout, doorway position and perspective. Empty room, no people. Subtle natural light, realistic surface textures."
+          }
+        },
+        "5": {
+          "class_type": "CLIPTextEncode",
+          "inputs": {
+            "clip": [
+              "2",
+              0
+            ],
+            "text": "people, faces, extra doorways, extra windows, moving camera, rearranged furniture, cartoon, illustration, text, watermark, distorted architecture"
+          }
+        },
+        "6": {
+          "class_type": "LoadImage",
+          "inputs": {
+            "image": "office_to_door_depth_0001.png"
+          }
+        },
+        "7": {
+          "class_type": "RepeatImageBatch",
+          "inputs": {
+            "image": [
+              "6",
+              0
+            ],
+            "amount": 17
+          }
+        },
+        "8": {
+          "class_type": "LoadImage",
+          "inputs": {
+            "image": "office_to_door.png"
+          }
+        },
+        "9": {
+          "class_type": "ModelSamplingSD3",
+          "inputs": {
+            "model": [
+              "1",
+              0
+            ],
+            "shift": 8.0
+          }
+        },
+        "10": {
+          "class_type": "WanVaceToVideo",
+          "inputs": {
+            "positive": [
+              "4",
+              0
+            ],
+            "negative": [
+              "5",
+              0
+            ],
+            "vae": [
+              "3",
+              0
+            ],
+            "width": 512,
+            "height": 288,
+            "length": 17,
+            "batch_size": 1,
+            "strength": 1.0,
+            "control_video": [
+              "7",
+              0
+            ],
+            "reference_image": [
+              "8",
+              0
+            ]
+          }
+        },
+        "11": {
+          "class_type": "KSampler",
+          "inputs": {
+            "model": [
+              "9",
+              0
+            ],
+            "seed": 20261006,
+            "steps": 20,
+            "cfg": 5.0,
+            "sampler_name": "euler",
+            "scheduler": "simple",
+            "positive": [
+              "10",
+              0
+            ],
+            "negative": [
+              "10",
+              1
+            ],
+            "latent_image": [
+              "10",
+              2
+            ],
+            "denoise": 1.0
+          }
+        },
+        "12": {
+          "class_type": "TrimVideoLatent",
+          "inputs": {
+            "samples": [
+              "11",
+              0
+            ],
+            "trim_amount": [
+              "10",
+              3
+            ]
+          }
+        },
+        "13": {
+          "class_type": "VAEDecode",
+          "inputs": {
+            "samples": [
+              "12",
+              0
+            ],
+            "vae": [
+              "3",
+              0
+            ]
+          }
+        },
+        "14": {
+          "class_type": "CreateVideo",
+          "inputs": {
+            "images": [
+              "13",
+              0
+            ],
+            "fps": 8.0
+          }
+        },
+        "15": {
+          "class_type": "SaveVideo",
+          "inputs": {
+            "video": [
+              "14",
+              0
+            ],
+            "filename_prefix": "scene_lab/depth_office_to_door",
+            "format": "mp4",
+            "codec": "h264"
+          }
+        }
+      },
+      {
+        "comfy_usage_source": "comfy-cli/comfy-mcp",
+        "client_id": "d036dce4-08f6-48e6-b75c-c8667ab9b8ed",
+        "create_time": 1791264250473
+      },
+      [
+        "15"
+      ]
+    ],
+    "outputs": {
+      "15": {
+        "images": [
+          {
+            "filename": "depth_office_to_door_00002_.mp4",
+            "subfolder": "scene_lab",
+            "type": "output"
+          }
+        ],
+        "animated": [
+          true
+        ]
+      }
+    },
+    "status": {
+      "status_str": "success",
+      "completed": true,
+      "messages": [
+        [
+          "execution_start",
+          {
+            "prompt_id": "765c2b59-69e7-4147-9cad-6ebc4520e9c0",
+            "timestamp": 1791264293433
+          }
+        ],
+        [
+          "execution_cached",
+          {
+            "nodes": [],
+            "prompt_id": "765c2b59-69e7-4147-9cad-6ebc4520e9c0",
+            "timestamp": 1791264293433
+          }
+        ],
+        [
+          "execution_success",
+          {
+            "prompt_id": "765c2b59-69e7-4147-9cad-6ebc4520e9c0",
+            "timestamp": 1791264406329
+          }
+        ]
+      ]
+    },
+    "meta": {
+      "15": {
+        "node_id": "15",
+        "display_node": "15",
+        "parent_node": null,
+        "real_node_id": "15"
+      }
+    }
+  }
+}

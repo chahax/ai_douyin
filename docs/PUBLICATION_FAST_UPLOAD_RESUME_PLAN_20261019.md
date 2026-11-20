@@ -1,0 +1,13 @@
+# 快传修复部署与本视频再一次发布
+
+用户对“是否允许再追加本视频发布1次，部署修复后继续”明确答复“允许”。本次只追加本视频publish一次，原account01/原完整成片/PREPARED/评论/标签，日计数26→27，不追加recovery、后台、模型或媒体。旧6730f85e9f9b45bc9c0520f2e23c5cd3已知failed/upload_failed，未点击发布且无新提交锁；原unknown人工归档历史不改。
+
+按原文档先行分工：管控核心实现独立v4单次授权，绑定本次明确批准、v3链、原已知失败原生快照/日志、无提交锁、原active42和26次数。冻结注册新文件，不改v1/v2/v3，不复用原幂等键；只publish优先级250，recovery不能领新额度。主助手审查少量相关SQLite决定案及实际链只读校验。
+
+部署脚本扩展严格v4批准模式，仍在两库写栅栏内核对原active42、原26/日、无恢复或运行/未知调度业务、无runtime lease，精确旧父22452/create_time1792387059.810444/owner第8代，原worker42a14及其原始脚本SHA、同项目headless profile树。只停止父并等待原worker/Chrome自然退出；不杀浏览器、不伪写控制、不触碰人工队列。queued维护若存在，须先精确识别为未进入浏览器的原任务，按既有部署取消原则保留intent/回执后操作性结清，不能误计平台故障或自动新增核验。
+
+主助手核对被冻结上传修复SHA及12项最终真实Chrome/52项相关回归证据后部署，保存新服务健康/源码/owner证明，仅派发一个新ID。主动AI声明提交后读回、虚构声明和五标签、单次发布点击及作品核验/授权法律评论仍按原规则。结果未知保留新锁，不自动重传或扩大额度。新上传门实际平台原节点资格尚未证明，不能把本地通过写成发布成功。
+
+原生预检已识别queued维护0a731f11cfe84668b568693e0856652f为post-publish，原refresh startup_catchup run3bf2a6889c934be9a44e42b5f11e9565；不是playback。可复用原Store.cancel_queued完整快照CAS取消，让原refresh线程自然记录失败及部署取消原因，旧control失败数按原机制1→2、active42保留，不清零或冒充平台失败/核验成功。原人工队列不取消；任何开始派发/结果未知或控制暂停均停止。实际回执、原因和计数须保存，不能使用此前playback专用取消工具硬套。
+
+首次handoff在停止前拒绝，因定时smart又登记c8518c2467134991b465604dde956829，对应8262f00c438a4d9ca01c0f0c683dcf59仍queued且无owner/generation。普通取消会使failure2→3暂停账号，故不能反复把部署取消走平台失败路径。新增独立精确smart部署取消工具：原批准SHA、原完整队列/调度run/account/policy/control/runtime快照CAS，在三库写栅栏内保存intent，scheduler写cancelled_before_browser_dispatch及原正常周期next_due，core保存完整派发前取消；core先commit、scheduler后commit，晚到原finish按终态忽略。保留控制failure2和active42/日26，不更改任何原失败、政策或额度。非跨库crash原子，partial须停止部署。仅此未派发原任务；运行/未知/新owner/多候选/快照变化全部拒绝，不触人工任务。实现以既有playback取消工具的已审提交顺序为基线，子agent开发、主助手审查小量真实SQLite案例，不重复旧大套件。

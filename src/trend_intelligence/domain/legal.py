@@ -88,7 +88,8 @@ class LegalServicesStrategy(PydanticDomainStrategy):
         preferred = unique_terms(profile.matching_terms(), LEGAL_DEFAULT_TERMS)
         matched = text_matches(topic.searchable_text, preferred)
         profile_matches = text_matches(topic.searchable_text, profile.matching_terms())
-        score = min(100.0, 35.0 + 18.0 * len(matched) + 12.0 * len(profile_matches))
+        score = (min(100.0, 35.0 + 18.0 * len(matched) + 12.0 * len(profile_matches))
+                 if matched else 0.0)
         reasons = (
             [f"命中法律账号主题：{', '.join(matched[:6])}"]
             if matched

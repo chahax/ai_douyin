@@ -1,0 +1,58 @@
+{
+  "schema": "creative_goal_context_model_profile/v6",
+  "writer": {
+    "provider": "minimax",
+    "model": "MiniMax-M3.1-Flash-Preview",
+    "base_url": "https://api.minimax.cn/v1",
+    "parameters": {
+      "temperature": 0.4,
+      "thinking": "adaptive",
+      "reasoning_effort": "medium",
+      "max_completion_tokens": 16000
+    }
+  },
+  "director": {
+    "provider": "deepseek",
+    "model": "deepseek-flash",
+    "base_url": "https://api.deepseek.com/v1",
+    "parameters": {
+      "temperature": 0.4,
+      "thinking": "disabled",
+      "max_completion_tokens": 12000
+    }
+  },
+  "stage_parameters": {
+    "goal_audit": {
+      "max_completion_tokens": 16000
+    },
+    "full_review": {
+      "max_completion_tokens": 32000
+    }
+  },
+  "scope": "independent native source-v4 evidence-role audit of complete609; all non-source model parameters unchanged",
+  "output_allowance_basis": "Source-v4 keeps compact source observations and separates actual event conditions from interpretation-frame evidence. Source24000 is an output allowance, not a server completion guarantee; commitment/drama16000, full32000 and MiniMax16000 remain unchanged.",
+  "official_review_reference": "https://api-docs.deepseek.com/api/create-chat-completion/",
+  "review_output_allowance_official_range_checked": true,
+  "new_contract_real_endpoint_accepted": false,
+  "server_schema_guarantee": false,
+  "sdk_max_retries": 0,
+  "http_follow_redirects": false,
+  "media_authorized": false,
+  "profile_version": "creative_goal_context_model_profile/v6",
+  "purpose": "New complete source-v4 report distinguishes actual event conditions from interpretation-frame context. Old610 stays rejected and is never converted or used as a report template; no report/format recovery claim.",
+  "source_strict": {
+    "enabled": true,
+    "role": "director",
+    "stage": "goal_audit",
+    "schema_version": "creative_goal_legal_usage_source_audit/v4",
+    "base_url": "https://api.deepseek.com/beta",
+    "function_strict": true,
+    "server_schema_guarantee": "official strict request support; prior source3 endpoint accepted without guaranteed nested enum compliance, source4 live acceptance untested",
+    "sdk_max_retries": 0,
+    "http_follow_redirects": false,
+    "other_deepseek_stages_strict": false,
+    "max_wire_utf8_bytes": 600000,
+    "wire_budget_basis": "Explicit independent bound for actual compiled strict wire, not inherited logical payload budget; check actual HTTP bytes before send",
+    "max_completion_tokens": 24000
+  }
+}

@@ -1,0 +1,23 @@
+# 正常静默、验证异常自动开窗（2026-10-18）
+
+用户明确纠正：验证码异常时应直接看到原账号网页，不应再点击“前往处理”。此要求取代此前仅显式点击开窗的限制。正常任务继续后台静默/静音，只有平台human_required待办自动开启一次原环境可见窗口；后台数据库、程序故障不误开平台窗口。
+
+实现采用项目后台扫描与原持久manual_window_jobs，不建立Codex自动任务。先确认当前账号paused human_required、当前原异常open、原业务已结束且runtime锁为空、无恢复请求，再登记与异常ID绑定的一次开窗；与显式点击共用原账号互斥、profile/快照核对和异步worker。每个异常只自动尝试一次，关闭、失败、未知、服务重启均不自动重开；已经为本异常人工打开过的窗口复用，后续新异常重新有一次机会。
+
+人工开窗前再次核对原异常仍有效，防止扫描与恢复/人工关闭竞争；处理完成仍由用户关闭窗口后点击完成，由后台核验原身份再恢复原计划。窗口关闭不自动确认平台验证通过。活动或未知原任务/锁不清除、不重派。当前异常6的原停点为法律搜索，部署通过后可由本次新授权自动打开一次，不代做验证码或继续播放。
+
+先进行本地持久去重、并发/重启/失败/新异常、原窗口复用及实际调度接线验证，再在账号无在途操作时部署。前端说明与运行配置同步更新，旧历史不回写；助手监控自动任务保持已删除。
+
+## 实施与验证
+
+项目Cron新增15秒本地扫描account_manual_windows；仅open human_required事件与原paused控制时间一致、原业务均终态且无恢复请求、原runtime锁空的活动绑定账号可进入。开窗任务登记后worker再次核对事件状态。正常任务仍headless+mute-audio，不为普通后台故障打开抖音页面。
+
+原manual_window_jobs新增按incident_id持久绑定的manual_window_incidents表。异常映射与新job登记在同一SQLite写事务内，复用已有活跃/未知job；当前异常已人工开过的较新关闭/失败job也只采用原ID。映射已经存在时扫描纯只读，不再申请写锁。关闭、失败、未知及服务重启不自动重试；管理员仍可明确手动重开，新异常则有新的自动机会。旧schema/历史job不改写，首建WAL约定保持。
+
+初批6例失败来自测试种子误用管理员pause_account而非平台human_required，旧报告AUTO_WINDOW_TESTS_V1保留；修正真实平台事件种子后82项通过。最终17模块组合381项通过（14.96秒），包括真实自动scanner→真实job SQLite→原shared helper→原profile/互斥的Event假浏览器、重复自动扫描与同时手点均复用同一job、关闭保存/退出互斥且不恢复、并发/重启/失败/新事件、恢复和未知门。
+
+22:19:47受控部署，新服务PID26916，原服务7744退出。部署前无在途业务、人工窗口、恢复或runtime锁，原窗口任务库一致备份AUTO_WINDOWS_BEFORE.sqlite。部署后网页200/ok，原五组件及新增manual_windows均有新鲜正常回执。原控制revision13、异常6、完成请求、原计划和历史播放结果不因开窗改写。
+
+后台自动为事件6登记job d56a076e2c1045088325a1ec312cc89f，requested_by=system:human_required:6，目标source=blocked_search，绑定原播放c5c0e78c7e0f4a3193a8897b0f977a87的法律搜索停点；实际on_opened回执后状态running/window_open_waiting_close，原账号manual-session互斥保持。不是助手点击按钮或假浏览器的“成功”，但也不证明验证码已处理或养号已播放。需要用户处理、关闭并点完成后再核验；后台不会替用户解验证码或自动点完成。
+
+助手监控自动任务保持已删除。本次是项目自身异常处理接线，检查点位于data/development_checkpoints/account_search_handling_context_20261018，AUTO_PREFLIGHT、AUTO_OPEN_RESULT、AUTO_INCIDENT_MAPPING及381项JUnit单列保存。

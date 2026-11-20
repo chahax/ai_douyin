@@ -1,0 +1,17 @@
+<!-- Trigger structure projected from real 87ca0b3d receipt; popup below is synthetic test data. -->
+<section class="wrapper-MLZdnB">
+  <div class="labelWrapper-p6osJm"><div class="title-cnbkZe">自主声明</div></div>
+  <div class="controlWrapper-Kt_9Xm"><div class="selectBox-buZRzi" style="cursor:pointer;width:260px;height:36px">
+    <div class="selectText-XSrMFZ">请选择自主声明</div>
+  </div></div>
+</section>
+<script>
+window.nativeDisclosureClicks=0;window.valueWrites=0;window.confirmClicks=0;
+document.querySelector('.selectBox-buZRzi').onclick=()=>{
+ window.nativeDisclosureClicks++;
+ const panel=document.createElement('div');panel.id='synthetic-native-options';panel.setAttribute('role','listbox');panel.setAttribute('aria-multiselectable','true');
+ panel.innerHTML='<div>自主声明测试选项（非平台真实选项证据）</div><label><input type="checkbox" checked>测试声明甲</label><label><input type="checkbox">测试声明乙</label><p>此处是测试帮助文本</p><span style="display:block;height:1px"><i hidden>HIDDEN_NOT_AN_OPTION</i></span><button type="button" id="confirm">确认</button>';
+ panel.querySelectorAll('input').forEach(e=>e.onchange=()=>window.valueWrites++);panel.querySelector('button').onclick=()=>window.confirmClicks++;
+ document.body.append(panel);
+};
+</script>

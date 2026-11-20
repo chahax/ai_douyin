@@ -1,0 +1,28 @@
+# 本次部署、实际上传及未知提交停点
+
+用户明确追加原账号核验1次和本视频发布1次，并要求部署后继续。本次只继续《这份申请，我没提》原PREPARED、account01及原成片SHA，未生成媒体、未改标题/简介/标签/评论或旧账本。
+
+## 实际执行
+
+- 第二份独立v2授权将原日计数23承接至最高25，恢复revision41/发布42，原两次注册及原未知人工取消记录不变。原排队manual保持，本次发布250优先于其200、低于核验300；其他普通运行额度仍20。
+- 主助手59项配额/声明相关回归通过；闲置headless交接48项通过，另子agent完成树变化审计顺序测试。原服务40812在queued-only、控制paused、无业务租约边界停止，14个原子进程自然退出（实际数量以SERVICE_HANDOFF.json为准），未强杀Chrome。新服务41264于北京时间12:28:29启动，HTTP200，实际部署源码SHA与记录一致。
+- 原账号核验461aca55ad184ded9cd791a4d7fe889f成功，原UUID/身份保持；发布0d4a7e8ea7bd498ba1243248f6c28438消费第二次，日计数25。
+- 12:30:08实际上传完成，12:31:40五个标签和简介读回完成；原始记录保留。
+- 原声明helper随后返回radio_checked，但原截图显示“对作品内容添加声明”弹窗仍打开、确定按钮未提交。该回执不能证明AI声明已生效，已另存明确纠正，不改写原日志。助手此前依据该返回值报告设置成功的判断不准确。
+- 12:31:54建立原提交锁，原语义按钮点击超时后旧代码又按class尝试，均未获得点击成功回执。12:33:00结果为submission_unknown/管控outcome_unknown。没有准确作品ID或链接，未核验作品展示，未发表评论。不能据前置截图或点击超时判定平台一定未收到。
+
+## 后续离线修复及主审
+
+非ARIA弹窗修复只修改AI小helper及必要测试：精确标题及有界最近祖先绑定唯一AI控件、确定、取消；弹窗仍可见一律不通过。确认关闭后，若同Page原native input保留且隐藏，独立读取每次重核原容器/原控件连接、真实checked、标签和URL；销毁、替换、复位、重开、歧义或没有可靠提交值均不通过，不用预览角标或简介代替平台声明。主助手59项相关回归及实际项目BrowserSession的5种本地UI案例通过。
+
+单次发布点击修复只改PublishWorkflow._click_publish：定位和复核唯一可用精确按钮后，只执行一次click RPC；点击或随后等待异常均不走第二条发布路径。主助手30项相关回归、实际项目BrowserSession的3种本地UI案例通过；剔除该函数后AST与改前一致。wrapper.first仍有读定位与点击之间的理论DOM变化间隙，未宣称原子strict。未扩大worker、发布后验收或锁规则。
+
+这两项最终修复尚未部署，当前正在持有原未知任务的owner未被重启或热补。最终源码AI helper为75c663e509628c64b6d77b1e53c3e7ac29a4b112c3403d19a2329abc9bc711b3，publish_workflow为c3be04da236c5ffd0cf06fa8c5f5b9d0da8adda379b469d3f91a974ba1419994。本地通过不代表抖音真实控件/作品验收通过。
+
+## 当前边界和证据
+
+本次追加两次均已用完。原submission锁、outcome_unknown及owner保持，未知后无新派发、无清锁或重传。已请用户在原法律号内容管理核对是否存在同标题作品或审核中记录；目前没有可用的原owner事后页面核验入口，不能另开会话绕过保护。仍须核实原作品结果后再决定下一步，不能自动重复提交。
+
+主证据为`data/video_generation/h3_dense_office_full_20261018/publication/resume_second_20261019/FINAL_CHECKPOINT.json`，同目录保存原用户授权、冻结、注册、正常交接、部署、排队、恢复请求及AI误通过纠正。原始journal为`data/publish_runs/707d14fbcc7dc33285fbfd827d653ef01cfb85025d6dae9bdad2a389c28eb432.20261019T042948413077.jsonl`。离线证据分别位于`data/development_checkpoints/ai_nonrole_declaration_20261019`和`data/development_checkpoints/publish_single_click_20261019`；旧证据及视频文件SHA保持。
+
+后续用户答复“没有找到该作品”，已原样记录为人工未找到报告（`USER_WORK_NOT_FOUND_REPORT.json`），绑定原任务、原账号、原锁SHA及当时状态；它不是服务端未投稿回执，也未单独授予新次数或清锁权限。核对时账号active/revision42、服务41264健康200、日计数25、原任务仍outcome_unknown。两项已验证修复SHA未变。尚未结清原任务、归档锁、新增配额或重新派发；后续可在用户明确批准人工结清及新增本视频发布一次后按范围部署继续，不另申请核验次数。

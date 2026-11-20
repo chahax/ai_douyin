@@ -45,7 +45,7 @@ NARRATION_MAX_LEN = 300
 
 # 段数动态计算
 MAX_SEGMENTS_MIN = 4
-MAX_SEGMENTS_MAX = 15
+MAX_SEGMENTS_MAX = 60
 CHARS_PER_SEGMENT = 250  # 每镜约 250 字
 
 
@@ -63,7 +63,21 @@ class DialogueLine(BaseModel):
     @field_validator("emotion")
     @classmethod
     def _validate_emotion(cls, v: str) -> str:
-        allowed = {"happy", "sad", "angry", "neutral", "fearful", "surprised"}
+        allowed = {
+            "happy",
+            "sad",
+            "angry",
+            "neutral",
+            "fearful",
+            "surprised",
+            "protective",
+            "determined",
+            "tender",
+            "tense",
+            "stunned",
+            "relieved",
+            "conflicted",
+        }
         if v and v not in allowed:
             # 不抛错：降级到 neutral 而不是整个 scene failed
             return "neutral"
@@ -123,8 +137,8 @@ class NovelSplit(BaseModel):
     )
     scenes: List[ScenePlan] = Field(
         min_length=1,
-        max_length=20,
-        description="分镜列表（1-20 镜）",
+        max_length=MAX_SEGMENTS_MAX,
+        description=f"分镜列表（1-{MAX_SEGMENTS_MAX} 镜）",
     )
     total_duration_seconds: float = Field(default=0.0, ge=0.0, description="总时长（= Σ scene.duration）")
 
@@ -152,12 +166,12 @@ class NovelSplit(BaseModel):
 
 
 def calc_max_segments(text_length: int) -> int:
-    """动态计算 max_segments（每镜约 250 字，下限 4 镜，上限 15 镜）。
+    """动态计算 max_segments（每镜约 250 字，下限 4 镜，上限 60 镜）。
 
     例:
-      500 字 → max(4, min(15, 500//250)) = max(4, 2) = 4 镜（下限保护）
-      2000 字 → max(4, min(15, 8)) = 8 镜
-      5000 字 → min(15, 20) = 15 镜（上限保护）
+      500 字 → max(4, min(60, 500//250)) = max(4, 2) = 4 镜（下限保护）
+      2000 字 → max(4, min(60, 8)) = 8 镜
+      15000 字 → min(60, 60) = 60 镜（上限保护）
     """
     return max(MAX_SEGMENTS_MIN, min(MAX_SEGMENTS_MAX, text_length // CHARS_PER_SEGMENT))
 

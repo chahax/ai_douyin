@@ -1,0 +1,15 @@
+{
+  "template": "video_shot_intent/v1",
+  "intent": {
+    "motion": "action",
+    "framing": "medium",
+    "camera": "locked",
+    "background": "static",
+    "preserve_reference": true,
+    "contains_hands": false,
+    "contains_phone": false,
+    "multi_person": false,
+    "replacement": false,
+    "relight": false
+  }
+}

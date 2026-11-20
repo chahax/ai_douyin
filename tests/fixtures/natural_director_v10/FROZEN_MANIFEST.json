@@ -1,0 +1,19 @@
+{
+  "schema": "natural_director_fixture_freeze/v1",
+  "frozen_at": "2026-10-18",
+  "before_live_v10": true,
+  "semantic_service_validation": "not_run",
+  "old_holdout_modified": false,
+  "files_sha256": {
+    "family_exchange.txt": "7998d4a91ecda67cf0602d8206d44afef3712a3591a8fadcdc76da016fa4cdd3",
+    "fresh_cases.json": "05c56eef8ee145d4157299c2c40253ce157e09bedaa07021c159dd57e82838cf",
+    "long_bus_station_natural.txt": "7c79b6eb80c44d3b122f6975d780550fe92fcaeae6658d7c08234eba04f7a52f",
+    "long_repair_shop_natural.txt": "959a1a5fc24d1c95bccd0550c863c9eff929a64e080f7332029d9c830a9ff46e",
+    "meaningful_silence.txt": "6e997543add93b7b8457df937c8e3f0552a4aea0d8c05d9da7d613887a600b24",
+    "office_three_people.txt": "cc0e58a93dc4f82832a793301294a9d665506a7e5668989d66fe5ce994992699",
+    "phone_offscreen.txt": "2323c9686079d0525d48974bb9d4019c2d8ee08d37ec75a61f936fc7629efafd",
+    "projection_cases.json": "d779e07b9ca38cdd07d2e72e737e5acbf9d5ef872a31cc3cab895106761e87dc",
+    "README.md": "2253daa18ef3312adbe5460bd022db351e0c07c8f09445de410e04ec7915174f",
+    "walking_prop_transfer.txt": "7a92cfc3e1dc69bdc55f6314e8cc87a47c5015d646d4f3afeabda9f0b4663081"
+  }
+}

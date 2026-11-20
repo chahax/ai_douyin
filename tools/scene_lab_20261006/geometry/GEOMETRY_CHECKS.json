@@ -1,0 +1,12 @@
+{
+  "manifest_matches_saved_world_transforms": true,
+  "mismatched_objects": [],
+  "desks": 2,
+  "chairs": 2,
+  "door_leaf_count": 1,
+  "single_contiguous_floor": true,
+  "door_opening_between_office_and_corridor": true,
+  "all_camera_manifests_bind_same_geometry": true,
+  "human_layout_approved": null,
+  "creative_quality_approved": null
+}

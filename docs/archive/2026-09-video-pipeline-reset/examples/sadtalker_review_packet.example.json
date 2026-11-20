@@ -1,0 +1,17 @@
+{
+  "template": "video_review_packet/v1",
+  "id": "sadtalker_xiaojie_audio_test",
+  "video_path": "D:\\IT\\SadTalker\\results_codex\\2026_07_25_16.26.30.mp4",
+  "output_dir": "D:\\IT\\ai_douyin\\data\\qa\\sadtalker_xiaojie_audio_test_review",
+  "sample_count": 5,
+  "plan_report": "D:\\IT\\ai_douyin\\data\\qa\\video_control_plan.example.report.json",
+  "shot_id": "spoken_line",
+  "control_report": "D:\\IT\\ai_douyin\\data\\qa\\sadtalker_xiaojie_audio_test.control.report.json",
+  "reference_image": "D:\\IT\\AI_vido\\ComfyUI\\input\\liveportrait_xiaojie_3q.png",
+  "mouth_region": [
+    60,
+    135,
+    140,
+    80
+  ]
+}

@@ -18,7 +18,7 @@ estimated_effort: 2d
 - **突发 QPS 被限流**，保护 API 配额不被打爆
 - **相同输入复用结果**，省钱省时
 
-与 V4（presenter 数字人）解耦 —— 本改进不触碰 presenter 路径，只治理 LLM 调用。
+与视频生成解耦：本改进只治理 LLM 调用；旧 Presenter 路径已经退役。
 
 ## 二、现状
 

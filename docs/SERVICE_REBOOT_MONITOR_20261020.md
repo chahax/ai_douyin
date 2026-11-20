@@ -1,0 +1,21 @@
+# 主机重启后服务与原任务监控
+
+用户2026-10-20要求核实修复和主机重启后的启动/任务运行，并持续监控。已建立当前会话10分钟heartbeat automation-2，仅有新异常/恢复/需要人工时通知，不派媒体、模型、发布、评论或重派未知任务。主机或Codex关闭时不能实时检查，下次可运行时核验。
+
+实际本机启动09:15:36，用户登录启动任务AI_Douyin_Streamlit于09:31运行；网页实际PID3508创建09:31:05，health200、调度组件心跳新鲜。此为登录后启动，不是无人登录的系统服务。任务仍未恢复：browser owner26920/gen31心跳停在前一天23:32，排队manual046和maintenance0c749未接续；普通日计数仍旧日68，不冒称任务正常。
+
+修复方案仅在明确上一主机启动周期的owner（backend身份、心跳与更新时间均早于当前启动至少5秒）且运行/暂停/人工/真实未知任务为空时审计交还。历史已结算unknown只按原resolution的完整快照匹配豁免，其余unknown保留。只改owner为released并保存原行、当前boot/进程来源和审计；原任务ID、payload、提交锁、账户暂停、额度及账本不改。当前启动周期内失联或只心跳超时绝不自动接管，不能把断线当作上次重启。新owner仍走正常准入和原账号身份核验。
+
+独立只读采样工具应比较本机boot、PID/ctime/cmdline、HTTP、组件新鲜度、owner代数、任务ID/更新时间及原停止原因。启动宽限5分钟，组件宽限180秒；已结清历史失败不重复告警，未知须保存原ID。每轮保存STATE和带时间戳快照，正常无变化静默。当前修复/实测证据在data/service_startup_monitor。
+
+
+实际原Windows任务重启后PID7996/gen32已审计交还上一boot owner并接续原维护0c749；已同步3条作品和新片1条评论，其他评论读取在途，不能终止或重派。本次16项最终测试通过（含原请求不可变和同native完整proof拒绝反例）。又定位到历史审计读取开销，已结清任务可由同一原publish结果和原native SHA/原unknown快照验证得到完全相同resolution，实测0.219秒；新快速读取修订暂未加载在7996内，待本次原维护安全终态再部署。完整4GB审计库与旧记录不改、不清空。
+
+
+## 最终实平台与Windows任务验收已完成
+
+最终16项真实SQLite/实际pump定向测试通过32.50s；增加SQLite authorizer断言正常读路径不会选取retirement_evidence，原完整审计读取仍保留；已结清的快速路径要求原请求全部不可变字段、原unknown快照、同一原native文件SHA及完整六项proof相符，缺证据不放行。实际冻结收据验证0.219秒，旧记录与锁未改。主助手使用既有精确headless项目家族核验，在原维护成功后关闭原7996进程、等原子进程自然退出、审计交还32代idle owner；未停止在途任务。
+
+最终通过原Windows自启任务启动PID5632，health200，全部六份源码SHA与启动前mtime符合；7个组件均有5632启动之后的新鲜healthy/running心跳。原0c749任务succeeded，原refresh a201 completed，部署hold settled，原refresh lease清空并安排下次；历史queued manual046因旧事件已不可处理明确failed，未重开人工窗口，不能计作新故障。账号active/revision44，正常业务已按新UTC日自然登记1次，普通20上限未变；idle owner已释放，原发布仍成功。没有新增媒体/文本模型/发布/评论或额外任务，旧原ID完整保留。
+
+每10分钟当前会话heartbeat automation-2已启用，优先运行scripts/check_service_startup.py，保存LATEST及时间戳采样；正常无变化保持安静，只通知新故障、卡住、平台验证或恢复。Codex/主机关闭时无法实时通知，下次可运行时继续核验。实际09:15主机重启与09:31用户登录自启已被观察，部署使用原Windows任务正常启动验收，没有重启主机；当前机制是用户登录后自启，未改成系统启动前的无人登录服务。完整实际证据在data/service_startup_monitor。

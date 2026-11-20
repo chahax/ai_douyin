@@ -1,0 +1,16 @@
+{
+  "schema": "narrative_quality_fixture_freeze/v1",
+  "frozen_at": "2026-10-18",
+  "before_live_quality_revision": true,
+  "semantic_acceptance": "not_run",
+  "holdout_sources": [
+    "holdout_family_source.txt",
+    "holdout_office_source.txt"
+  ],
+  "files_sha256": {
+    "cases.json": "eaecf533885af1268c1d1f379a098e667de6d298cde5ec9c7fb738eaa0881943",
+    "holdout_family_source.txt": "696c9a94e383578c157566a960b809d9856a532c1d8088ccc645d2803269279e",
+    "holdout_office_source.txt": "09a4c49628d4ae4e9ed32450eb9d42eb2f942bfdd6b485655ff9054982c1ca47",
+    "README.md": "34c49d57c823eb538e807cc5798ce85a71f63db00df965d289cdf51a5a0fce9e"
+  }
+}

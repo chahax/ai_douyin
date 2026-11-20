@@ -1,0 +1,164 @@
+{
+  "schema": "comfyui_workflow_type_benchmark/v1",
+  "created_at": "2026-08-24T00:00:00+08:00",
+  "policy": {
+    "rank_within_group_only": true,
+    "minimum_seeds": 2,
+    "smoke_passed_is_not_production_ready": true,
+    "retain_raw_output": true
+  },
+  "groups": [
+    {
+      "id": "B01_generation",
+      "input_contract": ["prompt", "approved_first_frame", "optional_last_frame"],
+      "candidates": [
+        {
+          "id": "wan22_5b_i2v",
+          "type": "i2v",
+          "local_status": "static_ready"
+        },
+        {
+          "id": "ltx23_i2v",
+          "type": "i2v",
+          "local_status": "static_ready"
+        },
+        {
+          "id": "wan21_flf2v",
+          "type": "first_last_frame_to_video",
+          "local_status": "catalogued"
+        }
+      ],
+      "quality_metrics": [
+        "watchability",
+        "semantic_adherence",
+        "composition",
+        "motion_naturalness",
+        "identity_consistency"
+      ]
+    },
+    {
+      "id": "B02_motion_control",
+      "input_contract": ["driver_video", "approved_character_reference"],
+      "candidates": [
+        {
+          "id": "wan22_animate_move",
+          "type": "motion_transfer",
+          "local_status": "static_ready"
+        },
+        {
+          "id": "wan_scail",
+          "type": "pose_control",
+          "local_status": "catalogued"
+        },
+        {
+          "id": "zl_motion_transfer_16g",
+          "type": "multi_person_motion_transfer",
+          "local_status": "catalogued"
+        }
+      ],
+      "quality_metrics": [
+        "motion_following",
+        "body_mechanics",
+        "hand_and_foot_integrity",
+        "identity_consistency",
+        "background_preservation"
+      ]
+    },
+    {
+      "id": "B04_identity_edit",
+      "input_contract": ["source_video", "reference_identity", "optional_mask"],
+      "candidates": [
+        {
+          "id": "ltx23_ingredients",
+          "type": "multi_reference_conditioning",
+          "local_status": "static_ready_requires_adaptation"
+        },
+        {
+          "id": "mocha_character_replace",
+          "type": "character_replacement",
+          "local_status": "catalogued"
+        },
+        {
+          "id": "wan_mix_kj_mask_pose",
+          "type": "masked_character_replacement",
+          "local_status": "catalogued"
+        }
+      ],
+      "quality_metrics": [
+        "identity_consistency",
+        "source_motion_preservation",
+        "background_preservation",
+        "mask_edge_stability"
+      ]
+    },
+    {
+      "id": "B05_audio",
+      "input_contract": ["portrait_or_video", "wav", "speaker_map"],
+      "candidates": [
+        {
+          "id": "infinitetalk",
+          "type": "audio_driven_video",
+          "local_status": "catalogued"
+        },
+        {
+          "id": "ltx23_lipdub",
+          "type": "video_lipdub",
+          "local_status": "catalogued"
+        }
+      ],
+      "quality_metrics": [
+        "lip_sync",
+        "speaker_separation",
+        "expression_naturalness",
+        "audio_video_duration_match"
+      ]
+    },
+    {
+      "id": "B06_editing",
+      "input_contract": ["source_video", "mask", "edit_instruction"],
+      "candidates": [
+        {
+          "id": "ltx23_inpaint_outpaint",
+          "type": "masked_video_edit",
+          "local_status": "catalogued"
+        },
+        {
+          "id": "vace_edit",
+          "type": "unified_video_edit",
+          "local_status": "catalogued"
+        }
+      ],
+      "quality_metrics": [
+        "edit_target_accuracy",
+        "unmasked_region_preservation",
+        "temporal_consistency"
+      ]
+    },
+    {
+      "id": "B07_enhancement",
+      "input_contract": ["low_resolution_video"],
+      "candidates": [
+        {
+          "id": "flashvsr",
+          "type": "video_super_resolution",
+          "local_status": "catalogued"
+        }
+      ],
+      "quality_metrics": [
+        "detail_fidelity",
+        "face_preservation",
+        "temporal_sharpness_stability",
+        "artifact_rate"
+      ]
+    }
+  ],
+  "required_artifacts": [
+    "output_raw.mp4",
+    "output_standardized.mp4",
+    "workflow.snapshot.json",
+    "run.manifest.json",
+    "contact_sheet.png",
+    "machine_gate.json",
+    "human_review.json"
+  ]
+}

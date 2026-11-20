@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     APP_VERSION: str = "0.1.0"
     DEBUG: bool = True
     LOG_LEVEL: str = "INFO"
+    AI_DOUYIN_BROWSER_CONTROL: bool = False
 
     # LLM Settings
     LLM_PROVIDER: str = ""
@@ -19,6 +20,19 @@ class Settings(BaseSettings):
     SCRIPT_LLM_MODEL: str = ""
     SCRIPT_LLM_THINKING: str = ""
     SCRIPT_REVIEW_LLM_MODEL: str = ""
+    # Creative-agent role routing. Credentials stay in the ignored local .env.
+    WRITER_AGENT_PROVIDER: str = "minimax"
+    WRITER_AGENT_API_STYLE: str = "openai_chat_completions"
+    WRITER_AGENT_API_KEY: str = ""
+    WRITER_AGENT_BASE_URL: str = "https://api.minimaxi.com/v1"
+    WRITER_AGENT_ENDPOINT: str = "/chat/completions"
+    WRITER_AGENT_MODEL: str = "MiniMax-M3"
+    DIRECTOR_AGENT_PROVIDER: str = "deepseek"
+    DIRECTOR_AGENT_API_STYLE: str = "openai_chat_completions"
+    DIRECTOR_AGENT_API_KEY: str = ""
+    DIRECTOR_AGENT_BASE_URL: str = "https://api.deepseek.com/v1"
+    DIRECTOR_AGENT_ENDPOINT: str = "/chat/completions"
+    DIRECTOR_AGENT_MODEL: str = "deepseek-flash"
     SOURCE_ANALYSIS_LOW_MEMORY: bool = False
     SOURCE_EXPRESSION_SYNTHESIS_PROVIDER: str = "local_qwen"
     SOURCE_EXPRESSION_LLM_MODEL: str = ""
@@ -131,6 +145,18 @@ class Settings(BaseSettings):
         "LLM_API_KEY",
         "LLM_BASE_URL",
         "LLM_MODEL",
+        "WRITER_AGENT_PROVIDER",
+        "WRITER_AGENT_API_STYLE",
+        "WRITER_AGENT_API_KEY",
+        "WRITER_AGENT_BASE_URL",
+        "WRITER_AGENT_ENDPOINT",
+        "WRITER_AGENT_MODEL",
+        "DIRECTOR_AGENT_PROVIDER",
+        "DIRECTOR_AGENT_API_STYLE",
+        "DIRECTOR_AGENT_API_KEY",
+        "DIRECTOR_AGENT_BASE_URL",
+        "DIRECTOR_AGENT_ENDPOINT",
+        "DIRECTOR_AGENT_MODEL",
         "VIDEO_SCRIPT_MODEL",
         "OLLAMA_BASE_URL",
         "OLLAMA_MODEL",

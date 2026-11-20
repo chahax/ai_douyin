@@ -1,0 +1,11 @@
+{
+  "schema": "creative_legal_scope_probe_profile/v1",
+  "writer": {"provider": "minimax", "model": "MiniMax-M3.1-Flash-Preview", "base_url": "https://api.minimax.cn/v1", "parameters": {"temperature": 0.4, "thinking": "adaptive", "reasoning_effort": "medium", "max_completion_tokens": 16000}},
+  "director": {"provider": "deepseek", "model": "deepseek-flash", "base_url": "https://api.deepseek.com/v1", "parameters": {"temperature": 0.4, "thinking": "disabled", "max_completion_tokens": 12000}},
+  "stage_parameters": {"goal_audit": {"max_completion_tokens": 16000}},
+  "sdk_max_retries": 0,
+  "http_follow_redirects": false,
+  "server_schema_guarantee": false,
+  "server_strict_requested": false,
+  "purpose": "At most two explicit scope diagnostics; no writer, new plan, script, media or publication. Local schema validation remains required."
+}

@@ -1,0 +1,15 @@
+# 原生初态修复生产前审查
+
+本轮采用独立opening_setup-v4/workflow-v21/producer-v25。其余模型、profile-v6、strict-client-v3、dispatcher-v9及flat-lineage-v5不变；新初态ordinary SDK实际模拟出站已经原flat5验证，因而未为版本号复制账本模块。原round_23的1719冻结文件不变。
+
+初态改为模型原生orientation={status,text}：specified文本非空，unspecified编译为null且完整text保存在expected_state。模型原文、SHA、holder/owner、container、scene与absent分工不变。614/615原稿及只改版本号的旧值仍拒收。正文和同源全文语义/物理审查实际请求已经接入新初态及其原生目录，不改旧正文合同。
+
+主agent已独立完成72项初态/正文/双审接线回归和25项生产回归，共97项全部通过。新12个代码、配置、测试文件SHA一致；另一位agent只读纯函数复算及失败原稿核验未发现阻断点。这些均为离线证据，不表示模型服务已支持新初态、完整正文已可采用或创作质量通过。
+
+正式prepare随后发现父文件名接线错误：读取不存在的goals/native_01，真实609保存在INHERITED_NATIVE_GOAL。失败发生在ROOT/CLAIM创建之前，0模型调用，已登记授权与预览保留。只修新v25该读取路径，补真实父615、隔离输出、完整证书/预算/runtime且禁止provider的prepare用例；子agent及主agent均独立通过。原97项加这1项新集成验证；首次97项未覆盖真实准备路径的缺口不能隐去。新代码SHA3e90cff1e888772a5854a25300650deb3f5286b41dfcb67680f14778d20b61bb，QA v2及ROOT_ACTUAL_PREPARE_v1.xml保存本次修复。
+
+首请求为MiniMax完整新规划28，SHA fb102aee9202b1e0efaf762edc49408322042f4e9f05bf2cb7679be4be98ab55，逻辑正文92,539字符、actual SDK模拟wire162,850字节。完整609、完整611原报告、R01全文、用户功能要求和法律条件进入实际请求；611重复编译引用表外置，原报告/findings/uncertainties保留，精确2处语义漏审反例绑定原文。旧614/615完整初态只在本地诊断证据，不作故事改写模板。611原accepted决定保留但不作为新规划批准。
+
+累计承接615次/12,732,559 reported tokens/613次用量已知，70/160未知及93,117预留保留。关闭父运行unused2留原记录，新局部2份完整规划来自持续文本授权、累计仅28/29；初态最多2份、正文初稿加2份整稿返修、三审最多6次。未知/截断/缺工具/不完整审查合同停止，SDK运输重试0。无媒体和发布。
+
+用户方向保持“超市老员工，强化情绪交锋”。老员工崔玉兰与有调任压力的经理郑文彬当场有阻力与策略变化，结尾保留她明天的班而争议未解决。未采用609或600旧草稿为新正文；新完整正文生成并同稿复审仍为下一步。

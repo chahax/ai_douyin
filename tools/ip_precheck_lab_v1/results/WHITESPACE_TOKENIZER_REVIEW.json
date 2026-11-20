@@ -1,0 +1,58 @@
+{
+  "schema_version": "ip_whitespace_tokenizer_review_v1",
+  "date": "2026-10-18",
+  "scope": "Observed local tokenizer-only diagnostic, transcribed from successful tool output. No model weights loaded, no NER predictions, no gold edits.",
+  "runtime": {
+    "python": "D:/IT/ai_douyin/tools/ip_precheck_lab_v1/.venv/Scripts/python.exe",
+    "isolated_flag": "-I",
+    "gliner": "0.2.29",
+    "transformers": "4.57.6",
+    "spacy": "3.8.16",
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1",
+    "local_files_only": true,
+    "network_guard": "Python socket.connect, socket.create_connection and socket.getaddrinfo denied before tokenizer imports. Not an OS sandbox."
+  },
+  "tokenizer_snapshot": "D:/IT/ai_douyin/tools/ip_precheck_lab_v1/cache/huggingface/hub/models--microsoft--mdeberta-v3-base/snapshots/a0484667b22365f84929a935b5e50a51f71f159d",
+  "text": "父亲：\n周明拿起 Nike 外套。",
+  "token_tuple_fields": ["text", "start", "end"],
+  "comparisons": [
+    {
+      "mode": "spacy_raw",
+      "tokens": [["父",0,1],["亲",1,2],["：",2,3],["\n",3,4],["周",4,5],["明",5,6],["拿",6,7],["起",7,8],["N",9,10],["i",10,11],["k",11,12],["e",12,13],["外",14,15],["套",15,16],["。",16,17]],
+      "word_ids": [null,0,0,1,1,2,2,4,4,5,5,6,6,7,7,8,9,9,10,11,11,12,12,13,13,14,14,null],
+      "words_mask": [0,1,0,2,0,3,0,4,0,5,0,6,0,7,0,8,9,0,10,11,0,12,0,13,0,14,0,0],
+      "missing_word_ids": [3],
+      "selected_pairs_fields": ["transformer_word_id", "embedding_word_index"],
+      "selected_pairs": [[0,0],[1,1],[2,2],[4,3],[5,4],[6,5],[7,6],[8,7],[9,8],[10,9],[11,10],[12,11],[13,12],[14,13]],
+      "has_position_mismatch": true,
+      "example": "Transformer word 4 (周 at chars 4:5) is written to embedding word index 3; original splitter index 3 maps to newline chars 3:4."
+    },
+    {
+      "mode": "spacy_non_whitespace",
+      "filter": "Retain tuple only if not token_text.isspace(); do not normalize text or change token start/end offsets.",
+      "tokens": [["父",0,1],["亲",1,2],["：",2,3],["周",4,5],["明",5,6],["拿",6,7],["起",7,8],["N",9,10],["i",10,11],["k",11,12],["e",12,13],["外",14,15],["套",15,16],["。",16,17]],
+      "word_ids": [null,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,8,8,9,10,10,11,11,12,12,13,13,null],
+      "words_mask": [0,1,0,2,0,3,0,4,0,5,0,6,0,7,0,8,9,0,10,11,0,12,0,13,0,14,0,0],
+      "missing_word_ids": [],
+      "selected_pairs_fields": ["transformer_word_id", "embedding_word_index"],
+      "selected_pairs": [[0,0],[1,1],[2,2],[3,3],[4,4],[5,5],[6,6],[7,7],[8,8],[9,9],[10,10],[11,11],[12,12],[13,13]],
+      "has_position_mismatch": false
+    }
+  ],
+  "source_root": "D:/IT/ai_douyin/tools/ip_precheck_lab_v1/.venv/Lib/site-packages/gliner",
+  "source_locations": [
+    {"file":"data_processing/tokenizer.py","start":86,"end":99,"sha256":"2dd8c7762ae6cd8fcd8dbf062e16f5441d44814373611d7b6be3a87ed08c5d9a","mechanism":"SpaCyTokenSplitter emits every token, including standalone whitespace."},
+    {"file":"data_processing/utils.py","start":159,"end":184,"sha256":"5e2c9025cb2c14df05736b80fd7cc677e0edd4373f630eb69bb61ab40db00ba8","mechanism":"prepare_word_mask counts observed distinct word IDs with seen_words instead of preserving numeric gaps."},
+    {"file":"modeling/utils.py","start":16,"end":20,"sha256":"ad99baafbca0c401b48e48a6983f793d377d8249469db8b9be689613f4e1e652","mechanism":"extract_first_word_embeddings writes to target_word_indices=words_mask-1."},
+    {"file":"model.py","start":2574,"end":2578,"sha256":"cc1c03ed1540de4c6b836f544921e0a2de33cfae6ad4d8aeb35dc08845d867fe","mechanism":"prepare_inputs retains start/end arrays for all splitter tokens."},
+    {"file":"model.py","start":2678,"end":2688,"sha256":"cc1c03ed1540de4c6b836f544921e0a2de33cfae6ad4d8aeb35dc08845d867fe","mechanism":"Predicted word span indexes map through the original splitter start/end arrays."}
+  ],
+  "conclusion": "A standalone newline is emitted at splitter index 3 but receives no transformer subtoken. Observed-word numbering then shifts left while original character maps retain the newline. Filtering pure-whitespace splitter tokens and retaining original non-whitespace offsets removes this demonstrated mismatch.",
+  "limitations": [
+    "Tokenizer/aggregation mechanism only; no claim of improved NER accuracy until original 18 gold cases and actual prompt are rerun.",
+    "Other zero-subtoken Unicode tokens and normalization behaviours are not exhaustively covered.",
+    "Installed spacy.blank(zh) emits individual Latin letters, as shown by Nike tokenization.",
+    "Tokenizer conversion warned about missing fast-tokenizer byte fallback and a Mistral regex warning; these warnings are not established causes of the demonstrated newline index compression."
+  ]
+}

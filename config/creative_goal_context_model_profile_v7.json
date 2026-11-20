@@ -1,0 +1,58 @@
+{
+  "schema": "creative_goal_context_model_profile/v7",
+  "writer": {
+    "provider": "minimax",
+    "model": "MiniMax-M3.1-Flash-Preview",
+    "base_url": "https://api.minimax.cn/v1",
+    "parameters": {
+      "temperature": 0.4,
+      "thinking": "adaptive",
+      "reasoning_effort": "medium",
+      "max_completion_tokens": 16000
+    }
+  },
+  "director": {
+    "provider": "deepseek",
+    "model": "deepseek-flash",
+    "base_url": "https://api.deepseek.com/v1",
+    "parameters": {
+      "temperature": 0.4,
+      "thinking": "disabled",
+      "max_completion_tokens": 12000
+    }
+  },
+  "stage_parameters": {
+    "goal_audit": {
+      "max_completion_tokens": 16000
+    },
+    "full_review": {
+      "max_completion_tokens": 32000
+    }
+  },
+  "scope": "independent native source-v5 sparse audit with fixed legal source text; non-source parameters unchanged",
+  "output_allowance_basis": "Source-v5 sparse observations retain exact source catalog partition. Source24000 is an output allowance, not a server completion guarantee; commitment/drama16000, full32000 and MiniMax16000 unchanged.",
+  "official_review_reference": "https://api-docs.deepseek.com/api/create-chat-completion/",
+  "review_output_allowance_official_range_checked": true,
+  "new_contract_real_endpoint_accepted": false,
+  "server_schema_guarantee": false,
+  "sdk_max_retries": 0,
+  "http_follow_redirects": false,
+  "media_authorized": false,
+  "profile_version": "creative_goal_context_model_profile/v7",
+  "purpose": "New whole native plan29 selects legal source text unchanged; sparse detailed legal/uncertain observations and exact negative partition. Old617 stays rejected evidence, no local conversion/report recovery.",
+  "source_strict": {
+    "enabled": true,
+    "role": "director",
+    "stage": "goal_audit",
+    "schema_version": "creative_goal_legal_usage_source_audit/v5",
+    "base_url": "https://api.deepseek.com/beta",
+    "function_strict": true,
+    "server_schema_guarantee": "official strict request support; original source4 endpoint accepted without semantic or nested quote guarantee; source5 live acceptance untested",
+    "sdk_max_retries": 0,
+    "http_follow_redirects": false,
+    "other_deepseek_stages_strict": false,
+    "max_wire_utf8_bytes": 600000,
+    "wire_budget_basis": "Explicit independent bound for actual compiled strict wire, not inherited logical payload budget; check actual HTTP bytes before send",
+    "max_completion_tokens": 24000
+  }
+}

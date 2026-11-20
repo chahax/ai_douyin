@@ -1,0 +1,74 @@
+{
+  "mcp": {
+    "version": "2.3.0",
+    "requires_python": ">=3.10",
+    "dependencies": [
+      "anyio>=4.10; python_version >= \"3.14\"",
+      "anyio>=4.9; python_version < \"3.14\"",
+      "httpx2>=2.10.0",
+      "jsonschema>=4.20.0",
+      "mcp-types==2.3.0",
+      "opentelemetry-api>=1.28.0",
+      "pydantic>=2.12.0",
+      "pyjwt[crypto]>=2.10.1",
+      "python-multipart>=0.0.9",
+      "pywin32>=311; sys_platform == \"win32\"",
+      "sse-starlette>=3.0.0",
+      "starlette>=0.27; python_version < \"3.14\"",
+      "starlette>=0.48.0; python_version >= \"3.14\"",
+      "typing-extensions>=4.13.0",
+      "typing-inspection>=0.4.1",
+      "uvicorn>=0.31.1; sys_platform != \"emscripten\"",
+      "python-dotenv>=1.0.0; extra == \"cli\"",
+      "typer>=0.16.0; extra == \"cli\"",
+      "rich>=13.9.4; extra == \"rich\""
+    ]
+  },
+  "comfy-mcp": {
+    "version": "0.10.0",
+    "requires_python": ">=3.10",
+    "dependencies": [
+      "mcp<3,>=2",
+      "pydantic>=2",
+      "anyio>=4.9",
+      "pytest>=8; extra == \"dev\"",
+      "ruff<0.17,>=0.16; extra == \"dev\""
+    ]
+  },
+  "comfy-cli": {
+    "version": "1.22.0",
+    "requires_python": ">=3.10",
+    "dependencies": [
+      "certifi>=2024.7.4",
+      "charset-normalizer>=3",
+      "cookiecutter",
+      "gitpython>=3.1.50",
+      "httpx",
+      "mixpanel<5",
+      "packaging",
+      "pathspec",
+      "posthog<8,>=6",
+      "psutil>=6",
+      "pyyaml",
+      "questionary",
+      "requests",
+      "rich",
+      "ruff",
+      "semver~=3.0.2",
+      "tomlkit<0.16,>=0.13",
+      "typer>=0.12.5",
+      "typing-extensions>=4.7",
+      "uv>=0.11.15",
+      "websocket-client",
+      "imageio-ffmpeg",
+      "blake3>=1.0.9",
+      "jsonschema; extra == \"dev\"",
+      "pre-commit; extra == \"dev\"",
+      "pytest; extra == \"dev\"",
+      "pytest-cov; extra == \"dev\"",
+      "ruff==0.15.15; extra == \"dev\"",
+      "typer>=0.24; extra == \"dev\"",
+      "term-image<0.8,>=0.7; extra == \"preview\""
+    ]
+  }
+}

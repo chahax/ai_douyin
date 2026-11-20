@@ -1,0 +1,144 @@
+# 小说号首页观看与单次恢复
+
+用户要求小说调研后续再说、直接刷首页，并授权“可以直接关闭重启吧”。
+
+小说号 novel_account_02 已保存原身份绑定。已启用推荐流观看，间隔24小时，最多20条、单条90秒、整轮20分钟；相关度阈值0，不以小说关键词过滤，不点赞、不评论。
+
+核查时小说号浏览器已退出，活跃浏览器属于法律号，未终止它。按本次授权保留完整快照，将原创作者中心未知任务 ca34df02c62048798c664a43b6d87037 记为人工取消（原结果仍未知），取消未派发调研 e372aaf1eb214d9ead7a23f060294baa 及对应计划 dae915a48c6c47e9b95b9089ffa88447；本次调研下次到期后移24小时，未实现长期按账号关闭调研。
+
+原后台PID25096及owner generation2继续工作，浏览器worker实际重新启动，未重启整个服务。21:51自动观看计划4007ee87136c4164b7bf2683c0c2fc1f、浏览器命令23f3c04120d84a56af42cf5e7c85e3f7开始执行。原身份核验正常，随后首页检测到380×384可见验证iframe，连续5次观察内容未确认，0次明确确认；以verification_ui_unconfirmed暂停，实际播放0条/0秒，不能称已成功刷视频或确认验证码内容。
+
+21:53账号paused/revision1，新异常36；自动原账号处理窗口0454a41bba72497b8d73b7c0860b1dcf正在打开。保持此原任务，不循环重开或重试。用户需检查页面；完成后沿原身份核验流程恢复。旧异常34与未知事实保留。
+
+证据：data/novel_feed_activation/recovery_20261023/AUTHORIZATION.json、BEFORE.json、RECEIPT.json、VERIFY.json；实际维护记录data/account_maintenance/novel_account_02/maintenance_fdbfdebc651a4bd4aaefa43d8ae321e1.json。
+
+一次性脚本scripts/recover_novel_feed_20261023.py已执行，禁止重跑。它对确切ID、状态和无账号浏览器进程检查后处分原任务，未修改通用程序、执行发布、模型调用或外部互动。
+
+## 推荐流异常处理目标修正
+
+用户指出原人工窗口显示self/like页，要求推荐首页。核查0454原回执target.source=fallback，个人主页当前无验证控件；实际失败维护已走recommend_feed，错误发生在后续人工窗口目标解析遗漏推荐流分支。
+
+manual_handling.py新增仅原账号、当前暂停、匹配完整回执、login_healthy=true、failure_stage=playback、playback_source=recommend_feed条件下选择推荐首页。观看与处理共用FEED_URL，现为用户指定https://www.douyin.com/?recommend=1。身份异常仍保持原处理门。
+
+130项相关测试通过（target_tests.xml）；独立进程用当前真实暂停和原维护回执解析出recommend_feed正确URL。源码已修改，但未重启当前后台、未验证它已加载新模块，0454仍为waiting_human旧页面，没有谎称已改向或重新播放。可在同一小说号窗口地址栏转到推荐首页检查；不需重新绑定。未重新派发观看或人工窗口。
+
+## 隐藏静音实测（后续已部署）
+
+用户要求“测试下你测试，隐藏浏览器别前端显示然后别放声音”。正常CloseMainWindow关闭确切小说浏览器PID33452，原0454窗口自然结束为succeeded；未把关闭当作验证完成。添加account_browser_preferences及历史表，小说号auto_visible_windows=false，自动扫描和执行前同时检查；仍保留异常与暂停，管理员显式窗口不受此偏好影响，其他账号不变。
+
+初始133项测试通过。无后台子进程、无业务租约、两个账号暂停时禁用登录计划，停止旧PID25096。20秒等待超时事实保留，随后独立确认进程不存在，再完成一次部署后续；没有重跑一次性脚本。启用原计划并启动PID31580。法律号旧10b2 waiting_human记录不修改；它没有实际浏览器进程，仍未认定验证解决。
+
+原身份cfc6b14e36bb46faaf28f0c4c26d89f3核验成功，小说号revision3 active。Chrome PID34296实际启动参数含--headless与--mute-audio（PROGRESS.json），视频播放代码另设video.muted=true。显式将仅一次短测设为到期，计划c7b32d11f11043f997da27220f872412（1条15秒、总上限2分钟）由正常调度执行。
+
+实际维护d9dad0c8082b4110b1b9f08cfca3e89b仍在推荐流遇到verification_ui_unconfirmed，实际0条0秒，没有点赞评论。账号paused/revision4，新异常37；未新增人工窗口。测试不是成功观看，不自动重试或把验证检测忽略。已还原先前日常20条/90秒/20分钟/24小时间隔配置，隐藏不弹窗偏好保持。新后台健康页200，已部署源码SHA一致，法律号旧窗口记录保持。证据位于data/novel_feed_activation/hidden_test_20261023。
+
+扩展回归初次52通过、2失败：一项旧桥接测试未隔离新增偏好数据库，已修正测试依赖；一项假窗口线程4秒等待超时。原失败回执保持，最终回归另存hidden_integration_final.xml。没有为测试修改或绕过生产验证门。
+
+最终扩展回归58项全部通过；本轮共188个不同用例通过（133+58减去3个重复用例）。真实平台结果仍按上述blocked/0播放记录，不以离线测试替代。
+
+## 逐步只读诊断与验证码分类修复
+
+用户要求“监控下不行你一步步调试”。增加固定首页只读诊断inspect_recommendation_surface：仍走原账号owner、身份、业务租约和额度；仅此空参数固定方法可在账号暂停时检查，不恢复账号、不点击/播放、不接受任意URL/脚本/路径。必须headless；采样0/3/10秒的页面与验证frame，保存验证区域截图。禁止自动可见窗口偏好保持。
+
+54项相关测试通过，含本地真实隐藏Chrome；初次测试fixture漏UTF-8头导致中文乱码，已修测试并保留失败回执。无活动业务/子进程时部署新后台PID31940，原法律号窗口记录未处置，账号暂停保持。一次性脚本deploy_feed_diagnostic_20261023.py已执行，不重跑。
+
+原诊断078a2955d5b446768dfd054a1e8bb569成功，实际URL为https://www.douyin.com/?recommend=1。原身份健康，初始0个视频/0个feed卡片；随后真实验证码iframe出现，文字为“请完成下列验证后继续”“按住左边按钮拖动完成上方拼图”，图片已加载，实际滑块class=captcha-slider-btn。局部截图确认是滑块验证码，不是空白框或页面跳错。没有移动滑块、点击验证码或绕过验证。
+
+缺陷为CONTENT_PROBE_FUNCTION控件选择器遗漏.captcha-slider-btn，导致可操作验证码错误分类为unconfirmed。仅新增该实际观测选择器，保留可见/祖先遮挡/命中/图片就绪要求。37项相关回归通过，包含隐藏按钮、pointer-events:none、opacity:0和无图片保持阻塞不误判可操作。
+
+原诊断worker空闲自然退出后，原后台新开隐藏worker只读复核3fed21d855c44ca7b0386e5e7db9e3a5；后两次采样均challenge_ready，feed/videos仍0。修复已在新生产worker实际生效。旧播放失败记录、异常37和暂停revision4不回写；只读诊断没有自动恢复账号或创建新的观看运行。原错误码历史仍verification_ui_unconfirmed，新证据已明确要求人工验证码。要继续实际观看须用户完成平台验证；按当前隐藏要求不主动弹窗。
+
+证据：data/feed_surface_diagnostics/078a2955d5b446768dfd054a1e8bb569、data/feed_surface_diagnostics/3fed21d855c44ca7b0386e5e7db9e3a5，以及data/novel_feed_activation/diagnostic_deploy_20261023/FINAL_RESULT.json。不重派这两次已完成诊断，不把它们计为已观看。
+
+## 确认验证码后自动弹窗（后续授权已部署）
+
+用户明确“有滑块可以弹的这个可以加入到自动化中吗”。将小说号偏好从禁止自动开窗改为confirmed_only（值2），仅当前同账号open/human_required事件允许自动窗口；未确认验证框仍暂停但不弹窗。自动扫描与实际执行前均复核，原按异常ID去重保持，关闭、失败或未知不会反复弹同一事件。普通观看继续隐藏静音，人工窗口通过BrowserSessionConfig.mute_audio和Chrome --mute-audio保持静音。其他账号偏好不变。
+
+162项相关回归通过，后增加2项扫描/去重场景并完成7项最终偏好测试，总计164个不同用例。停机前确认账号均暂停、业务无租约、旧进程无子进程、新任务无运行；禁用登录计划，停止31940，保存源码SHA和原控制状态。保留异常37原unconfirmed及旧0观看结果，基于3fed后续明确验证码证据和本次用户请求，仅新排98cdf4505c494458928fb0b4624c1dc9原账号窗口。未重派观看、恢复账号或修改历史失败。
+
+登录计划已重新启用并启动PID34044（创建时间1792768466.0236084），health200、源码SHA一致。真实窗口任务waiting_human，目标recommend_feed；Chrome32944可见且含--mute-audio。开窗当时检测current_no_challenge，不能把先前截图当作当前仍显示验证码，也不能据此自动解除暂停。小说号仍paused revision4，需用户核对页面、完成所需验证后关闭窗口并通过“处理完成，继续运行”请求原身份核验。法律号10b2旧waiting_human记录保持。
+
+本次证据data/novel_feed_activation/confirmed_popup_20261023/BEFORE.json、DEPLOYMENT.json、VERIFY.json；一次性scripts/deploy_confirmed_popup_20261023.py已执行，禁止重跑。验证码仅检测与交给用户处理，不自动拖动、破解或绕过。
+
+## 无验证码且推荐内容就绪后自动接续
+
+用户明确“没验证码就继续执行刷视频程序啊”。新增clear_feed_resume，由原账号owner在线程内每15秒只读检查原推荐流处理页。需confirmed_only偏好、原绑定未变、已知验证或feed_not_ready暂停、真实首页feed卡片及readyState至少2的视频，并连续两次无验证遮挡。保存会话、关闭该窗口、以原代owner结清窗口，再请求已有原身份核验；只把playback作为失败计划续行目标。新修订号检查防止旧页面解除后续暂停。不直接激活账号，不恢复主动暂停或未知任务。自动尝试每账号24小时最多一次、先持久占位，异常不重复派发；窗口保持打开才会观察，用户直接关闭仍可走原处理完成入口。
+
+66项测试最终通过。初次两个旧fixture缺package导致相对导入失败，另新用例发现公开snapshot不暴露revision；已修测试包设置与生产只读控制查询，旧失败保存。后续真实执行中发现推荐页验证码延迟出现，补15秒有界等待与最终验证码分类，feed_not_ready只在原推荐流回执下定位首页。147项包含本地Chrome的相关测试及2项目标测试通过，本次共201个不同用例。
+
+按本次用户直接续刷授权，正常关闭98cdf窗口，原任务自然succeeded。确认业务暂停、无子进程和未知任务后停止34044，只释放该已知空闲小说owner gen6。一次性部署脚本在停机后因src路径导入错误退出；已保留事实，从项目根执行剩余步骤，没有重跑停止或创建授权。恢复请求2e7fe仅playback，部署36584；原身份051082成功，账号revision6 active，真实隐藏/静音Chrome33864执行观看ab69（计划bb4b），结果feed_not_ready，0条/0秒，保留原失败并revision7暂停。
+
+只读e04ef诊断首样本0视频/0feed且无验证码，随后两次challenge_ready，证实滑块延迟加载。没有尝试拖动或绕过。旧worker自然空闲退出后，部署延迟检测补丁PID31656；按已确认验证码弹窗授权新开5252d3ba90ad4c6890b4527ec96be439原推荐首页，当前waiting_human、静音。开窗首次current_no_challenge只是早期观察，尚无自动恢复或观看成功回执，不能把后台健康200称为刷视频成功。
+
+证据data/novel_feed_activation/clear_resume_20261023：BEFORE、OWNER_RELEASE、RECOVERY_REQUEST、LATE_DEPLOYMENT、LATE_WINDOW、FINAL_CHECK。已启用原Windows登录任务，源码SHA一致；法律号原等待记录未处置。当前保留验证窗口，页面若连续就绪会自动交还并核验接续；仍有验证码需用户人工处理。
+
+## 2026-10-24重启后单次实测
+
+用户明确允许处置旧5252窗口并实测。核查主机已于当天08:23重启，原31656进程不存在、小说profile无浏览器，服务12816正常，但旧owner gen8与waiting_human窗口仍保留。26项离线复验通过。按本次授权，在原账号无运行租约的事务中保存完整原命令、owner、控制和策略快照，精确取消5252并释放gen8；未知结果仍original_outcome_known=false，未把窗口关闭当作验证码成功。法律号10b2保持。
+
+配置一次1条/15秒/总2分钟、隐藏静音、不点赞评论的短测，由正常恢复与调度执行。原身份7e2114c0ab7d432db5d48cbddbf29166成功；既有到期同步cbc7完成0作品/0评论，不是发布也不是观看。短测计划16840b11ad19471a99233045313352ca、浏览器请求a2c1a5bf011e4ea297a5a48971ed3611、维护1b9a5cbb98f24de6a01f8ba8ac7f0a3e，在首页连续两次检测到challenge_ready，实际0条/0秒，以human_required暂停revision10。实际隐藏Chrome3136带--mute-audio。
+
+系统按已授权confirmed_only自动弹出原推荐页窗口88b45246781a4e4aac7c00cc83dfaffc，静音、waiting_human；首样本current_no_challenge不能当作内容已加载或验证解决。没有重复短测、拖验证码或清除暂停。原日常20条/90秒/20分钟配置已还原。证据data/novel_feed_activation/recovery_test_20261024的AUTHORIZATION、BEFORE、DISPOSITION、RECOVERY_REQUEST、PROGRESS、RESULT；一次性scripts/resume_novel_test_20261024.py已执行禁止重跑。
+
+## 2026-10-24 推荐入口重定向与实时观察修复
+
+用户再次指出打开的网页没有刷视频。原窗口首样本不能解释当前状态，新增 owner 内每15秒真实页面观察：路径、feed数量、活动视频播放状态及视频布局，持久保存脱敏摘要供前端读取；45秒过期显示观测失效。无验证码但没有已加载视频明确显示推荐内容未就绪，不再要求用户找不存在的验证码。
+
+正常关闭88b452、9b5e两个处理窗口，均自然结为succeeded，未取消未知任务。两次空闲检查后部署，当前PID16840。真实9b5e诊断证实站点把指定首页重定向到/jingxuan：0个feed，唯一video高0、readyState0、暂停。增加仅在该路径、无验证遮挡时点击当前DOM唯一可见、同站HTTPS的“推荐”链接；点击前再次核对DOM，单窗口只尝试一次，不循环重定向或操作验证码。推荐流正常任务共用入口修复。
+
+21项诊断、66项窗口/前端相关回归及33项入口/播放/自动接续测试通过（有重复用例，不相加称不同用例）；包括本地真实Chrome导航测试。初次真实Chrome测试因空选择器不兼容失败，改为html后通过，失败XML保留。
+
+实际窗口6d6ebc7993ab4ef3bac6731bf1e6befc点击页面推荐入口后进入/，8个feed卡片、活动视频7692748101064346914，readyState4且paused=false。连续两次就绪采样后，按既有自动接续规则结清窗口、保存会话并请求仅playback恢复；978c90ef263b458bbb477d067f7eb24b原身份核验成功，账号active revision12，原失败观看计划安排到期。此时尚不能把处理页自动播放视为后台观看完成，后续以实际任务回执补充。
+
+证据data/novel_feed_activation/live_diagnostic_20261024及feed_entry_20261024。一次性deploy_live_feed_diagnostic_20261024.py、deploy_feed_entry_20261024.py已执行不可重跑；旧失败、历史unknown和法律号10b2保持。
+
+
+### 原窗口最小化复用
+
+前一轮自动接续后，隐藏会话真实观看3652/d7d1再次challenge_ready，0条0秒，revision13暂停。这证明处理页可播放不代表新建隐藏环境也可播放。用户明确选择“接受最小化静音，优先正常观看”。增加仅此账号持久偏好：clear页面连续两次就绪后保存原会话，以Chrome原生窗口状态最小化，保留原推荐页；恢复仍走原身份核验，只有同owner的playback任务能一次借用原标签页，首页路径一致时不重新导航。身份核验和其他业务不取走该页；普通借用任务不能调用窗口最小化命令。失败保守停止，不自动操作验证码。
+
+57项组合回归及9项目标复验通过（后者7项重叠，共59个不同用例），含本地真实Chrome最小化及保留标签页测试。自动24小时限次保持，按用户本次新明确要求单列一个绑定原账号/当前revision/新窗口ID的接续许可，不清旧占位、不扩为循环。正常关闭0391旧窗口，自然succeeded；空闲部署PID37540，新窗口998cc4ec5d424db9bbddf993ee4ce4cb。证据retained_feed_20261024；一次性deploy_retained_feed_20261024.py已执行，不重跑。实际接续结果待后续回执补充。
+
+
+### 本次最终停点：新开窗跳转超时
+
+37540已加载原会话复用补丁，health200。新窗口998cc4ec5d424db9bbddf993ee4ce4cb启动后导航抛BrowserNavigationTimeout，未进入窗口轮询或最小化接续，原命令outcome_unknown、failure_phase=handler、handler_started=true。可见Chrome38768静音仍在；不能称已观看、已最小化或已恢复。账号仍paused revision13，原单次接续许可consumed_at为空。保留当前原ID/owner/锁，没有重派。证据retained_feed_20261024/CURRENT_BLOCKER.json。
+
+已补窄范围导航超时修复：只有recommend_feed人工开窗、同一个page的BrowserNavigationTimeout可保留原页进入waiting_human/verification_unknown；不把加载失败解释为无验证码，不对其他业务/错误放宽未知门，不二次goto。后台现进程尚未加载此后续源码。新增测试初次仅前端观察fixture未隔离导致1失败，其他22项通过；隔离观察读取后复验另存feed_navigation_probe_final.xml。新未决998cc需明确处置授权后才可部署再实测。
+
+后补窗口导航测试最终13项全部通过；前次另10项真实Chrome导航回归通过，总23个不同用例。源码修复未部署，生产结论仍是未知窗口阻塞、0条后台观看。
+
+
+## 2026-10-24 用户授权处置998cc后的继续实测
+
+用户明确“允许处置998cc并继续部署实测”。已正常关闭原Chrome38768，确认profile退出，精确停止37540及其已无浏览器的worker；保存原命令/owner/授权/退出证据后审计取消998cc，original_outcome_known仍false，法律号10b2不动。部署PID34848，仅重开一次2e418e64d60b4637b15b08a85b1d5d0f，未重跑旧脚本。该窗口实际进入推荐流，连续两次8feed就绪后Chrome原生窗口最小化确认成功，原会话保持；23802726身份核验成功，revision15 active。随后观看9cbee9/d444以feed_not_ready已知结束，仍0观看。原失败不改写。
+
+进一步检查发现维护任务还会再次核验身份，旧借用构造器过早取走原推荐tab，导致身份探测覆盖该页。改为仅真正请求固定推荐首页时才交接原tab，身份页先独立运行并关闭；新增“身份→推荐”序列测试。同时持久偏好现在适用于之后的后台新会话，显式headed+mute_audio并原生最小化，非偏好账号保持原模式。推荐入口跟随放进15秒就绪窗口，覆盖网站延迟重定向。72个不同相关用例通过（69项组合＋24项目标复验，21重叠），包含本地真实Chrome最小化。一次初始测试文件名写错未执行测试，回执保留。
+
+已知失败无未决、原浏览器自然退出、gen13自然released后，按用户继续部署实测和最小化静音偏好完成后续部署PID39220；未再请求人工开窗、未清未知锁。沿正常恢复门核验111c66a7通过，revision18 active，Chrome35640为非headless且mute-audio。下一观看任务真实结果继续采样；不能把身份成功替代观看成功。证据timeout_recovery_20261024和minimized_playback_20261024，一次性deploy_novel_timeout_recovery_20261024.py及deploy_minimized_playback_20261024.py已执行不可重跑。
+
+
+### 最小化实际播放及换片修复
+
+39220后续任务2b440以feed_not_ready、0观看结束，revision19暂停；未出现未知任务。增加失败现场的脱敏page/viewport/visibility、活动视频、布局和入口诊断，不保存frame正文或登录态；32项相关测试通过，已知空闲后部署35324并恢复。8ed8身份核验通过，revision21；真实观看56a0d7/维护1条已验证、90.14秒，随后点击下一条未改变视频ID，以feed_did_not_advance结束、revision22暂停。故已证明最小化静音实际播放可行，但不能称整轮自动观看完成。旧0观看及失败保持。
+
+增加有界换片后备：点击箭头后最多10次400ms检查，始终无验证遮挡且原卡片保持才发一次ArrowDown；随后仍需实际视频ID变化，不变则保留现场并停止。18项测试通过，包含本地真实Chrome按钮无效→键盘换片用例，以及后备仍无效不得成功用例。原浏览器自然退出、owner自然released后，通过正常恢复门部署feed_next_20261024；无人工窗口重开或未知重派。一次性deploy_feed_failure_evidence_20261024.py、deploy_feed_next_20261024.py均已执行，不可重跑。
+
+
+### 总时长未知的视频不能误判未就绪
+
+换片后真实a782任务已验证1条89.82秒，但新活动视频7693773469738652017的currentTime约20.42、paused=false、readyState4、总时长非有限值被归为0；8个feed、实际路径/、未出现新验证码。原代码硬性要求duration>0，因此把已换片且正在播放的新视频误判feed_not_ready。现场保存在a782原维护回执feed_surface_evidence。修正为readyState和有限非负currentTime判定已加载，观看成功仍依赖实际时间推进、无seek、同视频ID、正常速率；总时长未知按配置停留秒数，duration_seconds=0、completion_ratio=0并标注duration_unavailable，不虚构总时长/完播比例。
+
+同时在借用页导航后以及每条播放前按已保存偏好重新确认原生最小化，避免新tab/导航恢复窗口状态。62项回归通过（初次1项因额外守卫导致固定调用数断言不适用，改成每个动作至少一次守卫，失败回执保留）。包含未知时长能真实播放、暂停视频仍0观看、导航后再次最小化等测试。原任务已知结束、浏览器和owner自然退出后部署20628，90bf原身份核验成功，revision27 active；进入当前真实日常接续。一次性deploy_feed_duration_20261024.py已执行不可重跑。
+
+
+### 当前真实验收：连续播放已恢复（北京时间 2026-10-24 14:30:11）
+
+最终PID20628、health200、部署源码SHA一致；小说号active revision27。新原身份90bf7e1f成功后，日常计划901c50ba6c074972b0dd27a48f69f21c、浏览器命令d735fb5009084c35a9d04dc282d057b0已实际验证2个不同视频：7699959934309403914与7697642773779844403，累计124.11秒，next_candidate_index=4，任务仍running且持续推进。每条播放前走已保存最小化偏好确认，Chrome39732非headless且--mute-audio。不是仅页面200、身份通过或点击返回成功。完整20分钟轮次尚未结束，不冒称整轮/所有账号业务均成功。
+
+本轮继续原20条/单条90秒/总20分钟、24小时间隔配置；点赞评论关闭。没有新视频发布、评论或模型调用。原998cc未知事实在审计副本保留，其他失败仍按原结果保存；法律号10b2未处理。本次所有一次性部署脚本禁止重跑。证据data/novel_feed_activation/feed_duration_20261024/LIVE_ACCEPTANCE.json以及timeout_recovery_20261024/SAMPLE_*.json。日后需先采样当前任务再操作，不重派这条运行中任务。
+
+
+### 后续状态复核（2026-10-24 14:35:44，北京时间）
+
+用户询问后续能否自动化。只读复核原d735任务最终已结束：成功3条、213.78秒，但后续播放期间视频ID改变，以feed_video_changed暂停revision28；不能把先前两条连续成功扩大为整轮稳定或无人值守通过。原自动播放策略仍enabled、24小时/20条/90秒/20分钟，当前退避next_due为2026-10-24 15:00:46，但账号暂停门仍阻止执行。服务health200，扫描心跳正常，浏览器已退出。未解除暂停或重派，证据timeout_recovery_20261024/SAMPLE_1792823702.json。

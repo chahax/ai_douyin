@@ -1,0 +1,62 @@
+[
+  {
+    "id": "still_office",
+    "prompt_id": "0523cc1f-9d59-430b-abe8-c3814988d400",
+    "interface_success": true,
+    "outputs_saved": [
+      {
+        "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\comfy\\output\\scene_lab\\depth_office_to_door_00001_.png",
+        "bytes": 165439,
+        "sha256": "f9bfb7a75dbe05d5dece6483f7e12da5734576dae99a32cc08b4971f2d4bde7b",
+        "node": "14",
+        "output_key": "images"
+      }
+    ],
+    "at_utc": "2026-10-06T05:23:51.371951+00:00",
+    "status": "awaiting_human_review",
+    "human_content_approval": null,
+    "assistant_video_content_review_performed": false,
+    "auto_retries": 0,
+    "paid_cloud_calls": 0
+  },
+  {
+    "id": "still_corridor",
+    "prompt_id": "8803775d-fae8-437c-a901-dcf3224b2b50",
+    "interface_success": true,
+    "outputs_saved": [
+      {
+        "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\comfy\\output\\scene_lab\\depth_corridor_to_office_00001_.png",
+        "bytes": 161609,
+        "sha256": "4904217824b541260385be234a0ce663171da497e6e045342e28791553b15c2e",
+        "node": "14",
+        "output_key": "images"
+      }
+    ],
+    "at_utc": "2026-10-06T05:24:59.644232+00:00",
+    "status": "awaiting_human_review",
+    "human_content_approval": null,
+    "assistant_video_content_review_performed": false,
+    "auto_retries": 0,
+    "paid_cloud_calls": 0
+  },
+  {
+    "id": "short_video_office",
+    "prompt_id": "765c2b59-69e7-4147-9cad-6ebc4520e9c0",
+    "interface_success": true,
+    "outputs_saved": [
+      {
+        "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\comfy\\output\\scene_lab\\depth_office_to_door_00002_.mp4",
+        "bytes": 24288,
+        "sha256": "1e3fda147e53ce4892892b55bad4785714133dcb0b775085bdc13907980fe101",
+        "node": "15",
+        "output_key": "images"
+      }
+    ],
+    "at_utc": "2026-10-06T05:27:28.554601+00:00",
+    "status": "awaiting_human_review",
+    "human_content_approval": null,
+    "assistant_video_content_review_performed": false,
+    "auto_retries": 0,
+    "paid_cloud_calls": 0
+  }
+]

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from dataclasses import replace
+
 from src.operations_accounts import AccountProfile
 
 from .analysis import TrendAnalyzer
@@ -19,7 +21,8 @@ from .tag_graph import (
     build_tag_cooccurrence_relations,
     build_tag_traffic_snapshots,
 )
-from .providers.base import TrendCollectionRequest, TrendCollectionResult, TrendProvider
+from .providers.base import TrendCollectionRequest, TrendCollectionResult, TrendProvider, related_tag_selection_options
+from .collection.legal_core import legal_related_terms
 from .repository import TrendRepository
 from .source_policy import SourcePolicy
 from .sample_gate import batch_observations, require_sample
@@ -46,6 +49,14 @@ class TrendOperationsService:
         plan: AccountCollectionPlan | None = None,
         batch: PlannedCollectionBatch | None = None,
     ) -> tuple[str | None, TrendCollectionResult]:
+        if account_profile is not None and account_profile.domain_strategy_id == "legal_services":
+            # Filter associated searches before opening pages, not merely after collection.
+            request = replace(request,
+                related_tag_domain="legal_services",
+                related_tag_filter_terms=legal_related_terms(account_profile),
+                related_tag_excluded_terms=tuple(account_profile.negative_keywords),
+                min_related_tag_support_videos=max(2, request.min_related_tag_support_videos),
+                min_related_tag_unique_authors=max(2, request.min_related_tag_unique_authors))
         result = provider.collect(request, policy=policy)
         if account_profile is not None and result.observations:
             original_count = len(result.observations)
@@ -113,13 +124,14 @@ class TrendOperationsService:
         request: TrendCollectionRequest,
     ) -> None:
         relations, roots_by_tag = build_keyword_tag_relations(
-            result.observations,
-            max_tags_per_keyword=request.max_related_tags_per_keyword,
-            max_total_tags=request.max_total_related_tags,
+            [r for r in result.observations if r.query_depth == 0],
+            max_tags_per_keyword=request.max_related_tags_per_keyword if request.expand_related_tags else 0,
+            max_total_tags=request.max_total_related_tags if request.expand_related_tags else 0,
+            **related_tag_selection_options(request),
         )
         observations_by_tag: dict[str, list] = {}
         for item in result.observations:
-            if item.query_kind == "tag" and item.query_value:
+            if item.query_kind in {"tag", "hashtag"} and item.query_value:
                 observations_by_tag.setdefault(item.query_value, []).append(item)
         result.tag_relations = relations + build_tag_cooccurrence_relations(
             observations_by_tag,

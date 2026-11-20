@@ -1,0 +1,20 @@
+{
+  "id": "still_corridor",
+  "prompt_id": "8803775d-fae8-437c-a901-dcf3224b2b50",
+  "interface_success": true,
+  "outputs_saved": [
+    {
+      "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\comfy\\output\\scene_lab\\depth_corridor_to_office_00001_.png",
+      "bytes": 161609,
+      "sha256": "4904217824b541260385be234a0ce663171da497e6e045342e28791553b15c2e",
+      "node": "14",
+      "output_key": "images"
+    }
+  ],
+  "at_utc": "2026-10-06T05:24:59.644232+00:00",
+  "status": "awaiting_human_review",
+  "human_content_approval": null,
+  "assistant_video_content_review_performed": false,
+  "auto_retries": 0,
+  "paid_cloud_calls": 0
+}

@@ -1,0 +1,42 @@
+{
+  "template": "deterministic_motion/v1",
+  "source_image": "../../data/qa/deterministic_motion_v1/source.png",
+  "output_path": "../../data/qa/deterministic_motion_v1/controlled_motion.mp4",
+  "width": 704,
+  "height": 1248,
+  "fps": 25,
+  "duration_seconds": 3.88,
+  "crf": 18,
+  "preset": "slow",
+  "safety": {
+    "minimum_activity_ratio": 0.001,
+    "maximum_effect_area_ratio": 0.04
+  },
+  "effects": {
+    "light_pulses": [
+      {
+        "name": "phone_glow",
+        "rect": [0.11, 0.69, 0.1, 0.07],
+        "color": [85, 145, 255],
+        "opacity": 0.3,
+        "blur": 12,
+        "start": 0.7,
+        "peak": 1.92,
+        "end": 2.7
+      }
+    ],
+    "particles": [
+      {
+        "name": "window_dust",
+        "rect": [0.35, 0.04, 0.14, 0.12],
+        "count": 3,
+        "color": [220, 235, 255],
+        "opacity": 0.12,
+        "radius": 2,
+        "drift": [0.02, -0.03],
+        "twinkle": 0.4,
+        "seed": 42
+      }
+    ]
+  }
+}

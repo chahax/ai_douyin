@@ -1,0 +1,13 @@
+{
+  "bindings": [
+    {
+      "ref": "D:\\IT\\ai_douyin\\tools\\ip_precheck_lab_v1\\cache\\huggingface\\hub\\models--urchade--gliner_multi-v2.1\\refs\\main",
+      "pinned_revision": "443d26d654e0324125a96bebd8e796c14ff2efe6"
+    },
+    {
+      "ref": "D:\\IT\\ai_douyin\\tools\\ip_precheck_lab_v1\\cache\\huggingface\\hub\\models--microsoft--mdeberta-v3-base\\refs\\main",
+      "pinned_revision": "a0484667b22365f84929a935b5e50a51f71f159d"
+    }
+  ],
+  "reason": "Pinned snapshot download does not create main refs; legacy GLiNER requests base tokenizer/config by repo name. Local cache main resolves only to this frozen revision."
+}

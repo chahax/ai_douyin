@@ -1,0 +1,13 @@
+# 本视频最多三次运行：明确授权与部署执行
+
+用户对“是否允许给这条视频追加最多3次发布运行？仅在明确的提交前失败后修复续行；提交结果未知就停止”答复“可以”。本次同一account01/原完整片/PREPARED/AI与虚构声明/五标签/批准法律评论，承接日27→最多30，不能自动清零旧次数或改媒体预算。无新增恢复、后台或模型/媒体额度。原64c924...为已知upload_failed，旧unknown人工归档不改。
+
+授权原文及完整来源保存在`data/video_generation/h3_dense_office_full_20261018/publication/resume_bounded_three_20261019/USER_AUTHORIZATION.json`，SHA c9fc63c22e39b70f4ee015a24cc2802664aef39f349ad55842122510c1fb91c1。当前服务35960/create1792391496.0718713/owner第9代，active42/failures2、日27、空runtime lease，仅原人工队列；此前refresh/smart/playback均已派发前结清或无在途。
+
+文档先行分工：核心新增独立v5三次批次授权，不改旧v1-v4。父grant固定三索引幂等键、原用户批准/原v4链/已知failed64c924完整快照与journal/原片SHA；独立registry。实际payload带attempt_index1..3，单槽上限分别28/29/30，不能直接用slot1领30。slot2/3须先登记上一槽完整终态与原journal的不可覆盖continuation proof，在队列及admission/实际lease内验证上一槽明确提交前失败、无submission_started/提交锁/作品ID、无人工或未知标志；没有proof不能跳槽。每次重复排队仍原ID、不新增消费。开始任何已验证作品、提交后待核验/未知或人工验证即停止，剩余额度不触发另一上传。
+
+旧quota/runtime只增加v5分派、索引入队和优先级250，不扩大manual/后台/recovery默认20。独立helper提供父grant构建及下一槽原生证明登记；程序保存实际ID、原生用量/次数和每次失败/修复/部署，不手改终态或伪写通过。已知提交前错误仅在原程序journal确证尚未reserve、无lock且非human/unknown时可续；无法确证就停止。root实际先执行slot1，必要修复后再登记slot2，最多3次。
+
+部署脚本增加本次新schema27/30/3次批准分支，保持原main、双库写栅栏、原PID/owner/gen/旧worker源码和同项目headless profile、所有运行/未知/恢复拒绝以及父退出/子树EOF自然退出。原worker7387源码可从upload_editor_transition_20261019/before保存源取回，其脚本SHA须实算。新修复helper ab786/workflow73ed/AI99cc已最终22项真实本地Chrome和52项相关回归通过，实平台资格仍待本次原生回执。
+
+主助手审查实际接线和少量真实SQLite决定案。旧v1-v4链不重复每案重建：可模块级原生seed/恢复闭合DB来验证新actor/cap/slot门，原旧链仍由主助手对实际冻结文件只读核对；不能以fixture代替实际链验收。完成后冻结源码、注册父grant、受控部署、仅派slot1。不能把本地或接口成功写成作品/声明/视频内容批准。用户依旧独自审片，助手不看听媒体或抽帧。

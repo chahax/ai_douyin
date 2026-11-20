@@ -1,0 +1,56 @@
+{
+  "initialize": {
+    "meta": null,
+    "protocolVersion": "2025-11-25",
+    "capabilities": {
+      "experimental": {},
+      "logging": null,
+      "prompts": {
+        "listChanged": false
+      },
+      "resources": {
+        "subscribe": false,
+        "listChanged": false
+      },
+      "tools": {
+        "listChanged": false
+      },
+      "completions": null,
+      "tasks": null
+    },
+    "serverInfo": {
+      "name": "MCP for Blender",
+      "title": null,
+      "version": "1.30.0",
+      "websiteUrl": null,
+      "icons": null
+    },
+    "instructions": "MCP for Blender drives the user's live Blender. execute_blender_code runs Python there\nwith the full bpy API, so anything Blender can do, you can do; look shows you the result.\n\nStart with get_addon_status (Blender version, which libraries and generators are on) and\nget_scene_info.\n\nScripts run in someone else's Blender:\n- Look shader nodes up by type, never by name (names are localized):\n  `next(n for n in mat.node_tree.nodes if n.type == \"BSDF_PRINCIPLED\")`.\n- Never hardcode enum identifiers; read them, e.g.\n  `[i.identifier for i in bpy.types.RenderSettings.bl_rna.properties[\"file_format\"].enum_items]`.\n  scene.render.engine under-reports: read the current value, and assign a new one inside\n  try/except TypeError, whose message lists the valid engines.\n- Material colors go on shader node inputs; material.diffuse_color only affects the viewport.\n\nlook is how you see your work; use it as much as you need. Images stay in the conversation, so\na smaller max_size keeps long sessions cheap.\n\nObjects can also come from existing libraries (search_assets, then import_asset: Poly Haven,\nSketchfab, Poly Pizza) or be made to order (generate_3d: one new textured model from text or an\nimage, 1-3 minutes, may cost the user a credit). A generation is one object, never a whole\nscene, the ground or parts to assemble. Imported and generated models arrive at arbitrary\nscale: use the reported world_bounding_box to size them and put them on the ground."
+  },
+  "tool_names": [
+    "get_addon_status",
+    "disable_telemetry",
+    "get_scene_info",
+    "execute_blender_code",
+    "record_trajectory_feedback",
+    "look",
+    "generate_3d",
+    "search_assets",
+    "import_asset"
+  ],
+  "get_scene_info": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "Scene 'Scene' | 4 camera, 1 empty, 3 light, 63 mesh | active office_reverse | selected office_reverse | mode OBJECT\n\nShowing 20 of 69 (name | type | location | size | hidden | children):\nE07_continuous_floor | mesh | at (3.0, 3.5, -0.08) | size 6.0x7.0x0.16\nE08_south | mesh | at (3.0, -0.07, 1.4) | size 6.0x0.14x2.8\nE08_east | mesh | at (6.07, 3.5, 1.4) | size 0.14x7.0x2.8\nE08_corridor_north | mesh | at (3.0, 7.07, 1.4) | size 6.0x0.14x2.8\nE08_west_below_window | mesh | at (-0.07, 2.5, 0.45) | size 0.14x5.0x0.9\nE08_west_above_window | mesh | at (-0.07, 2.5, 2.67) | size 0.14x5.0x0.26\nE08_west_south_pier | mesh | at (-0.07, 0.25, 1.7) | size 0.14x0.5x1.65\nE08_west_north_pier | mesh | at (-0.07, 4.65, 1.7) | size 0.14x0.7x1.65\nE08_corridor_west | mesh | at (-0.07, 6.0, 1.4) | size 0.14x2.0x2.8\nE08_far_wall_left | mesh | at (0.45, 5.0, 1.4) | size 0.9x0.14x2.8\nE08_far_wall_right | mesh | at (3.92, 5.0, 1.4) | size 4.15x0.14x2.8\nE08_door_header | mesh | at (1.38, 5.0, 2.47) | size 0.95x0.14x0.66\nE04_frame_left | mesh | at (0.9, 5.0, 1.08) | size 0.07x0.22x2.16\nE04_frame_right | mesh | at (1.85, 5.0, 1.08) | size 0.07x0.22x2.16\nE04_frame_top | mesh | at (1.38, 5.0, 2.16) | size 1.02x0.22x0.07\nE04_door_hinge | empty | at (0.94, 5.0, 0.0) | 2 children\nE05_window_vertical | mesh | at (0.0, 0.5, 1.7) | size 0.06x0.04x1.67\nE05_window_vertical.001 | mesh | at (0.0, 2.4, 1.7) | size 0.06x0.05x1.67\nE05_window_vertical.002 | mesh | at (0.0, 4.3, 1.7) | size 0.06x0.05x1.67\nE05_window_horizontal | mesh | at (0.0, 2.4, 0.91) | size 0.06x3.85x0.04\n... 49 more. Narrow with query= or root=, or raise limit.",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": {
+      "result": "Scene 'Scene' | 4 camera, 1 empty, 3 light, 63 mesh | active office_reverse | selected office_reverse | mode OBJECT\n\nShowing 20 of 69 (name | type | location | size | hidden | children):\nE07_continuous_floor | mesh | at (3.0, 3.5, -0.08) | size 6.0x7.0x0.16\nE08_south | mesh | at (3.0, -0.07, 1.4) | size 6.0x0.14x2.8\nE08_east | mesh | at (6.07, 3.5, 1.4) | size 0.14x7.0x2.8\nE08_corridor_north | mesh | at (3.0, 7.07, 1.4) | size 6.0x0.14x2.8\nE08_west_below_window | mesh | at (-0.07, 2.5, 0.45) | size 0.14x5.0x0.9\nE08_west_above_window | mesh | at (-0.07, 2.5, 2.67) | size 0.14x5.0x0.26\nE08_west_south_pier | mesh | at (-0.07, 0.25, 1.7) | size 0.14x0.5x1.65\nE08_west_north_pier | mesh | at (-0.07, 4.65, 1.7) | size 0.14x0.7x1.65\nE08_corridor_west | mesh | at (-0.07, 6.0, 1.4) | size 0.14x2.0x2.8\nE08_far_wall_left | mesh | at (0.45, 5.0, 1.4) | size 0.9x0.14x2.8\nE08_far_wall_right | mesh | at (3.92, 5.0, 1.4) | size 4.15x0.14x2.8\nE08_door_header | mesh | at (1.38, 5.0, 2.47) | size 0.95x0.14x0.66\nE04_frame_left | mesh | at (0.9, 5.0, 1.08) | size 0.07x0.22x2.16\nE04_frame_right | mesh | at (1.85, 5.0, 1.08) | size 0.07x0.22x2.16\nE04_frame_top | mesh | at (1.38, 5.0, 2.16) | size 1.02x0.22x0.07\nE04_door_hinge | empty | at (0.94, 5.0, 0.0) | 2 children\nE05_window_vertical | mesh | at (0.0, 0.5, 1.7) | size 0.06x0.04x1.67\nE05_window_vertical.001 | mesh | at (0.0, 2.4, 1.7) | size 0.06x0.05x1.67\nE05_window_vertical.002 | mesh | at (0.0, 4.3, 1.7) | size 0.06x0.05x1.67\nE05_window_horizontal | mesh | at (0.0, 2.4, 0.91) | size 0.06x3.85x0.04\n... 49 more. Narrow with query= or root=, or raise limit."
+    },
+    "isError": false
+  }
+}

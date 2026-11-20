@@ -1,0 +1,22 @@
+{
+  "schema": "creative_platform_refactor_profile/v1",
+  "version": "2026-10-02-v1",
+  "direction_report": "data/qa/creative_platform_refactor_20261002/direction_report.html",
+  "stage_debug_contract": "creative_stage_debug_index/v1",
+  "stage_artifact_contract": "creative_stage_artifact/v1",
+  "media_review_policy": "user_manual_review_only/v1",
+  "media_user_review_contract": "media_user_review/v1",
+  "queue_claim_policy": "atomic_conditional_update_with_lease/v1",
+  "external_unknown_policy": "no_automatic_retry_query_original/v1",
+  "publish_completion_policy": "post_publish_verification_required/v1",
+  "automatic_media_review": false,
+  "automatic_media_submit": false,
+  "implementation_scope": {
+    "p0_safe_progression": "implemented",
+    "p1_text_stage_debugging": "implemented",
+    "p2_stage_level_invalidation_and_media_feedback": "implemented_conservative_stage_scope",
+    "p2_field_level_dependency_narrowing": "not_implemented",
+    "p3_quality_improvement_claim": "not_evaluated_requires_user_labels",
+    "p4_browser_publish_adapter": "existing_with_pending_verification_propagation"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version": "ip_precheck_benchmark_v1",
+  "status": "model_load_failed",
+  "model_dir": "D:\\IT\\ai_douyin\\tools\\ip_precheck_lab_v1\\cache\\huggingface\\hub\\models--urchade--gliner_multi-v2.1\\snapshots\\443d26d654e0324125a96bebd8e796c14ff2efe6",
+  "error_type": "ImportError",
+  "error": "\n requires the protobuf library but it was not found in your environment. Check out the instructions on the\ninstallation page of its repo: https://github.com/protocolbuffers/protobuf/tree/master/python#installation and follow the ones\nthat match your environment. Please note that you may need to restart your runtime after installation.\n",
+  "warnings": [
+    {
+      "message": "`torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.",
+      "category": "FutureWarning",
+      "filename": "D:\\IT\\ai_douyin\\tools\\ip_precheck_lab_v1\\.venv\\Lib\\site-packages\\torch\\jit\\_script.py",
+      "lineno": 1491
+    }
+  ]
+}

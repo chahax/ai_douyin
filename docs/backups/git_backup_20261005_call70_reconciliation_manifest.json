@@ -1,0 +1,103 @@
+{
+  "schema": "git_incremental_creative_backup/v1",
+  "base": "0e26aa852436465b009e0d0e1af285c42583f8f3",
+  "branch": "codex/backup-ai-creative-20261003",
+  "timestamp_utc": "2026-10-05T04:10:06.702114+00:00",
+  "working_head": "2baa701a3c600314e30e6a491f243071c4a60ec5",
+  "working_branch": "codex/content-opportunity-framework",
+  "actual_calls_started": 70,
+  "calls_with_known_usage": 69,
+  "actual_reported_tokens": 709272,
+  "unknown_token_reservations": 64010,
+  "offline_regression": {
+    "passed": 500,
+    "subtests_passed": 14
+  },
+  "story_direction_content_alignment_pending": true,
+  "script_adopted_for_direction_only": true,
+  "director_request_outcome_unknown": 70,
+  "production_handoff_ready": false,
+  "full_s6_script_available": true,
+  "new_media_files": 0,
+  "deletion_sync": false,
+  "files": [
+    {
+      "path": "data/qa/call70_reconciliation_20261005/EXPECTED_PROVIDER_BODY_NOT_SENT.json",
+      "sha256": "8ea569dd3c3262129202aef6454af501719d10cd6f10ffd5f26c26049e63171a",
+      "git_blob": "8b6ab7c10ac614b27faa1c27004628f851afd9e3",
+      "bytes": 68199
+    },
+    {
+      "path": "data/qa/call70_reconciliation_20261005/OFFLINE_EXPECTED_SDK_PARAMETERS.json",
+      "sha256": "535e9c96ba19e5e5541159af9173afc59c674bdadf94628a16280c338a48b50b",
+      "git_blob": "bbc82e6b9eb22ea0b985b89a9dd9c7e8962c7528",
+      "bytes": 68229
+    },
+    {
+      "path": "data/qa/call70_reconciliation_20261005/ORIGINAL_REQUEST_INPUT_PREFLIGHT.json",
+      "sha256": "5c93a9783c783c00fdeedae6c3d5d7557430350fd0b75abc9006088de2a428b3",
+      "git_blob": "394b5c9386adf884215adc0427d4029d5e674c0e",
+      "bytes": 1135
+    },
+    {
+      "path": "data/qa/call70_reconciliation_20261005/PERFORMANCE_SOURCE_TARGETS_NOT_A_PLAN.json",
+      "sha256": "c668eb2c1e7b19fce7e422daaf776a735c4a13eb97c5d1e5973d95ded8fb635e",
+      "git_blob": "5512b7f9c71cc036415762951ad554a8468015ec",
+      "bytes": 6037
+    },
+    {
+      "path": "data/qa/call70_reconciliation_20261005/PROGRESS_VIEW_BEFORE_RECONCILIATION.json",
+      "sha256": "2b9a69c5b215feb12ebec5dbd340cc0b3636cbecc94e5b2cf8f56db77be08d2e",
+      "git_blob": "f721ea161aaaff75f7607723ef81a38f5fe6d9c1",
+      "bytes": 5559
+    },
+    {
+      "path": "data/qa/call70_reconciliation_20261005/RECONCILIATION_AUDIT.json",
+      "sha256": "ce7c2707ceb67ddd76541455073415f5ce4761d36b03c9c54a5a2f92039044dd",
+      "git_blob": "e62619ee09ee85e80709107cad40863dafdd092f",
+      "bytes": 5895
+    },
+    {
+      "path": "data/qa/call70_reconciliation_20261005/RECONCILIATION_STATUS.md",
+      "sha256": "3361e7c0adbf1c194a190da24964597af34760aa18972c95d64f05506b096c6f",
+      "git_blob": "15228298cb387934f296334075bfb196cc4caf4d",
+      "bytes": 3016
+    },
+    {
+      "path": "data/qa/call70_reconciliation_20261005/VALIDATION.json",
+      "sha256": "de889d2ee166dfbecc203fb463ab68b5bc8861a8e0266092eb9d383823452013",
+      "git_blob": "33d3486a3895f5a687e447b12ee8daf3afa45896",
+      "bytes": 694
+    },
+    {
+      "path": "data/qa/call70_reconciliation_20261005/save_reconciliation.py",
+      "sha256": "d2c6f574fa8cdc39cbd0ef0b2f36d7928b1a7734be673939b085ab8466313c04",
+      "git_blob": "b115a07ea5fd5fb89829a43d3bc32b5f6b0c42cf",
+      "bytes": 15753
+    },
+    {
+      "path": "data/task_progress_monitor/creative_progress_state.json",
+      "sha256": "95113661828dc585408e7d54f9d1b1a6a033b0fd5d18f38823380519587bb926",
+      "git_blob": "6b793ac092040fdbaf109559c675c5d4c268d971",
+      "bytes": 6239
+    },
+    {
+      "path": "docs/CREATIVE_TEXT_CONTINUATION_20261004.md",
+      "sha256": "1dba628ac85b61fa4aad3640eb0fd6bd06e31faf046cccdfb44d5e9f6879bf97",
+      "git_blob": "ff7d9c74f67211d4abe7a79b8820e5d2cd5b95ca",
+      "bytes": 26400
+    },
+    {
+      "path": "docs/THIS_TIME_I_LEAVE_S6_PRODUCTION_RECORD_20261005.md",
+      "sha256": "34350f1cfa53a0855b82e8e614741bfb32989a0a21cfb093d471ff4ad5062ffc",
+      "git_blob": "438901e42447b746242a26d61f2a7e5f0e070907",
+      "bytes": 6515
+    },
+    {
+      "path": "docs/backups/git_backup_20261005_s6_record_receipt.json",
+      "sha256": "a32db9afd81bd9905ddc9d1972b9f6774664f5396365a0bc7553979b1dc9e271",
+      "git_blob": "237a50a939d26f394165e62f055a4baa14bc3fe7",
+      "bytes": 735
+    }
+  ]
+}

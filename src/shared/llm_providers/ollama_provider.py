@@ -54,6 +54,45 @@ class OllamaProvider(BaseLLMProvider):
 
         return None
 
+    def chat_with_tools(self, messages, tools, temperature=0.3, tool_choice="auto"):
+        """Use Ollama's native ``/api/chat`` tool envelope.
+
+        Ollama does not expose the OpenAI ``tool_choice`` field consistently.
+        ``none`` therefore omits tool definitions; ``auto`` and ``required``
+        send them and preserve returned calls for the shared normalization
+        layer. An absent required call is reported as an empty result, never
+        fabricated into an executed side effect.
+        """
+
+        payload = {
+            "model": self.model,
+            "messages": messages,
+            "stream": False,
+            "options": {"temperature": temperature},
+        }
+        if tool_choice != "none" and tools:
+            payload["tools"] = tools
+        try:
+            response = requests.post(
+                f"{self.base_url}/api/chat",
+                json=payload,
+                timeout=self.timeout_seconds,
+            )
+            response.raise_for_status()
+            data = response.json()
+            message = data.get("message") or {}
+            content = self.normalize_text_content(message.get("content")) or ""
+            tool_calls = message.get("tool_calls") or []
+            if not isinstance(tool_calls, list):
+                logger.error("Ollama returned invalid tool_calls payload")
+                tool_calls = []
+            if tool_choice == "required" and not tool_calls:
+                logger.warning("Ollama returned no tool call when one was required")
+            return {"content": content, "tool_calls": tool_calls}
+        except Exception as exc:
+            logger.error(f"Ollama tools LLM error: {exc}")
+            return {"content": "", "tool_calls": []}
+
     @staticmethod
     def _build_json_retry_messages(messages):
         retry_messages = list(messages)

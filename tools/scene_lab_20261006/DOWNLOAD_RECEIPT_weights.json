@@ -1,0 +1,14 @@
+{
+  "at_utc": "2026-10-06T05:16:28.567072+00:00",
+  "downloads": [
+    {
+      "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\models\\diffusion_models\\wan2.1_vace_1.3B_fp16.safetensors",
+      "sha256": "640ccc0577e6a5d4bb15cd91b11b699ef914fc55f126c5a1c544e152130784f2",
+      "bytes": 4309519800,
+      "url": "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/123acf1cc74bccbb9bfff8ac1ee72edc08c2341d/split_files/diffusion_models/wan2.1_vace_1.3B_fp16.safetensors?download=true",
+      "verified_expected_sha256": true,
+      "hf_commit": "123acf1cc74bccbb9bfff8ac1ee72edc08c2341d"
+    }
+  ],
+  "paid_calls": 0
+}

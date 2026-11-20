@@ -1,0 +1,56 @@
+{
+  "schema": "creative_agent_models/v1",
+  "status": "role_routed_text_workflow_in_pilot",
+  "updated_at": "2026-09-27",
+  "roles": {
+    "writer": {
+      "label": "编剧 Agent",
+      "provider": "minimax",
+      "display_model": "MiniMax M3",
+      "api_style": "openai_chat_completions",
+      "base_url": "https://api.minimaxi.com/v1",
+      "endpoint": "/chat/completions",
+      "model": "MiniMax-M3",
+      "api_key_env": "WRITER_AGENT_API_KEY",
+      "context_capability": {
+        "planning_context_window_tokens": 512000,
+        "advertised_context_window_tokens": 1000000,
+        "source_url": "https://www.minimax.io/models/text/m3",
+        "verified_on": "2026-09-24"
+      }
+    },
+    "director": {
+      "label": "导演 Agent",
+      "provider": "deepseek",
+      "display_model": "DeepSeek-V4.1-Flash",
+      "api_style": "openai_chat_completions",
+      "base_url": "https://api.deepseek.com/v1",
+      "endpoint": "/chat/completions",
+      "model": "deepseek-flash",
+      "api_key_env": "DIRECTOR_AGENT_API_KEY",
+      "context_capability": {
+        "planning_context_window_tokens": 1000000,
+        "advertised_context_window_tokens": 1000000,
+        "source_url": "https://api-docs.deepseek.com/quick_start/pricing/",
+        "verified_on": "2026-09-24"
+      }
+    }
+  },
+  "credential_storage": {
+    "file": ".env",
+    "tracked_by_git": false,
+    "setup_script": "scripts/configure_creative_agent_tokens.ps1",
+    "writer_region_note": "沿用项目当前中国站 api.minimaxi.com；中国站 Token 不与国际站 api.minimax.io 混用"
+  },
+  "default_new_workflow_profile": "minimax_create_deepseek_review",
+  "workflow_profiles": {
+    "minimax_create_deepseek_review": {
+      "creation_stages": "MiniMax-M3 via writer credential route",
+      "review_stages": "deepseek-flash via director credential route",
+      "independent_actual_review_required": true
+    },
+    "legacy_writer_minimax_director_deepseek": {
+      "usage": "existing task replay only; profile stays bound to task"
+    }
+  }
+}

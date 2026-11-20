@@ -1,0 +1,118 @@
+{
+  "template": "comfyui_multi_style_benchmark/v1",
+  "id": "fanqie_story_style_motion_v1",
+  "fixed_output": {
+    "width": 480,
+    "height": 832,
+    "fps": 16,
+    "frame_count": 49,
+    "postprocess": "disabled"
+  },
+  "motions": [
+    {
+      "id": "m01_wait_and_turn",
+      "path": "inputs/motion_m01_wait_and_turn_3s.mp4",
+      "people": 1,
+      "description": "站立等待，转头看向画外人物，重心和腿部保持自然"
+    },
+    {
+      "id": "m02_reach_and_pull",
+      "path": "inputs/motion_m02_reach_and_pull_3s.mp4",
+      "people": 2,
+      "description": "伸手、接触、轻拉、对方自然响应"
+    },
+    {
+      "id": "m03_look_and_count",
+      "path": "inputs/motion_m03_look_and_count_3s.mp4",
+      "people": 1,
+      "description": "看向对方直接口头倒数，不看手表，不半蹲"
+    }
+  ],
+  "styles": [
+    {
+      "id": "s01_cinematic_real",
+      "reference": "inputs/styles/s01_cinematic_real.png"
+    },
+    {
+      "id": "s02_clean_2d_anime",
+      "reference": "inputs/styles/s02_clean_2d_anime.png"
+    },
+    {
+      "id": "s03_soft_3d",
+      "reference": "inputs/styles/s03_soft_3d.png"
+    },
+    {
+      "id": "s04_ink_comic",
+      "reference": "inputs/styles/s04_ink_comic.png"
+    }
+  ],
+  "workflows": [
+    {
+      "id": "w01_wananimate_move",
+      "path": "D:/IT/AI_vido/ComfyUI/user/default/workflows/wan22_animate_move_rtx5070ti_16gb.json",
+      "motion_source": "driving_video",
+      "readiness": "installed_not_runtime_verified"
+    },
+    {
+      "id": "w02_wan22_5b_i2v",
+      "path": "assets/workflows/wan22_i2v_4step.json",
+      "motion_source": "prompt_only",
+      "readiness": "requires_runtime_revalidation"
+    },
+    {
+      "id": "w03_ltx23_i2v",
+      "path": "D:/IT/AI_vido/ComfyUI/custom_nodes/ComfyUI-LTXVideo/example_workflows/2.3/LTX-2.3_T2V_I2V_Single_Stage_Distilled_Full.json",
+      "motion_source": "prompt_only",
+      "readiness": "requires_model_path_adaptation"
+    }
+  ],
+  "rounds": [
+    {
+      "id": "round_a_style",
+      "workflow_ids": ["w01_wananimate_move"],
+      "style_ids": ["s01_cinematic_real", "s02_clean_2d_anime", "s03_soft_3d", "s04_ink_comic"],
+      "motion_ids": ["m01_wait_and_turn"],
+      "seeds": [42, 314159]
+    },
+    {
+      "id": "round_b_workflow",
+      "workflow_ids": ["w01_wananimate_move", "w02_wan22_5b_i2v", "w03_ltx23_i2v"],
+      "style_ids": ["winner_from_round_a"],
+      "motion_ids": ["m01_wait_and_turn"],
+      "seeds": [42, 314159]
+    },
+    {
+      "id": "round_c_complex_motion",
+      "workflow_ids": ["top_2_from_round_b"],
+      "style_ids": ["winner_from_round_a"],
+      "motion_ids": ["m03_look_and_count", "m02_reach_and_pull"],
+      "seeds": [42, 314159]
+    }
+  ],
+  "hard_reject": [
+    "unplayable_or_black_frames",
+    "wrong_duration_or_dimensions",
+    "extra_or_missing_limbs",
+    "identity_swap",
+    "required_motion_missing",
+    "severe_temporal_style_drift",
+    "unequal_postprocessing"
+  ],
+  "human_score_weights": {
+    "overall_watchability": 35,
+    "motion_naturalness_continuity": 25,
+    "composition_story_expression": 15,
+    "style_fidelity_temporal_stability": 15,
+    "identity_consistency": 10
+  },
+  "required_artifacts": [
+    "output_raw.mp4",
+    "output_standardized.mp4",
+    "workflow.snapshot.json",
+    "run.manifest.json",
+    "contact_sheet.png",
+    "control.report.json",
+    "style.report.json",
+    "human_review.json"
+  ]
+}

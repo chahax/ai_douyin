@@ -1,0 +1,33 @@
+{
+  "user_authorization": "\u90fd\u4e0b\u8f7d\u4e0b\u6765\u7ec4\u5408\u8bd5\u4e0b",
+  "planned_jobs": [
+    {
+      "id": "still_office",
+      "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\comfy\\workflows\\still_office.json",
+      "sha256": "3ba0b2779f0097c8363209f9bc9b3a575157688ed392860b2fbb437843812de3",
+      "length": 1,
+      "kind": "image"
+    },
+    {
+      "id": "still_corridor",
+      "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\comfy\\workflows\\still_corridor.json",
+      "sha256": "5b3b3681436f0be7639e0a9cc6c69f5661670fd560c9cc431248dca8f18ec434",
+      "length": 1,
+      "kind": "image"
+    },
+    {
+      "id": "short_video_office",
+      "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\comfy\\workflows\\short_video_office.json",
+      "sha256": "ceb0c445bd5d7704bb9ec316d23726d4518d55f88ea0aed7ba8f592c3f5b3ede",
+      "length": 17,
+      "kind": "video"
+    }
+  ],
+  "max_local_jobs": 3,
+  "paid_cloud_calls": 0,
+  "automatic_retry": false,
+  "production_script_modified": false,
+  "identity_selected": null,
+  "video_review": "awaiting_human_review_after_save",
+  "purpose": "local geometry-to-depth-to-VACE compatibility and human visual comparison"
+}

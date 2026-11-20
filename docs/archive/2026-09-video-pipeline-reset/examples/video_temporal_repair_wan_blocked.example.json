@@ -1,0 +1,15 @@
+{
+  "template": "video_temporal_repair/v1",
+  "input_video": "D:\\IT\\AI_vido\\ComfyUI\\output\\wan_animate_test\\wan_animate_move_salute_v1_00001_.mp4",
+  "input_control_manifest": "../../data/qa/wan_animate_move_salute_v2/v1_raw.control.manifest.json",
+  "input_control_report": "../../data/qa/wan_animate_move_salute_v2/v1_raw.control.report.json",
+  "output_video": "../../data/qa/temporal_repair_wan_blocked/output.mp4",
+  "repair": {
+    "deflicker": {
+      "enabled": true,
+      "size": 5,
+      "mode": "am"
+    },
+    "interpolation": "none"
+  }
+}

@@ -1,0 +1,20 @@
+# 账号管控接线独立审查
+
+本审查只读接线源码，新增`tests/test_browser_control_independent_review.py`；未直接修改runtime、scheduler、manual handling或浏览器业务文件，未访问真实平台或生产数据库。
+
+## 实际跨层验证
+
+独立测试使用真实`account_refresh`隔离SQLite及真实`AccountRuntimeService.probe_recovery`流程，只替换浏览器传输与身份页面返回。链路为：原manual命令等待→发布保持queued→`complete_account_handling`登记→`_claim_recovery`绑定原token→同一个owner/context原身份核验→`_finish_recovery`真实事务完成→原发布放行。没有在测试中直接把控制状态写成active。原人工tab未关闭，仅回收核验任务tab。
+
+最后`independent_review_final.xml`四项通过，位置为`data/development_checkpoints/account_browser_control_20261018`。另三项分别验证上传中同版本停用账号应挡dispatch、保存登录状态不能绕过派发栅栏、排队期间旧自动开窗事件关闭后派发应失效。
+
+## 已送主审与实施agent的具体问题
+
+1. actor代次冻结而profile版本可更新：旧host永久运行会把所有新版请求退成binding_changed。实施agent已新增干净安全点`_release_changed_binding`，保留未决/人工页，不抢旧owner；后续pump新generation。此处仍需主agent组合验收。
+2. 维护human_required错误被记为资源waiting_human且恢复无法结清：实施agent已将旧维护结果保留为known failed，人工等待留给manual资源命令；不能由身份核验把旧业务失败洗成成功。
+3. dispatch轻量replace漏profile.status门：已加停用账号检查，独立测试通过。
+4. BorrowedSession保存状态直接借出owner方法绕过dispatch：已改显式受检方法，独立测试通过。
+5. 自动开窗只在enqueue时调用before_open，队列延迟期间事件已关闭仍会重新暂停并开旧页：实施agent已加派发前原事件有效性门，独立测试通过。
+6. BorrowedSession原先ctx为空时跳过dispatch；旧回调/辅助线程或嵌套其他任务能操作原tab：实施agent已绑定构造时的原任务与owner线程。独立测试在真实actor handler返回后调用保存的旧Page，确认拒绝且owner.cmd调用为0；见`independent_late_callback.xml`。不能仅凭正常ctx存在时的Page检查宣称完整所有权保护。
+
+嵌套发布仍保留原operation_scope token；独立审查确认新增一次全局daily_runs而不清原锁，原playback scoped quota未被重置。未知原任务及旧锁仍阻断，不认为正常心跳等于旧平台结果已知。自动发布/评论仍需原声明、唯一提交、准确作品核验和用户授权，本轮没有新增任何发布行为。

@@ -1,0 +1,72 @@
+{
+  "created_at_utc": "2026-10-06T05:03:44.490214+00:00",
+  "authorization": "用户：都下载下来组合试下",
+  "scope": "isolated_local_download_install_geometry_controlled_image_and_short_video_probe_no_cloud_spend",
+  "blender": {
+    "version": "4.5.14",
+    "url": "https://download.blender.org/release/Blender4.5/blender-4.5.14-windows-x64.zip",
+    "checksum_url": "https://download.blender.org/release/Blender4.5/blender-4.5.14.sha256"
+  },
+  "repos": {
+    "ahujasid/blender-mcp": {
+      "commit": "34b7bd277fff75a693cde78930b4359478958a01",
+      "archive_url": "https://codeload.github.com/ahujasid/blender-mcp/zip/34b7bd277fff75a693cde78930b4359478958a01"
+    },
+    "Comfy-Org/comfy-mcp": {
+      "commit": "e5f768d31de21ea32829381cebdda5336492a8ac",
+      "archive_url": "https://codeload.github.com/Comfy-Org/comfy-mcp/zip/e5f768d31de21ea32829381cebdda5336492a8ac"
+    },
+    "Comfy-Org/comfy-cli": {
+      "commit": "805e7de758a297f4888f4a8fcf170f49d124434f",
+      "archive_url": "https://codeload.github.com/Comfy-Org/comfy-cli/zip/805e7de758a297f4888f4a8fcf170f49d124434f"
+    },
+    "Comfy-Org/comfy-skills": {
+      "commit": "d50722a53585d0ab4fd1909fd59294b978aad449",
+      "archive_url": "https://codeload.github.com/Comfy-Org/comfy-skills/zip/d50722a53585d0ab4fd1909fd59294b978aad449"
+    },
+    "Comfy-Org/example_workflows": {
+      "commit": "5a7f3a85528002b735a869cb659ef88e18fd326e",
+      "archive_url": "https://codeload.github.com/Comfy-Org/example_workflows/zip/5a7f3a85528002b735a869cb659ef88e18fd326e"
+    },
+    "Wan-Video/Wan2.1": {
+      "commit": "9737cba9c1c3c4d04b33fcad41c111989865d315",
+      "archive_url": "https://codeload.github.com/Wan-Video/Wan2.1/zip/9737cba9c1c3c4d04b33fcad41c111989865d315"
+    },
+    "ali-vilab/VACE": {
+      "commit": "48eb44f1c4be87cc65a98bff985a26976841e9f3",
+      "archive_url": "https://codeload.github.com/ali-vilab/VACE/zip/48eb44f1c4be87cc65a98bff985a26976841e9f3"
+    }
+  },
+  "vace_candidate": {
+    "repo": "Comfy-Org/Wan_2.1_ComfyUI_repackaged",
+    "commit": "123acf1cc74bccbb9bfff8ac1ee72edc08c2341d",
+    "files": [
+      {
+        "type": "file",
+        "oid": "3dc03f8feb4e6b68e5fae7ea1973be49c7da1d47",
+        "size": 4309519800,
+        "lfs": {
+          "oid": "640ccc0577e6a5d4bb15cd91b11b699ef914fc55f126c5a1c544e152130784f2",
+          "size": 4309519800,
+          "pointerSize": 135
+        },
+        "xetHash": "261c2e35cfc32d3d55a35e07a19a517cd0b23b9fdc63ce67d9818f3635ade0b3",
+        "path": "split_files/diffusion_models/wan2.1_vace_1.3B_fp16.safetensors"
+      },
+      {
+        "type": "file",
+        "oid": "1eb46f4f3b4fc53592380295c031f5f35a8bb3cb",
+        "size": 4309497120,
+        "lfs": {
+          "oid": "654693bf2a93a27cd67c3bcee238bc1d0cbb0dd9a74928ed7155fb21a2a1900a",
+          "size": 4309497120,
+          "pointerSize": 135
+        },
+        "xetHash": "e101fb93216b00f0b1d1c96f9d775f960b285a501ed9c51b16bb0dbe992f9eaf",
+        "path": "split_files/diffusion_models/wan2.1_vace_1.3B_preview_fp16.safetensors"
+      }
+    ]
+  },
+  "cloud_paid_calls": 0,
+  "old_unknown_requests_not_retried": true
+}

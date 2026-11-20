@@ -1,0 +1,37 @@
+{
+  "schema": "creative_goal_context_model_profile/v2",
+  "writer": {
+    "provider": "minimax",
+    "model": "MiniMax-M3.1-Flash-Preview",
+    "base_url": "https://api.minimax.cn/v1",
+    "parameters": {
+      "temperature": 0.4,
+      "thinking": "adaptive",
+      "reasoning_effort": "medium",
+      "max_completion_tokens": 16000
+    }
+  },
+  "director": {
+    "provider": "deepseek",
+    "model": "deepseek-flash",
+    "base_url": "https://api.deepseek.com/v1",
+    "parameters": {
+      "temperature": 0.4,
+      "thinking": "disabled",
+      "max_completion_tokens": 12000
+    }
+  },
+  "stage_parameters": {
+    "goal_audit": {"max_completion_tokens": 8000},
+    "full_review": {"max_completion_tokens": 24000}
+  },
+  "scope": "independent offline goal/context workflow only; frozen M31 production profile unchanged",
+  "output_allowance_basis": "530 used 8903 completion tokens while omitting 21 dialogue checks; added complete coverage has an unmeasured output requirement, so full-review preview reserves a larger ceiling, not a guarantee or actual consumption",
+  "official_review_reference": "https://api-docs.deepseek.com/api/create-chat-completion/",
+  "review_output_allowance_official_range_checked": true,
+  "new_contract_real_endpoint_accepted": false,
+  "server_schema_guarantee": false,
+  "sdk_max_retries": 0,
+  "http_follow_redirects": false,
+  "media_authorized": false
+}

@@ -1,0 +1,236 @@
+{
+  "schema": "creative_provider_capability_registry/v1",
+  "checked_on": "2026-10-12",
+  "scope": "documentation_and_environment_audit_not_production_migration",
+  "evidence_levels": [
+    "official_documentation",
+    "generic_client",
+    "selected_production_adapter",
+    "real_interface_acceptance",
+    "human_content_approval"
+  ],
+  "sources": {
+    "ark_model": "https://docs.volcengine.com/docs/ark/seedance-2-5?lang=zh",
+    "ark_create": "https://docs.volcengine.com/docs/ark/create-video-generation-task-api?lang=zh&redirect=1",
+    "ark_get": "https://docs.volcengine.com/docs/ark/get-video-generation-task-api?lang=zh",
+    "ark_portrait": "https://docs.volcengine.com/docs/ark/seedance-portrait-asset-guide?lang=zh",
+    "ark_prompt": "https://docs.volcengine.com/docs/ark/seedance-2-0-prompt-guide?lang=zh&redirect=1",
+    "minimax_openai": "https://platform.minimax.io/docs/api-reference/text-openai-api",
+    "minimax_tools": "https://platform.minimax.io/docs/guides/text-m3-function-call",
+    "deepseek_models": "https://api-docs.deepseek.com/api/list-models/",
+    "deepseek_chat": "https://api-docs.deepseek.com/api/create-chat-completion/",
+    "deepseek_tools": "https://api-docs.deepseek.com/guides/tool_calls/",
+    "deepseek_json": "https://api-docs.deepseek.com/guides/json_mode/"
+  },
+  "providers": [
+    {
+      "provider": "ark_api",
+      "model": "doubao-seedance-2-0-mini-260615",
+      "protocol": "POST /api/v3/contents/generations/tasks; GET by original task id",
+      "official": {
+        "generation_seconds": [
+          4,
+          15
+        ],
+        "resolutions": [
+          "480p",
+          "720p"
+        ],
+        "input_modes": [
+          "text",
+          "first_frame",
+          "first_last_frame",
+          "multimodal_reference"
+        ],
+        "reference_counts": {
+          "image": 9,
+          "video": 3,
+          "audio": 3,
+          "total": 15
+        },
+        "reference_video_seconds_each": [
+          2,
+          15
+        ],
+        "reference_video_seconds_total_max": 15,
+        "audio_only_reference": false,
+        "return_last_frame": true,
+        "formal_frame_and_multimodal_modes_mutually_exclusive": true,
+        "omni_reference_task_type_supported": false,
+        "trusted_portrait": {
+          "same_ark_account_required": true,
+          "original_output_required": true,
+          "trust_days": 30,
+          "generated_video_and_service_tail_supported": true,
+          "download_url_hours": 24,
+          "trust_is_input_policy_not_identity_guarantee": true
+        },
+        "ratios": [
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16",
+          "21:9",
+          "adaptive"
+        ],
+        "ratio_default": "adaptive",
+        "ratio_verification": {
+          "checked_on": "2026-10-12",
+          "source_key": "ark_create",
+          "retrieval": "official_search_index_primary_page",
+          "cached_archive": "docs/reference/seedance/2026-09-07/seedance_2_0_api.md",
+          "scope": "Seedance 2.0 series including exact Mini model; formal frame supports adaptive or explicit listed ratio"
+        }
+      },
+      "official_sources": [
+        "ark_model",
+        "ark_create",
+        "ark_get",
+        "ark_portrait",
+        "ark_prompt"
+      ],
+      "local_anchors": [
+        "src/content_factory/seedance_client.py",
+        "src/content_factory/seedance_models.py",
+        "scripts/run_script_video.py",
+        "src/content_factory/creative_shared_media_contract_v3.py",
+        "scripts/run_creative_shared_full_production_v1.py"
+      ],
+      "generic_client_support": [
+        "reference_image",
+        "reference_video",
+        "reference_audio",
+        "first_frame",
+        "last_frame",
+        "return_last_frame"
+      ],
+      "selected_new_shared_entry": {
+        "v4_text_only": true,
+        "v1_media_bootstrap_text_only": true,
+        "v3_trusted_video_preview_only": true,
+        "new_shared_multimodal_submit_integrated": false,
+        "new_shared_live_account_origin_check_integrated": false,
+        "actor_asset_bindings": "unknown",
+        "voice_reference_inputs": "unbound"
+      },
+      "new_shared_reference_real_interface_acceptance": null,
+      "new_shared_identity_human_approval": null
+    },
+    {
+      "provider": "minimax",
+      "model": "MiniMax-M3",
+      "protocol": "OpenAI-compatible Chat Completions",
+      "official": {
+        "thinking_types": [
+          "disabled",
+          "adaptive"
+        ],
+        "thinking_default": "enabled",
+        "thinking_counts_toward_completion_limit": true,
+        "new_integration_output_limit_field": "max_completion_tokens",
+        "legacy_max_tokens_still_documented": true,
+        "tools_supported": true,
+        "forced_tool_choice_guarantee_verified": false,
+        "strict_inner_schema_guarantee_verified": false,
+        "multimodal_input": [
+          "text",
+          "image_url",
+          "video_url"
+        ]
+      },
+      "official_sources": [
+        "minimax_openai",
+        "minimax_tools"
+      ],
+      "local_anchors": [
+        "scripts/creative_bounded_format_role_clients_v1.py",
+        "scripts/run_creative_shared_full_production_v4.py"
+      ],
+      "actual_517": {
+        "model": "MiniMax-M3",
+        "thinking": "disabled",
+        "temperature": 0.4,
+        "max_tokens": 10000,
+        "tool_choice": "omitted",
+        "tools_inner_contract": "payload_json:string",
+        "http_status": 200,
+        "finish_reason": "tool_calls",
+        "reported_completion_tokens": 1390,
+        "contract_result": "source_path_missing_and_duplicate_not_truncation"
+      },
+      "selected_images_in_current_director_request": "none_selected_for_fresh_casting",
+      "selected_image_multimodal_director_input_integrated": false,
+      "video_understanding_allowed_by_current_user": false
+    },
+    {
+      "provider": "deepseek",
+      "model": "deepseek-flash",
+      "protocol": "OpenAI-compatible Chat Completions /v1",
+      "official": {
+        "models_read_only_endpoint": "GET /models",
+        "model_metadata_documented": [
+          "name",
+          "context_window",
+          "max_output_tokens",
+          "input_modalities",
+          "effort",
+          "api_capabilities"
+        ],
+        "json_mode": "JSON_syntax_not_application_semantics",
+        "strict_function_schema": {
+          "endpoint_scope": "beta",
+          "schema_subset_required": true
+        },
+        "named_or_required_tool_needs_thinking_disabled": true,
+        "thinking_default": "enabled",
+        "nonterminal_content_reasons": [
+          "length",
+          "content_filter",
+          "insufficient_system_resource",
+          "aborted"
+        ]
+      },
+      "official_sources": [
+        "deepseek_models",
+        "deepseek_chat",
+        "deepseek_tools",
+        "deepseek_json"
+      ],
+      "local_anchors": [
+        "scripts/creative_bounded_format_role_clients_v1.py",
+        "scripts/creative_evidenced_role_clients_v1.py",
+        "src/content_factory/creative_workflow_roles.py"
+      ],
+      "current_review_wire": {
+        "thinking": "disabled",
+        "tool_choice": "named_function",
+        "strict": false,
+        "inner_contract": "payload_json:string"
+      },
+      "generic_preflight_none_thinking_with_named_tool_risk": true,
+      "risk_is_proven_cause_of_old_failures": false,
+      "typed_strict_review_adapter_integrated": false
+    }
+  ],
+  "refresh_triggers": [
+    "new_model_or_protocol",
+    "input_mode_change",
+    "material_origin_change",
+    "format_or_parameter_failure",
+    "missing_or_changed_model_directory_fields"
+  ],
+  "new_entry_preflight_requirements": [
+    "compare_official_capability_generic_client_selected_adapter_and_actual_wire",
+    "derive_media_numbering_from_serialized_content_order",
+    "bind_actor_id_to_approved_original_asset_subject_and_voice",
+    "carry_fixed_shared_manifest_and_separate_dynamic_state",
+    "verify_same_account_original_task_and_native_file_hash_without_media_inspection",
+    "distinguish_30_day_origin_trust_from_24_hour_url_expiry",
+    "do_not_mix_formal_first_frame_with_reference_image_video_audio",
+    "preserve_original_task_id_claims_spend_and_manual_review_boundary"
+  ],
+  "this_registry_grants_calls": false,
+  "production_default_migrated": false,
+  "model_identity_fidelity_guaranteed": false
+}

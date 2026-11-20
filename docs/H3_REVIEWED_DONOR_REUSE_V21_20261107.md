@@ -1,0 +1,15 @@
+# 已审资产复用到新一分钟分镜
+
+`visual_h3_reference_reuse_v21.py`为新的显式合同，不修改原资产PLAN、原v6分镜或原generation-reference证明。原F10和F12分别保留自己的来源、人物范围、房间设计及生成审核约束。
+
+本次三人材料由原F12提供苏墨、叶西决front，由原F10提供叶南front；房间front与side均来自同一F12设计和审核链。每段五个独立引用槽，具名角色不按SHA合并，环境不能混用两个donor。完整donor包先通过原v20 collector.validate，选取canonical及其依赖证据后，再为S01—S04创建新的source_shot。新shot不会冒充旧F10/F12，也不会被强塞进旧v6的精确分镜子集。
+
+新根`data/video_generation/h3_reference_full_minute_20261107_v1`中的MANIFEST绑定用户本次授权、书籍/小说来源、完整donor包、具名角色选择、单源房间选择、四个原Seedance REQUEST、四个适配后提示词、逐项替换审计及root批准文件。新bundle沿用v20 schema，但明确加`reuse_contract=reviewed_donor_assets/v21`；旧bundle.validate只在显式声明此合同时分派到新的验证器，旧分支保留。
+
+本次原Seedance提示词中的旧首帧输入、具体衣服和旧观察者左右坐标，与新多图参考机制存在冲突。经root逐稿审核，仅替换这些参考机制文字，保留原对白、动作、情绪、时长及中近景切换。原始文本另存，`PROMPT_ADAPTATION_AUDIT.json`记录每个精确替换、次数、原/新UTF8 SHA和完整引号对白的字符范围。程序重演替换、重算所有对白范围并逐字比较；不能只信`dialogue_texts_equal`。`ROOT_PROMPT_APPROVAL.json`绑定具体审计文件与四个适配SHA。因此新全文不声称与Seedance原请求逐字节相同。
+
+`visual_h3_reference_delivery_v20.prepare_reused`消费此显式新合同。新delivery PLAN仍绑定真实F12 donor的asset_run、原asset PLAN SHA、服务目录、共享GPU与输入锁；新row单独绑定新manifest的source_shot和来源，继续使用既有CLAIM/REQUEST/RESPONSE、原ID轮询、四类原件收存、未知不重发及旧暂停保护。新prepare只准备文件，不调用execute或POST。
+
+新入口为真实ReferenceToVideo/ref2va权重，五张审核原图独立输入；没有将旧首图或上段尾帧作为唯一条件，没有新增固定机位，没有重新调用文本模型编写视频。技术准备或测试通过不等于成片身份、动作和场景一致性已通过，实际每段仍需原生生成和root看片。
+
+CPU回归位于`tests/test_visual_h3_reference_reuse_v21.py`，并与旧bundle/delivery回归联合运行。`data/qa/h3_reference_reuse_v21_20261107/CPU_ACCEPTANCE.json`记录47个唯一用例：新复用8、旧bundle22、旧delivery17；不与此前运行累加。临时协议图/视频均不是正式H3产物。

@@ -1,0 +1,20 @@
+{
+  "schema": "workflow_sequence_clarification_v1",
+  "at_utc": "2026-10-06T05:48:33.589604+00:00",
+  "user_statement": "为什么会出现视频，不应该是先图片生成然后视频吗直接视频物理感强一些？",
+  "assistant_correction": "将组合试下扩大解释为提前视频试验；原先少量图片经用户确认再进入视频的顺序应继续适用",
+  "existing_local_video_scope": "技术试验记录，不是S7正式片段，也不表示图片或视频人审通过",
+  "actual_video_inputs": "Blender办公室渲染参考图与同机位深度图重复17帧，未采用两张生成图片作为经用户批准的正式首帧",
+  "next_sequence": [
+    "固定场景布局和人物设定候选",
+    "少量图片与人物面部参考",
+    "用户确认图片",
+    "正式镜头首帧与表演请求预览",
+    "明确当前段生成后派发视频",
+    "用户人工审核视频"
+  ],
+  "gate": "no_new_video_dispatch_before_user_image_confirmation",
+  "new_model_calls": 0,
+  "original_receipts_and_ledgers_preserved": true,
+  "existing_video_content_verdict": null
+}

@@ -1,0 +1,469 @@
+{
+  "schema_version": "ip_precheck_cases_v1",
+  "gold_policy": "在首次模型推理之前固定；span 为 Python Unicode 字符偏移，左闭右开。NER 按名称语义评分；candidate 金标表示待人工核对的明确名称引用，含未入演示词库的新名称，不等于侵权。",
+  "labels": [
+    "person",
+    "brand",
+    "organization",
+    "location",
+    "work of art",
+    "fictional character",
+    "creator"
+  ],
+  "cases": [
+    {
+      "id": "brand_zh",
+      "text": "她拿起耐克运动鞋，旁边放着阿迪达斯背包。",
+      "expected_ner": [
+        {
+          "start": 3,
+          "end": 5,
+          "text": "耐克",
+          "label": "brand"
+        },
+        {
+          "start": 13,
+          "end": 17,
+          "text": "阿迪达斯",
+          "label": "brand"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 3,
+          "end": 5,
+          "text": "耐克",
+          "label": "brand"
+        },
+        {
+          "start": 13,
+          "end": 17,
+          "text": "阿迪达斯",
+          "label": "brand"
+        }
+      ]
+    },
+    {
+      "id": "brand_en",
+      "text": "广告上写着 Nike、NIKE 和 adidas。",
+      "expected_ner": [
+        {
+          "start": 6,
+          "end": 10,
+          "text": "Nike",
+          "label": "brand"
+        },
+        {
+          "start": 11,
+          "end": 15,
+          "text": "NIKE",
+          "label": "brand"
+        },
+        {
+          "start": 18,
+          "end": 24,
+          "text": "adidas",
+          "label": "brand"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 6,
+          "end": 10,
+          "text": "Nike",
+          "label": "brand"
+        },
+        {
+          "start": 11,
+          "end": 15,
+          "text": "NIKE",
+          "label": "brand"
+        },
+        {
+          "start": 18,
+          "end": 24,
+          "text": "adidas",
+          "label": "brand"
+        }
+      ]
+    },
+    {
+      "id": "phone_context",
+      "text": "他想买苹果手机，又比较了小米手机。",
+      "expected_ner": [
+        {
+          "start": 3,
+          "end": 5,
+          "text": "苹果",
+          "label": "brand"
+        },
+        {
+          "start": 12,
+          "end": 14,
+          "text": "小米",
+          "label": "brand"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 3,
+          "end": 5,
+          "text": "苹果",
+          "label": "brand"
+        },
+        {
+          "start": 12,
+          "end": 14,
+          "text": "小米",
+          "label": "brand"
+        }
+      ]
+    },
+    {
+      "id": "food_negative",
+      "text": "一筐苹果放在桌上，小米粥正在锅里煮。",
+      "expected_ner": [],
+      "expected_candidates": []
+    },
+    {
+      "id": "organization",
+      "text": "苹果公司与微软公司宣布合作。",
+      "expected_ner": [
+        {
+          "start": 0,
+          "end": 4,
+          "text": "苹果公司",
+          "label": "organization"
+        },
+        {
+          "start": 5,
+          "end": 9,
+          "text": "微软公司",
+          "label": "organization"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 0,
+          "end": 4,
+          "text": "苹果公司",
+          "label": "organization"
+        },
+        {
+          "start": 5,
+          "end": 9,
+          "text": "微软公司",
+          "label": "organization"
+        }
+      ]
+    },
+    {
+      "id": "fictional_people",
+      "text": "周明看着周禾说：“渡船快到了。”",
+      "expected_ner": [
+        {
+          "start": 0,
+          "end": 2,
+          "text": "周明",
+          "label": "person"
+        },
+        {
+          "start": 4,
+          "end": 6,
+          "text": "周禾",
+          "label": "person"
+        }
+      ],
+      "expected_candidates": []
+    },
+    {
+      "id": "generic_region",
+      "text": "长江中下游的渡口，河西通往河东。",
+      "expected_ner": [
+        {
+          "start": 0,
+          "end": 5,
+          "text": "长江中下游",
+          "label": "location"
+        }
+      ],
+      "expected_candidates": []
+    },
+    {
+      "id": "work_and_character",
+      "text": "镜头模仿《千与千寻》，让无脸男站在门外。",
+      "expected_ner": [
+        {
+          "start": 5,
+          "end": 9,
+          "text": "千与千寻",
+          "label": "work of art"
+        },
+        {
+          "start": 12,
+          "end": 15,
+          "text": "无脸男",
+          "label": "fictional character"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 5,
+          "end": 9,
+          "text": "千与千寻",
+          "label": "work of art"
+        },
+        {
+          "start": 12,
+          "end": 15,
+          "text": "无脸男",
+          "label": "fictional character"
+        }
+      ]
+    },
+    {
+      "id": "translated_aliases",
+      "text": "《哈利·波特》里的赫敏·格兰杰拿着魔杖。",
+      "expected_ner": [
+        {
+          "start": 1,
+          "end": 6,
+          "text": "哈利·波特",
+          "label": "work of art"
+        },
+        {
+          "start": 9,
+          "end": 15,
+          "text": "赫敏·格兰杰",
+          "label": "fictional character"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 1,
+          "end": 6,
+          "text": "哈利·波特",
+          "label": "work of art"
+        },
+        {
+          "start": 9,
+          "end": 15,
+          "text": "赫敏·格兰杰",
+          "label": "fictional character"
+        }
+      ]
+    },
+    {
+      "id": "creator_style",
+      "text": "画面采用宫崎骏的动画风格，背景参考梵高的笔触。",
+      "expected_ner": [
+        {
+          "start": 4,
+          "end": 7,
+          "text": "宫崎骏",
+          "label": "creator"
+        },
+        {
+          "start": 17,
+          "end": 19,
+          "text": "梵高",
+          "label": "creator"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 4,
+          "end": 7,
+          "text": "宫崎骏",
+          "label": "creator"
+        },
+        {
+          "start": 17,
+          "end": 19,
+          "text": "梵高",
+          "label": "creator"
+        }
+      ]
+    },
+    {
+      "id": "public_person",
+      "text": "请用周杰伦的形象拍一支广告。",
+      "expected_ner": [
+        {
+          "start": 2,
+          "end": 5,
+          "text": "周杰伦",
+          "label": "person"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 2,
+          "end": 5,
+          "text": "周杰伦",
+          "label": "person"
+        }
+      ]
+    },
+    {
+      "id": "unknown_brand",
+      "text": "虚构品牌“岚星盒”推出一款新手机。",
+      "expected_ner": [
+        {
+          "start": 5,
+          "end": 8,
+          "text": "岚星盒",
+          "label": "brand"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 5,
+          "end": 8,
+          "text": "岚星盒",
+          "label": "brand"
+        }
+      ]
+    },
+    {
+      "id": "unknown_work",
+      "text": "原创小说《月港清单》里有一个角色叫林舟。",
+      "expected_ner": [
+        {
+          "start": 5,
+          "end": 9,
+          "text": "月港清单",
+          "label": "work of art"
+        },
+        {
+          "start": 17,
+          "end": 19,
+          "text": "林舟",
+          "label": "fictional character"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 5,
+          "end": 9,
+          "text": "月港清单",
+          "label": "work of art"
+        },
+        {
+          "start": 17,
+          "end": 19,
+          "text": "林舟",
+          "label": "fictional character"
+        }
+      ]
+    },
+    {
+      "id": "beverage_aliases",
+      "text": "海报上有可口可乐和 Coca-Cola 的字样。",
+      "expected_ner": [
+        {
+          "start": 4,
+          "end": 8,
+          "text": "可口可乐",
+          "label": "brand"
+        },
+        {
+          "start": 10,
+          "end": 19,
+          "text": "Coca-Cola",
+          "label": "brand"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 4,
+          "end": 8,
+          "text": "可口可乐",
+          "label": "brand"
+        },
+        {
+          "start": 10,
+          "end": 19,
+          "text": "Coca-Cola",
+          "label": "brand"
+        }
+      ]
+    },
+    {
+      "id": "descriptive_only",
+      "text": "一个穿红蓝紧身衣、会吐蛛丝的少年从高楼跃下。",
+      "expected_ner": [],
+      "expected_candidates": []
+    },
+    {
+      "id": "generic_institution",
+      "text": "经理在旧书修复工作室核对验收单。",
+      "expected_ner": [],
+      "expected_candidates": []
+    },
+    {
+      "id": "mixed_reference",
+      "text": "她穿着 adidas 外套，看着《三体》封面上的罗辑。",
+      "expected_ner": [
+        {
+          "start": 4,
+          "end": 10,
+          "text": "adidas",
+          "label": "brand"
+        },
+        {
+          "start": 17,
+          "end": 19,
+          "text": "三体",
+          "label": "work of art"
+        },
+        {
+          "start": 24,
+          "end": 26,
+          "text": "罗辑",
+          "label": "fictional character"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 4,
+          "end": 10,
+          "text": "adidas",
+          "label": "brand"
+        },
+        {
+          "start": 17,
+          "end": 19,
+          "text": "三体",
+          "label": "work of art"
+        },
+        {
+          "start": 24,
+          "end": 26,
+          "text": "罗辑",
+          "label": "fictional character"
+        }
+      ]
+    },
+    {
+      "id": "ambiguous_same_text",
+      "text": "桌上有苹果，墙上贴着“苹果手机发布会”的海报。",
+      "expected_ner": [
+        {
+          "start": 11,
+          "end": 13,
+          "text": "苹果",
+          "label": "brand"
+        }
+      ],
+      "expected_candidates": [
+        {
+          "start": 11,
+          "end": 13,
+          "text": "苹果",
+          "label": "brand"
+        }
+      ]
+    }
+  ]
+}

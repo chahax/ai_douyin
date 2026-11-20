@@ -1,0 +1,30 @@
+{
+  "source_repo": "Comfy-Org/comfy-cli",
+  "source_commit": "805e7de758a297f4888f4a8fcf170f49d124434f",
+  "skills": [
+    {
+      "name": "comfy",
+      "path": "C:\\Users\\c\\.codex\\skills\\comfy\\SKILL.md",
+      "sha256": "f0130ebe0566ab0bc2cd566f3257edacc2706bb383a225e5880881b2902aad2c",
+      "available_after_next_session_refresh": true
+    },
+    {
+      "name": "comfy-debug",
+      "path": "C:\\Users\\c\\.codex\\skills\\comfy-debug\\SKILL.md",
+      "sha256": "a7054e2f22b3f832e3a7e2f7e495f36bdcde73073a82e874f8b47729bfe6c84a",
+      "available_after_next_session_refresh": true
+    },
+    {
+      "name": "comfy-director",
+      "path": "C:\\Users\\c\\.codex\\skills\\comfy-director\\SKILL.md",
+      "sha256": "b9f8c461a82e5766608a6a1255c42a2adbf64afe588736783482fe9685836e14",
+      "available_after_next_session_refresh": true
+    },
+    {
+      "name": "comfy-relay",
+      "path": "C:\\Users\\c\\.codex\\skills\\comfy-relay\\SKILL.md",
+      "sha256": "a43b40921467e184fe951f87ace593a0a1d0025be85f8c4f4bd3f4bab8d2f117",
+      "available_after_next_session_refresh": true
+    }
+  ]
+}

@@ -13,6 +13,12 @@ from src.trend_intelligence.pre_video_script import PreVideoScriptService, PreVi
 from src.trend_intelligence.repository import TrendRepository
 
 
+@pytest.fixture(autouse=True)
+def media_gate_uses_isolated_output_root(monkeypatch):
+    monkeypatch.setattr(PreVideoScriptService, '_resolve_output_dir',
+                        staticmethod(lambda request: Path(request.output_dir).resolve()))
+
+
 def test_metadata_batch_cannot_reach_writer_and_has_actionable_report(tmp_path):
     rows = _expanded_rows([
         _row('labor','解除合同如何处理',video_type='mixed',metric=100_000),

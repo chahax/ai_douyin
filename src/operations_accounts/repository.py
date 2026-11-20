@@ -95,6 +95,18 @@ CREATE TABLE IF NOT EXISTS account_runtime_state (
     FOREIGN KEY (account_uuid) REFERENCES douyin_accounts(account_uuid)
 );
 
+CREATE TABLE IF NOT EXISTS account_runtime_operation_usage (
+    account_uuid TEXT NOT NULL,
+    quota_scope TEXT NOT NULL,
+    day_key TEXT NOT NULL,
+    runs INTEGER NOT NULL DEFAULT 0,
+    legacy_baseline INTEGER NOT NULL DEFAULT 0,
+    history_sources_json TEXT NOT NULL DEFAULT '[]',
+    updated_at TEXT NOT NULL,
+    PRIMARY KEY (account_uuid, quota_scope, day_key),
+    FOREIGN KEY (account_uuid) REFERENCES douyin_accounts(account_uuid)
+);
+
 CREATE TABLE IF NOT EXISTS account_oauth_attempts (
     state_hash TEXT PRIMARY KEY,
     account_uuid TEXT NOT NULL,
@@ -451,6 +463,15 @@ class AccountBindingRepository:
                     f"该浏览器环境已绑定运营账号 {environment_owner['account_key']}。"
                 )
 
+            # Keep immutable identity snapshots when rebinding; never erase history.
+            conn.execute('''CREATE TABLE IF NOT EXISTS account_binding_history (
+                id INTEGER PRIMARY KEY AUTOINCREMENT, account_uuid TEXT NOT NULL,
+                changed_at TEXT NOT NULL, confirmed_by TEXT NOT NULL, snapshot_json TEXT NOT NULL
+            )''')
+            if existing is not None and existing['platform_identity_key'] != identity.platform_identity_key:
+                conn.execute('INSERT INTO account_binding_history(account_uuid, changed_at, confirmed_by, snapshot_json) VALUES(?,?,?,?)',
+                             (profile.account_uuid, now, confirmed_by, json.dumps(dict(existing), ensure_ascii=False)))
+
             created_at = existing["created_at"] if existing is not None else now
             conn.execute(
                 """
@@ -661,21 +682,34 @@ class AccountBindingRepository:
         return self.get(account_key)
 
     def get_runtime_state(self, account_uuid: str) -> AccountRuntimeState:
-        now = _utc_now()
         with self.connection() as conn:
+            row = conn.execute(
+                "SELECT * FROM account_runtime_state WHERE account_uuid = ?",
+                (account_uuid,),
+            ).fetchone()
+            if row is not None:
+                return AccountRuntimeState(**dict(row))
             conn.execute(
                 """
                 INSERT OR IGNORE INTO account_runtime_state (
                     account_uuid, updated_at
                 ) VALUES (?, ?)
                 """,
-                (account_uuid, now),
+                (account_uuid, _utc_now()),
             )
             row = conn.execute(
                 "SELECT * FROM account_runtime_state WHERE account_uuid = ?",
                 (account_uuid,),
             ).fetchone()
         return AccountRuntimeState(**dict(row))
+
+    def get_operation_usage(self, account_uuid: str, quota_scope: str) -> dict | None:
+        with self.connection() as conn:
+            row = conn.execute(
+                "SELECT * FROM account_runtime_operation_usage WHERE account_uuid = ? AND quota_scope = ? AND day_key = ?",
+                (account_uuid, quota_scope, datetime.now(timezone.utc).date().isoformat()),
+            ).fetchone()
+        return dict(row) if row is not None else None
 
     def acquire_runtime(
         self,
@@ -685,12 +719,35 @@ class AccountBindingRepository:
         daily_limit: int,
         cooldown_seconds: int,
         lock_seconds: int = 1800,
+        allow_manual_verification: bool = False,
+        quota_scope: str = "",
+        quota_baseline: int = 0,
+        quota_history_sources: tuple[str, ...] = (),
     ) -> AccountRuntimeState:
         if not owner.strip():
             raise ValueError("runtime lock owner 不能为空。")
+        if allow_manual_verification and not owner.startswith("manual-session:"):
+            raise ValueError("人工验证例外仅供 manual-session 互斥访问。")
+        if quota_scope and (quota_scope != "playback" or not owner.startswith("maintenance:playback:")
+                            or isinstance(daily_limit, bool) or daily_limit not in (0, 3)):
+            raise ValueError("独立播放配额仅供 maintenance:playback；0表示观看不限日次数，3保留旧限额。")
+        if not isinstance(quota_baseline, int) or isinstance(quota_baseline, bool) or quota_baseline < 0:
+            raise ValueError("播放历史配额基线必须为非负整数。")
         now = datetime.now(timezone.utc)
         now_text = now.isoformat()
         day_key = now.date().isoformat()
+        if quota_scope:
+            # Freeze inherited usage even when this first admission is denied.
+            # Changing log directories or retrying a quota denial cannot reseed.
+            with self.connection() as conn:
+                conn.execute("BEGIN IMMEDIATE")
+                conn.execute(
+                    "INSERT OR IGNORE INTO account_runtime_operation_usage "
+                    "(account_uuid, quota_scope, day_key, runs, legacy_baseline, history_sources_json, updated_at) "
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    (account_uuid, quota_scope, day_key, quota_baseline, quota_baseline,
+                     json.dumps(list(quota_history_sources), ensure_ascii=False), now_text),
+                )
         with self.connection() as conn:
             conn.execute("BEGIN IMMEDIATE")
             conn.execute(
@@ -707,11 +764,16 @@ class AccountBindingRepository:
             ).fetchone()
             state = AccountRuntimeState(**dict(row))
             lock_expires = _parse_time(state.lock_expires_at)
+            if allow_manual_verification and state.lock_owner:
+                # Manual repair cannot steal any pending owner, including an
+                # expired lease whose original operation is still unknown.
+                raise AccountRuntimeUnavailable(
+                    "locked", "原账号任务仍持有运行锁，请核对原任务后再进行人工处理。",
+                    retry_at=state.lock_expires_at,
+                )
             if (
                 state.lock_owner
                 and state.lock_owner != owner
-                and lock_expires is not None
-                and lock_expires > now
             ):
                 raise AccountRuntimeUnavailable(
                     "locked",
@@ -719,14 +781,22 @@ class AccountBindingRepository:
                     retry_at=state.lock_expires_at,
                 )
             circuit_until = _parse_time(state.circuit_open_until)
-            if circuit_until is not None and circuit_until > now:
+            if circuit_until is not None and circuit_until > now and not allow_manual_verification:
                 raise AccountRuntimeUnavailable(
                     "circuit_open",
                     "账号连续异常，已进入熔断冷却。",
                     retry_at=state.circuit_open_until,
                 )
             daily_runs = state.daily_runs if state.day_key == day_key else 0
-            if daily_runs >= max(1, daily_limit):
+            scope_runs = None
+            if quota_scope:
+                scope_runs = int(conn.execute(
+                    "SELECT runs FROM account_runtime_operation_usage WHERE account_uuid = ? AND quota_scope = ? AND day_key = ?",
+                    (account_uuid, quota_scope, day_key),
+                ).fetchone()["runs"])
+            unlimited_playback = quota_scope == "playback" and daily_limit == 0
+            from .daily_run_policy import daily_limit_reached
+            if not unlimited_playback and daily_limit_reached(scope_runs if scope_runs is not None else daily_runs, daily_limit):
                 raise AccountRuntimeUnavailable(
                     "daily_quota_exceeded",
                     f"账号今日运行次数已达到上限 {daily_limit}。",
@@ -760,6 +830,12 @@ class AccountBindingRepository:
                     account_uuid,
                 ),
             )
+            if quota_scope:
+                conn.execute(
+                    "UPDATE account_runtime_operation_usage SET runs = runs + 1, updated_at = ? "
+                    "WHERE account_uuid = ? AND quota_scope = ? AND day_key = ?",
+                    (now_text, account_uuid, quota_scope, day_key),
+                )
         return self.get_runtime_state(account_uuid)
 
     def release_runtime(
@@ -770,7 +846,10 @@ class AccountBindingRepository:
         success: bool,
         circuit_failure_threshold: int = 3,
         circuit_seconds: int = 21600,
+        allow_manual_verification: bool = False,
     ) -> AccountRuntimeState:
+        if allow_manual_verification and not owner.startswith("manual-session:"):
+            raise ValueError("人工验证例外仅供 manual-session 互斥访问。")
         now = datetime.now(timezone.utc)
         with self.connection() as conn:
             conn.execute("BEGIN IMMEDIATE")
@@ -787,9 +866,11 @@ class AccountBindingRepository:
                 raise AccountRuntimeUnavailable(
                     "lock_owner_mismatch", "不能释放其他任务持有的账号运行锁。"
                 )
-            failures = 0 if success else state.consecutive_failures + 1
-            circuit_until = ""
-            if failures >= max(1, circuit_failure_threshold):
+            # A manual repair window proves no business health. Keep its
+            # existing failures and circuit deadline when releasing only its lock.
+            failures = state.consecutive_failures if allow_manual_verification else (0 if success else state.consecutive_failures + 1)
+            circuit_until = state.circuit_open_until if allow_manual_verification else ""
+            if not allow_manual_verification and failures >= max(1, circuit_failure_threshold):
                 circuit_until = (
                     now + timedelta(seconds=max(60, circuit_seconds))
                 ).isoformat()

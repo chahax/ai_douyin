@@ -1,0 +1,14 @@
+[
+ {"id":"T01","source":"阿宁走出书店。随后在河边告诉小周考试通过了。","candidate":"切到河边，阿宁向小周报喜。省略出书店过程。","expected":"consistent"},
+ {"id":"T02","source":"阿宁走出书店。随后在河边告诉小周考试通过了。","candidate":"阿宁仍站在书店收银台前，向小周报喜。","expected":"contradiction"},
+ {"id":"T03","source":"阿宁离开书店，对等在外面的小周说考试通过了。","candidate":"阿宁面部近景，背景虚化、不强调具体地点，说考试通过了。","expected":"consistent"},
+ {"id":"T04","source":"小齐打算上楼取伞，还没迈步，妹妹就把伞拿下来了。","candidate":"小齐留在楼下，接过妹妹带下来的伞。","expected":"consistent"},
+ {"id":"T05","source":"小齐打算上楼取伞，还没迈步，妹妹就把伞拿下来了。","candidate":"小齐已在楼上，妹妹在楼上把伞交给他。","expected":"contradiction"},
+ {"id":"T06","source":"老林坐在诊室里，想起去年在海边散步的事。医生叫了他的名字。","candidate":"诊室里医生叫老林；旁白提到海边回忆，没有切回忆镜头。","expected":"consistent"},
+ {"id":"T07","source":"老林坐在诊室里，想起去年在海边散步的事。医生叫了他的名字。","candidate":"当前海边，医生在沙滩上叫老林。","expected":"contradiction"},
+ {"id":"T08","source":"甲留在厨房洗碗，乙到院子打电话。甲隔窗问乙几点走。","candidate":"甲在厨房，乙在院子。甲隔窗询问。省略乙出门镜头。","expected":"consistent"},
+ {"id":"T09","source":"甲留在厨房洗碗，乙到院子打电话。甲隔窗问乙几点走。","candidate":"甲和乙都在院子里，甲边洗碗边询问乙。","expected":"contradiction"},
+ {"id":"T10","source":"两人在客厅聊完工作，接着谈起周末计划，一直没有离开。","candidate":"同一客厅镜头继续，两人从工作谈到周末。","expected":"consistent"},
+ {"id":"T11","source":"她走出车站，路过花店时遇到了朋友。没有交代花店的地址。","candidate":"花店旁的两人近景交谈，不展示花店与车站的空间关系。","expected":"consistent"},
+ {"id":"T12","source":"她走出车站，路过花店时遇到了朋友。没有交代花店的地址。","candidate":"车站候车大厅里的花店，显示她还未离开车站便遇到朋友。","expected":"contradiction"}
+]

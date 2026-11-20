@@ -1,0 +1,13 @@
+{
+  "meta": null,
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"workflow\": \"D:\\\\IT\\\\ai_douyin\\\\tools\\\\scene_lab_20261006\\\\comfy\\\\workflows\\\\still_corridor.json\",\n  \"status\": \"queued\",\n  \"prompt_id\": \"8803775d-fae8-437c-a901-dcf3224b2b50\",\n  \"client_id\": \"d358bc30-ac61-4be3-bd0a-980b041f7825\",\n  \"outputs\": [],\n  \"elapsed_seconds\": null,\n  \"host\": \"127.0.0.1\",\n  \"port\": 8192,\n  \"state_file\": \"C:\\\\Users\\\\c\\\\AppData\\\\Local\\\\comfy-cli\\\\jobs\\\\8803775d-fae8-437c-a901-dcf3224b2b50.json\",\n  \"watcher_spawned\": false\n}",
+      "annotations": null,
+      "meta": null
+    }
+  ],
+  "structuredContent": null,
+  "isError": false
+}

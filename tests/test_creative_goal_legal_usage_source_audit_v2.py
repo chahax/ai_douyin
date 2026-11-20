@@ -1,0 +1,401 @@
+"""New synthetic pragmatic/native relation tests; never normalize old reviews."""
+from copy import deepcopy
+import hashlib
+import json
+from pathlib import Path
+import socket
+
+from jsonschema import Draft202012Validator, ValidationError
+import pytest
+
+from src.content_factory import creative_goal_legal_usage_source_audit_v2 as audit
+from tests.test_creative_goal_legal_usage_source_audit_v1 import authority, goal, ref_for, real594
+
+CONTEXT = "d" * 64
+PROJECT = Path(__file__).resolve().parents[1]
+ROUND17 = PROJECT / "data/production_trials/goal_context_text_production_20261013/round_17"
+
+
+@pytest.fixture(autouse=True)
+def offline(monkeypatch):
+    def deny(*args, **kwargs): raise AssertionError("pragmatic source tests must not contact providers")
+    monkeypatch.setattr(socket.socket, "connect", deny)
+    monkeypatch.setattr(socket, "create_connection", deny)
+
+
+def synthetic_legal_usage(goal, ref, *, relation="supported", scope="general_rule", treatment="asserted"):
+    return {"kind": "legal_assertion", "quote": audit.build_evidence_catalog(goal)[ref]["quote"],
+        "assertion_scope": scope, "interpretation": "Synthetic legal interpretation, not local Chinese extraction",
+        "authority_refs": ["L002"] if relation not in ("not_covered", "unknown") else [],
+        "basis_relation": relation, "treatment": treatment, "context_evidence": [],
+        "reason": "Synthetic explicit relation for gate exercise",
+        "required_revision": "Submit complete native plan revision" if relation in ("contradicts", "application_contradicted") and treatment == "asserted" else ""}
+
+
+def synthetic_source(goal, authority, context=CONTEXT):
+    """Build only an explicit synthetic structural report, never a provider pass."""
+    document = {"schema": audit.VERSION, "goal_sha256": audit.digest(goal), "audit_context_sha256": context,
+        "authority_context_sha256": audit.digest(authority),
+        "claim_checks": {claim["id"]: {"status": "pass", "reason": "Synthetic provenance judgment only",
+                                      "required_revision": ""} for claim in goal["claims"]},
+        "legal_usage_scan": {ref: [] for ref in audit.build_evidence_catalog(goal)}}
+    for claim in goal["claims"]:
+        if claim["kind"] == "verified_legal":
+            row = synthetic_legal_usage(goal, "C:" + claim["id"])
+            row["authority_refs"] = list(claim["origin_ids"])
+            document["legal_usage_scan"]["C:" + claim["id"]].append(row)
+    return document
+
+
+def add_legal_usage(document, goal, ref, **kwargs):
+    row = synthetic_legal_usage(goal, ref, **kwargs)
+    document["legal_usage_scan"][ref].append(row)
+    return row
+
+
+def add_nonlegal_usage(document, goal, ref, function="case_offer_or_promise"):
+    row = {"kind": "non_legal_context", "quote": audit.build_evidence_catalog(goal)[ref]["quote"],
+        "pragmatic_function": function, "interpretation": "Synthetic case speech act without a legal assertion",
+        "reason": "Synthetic classification, not proof of pragmatic meaning"}
+    document["legal_usage_scan"][ref].append(row)
+    return row
+
+
+def add_uncertain_usage(document, goal, ref):
+    row = {"kind": "uncertain", "quote": audit.build_evidence_catalog(goal)[ref]["quote"],
+        "interpretation": "Cannot establish whether this occurrence asserts legal meaning",
+        "reason": "Synthetic meaningful uncertainty"}
+    document["legal_usage_scan"][ref].append(row)
+    return row
+
+
+def validate(document, goal, authority):
+    return audit.validate_source(document, goal, authority, context_sha256=CONTEXT)
+
+
+def actual_witness(goal, path="whole_plan.beats.0.response", quote=None):
+    ref = ref_for(goal, path)
+    return {"source_ref": ref, "quote": quote or audit.build_evidence_catalog(goal)[ref]["quote"]}
+
+
+def test_three_disjoint_native_shapes_no_usage_status_or_duplicate_relation_allof(goal, authority):
+    schema = audit.build_source_schema(goal, authority, context_sha256=CONTEXT)
+    Draft202012Validator.check_schema(schema)
+    assert set(schema["properties"]["legal_usage_scan"]["properties"]) == set(audit.build_evidence_catalog(goal))
+    for kind in ("non_legal_context", "legal_assertion", "uncertain"):
+        assert "status" not in schema["$defs"][kind]["properties"]
+        assert "allOf" not in schema["$defs"][kind]
+    assert "status" in schema["$defs"]["judgment"]["properties"]
+    document = synthetic_source(goal, authority)
+    before = deepcopy((goal, authority, document))
+    result = validate(document, goal, authority)
+    assert result["accepted"] and result["legal_usage_coverage_complete"]
+    assert result["gate_origin"] == "explicit_native_relation_policy" and not result["native_usage_status_created"]
+    assert not result["pragmatic_classification_proven"] and not result["mixed_utterance_extraction_proven"]
+    assert not result["legal_semantic_extraction_proven"] and not result["human_approved"]
+    assert (goal, authority, document) == before
+
+
+@pytest.mark.parametrize("function", audit.PRAGMATIC_FUNCTIONS)
+def test_nonlegal_personal_offer_fact_or_question_does_not_need_law_support(goal, authority, function):
+    document = synthetic_source(goal, authority)
+    ref = ref_for(goal, "whole_plan.beats.0.stimulus")
+    usage = add_nonlegal_usage(document, goal, ref, function)
+    assert not set(usage) & {"authority_refs", "basis_relation", "treatment", "status"}
+    result = validate(document, goal, authority)
+    assert result["accepted"] and result["usage_gates"][ref][0]["gate"] == "clear"
+    assert not result["pragmatic_classification_proven"]  # No Chinese keyword exemption is claimed.
+
+
+def test_mixed_offer_and_wrong_legal_premise_need_two_native_rows_and_still_fail(goal, authority):
+    goal["whole_plan"]["beats"][0]["stimulus"] = "这周签了下周发钱；第38条自己走就没有补偿。"
+    ref = ref_for(goal, "whole_plan.beats.0.stimulus")
+    document = synthetic_source(goal, authority)
+    offer = add_nonlegal_usage(document, goal, ref)
+    offer["quote"] = "这周签了下周发钱"
+    assertion = add_legal_usage(document, goal, ref, relation="contradicts")
+    assertion["quote"] = "第38条自己走就没有补偿"
+    result = validate(document, goal, authority)
+    assert not result["accepted"] and [row["gate"] for row in result["usage_gates"][ref]] == ["clear", "fail"]
+    assert result["findings"][0]["native_usage"] == assertion and "status" not in assertion
+
+
+@pytest.mark.parametrize("relation,scope,treatment,gate", [
+    ("supported", "general_rule", "asserted", "clear"),
+    ("contradicts", "general_rule", "asserted", "fail"),
+    ("not_covered", "general_rule", "asserted", "unknown"),
+    ("unknown", "general_rule", "asserted", "unknown"),
+    ("application_not_demonstrated", "case_application", "asserted", "unknown"),
+    ("application_contradicted", "case_application", "asserted", "fail"),
+    ("supported", "case_application", "asserted", "clear"),
+    ("contradicts", "general_rule", "actually_corrected", "clear"),
+    ("application_contradicted", "case_application", "actually_corrected", "clear"),
+    ("not_covered", "general_rule", "actually_corrected", "unknown"),
+    ("unknown", "general_rule", "actually_corrected", "unknown"),
+])
+def test_finite_gate_policy_preserves_every_uncovered_or_unknown_relation(goal, authority, relation, scope, treatment, gate):
+    document = synthetic_source(goal, authority)
+    row = add_legal_usage(document, goal, "C:CC6", relation=relation, scope=scope, treatment=treatment)
+    if treatment == "actually_corrected" or scope == "case_application" and relation in ("supported", "application_contradicted"):
+        row["context_evidence"] = [actual_witness(goal)]
+    result = validate(document, goal, authority)
+    assert result["usage_gates"]["C:CC6"][0]["gate"] == gate
+    assert result["accepted"] is (gate == "clear")
+    rows = result["findings"] if gate == "fail" else result["uncertainties"] if gate == "unknown" else []
+    if rows: assert rows[0]["gate_origin"] == audit.GATE_ORIGIN and rows[0]["native_usage"] == row
+
+
+def test_uncertain_classification_is_meaningful_and_blocks_without_fake_legal_relation(goal, authority):
+    document = synthetic_source(goal, authority)
+    row = add_uncertain_usage(document, goal, "C:CC6")
+    result = validate(document, goal, authority)
+    assert not result["accepted"] and result["uncertainties"][0]["native_usage"] == row
+    assert result["uncertainties"][0]["gate"] == "unknown"
+
+
+@pytest.mark.parametrize("kind", ["non_legal_context", "uncertain", "legal_assertion"])
+@pytest.mark.parametrize("extra", ["status", "portrayal"])
+def test_old_redundant_fields_cannot_enter_any_new_native_branch(goal, authority, kind, extra):
+    document = synthetic_source(goal, authority)
+    row = add_nonlegal_usage(document, goal, "C:CC6") if kind == "non_legal_context" else (
+        add_uncertain_usage(document, goal, "C:CC6") if kind == "uncertain" else add_legal_usage(document, goal, "C:CC6"))
+    row[extra] = "pass" if extra == "status" else "open_or_question"
+    with pytest.raises(ValidationError): validate(document, goal, authority)
+
+
+@pytest.mark.parametrize("fault", ["missing_verified", "nonlegal_verified", "missing_g", "missing_c", "extra_g", "wrong_schema",
+    "wrong_goal", "wrong_context", "wrong_authority", "mixed_branch_fields"])
+def test_full_position_metadata_and_three_identity_bindings_remain_required(goal, authority, fault):
+    document = synthetic_source(goal, authority)
+    if fault == "missing_verified": document["legal_usage_scan"]["C:VL2"] = []
+    elif fault == "nonlegal_verified":
+        document["legal_usage_scan"]["C:VL2"] = [];add_nonlegal_usage(document, goal, "C:VL2")
+    elif fault in ("missing_g", "missing_c"):
+        ref = ref_for(goal, "whole_plan.beats.0.stimulus") if fault == "missing_g" else "C:CC6"
+        document["legal_usage_scan"].pop(ref)
+    elif fault == "extra_g": document["legal_usage_scan"]["G999"] = []
+    elif fault == "wrong_schema": document["schema"] = audit.exact.VERSION
+    elif fault == "wrong_goal": document["goal_sha256"] = "0" * 64
+    elif fault == "wrong_context": document["audit_context_sha256"] = "0" * 64
+    elif fault == "wrong_authority": document["authority_context_sha256"] = "0" * 64
+    else: add_nonlegal_usage(document, goal, "C:CC6")["authority_refs"] = ["L002"]
+    with pytest.raises(ValidationError): validate(document, goal, authority)
+
+
+@pytest.mark.parametrize("fault", ["none", "claim", "identity", "purpose", "own_g", "repeated_original", "wrong_quote"])
+def test_actual_correction_needs_a_different_enacted_g_not_declaration_or_original_self_proof(goal, authority, fault):
+    ref = ref_for(goal, "whole_plan.beats.0.stimulus")
+    document = synthetic_source(goal, authority)
+    row = add_legal_usage(document, goal, ref, relation="contradicts", treatment="actually_corrected")
+    if fault == "claim": row["context_evidence"] = [{"source_ref": "C:VL2", "quote": goal["claims"][1]["text"]}]
+    elif fault in ("identity", "purpose"):
+        path = "whole_plan.characters.0.role" if fault == "identity" else "whole_plan.beats.0.goal"
+        row["context_evidence"] = [actual_witness(goal, path)]
+    elif fault == "own_g": row["context_evidence"] = [{"source_ref": ref, "quote": row["quote"]}]
+    elif fault == "repeated_original":
+        goal["whole_plan"]["beats"][0]["response"] = row["quote"]
+        document = synthetic_source(goal, authority)
+        row = add_legal_usage(document, goal, ref, relation="contradicts", treatment="actually_corrected")
+        row["context_evidence"] = [actual_witness(goal)]
+    elif fault == "wrong_quote": row["context_evidence"] = [actual_witness(goal, quote="不在该G中的纠正")]
+    with pytest.raises((ValidationError, audit.LegalUsageContractError)): validate(document, goal, authority)
+
+
+@pytest.mark.parametrize("fault", ["missing_case_conditions", "missing_case_counterproof", "general_with_application", "missing_authority",
+    "supported_but_corrected", "clear_with_revision", "fail_without_revision", "wrong_authority_ref", "wrong_quote"])
+def test_native_legal_relation_self_consistency_and_exact_support(goal, authority, fault):
+    document = synthetic_source(goal, authority)
+    row = add_legal_usage(document, goal, "C:CC6")
+    if fault == "missing_case_conditions": row["assertion_scope"] = "case_application"
+    elif fault == "missing_case_counterproof": row.update(assertion_scope="case_application", basis_relation="application_contradicted", required_revision="Whole revision")
+    elif fault == "general_with_application": row["basis_relation"] = "application_not_demonstrated"
+    elif fault == "missing_authority": row["authority_refs"] = []
+    elif fault == "supported_but_corrected": row.update(treatment="actually_corrected", context_evidence=[actual_witness(goal)])
+    elif fault == "clear_with_revision": row["required_revision"] = "mandatory change"
+    elif fault == "fail_without_revision": row["basis_relation"] = "contradicts"
+    elif fault == "wrong_authority_ref": row["authority_refs"] = ["LC"]
+    else: row["quote"] = "未在原句出现"
+    with pytest.raises((ValidationError, audit.LegalUsageContractError)): validate(document, goal, authority)
+
+
+@pytest.mark.parametrize("same_source", [True, False])
+@pytest.mark.parametrize("relation", ["supported", "application_contradicted"])
+def test_case_conditions_or_counterproof_cannot_be_the_same_original_assertion_even_at_another_g(goal, authority, same_source, relation):
+    ref = ref_for(goal,"whole_plan.beats.0.stimulus")
+    if not same_source: goal["whole_plan"]["beats"][0]["response"] = goal["whole_plan"]["beats"][0]["stimulus"]
+    document = synthetic_source(goal,authority)
+    row = add_legal_usage(document,goal,ref,relation=relation,scope="case_application")
+    context_ref = ref if same_source else ref_for(goal,"whole_plan.beats.0.response")
+    row["context_evidence"] = [{"source_ref":context_ref,"quote":row["quote"]}]
+    with pytest.raises(audit.LegalUsageContractError,match="own condition proof or counterproof"):
+        validate(document,goal,authority)
+
+
+def test_one_g_can_supply_different_exact_condition_and_conclusion_fragments(goal,authority):
+    goal["whole_plan"]["beats"][0]["stimulus"] = "公司提出并且双方同意解除；该情形依法有经济补偿。"
+    ref = ref_for(goal,"whole_plan.beats.0.stimulus")
+    document = synthetic_source(goal,authority)
+    row = add_legal_usage(document,goal,ref,scope="case_application")
+    row.update(quote="该情形依法有经济补偿",authority_refs=["L001"],
+        context_evidence=[{"source_ref":ref,"quote":"公司提出并且双方同意解除"}])
+    result = validate(document,goal,authority)
+    assert result["accepted"] and not result["legal_semantic_extraction_proven"]
+
+
+@pytest.mark.parametrize("field,limit", [("reason", audit.MAX_REASON_CHARS), ("interpretation", audit.MAX_INTERPRETATION_CHARS),
+    ("quote", audit.MAX_QUOTE_CHARS), ("required_revision", audit.MAX_REVISION_CHARS)])
+def test_finite_native_output_never_silently_truncated(goal, authority, field, limit):
+    document = synthetic_source(goal, authority)
+    row = add_legal_usage(document, goal, "C:CC6")
+    row[field] = "长" * (limit + 1)
+    before = deepcopy(document)
+    with pytest.raises(ValidationError): validate(document, goal, authority)
+    assert document == before
+
+
+def test_true_source_classification_unknown_still_blocks_even_if_all_usage_gates_clear(goal, authority):
+    document = synthetic_source(goal, authority)
+    document["claim_checks"]["CC6"].update(status="unknown", reason="Provenance not established")
+    result = validate(document, goal, authority)
+    assert not result["accepted"] and result["uncertainties"][0]["table"] == "claim_checks"
+
+
+def test_old_v1_schema_or_admission_can_never_run_in_v2(goal, authority, monkeypatch):
+    def deny(*args, **kwargs): raise AssertionError("old source1 admission invoked")
+    monkeypatch.setattr(audit.exact, "build_source_schema", deny)
+    monkeypatch.setattr(audit.exact, "validate_source", deny)
+    document = synthetic_source(goal, authority)
+    assert validate(document, goal, authority)["accepted"]
+
+
+def test_verified_legal_can_be_uncertain_but_never_disappear_into_nonlegal_context(goal, authority):
+    document = synthetic_source(goal, authority)
+    document["legal_usage_scan"]["C:VL2"] = []
+    add_uncertain_usage(document, goal, "C:VL2")
+    result = validate(document, goal, authority)
+    assert not result["accepted"] and result["uncertainties"][0]["source_ref"] == "C:VL2"
+
+
+@pytest.mark.parametrize("component", ["facts", "sources", "origins"])
+def test_any_authority_condition_source_or_directory_drift_blocks_original_report(goal, authority, component):
+    document = synthetic_source(goal, authority)
+    changed = deepcopy(authority)
+    if component == "facts": changed["verified_legal_context"]["facts"][1]["paraphrase"] += "changed conditions"
+    elif component == "sources": changed["verified_legal_context"]["sources"][0]["version"] += "changed version"
+    else: changed["origin_catalog"]["user"]["U1"]["path"] = "another path"
+    with pytest.raises(ValidationError): validate(document, goal, changed)
+
+
+def test_per_source_capacity_is_finite_and_overflow_is_not_silently_removed(goal, authority):
+    document = synthetic_source(goal, authority)
+    for index in range(audit.MAX_USAGES_PER_SOURCE):
+        row = add_nonlegal_usage(document, goal, "C:CC6")
+        row["interpretation"] = f"Synthetic distinct pragmatic item {index}"
+    assert validate(document, goal, authority)["valid"]
+    add_uncertain_usage(document, goal, "C:CC6")
+    before = deepcopy(document)
+    with pytest.raises(ValidationError): validate(document, goal, authority)
+    assert document == before
+
+
+def test_context_evidence_capacity_is_finite(goal, authority):
+    goal["whole_plan"]["beats"][0]["visible_change"] = "主管收回表，员工仍坐着。"
+    document = synthetic_source(goal, authority)
+    row = add_legal_usage(document, goal, "C:CC6", scope="case_application")
+    available = audit.build_actual_context_catalog(goal)
+    row["context_evidence"] = [{"source_ref": ref, "quote": item["quote"]}
+                               for ref, item in list(available.items())[:audit.MAX_CONTEXT_EVIDENCE]]
+    assert validate(document, goal, authority)["valid"]
+    ref, item = list(available.items())[audit.MAX_CONTEXT_EVIDENCE]
+    row["context_evidence"].append({"source_ref": ref, "quote": item["quote"]})
+    with pytest.raises(ValidationError): validate(document, goal, authority)
+
+
+def test_repeated_assertion_positions_are_not_limited_by_an_arbitrary_global_32(goal, authority):
+    goal["whole_plan"]["beats"] = [{"id": f"b{index}", "stimulus": "第38条解除与经济补偿有法定衔接。"}
+                                     for index in range(40)]
+    document = synthetic_source(goal, authority)
+    for ref, item in audit.build_evidence_catalog(goal).items():
+        if item["document_path"].startswith("whole_plan.beats."): add_legal_usage(document, goal, ref)
+    result = validate(document, goal, authority)
+    assert result["accepted"] and result["legal_usage_count"] == 41
+    assert result["maximum_usage_count"] == len(audit.build_evidence_catalog(goal)) * audit.MAX_USAGES_PER_SOURCE
+
+
+def test_empty_creative_scan_and_nonlegal_label_are_not_local_semantic_proof(goal, authority):
+    document = synthetic_source(goal, authority)
+    # Deliberately no local language matching: a wrong semantic label is not
+    # independently recognized here. That responsibility remains explicit.
+    add_nonlegal_usage(document, goal, "C:CC6")
+    result = validate(document, goal, authority)
+    assert result["accepted"] and not result["pragmatic_classification_proven"]
+    assert not result["mixed_utterance_extraction_proven"]
+
+
+def test_actual594_595_wrong_38_rule_remains_blocked_and_old_report_is_not_converted():
+    goal, authority, old_source, _, hashes = real594()
+    with pytest.raises(ValidationError): validate(old_source["output"], goal, authority)
+    report = synthetic_source(goal, authority)
+    for ref in ("C:CC6", ref_for(goal, "whole_plan.beats.5.stimulus")):
+        add_legal_usage(report, goal, ref, relation="contradicts")
+    result = validate(report, goal, authority)
+    assert not result["accepted"] and len(result["findings"]) == 2
+    assert hashes == {path: hashlib.sha256(Path(path).read_bytes()).hexdigest() for path in hashes}
+
+
+def real602603():
+    paths = [ROUND17 / "goals/native_01.json", ROUND17 / "call_603_goal_source_audit_01.json"]
+    assert all(path.is_file() for path in paths), "actual frozen602/603 evidence required"
+    goal, receipt = [json.loads(path.read_text(encoding="utf-8")) for path in paths]
+    payload = json.loads(next(row["content"] for row in receipt["request"]["messages"] if row["role"] == "user"))
+    authority = {key: deepcopy(payload[key]) for key in ("verified_legal_context", "origin_catalog")}
+    hashes = {str(path): hashlib.sha256(path.read_bytes()).hexdigest() for path in paths}
+    return goal, authority, receipt, hashes
+
+
+def test_actual603_twenty_relation_status_errors_are_not_reclassified_into_an_accepted_native_report():
+    goal, authority, receipt, hashes = real602603()
+    assert receipt["status"] == "contract_rejected" and receipt["response_metadata"]["finish_reason"] == "tool_calls"
+    errors = list(Draft202012Validator(receipt["request"]["structured_schema"]).iter_errors(receipt["output"]))
+    assert len(errors) == 20 and all(list(error.absolute_path)[-1] == "status" for error in errors)
+    with pytest.raises(ValidationError): validate(receipt["output"], goal, authority)
+    # New native-shaped synthetic classifications illustrate the two duties;
+    # they never overwrite, convert or adopt the old source report.
+    report = synthetic_source(goal, authority)
+    for path,function in [("whole_plan.beats.0.stimulus", "case_offer_or_promise"),
+                          ("whole_plan.beats.2.response", "case_fact_or_intent")]:
+        add_nonlegal_usage(report, goal, ref_for(goal,path), function)
+    unsupported = add_legal_usage(report, goal, ref_for(goal,"whole_plan.beats.3.response"), relation="not_covered")
+    unsupported["interpretation"] = "Synthetic benchmark for603's own interpretation: uncorrected assertion about notebook legal proof, authority does not cover it"
+    result = validate(report, goal, authority)
+    assert not result["accepted"] and len(result["uncertainties"]) == 1
+    assert result["usage_gates"]["G007"][0]["gate"] == "clear" and result["usage_gates"]["G030"][0]["gate"] == "unknown"
+    assert hashes == {path: hashlib.sha256(Path(path).read_bytes()).hexdigest() for path in hashes}
+
+
+def test_actual602_written_agreement_term_does_not_demonstrate_agreement_conditions():
+    goal, authority, _, _ = real602603()
+    report = synthetic_source(goal, authority)
+    ref = ref_for(goal,"whole_plan.beats.8.stimulus")
+    row = add_legal_usage(report,goal,ref,relation="application_not_demonstrated",scope="case_application")
+    row["authority_refs"] = ["L001"]
+    row["context_evidence"] = [actual_witness(goal,"whole_plan.beats.5.stimulus")]
+    row["interpretation"] = "Synthetic conditional benchmark: if writing the term is presented as an already reached agreement, actual mutual consent has not been demonstrated"
+    result = validate(report,goal,authority)
+    assert not result["accepted"] and result["uncertainties"][0]["native_usage"]["basis_relation"] == "application_not_demonstrated"
+    assert not result["legal_semantic_extraction_proven"]  # Not a local finding that an unsigned agreement is always invalid.
+
+
+def test_actual602_native_reported_case_contradiction_routes_to_failure_without_local_signature_inference():
+    goal, authority, _, _ = real602603()
+    report = synthetic_source(goal, authority)
+    ref = ref_for(goal,"whole_plan.beats.8.stimulus")
+    row = add_legal_usage(report,goal,ref,relation="application_contradicted",scope="case_application")
+    row["authority_refs"] = ["L001"]
+    row["context_evidence"] = [actual_witness(goal,"whole_plan.beats.5.stimulus"),
+                               actual_witness(goal,"whole_plan.beats.7.stimulus")]
+    row["interpretation"] = "Synthetic explicit case-contradiction relation exercises routing; only a reviewing model may interpret whether these responses negate agreement, not a local unsigned-means-no-agreement rule"
+    result = validate(report,goal,authority)
+    assert not result["accepted"] and result["findings"][0]["gate"] == "fail"
+    assert len(result["findings"][0]["evidence"]["context_evidence"]) == 2
+    assert not result["semantic_truth_deterministically_proven"]

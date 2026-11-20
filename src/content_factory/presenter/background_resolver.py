@@ -119,9 +119,9 @@ class ComfyAttempt:
 
 # 阶梯降级预设：attempt 1 → 2 → 3
 RETRY_PRESETS: List[ComfyAttempt] = [
-    ComfyAttempt(width=768, height=1344, batch_size=1, steps=28),  # attempt 1: 默认
-    ComfyAttempt(width=768, height=1344, batch_size=1, steps=20),  # attempt 2: 降 steps
-    ComfyAttempt(width=640, height=1120, batch_size=1, steps=20),  # attempt 3: 降分辨率
+    ComfyAttempt(width=832, height=1472, batch_size=1, steps=8),   # attempt 1: 发布源尺寸
+    ComfyAttempt(width=768, height=1344, batch_size=1, steps=6),   # attempt 2: 降 steps/分辨率
+    ComfyAttempt(width=640, height=1120, batch_size=1, steps=6),   # attempt 3: 降分辨率
 ]
 
 
@@ -862,7 +862,14 @@ class BackgroundResolver:
             return "study"
         return "default"
 
-    def _create_comfy_background(self, prompt: str, output_path: Path, seed: int = 260600, close_after: bool = True) -> bool:
+    def _create_comfy_background(
+        self,
+        prompt: str,
+        output_path: Path,
+        seed: int = 260600,
+        close_after: bool = True,
+        preset: ComfyAttempt | None = None,
+    ) -> bool:
         """调用 ComfyUI 生成动漫背景图。可在一次 Presenter 流程内复用服务。"""
         import json
         import socket
@@ -972,6 +979,12 @@ class BackgroundResolver:
                 return False
             logger.info("[ComfyUI] 已就绪")
 
+        preset = preset or ComfyAttempt(
+            width=RETRY_PRESETS[0].width,
+            height=RETRY_PRESETS[0].height,
+            batch_size=1,
+            steps=int(settings.COMFYUI_STEPS),
+        )
         workflow = {
             "1": {"class_type": "CheckpointLoaderSimple", "inputs": {"ckpt_name": settings.COMFYUI_CHECKPOINT}},
             "2": {"class_type": "CLIPTextEncode", "inputs": {"text": prompt, "clip": ["1", 1]}},
@@ -989,9 +1002,13 @@ class BackgroundResolver:
                         "severed arm, cropped arm, body parts without a full person, disconnected limb",
                 "clip": ["1", 1]
             }},
-            "4": {"class_type": "EmptyLatentImage", "inputs": {"width": 768, "height": 1344, "batch_size": 1}},
+            "4": {"class_type": "EmptyLatentImage", "inputs": {
+                "width": preset.width,
+                "height": preset.height,
+                "batch_size": preset.batch_size,
+            }},
             "5": {"class_type": "KSampler", "inputs": {
-                "seed": seed, "steps": int(settings.COMFYUI_STEPS), "cfg": float(settings.COMFYUI_CFG),
+                "seed": seed, "steps": preset.steps, "cfg": float(settings.COMFYUI_CFG),
                 "sampler_name": "euler", "scheduler": "simple", "denoise": 1.0,
                 "model": ["1", 0], "positive": ["2", 0], "negative": ["3", 0], "latent_image": ["4", 0]
             }},
@@ -1129,20 +1146,12 @@ class BackgroundResolver:
                         attempts=attempt_idx + 1,
                     )
 
-                # 实际调用底层（保留旧逻辑，新代码路径接 _create_comfy_background）
-                # 临时覆盖 settings 中的尺寸参数（这是最不侵入的实现方式）
-                from src.shared.config import Settings
-                # 注：pydantic-settings 不允许运行时改 .value，需要 monkeypatch
-                # 这里采用临时替换 settings.COMFYUI_STEPS / 通过环境变量预设
-                # 简化方案：通过 retry 让 _create_comfy_background 用 preset 的 steps
-                # 由于 _create_comfy_background 直接读 settings.COMFYUI_STEPS，
-                # 当前实现保留默认尺寸 + steps，不动态切换 preset。
-                # TODO(I-2): 让 _create_comfy_background 接受 preset 参数
                 success = self._create_comfy_background(
                     prompt=prompt,
                     output_path=output_path,
                     seed=seed,
                     close_after=close_after,
+                    preset=preset,
                 )
                 if success:
                     return output_path

@@ -1,0 +1,33 @@
+{
+  "schema": "creative_script_model_profile/m31_flash_v1",
+  "writer": {
+    "provider": "minimax",
+    "model": "MiniMax-M3.1-Flash-Preview",
+    "base_url": "https://api.minimax.cn/v1",
+    "parameters": {
+      "temperature": 0.4,
+      "thinking": "adaptive",
+      "reasoning_effort": "medium",
+      "max_completion_tokens": 16000
+    }
+  },
+  "director": {
+    "provider": "deepseek",
+    "model": "deepseek-flash",
+    "base_url": "https://api.deepseek.com/v1",
+    "parameters": {
+      "temperature": 0.4,
+      "thinking": "disabled",
+      "max_completion_tokens": 12000
+    }
+  },
+  "official_sources": [
+    "https://platform.minimax.cn/docs/guides/text-generation",
+    "https://platform.minimax.cn/docs/api-reference/text-chat-openai"
+  ],
+  "scope": "new independent full-script entry; historical frozen M3 entries unchanged",
+  "server_schema_guarantee": false,
+  "sdk_max_retries": 0,
+  "http_follow_redirects": false,
+  "media_authorized": false
+}

@@ -47,11 +47,14 @@ class PresenterRequest:
     background_style: str = "anime"
     bgm: str = ""
     output_dir: str = "data/videos"
+    quality_profile: str = "publish"  # preview / publish / master
     audio_path: str = ""
     max_segments: int = 16
     use_comfy_background: bool = True
     # I-2 ComfyUI 容错：True 时 ComfyUI 不可用直接中止 pipeline；False 时用 None 背景继续（默认）
     strict_background: bool = False
+    # 番茄推广：保留评论区搜索等有意 CTA（默认删除互动引导句以适配普通数字人口播）
+    preserve_engagement_cta: bool = False
 
 
 @dataclass

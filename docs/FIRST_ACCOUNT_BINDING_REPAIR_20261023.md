@@ -1,0 +1,11 @@
+# 小说号首次登录入口修复
+
+用户反馈新账号登录页“原环境处理异常”。novel_account_02 / 小说号 / novel_promotion已创建，尚无真实身份绑定，原登录租约已经正常退出。不是开放平台ClientKey缺失：首次登录页面调用PreparedBrowserEnvironment.create_browser_session时，borrow_session在启用统一管控后拒绝不属于后台owner的调用。已绑定账号的管控模式不能直接用于尚无绑定的新账号，导致浏览器启动前即被拒绝；泛化异常提示掩盖了managed_browser_required。
+
+新增首次绑定专用上下文：只在原账号manual-session持久租约中启用，核对未绑定、账号UUID/策略版本/状态、租约持有者与时效、原环境路径、人工未决窗口、浏览器owner及queued/running/paused/waiting_human/unknown任务。遇到任何未决或读取错误不放行。上下文退出后恢复普通管控限制，绑定读取后仍需管理员确认保存；不自动绑号、不复用法律号会话。错误提示增加经过字符限制的错误代码，不展示凭据。
+
+43个不同测试通过，含本地真实Chrome在隔离首次绑定环境启动、身份读取仍不落绑定、作用域结束恢复限制、跨账号/路径及作用域对象变更拒绝、未知任务/过期锁拦截、已绑定账号不能绕过管控、原页面管理员确认流程。
+
+部署前禁用Windows任务，核对PID21204无子进程、两账号无运行锁、无活跃调度租约和未决管控任务，既有owner已released；停机部署后重新启用原任务。新PID25096健康采样通过，源码SHA匹配，原法律号身份绑定保持，新小说号仍未绑定。生产首次扫码和最终身份确认需用户在原页面完成，未冒称已绑定成功。
+
+证据目录data/first_binding_repair/20261023，含tests.xml、final.xml、DEPLOYMENT.json和VERIFY.json。一次性部署脚本不重复执行。

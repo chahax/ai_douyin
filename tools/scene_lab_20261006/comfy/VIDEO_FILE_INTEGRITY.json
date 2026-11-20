@@ -1,0 +1,29 @@
+{
+  "path": "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\comfy\\output\\scene_lab\\depth_office_to_door_00002_.mp4",
+  "bytes": 24288,
+  "sha256": "1e3fda147e53ce4892892b55bad4785714133dcb0b775085bdc13907980fe101",
+  "complete_top_level_atoms": true,
+  "atoms": [
+    {
+      "type": "ftyp",
+      "bytes": 32
+    },
+    {
+      "type": "free",
+      "bytes": 8
+    },
+    {
+      "type": "mdat",
+      "bytes": 20821
+    },
+    {
+      "type": "moov",
+      "bytes": 3427
+    }
+  ],
+  "decoded_frames": 0,
+  "audio_listened": false,
+  "asr_calls": 0,
+  "audiovisual_review_model_calls": 0,
+  "content_status": "awaiting_human_review"
+}

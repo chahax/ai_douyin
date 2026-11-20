@@ -1,0 +1,84 @@
+{
+  "template": "video_control_plan/v1",
+  "id": "anti_fraud_tool_routing_probe",
+  "allow_fallback": false,
+  "defaults": {
+    "camera": "locked",
+    "background": "static",
+    "preserve_reference": true,
+    "multi_person": false
+  },
+  "shots": [
+    {
+      "id": "phone_notice",
+      "intent": {
+        "motion": "micro",
+        "framing": "medium",
+        "contains_hands": true,
+        "contains_phone": true
+      }
+    },
+    {
+      "id": "silent_expression",
+      "intent": {
+        "motion": "micro",
+        "framing": "head_shoulders"
+      }
+    },
+    {
+      "id": "spoken_line",
+      "intent": {
+        "motion": "micro",
+        "framing": "head_shoulders",
+        "audio_driven": true,
+        "visual_style": "generic",
+        "lip_sync_required": true
+      }
+    },
+    {
+      "id": "anime_voiceover",
+      "intent": {
+        "motion": "micro",
+        "framing": "head_shoulders",
+        "audio_driven": true,
+        "visual_style": "anime",
+        "lip_sync_required": false
+      }
+    },
+    {
+      "id": "anime_exact_lipsync",
+      "intent": {
+        "motion": "micro",
+        "framing": "head_shoulders",
+        "audio_driven": true,
+        "visual_style": "anime",
+        "lip_sync_required": true
+      }
+    },
+    {
+      "id": "subject_action",
+      "intent": {
+        "motion": "subject",
+        "framing": "medium"
+      }
+    },
+    {
+      "id": "background_relight",
+      "intent": {
+        "motion": "subject",
+        "framing": "medium",
+        "replacement": true,
+        "relight": true
+      }
+    },
+    {
+      "id": "free_camera",
+      "intent": {
+        "motion": "free",
+        "framing": "full",
+        "camera": "moving",
+        "background": "dynamic"
+      }
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+downloaded_models:
+  base_path: C:/Users/c/Downloads/ComfyUI_models
+  clip_vision: clip_vision
+  controlnet: controlnet

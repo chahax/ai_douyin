@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Callable, Iterable, Literal
 
 from src.platform_adapter.models import CommentQuery
+from src.platform_adapter.douyin_identity import DouyinIdentityVerificationError
 from src.platform_adapter.douyin_playback import (
     DouyinRelevantPlaybackController,
     PlaybackOptions,
@@ -32,8 +33,15 @@ from .repository import AccountRuntimeUnavailable
 from .runtime import AccountRuntimeError, AccountRuntimeService
 
 
-MaintenanceMode = Literal["daily", "pre-publish", "playback", "post-publish"]
+MaintenanceMode = Literal[
+    "daily", "pre-publish", "playback", "post-publish", "smart-operations"
+]
 MAINTENANCE_LOG_DIR = Path("data/account_maintenance")
+_IDENTITY_BLOCK_CODES = frozenset({
+    "human_required", "verification_ui_unconfirmed", "login_expired", "identity_unavailable", "identity_mismatch",
+    "login_unhealthy", "binding_required", "account_binding_required",
+    "account_uuid_mismatch", "browser_environment_mismatch",
+})
 _COLLECTED_FIELDS = frozenset(
     {
         "video_id",
@@ -61,6 +69,13 @@ class AccountMaintenanceResult:
     account_uuid: str = ""
     mode: MaintenanceMode = "daily"
     status: str = "running"
+    error_code: str = ""
+    failure_stage: str = ""
+    blocked_search: dict[str, str] = field(default_factory=dict)
+    challenge_evidence: dict = field(default_factory=dict)
+    feed_surface_evidence: dict = field(default_factory=dict)
+    navigation_evidence: dict = field(default_factory=dict)
+    runtime_lease_acquired: bool = False
     login_healthy: bool = False
     identity: str = ""
     collected_count: int = 0
@@ -68,6 +83,7 @@ class AccountMaintenanceResult:
     skipped_irrelevant: int = 0
     synced_videos: int = 0
     synced_comments: int = 0
+    comment_sync_failures: int = 0
     published_data_sync_completed: bool = False
     interaction_actions: int = 0
     playback_candidates: int = 0
@@ -76,9 +92,11 @@ class AccountMaintenanceResult:
     likes_performed: int = 0
     comments_sent: int = 0
     playback_items: list[dict[str, object]] = field(default_factory=list)
+    playback_source: str = ""
     interaction_policy: dict[str, object] = field(default_factory=dict)
     success_criteria: dict[str, bool] = field(default_factory=dict)
     video_records: list[dict[str, object]] = field(default_factory=list)
+    research_keywords: list[str] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
     message: str = ""
     started_at: str = ""
@@ -87,7 +105,28 @@ class AccountMaintenanceResult:
 
 
 class _MaintenanceRunFailed(RuntimeError):
-    pass
+    def __init__(self, message: str, code: str = "maintenance_incomplete"):
+        super().__init__(message)
+        self.code = code
+
+
+def playback_lease_seconds(total_minutes: int) -> int:
+    """Reserve the configured viewing cap plus 30 minutes for research/cleanup."""
+    if int(total_minutes) <= 0:
+        raise ValueError("总播放时长必须为正整数分钟。")
+    return max(3600, int(total_minutes) * 60 + 1800)
+
+
+class _BorrowedResearchSession:
+    """A research provider may release its handle, while the run owns the browser."""
+    def __init__(self, session):
+        self.session = session
+
+    def __getattr__(self, name):
+        return getattr(self.session, name)
+
+    def stop(self):
+        pass
 
 
 class AccountMaintenanceService:
@@ -101,6 +140,10 @@ class AccountMaintenanceService:
         "pre-publish": (20, 0),
         "playback": (3, 0),
         "post-publish": (20, 0),
+        # This account-wide counter is also used by the four-hour metric sync.
+        # Keep the same ceiling so the daily research run is not starved by
+        # successful background refreshes earlier in the day.
+        "smart-operations": (20, 0),
     }
 
     def __init__(
@@ -126,7 +169,13 @@ class AccountMaintenanceService:
         authorization_reference: str = "",
         headless: bool = True,
         playback_options: PlaybackOptions | None = None,
+        research_keywords: Iterable[str] | None = None,
     ) -> AccountMaintenanceResult:
+        from .browser_control_runtime import enabled, is_managed_account, managed_maintenance
+        if enabled() and not is_managed_account(account_key):
+            return managed_maintenance(self, account_key, mode, dict(
+                authorization_reference=authorization_reference, headless=headless,
+                playback_options=playback_options, research_keywords=research_keywords))
         if mode not in self.MODE_LIMITS:
             raise ValueError(f"不支持的账号维护模式：{mode}")
         result = AccountMaintenanceResult(
@@ -135,57 +184,107 @@ class AccountMaintenanceService:
             mode=mode,
             started_at=_utc_now(),
         )
+        active_stage = "runtime"
         try:
+            options = playback_options or PlaybackOptions()
+            if mode == "playback":
+                options.validate()
             context = self.runtime.resolve(account_key)
             result.account_uuid = context.account_uuid
             result.identity = context.identity_label
             daily_limit, cooldown_seconds = self.MODE_LIMITS[mode]
+            # Pure feed viewing has no daily attempt cap; retain usage history
+            # and every identity, lease, circuit and recovery check.
+            if (mode == "playback" and options.source == "recommend_feed"
+                    and not options.auto_like and not options.auto_comment):
+                daily_limit = 0
+            playback_lease = {}
+            if mode == "playback":
+                playback_lease = self._playback_quota_options(context)
+                playback_lease["lock_seconds"] = playback_lease_seconds(options.total_minutes)
             with self.runtime.operation_lease(
                 context,
                 operation=f"maintenance:{mode}",
                 daily_limit=daily_limit,
                 cooldown_seconds=cooldown_seconds,
+                **playback_lease,
             ):
+                result.runtime_lease_acquired = True
+                active_stage = "identity"
                 identity_session = context.create_browser_session(headless=headless)
                 try:
                     check = self.runtime.verify_identity(
                         context,
                         session=identity_session,
                     )
-                finally:
-                    identity_session.stop()
-                result.login_healthy = check.healthy
-                if not check.healthy:
-                    result.message = check.message
-                    raise _MaintenanceRunFailed(check.message)
-                if mode in {"daily", "pre-publish", "playback"}:
-                    self._run_research(
-                        result,
-                        context,
-                        authorization_reference=authorization_reference,
-                        headless=headless,
-                    )
-                    if mode == "playback":
-                        self._run_playback(
+                    result.login_healthy = check.healthy
+                    if not check.healthy:
+                        result.message = check.message
+                        raise _MaintenanceRunFailed(check.message, check.status)
+                    if mode == "playback" and options.source == "recommend_feed":
+                        active_stage = "playback"
+                        self._run_recommendation_playback(result, context, options, identity_session)
+                    elif mode in {"daily", "pre-publish", "playback", "smart-operations"}:
+                        active_stage = "research"
+                        # Reuse the identity-verified browser for search. Starting a
+                        # second browser immediately after verification can lose
+                        # transient anti-bot state and trigger an avoidable challenge.
+                        self._run_research(
                             result,
                             context,
-                            options=playback_options or PlaybackOptions(),
-                            headless=headless,
                             authorization_reference=authorization_reference,
+                            headless=headless,
+                            research_keywords=research_keywords,
+                            research_session=identity_session,
                         )
-                else:
-                    self._run_post_publish(result, context, headless=headless)
-                self._evaluate_success(result)
-                if result.status != "completed":
-                    raise _MaintenanceRunFailed(result.message)
-        except (AccountRuntimeError, AccountRuntimeUnavailable, _MaintenanceRunFailed) as exc:
+                        if mode == "playback" and result.status != "skipped":
+                            active_stage = "playback"
+                            self._run_playback(
+                                result,
+                                context,
+                                options=options,
+                                headless=headless,
+                                authorization_reference=authorization_reference,
+                                session=identity_session,
+                            )
+                    else:
+                        active_stage = "published_data_sync"
+                        self._run_post_publish(
+                            result,
+                            context,
+                            headless=headless,
+                            session=identity_session,
+                        )
+                    if result.status != "skipped":
+                        self._evaluate_success(result)
+                    if (
+                        result.status not in {"completed", "skipped"}
+                        and not (
+                            mode == "smart-operations"
+                            and result.published_data_sync_completed
+                        )
+                    ):
+                        raise _MaintenanceRunFailed(result.message)
+                finally:
+                    try:
+                        if result.login_healthy and getattr(context.binding, "status", "active") == "active":
+                            save_state = getattr(identity_session, "save_storage_state", None)
+                            if save_state is not None:
+                                save_state()
+                    finally:
+                        identity_session.stop()
+        except (AccountRuntimeError, AccountRuntimeUnavailable, DouyinIdentityVerificationError, _MaintenanceRunFailed) as exc:
+            result.failure_stage = result.failure_stage or active_stage
             if result.status == "running":
                 result.status = "blocked"
             result.message = result.message or str(exc)
+            result.error_code = result.error_code or str(exc.code)
             if str(exc) and str(exc) not in result.warnings:
                 result.warnings.append(str(exc))
         except Exception as exc:
+            result.failure_stage = result.failure_stage or active_stage
             result.status = "failed"
+            result.error_code = result.error_code or str(getattr(exc, "code", "") or "unexpected_error")
             result.message = f"{type(exc).__name__}: {exc}"
             result.warnings.append(result.message)
         finally:
@@ -194,6 +293,84 @@ class AccountMaintenanceService:
             self._write_log(result)
         return result
 
+    def _run_recommendation_playback(self, result, context, options, session):
+        from src.platform_adapter.douyin_recommendation_playback import DouyinRecommendationPlaybackController
+        result.playback_source = "recommend_feed"
+        result.interaction_policy = {
+            "source": "recommend_feed", "requested_auto_like": False,
+            "requested_auto_comment": False, "realized_like_budget": 0,
+            "realized_comment_budget": 0, "relevance_basis": "visible_caption_account_profile",
+        }
+        usage = self._interaction_usage(context.account_key)
+        controller = self.playback_factory(session) if self.playback_factory else DouyinRecommendationPlaybackController(session)
+        playback = controller.run(context.profile, options,
+                                  recent_video_ids=usage["recent_played_video_ids"])
+        result.playback_items = [asdict(item) for item in playback.items]
+        result.challenge_evidence = dict(playback.challenge_evidence)
+        result.feed_surface_evidence = dict(getattr(playback, 'feed_surface_evidence', {}) or {})
+        result.playback_candidates = len(playback.items)
+        result.playback_verified_videos = playback.verified_videos
+        result.actual_watch_seconds = playback.actual_watch_seconds
+        result.likes_performed, result.comments_sent = playback.likes_performed, playback.comments_sent
+        result.warnings.extend(playback.warnings)
+        if playback.status == "skipped":
+            result.status, result.error_code = "skipped", playback.error_code
+            result.message = "本轮推荐流未遇到达到相关度要求的可验证视频。"
+            result.success_criteria = {"verified_playback_completed": False, "external_interactions_zero": True}
+        elif playback.status != "completed":
+            raise _MaintenanceRunFailed("推荐流播放未完成，已保留实际播放记录。",
+                                        playback.error_code or "playback_unverified")
+
+    def _playback_quota_options(self, context) -> dict:
+        """Inherit original playback attempts once per account/UTC day.
+
+        Always include the standard production log root as well as a custom
+        destination. The database freezes this seed even when admission fails;
+        subsequent directory changes never reset the scoped count.
+        """
+        usage_reader = getattr(self.runtime, "get_operation_usage", None)
+        if usage_reader is not None and usage_reader(context, "playback") is not None:
+            return {"quota_scope": "playback"}
+        sources = tuple(sorted({str(Path(root).resolve()) for root in (MAINTENANCE_LOG_DIR, self.log_dir)}))
+        today = datetime.now(timezone.utc).date()
+        attempts: dict[str, dict] = {}
+        denied_codes = {
+            "binding_required", "login_unhealthy", "account_disabled", "account_uuid_mismatch",
+            "browser_environment_mismatch", "locked", "circuit_open", "daily_quota_exceeded", "cooldown",
+            "quota_history_unavailable",
+        }
+        try:
+            for root in sources:
+                account_dir = Path(root) / context.account_key
+                try:
+                    account_dir.stat()
+                except FileNotFoundError:
+                    continue
+                for path in account_dir.iterdir():
+                    if not (path.name.startswith("maintenance_") and path.suffix == ".json"):
+                        continue
+                    payload = json.loads(path.read_text(encoding="utf-8"))
+                    if not isinstance(payload, dict):
+                        raise ValueError("维护历史不是对象")
+                    if payload.get("mode") != "playback":
+                        continue
+                    if payload.get("error_code") in denied_codes or payload.get("runtime_lease_acquired") is False:
+                        continue
+                    if payload.get("account_uuid") != context.account_uuid or payload.get("account_key") != context.account_key:
+                        raise ValueError("播放历史账号身份不明确或冲突")
+                    started = _parse_utc(payload.get("started_at"))
+                    run_id = str(payload.get("run_id") or "")
+                    if started is None or not run_id:
+                        raise ValueError("播放历史缺少运行身份或UTC时间")
+                    if started.date() != today:
+                        continue
+                    if run_id in attempts and attempts[run_id] != payload:
+                        raise ValueError("同一播放运行存在冲突历史")
+                    attempts[run_id] = payload
+        except (OSError, ValueError, TypeError) as exc:
+            raise AccountRuntimeError("quota_history_unavailable", f"无法确认既有播放次数，已停止新派发：{type(exc).__name__}: {exc}") from exc
+        return {"quota_scope": "playback", "quota_baseline": len(attempts), "quota_history_sources": sources}
+
     def _run_research(
         self,
         result: AccountMaintenanceResult,
@@ -201,15 +378,24 @@ class AccountMaintenanceService:
         *,
         authorization_reference: str,
         headless: bool,
+        research_keywords: Iterable[str] | None = None,
+        research_session=None,
     ) -> None:
         if not authorization_reference.strip():
             result.message = "相关内容调研需要填写授权说明或工单编号。"
-            raise _MaintenanceRunFailed(result.message)
-        keywords = context.profile.seed_keywords[:2]
+            raise _MaintenanceRunFailed(result.message, "authorization_required")
+        keywords = []
+        for value in research_keywords or context.profile.seed_keywords[:2]:
+            keyword = str(value or "").strip()
+            if keyword and keyword not in keywords:
+                keywords.append(keyword)
+            if len(keywords) >= 2:
+                break
+        result.research_keywords = keywords
         if not keywords:
             result.message = "账号策略没有种子关键词，无法进行相关内容调研。"
-            raise _MaintenanceRunFailed(result.message)
-        pre_publish = result.mode == "pre-publish"
+            raise _MaintenanceRunFailed(result.message, "research_keywords_missing")
+        pre_publish = result.mode in {"pre-publish", "smart-operations"}
         playback_mode = result.mode == "playback"
         request = TrendCollectionRequest(
             keywords=keywords,
@@ -222,22 +408,52 @@ class AccountMaintenanceService:
             expand_related_tags=pre_publish or playback_mode,
             max_related_tags_per_keyword=2 if pre_publish or playback_mode else 0,
             max_total_related_tags=4 if pre_publish or playback_mode else 0,
+            # Manual runs keep the already verified window open long enough for
+            # a one-off Douyin challenge. Scheduled headless runs remain fail-fast.
+            manual_verification_timeout_seconds=180 if not headless else 0,
         )
         policy = _maintenance_policy(
             authorization_reference,
             planned_pages=estimate_douyin_planned_pages(request),
         )
+        provider = (
+            DouyinWebTrendProvider(
+                session_factory=lambda _headless: _BorrowedResearchSession(research_session)
+            )
+            if research_session is not None
+            else DouyinWebTrendProvider.for_account(context.account_key)
+        )
         research = self.research_factory().run(
             context.profile,
-            DouyinWebTrendProvider.for_account(context.account_key),
+            provider,
             request,
             policy=policy,
-            max_content_candidates=80 if playback_mode else (40 if pre_publish else 16),
+            # The research sample gate requires at least 20 distinct videos.
+            # A daily cap of 16 made every real daily run fail before analysis.
+            max_content_candidates=80 if playback_mode else (40 if pre_publish else 24),
         )
         result.collected_count = research.collected_observations
         result.unique_relevant_videos = research.unique_videos
         result.video_records = research.video_records
         result.warnings.extend(research.warnings)
+        result.navigation_evidence = dict(getattr(research, 'navigation_evidence', {}) or {})
+        if research.stopped_reason in {"human_required", "verification_ui_unconfirmed", "browser_navigation_timeout"}:
+            result.failure_stage = "research"
+            result.blocked_search = dict(getattr(research, "blocked_search", {}) or {})
+            result.challenge_evidence = dict(getattr(research, 'challenge_evidence', {}) or {})
+        if playback_mode:
+            # Collection can stop for verification after collecting some rows;
+            # a later sample gate must not hide that original access problem.
+            for stage in getattr(research, "stages", ()):
+                if stage.stage == "trend_collection" and stage.message not in {"", "allowed"}:
+                    raise _MaintenanceRunFailed(stage.message, stage.message)
+            if research.stopped_reason not in {
+                "", "insufficient_research_sample", "incomplete_source_media_analysis", "no_valid_videos"
+            }:
+                raise _MaintenanceRunFailed(research.stopped_reason, research.stopped_reason)
+            if research.stopped_reason == "no_valid_videos" and not result.video_records:
+                self._skip_playback(result)
+                return
         for warning in research.warnings:
             if warning.startswith("账号相关度预检："):
                 import re
@@ -245,15 +461,43 @@ class AccountMaintenanceService:
                 match = re.search(r"跳过\s*(\d+)\s*条", warning)
                 if match:
                     result.skipped_irrelevant = int(match.group(1))
-        if research.status not in {"completed", "partial"}:
+        metadata_only_operations = (
+            result.mode == "smart-operations"
+            and research.unique_videos > 0
+            and research.stopped_reason == "insufficient_research_sample"
+        )
+        deferred_smart_research = (
+            result.mode == "smart-operations"
+            and research.stopped_reason in {"human_required", "verification_ui_unconfirmed"}
+        )
+        if (
+            research.status not in {"completed", "partial", "awaiting_media_analysis"}
+            and not metadata_only_operations
+            and not deferred_smart_research
+            and not (playback_mode and research.stopped_reason == "insufficient_research_sample")
+        ):
             result.message = research.stopped_reason or "相关内容调研没有完成。"
-            raise _MaintenanceRunFailed(result.message)
+            raise _MaintenanceRunFailed(result.message, research.stopped_reason or "research_incomplete")
+        if metadata_only_operations:
+            result.warnings.append(
+                "关联视频元数据可用于运营观察；页面指标语义未确认，未生成自动选题或剧本。"
+            )
+        if deferred_smart_research:
+            result.error_code = research.stopped_reason
+            result.warnings.append(
+                ("搜索验证容器阻塞但未确认可操作验证码，请核对加载与网络；继续同步作品后台数据。" if research.stopped_reason == "verification_ui_unconfirmed" else "本轮关联视频搜索需要人工验证；继续同步作品后台数据，运营报告使用最近成功采集的缓存样本。")
+            )
+        if research.status == "awaiting_media_analysis":
+            result.warnings.append(
+                "关联视频的页面内容与元数据分析已完成；原视频音画分析尚未执行，不能据此自动生成剧本。"
+            )
         if pre_publish:
             self._sync_owned_feedback(
                 result,
                 context,
                 headless=headless,
-                required=False,
+                required=result.mode == "smart-operations",
+                session=research_session,
             )
 
     def _run_playback(
@@ -264,6 +508,7 @@ class AccountMaintenanceService:
         options: PlaybackOptions,
         headless: bool,
         authorization_reference: str,
+        session=None,
     ) -> None:
         options.validate()
         usage = self._interaction_usage(context.account_key)
@@ -277,10 +522,8 @@ class AccountMaintenanceService:
         )
         result.playback_candidates = len(candidates)
         if not candidates:
-            result.message = (
-                f"没有达到相关度阈值 {options.min_relevance_score:g} 的播放候选。"
-            )
-            raise _MaintenanceRunFailed(result.message)
+            self._skip_playback(result)
+            return
 
         ratio_plan = _build_dynamic_interaction_plan(
             candidates,
@@ -362,12 +605,13 @@ class AccountMaintenanceService:
             result.warnings.append("当前动态点赞比例预算为 0，本次不会点赞。")
         if options.auto_comment and comment_budget == 0:
             result.warnings.append("当前动态评论比例预算或冷却额度为 0，本次不会评论。")
-        session = context.create_browser_session(headless=headless)
+        own_session = session is None
+        session = session or context.create_browser_session(headless=headless)
         try:
             playback_identity = self.runtime.verify_identity(context, session=session)
             if not playback_identity.healthy:
                 result.message = playback_identity.message
-                raise _MaintenanceRunFailed(playback_identity.message)
+                raise _MaintenanceRunFailed(playback_identity.message, playback_identity.status)
             controller = (
                 self.playback_factory(session)
                 if self.playback_factory is not None
@@ -381,7 +625,8 @@ class AccountMaintenanceService:
                 blocked_comment_authors=usage["commented_authors_today"],
             )
         finally:
-            session.stop()
+            if own_session:
+                session.stop()
         result.playback_verified_videos = playback.verified_videos
         result.actual_watch_seconds = playback.actual_watch_seconds
         result.likes_performed = playback.likes_performed
@@ -419,7 +664,14 @@ class AccountMaintenanceService:
         result.warnings.extend(playback.warnings)
         if playback.status != "completed" or playback.verified_videos < 1:
             result.message = "相关视频播放未通过真实进度校验。"
-            raise _MaintenanceRunFailed(result.message)
+            raise _MaintenanceRunFailed(result.message, getattr(playback, "error_code", "") or "playback_unverified")
+
+    @staticmethod
+    def _skip_playback(result: AccountMaintenanceResult) -> None:
+        result.status = "skipped"
+        result.error_code = "no_playback_candidates"
+        result.message = "本轮没有未观看且达到相关度要求的有效播放候选，未执行播放。"
+        result.success_criteria = {"verified_playback_completed": False, "external_interactions_zero": True}
 
     def _interaction_usage(self, account_key: str) -> dict[str, object]:
         account_dir = self.log_dir / account_key
@@ -492,12 +744,20 @@ class AccountMaintenanceService:
             "last_comment_at": last_comment_at,
         }
 
-    def _run_post_publish(self, result: AccountMaintenanceResult, context, *, headless: bool) -> None:
+    def _run_post_publish(
+        self,
+        result: AccountMaintenanceResult,
+        context,
+        *,
+        headless: bool,
+        session=None,
+    ) -> None:
         self._sync_owned_feedback(
             result,
             context,
             headless=headless,
             required=True,
+            session=session,
         )
 
     def _sync_owned_feedback(
@@ -507,20 +767,50 @@ class AccountMaintenanceService:
         *,
         headless: bool,
         required: bool,
+        session=None,
     ) -> None:
+        try:
+            self._sync_owned_feedback_impl(
+                result, context, headless=headless, required=required, session=session
+            )
+        except Exception as exc:
+            # A deferred search challenge must not label a later sync failure.
+            result.failure_stage = "published_data_sync"
+            result.error_code = str(getattr(exc, "code", "") or "unexpected_error")
+            result.message = str(exc)
+            raise
+
+    def _sync_owned_feedback_impl(
+        self,
+        result: AccountMaintenanceResult,
+        context,
+        *,
+        headless: bool,
+        required: bool,
+        session=None,
+    ) -> None:
+        borrowed_session = session is not None and self.adapter_factory is None
         if self.adapter_factory is None:
             from src.platform_adapter.douyin_adapter import DouyinAdapter
 
-            adapter = DouyinAdapter.for_account(context.account_key, headless=headless)
+            adapter = (
+                DouyinAdapter(session=session, runtime_context=context)
+                if session is not None
+                else DouyinAdapter.for_account(context.account_key, headless=headless)
+            )
         else:
             adapter = self.adapter_factory(context.account_key, headless=headless)
         try:
             sync = adapter.sync_videos(page_limit=3)
             if not sync.success:
                 message = sync.message or "作品数据同步失败。"
+                sync_code = str(getattr(sync, "status", "") or "sync_failed")
+                if sync_code in _IDENTITY_BLOCK_CODES:
+                    result.error_code = sync_code
+                    result.failure_stage = "published_data_sync"
                 if required:
                     result.message = message
-                    raise _MaintenanceRunFailed(message)
+                    raise _MaintenanceRunFailed(message, sync_code)
                 result.warnings.append(f"自有作品用户反馈暂未同步：{message}")
                 return
             result.published_data_sync_completed = True
@@ -529,22 +819,50 @@ class AccountMaintenanceService:
                 if not video.video_id:
                     continue
                 comments = adapter.fetch_comments(CommentQuery(post_id=video.video_id))
-                if comments.success:
+                expected_comments = (getattr(video, "creator_metrics", None) or {}).get(
+                    "comment_count"
+                )
+                if (
+                    comments.success
+                    and expected_comments is not None
+                    and int(expected_comments) > 0
+                    and not comments.comments
+                ):
+                    result.comment_sync_failures += 1
+                    result.warnings.append(
+                        f"作品 {video.video_id} 后台显示 {expected_comments} 条评论，页面解析为 0，未记为评论同步成功。"
+                    )
+                elif comments.success:
                     result.synced_comments += len(comments.comments)
+                else:
+                    result.comment_sync_failures += 1
+                    comment_code = str(getattr(comments, "status", "") or "")
+                    if comment_code in _IDENTITY_BLOCK_CODES:
+                        result.error_code = comment_code
+                        result.failure_stage = "published_data_sync"
+                    result.warnings.append(f'作品 {video.video_id} 评论同步未成功。')
         finally:
-            adapter.close()
+            # The outer run owns its verified session and checkpoints refreshed
+            # cookies after all collection. Closing it here loses that snapshot.
+            if not borrowed_session:
+                adapter.close()
 
     @staticmethod
     def _evaluate_success(result: AccountMaintenanceResult) -> None:
         criteria = {"login_healthy": result.login_healthy}
-        if result.mode in {"daily", "pre-publish", "playback"}:
+        if result.mode in {"daily", "pre-publish", "smart-operations"} or (
+                result.mode == "playback" and result.playback_source != "recommend_feed"):
             criteria["relevant_distinct_content_collected"] = (
                 result.unique_relevant_videos > 0
             )
-        else:
+            if result.mode == "smart-operations":
+                criteria["published_data_synced"] = result.published_data_sync_completed
+                criteria["comments_sync_succeeded"] = result.comment_sync_failures == 0
+        elif result.mode != "playback":
             criteria["published_data_synced"] = (
                 result.published_data_sync_completed
             )
+            criteria['comments_sync_succeeded'] = result.comment_sync_failures == 0
         if result.mode == "playback":
             criteria["verified_playback_completed"] = result.playback_verified_videos > 0
             like_budget = int(result.interaction_policy.get("realized_like_budget") or 0)
@@ -558,12 +876,32 @@ class AccountMaintenanceService:
         else:
             criteria["external_interactions_zero"] = result.interaction_actions == 0
         result.success_criteria = criteria
-        result.status = "completed" if all(criteria.values()) else "partial"
-        result.message = (
-            "账号健康与运营维护完成。"
-            if result.status == "completed"
-            else "账号维护只完成了部分成功标准。"
-        )
+        # Comment collection is useful feedback, but the comment endpoint can be
+        # unavailable even when identity verification and creator metrics both
+        # succeeded. Treating that optional failure as an account-access failure
+        # repeatedly opened the account circuit breaker and stopped later metric
+        # collection. Keep the warning and criterion, while letting the verified
+        # backend snapshot count as a successful post-publish maintenance run.
+        required = {
+            key: value for key, value in criteria.items()
+            if not (
+                result.mode in {"post-publish", "smart-operations"}
+                and key == "comments_sync_succeeded"
+            )
+        }
+        result.status = "completed" if all(required.values()) else "partial"
+        if result.mode == "smart-operations" and result.error_code in {"human_required", "verification_ui_unconfirmed"}:
+            # Saved rows and creator metrics remain useful, while the new
+            # collection's explicit verification block remains unresolved.
+            result.status = "partial"
+        if result.status == "completed" and result.comment_sync_failures:
+            result.message = "作品后台数据同步完成；部分评论暂未同步，已保留告警。"
+        else:
+            result.message = (
+                "账号健康与运营维护完成。"
+                if result.status == "completed"
+                else "账号维护只完成了部分成功标准。"
+            )
 
     def _write_log(self, result: AccountMaintenanceResult) -> None:
         account_dir = self.log_dir / result.account_key

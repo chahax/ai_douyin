@@ -1,0 +1,10 @@
+# Seedance一分钟小说试片已生成并合成，待用户审片（2026-11-02 最新）
+
+用户“先来个一分钟的视频分段生成”，明确选Seedance现有云接口速度优先。第一章开场单独摘编4×15秒，720p竖屏原生音频，不改535阶段章节候选、不新增文本调用、不发布。目录data/video_generation/six_children_seedance_60s_20261102_trusted；完整片deliverables/six_children_opening_60s_review.mp4，60.197673秒、720×1280、24fps、1444帧、AAC48kHz。四任务t8pjb/lb6jf/sdztv/wg2h7均succeeded、原视频和原生尾帧保存；STATE=delivered_awaiting_human_review。后段用前段服务原生尾帧，未抽帧或观看/听音/ASR，内容由用户审片，不称语义与人物一致性验收通过。
+
+原six_children_seedance_60s_20261102外部image_gen开场图被Ark返回400 PrivacyInformation拒绝，无taskID。原图/请求/失败STATE/RUNNER_AT_REJECTION.py保留，不重派。按官方portrait-asset-guide改用同账号Seedream5.0Pro纯文生图原始1440×2560图；1次Seedream成功及4次Seedance成功，与前次1次已知拒绝显式关联。新图/回执/请求SHA保留，新脚本强制原生文生图来源，不把跨平台图编辑或转换冒充原生产物。
+
+5项离线回归通过；首次默认临时目录权限错误保留，使用项目内目录后通过。合成不重编码画面，按视频15.041667秒对齐各段音频端点（原音15.104秒）；整片约60.2秒。MP4关键帧参数头发生封装变化，初次直接包哈希检查不等原记录保留；归一AnnexB比对完全一致，所有1444帧时间间隔连续，无丢帧；这是技术核验，不是内容评审。TECHNICAL_VERIFICATION、NORMALIZED_BITSTREAM_VERIFICATION、DELIVERY、PRODUCTION_NOTES及SCREENPLAY_60S记录齐全。旧文本535/未知135与290不动，无服务重启或默认流程迁移。
+
+
+完整证据目录：`D:/IT/ai_douyin/data/video_generation/six_children_seedance_60s_20261102_trusted`。

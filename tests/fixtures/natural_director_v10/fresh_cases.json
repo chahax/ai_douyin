@@ -1,0 +1,62 @@
+{
+  "schema": "natural_director_fresh_cases/v1",
+  "fixture_origin": "locally_authored_offline_contract_examples",
+  "semantic_service_validation": "not_run",
+  "cases": [
+    {
+      "case_id": "family_exchange",
+      "path": "family_exchange.txt",
+      "category": "two_person_family",
+      "duration_seconds": 12,
+      "expected_review_focus": [
+        "双方回答和目光",
+        "钥匙改变关系",
+        "自然语速"
+      ]
+    },
+    {
+      "case_id": "office_three_people",
+      "path": "office_three_people.txt",
+      "category": "three_person_workplace",
+      "duration_seconds": 14,
+      "expected_review_focus": [
+        "第三人质问影响决定",
+        "目光转移有对象",
+        "责任落实"
+      ]
+    },
+    {
+      "case_id": "walking_prop_transfer",
+      "path": "walking_prop_transfer.txt",
+      "category": "walking_prop",
+      "duration_seconds": 9,
+      "expected_review_focus": [
+        "并行走向",
+        "双手占用",
+        "湿包裹刺激反应"
+      ]
+    },
+    {
+      "case_id": "meaningful_silence",
+      "path": "meaningful_silence.txt",
+      "category": "silence_averted_gaze",
+      "duration_seconds": 10,
+      "expected_review_focus": [
+        "避视有动机",
+        "沉默中判断变化",
+        "合理近景"
+      ]
+    },
+    {
+      "case_id": "phone_offscreen",
+      "path": "phone_offscreen.txt",
+      "category": "phone_offscreen",
+      "duration_seconds": 11,
+      "expected_review_focus": [
+        "镜内外身份",
+        "录音或电话不编现场动作",
+        "声源与口型归属"
+      ]
+    }
+  ]
+}

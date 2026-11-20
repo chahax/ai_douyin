@@ -112,14 +112,39 @@ class BaseLLMProvider(ABC):
         if self._is_valid_json(candidate):
             return candidate
 
-        # 步骤 3: 兜底 — 提取第一个 {} 或 [] 块
-        match = re.search(r"(\{[\s\S]*\}|\[[\s\S]*\])", candidate)
-        if match:
-            extracted = match.group(1).strip()
-            if self._is_valid_json(extracted):
-                return extracted
+        # 步骤 3: 用 JSON 解码器提取第一个完整的顶层值。
+        # 贪婪正则会把 JSON 后的说明或第二个 JSON 一起吞掉，导致 Extra data。
+        decoder = json.JSONDecoder()
+        for start, char in enumerate(candidate):
+            if char not in "[{":
+                continue
+            try:
+                _, length = decoder.raw_decode(candidate[start:])
+            except json.JSONDecodeError:
+                continue
+            end = start + length
+            trailing = candidate[end:].strip()
+            # 说明文字可以丢弃；多个并列 JSON 含义不唯一，继续拒绝。
+            if self._contains_independent_json(trailing):
+                return None
+            return candidate[start:end].strip()
 
         return None
+
+    @staticmethod
+    def _contains_independent_json(text: str) -> bool:
+        if not text:
+            return False
+        decoder = json.JSONDecoder()
+        for start, char in enumerate(text):
+            if char not in "[{":
+                continue
+            try:
+                decoder.raw_decode(text[start:])
+            except json.JSONDecodeError:
+                continue
+            return True
+        return False
 
     @staticmethod
     def _is_valid_json(text: str) -> bool:
@@ -128,3 +153,4 @@ class BaseLLMProvider(ABC):
             return True
         except Exception:
             return False
+

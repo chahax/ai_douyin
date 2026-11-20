@@ -17,13 +17,26 @@ from .repository import (
     AccountProfileRepository,
     AccountRuntimeUnavailable,
 )
-from .runtime import (
-    AccountRuntimeContext,
-    AccountRuntimeError,
-    AccountRuntimeService,
-    PreparedBrowserEnvironment,
-    RuntimeIdentityCheck,
-)
+
+# Keep package initialization independent of browser/runtime imports. Concurrent
+# scheduler imports can use the light models/repository before runtime is needed.
+_RUNTIME_EXPORTS = frozenset({
+    "AccountRuntimeContext", "AccountRuntimeError", "AccountRuntimeService",
+    "PreparedBrowserEnvironment", "RuntimeIdentityCheck",
+})
+
+
+def __getattr__(name):
+    if name in _RUNTIME_EXPORTS:
+        from importlib import import_module
+        value = getattr(import_module(".runtime", __name__), name)
+        globals()[name] = value
+        return value
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
+
+def __dir__():
+    return sorted(set(globals()) | set(__all__))
 
 __all__ = [
     "AccountBinding",

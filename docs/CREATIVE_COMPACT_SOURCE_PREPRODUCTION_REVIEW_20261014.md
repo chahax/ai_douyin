@@ -1,0 +1,15 @@
+# 紧凑原生来源合同：主审生产前验收
+
+2026-10-14，主agent审source3/workflow19、strictclient2/profile5/dispatch8/producer21/flat4和登记入口。独立复跑156个来源/工作流用例及104个生产/接口用例通过，共260个不同当前用例；额外实际SDK单例复跑不重复计数。证据ROOT_NATIVE_v1.xml、ROOT_PRODUCER_v1.xml及ROOT_ACTUAL_SDK_v1.xml分别在creative_compact_source_20261014和creative_compact_source_observations_20261014 QA目录。
+
+新合同仅改变完整C/G扫描的序列化结构和非法律冗余解释；178位置、42 claim_checks、原法律准入语义、三SHA、精确quote及实际条件/纠正证据保留。verified_legal C不准混入nonlegal。程序不理解中文、不补pass，语义分类及抽取全备仍待实际原生审查。
+
+实际604预览原Schema7574 bytes，严格服务Schema36946 bytes，SDK真正发送118700 bytes；旧606服务Schema402758/实际wire484136。原source上下文与v18一致且可无损重建完整604。来源输出独立24000，其余审查/创作参数原样；新dispatch8核精确source3+strictbinding，只此分支采用24k，不临时改profile/request骗旧gate。
+
+高密度返修原反馈123111字符会触及旧边界。新workflow19仅对明确source3版本/三SHA/原决策形状匹配的legal_usage_citations和usage_gates编译冗余表，引用原JSONpointer/SHA；findings、uncertainties、native_usage、完整证据、required_revision原封保留。实际604压力请求81705字符/118764 bytes。生产先保存完整反馈并读回==原对象，文件路径仅作本地证明，不进模型正文；不对原生稿或法律来源作裁剪。
+
+主审独立读回父606证书3708依赖；原1596冻结未改，606原TaskStore result_unknown/complete_end=false及601 PENDING不修改。已知length响应只认证消费，不admit报告。继承606/12329534 reported tokens/604 known，70/160及93117保留。新root round20/newgrant承接原规划used26、旧max28未用2关闭，本运行独立最多2新内容规划仍累计26+2=max28；审查总6、完整正文初稿加2整稿返修。不是清零或重启旧请求。
+
+首动作仅新身份审完整604。未知、截断、缺工具或结构拒收停止；完整已知且无uncertainties的明确内容fail，按有效授权有界提交完整新规划再复审。通过三审才原生开场/正文及同源双全文审查。无媒体/发布，机器合格不标用户采用、导演交接或视频通过。
+
+当前仍无新合格完整正文，此文档及离线通过不是最终创作交付。开发前可恢复副本creative_legal_usage_release_20261014_v18及20261012工作台基线保留，恢复须独立目录，不覆盖冻结或清零消耗。

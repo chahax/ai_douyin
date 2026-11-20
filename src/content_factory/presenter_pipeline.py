@@ -28,9 +28,9 @@ class PresenterPipeline:
         self.generation_service = GenerationService()
         self.resolver = BackgroundResolver()
         self.overlay_renderer = TextOverlayRenderer()
-        self.composer = PresenterComposer()
 
     def run(self, request: PresenterRequest) -> PresenterResult:
+        composer = PresenterComposer(request.quality_profile)
         stamp = time.strftime("%Y%m%d_%H%M%S")
         work_dir = project_path("data/presenter") / stamp
         audio_dir = work_dir / "audio"
@@ -111,7 +111,7 @@ class PresenterPipeline:
                     character_position=request.character_position,
                     character_size=request.character_size,
                 )
-                segment.clip_path = self.composer.compose_segment(
+                segment.clip_path = composer.compose_segment(
                     segment=segment,
                     background_path=segment.background_path,
                     character=character,
@@ -125,7 +125,7 @@ class PresenterPipeline:
             final_name = f"presenter_{stamp}.mp4"
             final_path = final_dir / final_name
             bgm_path = str(project_path(request.bgm)) if request.bgm else ""
-            self.composer.concatenate(segments, final_path, bgm_path=bgm_path)
+            composer.concatenate(segments, final_path, bgm_path=bgm_path)
 
             output_dir = project_path(request.output_dir)
             output_dir.mkdir(parents=True, exist_ok=True)
@@ -231,13 +231,13 @@ class PresenterPipeline:
         input_text = self._load_input_text(request)
 
         if input_mode == INPUT_MODE_ARTICLE_DIRECT:
-            return self._clean_direct_article(input_text)
+            return self._clean_direct_article(input_text, preserve_cta=request.preserve_engagement_cta)
 
         if input_mode == INPUT_MODE_ARTICLE_EXTRACT:
             return self._extract_article_script(input_text, request)
 
         if input_text and not request.keywords:
-            return self._clean_direct_article(input_text)
+            return self._clean_direct_article(input_text, preserve_cta=request.preserve_engagement_cta)
 
         gen_request = GenerationRequest(
             topic=request.keywords,
@@ -256,7 +256,7 @@ class PresenterPipeline:
             return path.read_text(encoding="utf-8").strip()
         return (request.text or "").strip()
 
-    def _clean_direct_article(self, text: str) -> str:
+    def _clean_direct_article(self, text: str, *, preserve_cta: bool = False) -> str:
         if not text:
             return ""
         cleaned = text.replace("\ufeff", "")
@@ -264,7 +264,8 @@ class PresenterPipeline:
         cleaned = re.sub(r"^[ \t]*#{1,6}[ \t]*", "", cleaned, flags=re.MULTILINE)
         cleaned = re.sub(r"[ \t]+", " ", cleaned)
         cleaned = re.sub(r"\n{3,}", "\n\n", cleaned)
-        cleaned = re.sub(r"(关注|点赞|评论|转发|收藏|一键三连)[^。！？!?\n]*[。！？!?]?", "", cleaned)
+        if not preserve_cta:
+            cleaned = re.sub(r"(关注|点赞|评论|转发|收藏|一键三连)[^。！？!?\n]*[。！？!?]?", "", cleaned)
         return cleaned.strip()
 
     def _extract_article_script(self, text: str, request: PresenterRequest) -> str:

@@ -1,0 +1,30 @@
+{
+  "pid": 33312,
+  "args": [
+    "D:\\IT\\AI_vido\\ComfyUI\\.venv\\Scripts\\python.exe",
+    "-u",
+    "D:\\IT\\AI_vido\\ComfyUI\\main.py",
+    "--listen",
+    "127.0.0.1",
+    "--port",
+    "8192",
+    "--disable-auto-launch",
+    "--disable-all-custom-nodes",
+    "--cache-none",
+    "--reserve-vram",
+    "1.5",
+    "--user-directory",
+    "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\comfy\\user",
+    "--input-directory",
+    "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\comfy\\input",
+    "--output-directory",
+    "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\comfy\\output",
+    "--extra-model-paths-config",
+    "D:\\IT\\ai_douyin\\tools\\scene_lab_20261006\\comfy\\extra_models.yaml"
+  ],
+  "at_utc": "2026-10-06T05:17:39.987561+00:00",
+  "endpoint": "http://127.0.0.1:8192",
+  "production_environment_modified": false,
+  "new_dependencies_in_comfy": false,
+  "paid_calls": 0
+}

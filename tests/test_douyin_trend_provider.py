@@ -27,6 +27,10 @@ class FakeLocator:
         self.selector = selector
 
     def evaluate(self, script: str):
+        if "data-douyin-visible-challenge" in script:
+            visible=self.page.captcha_frame_count > 0 and self.page.captcha_frame_visible
+            return dict(blocking=visible,frame_count=self.page.captcha_frame_count,
+                actionable_frames=int(visible),visible_dialogs=0, surface_states=["challenge_ready"] if visible else [])
         if "const links = Array.from" in script:
             return [self.page.visible_row()]
         if "sort-selection-signature" in script:
@@ -42,6 +46,8 @@ class FakeLocator:
         return self.page.body_text
 
     def count(self):
+        if self.selector.startswith("iframe"):
+            return self.page.captcha_frame_count
         return self.page.video_link_count
 
 
@@ -107,6 +113,8 @@ class FakePage:
     ):
         self.body_text = "安全验证" if blocked else "搜索结果"
         self.video_link_count = 0 if blocked else 1
+        self.captcha_frame_count = 0
+        self.captcha_frame_visible = False
         self.waits = []
         self.hover_opens = hover_opens
         self.no_op_labels = no_op_labels or set()
@@ -186,6 +194,7 @@ def _policy() -> SourcePolicy:
                 "sort",
                 "rank",
                 "displayed_metrics",
+                "duration_seconds",
                 "published_at",
                 "hashtags",
                 "tag_relationships",
@@ -322,9 +331,124 @@ def test_provider_stops_for_human_verification() -> None:
     )
 
     assert result.observations == []
-    assert result.stopped_reason == "human_required"
-    assert "安全验证" in result.warnings[0]
+    assert result.stopped_reason == "verification_ui_unconfirmed"
+    assert "未确认可操作验证码" in result.warnings[0]
     assert session.stopped is True
+    assert result.blocked_search == {"query": "法律", "query_kind": "keyword",
+        "sort_key": "comprehensive", "detection": "security_text_without_results"}
+
+
+def test_shape_captcha_is_treated_as_human_verification() -> None:
+    page = FakePage(blocked=True)
+    page.body_text = ""
+    page.captcha_frame_count = 1
+    page.captcha_frame_visible = True
+
+    assert DouyinWebTrendProvider._is_blocked(page) is True
+
+
+def test_hidden_captcha_iframe_is_not_treated_as_human_verification() -> None:
+    page = FakePage()
+    page.captcha_frame_count = 1
+    page.captcha_frame_visible = False
+
+    assert DouyinWebTrendProvider._is_blocked(page) is False
+
+
+def test_visible_challenge_remains_blocking_even_when_video_results_are_present():
+    page = FakePage()
+    page.captcha_frame_count = 1
+    page.captcha_frame_visible = True
+    assert page.video_link_count == 1
+    assert DouyinWebTrendProvider._blocked_detection(page) == "visible_challenge"
+    DouyinWebTrendProvider._wait_until_ready(page)
+    assert page.waits == [400,400]
+
+
+def test_normal_login_prompt_allows_original_bounded_result_rendering_without_bypassing_challenge():
+    session = FakeSession()
+    session.page.body_text = "搜索页常驻扫码登录入口"
+    session.page.video_link_count = 0
+    original_wait = session.page.wait_for_timeout
+    def wait(milliseconds):
+        original_wait(milliseconds)
+        if len(session.page.waits) >= 2:
+            session.page.video_link_count = 1
+    session.page.wait_for_timeout = wait
+    result = DouyinWebTrendProvider(session_factory=lambda headless: session).collect(
+        TrendCollectionRequest(keywords=["法律"], sorts=("comprehensive",), limit_per_sort=1,
+            web_crawler_enabled=True, headless=True), policy=_policy())
+    assert len(result.observations) == 1 and result.stopped_reason == ""
+    assert result.blocked_search == {} and session.page.waits[:2] == [500, 500]
+
+
+def test_login_prompt_without_results_still_stops_after_readiness_budget():
+    import pytest
+    from src.trend_intelligence.providers.douyin_web import SearchResultsUnavailable
+    session = FakeSession()
+    session.page.body_text = "扫码登录 验证码登录"
+    session.page.video_link_count = 0
+    with pytest.raises(SearchResultsUnavailable):
+        DouyinWebTrendProvider(session_factory=lambda headless: session).collect(
+            TrendCollectionRequest(keywords=["劳动合同"], sorts=("latest",), web_crawler_enabled=True,
+                headless=True), policy=_policy())
+    assert session.page.waits == [500] * 20
+    assert session.stopped
+
+
+def test_blocked_search_captures_later_keyword_and_filter_challenge_without_page_payload():
+    session = FakeSession()
+    interact = session.page.interact_visible_exact_text
+    def interaction(text, **kwargs):
+        result = interact(text, **kwargs)
+        if session.page.current_query == "劳动合同" and text == "最新发布" and kwargs.get("operation") == "click":
+            session.page.captcha_frame_count = 1
+            session.page.captcha_frame_visible = True
+            session.page.body_text = "cookie: private-cookie; authorization: Bearer private-token"
+        return result
+    session.page.interact_visible_exact_text = interaction
+    result = DouyinWebTrendProvider(session_factory=lambda headless: session).collect(
+        TrendCollectionRequest(keywords=["法律", "劳动合同", "未到达关键词"], sorts=("comprehensive", "latest"),
+            limit_per_sort=1, web_crawler_enabled=True, headless=True), policy=_policy())
+    assert len(result.observations) == 3 and result.stopped_reason == "human_required"
+    assert result.blocked_search == {"query": "劳动合同", "query_kind": "keyword",
+        "sort_key": "latest", "detection": "visible_challenge"}
+    assert all("未到达关键词" not in url for url in session.urls)
+    assert "private-cookie" not in str(result.blocked_search) and "private-token" not in str(result.blocked_search)
+    assert set(result.blocked_search) == {"query", "query_kind", "sort_key", "detection"}
+
+
+def test_blocked_search_captures_exact_hashtag_query_and_sort():
+    session = FakeSession()
+    interact = session.page.interact_visible_exact_text
+    def interaction(text, **kwargs):
+        result = interact(text, **kwargs)
+        if session.page.current_query.startswith("#") and text == "最新发布" and kwargs.get("operation") == "click":
+            session.page.captcha_frame_count = 1
+            session.page.captcha_frame_visible = True
+        return result
+    session.page.interact_visible_exact_text = interaction
+    result = DouyinWebTrendProvider(session_factory=lambda headless: session).collect(
+        TrendCollectionRequest(keywords=["法律"], sorts=("comprehensive", "latest"), limit_per_sort=1,
+            web_crawler_enabled=True, headless=True, expand_related_tags=True,
+            max_related_tags_per_keyword=1, max_total_related_tags=1), policy=_policy())
+    assert result.stopped_reason == "human_required"
+    assert result.blocked_search == {"query": "#法律科普", "query_kind": "hashtag",
+        "sort_key": "latest", "detection": "visible_challenge"}
+    assert any(row.query_kind == "keyword" for row in result.observations)
+    assert any(row.query_kind == "hashtag" for row in result.observations)
+
+
+def test_blocked_search_dicts_are_independent_and_unsafe_query_is_not_persisted():
+    from src.trend_intelligence.providers.base import TrendCollectionResult
+    first, second = TrendCollectionResult(observations=[]), TrendCollectionResult(observations=[])
+    first.blocked_search["query"] = "法律"
+    assert second.blocked_search == {}
+    session = FakeSession(blocked=True)
+    result = DouyinWebTrendProvider(session_factory=lambda headless: session).collect(
+        TrendCollectionRequest(keywords=["https://private.example/?token=secret"],
+            sorts=("comprehensive",), web_crawler_enabled=True, headless=True), policy=_policy())
+    assert result.stopped_reason == "verification_ui_unconfirmed" and result.blocked_search == {}
 
 
 def test_provider_expands_one_hashtag_level_across_all_sorts() -> None:
@@ -469,3 +593,14 @@ def test_related_tag_selection_prefers_root_topic_over_incidental_slogan() -> No
     assert next(
         item for item in relations if item.target_tag == "超哥金句"
     ).expanded is False
+
+
+def test_collector_only_labels_explicit_likes(monkeypatch):
+    session = FakeSession()
+    rows = {key: dict(row) for key, row in session.page.rows_by_sort.items()}
+    rows['comprehensive']['metricKind'] = 'likes'
+    monkeypatch.setattr(session.page, 'rows_by_sort', rows)
+    result = DouyinWebTrendProvider(session_factory=lambda headless: session).collect(
+        TrendCollectionRequest(keywords=['法律'], limit_per_sort=1, web_crawler_enabled=True), policy=_policy())
+    kinds = {row.sort_key: row.metric_kind for row in result.observations}
+    assert kinds == {'comprehensive': 'likes', 'most_liked': 'displayed_unknown', 'latest': 'displayed_unknown'}

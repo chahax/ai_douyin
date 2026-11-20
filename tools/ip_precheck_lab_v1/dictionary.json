@@ -1,0 +1,214 @@
+{
+  "schema_version": "ip_precheck_dictionary_v1",
+  "scope": "仅演示候选名称及别名匹配；词库命中不是侵权判定。无匹配不表示安全；未收录新品牌、描述性相似及视觉形象仍可能漏检。",
+  "matcher_source": "https://spacy.io/api/entityruler",
+  "context_policy": "苹果、小米仅在同一标点分句内出现给定上下文词时保留；这是可审计的演示启发式，可能误判。",
+  "entries": [
+    {
+      "id": "brand.nike",
+      "canonical": "Nike / 耐克",
+      "label": "brand",
+      "candidate_kind": "brand_reference",
+      "aliases": [
+        "耐克",
+        "Nike"
+      ],
+      "source_kind": "manually_curated_demo",
+      "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。"
+    },
+    {
+      "id": "brand.adidas",
+      "canonical": "adidas / 阿迪达斯",
+      "label": "brand",
+      "candidate_kind": "brand_reference",
+      "aliases": [
+        "阿迪达斯",
+        "adidas"
+      ],
+      "source_kind": "manually_curated_demo",
+      "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。"
+    },
+    {
+      "id": "brand.apple",
+      "canonical": "Apple / 苹果",
+      "label": "brand",
+      "candidate_kind": "brand_reference",
+      "aliases": [
+        "Apple",
+        "苹果"
+      ],
+      "conditional_aliases": {
+        "苹果": [
+          "手机",
+          "电脑",
+          "发布会",
+          "品牌"
+        ]
+      },
+      "source_kind": "manually_curated_demo",
+      "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。"
+    },
+    {
+      "id": "brand.xiaomi",
+      "canonical": "Xiaomi / 小米",
+      "label": "brand",
+      "candidate_kind": "brand_reference",
+      "aliases": [
+        "Xiaomi",
+        "小米"
+      ],
+      "conditional_aliases": {
+        "小米": [
+          "手机",
+          "科技",
+          "发布会",
+          "品牌"
+        ]
+      },
+      "source_kind": "manually_curated_demo",
+      "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。"
+    },
+    {
+      "id": "organization.apple",
+      "canonical": "苹果公司",
+      "label": "organization",
+      "candidate_kind": "brand_organization_reference",
+      "aliases": [
+        "苹果公司"
+      ],
+      "source_kind": "manually_curated_demo",
+      "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。"
+    },
+    {
+      "id": "organization.microsoft",
+      "canonical": "微软公司",
+      "label": "organization",
+      "candidate_kind": "brand_organization_reference",
+      "aliases": [
+        "微软公司",
+        "Microsoft"
+      ],
+      "source_kind": "manually_curated_demo",
+      "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。"
+    },
+    {
+      "id": "work.spirited_away",
+      "canonical": "千与千寻",
+      "label": "work of art",
+      "candidate_kind": "work_reference",
+      "aliases": [
+        "千与千寻",
+        "Spirited Away"
+      ],
+      "source_kind": "manually_curated_demo",
+      "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。"
+    },
+    {
+      "id": "character.no_face",
+      "canonical": "无脸男",
+      "label": "fictional character",
+      "candidate_kind": "character_reference",
+      "aliases": [
+        "无脸男",
+        "No-Face"
+      ],
+      "source_kind": "manually_curated_demo",
+      "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。"
+    },
+    {
+      "id": "work.harry_potter",
+      "canonical": "哈利·波特",
+      "label": "work of art",
+      "candidate_kind": "work_reference",
+      "aliases": [
+        "哈利·波特",
+        "Harry Potter"
+      ],
+      "source_kind": "manually_curated_demo",
+      "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。"
+    },
+    {
+      "id": "character.hermione",
+      "canonical": "赫敏·格兰杰",
+      "label": "fictional character",
+      "candidate_kind": "character_reference",
+      "aliases": [
+        "赫敏·格兰杰",
+        "Hermione Granger"
+      ],
+      "source_kind": "manually_curated_demo",
+      "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。"
+    },
+    {
+      "id": "creator.miyazaki",
+      "canonical": "宫崎骏",
+      "label": "creator",
+      "candidate_kind": "creator_reference",
+      "aliases": [
+        "宫崎骏",
+        "Hayao Miyazaki"
+      ],
+      "source_kind": "manually_curated_demo",
+      "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。"
+    },
+    {
+      "id": "creator.van_gogh",
+      "canonical": "梵高",
+      "label": "creator",
+      "candidate_kind": "creator_reference",
+      "aliases": [
+        "梵高",
+        "Vincent van Gogh"
+      ],
+      "source_kind": "manually_curated_demo",
+      "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。"
+    },
+    {
+      "id": "person.jay_chou",
+      "canonical": "周杰伦",
+      "label": "person",
+      "candidate_kind": "public_figure_reference",
+      "aliases": [
+        "周杰伦",
+        "Jay Chou"
+      ],
+      "source_kind": "manually_curated_demo",
+      "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。"
+    },
+    {
+      "id": "brand.coca_cola",
+      "canonical": "可口可乐 / Coca-Cola",
+      "label": "brand",
+      "candidate_kind": "brand_reference",
+      "aliases": [
+        "可口可乐",
+        "Coca-Cola"
+      ],
+      "source_kind": "manually_curated_demo",
+      "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。"
+    },
+    {
+      "id": "work.three_body",
+      "canonical": "三体",
+      "label": "work of art",
+      "candidate_kind": "work_reference",
+      "aliases": [
+        "三体",
+        "The Three-Body Problem"
+      ],
+      "source_kind": "manually_curated_demo",
+      "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。"
+    },
+    {
+      "id": "character.luo_ji",
+      "canonical": "罗辑",
+      "label": "fictional character",
+      "candidate_kind": "character_reference",
+      "aliases": [
+        "罗辑"
+      ],
+      "source_kind": "manually_curated_demo",
+      "source_note": "人工编写的演示词条；不含权利归属或授权判定，不是官方完整 IP 词库。"
+    }
+  ]
+}

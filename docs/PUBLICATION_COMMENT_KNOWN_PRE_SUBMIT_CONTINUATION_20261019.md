@@ -1,0 +1,5 @@
+# 原评论已知未提交的核查续行
+
+按当前原作品无限只读核查授权，且主审已批准，仅放行comment_editor_unavailable/comment_submit_unavailable。必须原authority、原PREPARED全文、原account和准确post、平台完整核验、native证据三字段全文一致，原评论receipt为submitted false/无claim。首次exclusive冻结native receipt原字节至原ctx目录；旧副本不可覆盖，后续每次仍检查实际claim不存在。
+
+queue/自动continuation/实际claim使用共同repeatable判定；unknown/human/submitted/claim或错身份、原文、证据均不续行。普通20、原发布锁、原unknown结果和runtime/store其他源不改。生产由root执行，本agent仅离线测试和已允许的冻结原生证据只读核对。

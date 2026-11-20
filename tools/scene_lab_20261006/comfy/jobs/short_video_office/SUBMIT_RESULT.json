@@ -1,0 +1,13 @@
+{
+  "meta": null,
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"workflow\": \"D:\\\\IT\\\\ai_douyin\\\\tools\\\\scene_lab_20261006\\\\comfy\\\\workflows\\\\short_video_office.json\",\n  \"status\": \"queued\",\n  \"prompt_id\": \"765c2b59-69e7-4147-9cad-6ebc4520e9c0\",\n  \"client_id\": \"d036dce4-08f6-48e6-b75c-c8667ab9b8ed\",\n  \"outputs\": [],\n  \"elapsed_seconds\": null,\n  \"host\": \"127.0.0.1\",\n  \"port\": 8192,\n  \"state_file\": \"C:\\\\Users\\\\c\\\\AppData\\\\Local\\\\comfy-cli\\\\jobs\\\\765c2b59-69e7-4147-9cad-6ebc4520e9c0.json\",\n  \"watcher_spawned\": false\n}",
+      "annotations": null,
+      "meta": null
+    }
+  ],
+  "structuredContent": null,
+  "isError": false
+}

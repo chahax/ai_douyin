@@ -1,0 +1,17 @@
+# 第25轮隔离事件与声明协议
+
+本实现依据 `CREATIVE_ISOLATED_EVENT_ENTAILMENT_PLAN_20261016.md`，只新增纯协议与薄WF5，不修改冻结focus/full7/WF4或678、680。完整请求由原full_review角色参数构建，DeepSeek-flash、temperature 0.4、thinking disabled、max_completion_tokens 32000；程序不派发请求。
+
+`scripts.creative_isolated_event_entailment_v1` 提供 `prepare_events/validate_events` 与 `prepare_entailment/validate_entailment`。WF5的对应方法是 `prepare_observable_events_request/validate_observable_events`、`prepare_event_entailment_request/validate_event_entailment`。参数依次为 inputs、profile、真实provider-native raw、编译views；比较请求再带原生events报告及原prepared。WF5继承原source4准入、raw/derived/compiled三身份、full7和默认admission。
+
+第一阶段只发送演员ID/姓名、场次ID/故事时间定位和全部实际steps。原678有42个E，文字1083字。规划、premise/event/trigger、ensemble、法律、R01、旧报告和人工预期均不出站；原始对象及SHA保存在prepared.views。该省略是事实证据隔离，不能套用创作/导演/全文审查的R01一次要求。第一阶段逐E提交可观察事件，精确引用自身步骤，actor/语用force/发生轴与内容时态分开。当前已说出承诺可以是occurred，同时所谈未来履行仍future/open。间接疑问形式可为request，不能靠标点分类。
+
+本地按E及events索引编出 `E:B01:0#0`，不要求模型另写冗余ID。`validate_events` 返回compiled_ledger和ledger_usable；其accepted只表示提取协议可进入下一阶段，绝不是剧情内容通过。任何未决分类或槽都停止比较。先后关系须有实际原文证据，不能由步骤编号或并行关系推完成；本地只核有据报告的端点、引文、类型和无环，不证明语言时序解释正确。
+
+第二阶段固定读取每拍goal/stimulus/response/strategy.after/visible_change、正文event/trigger、premise及结尾四个叙事字段。9拍恰好68项，2863字，不复制205个leaf表。每个F的source_segments按序逐字拼回整个原字段；任何缺分句、漏字段都拒绝。分类、拆原子和自然语言蕴含仍是模型责任，程序不能证明没有把缺失事件错误归成背景或目标。
+
+每个事件原子对照冻结ledger，同时核同一个事件的actor、kind、force、必要medium、occurrence等类型槽。必要deadline只核非null存在，不按自由文本不相等判矛盾；期限和命题是否等义由模型比较。原生verdict和revision_target原样保留；可证槽矛盾另列computed_slot_findings。unknown优先停，原生plan优先停；固定源下已知script缺口才进入整稿返修。背景/目标/神情/开放未来不强求口播、操作或达成。
+
+`build_review_packet` 保存合同有效的pass/fail/unknown比较与两原生报告、完整验证ledger；`build_repair_feedback` 只允许已知script失败。C的本地packet、SDK回执和原生SHA不改。WF5出站writer投影重建并核对该packet，保完整comparison一次、其全部event_refs/prior_event_refs及必要时序中间节点的typed引用闭包、失败F的path/role映射。完整events报告和全ledger留本地，writer以SHA及omitted_manifest承接；原完整正文、goal和R01不截取。
+
+实际678双阶段QA预览第二部分只能使用明确标注的synthetic ledger作形状/体量测量，不能伪称完成实际提取；真正第二调用须消费第一实际原生结果。纯控制和SDK Mock只验协议与治理，不代表实际校准或内容合格。实际校准仍漏检则停，不临时添加第三judge。

@@ -38,7 +38,8 @@ class WisdomRetriever:
         # 1. 尝试本地 HuggingFace 模型（项目路径或 HF 缓存）
         if local_model_path:
             try:
-                embedding = HuggingFaceEmbeddings(model_name=local_model_path)
+                embedding = HuggingFaceEmbeddings(model_name=local_model_path,
+                    model_kwargs={'device': 'cpu', 'local_files_only': True})
                 logger.info(f"Using local HuggingFace embedding model: {local_model_path}")
             except Exception as exc:
                 logger.warning(f"本地 embedding 模型加载失败: {exc}")
@@ -88,9 +89,11 @@ class WisdomRetriever:
     def _build_huggingface_embedding(self):
         hf_model = self.embedding_model or "shibing624/text2vec-base-chinese"
         logger.info(f"Using HuggingFace Hub embedding model: {hf_model}（无本地模型，将请求 HuggingFace）")
-        return HuggingFaceEmbeddings(model_name=hf_model)
+        return HuggingFaceEmbeddings(model_name=hf_model, model_kwargs={'device': 'cpu'})
 
     def _retry_with_huggingface(self) -> bool:
+        if not settings.ENABLE_HF_EMBEDDING_FALLBACK:
+            return False
         try:
             self.embeddings = self._build_huggingface_embedding()
             self.db = Chroma(

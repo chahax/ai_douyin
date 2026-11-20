@@ -1,0 +1,4 @@
+interface:
+  display_name: "自动剧本流程调试"
+  short_description: "排查剧本生成截断、跨场连续性与审核误判，修复后分层测试并保留真实证据"
+  default_prompt: "使用 $story-pipeline-debug 排查当前自动剧本流程，修复后做回归及已授权的真实文本小样测试，区分程序通过与内容验收。"

@@ -44,6 +44,21 @@ def test_valid_json_is_normalized_for_both_client_modes():
         assert provider.chat_completion([], json_mode=True) == '{"ok": true}'
 
 
+def test_json_followed_by_explanatory_text_keeps_only_the_complete_json_value():
+    provider, _ = provider_with_response(
+        preserve=False,
+        content='Here is the result:\n{"ok": true, "nested": {"value": 1}}\n已按要求生成。',
+    )
+    assert provider.chat_completion([], json_mode=True) == '{"ok": true, "nested": {"value": 1}}'
+
+
+def test_multiple_independent_json_values_remain_invalid():
+    provider, _ = provider_with_response(
+        preserve=False,
+        content='{"first": true}\n{"second": true}',
+    )
+    assert provider.chat_completion([], json_mode=True) is None
+
 def test_optional_model_request_controls_are_forwarded_without_changing_other_calls():
     provider, calls = provider_with_response(preserve=True, content='{"ok": true}')
     provider.extra_body = {'thinking': {'type': 'disabled'}, 'reasoning_split': True}
@@ -52,3 +67,4 @@ def test_optional_model_request_controls_are_forwarded_without_changing_other_ca
     regular, calls = provider_with_response(preserve=False, content='{"ok": true}')
     regular.chat_completion([], json_mode=True)
     assert 'extra_body' not in calls[0]
+

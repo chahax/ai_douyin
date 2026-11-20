@@ -43,14 +43,17 @@ class PlaybackOptions:
     # Zero means the daily ratio budget is the only limit.
     max_likes: int = 0
     max_comments: int = 0
+    source: str = "recommend_feed"
 
     def validate(self) -> None:
-        if not 1 <= int(self.max_videos) <= 20:
-            raise ValueError("播放视频数必须在 1 到 20 之间。")
-        if not 5 <= int(self.per_video_seconds) <= 300:
-            raise ValueError("单条播放上限必须在 5 到 300 秒之间。")
-        if not 1 <= int(self.total_minutes) <= 60:
-            raise ValueError("总播放时长必须在 1 到 60 分钟之间。")
+        if self.source not in {"recommend_feed", "search_candidates"}:
+            raise ValueError("不支持的播放来源。")
+        if int(self.max_videos) <= 0:
+            raise ValueError("播放视频数必须为正整数。")
+        if int(self.per_video_seconds) <= 0:
+            raise ValueError("单条播放上限必须为正整数秒。")
+        if int(self.total_minutes) <= 0:
+            raise ValueError("总播放时长必须为正整数分钟。")
         if not 0 <= float(self.min_relevance_score) <= 100:
             raise ValueError("相关度阈值必须在 0 到 100 之间。")
         if not 0 <= float(self.base_like_ratio) <= 1:
@@ -105,6 +108,7 @@ class PlaybackItemResult:
     comment_status: str = "disabled"
     commented_at: str = ""
     error: str = ""
+    error_code: str = ""
 
 
 @dataclass(slots=True)
@@ -116,6 +120,9 @@ class PlaybackRunResult:
     likes_performed: int = 0
     comments_sent: int = 0
     warnings: list[str] = field(default_factory=list)
+    error_code: str = ""
+    challenge_evidence: dict = field(default_factory=dict)
+    feed_surface_evidence: dict = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, object]:
         return asdict(self)
@@ -215,6 +222,18 @@ class DouyinRelevantPlaybackController:
             list(candidates)[: int(options.max_videos)]
         )
         for index, candidate in enumerate(prepared_candidates):
+            # Only yield between complete items (including their interactions).
+            # The same iterator/result resumes after foreground publishing;
+            # publishing time must not consume the playback wall-clock budget.
+            from src.operations_accounts.browser_control_runtime import background_safe_point
+            paused_seconds = background_safe_point({
+                "stage": "playback_before_candidate", "next_candidate_index": index,
+                "candidate_ids": [str(row.get("video_id") or "") for row in prepared_candidates],
+                "completed": result.to_dict(),
+                "remaining_wall_seconds": max(0.0, deadline - time.monotonic()),
+                "likes_remaining": likes_remaining, "comments_remaining": comments_remaining,
+            })
+            deadline += paused_seconds
             remaining_wall_seconds = int(deadline - time.monotonic())
             if remaining_wall_seconds < 2:
                 result.warnings.append("达到本次总播放时长上限。")
@@ -230,6 +249,11 @@ class DouyinRelevantPlaybackController:
             )
             item.watch_plan_factor = watch_factor
             result.items.append(item)
+            if item.error_code:
+                result.error_code = item.error_code
+                result.status = "partial"
+                result.warnings.append(item.error)
+                break
             if not item.playback_verified:
                 continue
             result.verified_videos += 1
@@ -367,15 +391,19 @@ class DouyinRelevantPlaybackController:
         try:
             page = self.session.open_page(url)
             page.wait_for_timeout(1800)
-            if has_visible_douyin_challenge(page) or _page_looks_blocked(page):
+            block_code = "human_required" if has_visible_douyin_challenge(page) else _page_block_code(page)
+            if block_code:
+                item.error_code = block_code
                 item.error = "登录页、验证码或安全验证阻止播放。"
                 return item
             actual_id = _current_video_id(page)
             if actual_id and actual_id != video_id:
+                item.error_code = "video_identity_mismatch"
                 item.error = f"视频身份不匹配：期望 {video_id}，实际 {actual_id}。"
                 return item
             start = _video_state(page)
             if not start.get("found"):
+                item.error_code = "playback_video_missing"
                 item.error = "页面未找到可播放视频。"
                 return item
             item.start_current_time = float(start.get("current_time") or 0)
@@ -391,6 +419,11 @@ class DouyinRelevantPlaybackController:
             playback_deadline = time.monotonic() + item.planned_watch_seconds + 5
             while time.monotonic() < playback_deadline:
                 page.wait_for_timeout(1000)
+                block_code = "human_required" if has_visible_douyin_challenge(page) else _page_block_code(page)
+                if block_code:
+                    item.error_code = block_code
+                    item.error = "播放过程中出现登录或安全验证，已停止本轮。"
+                    break
                 state = _video_state(page)
                 if not state.get("found"):
                     break
@@ -413,13 +446,15 @@ class DouyinRelevantPlaybackController:
                 else 0.0
             )
             required = max(1.0, item.planned_watch_seconds * 0.75)
-            item.playback_verified = item.actual_watch_seconds >= required
-            if not item.playback_verified:
+            item.playback_verified = not item.error_code and item.actual_watch_seconds >= required
+            if not item.playback_verified and not item.error_code:
+                item.error_code = "playback_unverified"
                 item.error = (
                     f"实际播放 {item.actual_watch_seconds:.1f}s，"
                     f"低于校验要求 {required:.1f}s。"
                 )
         except Exception as exc:
+            item.error_code = str(getattr(exc, "code", "") or ("playback_timeout" if isinstance(exc, TimeoutError) else "playback_error"))
             item.error = f"{type(exc).__name__}: {exc}"
         return item
 
@@ -714,17 +749,23 @@ def _current_video_id(page) -> str:
     return str(value or "")
 
 
-def _page_looks_blocked(page) -> bool:
-    return bool(
+def _page_block_code(page) -> str:
+    value = (
         page.locator("").evaluate(
             r"""() => {
               const text = document.body ? document.body.innerText : '';
               const url = location.href || '';
-              return /\/login(?:[/?#]|$)/.test(url)
-                || /扫码登录|账号异常|访问异常|风控/.test(text);
+              if (/\/login(?:[/?#]|$)/.test(url)) return 'login_expired';
+              if (/扫码登录|账号异常|访问异常|风控/.test(text)) return 'human_required';
+              return '';
             }"""
         )
     )
+    return str(value or "")
+
+
+def _page_looks_blocked(page) -> bool:
+    return bool(_page_block_code(page))
 
 
 def _video_state(page) -> dict[str, object]:
