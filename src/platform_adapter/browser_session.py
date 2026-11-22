@@ -284,16 +284,20 @@ def main():
         kwargs["args"] = ["--mute-audio"]
     if not headless and init.get("start_minimized", False):
         kwargs.setdefault("args", []).append("--start-minimized")
+        # Let the native window determine the viewport. Applying device metrics
+        # when Playwright attaches a tab can resize a minimized Chrome window.
+        kwargs["no_viewport"] = True
     if channel:
         kwargs["channel"] = channel
     if chromium_sandbox:
         kwargs["chromium_sandbox"] = True
 
     _stage("launching_browser")
-    context = pw.chromium.launch_persistent_context(
-        user_data_dir=user_data_dir,
-        **kwargs,
-    )
+    if sys.platform == "win32" and not headless and init.get("start_minimized", False):
+        from src.platform_adapter.chromium_taskbar import launch
+        context = launch(pw, user_data_dir, kwargs, init.get("background_account_label", ""))
+    else:
+        context = pw.chromium.launch_persistent_context(user_data_dir=user_data_dir, **kwargs)
     context.set_default_timeout(timeout_ms)
     _stage("restoring_state")
 
@@ -354,6 +358,9 @@ def main():
                     restored_origin_names = sorted(_origin_map.keys())
 
     page = context.pages[0] if context.pages else context.new_page()
+    if not headless and init.get("start_minimized", False):
+        from src.operations_accounts.retained_feed_session import minimize
+        minimize(page)
     # Handles name a particular Page for its whole lifetime. Switching another
     # task to a new tab never changes an existing Page/Locator's target.
     tabs = {}
@@ -455,7 +462,11 @@ def main():
                     raise ValueError("tab role must be a nonempty string of at most 80 characters")
                 if context_closed:
                     raise RuntimeError("browser context is closed")
-                tab = context.new_page()
+                if not headless and init.get("start_minimized", False):
+                    from src.platform_adapter.chromium_taskbar import new_background_tab
+                    tab = new_background_tab(context)
+                else:
+                    tab = context.new_page()
                 tab_id = register_tab(tab, role)
                 tab_roles[tab_id] = role
                 sys.stdout.write(json.dumps({"status": "ok", "tab_id": tab_id, "role": role}) + "\n")
@@ -1247,6 +1258,7 @@ class BrowserSession:
             "headless": self.config.headless,
             "mute_audio": bool(getattr(self.config, "mute_audio", False)),
             "start_minimized": bool(getattr(self.config, "start_minimized", False)),
+            "background_account_label": getattr(self.config, "background_account_label", ""),
             "slow_mo": self.config.slow_mo_ms,
             "timeout_ms": self.config.timeout_ms,
             "channel": self.config.browser_channel or self._detect_browser_channel(),

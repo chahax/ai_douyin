@@ -1,4 +1,5 @@
 import sqlite3
+import sys
 from types import SimpleNamespace as NS
 from unittest.mock import Mock
 import pytest
@@ -55,6 +56,56 @@ def test_real_chrome_minimizes_original_window_and_keeps_tab():
         finally:browser.close()
 
 
+@pytest.mark.skipif(sys.platform != 'win32', reason='Windows taskbar')
+def test_real_chrome_managed_window_stays_in_taskbar_during_navigation(tmp_path):
+    import ctypes
+    import threading
+    import psutil
+    from ctypes import wintypes
+    from src.operations_accounts.interactive_desktop import current_desktop_name
+    from src.platform_adapter.browser_session import BrowserSession
+    from src.platform_adapter.models import BrowserSessionConfig
+
+    if current_desktop_name() != 'Default':
+        pytest.skip('Focus sampling requires the interactive Windows desktop')
+    user32 = ctypes.WinDLL('user32')
+    user32.GetForegroundWindow.restype = wintypes.HWND
+    user32.GetWindowThreadProcessId.argtypes = [wintypes.HWND, ctypes.POINTER(wintypes.DWORD)]
+    observed = {}
+    stage = 'startup'
+    done = threading.Event()
+
+    def sample_foreground():
+        while not done.is_set():
+            pid = wintypes.DWORD()
+            user32.GetWindowThreadProcessId(user32.GetForegroundWindow(), ctypes.byref(pid))
+            observed.setdefault(pid.value, set()).add(stage)
+            done.wait(0.01)
+
+    session = BrowserSession(BrowserSessionConfig(base_url='about:blank', home_url='about:blank', user_data_dir=str(tmp_path/'chrome'),
+        storage_state_path=str(tmp_path/'state.json'), headless=False, browser_channel='chrome',
+        chromium_sandbox=True, mute_audio=True, start_minimized=True, background_account_label='Taskbar QA'))
+    observer = threading.Thread(target=sample_foreground)
+    observer.start()
+    try:
+        session.start()
+        assert session.get_page()._cmd('supervision_window_state')['window_state'] == 'minimized', 'startup'
+        assert session.get_page().evaluate('document.title') == 'Taskbar QA · 抖音业务窗口'
+        stage = 'new tab'
+        page = session.new_tab('maintenance')
+        assert page._cmd('supervision_window_state')['window_state'] == 'minimized', 'new tab'
+        stage = 'navigation'
+        page.goto('about:blank')
+        assert page._cmd('supervision_window_state')['window_state'] == 'minimized'
+        owned = {p.pid: p.name() for p in psutil.Process(session._proc.pid).children(recursive=True)}
+        assert owned
+    finally:
+        done.set()
+        observer.join()
+        session.stop()
+    assert not [(owned[pid], stages) for pid, stages in observed.items() if pid in owned]
+
+
 @pytest.mark.parametrize('path,expected_goto',[('/',False),('/jingxuan',True)])
 def test_borrower_preserves_only_current_homepage_and_rejects_owner_actions(path,expected_goto):
     from src.operations_accounts import browser_control_runtime as bridge
@@ -79,7 +130,8 @@ def test_borrower_preserves_only_current_homepage_and_rejects_owner_actions(path
 
 
 @pytest.mark.parametrize('opted_in',[True,False])
-def test_future_background_session_honors_saved_minimized_preference(monkeypatch,opted_in):
+@pytest.mark.parametrize('headless', [True, False])
+def test_future_background_session_honors_saved_minimized_preference(monkeypatch,opted_in,headless):
     from src.operations_accounts import browser_control_runtime as bridge
     from src.operations_accounts import retained_feed_session as retained
     from src.platform_adapter.douyin_warmup import DouyinWarmupService
@@ -89,29 +141,30 @@ def test_future_background_session_honors_saved_minimized_preference(monkeypatch
     monkeypatch.setattr(retained,'enabled',lambda *args:opted_in)
     ctx=NS(account_key='a',account_uuid='account:a')
     runtime=Mock();runtime.bindings.get_runtime_state.return_value=NS(lock_owner='')
-    resource=bridge.AccountBrowserResource(ctx,runtime,headless=True)
+    resource=bridge.AccountBrowserResource(ctx,runtime,headless=headless)
     assert resource.ensure_session() is owner
-    build.assert_called_once_with('a',headless=not opted_in)
+    build.assert_called_once_with('a',headless=headless and not opted_in)
     if opted_in:
-        owner.start.assert_called_once()
-        owner.get_page.return_value._cmd.assert_called_once_with('minimize_window')
-        assert owner.config.mute_audio is True and not resource.headless
-    else:owner.start.assert_not_called()
+        assert owner.config.start_minimized is True and owner.config.mute_audio is True
+        assert not resource.headless
+    assert owner.start.call_count == int(headless and opted_in)
 
 
-def test_borrowed_navigation_reasserts_minimized_and_muted_mode(monkeypatch):
+@pytest.mark.parametrize('started_minimized', [False, True])
+def test_borrowed_navigation_respects_window_opened_from_taskbar(monkeypatch, started_minimized):
     from src.operations_accounts import browser_control_runtime as bridge
     from src.operations_accounts import retained_feed_session as retained
     monkeypatch.setattr(retained,'enabled',lambda *args:True)
     owner=Mock();owner.new_tab.return_value=NS(tab_id='identity')
     owner.config.mute_audio=True
-    owner.get_page.return_value._cmd.return_value={'minimized':True}
+    owner.config.start_minimized=started_minimized
+    owner.get_page.return_value._cmd.return_value={'window_state':'normal'} if started_minimized else {'minimized':True}
     resource=NS(retained_feed_tab=None,headless=False,account_uuid='account:a',ensure_session=lambda:owner)
     ctx=NS(command={'kind':'maintenance','payload':{'mode':'playback'}},check_dispatch=Mock())
     token=bridge._active.set(ctx)
     try:
         session=bridge.BorrowedSession(resource,'maintenance')
         session.open_page('https://www.douyin.com/user/self')
-        owner.get_page.return_value._cmd.assert_called_once_with('minimize_window')
-        assert session.keep_background()=={'minimized':True,'muted':True}
+        owner.get_page.return_value._cmd.assert_called_once_with('supervision_window_state' if started_minimized else 'minimize_window')
+        assert session.keep_background()=={'minimized':not started_minimized,'muted':True}
     finally:bridge._active.reset(token)

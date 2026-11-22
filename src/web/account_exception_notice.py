@@ -369,6 +369,8 @@ def _render_manual_window_job(job, available, account_key):
     else:
         label = _WINDOW_PHASE_LABELS.get(job.get('phase'), '人工窗口任务已登记，等待后台执行…')
         st.info(label)
+        if job.get('window_minimized'):
+            st.caption('处理窗口打开时已静音并收在任务栏。点“重新显示原账号处理窗口”可查看。')
         blocker = job.get('queue_blocker')
         reasons = {
             'publication_verification_pending': '原发布结果仍待作品核验，后台只读补查不会重新发布；此人工窗口尚未打开，关闭浏览器或重复点击完成不能代替作品核验。',

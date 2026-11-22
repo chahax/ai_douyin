@@ -16,7 +16,7 @@ class BrowserSessionConfig:
     chromium_sandbox: bool = False
     mute_audio: bool = False
     start_minimized: bool = False
-    start_minimized: bool = False
+    background_account_label: str = ""
 
 
 @dataclass

@@ -28,6 +28,9 @@ class Page:
         self.events.append(('goto', url))
 
     def _cmd(self, action):
+        if action == 'supervision_window_state':
+            self.events.append(('observe_window', self.tab_id))
+            return {'window_state': 'minimized'}
         assert action == 'reveal_manual_window'
         self.events.append(('reveal', self.tab_id))
         return {'restored': True}
@@ -50,6 +53,7 @@ class Page:
 @pytest.mark.parametrize('state,status,observations,waits', [
     ('clear', 'current_no_challenge', 1, []),
     ('clear_rebuilt', 'current_no_challenge', 1, []),
+    ('automatic_background', 'current_no_challenge', 1, []),
     ('challenge_ready', 'challenge_controls_confirmed', 2, [400]),
     ('loading', 'verification_unknown', 5, [400, 800, 1600, 3200]),
     ('load_failed', 'verification_unknown', 5, [400, 800, 1600, 3200]),
@@ -65,7 +69,7 @@ def test_actor_persists_current_same_tab_probe_without_completing_human_task(
     monkeypatch.setattr(clear_feed_resume, 'latest_observation', lambda *a, **k: None)
     monkeypatch.setattr('src.operations_accounts.interactive_desktop.require_interactive_desktop', lambda: None)
     events = []
-    page = Page('clear' if state == 'clear_rebuilt' else state, events)
+    page = Page('clear' if state in {'clear_rebuilt', 'automatic_background'} else state, events)
     if state == 'navigation_timeout':
         from src.platform_adapter.browser_session import BrowserNavigationTimeout
         def timed_out(url):
@@ -89,7 +93,7 @@ def test_actor_persists_current_same_tab_probe_without_completing_human_task(
         assert lease_active
         return original_probe()
     page.probe_douyin_challenge = probe
-    owner = NS(config=NS(headless=state == 'clear_rebuilt'), new_tab=lambda role: page)
+    owner = NS(config=NS(headless=state == 'clear_rebuilt', start_minimized=state == 'automatic_background'), new_tab=lambda role: page)
     resource = NS(session=owner, headless=False, context=NS(profile=object()),
         account_uuid='account:one', account_key='one', manual_tasks={},
         runtime=NS(operation_lease=lease), ensure_session=lambda: owner)
@@ -104,7 +108,15 @@ def test_actor_persists_current_same_tab_probe_without_completing_human_task(
     monkeypatch.setattr(manual_handling, '_pause_for_handling', lambda *a: events.append(('pause', a)))
     monkeypatch.setattr(account_refresh, 'snapshot', lambda: {})
     store = BrowserControlStore(tmp_path / 'control.db')
-    command = store.submit('account:one', 'binding-original', 'manual', 'manual-once', {'account_key': 'one'})
+    payload = {'account_key': 'one'}
+    if state == 'automatic_background':
+        payload['incident_id'] = 1
+        issue = dict(account_uuid='account:one', account_key='one', error_code='human_required',
+                     status='open', created_at=1, id=1)
+        monkeypatch.setattr(account_refresh, 'snapshot', lambda: {'issues': [issue],
+            'controls': [dict(issue, state='paused', updated_at=1)]})
+        monkeypatch.setattr('src.scheduler.browser_visibility.automatic_window_allowed', lambda *args, **kwargs: True)
+    command = store.submit('account:one', 'binding-original', 'manual', 'manual-once', payload)
     actor = BrowserControlActor(store, 'account:one', 'binding-original', 'owner-original',
         {'manual': bridge._manual}, context=resource)
     try:
@@ -125,6 +137,9 @@ def test_actor_persists_current_same_tab_probe_without_completing_human_task(
         assert [e[1] for e in events if e[0] == 'probe'] == ([] if state == 'navigation_timeout' else [page.tab_id] * (observations or 1))
         assert '原验证页已保留' not in result['message']
         public = bridge._manual_public(saved)
+        if state == 'automatic_background':
+            assert public['window_minimized'] is True
+            assert ('reveal', page.tab_id) not in events
         assert public['state'] == 'running' and public['handoff_ready'] is True
         assert public['phase'] == 'window_' + status
         assert public['target_source'] == target.source

@@ -279,6 +279,10 @@ class BorrowedSession:
         from src.scheduler.account_refresh import DB
         if (getattr(self.resource,'headless',True) is False
                 and minimized_enabled(self.resource.account_uuid,DB)):
+            if getattr(self.config, 'start_minimized', False) is True:
+                # The operator may have opened the taskbar window since launch.
+                window = self.owner.get_page(self.page.tab_id)._cmd('supervision_window_state')
+                return {'minimized': window['window_state'] == 'minimized', 'muted': bool(self.config.mute_audio)}
             result=self.owner.get_page(self.page.tab_id)._cmd('minimize_window')
             if result.get('minimized') is not True:
                 raise RuntimeError('Account window minimization not confirmed')
@@ -364,7 +368,7 @@ class AccountBrowserResource:
             from .window_supervision import enabled as supervision_enabled
             from src.scheduler.account_refresh import DB
             supervised = supervision_enabled(self)
-            minimized = self.headless and (supervised or minimized_enabled(self.account_uuid, DB))
+            minimized = supervised or minimized_enabled(self.account_uuid, DB)
             self.session = DouyinWarmupService().build_browser_session(self.account_key, headless=False if minimized else self.headless)
             if minimized:
                 if supervised:
@@ -372,10 +376,11 @@ class AccountBrowserResource:
                     require_interactive_desktop()
                 self.session.config.mute_audio = True
                 self.session.config.start_minimized = True
-                self.session.start()
-                if self.session.get_page()._cmd('minimize_window').get('minimized') is not True:
-                    raise RuntimeError('Account window minimization not confirmed')
-                self.headless = False
+                profile = getattr(self.context, 'profile', None)
+                self.session.config.background_account_label = getattr(profile, 'display_name', '') or self.account_key
+                if self.headless:
+                    self.session.start()
+                    self.headless = False
         return self.session
 
     def shutdown(self):
@@ -857,17 +862,25 @@ def _manual(ctx, payload):
     # Retain the task/tab fence even if display acknowledgement is unavailable.
     # A display failure is never permission to open a second profile.
     ctx.check_dispatch()
+    automatic_background = (payload.get('incident_id') is not None
+                            and getattr(session.config, 'start_minimized', False) is True)
+    visibility = {'restored': False}
     try:
-        display = page._cmd('reveal_manual_window')
+        if automatic_background:
+            state = page._cmd('supervision_window_state').get('window_state')
+            if state in {'minimized', 'normal', 'maximized', 'fullscreen'}:
+                visibility = {'window_state': state}
+        else:
+            visibility['restored'] = page._cmd('reveal_manual_window').get('restored') is True
     except Exception:
-        display = {'restored': False}
+        pass  # The original tab stays available for an explicit display request.
     message = {
         'challenge_controls_confirmed': '当前已连续识别到验证提示和可操作控件；请按网页提示人工处理。',
         'current_no_challenge': '当前未检测到验证控件；不代表旧异常已解决或账号已恢复，请核对页面。',
         'verification_unknown': '当前验证界面仍在加载、不可读取或未确认；尚不能确认有可操作控件，请核对页面加载情况。',
     }[current['status']]
     return BrowserCommandResult('waiting_human', {'phase': 'window_open_waiting_handling',
-        'window_visibility': {'restored': display.get('restored') is True},
+        'window_visibility': visibility,
         'tab_id': page.tab_id, 'navigation': 'new_target_navigation',
         'navigation_evidence': navigation_evidence,
         'target': {'source': getattr(target, 'source', 'fallback'),
@@ -1154,7 +1167,10 @@ def _manual_public(command):
                 live={'stage':'observation_stale'}
             if live:
                 public.update(phase='feed_'+live['stage'],feed_observation=live)
-    if state == 'waiting_human' and (finished.get('window_visibility') or {}).get('restored') is False:
+    visibility = finished.get('window_visibility') or {}
+    if state == 'waiting_human' and visibility.get('window_state') == 'minimized':
+        public['window_minimized'] = True
+    if state == 'waiting_human' and visibility.get('restored') is False:
         public['phase'] = 'window_display_unconfirmed'
     if state == 'succeeded' and finished.get('close_reason') == 'proven_previous_host_boot':
         public.update(phase='closed_by_previous_boot', session_saved=False)
