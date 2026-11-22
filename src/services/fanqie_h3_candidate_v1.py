@@ -539,7 +539,8 @@ class CandidateLedger:
         p=json.loads(c['prepared_json'])
         self._fresh_promotion(snapshot,row,resource_binding,f)
         if p['promotion']!=promotion_intent(snapshot,row,resource_binding):raise CandidateBlocked('promotion_changed')
-        if read_ref(p['authorization']).get('comment') != p.get('comment'):
+        authority = read_ref(p['authorization'])
+        if 'comment' in p and authority.get('comment') != p['comment']:
             raise CandidateBlocked('authorization_comment_mismatch')
         read_ref(p['review']);read_ref(f['media'],json_content=False)
         with self._db(True) as db:

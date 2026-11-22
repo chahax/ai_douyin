@@ -137,6 +137,26 @@ def test_dispatch_unknown_no_replay(case):
     assert calls==[1]
 
 
+def test_legacy_caption_only_preparation_never_sends_extra_authorization_notes(case):
+    x=case
+    sn=x['bind']()
+    x['review']()
+    prepared=x['prepare']()
+    # Before comment support the ledger stored only the file reference and
+    # request, even when an external authorizer supplied additional JSON fields.
+    old_auth=json.loads(Path(prepared['authorization']['path']).read_text(encoding='utf8'))
+    prepared['authorization']=x['save']('legacy-authority.json',{**old_auth,'comment':'旧记录附言'})
+    with sqlite3.connect(x['db']) as db:
+        db.execute('UPDATE fanqie_h3_candidates SET prepared_json=? WHERE candidate_id=?',
+                   (json.dumps(prepared),x['cid']))
+    sent=[]
+    def queue(key,request,*,authorization):
+        sent.append(authorization)
+        return {'command_id':'original'}
+    assert x['store'].dispatch(x['cid'],snapshot=sn,row=sn['rows'][0],resource_binding=x['binding'],queue=queue)=='original'
+    assert sent==[prepared['authorization']]
+
+
 def browser_receipt(x,payload,**changes):
     db=x['tmp_path']/'browser.db'
     result=dict(status='published',success=True,post_id='123456789012345',publish_url='https://www.douyin.com/video/123456789012345',
