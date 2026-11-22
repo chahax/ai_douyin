@@ -152,12 +152,14 @@ def prepared_metadata_matches(candidate,metadata,task):
     prepared=candidate.get('prepared_publication') or {}
     request=prepared.get('request') or {}
     selection=prepared.get('promotion',{}).get('selection_key',prepared.get('promotion',{}).get('row',{}).get('platform_task_id'))
-    return (bool(prepared) and selection==task
-        and all(request.get(k)==v for k,v in metadata.items()))
+    return (bool(prepared) and selection==task and prepared.get('comment')==metadata.get('comment')
+        and all(request.get(k)==v for k,v in metadata.items() if k not in ('story_hook','comment')))
 
 
 def render_workspace(accounts,resource,*,admin):
     from pathlib import Path
+    from src.services.fanqie_h3_candidate_v1 import digest
+    from src.services.fanqie_publication_copy import novel_publication_copy
     from src.services.fanqie_promotion_workspace_v1 import PromotionWorkspace,ref
     workspace=PromotionWorkspace(accounts=accounts)
     state=workspace.status(resource)
@@ -238,7 +240,7 @@ def render_workspace(accounts,resource,*,admin):
         st.session_state['fanqie_workspace_active_candidate']=cid
     candidate=next(c for c in candidates if c['candidate_id']==cid)
     if Path(candidate['media']['path']).is_file():st.video(candidate['media']['path'])
-    options=state.get('promotion_options') or []
+    options=[option for option in state.get('promotion_options',[]) if option['book_id']==candidate['book_id']]
     task_ids=[option['key'] for option in options]
     task=st.selectbox('已完整同步的平台推广任务',task_ids,index=None,
         format_func=lambda value:next(option['label'] for option in options if option['key']==value),key='fanqie_workspace_task')
@@ -250,25 +252,41 @@ def render_workspace(accounts,resource,*,admin):
         accepted=st.checkbox('我已观看并接受本视频作为发布素材，保留已知问题记录',key='fanqie_workspace_accepted')
         if st.button('记录本人素材确认',disabled=not accepted):
             _workspace_action(accounts,'workspace_review',candidate_id=cid,user_statement=review)
-        title=st.text_input('发布标题',key='fanqie_workspace_title')
-        description=st.text_area('发布说明',key='fanqie_workspace_description')
-        tags=st.text_input('对应标签（逗号分隔）',key='fanqie_workspace_tags')
-        metadata=dict(title=title,description=description,hashtags=[x.strip().lstrip('#') for x in tags.replace('，',',').split(',') if x.strip()],ai_generated=True,fictional_story=True)
-        st.write('标题：'+title);st.write('说明：'+description);st.write('标签：'+'、'.join(metadata['hashtags']))
-        st.write('声明：AI生成；虚构剧情。')
-        st.caption('将声明AI生成与虚构剧情；发布仍使用原账号管控流程。')
-        publish_statement=st.text_input('对上述资料及选中推广任务的发布授权说明',key='fanqie_workspace_pub_statement')
-        authorized=st.checkbox('授权按所示资料准备并随后派发本次发布',key='fanqie_workspace_pub_authorized')
-        if st.button('固定本次发布资料',disabled=not (authorized and task)):
-            _workspace_action(accounts,'workspace_prepare_publish',candidate_id=cid,resource=resource,
-                              **selected,metadata=metadata,user_statement=publish_statement)
-        if candidate['publication_prepared']:
-            st.caption('已固定、实际将派发的发布资料：')
-            fixed=candidate['prepared_publication']['request']
-            st.write('标题：'+fixed['title']);st.write('说明：'+fixed['description'])
-            st.write('标签：'+'、'.join(fixed['hashtags'])+'；AI生成；虚构剧情。')
-            if not prepared_metadata_matches(candidate,metadata,task):
-                st.info('当前输入或任务与已固定资料不一致，暂不派发。请核对上方实际发布资料。')
+        fixed=candidate.get('prepared_publication')
+        if fixed:
+            metadata=dict(fixed['request'])
+            if 'comment' in fixed:metadata['comment']=fixed['comment']
+            st.caption('本次已固定的发布资料')
+            st.text(metadata['title'])
+            st.text(' '.join('#'+tag for tag in metadata['hashtags']))
+        else:
+            title=st.text_input('发布标题',key='fanqie_workspace_title_'+cid)
+            hook=st.text_input('一句剧情引子',placeholder='留空时使用发布标题',key='fanqie_workspace_hook_'+cid)
+            tags=st.text_input('对应标签（逗号分隔）',key='fanqie_workspace_tags_'+cid)
+            metadata=dict(title=title,story_hook=hook.strip() or title.strip(),
+                hashtags=[x.strip().lstrip('#') for x in tags.replace('，',',').split(',') if x.strip()],
+                ai_generated=True,fictional_story=True)
+            if task and metadata['story_hook']:
+                option=next(option for option in options if option['key']==task)
+                metadata.update(novel_publication_copy(metadata['story_hook'],candidate['book_name'],option['alias']))
+        if metadata.get('description'):
+            st.caption('作品正文')
+            st.text(metadata['description'])
+        if metadata.get('comment'):
+            st.caption('作品发布并核实后，由本账号发送的评论')
+            st.text(metadata['comment'])
+        approval_key=digest([cid,resource,task,metadata['title'],metadata['hashtags'],
+                             metadata.get('description'),metadata.get('comment')])
+        authorized=st.checkbox('授权按以上资料发布'+('并发送作者评论' if metadata.get('comment') else ''),
+                               key='fanqie_workspace_pub_authorized_'+approval_key)
+        if not fixed:
+            publish_statement=st.text_input('本次发布授权说明',key='fanqie_workspace_pub_statement_'+approval_key)
+            if st.button('固定本次发布资料',disabled=not (authorized and task and title.strip()
+                    and metadata.get('comment') and metadata['hashtags'] and publish_statement.strip())):
+                _workspace_action(accounts,'workspace_prepare_publish',candidate_id=cid,resource=resource,
+                                  **selected,metadata=metadata,user_statement=publish_statement)
+        elif task and not prepared_metadata_matches(candidate,metadata,task):
+            st.info('请选择固定资料对应的推广任务。')
         if st.button('派发已授权发布',disabled=not (authorized and task and prepared_metadata_matches(candidate,metadata,task)
                 and douyin.get('publication_ready') and candidate.get('publication_command_state')!='unavailable')):
             _workspace_action(accounts,'workspace_dispatch_publish',candidate_id=cid,resource=resource,**selected)

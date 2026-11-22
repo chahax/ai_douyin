@@ -13,6 +13,7 @@ from src.operations_accounts.fanqie_account_control import FanqieAccounts,launch
 from src.operations_accounts.browser_control import BrowserControlStore,BrowserControlRejected
 from src.operations_accounts import fanqie_managed_promotion_v1 as promotion
 from .fanqie_review_service import CLOSED_LOOP_DB_PATH
+from .fanqie_publication_copy import novel_publication_copy
 
 ROOT=Path(__file__).resolve().parents[2]
 
@@ -95,7 +96,8 @@ class PromotionWorkspace:
                 result['snapshot']=snapshot;result['promotion_rows']=value['rows'] if value else []
                 result['snapshot_schema']=value['schema'] if value else None
                 from .fanqie_promotion_identity_v2 import selection_key
-                result['promotion_options']=[dict(key=selection_key(value,row),label=row['book_name']+' · '+row['alias'])
+                result['promotion_options']=[dict(key=selection_key(value,row),label=row['book_name']+' · '+row['alias'],
+                    book_id=row['book_id'],alias=row['alias'])
                     for row in value['rows'] if row.get('status')=='ready'] if value else []
             except (ValueError,sqlite3.Error,OSError,BrowserControlRejected) as error:result['snapshot_notice']=str(error)
         return result
@@ -226,6 +228,13 @@ class PromotionWorkspace:
         ledger=self._candidates();frozen=json.loads(ledger.get(candidate_id)['frozen_json'])
         ledger.ensure_runtime_account(frozen['account'],runtime_db=self.accounts.douyin_db)
         snapshot,row,binding=self._promotion(resource,platform_task_id,promotion_key=promotion_key)
+        # Existing clients can still provide an explicit, caption-only publication.
+        # New template requests bind both previewed texts to the selected promotion.
+        if 'story_hook' in metadata or 'description' not in metadata or 'comment' in metadata:
+            copy=novel_publication_copy(metadata.get('story_hook') or metadata['title'],frozen['book_name'],row['alias'])
+            if any(key in metadata and metadata[key]!=value for key,value in copy.items()):
+                raise ValueError('书名、推广词或文案已变化，请重新核对发布预览')
+            metadata={**metadata,**copy}
         req=PublishRequest(video_path=frozen['media']['path'],title=metadata['title'],description=metadata['description'],
             hashtags=metadata['hashtags'],ai_generated=True,fictional_story=True,extra_metadata={'account_uuid':frozen['account']['account_uuid']})
         authority=dict(candidate_id=candidate_id,media=frozen['media'],
@@ -233,6 +242,7 @@ class PromotionWorkspace:
             user_statement=user_statement,metadata_sha256=digest(asdict(req)),
             promotion_subject_sha256=digest(dict(row=authorization_subject(snapshot,row),binding=binding)))
         if snapshot['schema']=='fanqie_promotion_snapshot/v2':authority['schema']='fanqie_publication_authorization/v2'
+        if 'comment' in metadata:authority['comment']=metadata['comment']
         auth=_record(self.accounts.evidence/'workspace_authorizations','PUBLISH',authority)
         return ledger.prepare_publish(candidate_id,snapshot=snapshot,row=row,resource_binding=binding,
             metadata=dict(metadata,ai_generated=True,fictional_story=True),authorization_ref=auth)

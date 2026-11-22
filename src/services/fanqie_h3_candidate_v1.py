@@ -32,6 +32,13 @@ def digest(value):
     return hashlib.sha256(canonical(value).encode()).hexdigest()
 
 
+def publication_command_authorization(prepared):
+    reference = prepared['authorization']
+    if 'comment' in prepared:
+        return {**reference, 'comment': prepared['comment']}
+    return reference
+
+
 def read_ref(ref, *, json_content=True):
     if not isinstance(ref, dict) or set(ref) != {'path', 'sha256'}:
         raise CandidateBlocked('file_reference_required')
@@ -512,6 +519,11 @@ class CandidateLedger:
         if snapshot.get('schema')=='fanqie_promotion_snapshot/v2' and auth.get('schema')!='fanqie_publication_authorization/v2':
             raise CandidateBlocked('native_publication_authorization_version_required')
         prepared=dict(request=asdict(request),authorization=authorization_ref,promotion=promotion_intent(snapshot,row,resource_binding),review=json.loads(c['review_json']))
+        if 'comment' in metadata or 'comment' in auth:
+            comment = metadata.get('comment')
+            if not isinstance(comment, str) or not comment.strip() or auth.get('comment') != comment:
+                raise CandidateBlocked('authorization_comment_mismatch')
+            prepared['comment'] = comment
         with self._db(True) as db:
             old=db.execute('SELECT prepared_json FROM fanqie_h3_candidates WHERE candidate_id=?',(candidate_id,)).fetchone()[0]
             if old and old!=canonical(prepared):raise CandidateBlocked('prepared_publication_immutable')
@@ -527,7 +539,9 @@ class CandidateLedger:
         p=json.loads(c['prepared_json'])
         self._fresh_promotion(snapshot,row,resource_binding,f)
         if p['promotion']!=promotion_intent(snapshot,row,resource_binding):raise CandidateBlocked('promotion_changed')
-        read_ref(p['authorization']);read_ref(p['review']);read_ref(f['media'],json_content=False)
+        if read_ref(p['authorization']).get('comment') != p.get('comment'):
+            raise CandidateBlocked('authorization_comment_mismatch')
+        read_ref(p['review']);read_ref(f['media'],json_content=False)
         with self._db(True) as db:
             c=dict(db.execute('SELECT * FROM fanqie_h3_candidates WHERE candidate_id=?',(candidate_id,)).fetchone())
             if c['command_id']:return c['command_id']
@@ -538,7 +552,7 @@ class CandidateLedger:
             from src.operations_accounts.browser_control_runtime import queue_publish_request
             queue=queue_publish_request
         from src.platform_adapter.models import PublishRequest
-        command=queue(f['account']['account_key'],PublishRequest(**p['request']),authorization=p['authorization'])
+        command=queue(f['account']['account_key'],PublishRequest(**p['request']),authorization=publication_command_authorization(p))
         if not isinstance(command.get('command_id'),str):raise CandidateBlocked('dispatch_receipt_missing')
         with self._db(True) as db:
             db.execute("UPDATE fanqie_h3_candidates SET command_id=?,dispatch_state='queued' WHERE candidate_id=?",(command['command_id'],candidate_id))
@@ -555,7 +569,7 @@ class CandidateLedger:
             original=db.execute('SELECT payload,result FROM browser_control_commands WHERE command_id=?',(command_id,)).fetchone()
             raw=original[0];result=json.loads(original[1])
         payload=json.loads(raw); prepared=json.loads(c['prepared_json'])
-        if payload.get('video_sha256')!=f['media']['sha256'] or payload.get('request')!=prepared['request'] or payload.get('authorization')!=prepared['authorization']:
+        if payload.get('video_sha256')!=f['media']['sha256'] or payload.get('request')!=prepared['request'] or payload.get('authorization')!=publication_command_authorization(prepared):
             raise CandidateBlocked('publication_media_or_metadata_mismatch')
         from .publication_time_evidence_v1 import read_publication_time
         try:
@@ -616,7 +630,7 @@ class CandidateLedger:
         r=dict(rows[0]);payload=json.loads(r['payload'])
         if (r['kind']!='publish' or r['binding_version']!=f['account']['binding_version']
             or payload.get('video_sha256')!=f['media']['sha256'] or payload.get('request')!=p['request']
-            or payload.get('authorization')!=p['authorization']):raise CandidateBlocked('original_dispatch_mismatch')
+            or payload.get('authorization')!=publication_command_authorization(p)):raise CandidateBlocked('original_dispatch_mismatch')
         with self._db(True) as db:
             current=db.execute('SELECT command_id FROM fanqie_h3_candidates WHERE candidate_id=?',(candidate_id,)).fetchone()[0]
             if current and current!=r['command_id']:raise CandidateBlocked('different_command_already_bound')

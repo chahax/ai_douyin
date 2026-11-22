@@ -49,6 +49,20 @@ def test_public_CLI_status_invokes_read_only_method(monkeypatch,capsys):
     assert json.loads(capsys.readouterr().out)['read_only']
 
 
+def test_cli_outputs_comment_as_valid_json_on_gbk_pipe(monkeypatch,tmp_path):
+    import io
+    from scripts import run_fanqie_promotion_workspace_v1 as cli
+    result={'comment':'想看后续，打开番茄小说搜「小说推广词」。原著是《测试小说》📖'}
+    calls=[]
+    monkeypatch.setattr(cli,'PromotionWorkspace',
+        lambda path:NS(prepare_publish=lambda **params:calls.append(params) or result))
+    stream=io.BytesIO()
+    output=io.TextIOWrapper(stream,encoding='gbk',write_through=True)
+    monkeypatch.setattr(cli.sys,'stdout',output)
+    cli.main(['prepare-publish','--ledger',str(tmp_path/'unused')])
+    assert json.loads(stream.getvalue().decode('gbk'))==result and calls==[{}]
+
+
 def test_UI_workspace_mutations_require_admin_before_facade(monkeypatch):
     from src.web import fanqie_accounts_panel as ui
     monkeypatch.setattr(ui,'get_current_user',lambda:None)
@@ -73,6 +87,39 @@ def test_UI_dispatch_requires_displayed_metadata_and_same_task_match_frozen_requ
     assert prepared_metadata_matches(candidate,metadata,'task')
     assert not prepared_metadata_matches(candidate,dict(metadata,title='临时改标题'),'task')
     assert not prepared_metadata_matches(candidate,metadata,'other-task')
+    candidate['prepared_publication']['comment']='本书推广评论'
+    assert prepared_metadata_matches(candidate,dict(metadata,comment='本书推广评论'),'task')
+    assert not prepared_metadata_matches(candidate,dict(metadata,comment='另一部作品的评论'),'task')
+    assert not prepared_metadata_matches(candidate,metadata,'task')
+
+
+def test_workspace_page_previews_copy_and_scopes_approval_to_the_displayed_alias(tmp_path,monkeypatch):
+    from streamlit.testing.v1 import AppTest
+    candidate=dict(candidate_id='candidate1',book_id='book1',book_name='门后的信',
+        media={'path':str(tmp_path/'missing.mp4')},prepared_publication=None)
+    options=[dict(key=k,alias=a,label=a,book_id=b) for k,a,b in [
+        ('first','第一封信','book1'),('second','另一封信','book1'),('different','其他小说','book2')]]
+    state=dict(candidates=[candidate],promotion_options=options,douyin_status={'available':True,'publication_ready':True})
+    monkeypatch.setattr(PromotionWorkspace,'status',lambda *args:state)
+    app=AppTest.from_string(
+        "from types import SimpleNamespace as NS\nfrom src.web.fanqie_accounts_panel import render_workspace\n"
+        "render_workspace(NS(get=lambda _: {},check_association=lambda _: {'account_key':'novel'}),'resource',admin=True)"
+    ).run(timeout=30)
+    assert not app.exception
+    task=app.selectbox(key='fanqie_workspace_task')
+    assert task.options==['第一封信','另一封信']
+    task.select('first')
+    app.text_input(key='fanqie_workspace_title_candidate1').set_value('门后藏着谁的信？').run(timeout=30)
+    assert not app.exception
+    caption,comment=[item.value for item in app.text]
+    assert '门后藏着谁的信？' in caption and '第一封信' not in caption
+    assert '「第一封信」' in comment and '《门后的信》' in comment
+    checkbox=lambda:next(item for item in app.checkbox if '发送作者评论' in item.label)
+    checkbox().check().run(timeout=30)
+    assert checkbox().value
+    app.selectbox(key='fanqie_workspace_task').select('second').run(timeout=30)
+    assert not app.exception and not checkbox().value
+    assert '「另一封信」' in app.text[-1].value
 
 
 def _status_workspace(tmp_path,monkeypatch,*,controls=True):

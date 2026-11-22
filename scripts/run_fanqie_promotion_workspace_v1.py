@@ -30,7 +30,11 @@ def main(argv=None):
         params['resource']=args.resource
     workspace=PromotionWorkspace(args.ledger)
     result=getattr(workspace,methods[args.action])(**params)
-    print(json.dumps(result,ensure_ascii=False,default=str,indent=2))
+    try:
+        print(json.dumps(result,ensure_ascii=False,default=str,indent=2))
+    except UnicodeEncodeError:
+        # Windows pipes may use GBK, including after an operation has committed.
+        print(json.dumps(result,ensure_ascii=True,default=str,indent=2))
     return result
 
 

@@ -16,6 +16,7 @@ import sqlite3
 import time
 
 from .fanqie_promotion_workspace_v1 import PromotionWorkspace
+from .fanqie_h3_candidate_v1 import publication_command_authorization
 from . import fanqie_promotion_identity_v2 as native
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -190,7 +191,7 @@ class PublicationContinuation:
                 or original['binding_version'] != account['binding_version']
                 or original['payload'].get('video_sha256') != spec['media']['sha256']
                 or original['payload'].get('request') != prepared.get('request')
-                or original['payload'].get('authorization') != prepared.get('authorization')):
+                or original['payload'].get('authorization') != publication_command_authorization(prepared)):
             raise ValueError('continuation_original_publication_intent_changed')
         auth = read_ref(spec['original_authorization'])
         target = dict(book_id=spec['book']['book_id'], book_name=spec['book']['book_name'],

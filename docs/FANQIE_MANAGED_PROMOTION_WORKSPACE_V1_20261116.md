@@ -9,7 +9,7 @@
 1. 同步当前专属环境的推广任务。只从明确属性、链接参数或中文列头提取平台任务ID、别名ID、推广路径。缺少时显示待补资料，不拿书籍ID、行号或书名代替。
 2. 申请推广词时明确书籍ID、准确书名、推广词、实际推广路径及AIGC，并记录本次授权。先查相同任务；已有任务保留，不自动换书、换词或换路径。
 3. 导入已有视频的交接、小说来源和同一视频技术审核工件。只登记待审核候选，不自动通过内容审核。
-4. 绑定完整、当前生效的准确推广任务，记录本人观看后的素材确认。展示标题、说明、标签与AI/虚构声明后固定本次资料，再通过原账号发布器派发。
+4. 绑定作品对应的推广任务，确认素材后填写标题、标签和一句剧情引子。工作台分别预览短正文和作者评论。正文保留推广收益、AI 生成和虚构剧情说明，评论使用已绑定的番茄搜索词及原著书名。两段文案随本次授权固定，发布器核实抖音作品后发送作者评论。
 5. 使用候选对应的原发布任务读取真实作品链接。若原凭据缺少发布时间，通过已有作品同步任务核实，不猜发布日期。
 6. 以这些原凭据、准确推广任务和官方模板准备回填。回填资料ID与校验值由准备结果传递。授权、派发、只读核对是不同操作。
 
@@ -40,6 +40,8 @@ backfill-status --input binding_parameters.json
 ```
 
 `--input`是该命名操作的结构化参数，不接受动态模块、函数或浏览器配置。工件使用固定`path/sha256`；候选导入另支持`handoff_path/provenance_path/technical_review_path`，按实际文件计算SHA。申请参数为`book_id/book_name/alias/promotion_path/user_statement`，发文类型固定AIGC。迁移参数为新的项目data备份目录`backup_directory`，只能在已有兼容P0库上显式执行。
+
+`prepare-publish` 的 `metadata` 传入 `title`、`hashtags` 即可使用小说号模板。可用 `story_hook` 单独指定剧情引子，省略时采用标题。调用方也可一并传入预览的 `description` 和 `comment`，系统会重新核对两者。只显式传入原有正文 `description` 的旧调用沿用单正文发布。
 
 独立专属账号CLI另增加`promotion-list`、`promotion-apply --request FILE`和`backfill-reconcile`；后台注册相应handler，回填factory保持lazy，缺业务台账不会阻断旧登录handler。
 

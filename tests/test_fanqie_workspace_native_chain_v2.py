@@ -47,7 +47,7 @@ def html():
 
 
 @pytest.fixture
-def native_chain(tmp_path,monkeypatch):
+def native_chain(tmp_path,monkeypatch,request):
     def forbidden(*a,**kw):raise AssertionError('No external process/network in workspace chain')
     class NoProcess(subprocess.Popen):
         def __init__(self,*a,**kw):forbidden()
@@ -147,7 +147,11 @@ def native_chain(tmp_path,monkeypatch):
     snapshot_ref=sync();snapshot=promotion._read(snapshot_ref);promotion_key=native.selection_key(snapshot,snapshot['rows'][0])
     ws.bind_candidate(cid,resource,promotion_key=promotion_key)
     ws.record_review(cid,user_statement='Accept this exact fixture media and disclosed defects')
-    sync();ws.prepare_publish(cid,resource,promotion_key=promotion_key,metadata=dict(title='测试小说片段',description='AI生成虚构故事',hashtags=['小说推文','AI生成']),user_statement='Approve this exact metadata and promotion')
+    metadata=dict(title='测试小说片段',hashtags=['小说推文','AI生成'])
+    metadata.update(getattr(request,'param',{'description':'AI生成虚构故事'}))
+    sync()
+    publication=ws.prepare_publish(cid,resource,promotion_key=promotion_key,metadata=metadata,
+        user_statement='Approve this exact publication copy and promotion')
     from src.operations_accounts import browser_control_runtime as runtime_module
     queued_publications=[]
     def enqueue(key,kind,payload,idempotency,priority):
@@ -207,6 +211,32 @@ def native_chain(tmp_path,monkeypatch):
     assert promotion._read(published)['schema']=='fanqie_h3_publication_handoff/v2'
     assert manifest['promotion_contract_schema']=='fanqie_backfill_contract/v3'
     return locals()
+
+
+@pytest.mark.parametrize('native_chain', [{'story_hook':'她为什么把钥匙还给了陌生人？'}, {}], indirect=True)
+def test_novel_copy_bound_from_preview_through_dispatch_and_receipt(native_chain):
+    from src.platform_adapter.publish_verification import FICTION_NOTICE, declared_description
+    x=native_chain
+    prepared=x['publication']
+    comment='想看后续，打开番茄小说搜「测试关键词」。原著是《测试小说》📖'
+    caption=prepared['request']['description']
+    hook=x['metadata'].get('story_hook',x['metadata']['title'])
+    assert hook in caption and '可能获益' in caption and 'AI' in caption
+    assert caption.count(FICTION_NOTICE)==1 and declared_description(caption,True)==caption
+    assert '测试关键词' not in caption and '打开番茄' not in caption
+    assert prepared['comment']==comment
+    authority=promotion._read(prepared['authorization'])
+    assert authority['comment']==comment and authority['candidate_id']==x['cid']
+    with sqlite3.connect(x['control'].path) as db:
+        raw=db.execute('SELECT payload FROM browser_control_commands WHERE command_id=?',(x['command'],)).fetchone()[0]
+    payload=json.loads(raw)
+    assert payload['authorization']=={**prepared['authorization'],'comment':comment}
+    assert payload['request']==prepared['request']
+    preview={**x['metadata'],'description':caption,'comment':comment}
+    for changed in ({'comment':'其他作品'},{'description':'另一段文案'}):
+        with pytest.raises(ValueError,match='重新核对发布预览'):
+            x['ws'].prepare_publish(x['cid'],x['resource'],promotion_key=x['promotion_key'],
+                metadata={**preview,**changed},user_statement='Confirm the displayed copy')
 
 
 @pytest.mark.parametrize('scenario',['confirmed','unknown_then_readonly','changed_media'])
