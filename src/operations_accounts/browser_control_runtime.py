@@ -1085,6 +1085,16 @@ def queue_manual_window(account_uuid, account_key, requested_by, *, incident_id=
     if not allow_automatic_resume:
         payload['allow_automatic_resume'] = False
     result = existing or _submit(account_key, 'manual', payload, key, 200)
+    if result.get('state') in {'running','waiting_human'}:
+        store = _store()
+        snapshot = store.manual_status_snapshot(account_uuid)
+        original = next((c for c in snapshot['commands'] if c['command_id'] == result['command_id']), None)
+        if original is None:
+            raise BrowserControlRejected('manual_window_changed', '原窗口状态已变化，请刷新后核对。')
+        from .manual_window_status import present_manual_liveness
+        public = present_manual_liveness(_manual_public(original), original, snapshot['owner'],
+                                         now=store.clock(), ttl=store.owner_ttl)
+        return dict(public, reused=existing is not None)
     return dict(_manual_public(result), reused=existing is not None)
 
 
@@ -1148,6 +1158,8 @@ def _manual_public(command):
         public['phase'] = 'window_display_unconfirmed'
     if state == 'succeeded' and finished.get('close_reason') == 'proven_previous_host_boot':
         public.update(phase='closed_by_previous_boot', session_saved=False)
+    if state == 'succeeded' and finished.get('close_reason') == 'proven_previous_backend_exit':
+        public.update(phase='closed_by_previous_backend', session_saved=False)
     return public
 
 
@@ -1171,27 +1183,29 @@ def manual_window_snapshot(account_uuid, account_key, *, incident_id=None):
     if public.get('phase') == 'window_owner_unconfirmed':
         try:
             from .manual_boot_closure import preview
+            version, _ = _manual_closure_binding(account_uuid, account_key)
             public['previous_boot_cleanup'] = preview(store, account_uuid, account_key, command['command_id'],
-                _manual_binding_version(account_uuid, account_key))
+                version)
         except Exception:
             public['previous_boot_cleanup'] = {'available': False}
     return public
 
 
-def _manual_binding_version(account_uuid, account_key):
+def _manual_closure_binding(account_uuid, account_key):
     runtime = _runtime()
     profile, binding = runtime.profiles.get(account_key), runtime.bindings.get(account_key)
     if (profile.account_uuid != account_uuid or binding.account_uuid != account_uuid
             or binding.account_key != account_key):
         raise BrowserControlRejected('account_uuid_mismatch', '原人工窗口绑定不一致。')
-    return binding_version(SimpleNamespace(profile=profile, binding=binding))
+    return binding_version(SimpleNamespace(profile=profile, binding=binding)), binding.browser_profile_dir
 
 
 def close_manual_before_previous_boot(account_uuid, account_key, job_id, proof_sha, requested_by):
     """Explicit UI acknowledgement; no browser, account resume or task replay."""
     from .manual_boot_closure import settle
+    version, _ = _manual_closure_binding(account_uuid, account_key)
     return settle(_store(), account_uuid, account_key, job_id,
-                  _manual_binding_version(account_uuid, account_key), proof_sha, requested_by)
+                  version, proof_sha, requested_by)
 
 
 def _window_commands(account_key, kind):

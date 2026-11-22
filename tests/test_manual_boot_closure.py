@@ -106,3 +106,49 @@ def test_readers_cannot_forge_another_account_acknowledgement(original):
     apply(original, proof)
     with pytest.raises(BrowserControlRejected):
         closure.settle(original.store, 'a', 'foreign-key', original.command_id, 'binding', proof, 'fixture-admin')
+
+
+def test_same_boot_restart_rechecks_processes_before_settlement(original, tmp_path, monkeypatch):
+    original.evidence['boot_time'] = 900
+    profile = tmp_path / 'profile'
+    monkeypatch.setattr(closure, '_bound_profile', lambda *args:profile)
+    gone = [True]
+    def exited(pid, directory, opened_at):
+        assert (pid, directory, opened_at) == (111, profile, 1000)
+        return gone[0]
+    monkeypatch.setattr(closure, '_previous_backend_gone', exited)
+    args = (original.store, 'a', 'key', original.command_id, 'binding')
+    preview = closure.preview(*args)
+    assert preview['reason'] == 'proven_previous_backend_exit'
+    gone[0] = False
+    with pytest.raises(BrowserControlRejected):
+        closure.settle(*args, preview['proof_sha'], 'admin')
+    assert original.store.get(original.command_id)['state'] == 'waiting_human'
+    gone[0] = True
+    closure.settle(*args, preview['proof_sha'], 'admin')
+    public = _manual_public(original.store.get(original.command_id))
+    assert public['phase'] == 'closed_by_previous_backend' and public['state'] == 'closed'
+    assert original.store.get(original.queued_id)['state'] == 'queued'
+
+
+def test_same_boot_proof_requires_absent_processes(tmp_path, monkeypatch):
+    import psutil
+    from pathlib import Path
+    profile = tmp_path / 'profile'
+    monkeypatch.setattr(psutil, 'WINDOWS', True)
+    monkeypatch.setattr(psutil,'pid_exists',lambda pid: True)
+    assert not closure._previous_backend_gone(111,profile,1000)
+    monkeypatch.setattr(psutil,'pid_exists',lambda pid: False)
+    workers = []
+    monkeypatch.setattr(psutil,'process_iter',lambda: iter(workers))
+    for args in (['chrome.exe','--user-data-dir='+str(profile)], ['chrome.exe','--user-data-dir',str(profile)]):
+        workers[:] = [NS(name=lambda:'chrome.exe', cmdline=lambda:args)]
+        assert not closure._previous_backend_gone(111,profile,1000)
+    cache = Path(closure.__file__).resolve().parents[2]/'data/browser_worker_cache'
+    workers[:] = [NS(name=lambda:'pythonw.exe',create_time=lambda:990,cmdline=lambda:['pythonw',str(cache/'worker.py')])]
+    assert not closure._previous_backend_gone(111,profile,1000)
+    def denied(): raise psutil.AccessDenied(123)
+    workers[:] = [NS(name=lambda:'chrome.exe',cmdline=denied)]
+    assert not closure._previous_backend_gone(111,profile,1000)
+    workers.clear()
+    assert closure._previous_backend_gone(111,profile,1000)

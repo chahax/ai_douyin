@@ -342,10 +342,10 @@ def _render_manual_window_job(job, available, account_key):
     state = job.get('state')
     if job.get('phase') == 'window_owner_unconfirmed':
         if (job.get('previous_boot_cleanup') or {}).get('available') is True:
-            st.info('旧窗口早于本次系统启动，原窗口记录尚未结清。请先确认结清旧记录，再重新打开原账号环境核验。')
+            st.info('已核对旧窗口所属环境已退出。请先结清旧窗口记录，再核验原账号身份。')
         else:
             st.warning(_WINDOW_PHASE_LABELS['window_owner_unconfirmed'])
-            st.caption('心跳失联不等于浏览器已退出。请先核对原窗口服务，暂不另开窗口。')
+            st.caption('如果原窗口还开着，请先在该窗口完成操作并正常关闭。后台服务重启后会核对旧进程是否退出，再显示结清旧记录的入口。')
         heartbeat = job.get('owner_heartbeat_at')
         if _valid_timestamp(heartbeat):
             st.caption('原窗口服务最后心跳（北京时间）：' + datetime.fromtimestamp(
@@ -356,7 +356,9 @@ def _render_manual_window_job(job, available, account_key):
         st.info('此前人工任务已完成原身份核验；这不是当前账号已恢复或原窗口仍打开的证明。当前计划状态与新异常须分别核对。')
     elif state == 'closed':
         st.session_state.pop(f'pending_douyin_identity_{account_key}', None)
-        if job.get('phase') == 'closed_by_previous_boot':
+        if job.get('phase') == 'closed_by_previous_backend':
+            st.info('旧后台和窗口已退出，窗口记录已结清。登录状态仍需在原账号环境重新核验。')
+        elif job.get('phase') == 'closed_by_previous_boot':
             st.info('系统重启前的旧窗口记录已结清。会话保存情况未确认；请重新打开原账号环境核对登录，处理后再申请身份核验。')
         else:
             st.info('人工窗口已关闭；会话已保留并退出原环境。请点击“处理完成，继续运行”，后台核验原身份通过后才继续。')
@@ -470,7 +472,10 @@ def _render_manual_window_controls(account_uuid, account_key, key, label, runtim
             st.error('人工窗口任务未能登记：' + error)
         cleanup = job.get('previous_boot_cleanup') if isinstance(job, dict) else None
         if isinstance(cleanup, dict) and cleanup.get('available') is True and admin:
-            st.caption('系统启动时间已证明旧窗口早于本次开机；可保留审计并结清该旧人工任务。此操作只处理旧窗口记录，账号仍保持暂停，原业务结果与运行锁保持原样。')
+            if cleanup.get('reason') == 'proven_previous_backend_exit':
+                st.caption('已核对原后台、浏览器和工作进程退出。可结清旧窗口记录，再申请身份核验。')
+            else:
+                st.caption('系统启动时间已证明旧窗口早于本次开机，可结清该旧人工任务，再申请身份核验。')
             agreed = st.checkbox('确认结清系统重启前的这条旧窗口记录', key=key + '_boot_confirm_' + job['job_id'])
             if st.button('结清重启前的旧窗口记录', key=key + '_boot_settle', disabled=not agreed):
                 try:
@@ -555,7 +560,7 @@ def _handling_state(data, uuid, account_key):
 
 def _unfinished_window_message(job):
     if (job.get('previous_boot_cleanup') or {}).get('available') is True:
-        return '请先结清重启前的旧窗口记录；结清后仍须在原账号环境完成处理并申请身份核验。'
+        return '请先结清重启前的旧窗口记录，再在原账号环境申请身份核验。'
     if job.get('phase') == 'window_owner_unconfirmed':
         return '原窗口服务失联或归属无法确认，请先核对原会话与后台恢复记录；当前不能重新开窗或提交继续。'
     if job.get('phase') == 'queued':

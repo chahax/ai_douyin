@@ -6,6 +6,24 @@ from src.operations_accounts.browser_control import BrowserControlStore, Browser
 from src.operations_accounts import browser_control_runtime as bridge
 
 
+def test_reusing_orphaned_open_window_does_not_offer_identity_handback(tmp_path, monkeypatch):
+    now = [1000.]
+    store = BrowserControlStore(tmp_path/'browser.db', clock=lambda: now[0])
+    owner = store.acquire_owner('a', 'binding', 'backend:123:abc')
+    cmd = store.submit('a','binding','manual','original',{'account_key':'legal','account_uuid':'a'})
+    store.claim_next('a','binding',owner['owner_id'],owner['generation'])
+    store.transition(cmd['command_id'],owner['owner_id'],owner['generation'],'waiting_human',
+                     result={'tab_id':'original','current_verification':{'surface_state':'clear'}})
+    now[0] += store.owner_ttl + 1
+    monkeypatch.setattr(bridge,'_store',lambda:store)
+    monkeypatch.setattr(bridge,'_runtime',lambda:SimpleNamespace(resolve=lambda *a,**kw:SimpleNamespace(account_uuid='a')))
+    monkeypatch.setattr(bridge,'_window_commands',lambda *a:store.commands_of_kind('a','manual'))
+    result = bridge.queue_manual_window('a','legal','operator')
+    assert result['reused'] and result['job_id'] == cmd['command_id']
+    assert result['phase'] == 'window_owner_unconfirmed' and not result['handoff_ready']
+    assert 'current_verification' not in result and len(store.commands_of_kind('a','manual')) == 1
+
+
 def test_window_queries_exclude_unrelated_receipts_and_preserve_unknown(tmp_path, monkeypatch):
     path = tmp_path / "browser.db"
     store = BrowserControlStore(path)
