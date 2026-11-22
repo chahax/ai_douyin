@@ -802,10 +802,7 @@ def _manual(ctx, payload):
             proof = clean(exc.startup_evidence)
             # Only this brand-new, never-ready attempt may be a known failure.
             # A lost ready browser/RPC or unproven cleanup remains unknown.
-            known = (proof.get('ready_received') is False and proof.get('cleanup_verified') is True
-                     and proof.get('stage') not in {None, 'ready'}
-                     and getattr(session, '_proc', object()) is None
-                     and getattr(session, '_startup_cleanup_verified', False) is True)
+            known = _worker_failed_before_ready(session, proof)
             return BrowserCommandResult('failed' if known else 'outcome_unknown',
                 {'status': 'manual_window_not_opened' if known else 'startup_cleanup_unconfirmed',
                  'error_code': exc.code, 'error_type': type(exc).__name__,
@@ -957,10 +954,30 @@ def queue_official_console(account_uuid, account_key, requested_by):
     return existing or _submit(account_key, 'official_console', {'requested_by': requested_by}, key, 20)
 
 
+def _worker_failed_before_ready(session, proof):
+    return (proof.get('ready_received') is False and proof.get('cleanup_verified') is True
+            and proof.get('stage') not in {None, 'ready'}
+            and getattr(session, '_proc', object()) is None
+            and getattr(session, '_startup_cleanup_verified', False) is True)
+
+
 @_with_active
 def _recovery(ctx, payload):
+    from .runtime import AccountRuntimeError
+    from src.platform_adapter.browser_session import BrowserWorkerStartupError, BrowserWorkerStartupTimeout
+    from src.shared.browser_startup_diagnostics import clean
     resource = ctx.resource
-    result = resource.runtime.probe_recovery(resource.account_key, headless=resource.headless)
+    try:
+        result = resource.runtime.probe_recovery(resource.account_key, headless=resource.headless)
+    except AccountRuntimeError as exc:
+        startup = exc.__cause__
+        if not isinstance(startup, (BrowserWorkerStartupError, BrowserWorkerStartupTimeout)):
+            raise
+        proof = clean(startup.startup_evidence)
+        if not _worker_failed_before_ready(resource.session, proof):
+            raise
+        return BrowserCommandResult('failed', {'error_code': startup.code, 'startup_evidence': proof,
+                                                'identity_verified': False})
     if result.healthy and payload.get('identity_probe_only') is not True:
         for task_id in list(resource.manual_tasks):
             ctx.actor.store.complete_waiting(task_id, ctx.actor.owner_id, ctx.actor.generation,
@@ -1506,7 +1523,8 @@ def managed_recovery(account_key):
     command = _submit(account_key, 'recovery', payload, key, 300)
     result = _await(command)
     if result['state'] != 'succeeded':
-        raise BrowserControlRejected(result.get('error_code') or result['state'], '原身份核验未能完成，保留原请求。')
+        code = result.get('error_code') or (result.get('result') or {}).get('error_code') or result['state']
+        raise BrowserControlRejected(code, '原身份核验未能完成，保留原请求。')
     context = _runtime().resolve(account_key, require_healthy=False)
     from .runtime import RuntimeIdentityCheck
     data = result['result']

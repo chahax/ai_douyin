@@ -45,6 +45,29 @@ def test_missing_preference_does_not_change_other_accounts(tmp_path):
     assert not enabled('a',path)
 
 
+@pytest.mark.parametrize('cleaned', [False, True])
+def test_identity_probe_records_only_confirmed_pre_ready_failure(cleaned):
+    from src.operations_accounts import browser_control_runtime as bridge
+    from src.operations_accounts.runtime import AccountRuntimeError
+    from src.platform_adapter.browser_session import BrowserWorkerStartupError
+
+    startup = BrowserWorkerStartupError('launching_browser')
+    startup.startup_evidence = dict(stage='launching_browser', ready_received=False, cleanup_verified=cleaned)
+
+    def probe(*args, **kwargs):
+        raise AccountRuntimeError('recovery_probe_failed', 'test') from startup
+
+    session = NS(_proc=None, _startup_cleanup_verified=cleaned)
+    ctx = NS(resource=NS(runtime=NS(probe_recovery=probe), account_key='test', headless=True, session=session))
+    if cleaned:
+        outcome = bridge._recovery(ctx, {})
+        assert outcome.state == 'failed' and outcome.result['error_code'] == 'browser_start_failed'
+        assert outcome.result['identity_verified'] is False
+    else:
+        with pytest.raises(AccountRuntimeError):
+            bridge._recovery(ctx, {})
+
+
 def test_real_chrome_minimizes_original_window_and_keeps_tab():
     from playwright.sync_api import sync_playwright
     with sync_playwright() as p:
@@ -57,7 +80,8 @@ def test_real_chrome_minimizes_original_window_and_keeps_tab():
 
 
 @pytest.mark.skipif(sys.platform != 'win32', reason='Windows taskbar')
-def test_real_chrome_managed_window_stays_in_taskbar_during_navigation(tmp_path):
+@pytest.mark.parametrize('chromium_sandbox', [False, True])
+def test_real_chrome_managed_window_stays_in_taskbar_during_navigation(tmp_path, chromium_sandbox):
     import ctypes
     import threading
     import psutil
@@ -84,7 +108,7 @@ def test_real_chrome_managed_window_stays_in_taskbar_during_navigation(tmp_path)
 
     session = BrowserSession(BrowserSessionConfig(base_url='about:blank', home_url='about:blank', user_data_dir=str(tmp_path/'chrome'),
         storage_state_path=str(tmp_path/'state.json'), headless=False, browser_channel='chrome',
-        chromium_sandbox=True, mute_audio=True, start_minimized=True, background_account_label='Taskbar QA'))
+        chromium_sandbox=chromium_sandbox, mute_audio=True, start_minimized=True, background_account_label='Taskbar QA'))
     observer = threading.Thread(target=sample_foreground)
     observer.start()
     try:

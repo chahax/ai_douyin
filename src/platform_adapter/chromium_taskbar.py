@@ -20,7 +20,7 @@ const { Chromium } = require(require('path').join(root, 'lib/server/chromium/chr
 const { options, profile } = JSON.parse(require('fs').readFileSync(0, 'utf8'));
 Chromium.prototype.defaultArgs(options, false, profile)
   .then(args => process.stdout.write(JSON.stringify(args)));"""
-    effective = {'headless': False, 'chromiumSandbox': options['chromium_sandbox'],
+    effective = {'headless': False, 'chromiumSandbox': options.get('chromium_sandbox'),
                  'channel': options.get('channel'), 'args': options.get('args', [])}
     result = subprocess.run([node, '-e', script, str(driver)], check=True, capture_output=True,
         input=json.dumps({'options': effective, 'profile': str(Path(user_data_dir).resolve())}),
